@@ -1,0 +1,21 @@
+{
+    "The :attribute must be at least :length characters and contain at least one uppercase character, one number, and one special character." : "يجب أن يكون طول :attribute على الأقل :length حروفٍ/حرفًا، كما يجب احتوائها على احرف كبيرة وأرقام ورموز.",
+    "N/A" : "لا يوجد",
+    "Male" : "ذكر",
+    "Female" : "أنثى",
+    "Deletion Confirmation" : "تأكيد الحذف",
+    "Close" : "إغلاق",
+    "Delete" : "حذف",
+    "Are you sure, you want to delete" : "هل أنت متأكد من حذف",
+    "Are you sure, you want to restore" : "هل أنت متأكد من استعادة",
+    "user/users" : "مستخدم/مستخدمين",
+    "User/Users has/have been deleted successfully" : "تم حذف المستخدم/المستخدمين بنجاح",
+    "Unable to delete User/Users" : "لم ننجح في حذف المستخدم/المستخدمين",
+    "User has been deleted successfully" : "تم حذف المستخدم بنجاح",
+    "Unable to delete this User" : "لم ننجح في حذف المستخدم",
+    "Data Processing" : "جاري جلب البيانات",
+    "role_id" : "الدور",
+    "User has been restored successfully" : "تم استعادة المستخدم بنجاح",
+    "Restoring Confirmation" : "تأكيد استعادة",
+    "Restore" : "استعادة"
+}
