@@ -8,25 +8,29 @@
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">
+
+            {{-- Dashboard --}}
             <li class="nav-item {{ $activeSection == 'dashboard' ? ' active' : '' }}">
                 <a class="nav-link" href="{{ route('admin.dashboard') }}">
                     <i class="fa-solid fa-chart-line"></i>
                     <span>{{ __('admin/master.dashboard') }}</span>
                 </a>
             </li>
-            <li class="nav-item active {{ $activeSection ? ' active' : '' }}">
-                <a class="nav-link" data-toggle="collapse" href="#users" aria-expanded="true">
+
+            {{-- Users --}}
+            <li class="nav-item {{ $activeSection == 'Users' ? ' active' : '' }}">
+                <a class="nav-link" data-toggle="collapse" href="#users" aria-expanded="{{ $activeSection == 'Users' ? 'true' : 'false' }}">
                     <i class="fa-solid fa-user"></i>
                     <span>{{ __('admin/master.users') }}
                         <b class="caret"></b>
                     </span>
                 </a>
-                <div class="collapse show" id="users">
+                <div class="collapse {{ $activeSection == 'Users' ? ' show' : '' }}" id="users">
                     <ul class="nav">
-                        <li class="nav-item {{ $activePage == 'all-users' ? ' active' : '' }}">
-                            <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                        <li class="nav-item {{ $activePage == 'All Users' ? ' active' : '' }}">
+                            <a class="nav-link" href="{{ route('admin.users.index') }}">
                                 <i class="fa-solid fa-user-group"></i>
-                                <span>{{ __('admin/master.all users') }}
+                                <span>{{ __('admin/master.All Users') }}
                                 </span> </a>
                         </li>
                         <li class="nav-item {{ $activePage == 'add-user' ? ' active' : '' }}">
@@ -44,6 +48,8 @@
                     </ul>
                 </div>
             </li>
+
+
         </ul>
     </div>
 </div>

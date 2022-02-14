@@ -33,6 +33,7 @@
     @if (LaravelLocalization::getCurrentLocale() == 'ar')
         <link href="{{ asset('assets/admin/css/material-dashboard-rtl.css') }}" rel="stylesheet" />
     @endif
+    @stack('css')
 
 </head>
 

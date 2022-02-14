@@ -8,11 +8,17 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Translatable\HasTranslations;
+
+
 
 class User extends Authenticatable
 {
     use HasFactory;
     use HasRoles;
+    use HasTranslations;
+
+    public $translatable = ['f_name','l_name'];
 
     /**
      * The attributes that are mass assignable.
@@ -59,7 +65,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $appends = [
-        'profile_photo_url',
-    ];
+    // protected $appends = [
+    //     'profile_photo_url',
+    // ];
 }

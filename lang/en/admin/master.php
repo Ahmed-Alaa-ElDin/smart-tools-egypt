@@ -3,7 +3,7 @@
 return [
     'dashboard'                 =>      'Dashboard',
     'users'                     =>      'Users',
-    'all users'                 =>      'All Users',
+    'All Users'                 =>      'All Users',
     'add user'                  =>      'Add User',
     'deleted users'             =>      'Deleted Users',
     'login'                     =>      'Log in',
