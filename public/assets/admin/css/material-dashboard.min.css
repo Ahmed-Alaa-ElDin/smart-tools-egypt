@@ -14433,7 +14433,9 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
     top: 0;
     left: 0;
     background-size: cover;
-    background-position: 50%
+    background-position: 50%;
+    background-size: contain !important;
+    background-repeat: no-repeat;
 }
 
 .sidebar .sidebar-background:after {
@@ -14587,7 +14589,8 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 
 .sidebar.has-image:after,
 .sidebar[data-image]:after {
-    opacity: .77
+    opacity: .77;
+    max-width: 100%;
 }
 
 .off-canvas-sidebar .navbar-collapse .nav>li>a,

@@ -38,6 +38,7 @@ class AuthController extends Controller
             $user->last_visit_at = now();
             $user->visit_num += 1;
             $user->save();
+
         } catch (\Throwable $th) {
         }
 

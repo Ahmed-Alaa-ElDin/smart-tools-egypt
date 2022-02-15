@@ -5,7 +5,6 @@ return [
     'All Users Table'               =>      'جدول جميع المستخدمين',
     'Add New User'                  =>      'إضافة مستخدم جديد',
     'Name'                          =>      'الاسم',
-    'Mail'                          =>      'البريد الإلكتروني',
     'Phone'                         =>      'رقم التليفون',
     'Country'                       =>      'البلد',
     'Role'                          =>      'الدور',
@@ -66,8 +65,9 @@ return [
     'New user successfully added'   =>      'تمت إضافة المستخدم الجديد بنجاح',
     'Unable to add new user'        =>      'لم نستطع إضافة مستخدم جديد ، برجاء المحاولة مرة أخرى.',
     'Import Export Users'           =>      'استيراد / تصدير مستخدمين',
-    'download all excel'            =>      'تصدير الكل كملف إكسيل',
-    'download all pdf'              =>      'تصدير الكل كملف PDF',
+    'Export Users'                  =>      'تحميل المستخدمين',
+    'download all excel'            =>      'تحميل الكل كملف إكسيل',
+    'download all pdf'              =>      'تحميل الكل كملف PDF',
     'import excel file'             =>      'استيراد من ملف إكسيل',
     'Visits Count'                  =>      'عدد الزيارات',
     'Last Visit'                    =>      'آخر زيارة',
@@ -111,5 +111,5 @@ return [
     'Balance'                       =>      'الرصيد',
     'LE'                            =>      'جنية',
     'Search ...'                    =>      'بحث ...',
-
+    'Points'                        =>      'رصيد النقاط',
 ];

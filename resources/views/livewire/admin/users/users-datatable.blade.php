@@ -3,7 +3,7 @@
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div class="py-3 bg-white space-y-6">
-                    <div class="grid grid-cols-3 gap-6">
+                    <div class="grid grid-cols-3 gap-6 items-center">
 
 
                         {{-- Search Box --}}
@@ -19,7 +19,26 @@
                         </div>
 
                         {{-- Download --}}
-                        <div class="form-inline col-span-1 justify-center my-2"></div>
+                        <div class="form-inline col-span-1 justify-center">
+                            <div class="flex justify-center">
+                                <button class="btn btn-success dropdown-toggle btn-round btn-sm text-white font-bold "
+                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-sync-alt"></i> &nbsp; {{ __('admin/usersPages.Export Users') }}
+                                    &nbsp;</button>
+                                <div class="dropdown-menu">
+                                    <a href="{{ route('admin.users.exportExcel') }}"
+                                        class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600"><i
+                                            class="fas fa-file-excel"></i>
+                                        &nbsp;&nbsp;
+                                        {{ __('admin/usersPages.download all excel') }}</a>
+                                    <a href="{{ route('admin.users.exportPDF') }}"
+                                        class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600"><i
+                                            class="fas fa-file-pdf"></i>
+                                        &nbsp;&nbsp;
+                                        {{ __('admin/usersPages.download all pdf') }}</a>
+                                </div>
+                            </div>
+                        </div>
                         {{-- Pagination Number --}}
                         <div class="form-inline col-span-1 justify-end my-2">
                             {{ __('pagination.Show') }} &nbsp;
@@ -40,25 +59,32 @@
                         {{-- Data Table Header --}}
                         <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{ __('admin/usersPages.Name') }}</th>
-                                <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{ __('admin/usersPages.Contacts') }}</th>
-                                <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{ __('admin/usersPages.Balance') }}</th>
+                                <th wire:click="sortBy('f_name')" scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                    {{ __('admin/usersPages.Name') }} &nbsp;
+                                    @include('partials._sort_icon', ['field' => 'f_name'])</th>
+                                <th wire:click="sortBy('email')" scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                    {{ __('admin/usersPages.Contacts') }}&nbsp;
+                                    @include('partials._sort_icon', ['field' => 'email'])
+                                <th wire:click="sortBy('balance')" scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                    {{ __('admin/usersPages.Balance') }}&nbsp;
+                                    @include('partials._sort_icon', ['field' => 'balance'])
+                                </th>
+                                <th wire:click="sortBy('visit_num')" scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                    <div class="min-w-max">
+                                        {{ __('admin/usersPages.Visits No.') }} &nbsp;
+                                        @include('partials._sort_icon', ['field' => 'visit_num'])
+                                    </div>
                                 </th>
                                 <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{ __('admin/usersPages.Visits No.') }}</th>
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
+                                    {{ __('admin/usersPages.Role') }}
                                 </th>
                                 <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{ __('admin/usersPages.Role') }}</th>
-                                <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
                                     {{ __('admin/usersPages.Manage') }}
                                     <span class="sr-only">{{ __('admin/usersPages.Manage') }}</span>
                                 </th>
@@ -103,7 +129,7 @@
                                         {{ $user->visit_num }}
                                     </td>
                                     <td class="px-6 py-2 text-center whitespace-nowrap text-sm text-gray-500">
-                                        {{ $user->roles->first()->name }}
+                                        {{ $user->roles->first()->name ?? __('N/A') }}
                                     </td>
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
                                         <a href="#" title="{{ __('admin/usersPages.View') }}"

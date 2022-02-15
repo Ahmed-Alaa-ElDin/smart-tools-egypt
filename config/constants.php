@@ -2,6 +2,6 @@
 
 return [
     "constants" => [
-        'pagination' => 2
+        'pagination' => 10
     ]
 ];

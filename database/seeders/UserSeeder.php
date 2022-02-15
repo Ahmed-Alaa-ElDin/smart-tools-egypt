@@ -17,6 +17,9 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+        User::factory()
+        ->count(500)
+        ->create();
 
         // Create Users
         $ahmed = User::create([
@@ -30,7 +33,7 @@ class UserSeeder extends Seeder
             'updated_at' => now(),
             'password' => Hash::make('123456789'),
         ]);
-        // newItem->name = ['en' => 'myName', 'nl' => 'Naam in het Nederlands'];
+
         $admin = User::create([
             'f_name' => 'Admin',
             'email' => 'admin@gmail.com',
@@ -54,6 +57,6 @@ class UserSeeder extends Seeder
         // Assign Roles
         $ahmed->assignRole('Admin');
         $admin->assignRole('Admin');
-        $user->assignRole('User');
+        $user->assignRole('Customer');
     }
 }

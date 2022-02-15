@@ -5,7 +5,6 @@ return [
     'All Users Table'               =>      'All Users Table',
     'Add New User'                  =>      'Add New User',
     'Name'                          =>      'Name',
-    'Mail'                          =>      'Mail',
     'Phone'                         =>      'Phone',
     'Country'                       =>      'Country',
     'Country (En)'                  =>      'Country (En)',
@@ -63,6 +62,7 @@ return [
     'New user successfully added'   =>      'New user successfully added',
     'Unable to add new user'        =>      'Unable to add the new user, please try again!!',
     'Import Export Users'           =>      'Import / Export Users',
+    'Export Users'                  =>      'Export Users',
     'download all excel'            =>      'Download all as Excel',
     'download all pdf'              =>      'Download all as PDF',
     'import excel file'             =>      'Import from Excel file',
@@ -82,7 +82,7 @@ return [
     'New Password'                  =>      'New Password',
     'Old Default Password'          =>      'If you left these fields blank, this user will keep the old password',
     'Remove Old Image'              =>      'Remove Old Image',
-    'Old Password didnt match'      =>      'Old Password didn\'t match',
+    'Old Password didn\'t match'    =>      'Old Password didn\'t match',
     'user successfully updated'     =>      'User updated successfully',
     'Unable to update user'         =>      'Unable to update the user, please try again!!',
     'Save Edit User'                =>      'Update User',
@@ -109,5 +109,6 @@ return [
     'Balance'                       =>      'Balance',
     'LE'                            =>      'LE',
     'Search ...'                    =>      'Search ...',
+    'Points'                        =>      'Points',
 
 ];

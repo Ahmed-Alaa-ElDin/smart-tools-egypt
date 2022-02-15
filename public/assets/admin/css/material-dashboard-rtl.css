@@ -26,8 +26,7 @@ html[dir="rtl"] .alert-dismissible {
 }
 
 html[dir="rtl"] .dropdown-menu {
-    right: 0;
-    text-align: right;
+    text-align: center;
 }
 
 html[dir="rtl"] .checkbox label {

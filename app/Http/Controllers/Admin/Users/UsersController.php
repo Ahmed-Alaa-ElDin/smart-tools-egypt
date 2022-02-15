@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Admin\Users;
 
+use App\Exports\Admin\Users\UsersExport;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Writer\Pdf\Tcpdf;
 
 class UsersController extends Controller
 {
@@ -19,6 +23,27 @@ class UsersController extends Controller
 
         return view('admin.users.index', compact('users'));
     }
+
+    /**
+     * Exports all user from user datatable as xlsx
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportExcel()
+    {
+        return Excel::download(new UsersExport, 'Users-' . Carbon::now()->format('d-m-Y') . '.xlsx');
+    }
+
+    /**
+     * Exports all user from user datatable as pdf
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportPDF()
+    {
+        return Excel::download(new UsersExport, 'Users-' . Carbon::now()->format('d-m-Y') . '.pdf', \Maatwebsite\Excel\Excel::MPDF);
+    }
+
 
     /**
      * Show the form for creating a new resource.

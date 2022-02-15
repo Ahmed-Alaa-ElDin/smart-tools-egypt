@@ -27,17 +27,18 @@ class UsersDatatable extends Component
     public function render()
     {
         $users = User::with('roles')
-        ->where('f_name->en', 'like', '%' . $this->search . '%')
-        ->orWhere('f_name->ar','like', '%' . $this->search . '%')
-        ->orWhere('l_name->en','like', '%' . $this->search . '%')
-        ->orWhere('l_name->ar','like', '%' . $this->search . '%')
-        ->orWhere('email','like', '%' . $this->search . '%')
-        ->orWhere('phone','like', '%' . $this->search . '%')
-        ->orWhereHas('roles', function ($query) {
-            $query->where('name', 'like', '%'.$this->search.'%');
-        })
-        ->orderBy($this->sortBy, $this->sortDirection)
-        ->paginate($this->perPage);
+            ->where('f_name->en', 'like', '%' . $this->search . '%')
+            ->orWhere('f_name->ar', 'like', '%' . $this->search . '%')
+            ->orWhere('l_name->en', 'like', '%' . $this->search . '%')
+            ->orWhere('l_name->ar', 'like', '%' . $this->search . '%')
+            ->orWhere('email', 'like', '%' . $this->search . '%')
+            ->orWhere('phone', 'like', '%' . $this->search . '%')
+            ->orWhereHas('roles', function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%');
+            })
+            ->orderBy($this->sortBy, $this->sortDirection)
+            ->paginate($this->perPage);
+
 
         return view('livewire.admin.users.users-datatable', compact('users'));
     }

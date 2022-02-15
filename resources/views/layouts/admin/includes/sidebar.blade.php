@@ -1,5 +1,5 @@
 <div class="sidebar" data-color="red" data-background-color="white"
-    data-image="{{ asset('assets/admin/img/smart-tools-logo-100.png') }}">
+    data-image="{{ asset('assets/admin/img/smart-tools-logo-only.png') }}">
     <div class="logo">
         <a href="https://creative-tim.com/" class="simple-text logo-normal">
             <img src="{{ asset('assets/admin/img/smart-tools-logo-50.png') }}" alt="" width="50px">
