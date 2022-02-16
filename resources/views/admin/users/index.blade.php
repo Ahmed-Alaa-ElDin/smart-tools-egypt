@@ -13,7 +13,7 @@ __('admin/usersPages.All Users')])
                 </ol>
             </nav>
 
-            <div class="row">
+            <section class="row">
                 <div class="col-md-12">
 
                     {{-- Card --}}
@@ -22,12 +22,12 @@ __('admin/usersPages.All Users')])
                         {{-- Card Head --}}
                         <div class="card-header card-header-primary">
                             <div class="row">
-                                <div class="col-6 ltr:text-left rtl:text-right font-bold self-center">
+                                <div class="col-6 ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class=""> {{ __('admin/usersPages.Here you can manage users') }}</p>
                                 </div>
                                 <div class="col-6 ltr:text-right rtl:text-left">
-                                    <a href="#"
-                                        class="btn btn-sm bg-green-700 hover:bg-green-600 focus:bg-green-700 active:bg-green-700 font-bold">{{ __('admin/usersPages.Add New User') }}</a>
+                                    <a href="{{ route('admin.users.create') }}"
+                                        class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">{{ __('admin/usersPages.Add User') }}</a>
                                 </div>
                             </div>
                         </div>
@@ -41,7 +41,7 @@ __('admin/usersPages.All Users')])
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
     </div>
 @endsection

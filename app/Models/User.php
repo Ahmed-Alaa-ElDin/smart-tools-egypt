@@ -35,7 +35,7 @@ class User extends Authenticatable
         'visit_num',
         'last_visit_at',
         'profile_photo_path',
-        'email_verified_at'
+        'email_verified_at',
     ];
 
     /**

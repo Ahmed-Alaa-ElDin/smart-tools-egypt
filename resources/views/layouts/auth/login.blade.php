@@ -9,8 +9,8 @@
     <title>{{  'Login | '. env('APP_NAME') }}</title>
 
     {{-- FavIcons --}}
-    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/admin/img/smart-tools-logo-50.png') }}">
-    <link rel="icon" type="image/png" href="{{ asset('assets/admin/img/smart-tools-logo-50.png') }}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}">
 
     <!-- Font Icon -->
     {{-- <link rel="stylesheet" href="{{ asset('assets/auth/fonts/material-icon/css/material-design-iconic-font.min.css') }}"> --}}

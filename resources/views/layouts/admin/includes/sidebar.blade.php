@@ -1,8 +1,8 @@
 <div class="sidebar" data-color="red" data-background-color="white"
-    data-image="{{ asset('assets/admin/img/smart-tools-logo-only.png') }}">
+    data-image="{{ asset('assets/img/logos/smart-tools-logo-only-400.png') }}">
     <div class="logo">
         <a href="https://creative-tim.com/" class="simple-text logo-normal">
-            <img src="{{ asset('assets/admin/img/smart-tools-logo-50.png') }}" alt="" width="50px">
+            <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}" alt="" width="50px">
             {{ 'Smart Tools' }}
         </a>
     </div>
@@ -33,8 +33,8 @@
                                 <span>{{ __('admin/master.All Users') }}
                                 </span> </a>
                         </li>
-                        <li class="nav-item {{ $activePage == 'add-user' ? ' active' : '' }}">
-                            <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                        <li class="nav-item {{ $activePage == 'Add User' ? ' active' : '' }}">
+                            <a class="nav-link" href="{{ route('admin.users.create') }}">
                                 <i class="fa-solid fa-user-plus"></i>
                                 <span>{{ __('admin/master.add user') }}
                                 </span> </a>
