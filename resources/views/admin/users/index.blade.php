@@ -35,7 +35,7 @@ __('admin/usersPages.All Users')])
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Data Table Start --}}
-                            <livewire:admin.users.users-datatable />
+                            @livewire('admin.users.users-datatable')
                             {{-- Data Table End --}}
 
                         </div>

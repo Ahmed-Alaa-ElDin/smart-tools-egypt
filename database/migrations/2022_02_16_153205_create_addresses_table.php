@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->integer('country_id');
-            $table->integer('governorate_id');
-            $table->integer('city_id');
+            $table->integer('user_id')->unsigned()->onDelete('cascade')->onUpdate('cascade');;
+            $table->integer('country_id')->unsigned()->onDelete('cascade')->onUpdate('cascade');;
+            $table->integer('governorate_id')->unsigned()->onDelete('cascade')->onUpdate('cascade');;
+            $table->integer('city_id')->unsigned()->onDelete('cascade')->onUpdate('cascade');;
             $table->text('details');
             $table->text('special_marque');
             $table->timestamps();

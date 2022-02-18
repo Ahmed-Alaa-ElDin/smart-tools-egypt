@@ -23,4 +23,16 @@ class City extends Model
     {
         return $this->belongsTo(Governorate::class);
     }
+
+    // One to many relationship  City --> Addresses
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
+
+    // Has many through relationship  City --> users
+    public function users()
+    {
+        return $this->hasManyThrough(User::class, Address::class);
+    }
 }

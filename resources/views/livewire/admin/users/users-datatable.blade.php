@@ -62,15 +62,20 @@
                                 <th wire:click="sortBy('f_name')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/usersPages.Name') }} &nbsp;
-                                    @include('partials._sort_icon', ['field' => 'f_name'])</th>
+                                    @include('partials._sort_icon', ['field' => 'f_name'])
+                                </th>
+
                                 <th wire:click="sortBy('email')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/usersPages.Contacts') }}&nbsp;
                                     @include('partials._sort_icon', ['field' => 'email'])
+                                </th>
                                 <th wire:click="sortBy('balance')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                    <div class="min-w-max">
                                     {{ __('admin/usersPages.Balance') }}&nbsp;
                                     @include('partials._sort_icon', ['field' => 'balance'])
+                                    </div>
                                 </th>
                                 <th wire:click="sortBy('visit_num')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
@@ -129,7 +134,7 @@
                                         {{ $user->visit_num }}
                                     </td>
                                     <td class="px-6 py-2 text-center whitespace-nowrap text-sm text-gray-500">
-                                        {{ $user->roles->first()->name ?? __('N/A') }}
+                                        {{ $user->roles->first() ? __('admin/usersPages.' . $user->roles->first()->name) : __('N/A') }}
                                     </td>
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
                                         <a href="#" title="{{ __('admin/usersPages.View') }}"

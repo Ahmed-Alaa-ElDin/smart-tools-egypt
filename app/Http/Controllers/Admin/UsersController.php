@@ -8,6 +8,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Spatie\Permission\Models\Role;
 
 class UsersController extends Controller
 {
@@ -51,6 +52,7 @@ class UsersController extends Controller
      */
     public function create()
     {
+
         return view('admin.users.create');
     }
 
@@ -62,7 +64,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**

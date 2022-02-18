@@ -23,4 +23,15 @@ class Country extends Model
         return $this->hasMany(Governorate::class);
     }
 
+    // One to many relationship  Country --> Addresses
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
+
+    // Has many through relationship  Country --> users
+    public function users()
+    {
+        return $this->hasManyThrough(User::class, Address::class);
+    }
 }

@@ -62,7 +62,7 @@
                         {{-- Submit --}}
                         <div>
                             <button type="submit"
-                                class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-bold rounded-md text-white bg-primary hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary shadow-lg">
+                                class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-bold rounded-md text-white bg-primary hover:bg-secondary focus:outline-none focus:ring-none focus:ring-offset-0 focus:ring-none shadow-lg ease-in-out duration-300">
                                 {{ __('auth/authentication.Log in') }}
                             </button>
                         </div>

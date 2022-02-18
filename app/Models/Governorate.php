@@ -21,12 +21,24 @@ class Governorate extends Model
     // One to many relationship  Governorate --> Cities
     public function cities()
     {
-        return $this->hasMany(Governorate::class);
+        return $this->hasMany(City::class);
     }
 
     // One to many relationship (Reverse)  Country --> Governorates
     public function country()
     {
         return $this->belongsTo(Country::class);
+    }
+
+    // One to many relationship  Governorate --> Addresses
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
+
+    // Has many through relationship  Governorate --> users
+    public function users()
+    {
+        return $this->hasManyThrough(User::class, Address::class);
     }
 }

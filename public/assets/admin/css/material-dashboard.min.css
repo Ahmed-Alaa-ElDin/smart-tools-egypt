@@ -12638,7 +12638,7 @@ label.radio-inline {
 .checkbox label,
 .radio label,
 label {
-    font-size: .875rem
+    /* font-size: .875rem */
 }
 
 .bmd-label-floating,
@@ -15948,7 +15948,7 @@ a .material-icons {
 
 .form-check,
 label {
-    font-size: 14px;
+    /* font-size: 14px; */
     line-height: 1.42857;
     color: #aaa;
     font-weight: 400

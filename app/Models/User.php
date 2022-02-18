@@ -18,7 +18,7 @@ class User extends Authenticatable
     use HasRoles;
     use HasTranslations;
 
-    public $translatable = ['f_name','l_name'];
+    public $translatable = ['f_name', 'l_name'];
 
     /**
      * The attributes that are mass assignable.
@@ -68,4 +68,10 @@ class User extends Authenticatable
     // protected $appends = [
     //     'profile_photo_url',
     // ];
+
+    // One to many relationship  User --> Addresses
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
 }
