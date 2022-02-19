@@ -170,6 +170,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
 
+
         /*
          * Application Service Providers...
          */
@@ -192,8 +193,6 @@ return [
     |
     */
 
-    'aliases' => Facade::defaultAliases()->merge([
-        // ...
-    ])->toArray(),
+    'aliases' => Facade::defaultAliases()->merge([])->toArray(),
 
 ];

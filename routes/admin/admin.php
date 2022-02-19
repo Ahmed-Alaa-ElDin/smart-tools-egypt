@@ -16,4 +16,5 @@ Route::group([
     Route::get('/users/export-pdf',[UsersController::class,'exportPDF'])->name('users.exportPDF');
     Route::resource('/users', UsersController::class);
     // ############## Users Routs End ##############
+
 });

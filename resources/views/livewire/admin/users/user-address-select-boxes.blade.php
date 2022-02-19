@@ -55,22 +55,23 @@
     </div>
 
     {{-- Details --}}
-    <div class="col-span-3 grid grid-cols-6 justify-between items-center m-0">
+    <div class="details col-span-3 grid grid-cols-6 justify-between items-center m-0">
         <label class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
             for="details">{{ __('admin/usersPages.Address Details') }}</label>
-        <textarea name="details" id="details"
-            placeholder="{{ __('admin/usersPages.Please mention the details of the address such as street name, building number, ... etc.') }}"
-            rows="2"
-            class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"></textarea>
+        <div
+            class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 overflow-hidden">
+            <textarea name="details" id="details" rows="2"></textarea>
+        </div>
     </div>
 
     {{-- Special Marque --}}
-    <div class="col-span-3 grid grid-cols-6 justify-between items-center">
+    <div class="special_marque col-span-3 grid grid-cols-6 justify-between items-center">
         <label class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
             for="special_marque">{{ __('admin/usersPages.Special Marque') }}</label>
-        <textarea name="special_marque" id="special_marque"
-            placeholder="{{ __('admin/usersPages.Please mention any special marque such as mosque, grocery, ... etc.') }}"
-            rows="2"
-            class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"></textarea>
+        <div
+            class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300">
+
+            <textarea name="special_marque" id="special_marque" rows="2"></textarea>
+        </div>
     </div>
 </div>

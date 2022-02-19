@@ -131,4 +131,8 @@ return [
     'Special Marque'                            =>      'علامة مميزة',
     'Please mention the details of the address such as street name, building number, ... etc.'  =>      'برجاء توضيح العنوان بالتفصيل مثل اسم الشارع ورقم العمارة',
     'Please mention any special marque such as mosque, grocery, ... etc.'                       =>      'برجاء ذكر أي علامة مميزة للمكان مثل مسجد أو محل',
+    'Save'                                      =>      'حفظ',
+    'Save and Add New User'                     =>      'حفظ وإضافة مستخدم آخر',
+    'Back'                                      =>      'رجوع للخلف',
+
 ];

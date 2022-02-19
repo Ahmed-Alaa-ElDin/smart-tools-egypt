@@ -53,6 +53,7 @@ return [
     'max'                  => [
         'numeric' => 'يجب أن تكون قيمة الحقل :attribute مساوية أو أصغر لـ :max.',
         'file'    => 'يجب أن لا يتجاوز حجم الملف :attribute :max كيلوبايت',
+        'photo'    => 'يجب أن لا يتجاوز حجم ملف :attribute :max كيلوبايت',
         'string'  => 'يجب أن لا يتجاوز طول نص :attribute :max حروفٍ/حرفًا',
         'array'   => 'يجب أن لا يحتوي الحقل :attribute على أكثر من :max عناصر/عنصر.',
     ],
@@ -85,7 +86,7 @@ return [
     'string'               => 'يجب أن يكون الحقل :attribute نصآ.',
     'timezone'             => 'يجب أن يكون :attribute نطاقًا زمنيًا صحيحًا',
     'unique'               => 'قيمة الحقل :attribute مُستخدمة من قبل',
-    'uploaded'             => 'فشل في تحميل الـ :attribute',
+    'uploaded'             => 'فشل في تحميل :attribute',
     'url'                  => 'صيغة الرابط :attribute غير صحيحة',
 
     /*
@@ -160,6 +161,7 @@ return [
         'q'                     => 'البحث',
         'link'                  => ' ',
         'slug'                  => ' ',
+        'photo' => 'الصورة',
     ],
 
 ];

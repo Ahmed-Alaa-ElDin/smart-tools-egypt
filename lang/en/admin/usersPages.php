@@ -130,4 +130,7 @@ return [
     'Special Marque'                            =>      'Special Marque',
     'Please mention the details of the address such as street name, building number, ... etc.'  =>      'Please mention the details of the address such as street name, building number, ... etc.',
     'Please mention any special marque such as mosque, grocery, ... etc.'                       =>      'Please mention any special marque such as mosque, grocery, ... etc.',
+    'Save'                                      =>      'Save',
+    'Save and Add New User'                     =>      'Save & Add New User',
+    'Back'                                      =>      'Back',
 ];

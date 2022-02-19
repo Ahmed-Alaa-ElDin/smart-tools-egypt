@@ -54,14 +54,25 @@ __('admin/usersPages.Add User')])
 {{-- Extra Scripts --}}
 @push('js')
     @livewireScripts
-    {{-- <script src="{{ asset('assets/js/plugins/tinymce/tinymce.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/tinymce/tinymce.min.js') }}"></script>
     <script>
         tinymce.init({
             selector: 'textarea',
-            body_class: 'my_class',
             statusbar: false,
             menubar: false,
+            resize: false,
+            plugins: 'directionality autoresize',
+            toolbar: 'ltr rtl',
+            directionality: 'rtl',
+            autoresize_overflow_padding: 0,
 
+            setup: function(editor) {
+                editor.on('init', function(e) {
+                    editor.execCommand('JustifyCenter', false);
+                    window.scrollTo(0, 0);
+                    $('.first_input').first().focus();
+                });
+            }
         });
-    </script> --}}
+    </script>
 @endpush
