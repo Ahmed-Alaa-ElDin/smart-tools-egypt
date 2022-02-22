@@ -134,5 +134,9 @@ return [
     'Save'                                      =>      'حفظ',
     'Save and Add New User'                     =>      'حفظ وإضافة مستخدم آخر',
     'Back'                                      =>      'رجوع للخلف',
+    'Uploading ...'                             =>      'جاري التحميل ...',
+    'Password Notification'                     =>      'يرجى العلم أن كلمة المرور الإفتراضية هي"Password@1234"',
+    'User added successfully'                   =>      'تمت إضافة المستخدم بنجاح',
+    'Remove / Replace Profile Image'            =>      'حذف / استبدال الصورة الشخصية',
 
 ];

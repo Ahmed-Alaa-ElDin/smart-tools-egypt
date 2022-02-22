@@ -15,13 +15,19 @@ return new class extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->unsigned()->onDelete('cascade')->onUpdate('cascade');;
-            $table->integer('country_id')->unsigned()->onDelete('cascade')->onUpdate('cascade');;
-            $table->integer('governorate_id')->unsigned()->onDelete('cascade')->onUpdate('cascade');;
-            $table->integer('city_id')->unsigned()->onDelete('cascade')->onUpdate('cascade');;
+            $table->unsignedBigInteger('user_id')->unsigned();
+            $table->unsignedBigInteger('country_id')->unsigned();
+            $table->unsignedBigInteger('governorate_id')->unsigned();
+            $table->unsignedBigInteger('city_id')->unsigned();
             $table->text('details');
             $table->text('special_marque');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('governorate_id')->references('id')->on('governorates')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
+
         });
     }
 

@@ -28,7 +28,6 @@ __('admin/usersPages.Add User')])
                                     <p class="">
                                         {{ __('admin/usersPages.Through this form you can add new user') }}</p>
                                 </div>
-
                             </div>
                         </div>
 
@@ -38,6 +37,7 @@ __('admin/usersPages.Add User')])
                             {{-- Form Start --}}
                             @livewire('admin.users.add-user-form')
                             {{-- content --}}
+
                         </div>
                     </div>
                 </div>
@@ -54,10 +54,12 @@ __('admin/usersPages.Add User')])
 {{-- Extra Scripts --}}
 @push('js')
     @livewireScripts
+    {{-- Tinymce --}}
     <script src="{{ asset('assets/js/plugins/tinymce/tinymce.min.js') }}"></script>
+
     <script>
-        tinymce.init({
-            selector: 'textarea',
+        // Basic tinumce config
+        let options = {
             statusbar: false,
             menubar: false,
             resize: false,
@@ -65,14 +67,39 @@ __('admin/usersPages.Add User')])
             toolbar: 'ltr rtl',
             directionality: 'rtl',
             autoresize_overflow_padding: 0,
+        }
 
+        // tinymce for details
+        tinymce.init({
+            ...options,
+            selector: '#details',
             setup: function(editor) {
                 editor.on('init', function(e) {
                     editor.execCommand('JustifyCenter', false);
                     window.scrollTo(0, 0);
                     $('.first_input').first().focus();
                 });
+                editor.on('blur', function(e) {
+                    window.livewire.emit('details', tinymce.get(e.target.id).getContent())
+                });
             }
         });
+
+        // tinymce for special marque
+        tinymce.init({
+            ...options,
+            selector: '#special_marque',
+            setup: function(editor) {
+                editor.on('init', function(e) {
+                    editor.execCommand('JustifyCenter', false);
+                    window.scrollTo(0, 0);
+                    $('.first_input').first().focus();
+                });
+                editor.on('blur', function(e) {
+                    window.livewire.emit('specialMarque', tinymce.get(e.target.id).getContent())
+                });
+            }
+        });
+
     </script>
 @endpush

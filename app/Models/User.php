@@ -36,6 +36,7 @@ class User extends Authenticatable
         'last_visit_at',
         'profile_photo_path',
         'email_verified_at',
+        'birth_date'
     ];
 
     /**
@@ -73,5 +74,10 @@ class User extends Authenticatable
     public function addresses()
     {
         return $this->hasMany(Address::class);
+    }
+
+    public function userGovernorates()
+    {
+        return $this->hasOneThrough(Governorate::class, Address::class,'user_id','id','governorate_id','id');
     }
 }

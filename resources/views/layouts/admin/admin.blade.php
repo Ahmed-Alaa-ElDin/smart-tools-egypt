@@ -7,10 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $titlePage . " | " . __('Smart Tools Egypt') }}</title>
+    <title>{{ $titlePage . ' | ' . __('Smart Tools Egypt') }}</title>
 
     {{-- FavIcons --}}
-    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/img/logos/smart-tools-logo-fav-only-50.png') }}">
+    <link rel="apple-touch-icon" sizes="76x76"
+        href="{{ asset('assets/img/logos/smart-tools-logo-fav-only-50.png') }}">
     <link rel="icon" type="image/png" href="{{ asset('assets/img/logos/smart-tools-logo-fav-only-50.png') }}">
 
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
@@ -33,6 +34,7 @@
     @if (LaravelLocalization::getCurrentLocale() == 'ar')
         <link href="{{ asset('assets/admin/css/material-dashboard-rtl.css') }}" rel="stylesheet" />
     @endif
+
     @stack('css')
 
 </head>
@@ -62,9 +64,10 @@
 
     <!-- Plugin for the momentJs  -->
     {{-- <script src="{{ asset('assets/admin/js/plugins/moment.min.js') }}"></script>
-        <!--  Plugin for Sweet Alert -->
-        <script src="{{ asset('assets/admin/js/plugins/sweetalert2.js') }}"></script>
-        <!-- Forms Validations Plugin -->
+        <!--  Plugin for Sweet Alert --> --}}
+    {{-- <script src="{{ asset('assets/admin/js/plugins/sweetalert2.js') }}"></script> --}}
+    {{-- <script src="{{ asset('assets/js/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script> --}}
+    {{-- <!-- Forms Validations Plugin -->
         <script src="{{ asset('assets/admin/js/plugins/jquery.validate.min.js') }}"></script>
         <!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
         <script src="{{ asset('assets/admin/js/plugins/jquery.bootstrap-wizard.js') }}"></script>
@@ -90,14 +93,19 @@
         <script src="{{ asset('assets/admin/js/plugins/arrive.min.js') }}"></script>
         <!--  Google Maps Plugin    -->
         <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE'"></script>
-        <!-- Chartist JS --> --}}
-    <script src="{{ asset('assets/admin/js/plugins/chartist.min.js') }}"></script> {{-- <!--  Notifications Plugin    -->
+    <!-- Chartist JS --> --}}
+    <script src="{{ asset('assets/admin/js/plugins/chartist.min.js') }}"></script>
+    {{-- <!--  Notifications Plugin    -->
         <script src="{{ asset('assets/admin/js/plugins/bootstrap-notify.js') }}"></script>
         <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc --> --}}
     <script src="{{ asset('assets/admin/js/material-dashboard.min.js') }}" type="text/javascript"></script>
+
     {{-- <!-- Material Dashboard DEMO methods, don't include it in your project! -->
         <script src="{{ asset('assets/admin/demo/demo.js') }}"></script>
         <script src="{{ asset('assets/admin/js/settings.js') }}"></script> --}}
+
+    @include('sweetalert::alert')
+
     @stack('js')
 </body>
 

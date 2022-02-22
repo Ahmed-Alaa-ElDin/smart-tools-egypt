@@ -13,43 +13,43 @@ return [
     |
     */
 
-    'accepted'             => 'يجب قبول الحقل :attribute',
-    'active_url'           => 'الحقل :attribute لا يُمثّل رابطًا صحيحًا',
-    'after'                => 'يجب على الحقل :attribute أن يكون تاريخًا لاحقًا للتاريخ :date.',
-    'after_or_equal'       => 'الحقل :attribute يجب أن يكون تاريخاً لاحقاً أو مطابقاً للتاريخ :date.',
-    'alpha'                => 'يجب أن لا يحتوي الحقل :attribute سوى على حروف',
-    'alpha_dash'           => 'يجب أن لا يحتوي الحقل :attribute على حروف، أرقام ومطّات.',
+    'accepted'             => 'يجب قبول حقل :attribute',
+    'active_url'           => 'حقل :attribute لا يُمثّل رابطًا صحيحًا',
+    'after'                => 'يجب على حقل :attribute أن يكون تاريخًا لاحقًا للتاريخ :date.',
+    'after_or_equal'       => 'حقل :attribute يجب أن يكون تاريخاً لاحقاً أو مطابقاً للتاريخ :date.',
+    'alpha'                => 'يجب أن لا يحتوي حقل :attribute سوى على حروف',
+    'alpha_dash'           => 'يجب أن لا يحتوي حقل :attribute على حروف، أرقام ومطّات.',
     'alpha_num'            => 'يجب أن يحتوي :attribute على حروفٍ وأرقامٍ فقط',
-    'array'                => 'يجب أن يكون الحقل :attribute ًمصفوفة',
-    'before'               => 'يجب على الحقل :attribute أن يكون تاريخًا سابقًا للتاريخ :date.',
-    'before_or_equal'      => 'الحقل :attribute يجب أن يكون تاريخا سابقا أو مطابقا للتاريخ :date',
+    'array'                => 'يجب أن يكون حقل :attribute ًمصفوفة',
+    'before'               => 'يجب على حقل :attribute أن يكون تاريخًا سابقًا لتاريخ :date.',
+    'before_or_equal'      => 'حقل :attribute يجب أن يكون تاريخا سابقا أو مطابقا للتاريخ :date',
     'between'              => [
         'numeric' => 'يجب أن تكون قيمة :attribute بين :min و :max.',
         'file'    => 'يجب أن يكون حجم الملف :attribute بين :min و :max كيلوبايت.',
         'string'  => 'يجب أن يكون عدد حروف النّص :attribute بين :min و :max',
         'array'   => 'يجب أن يحتوي :attribute على عدد من العناصر بين :min و :max',
     ],
-    'boolean'              => 'يجب أن تكون قيمة الحقل :attribute إما true أو false ',
+    'boolean'              => 'يجب أن تكون قيمة حقل :attribute إما true أو false ',
     'confirmed'            => 'حقل التأكيد غير مُطابق للحقل :attribute',
     'date'                 => 'حقل :attribute ليس تاريخًا صحيحًا',
     'date_format'          => 'لا يتوافق حقل :attribute مع الشكل :format.',
-    'different'            => 'يجب أن يكون الحقلان :attribute و :other مُختلفان',
-    'digits'               => 'يجب أن يحتوي الحقل :attribute على :digits رقمًا/أرقام',
-    'digits_between'       => 'يجب أن يحتوي الحقل :attribute بين :min و :max رقمًا/أرقام ',
+    'different'            => 'يجب أن يكون حقلان :attribute و :other مُختلفان',
+    'digits'               => 'يجب أن يحتوي حقل :attribute على :digits رقمًا/أرقام',
+    'digits_between'       => 'يجب أن يحتوي حقل :attribute بين :min و :max رقمًا/أرقام ',
     'dimensions'           => 'الـ :attribute يحتوي على أبعاد صورة غير صالحة.',
     'distinct'             => 'للحقل :attribute قيمة مُكرّرة.',
     'email'                => 'يجب أن يحتوي :attribute على علامة @',
-    'exists'               => 'الحقل :attribute لاغٍ',
+    'exists'               => 'قيمة حقل :attribute غير موجودة بقاعدة البيانات',
     'file'                 => 'الـ :attribute يجب أن يكون من ملفا.',
     'filled'               => 'حقل :attribute إجباري',
     'image'                => 'يجب أن يكون حقل :attribute صورةً',
     'in'                   => 'حقل :attribute الذي تم اختياره غير موجود بقاعدة البيانات',
-    'in_array'             => 'الحقل :attribute غير موجود في :other.',
-    'integer'              => 'يجب أن يكون الحقل :attribute عددًا صحيحًا',
-    'ip'                   => 'يجب أن يكون الحقل :attribute عنوان IP ذا بُنية صحيحة',
-    'ipv4'                 => 'يجب أن يكون الحقل :attribute عنوان IPv4 ذا بنية صحيحة.',
-    'ipv6'                 => 'يجب أن يكون الحقل :attribute عنوان IPv6 ذا بنية صحيحة.',
-    'json'                 => 'يجب أن يكون الحقل :attribute نصا من نوع JSON.',
+    'in_array'             => 'حقل :attribute غير موجود في :other.',
+    'integer'              => 'يجب أن يكون حقل :attribute عددًا صحيحًا',
+    'ip'                   => 'يجب أن يكون حقل :attribute عنوان IP ذا بُنية صحيحة',
+    'ipv4'                 => 'يجب أن يكون حقل :attribute عنوان IPv4 ذا بنية صحيحة.',
+    'ipv6'                 => 'يجب أن يكون حقل :attribute عنوان IPv6 ذا بنية صحيحة.',
+    'json'                 => 'يجب أن يكون حقل :attribute نصا من نوع JSON.',
     'max'                  => [
         'numeric' => 'يجب أن تكون قيمة الحقل :attribute مساوية أو أصغر لـ :max.',
         'file'    => 'يجب أن لا يتجاوز حجم الملف :attribute :max كيلوبايت',
@@ -78,16 +78,16 @@ return [
     'required_without_all' => 'حقل :attribute إذا لم يتوفّر :values.',
     'same'                 => 'يجب أن يتطابق حقل :attribute مع :other',
     'size'                 => [
-        'numeric' => 'يجب أن تكون قيمة الحقل :attribute مساوية لـ :size',
-        'file'    => 'يجب أن يكون حجم الملف :attribute :size كيلوبايت',
-        'string'  => 'يجب أن يحتوي النص :attribute على :size حروفٍ/حرفًا بالظبط',
-        'array'   => 'يجب أن يحتوي الحقل :attribute على :size عنصرٍ/عناصر بالظبط',
+        'numeric' => 'يجب أن تكون قيمة حقل :attribute مساوية لـ :size',
+        'file'    => 'يجب أن يكون حجم ملف :attribute :size كيلوبايت',
+        'string'  => 'يجب أن يحتوي نص :attribute على :size حروفٍ/حرفًا بالظبط',
+        'array'   => 'يجب أن يحتوي حقل :attribute على :size عنصرٍ/عناصر بالظبط',
     ],
-    'string'               => 'يجب أن يكون الحقل :attribute نصآ.',
+    'string'               => 'يجب أن يكون حقل :attribute نصآ.',
     'timezone'             => 'يجب أن يكون :attribute نطاقًا زمنيًا صحيحًا',
-    'unique'               => 'قيمة الحقل :attribute مُستخدمة من قبل',
+    'unique'               => 'قيمة حقل :attribute مُستخدمة من قبل',
     'uploaded'             => 'فشل في تحميل :attribute',
-    'url'                  => 'صيغة الرابط :attribute غير صحيحة',
+    'url'                  => 'صيغة رابط :attribute غير صحيحة',
 
     /*
     |--------------------------------------------------------------------------
@@ -101,9 +101,7 @@ return [
     */
 
     'custom' => [
-        'attribute' => [
-            'role' => 'دور',
-        ],
+        'attribute' => [],
     ],
 
     /*
@@ -120,9 +118,13 @@ return [
     'attributes' => [
         'name'                  => 'الاسم',
         'first_name_en'         => 'الاسم الأول بالإنجليزية',
+        'f_name.en'             => 'الاسم الأول بالإنجليزية',
         'last_name_en'          => 'اسم العائلة بالإنجليزية',
+        'l_name.en'             => 'اسم العائلة بالإنجليزية',
         'first_name_ar'         => 'الاسم الأول بالعربية',
+        'f_name.ar'             => 'الاسم الأول بالعربية',
         'last_name_ar'          => 'اسم العائلة بالعربية',
+        'l_name.ar'             => 'اسم العائلة بالعربية',
         'username'              => 'اسم المُستخدم',
         'email'                 => 'البريد الالكتروني',
         'first_name'            => 'الاسم الأول',
@@ -161,7 +163,30 @@ return [
         'q'                     => 'البحث',
         'link'                  => ' ',
         'slug'                  => ' ',
-        'photo' => 'الصورة',
+        'photo'                 => 'الصورة',
+        'birth_date'            => 'تاريخ الميلاد',
+        'choosedCountry'        =>  'البلد',
+        'choosedGovernorate'    =>  'المحافظة',
+        'choosedCity'           =>  'المدينة',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Custom Validation Attributes
+    |--------------------------------------------------------------------------
+    |
+    | The following language lines are used to swap attribute place-holders
+    | with something more reader friendly such as E-Mail Address instead
+    | of "email". This simply helps us make messages a little cleaner.
+    |
+    */
+    'values' => [
+        // or whatever fields you wanna translate
+        'birth_date' => [
+            // or tomorrow
+            'today' => 'اليوم'
+        ]
+    ]
+
 
 ];

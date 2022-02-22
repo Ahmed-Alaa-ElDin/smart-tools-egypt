@@ -38,14 +38,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
-            'visibility' => 'public',
-        ],
-
-        'photos' => [
-            'driver' => 'local',
-            'root' => storage_path('app/photos'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
         ],
 
@@ -58,6 +51,13 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+        ],
+
+        'profiles' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/images/profiles'),
+            'url' => env('APP_URL') . '/images/profiles',
+            'visibility' => 'public',
         ],
 
     ],
@@ -75,6 +75,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        public_path('images/profiles') => storage_path('app/public/images/profiles'),
     ],
 
 ];

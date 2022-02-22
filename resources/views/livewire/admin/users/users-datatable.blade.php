@@ -59,12 +59,15 @@
                         {{-- Data Table Header --}}
                         <thead class="bg-gray-50">
                             <tr>
+
+                                {{-- Name --}}
                                 <th wire:click="sortBy('f_name')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/usersPages.Name') }} &nbsp;
                                     @include('partials._sort_icon', ['field' => 'f_name'])
                                 </th>
 
+                                {{-- Email --}}
                                 <th wire:click="sortBy('email')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/usersPages.Contacts') }}&nbsp;
@@ -73,8 +76,8 @@
                                 <th wire:click="sortBy('balance')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
-                                    {{ __('admin/usersPages.Balance') }}&nbsp;
-                                    @include('partials._sort_icon', ['field' => 'balance'])
+                                        {{ __('admin/usersPages.Balance') }}&nbsp;
+                                        @include('partials._sort_icon', ['field' => 'balance'])
                                     </div>
                                 </th>
                                 <th wire:click="sortBy('visit_num')" scope="col"
@@ -99,22 +102,23 @@
                         {{-- Data Table Body --}}
                         <tbody class="bg-white divide-y divide-gray-200">
                             @forelse ($users as $user)
+                                {{-- photo & name --}}
                                 <tr>
                                     <td class="px-6 py-2 whitespace-nowrap">
                                         <div class="flex items-center content-center">
                                             <div class="flex-shrink-0 h-10 w-10">
                                                 @if ($user->profile_photo_path)
                                                     <img class="h-10 w-10 rounded-full"
-                                                        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60"
-                                                        alt="">
+                                                        src="{{ asset('storage/images/profiles/cropped200/'.$user->profile_photo_path) }}"
+                                                        alt="{{ $user->f_name . " " . $user->l_name . "profile image" }}">
                                                 @else
                                                     <div
                                                         class="h-10 w-10 rounded-full text-white bg-secondary flex justify-center items-center">
-                                                        <i class="fa-solid fa-user fa-fw"></i>
+                                                        <i class="fa-regular fa-user fa-fw"></i>
                                                     </div>
                                                 @endif
                                             </div>
-                                            <div class="ml-4">
+                                            <div class="ltr:ml-4 rtl:mr-4">
                                                 <div class="text-sm font-medium text-gray-900">
                                                     {{ $user->f_name . ' ' . $user->l_name }}
                                                 </div>

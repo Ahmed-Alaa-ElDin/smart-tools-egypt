@@ -133,4 +133,9 @@ return [
     'Save'                                      =>      'Save',
     'Save and Add New User'                     =>      'Save & Add New User',
     'Back'                                      =>      'Back',
+    'Uploading ...'                             =>      'Uploading ...',
+    'Password Notification'                     =>      'Note that the default password is "Password@1234"',
+    'User added successfully'                   =>      'User added successfully',
+    'Remove / Replace Profile Image'            =>      'Remove / Replace Profile Image',
+
 ];

@@ -20,7 +20,7 @@
         <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">
 
-                {{-- Notification Dropdown  --}}
+                {{-- Notification Dropdown --}}
                 <li class="nav-item dropdown">
                     <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -35,7 +35,7 @@
                     </div>
                 </li>
 
-                {{-- Lang. DropDown  --}}
+                {{-- Lang. DropDown --}}
                 <li class="nav-item lang dropdown">
                     <a class="nav-link" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
@@ -53,8 +53,14 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" href="#pablo" id="navbarDropdownProfile" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
-                        <i class="fa-solid fa-user"></i>
-                        <span class="ml-2">{{ auth()->user()->f_name }}</span>
+                        @if (auth()->user()->profile_photo_path)
+                            <img class="h-10 w-10 rounded-full"
+                                src="{{ asset('storage/images/profiles/cropped200/' . auth()->user()->profile_photo_path) }}"
+                                alt="{{ auth()->user()->f_name . ' ' . auth()->user()->l_name . 'profile image' }}">
+                        @else
+                            <i class="fa-regular fa-user"></i>
+                        @endif
+                        <span class="ltr:ml-2 rtl:mr-2">{{ auth()->user()->f_name }}</span>
                         <p class="d-lg-none d-md-block">
                             {{ __('admin/master.Account') }}
                         </p>

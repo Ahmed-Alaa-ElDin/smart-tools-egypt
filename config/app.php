@@ -169,6 +169,8 @@ return [
          */
         Spatie\Permission\PermissionServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
+
 
 
         /*
@@ -193,6 +195,8 @@ return [
     |
     */
 
-    'aliases' => Facade::defaultAliases()->merge([])->toArray(),
+    'aliases' => Facade::defaultAliases()->merge([
+        'Image' => Intervention\Image\Facades\Image::class,
+    ])->toArray(),
 
 ];
