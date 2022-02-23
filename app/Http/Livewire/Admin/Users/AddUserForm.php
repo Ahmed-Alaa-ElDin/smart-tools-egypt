@@ -24,7 +24,7 @@ class AddUserForm extends Component
 
     public $f_name = ['ar' => '', 'en' => ''], $l_name = ['ar' => '', 'en' => ''], $email, $phone, $gender = '0', $role, $birth_date, $country, $governorate, $city, $details, $special_marque;
 
-    protected $listeners = ['choosedCountry', 'choosedGovernorate', 'choosedCity', 'details', 'specialMarque'];
+    protected $listeners = ['choseCountry', 'choseGovernorate', 'choseCity', 'details', 'specialMarque'];
 
     protected $rules = [
         'f_name.ar' => 'required|string|max:20|min:3',
@@ -90,21 +90,21 @@ class AddUserForm extends Component
     }
 
     // Get Country data from address component
-    public function choosedCountry($choosedCountry)
+    public function choseCountry($choseCountry)
     {
-        $this->country = $choosedCountry;
+        $this->country = $choseCountry;
     }
 
     // Get Governorate data from address component
-    public function choosedGovernorate($choosedGovernorate)
+    public function choseGovernorate($choseGovernorate)
     {
-        $this->governorate = $choosedGovernorate;
+        $this->governorate = $choseGovernorate;
     }
 
     // Get City data from address component
-    public function choosedCity($choosedCity)
+    public function choseCity($choseCity)
     {
-        $this->city = $choosedCity;
+        $this->city = $choseCity;
     }
 
     // Get details

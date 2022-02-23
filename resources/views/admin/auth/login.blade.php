@@ -53,7 +53,7 @@
                             <div class="flex items-center">
                                 <input id="remember" name="remember" type="checkbox"
                                     class="h-4 w-4 text-primary focus:ring-primary border-secondary rounded cursor-pointer shadow-xl">
-                                <label for="remember" class="ml-2 block text-sm text-gray-900 cursor-pointer">
+                                <label for="remember" class="ltr:ml-2 rtl:mr-2 block text-sm text-gray-900 cursor-pointer">
                                     {{ __('auth/authentication.Remember') }}
                                 </label>
                             </div>

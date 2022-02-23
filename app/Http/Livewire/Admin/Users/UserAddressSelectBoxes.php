@@ -11,12 +11,12 @@ class UserAddressSelectBoxes extends Component
 {
     public $countries = [], $governorates = [],  $cities = [];
 
-    public $choosedCountry, $choosedGovernorate, $choosedCity, $details, $special_marque;
+    public $choseCountry, $choseGovernorate, $choseCity, $details, $special_marque;
 
     protected $rules = [
-        'choosedCountry'        => 'required|exists:countries,id',
-        'choosedGovernorate'    => 'required|exists:governorates,id',
-        'choosedCity'           => 'required|exists:cities,id',
+        'choseCountry'        => 'required|exists:countries,id',
+        'choseGovernorate'    => 'required|exists:governorates,id',
+        'choseCity'           => 'required|exists:cities,id',
     ];
 
     // Called Once on load
@@ -26,24 +26,24 @@ class UserAddressSelectBoxes extends Component
         $this->countries = Country::orderBy('name')->get();
 
         // Choose first country
-        $this->choosedCountry = $this->countries->first()->id ?? Null;
-        $this->emit('choosedCountry', $this->choosedCountry);
+        $this->choseCountry = $this->countries->first()->id ?? Null;
+        $this->emit('choseCountry', $this->choseCountry);
 
         // get all governorates
-        if ($this->choosedCountry) {
-            $this->governorates = Governorate::where('country_id', $this->choosedCountry)->orderBy('name')->get();
+        if ($this->choseCountry) {
+            $this->governorates = Governorate::where('country_id', $this->choseCountry)->orderBy('name')->get();
         }
 
         if ($this->governorates) {
             // Choose first governorate
-            $this->choosedGovernorate = $this->governorates->first()->id ?? Null;
-            $this->emit('choosedGovernorate', $this->choosedGovernorate);
+            $this->choseGovernorate = $this->governorates->first()->id ?? Null;
+            $this->emit('choseGovernorate', $this->choseGovernorate);
 
 
             // get all cities
-            $this->cities = City::where('governorate_id', $this->choosedGovernorate)->orderBy('name')->get();
-            $this->choosedCity = $this->cities->first()->id ?? Null;
-            $this->emit('choosedCity', $this->choosedCity);
+            $this->cities = City::where('governorate_id', $this->choseGovernorate)->orderBy('name')->get();
+            $this->choseCity = $this->cities->first()->id ?? Null;
+            $this->emit('choseCity', $this->choseCity);
         }
     }
 
@@ -53,54 +53,65 @@ class UserAddressSelectBoxes extends Component
         return view('livewire.admin.users.user-address-select-boxes');
     }
 
+    // Realtime validation
     public function updated($field)
     {
         $this->validateOnly($field);
     }
 
     // Call when Choose new Country
-    public function updatedChoosedCountry()
+    public function updatedChoseCountry()
     {
-        $this->governorates = Governorate::where('country_id', $this->choosedCountry)->get();
+        $this->governorates = Governorate::where('country_id', $this->choseCountry)->get();
 
         if (!$this->governorates->count()) {
             $this->cities = [];
 
-            $this->emit('choosedGovernorate', Null);
-            $this->emit('choosedCity', Null);
+            $this->emit('choseGovernorate', Null);
+            $this->emit('choseCity', Null);
         } else {
-            $this->choosedGovernorate = $this->governorates->first()->id;
+            $this->choseGovernorate = $this->governorates->first()->id;
 
-            $this->cities = City::where('governorate_id', $this->choosedGovernorate)->orderBy('name')->get();
+            $this->cities = City::where('governorate_id', $this->choseGovernorate)->orderBy('name')->get();
 
-            $this->validateOnly($this->choosedCountry);
+            $this->validateOnly($this->choseCountry);
 
-            $this->emit('choosedCountry', $this->choosedCountry);
-            $this->emit('choosedGovernorate', $this->choosedGovernorate);
+            $this->emit('choseCountry', $this->choseCountry);
+            $this->emit('choseGovernorate', $this->choseGovernorate);
         }
     }
 
     // Call when Choose new Governorate
-    public function updatedChoosedGovernorate()
+    public function updatedChoseGovernorate()
     {
-        $this->cities = City::where('governorate_id', $this->choosedGovernorate)->orderBy('name')->get();
+        $this->cities = City::where('governorate_id', $this->choseGovernorate)->orderBy('name')->get();
 
         if (!$this->cities->count()) {
             $this->cities = [];
         } else {
-            $this->choosedCity = $this->cities->first()->id;
+            $this->choseCity = $this->cities->first()->id;
         }
 
-        $this->validateOnly($this->choosedGovernorate);
+        $this->validateOnly($this->choseGovernorate);
 
-        $this->emit('choosedGovernorate', $this->choosedGovernorate);
+        $this->emit('choseGovernorate', $this->choseGovernorate);
     }
 
     // Call when Choose new City
-    public function updatedChoosedCity()
+    public function updatedChoseCity()
     {
-        $this->validateOnly($this->choosedCity);
+        $this->validateOnly($this->choseCity);
 
-        $this->emit('choosedCity', $this->choosedCity);
+        $this->emit('choseCity', $this->choseCity);
+    }
+
+    public function updatedDetails()
+    {
+        $this->emit('details', $this->details);
+    }
+
+    public function updatedSpecialMarque()
+    {
+        $this->emit('specialMarque', $this->special_marque);
     }
 }

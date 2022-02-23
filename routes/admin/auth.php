@@ -1,18 +1,18 @@
 <?php
 
-use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\AuthControllerAdmin;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['prefix'=>'/admin','as'=>'admin.'], function () {
+Route::group(['prefix' => '/admin', 'as' => 'admin.'], function () {
 
-    Route::get('/login', [AuthController::class, 'create'])
+    Route::get('/login', [AuthControllerAdmin::class, 'create'])
         ->middleware('guest')
         ->name('login');
 
-    Route::post('/login', [AuthController::class, 'store'])
+    Route::post('/login', [AuthControllerAdmin::class, 'store'])
         ->middleware('guest');
 
-    Route::post('/logout', [AuthController::class, 'destroy'])
+    Route::post('/logout', [AuthControllerAdmin::class, 'destroy'])
         ->middleware('auth')
         ->name('logout');
 });
