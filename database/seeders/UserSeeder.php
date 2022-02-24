@@ -26,7 +26,6 @@ class UserSeeder extends Seeder
             'f_name' => ['en' => 'Ahmed', 'ar' => 'أحمد'],
             'l_name' => ['en' => 'Alaa', 'ar' => 'علاء'],
             'email' => 'ahmedalaaaldin100@gmail.com',
-            'phone' => '01111339306',
             'last_visit_at' => now(),
             'email_verified_at' => now(),
             'created_at' => now(),

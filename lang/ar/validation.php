@@ -74,8 +74,8 @@ return [
     'required_unless'      => 'حقل :attribute مطلوب في حال ما لم يكن :other يساوي :values.',
     'required_with'        => 'حقل :attribute مطلوب إذا توفّر :values.',
     'required_with_all'    => 'حقل :attributeمطلوب إذا توفّر :values.',
-    'required_without'     => 'حقل :attribute إذا لم يتوفّر :values.',
-    'required_without_all' => 'حقل :attribute إذا لم يتوفّر :values.',
+    'required_without'     => 'حقل :attribute مطلوب إذا لم يتوفّر :values.',
+    'required_without_all' => 'حقل :attribute مطلوب إذا لم يتوفّر :values.',
     'same'                 => 'يجب أن يتطابق حقل :attribute مع :other',
     'size'                 => [
         'numeric' => 'يجب أن تكون قيمة حقل :attribute مساوية لـ :size',
@@ -88,6 +88,8 @@ return [
     'unique'               => 'قيمة حقل :attribute مُستخدمة من قبل',
     'uploaded'             => 'فشل في تحميل :attribute',
     'url'                  => 'صيغة رابط :attribute غير صحيحة',
+    'The Email Address is required when role is admin.' => 'حقل البريد الالكتروني مطلوب عندما يكون الدور مدير',
+
 
     /*
     |--------------------------------------------------------------------------

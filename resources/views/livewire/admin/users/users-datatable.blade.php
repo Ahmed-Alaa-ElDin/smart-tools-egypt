@@ -73,6 +73,8 @@
                                     {{ __('admin/usersPages.Contacts') }}&nbsp;
                                     @include('partials._sort_icon', ['field' => 'email'])
                                 </th>
+
+                                {{-- Balance --}}
                                 <th wire:click="sortBy('balance')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
@@ -80,6 +82,8 @@
                                         @include('partials._sort_icon', ['field' => 'balance'])
                                     </div>
                                 </th>
+
+                                {{-- Visits Num --}}
                                 <th wire:click="sortBy('visit_num')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
@@ -87,10 +91,14 @@
                                         @include('partials._sort_icon', ['field' => 'visit_num'])
                                     </div>
                                 </th>
+
+                                {{-- Role --}}
                                 <th scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
                                     {{ __('admin/usersPages.Role') }}
                                 </th>
+
+                                {{-- Manage --}}
                                 <th scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
                                     {{ __('admin/usersPages.Manage') }}
@@ -109,8 +117,8 @@
                                             <div class="flex-shrink-0 h-10 w-10">
                                                 @if ($user->profile_photo_path)
                                                     <img class="h-10 w-10 rounded-full"
-                                                        src="{{ asset('storage/images/profiles/cropped200/'.$user->profile_photo_path) }}"
-                                                        alt="{{ $user->f_name . " " . $user->l_name . "profile image" }}">
+                                                        src="{{ asset('storage/images/profiles/cropped200/' . $user->profile_photo_path) }}"
+                                                        alt="{{ $user->f_name . ' ' . $user->l_name . 'profile image' }}">
                                                 @else
                                                     <div
                                                         class="h-10 w-10 rounded-full text-white bg-secondary flex justify-center items-center">
@@ -128,7 +136,8 @@
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
                                         <div class="text-sm text-gray-900">{{ $user->email }}
                                         </div>
-                                        <div class="text-sm text-gray-500">{{ $user->phone }}
+                                        <div class="text-sm text-gray-500">
+                                            {{ $user->phones->first() ? $user->phones->first()->phone : '' }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
@@ -144,8 +153,8 @@
                                         <a href="#" title="{{ __('admin/usersPages.View') }}"
                                             class="m-0"><i
                                                 class="fa-solid fa-eye fa-fw p-2 text-white bg-view hover:bg-viewHover rounded"></i></a>
-                                        <a href="#" title="{{ __('admin/usersPages.Edit') }}"
-                                            class="m-0"><i
+                                        <a href="{{ route('admin.users.edit', ['user' => $user->id]) }}"
+                                            title="{{ __('admin/usersPages.Edit') }}" class="m-0"><i
                                                 class="fa-solid fa-pen-to-square fa-fw p-2 text-white bg-edit hover:bg-editHover rounded"></i></a>
                                         <a href="#" title="{{ __('admin/usersPages.Role') }}"
                                             class="m-0"><i

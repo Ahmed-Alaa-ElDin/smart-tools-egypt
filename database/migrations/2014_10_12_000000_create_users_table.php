@@ -18,9 +18,8 @@ return new class extends Migration
             $table->id();
             $table->string('f_name');
             $table->string('l_name')->nullable();
-            $table->string('email',50)->unique();
+            $table->string('email',50)->unique()->nullable();
             $table->string('password');
-            $table->string('phone',20)->nullable();
             $table->tinyInteger('gender')->default(0)->comment('0 -> Male , 1 -> Female');
             $table->date('birth_date')->default(Carbon::now());
             $table->string('profile_photo_path', 2048)->nullable();

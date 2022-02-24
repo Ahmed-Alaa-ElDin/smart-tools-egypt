@@ -79,8 +79,9 @@ class User extends Authenticatable
         return $this->hasMany(Address::class);
     }
 
-    public function userGovernorates()
+    public function phones()
     {
-        return $this->hasOneThrough(Governorate::class, Address::class,'user_id','id','governorate_id','id');
+        return $this->hasMany(Phone::class);
     }
+
 }

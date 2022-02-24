@@ -119,6 +119,7 @@ return [
     'Search ...'                                =>      'بحث ...',
     'Points'                                    =>      'رصيد النقاط',
     'Through this form you can add new user'    =>      'يمكنك إضافة مستخدم جديد عن طريق هذه الصفحة',
+    'Through this form you can edit user data'  =>      'يمكنك تعديل بيانات المستخدم عن طريق هذه الصفحة',
     'in Arabic'                                 =>      'بالعربية',
     'in English'                                =>      'بالإنجليزية',
     'Other Information'                         =>      'معلومات أخرى',
@@ -138,5 +139,6 @@ return [
     'Password Notification'                     =>      'يرجى العلم أن كلمة المرور الإفتراضية هي"Password@1234"',
     'User added successfully'                   =>      'تمت إضافة المستخدم بنجاح',
     'Remove / Replace Profile Image'            =>      'حذف / استبدال الصورة الشخصية',
+    'Update'                                    =>      'تحديث البيانات'
 
 ];

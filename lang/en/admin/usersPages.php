@@ -118,6 +118,7 @@ return [
     'Search ...'                                =>      'Search ...',
     'Points'                                    =>      'Points',
     'Through this form you can add new user'    =>      'Through this form you can add a new user',
+    'Through this form you can edit user data'  =>      'Through this form you can edit the user data',
     'in Arabic'                                 =>      'in Arabic',
     'in English'                                =>      'in English',
     'Other Information'                         =>      'Other Information',
@@ -137,5 +138,6 @@ return [
     'Password Notification'                     =>      'Note that the default password is "Password@1234"',
     'User added successfully'                   =>      'User added successfully',
     'Remove / Replace Profile Image'            =>      'Remove / Replace Profile Image',
+    'Update'                                    =>      'Update'
 
 ];
