@@ -15,6 +15,7 @@ class Address extends Model
         'governorate_id',
         'city_id',
         'details',
+        'default',
         'special_marque'
     ];
 

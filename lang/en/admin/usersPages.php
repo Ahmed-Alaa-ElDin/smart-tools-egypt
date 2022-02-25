@@ -138,6 +138,9 @@ return [
     'Password Notification'                     =>      'Note that the default password is "Password@1234"',
     'User added successfully'                   =>      'User added successfully',
     'Remove / Replace Profile Image'            =>      'Remove / Replace Profile Image',
-    'Update'                                    =>      'Update'
+    'Update'                                    =>      'Update',
+    'Default'                                   =>      'Default',
+    'Add'                                       =>      'Add',
+
 
 ];

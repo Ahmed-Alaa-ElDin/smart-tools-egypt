@@ -12,7 +12,7 @@ class Phone extends Model
     protected $fillable = [
         'user_id',
         'phone',
-        'master',
+        'default',
     ];
 
         // One to many relationship (Reverse)  User --> Phones

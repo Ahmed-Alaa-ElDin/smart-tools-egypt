@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('city_id')->unsigned();
             $table->text('details');
             $table->text('special_marque');
+            $table->tinyInteger('default')->default(0)->comment('0 --> Not default , 1 --> Default');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');

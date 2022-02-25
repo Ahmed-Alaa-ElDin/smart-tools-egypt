@@ -131,6 +131,7 @@ return [
     'url' => 'The :attribute must be a valid URL.',
     'uuid' => 'The :attribute must be a valid UUID.',
     'The Email Address is required when role is admin.' => 'The Email Address is required when role is admin.',
+    'The phone numbers must contain digits between 8 & 11' => 'The phone numbers must contain digits between 8 & 11',
 
 
     /*

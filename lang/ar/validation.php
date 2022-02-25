@@ -89,7 +89,7 @@ return [
     'uploaded'             => 'فشل في تحميل :attribute',
     'url'                  => 'صيغة رابط :attribute غير صحيحة',
     'The Email Address is required when role is admin.' => 'حقل البريد الالكتروني مطلوب عندما يكون الدور مدير',
-
+    'The phone numbers must contain digits between 8 & 11' => 'يجب أن تحتوي أرقام التليفونات على أرقم تتكون من 8 إلى 11 رقم',
 
     /*
     |--------------------------------------------------------------------------

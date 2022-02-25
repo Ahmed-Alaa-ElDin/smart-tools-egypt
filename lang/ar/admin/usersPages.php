@@ -130,7 +130,7 @@ return [
     'No Roles in the database'                  =>      'لا يوجد أدوار في قاعدة البيانات',
     'Address Details'                           =>      'تفاصيل العنوان',
     'Special Marque'                            =>      'علامة مميزة',
-    'Please mention the details of the address such as street name, building number, ... etc.'  =>      'برجاء توضيح العنوان بالتفصيل مثل اسم الشارع ورقم العمارة',
+    'Please mention the details of the address such as street name, building number, ... etc.'  =>      'برجاء توضيح العنوان بالتفصيل مثل اسم الشارع ورقم العقار',
     'Please mention any special marque such as mosque, grocery, ... etc.'                       =>      'برجاء ذكر أي علامة مميزة للمكان مثل مسجد أو محل',
     'Save'                                      =>      'حفظ',
     'Save and Add New User'                     =>      'حفظ وإضافة مستخدم آخر',
@@ -139,6 +139,8 @@ return [
     'Password Notification'                     =>      'يرجى العلم أن كلمة المرور الإفتراضية هي"Password@1234"',
     'User added successfully'                   =>      'تمت إضافة المستخدم بنجاح',
     'Remove / Replace Profile Image'            =>      'حذف / استبدال الصورة الشخصية',
-    'Update'                                    =>      'تحديث البيانات'
+    'Update'                                    =>      'تحديث البيانات',
+    'Default'                                   =>      'إفتراضي',
+    'Add'                                       =>      'إضافة',
 
 ];

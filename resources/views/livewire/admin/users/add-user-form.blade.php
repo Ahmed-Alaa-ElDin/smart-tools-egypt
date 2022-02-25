@@ -194,7 +194,6 @@
         </div>
 
         {{-- Address --}}
-        {{ $country . $governorate . $city }}
         <div class="grid grid-cols-12 gap-x-4 gap-y-2 items-center bg-red-100 p-2 rounded text-center my-2">
             <label
                 class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">{{ __('admin/usersPages.Address') }}</label>

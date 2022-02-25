@@ -44,7 +44,6 @@ class AddUserForm extends Component
         'country'        => 'required|exists:countries,id',
         'governorate'    => 'required|exists:governorates,id',
         'city'           => 'required|exists:cities,id',
-
     ];
 
     // Validation Custom messages
@@ -213,8 +212,9 @@ class AddUserForm extends Component
                     'country_id' => $this->country,
                     'governorate_id' => $this->governorate,
                     'city_id' => $this->city,
-                    'details' => $this->details,
-                    'special_marque' => $this->special_marque
+                    'details' => $this->details ?? null,
+                    'special_marque' => $this->special_marque ?? null,
+                    'default' => 1
                 ]);
             }
 
