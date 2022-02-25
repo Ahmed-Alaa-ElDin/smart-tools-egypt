@@ -390,33 +390,23 @@
 
                             {{-- Default Radio Button --}}
                             <div class="flex flex-column justify-center items-center gap-1">
-                                <label for="default{{ $index }}"
+                                <label for="default0"
                                     class="text-xs text-black m-0">{{ __('admin/usersPages.Default') }}</label>
-                                <input type="radio" id="default{{ $index }}" wire:model.lazy="defaultAddress"
-                                    value="{{ $index }}"
+                                <input type="radio" id="default0" wire:model.lazy="defaultAddress"
+                                    value="0"
                                     class="appearance-none checked:bg-primary outline-none ring-0">
                             </div>
-
-                            {{-- Add remove button if their are more than one address --}}
-                            @if (count($addresses) > 1)
-                                <div>
-                                    <button
-                                        class=" bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded-full shadow btn btn-xs"
-                                        wire:click.prevent='removeAddress({{ $index }})'><i
-                                            class="fa fa-minus"></i></button>
-                                </div>
-                            @endif
 
                         </div>
 
                         {{-- Country --}}
                         <div class="col-span-3 lg:col-span-1 grid grid-cols-3 items-center">
                             <label class="col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
-                                for="country{{ $index }}">{{ __('admin/usersPages.Country') }}</label>
+                                for="country0">{{ __('admin/usersPages.Country') }}</label>
                             <select
                                 class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('country') border-red-900 border-2 @enderror"
-                                wire:model.lazy='addresses.{{ $index }}.country_id'
-                                wire:change='$emit("countryUpdated")' id="country{{ $index }}">
+                                wire:model.lazy='addresses.0.country_id'
+                                wire:change='$emit("countryUpdated")' id="country0">
                                 @forelse ($countries as $country)
                                     <option value="{{ $country->id }}">{{ $country->name }}</option>
                                 @empty
@@ -438,7 +428,7 @@
                                 for="governorate">{{ __('admin/usersPages.Governorate') }}</label>
                             <select
                                 class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('governorate') border-red-900 border-2 @enderror"
-                                wire:model.lazy='addresses.{{ $index }}.governorate_id' id="governorate"
+                                wire:model.lazy='addresses.0.governorate_id' id="governorate"
                                 wire:change='$emit("governorateUpdated")'>
                                 @forelse ($governorates[$index] as $governorate)
                                     <option value="{{ $governorate['id'] }}">
@@ -468,7 +458,7 @@
 
                             <select
                                 class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('city  ') border-red-900 border-2 @enderror"
-                                wire:model.lazy='addresses.{{ $index }}.city_id' id="city">
+                                wire:model.lazy='addresses.0.city_id' id="city">
                                 @forelse ($cities[$index] as $city)
                                     <option value="{{ $city['id'] }}">{{ $city['name'][session('locale')] }}
                                     </option>
@@ -495,7 +485,7 @@
                             <label
                                 class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                 for="details">{{ __('admin/usersPages.Address Details') }}</label>
-                            <textarea id="details" rows="2" wire:model.lazy="addresses.{{ $index }}.details"
+                            <textarea id="details" rows="2" wire:model.lazy="addresses.0.details"
                                 dir="rtl"
                                 placeholder="{{ __('admin/usersPages.Please mention the details of the address such as street name, building number, ... etc.') }}"
                                 class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 overflow-hidden"></textarea>
@@ -513,7 +503,7 @@
                                 class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                 for="special_marque">{{ __('admin/usersPages.Special Marque') }}</label>
                             <textarea id="special_marque" rows="2"
-                                wire:model.lazy="addresses.{{ $index }}.special_marque" dir="rtl"
+                                wire:model.lazy="addresses.0.special_marque" dir="rtl"
                                 placeholder="{{ __('admin/usersPages.Please mention any special marque such as mosque, grocery, ... etc.') }}"
                                 class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"></textarea>
                             @error('addresses.*.special_marque')
