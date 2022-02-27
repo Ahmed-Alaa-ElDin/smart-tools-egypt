@@ -66,7 +66,7 @@
     {{-- <script src="{{ asset('assets/admin/js/plugins/moment.min.js') }}"></script>
         <!--  Plugin for Sweet Alert --> --}}
     {{-- <script src="{{ asset('assets/admin/js/plugins/sweetalert2.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/js/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
     {{-- <!-- Forms Validations Plugin -->
         <script src="{{ asset('assets/admin/js/plugins/jquery.validate.min.js') }}"></script>
         <!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
@@ -104,7 +104,28 @@
         <script src="{{ asset('assets/admin/demo/demo.js') }}"></script>
         <script src="{{ asset('assets/admin/js/settings.js') }}"></script> --}}
 
-    @include('sweetalert::alert')
+    {{-- @include('sweetalert::alert') --}}
+
+    <script>
+        @if (Session::has('success'))
+            Swal.fire({
+            text:'{{ Session::get('success') }}',
+            icon: 'success',
+            timer: 3000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            })
+        @elseif (Session::has('error'))
+            Swal.fire({
+            text:'{{ Session::get('error') }}',
+            icon: 'error',
+            timer: 3000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            })
+        @endif
+    </script>
+
 
     @stack('js')
 </body>

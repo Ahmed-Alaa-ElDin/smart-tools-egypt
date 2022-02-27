@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Config;
+
 return [
     'All Users'                                 =>      'All Users',
     'All Users Table'                           =>      'All Users Table',
@@ -135,12 +137,20 @@ return [
     'Save and Add New User'                     =>      'Save & Add New User',
     'Back'                                      =>      'Back',
     'Uploading ...'                             =>      'Uploading ...',
-    'Password Notification'                     =>      'Note that the default password is "Password@1234"',
+    'Password Notification'                     =>      'Note that the default password is "'.Config::get('constants.constants.DEFAULT_PASSWORD').'"',
     'User added successfully'                   =>      'User added successfully',
+    'User hasn\'t been added'                   =>      "User hasn t been added",
+    'User updated successfully'                 =>      'User updated successfully',
+    'User hasn\'t been updated'                 =>      "User hasn t been updated",
     'Remove / Replace Profile Image'            =>      'Remove / Replace Profile Image',
     'Update'                                    =>      'Update',
     'Default'                                   =>      'Default',
     'Add'                                       =>      'Add',
-
-
+    'Delete'                                    =>      'Delete',
+    'Reset Password'                            =>      'Reset Password',
+    'Are you sure, you want to reset the password ?'    =>      'Are you sure, you want to reset the password ?',
+    'Confirm'                                   =>      'Confirm',
+    'Cancel'                                    =>      'Cancel',
+    'Password has been reset successfully'      =>      'Password has been reset successfully',
+    'Password hasn\'n been reset'               =>      'Password hasn\'n been reset',
 ];

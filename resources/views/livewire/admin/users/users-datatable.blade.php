@@ -110,6 +110,7 @@
                         {{-- Data Table Body --}}
                         <tbody class="bg-white divide-y divide-gray-200">
                             @forelse ($users as $user)
+
                                 {{-- photo & name --}}
                                 <tr>
                                     <td class="px-6 py-2 whitespace-nowrap">
@@ -137,7 +138,7 @@
                                         <div class="text-sm text-gray-900">{{ $user->email }}
                                         </div>
                                         <div class="text-sm text-gray-500">
-                                            {{ $user->phones->first() ? $user->phones->first()->phone : '' }}
+                                            {{ $user->phones->where('default', 1)->first() ? $user->phones->where('default', 1)->first()->phone : '' }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
@@ -147,25 +148,34 @@
                                         {{ $user->visit_num }}
                                     </td>
                                     <td class="px-6 py-2 text-center whitespace-nowrap text-sm text-gray-500">
-                                        {{ $user->roles->first() ? __('admin/usersPages.' . $user->roles->first()->name) : __('N/A') }}
+                                        {{ $user->roles->first() ? $user->roles->first()->name : __('N/A') }}
                                     </td>
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
+
+                                        {{-- User Details --}}
                                         <a href="#" title="{{ __('admin/usersPages.View') }}"
                                             class="m-0"><i
                                                 class="fa-solid fa-eye fa-fw p-2 text-white bg-view hover:bg-viewHover rounded"></i></a>
+
+                                        {{-- Edit Button --}}
                                         <a href="{{ route('admin.users.edit', ['user' => $user->id]) }}"
                                             title="{{ __('admin/usersPages.Edit') }}" class="m-0"><i
                                                 class="fa-solid fa-pen-to-square fa-fw p-2 text-white bg-edit hover:bg-editHover rounded"></i></a>
-                                        <a href="#" title="{{ __('admin/usersPages.Role') }}"
+
+                                        {{-- Edit Role Button --}}
+                                        <a href="#" title="{{ __('admin/usersPages.Role') }}" wire:click.prevent="editRolesSelect({{ $user->id }})"
                                             class="m-0"><i
                                                 class="fa-solid fa-key fa-fw p-2 text-white bg-role hover:bg-roleHover rounded"></i></a>
-                                        <a href="#" title="{{ __('admin/usersPages.Delete') }}"
+
+                                        {{-- Soft Delete Button --}}
+                                        <a href="#" title="{{ __('admin/usersPages.Delete') }}" wire:click.prevent="deleteConfirm({{ $user->id }})"
                                             class="m-0"><i
                                                 class="fa-solid fa-trash-can fa-fw p-2 text-white bg-delete hover:bg-deleteHover rounded"></i></a>
                                     </td>
                                 </tr>
 
                             @empty
+                            {{-- TODO --}}
                             @endforelse
                         </tbody>
                     </table>

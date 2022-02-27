@@ -26,7 +26,7 @@ class UsersExport implements FromCollection, WithHeadings, WithStyles, WithMappi
      */
     public function collection()
     {
-        $users = User::with('roles')->get();
+        $users = User::with('roles')->with('phones')->with('addresses')->get();
         $this->count = $users->count();
 
         return $users;
@@ -66,7 +66,7 @@ class UsersExport implements FromCollection, WithHeadings, WithStyles, WithMappi
             $user->getTranslation('f_name', 'ar'),
             $user->getTranslation('l_name', 'ar'),
             $user->email,
-            $user->phone ? $user->phone : __('N/A'),
+            $user->phones->first() ? $user->phones->where('default',1)->first()->phone : __('N/A'),
             $user->gender == 0 ? __('Male') : __('Female'),
             $user->balance == 0 ? "0" . ' ' . __('admin/usersPages.LE') : $user->balance . ' ' . __('admin/usersPages.LE'),
             $user->points == 0 ? "0" : $user->points,

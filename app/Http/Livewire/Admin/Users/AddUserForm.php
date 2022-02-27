@@ -8,8 +8,10 @@ use App\Models\Country;
 use App\Models\Governorate;
 use App\Models\Phone;
 use App\Models\User;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Intervention\Image\ImageManager;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -183,7 +185,7 @@ class AddUserForm extends Component
                     'ar' => $this->l_name['ar'],
                     'en' => $this->l_name['en'],
                 ],
-                'password'              => Hash::make('Password@1234'),
+                'password'              => Hash::make(Config::get('constants.constants.DEFAULT_PASSWORD')),
                 'gender'                => $this->gender,
                 'profile_photo_path'    =>  $this->image_name,
                 'visit_num'             => 0,
@@ -227,14 +229,17 @@ class AddUserForm extends Component
             DB::commit();
 
             if ($new) {
-                alert()->success(__('admin/usersPages.User added successfully'))->persistent(false, false)->autoClose($milliseconds = 3000)->timerProgressBar();
+                Session::flash('success', __('admin/usersPages.User added successfully'));
                 redirect()->route('admin.users.create');
             } else {
-                redirect()->route('admin.users.index')->with('success', __('admin/usersPages.User added successfully'));
+                Session::flash('success', __('admin/usersPages.User added successfully'));
+                redirect()->route('admin.users.index');
             }
         } catch (Throwable $th) {
             DB::rollback();
-            redirect()->route('admin.users.index')->with('error', __('admin/usersPages.User hasn\'t been added'));
+
+            Session::flash('error', __('admin/usersPages.User hasn\'t been added'));
+            redirect()->route('admin.users.index');
         }
     }
 }

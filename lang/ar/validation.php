@@ -167,9 +167,14 @@ return [
         'slug'                  => ' ',
         'photo'                 => 'الصورة',
         'birth_date'            => 'تاريخ الميلاد',
-        'choosedCountry'        =>  'البلد',
-        'choosedGovernorate'    =>  'المحافظة',
-        'choosedCity'           =>  'المدينة',
+        'choseCountry'          =>  'البلد',
+        'choseGovernorate'      =>  'المحافظة',
+        'choseCity'             =>  'المدينة',
+        'addresses.*.country_id'        =>  'الدولة',
+        'addresses.*.governorate_id'    =>  'المحافظ',
+        'addresses.*.city_id'           =>  'المدينة',
+        'addresses.*.details'           =>  'تفاصيل العنوان',
+        'addresses.*.special_marque'    =>  'العلامة المميزة',
     ],
 
     /*

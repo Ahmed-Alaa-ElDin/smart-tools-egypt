@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Spatie\Permission\Models\Role;
 
 class UsersDatatable extends Component
 {
@@ -18,10 +19,12 @@ class UsersDatatable extends Component
 
     public $search = "";
 
+    protected $listeners = ['softDeleteUser','editRoles'];
+
     // Render Once
     public function mount()
     {
-        $this->perPage = Config::get('constants.constants.pagination');
+        $this->perPage = Config::get('constants.constants.PAGINATION');
     }
 
     // Render With each update
@@ -60,8 +63,69 @@ class UsersDatatable extends Component
             $this->sortDirection = 'ASC';
         }
 
-        // $this->reset(['selectedUsers', 'selectedAllUsers']);
-
         return $this->sortBy = $field;
     }
+
+    ######## Soft Delete #########
+    public function deleteConfirm($user_id)
+    {
+        $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
+            "text" => __('admin/usersPages.Are you sure, you want to delete this user ?'),
+            'confirmButtonText' => __('admin/usersPages.Delete'),
+            'denyButtonText' => __('admin/usersPages.Cancel'),
+            'user_id' => $user_id,
+        ]);
+    }
+
+    public function softDeleteUser($user_id)
+    {
+        try {
+            $user = User::findOrFail($user_id);
+            $user->delete();
+
+            $this->dispatchBrowserEvent('swalUserDeleted', [
+                "text" => __('admin/usersPages.User has been deleted successfully'),
+                'icon' => 'success'
+            ]);
+        } catch (\Throwable $th) {
+            $this->dispatchBrowserEvent('swalUserDeleted', [
+                "text" => __('admin/usersPages.User hasn\'n been deleted'),
+                'icon' => 'error'
+            ]);
+        }
+    }
+    ######## Soft Delete #########
+
+
+    ######## Edit User Roles #########
+    public function editRolesSelect($user_id)
+    {
+        $this->dispatchBrowserEvent('swalEditRolesSelect', [
+            'title' => __('admin/usersPages.Select field validation'),
+            'confirmButtonText' => __('admin/usersPages.Update'),
+            'denyButtonText' => __('admin/usersPages.Cancel'),
+            'data' => json_encode(Role::get()->pluck('name', 'name')),
+            'selected' => User::findOrFail($user_id)->roles->first()->name ?? 'Customer',
+            'user_id' => $user_id,
+        ]);
+    }
+
+    public function editRoles($user_id, $role_name)
+    {
+        try {
+            User::findOrFail($user_id)->syncRoles($role_name);
+
+            $this->dispatchBrowserEvent('swalUserRoleChanged', [
+                "text" => __('admin/usersPages.New role assigned successfully'),
+                'icon' => 'success'
+            ]);
+
+        } catch (\Throwable $th) {
+            $this->dispatchBrowserEvent('swalUserRoleChanged', [
+                "text" => __('admin/usersPages.New role hasn\'n been assigned'),
+                'icon' => 'error'
+            ]);
+        }
+    }
+    ######## Edit User Roles #########
 }

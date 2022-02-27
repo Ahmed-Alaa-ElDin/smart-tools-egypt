@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Config;
+
 return [
     'All Users'                                 =>      'جميع المستخدمين',
     'All Users Table'                           =>      'جدول جميع المستخدمين',
@@ -136,11 +138,21 @@ return [
     'Save and Add New User'                     =>      'حفظ وإضافة مستخدم آخر',
     'Back'                                      =>      'رجوع للخلف',
     'Uploading ...'                             =>      'جاري التحميل ...',
-    'Password Notification'                     =>      'يرجى العلم أن كلمة المرور الإفتراضية هي"Password@1234"',
+    'Password Notification'                     =>      'يرجى العلم أن كلمة المرور الإفتراضية هي"' . Config::get('constants.constants.DEFAULT_PASSWORD') . '"',
     'User added successfully'                   =>      'تمت إضافة المستخدم بنجاح',
+    'User hasn\'t been added'                   =>      'لم تتم عملية إضافة المستخدم',
+    'User updated successfully'                 =>      'تم تحديث بيانات المستخدم بنجاح',
+    'User hasn\'t been updated'                 =>      'لم تتم عملية تحديث بيانات المستخدم',
     'Remove / Replace Profile Image'            =>      'حذف / استبدال الصورة الشخصية',
     'Update'                                    =>      'تحديث البيانات',
     'Default'                                   =>      'إفتراضي',
     'Add'                                       =>      'إضافة',
+    'Delete'                                    =>      'حذف',
+    'Reset Password'                            =>      'إعادة تعيين كلمة المرور',
+    'Are you sure, you want to reset the password ?'    =>      'هل أنت متأكد من إعادة تعيين كلمة المرور ؟',
+    'Confirm'                                   =>      'تأكيد',
+    'Cancel'                                    =>      'إلغاء',
+    'Password has been reset successfully'      =>      'تم إعادة تعيين كلمة المرور بنجاح',
+    'Password hasn\'n been reset'               =>      'لم تم إعادة تعيين كلمة المرور',
 
 ];

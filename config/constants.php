@@ -2,6 +2,7 @@
 
 return [
     "constants" => [
-        'pagination' => 10
+        'PAGINATION' => 10,
+        'DEFAULT_PASSWORD' => 'Password@1234'
     ]
 ];

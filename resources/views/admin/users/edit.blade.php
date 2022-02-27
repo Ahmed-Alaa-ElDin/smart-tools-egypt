@@ -54,4 +54,36 @@ __('admin/usersPages.Edit User')])
 {{-- Extra Scripts --}}
 @push('js')
     @livewireScripts
+
+    <script>
+        window.addEventListener('swalConfirmPassword', function(e) {
+            Swal.fire({
+                text: e.detail.text,
+                showDenyButton: true,
+                confirmButtonText: e.detail.confirmButtonText,
+                denyButtonText: e.detail.denyButtonText,
+                denyButtonColor: 'gray',
+                confirmButtonColor: 'orange',
+                focusDeny: true,
+                denyButtonText: e.detail.denyButtonText,
+                showLoaderOnConfirm: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.emit('resetPassword');
+                }
+            });
+        });
+
+        window.addEventListener('swalPasswordReset', function(e) {
+            Swal.fire({
+                text: e.detail.text,
+                icon: e.detail.icon,
+                position: 'top-right',
+                showConfirmButton: false,
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+            })
+        });
+    </script>
 @endpush

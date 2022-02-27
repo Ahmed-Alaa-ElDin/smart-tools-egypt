@@ -33,6 +33,9 @@ __('admin/usersPages.All Users')])
                         </div>
 
                         {{-- Card Body --}}
+                        {{-- @php
+                            dd(session());
+                        @endphp --}}
                         <div class="card-body overflow-hidden">
                             {{-- Data Table Start --}}
                             @livewire('admin.users.users-datatable')
@@ -54,6 +57,73 @@ __('admin/usersPages.All Users')])
 {{-- Extra Scripts --}}
 @push('js')
     @livewireScripts
+
+    <script>
+        // #### User Soft Delete ####
+        window.addEventListener('swalConfirmSoftDelete', function(e) {
+            Swal.fire({
+                icon: 'warning',
+                text: e.detail.text,
+                showDenyButton: true,
+                confirmButtonText: e.detail.confirmButtonText,
+                denyButtonText: e.detail.denyButtonText,
+                denyButtonColor: 'gray',
+                confirmButtonColor: 'red',
+                focusDeny: true,
+                showLoaderOnConfirm: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.emit('softDeleteUser', e.detail.user_id);
+                }
+            });
+        });
+
+        window.addEventListener('swalUserDeleted', function(e) {
+            Swal.fire({
+                text: e.detail.text,
+                icon: e.detail.icon,
+                position: 'top-right',
+                showConfirmButton: false,
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+            })
+        });
+        // #### User Soft Delete ####
+
+        window.addEventListener('swalEditRolesSelect', function(e) {
+            Swal.fire({
+                title: e.detail.title,
+                input: 'select',
+                inputOptions:JSON.parse(e.detail.data),
+                inputValue: e.detail.selected,
+                customClass: {
+                    input: 'role-grapper rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300',
+                },
+                showDenyButton: true,
+                confirmButtonText: e.detail.confirmButtonText,
+                denyButtonText: e.detail.denyButtonText,
+                denyButtonColor: 'gray',
+                confirmButtonColor: 'green',
+                showLoaderOnConfirm: true,
+
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.emit('editRoles', e.detail.user_id,result.value);
+                }
+            });
+        });
+
+        window.addEventListener('swalUserRoleChanged', function(e) {
+            Swal.fire({
+                text: e.detail.text,
+                icon: e.detail.icon,
+                position: 'top-right',
+                showConfirmButton: false,
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+            })
+        });
+    </script>
 @endpush
-
-
