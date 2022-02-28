@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
-
-class RoleSeeder extends Seeder
+class PermissionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,17 +15,11 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        $customer = Role::create([
-            'name' => 'Customer'
-        ]);
-
-        $admin = Role::create([
-            'name' => 'Admin'
-        ]);
-
-        $adminPermissions = [
+        $permissions = [
+            // Dashboard
             ['name' => "See Dashboard"],
 
+            // Users
             ['name' => "See All Users"],
             ['name' => "Add New User"],
             ['name' => "See User's Details"],
@@ -37,7 +31,8 @@ class RoleSeeder extends Seeder
             ['name' => "See All Roles"],
         ];
 
-        $admin->givePermissionTo($adminPermissions);
-
+        foreach ($permissions as $permission) {
+            Permission::create($permission);
+        }
     }
 }

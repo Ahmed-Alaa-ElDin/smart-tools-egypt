@@ -1,16 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Exports\Admin\Users\UsersExport;
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
-use Spatie\Permission\Models\Role;
 
-class UsersController extends Controller
+class RolesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,31 +13,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-
-        return view('admin.users.index', compact('users'));
+        return view('admin.users.roles');
     }
-
-    /**
-     * Exports all user from user datatable as xlsx
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function exportExcel()
-    {
-        return Excel::download(new UsersExport, 'Users-' . Carbon::now()->format('d-m-Y') . '.xlsx');
-    }
-
-    /**
-     * Exports all user from user datatable as pdf
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function exportPDF()
-    {
-        return Excel::download(new UsersExport, 'Users-' . Carbon::now()->format('d-m-Y') . '.pdf', \Maatwebsite\Excel\Excel::MPDF);
-    }
-
 
     /**
      * Show the form for creating a new resource.
@@ -52,8 +23,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-
-        return view('admin.users.create');
+        //
     }
 
     /**
@@ -64,7 +34,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        //
     }
 
     /**
@@ -86,7 +56,7 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.users.edit',compact('id'));
+        //
     }
 
     /**
@@ -110,11 +80,5 @@ class UsersController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-
-    public function softDeletedUsers()
-    {
-        return view('admin.users.softDeleted');
     }
 }

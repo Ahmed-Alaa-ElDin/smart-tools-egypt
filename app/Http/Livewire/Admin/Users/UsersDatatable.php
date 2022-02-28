@@ -89,7 +89,7 @@ class UsersDatatable extends Component
             ]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalUserDeleted', [
-                "text" => __('admin/usersPages.User hasn\'n been deleted'),
+                "text" => __('admin/usersPages.User hasn\'t been deleted'),
                 'icon' => 'error'
             ]);
         }
@@ -101,7 +101,7 @@ class UsersDatatable extends Component
     public function editRolesSelect($user_id)
     {
         $this->dispatchBrowserEvent('swalEditRolesSelect', [
-            'title' => __('admin/usersPages.Select field validation'),
+            'title' => __('admin/usersPages.Select User Role'),
             'confirmButtonText' => __('admin/usersPages.Update'),
             'denyButtonText' => __('admin/usersPages.Cancel'),
             'data' => json_encode(Role::get()->pluck('name', 'name')),

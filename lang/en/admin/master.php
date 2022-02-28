@@ -16,4 +16,5 @@ return [
     'edit roles'                =>      'Edit Roles',
     'Soft Deleted Users'        =>      'Temp. Deleted Users',
     'Soft Deleted Users Table'  =>      'Temp. Deleted Users\' Table',
+    'Roles Management'          =>      'Roles Management',
 ];

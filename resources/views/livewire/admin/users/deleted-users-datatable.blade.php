@@ -1,4 +1,5 @@
 <div>
+
     <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -23,19 +24,19 @@
                             <div class="flex justify-center">
                                 <button class="btn btn-success dropdown-toggle btn-round btn-sm text-white font-bold "
                                     type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-sync-alt"></i> &nbsp; {{ __('admin/usersPages.Export Users') }}
+                                    <i class="fas fa-sync-alt"></i> &nbsp; {{ __('admin/usersPages.Manage All') }}
                                     &nbsp;</button>
                                 <div class="dropdown-menu">
-                                    <a href="{{ route('admin.users.exportExcel') }}"
+                                    <a href="#" wire:click.prevent="restoreAllConfirm"
                                         class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600"><i
-                                            class="fas fa-file-excel"></i>
+                                            class="fas fa-trash-can-arrow-up"></i>
                                         &nbsp;&nbsp;
-                                        {{ __('admin/usersPages.download all excel') }}</a>
-                                    <a href="{{ route('admin.users.exportPDF') }}"
+                                        {{ __('admin/usersPages.Restore All') }}</a>
+                                    <a href="#" wire:click.prevent="forceDeleteAllConfirm"
                                         class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600"><i
-                                            class="fas fa-file-pdf"></i>
+                                            class="fas fa-trash-can"></i>
                                         &nbsp;&nbsp;
-                                        {{ __('admin/usersPages.download all pdf') }}</a>
+                                        {{ __('admin/usersPages.Delete All Permanently') }}</a>
                                 </div>
                             </div>
                         </div>
@@ -152,37 +153,24 @@
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- User Details --}}
-                                        @can("See User's Details")
-
-                                        @endcan
                                         <a href="#" title="{{ __('admin/usersPages.View') }}"
                                             class="m-0"><i
                                                 class="fa-solid fa-eye fa-fw p-2 text-white bg-view hover:bg-viewHover rounded"></i></a>
 
-                                        {{-- Edit Button --}}
-                                        @can('Edit User')
-                                            <a href="{{ route('admin.users.edit', ['user' => $user->id]) }}"
-                                                title="{{ __('admin/usersPages.Edit') }}" class="m-0"><i
-                                                    class="fa-solid fa-pen-to-square fa-fw p-2 text-white bg-edit hover:bg-editHover rounded"></i></a>
-                                        @endcan
+                                        {{-- Restore Button --}}
+                                        <a href="#" title="{{ __('admin/usersPages.Restore') }}"
+                                            wire:click.prevent="restoreConfirm({{ $user->id }})"
+                                            class="m-0"><i
+                                                class="fa-solid fa-trash-can-arrow-up fa-fw p-2 text-white bg-green-500 hover:bg-green-700 rounded"></i></a>
 
-                                        {{-- Edit Role Button --}}
-                                        @can("Edit User's Role")
-                                            <a href="#" title="{{ __('admin/usersPages.Role') }}"
-                                                wire:click.prevent="editRolesSelect({{ $user->id }})"
-                                                class="m-0"><i
-                                                    class="fa-solid fa-key fa-fw p-2 text-white bg-role hover:bg-roleHover rounded"></i></a>
-                                        @endcan
-
-                                        {{-- Soft Delete Button --}}
-                                        @can('Soft Delete User')
-                                            <a href="#" title="{{ __('admin/usersPages.Delete') }}"
-                                                wire:click.prevent="deleteConfirm({{ $user->id }})"
-                                                class="m-0"><i
-                                                    class="fa-solid fa-trash-can fa-fw p-2 text-white bg-delete hover:bg-deleteHover rounded"></i></a>
-                                        @endcan
+                                        {{-- Permanent Delete Button --}}
+                                        <a href="#" title="{{ __('admin/usersPages.Delete Permanently') }}"
+                                            wire:click.prevent="forceDeleteConfirm({{ $user->id }})"
+                                            class="m-0"><i
+                                                class="fa-solid fa-trash-can fa-fw p-2 text-white bg-delete hover:bg-deleteHover rounded"></i></a>
                                     </td>
                                 </tr>
+
                             @empty
                                 <tr>
                                     <td class="text-center py-2 font-bold" colspan="6">

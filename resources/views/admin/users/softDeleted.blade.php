@@ -1,5 +1,5 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Users', 'activePage' => 'All Users', 'titlePage' =>
-__('admin/usersPages.All Users')])
+@extends('layouts.admin.admin', ['activeSection' => 'Users', 'activePage' => 'Deleted Users', 'titlePage' =>
+__('admin/usersPages.Deleted Users')])
 
 @section('content')
     <div class="content">
@@ -9,7 +9,9 @@ __('admin/usersPages.All Users')])
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item hover:text-primary"><a
                             href="{{ route('admin.dashboard') }}">{{ __('admin/usersPages.Dashboard') }}</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/usersPages.All Users') }}</li>
+                    <li class="breadcrumb-item hover:text-primary"><a
+                            href="{{ route('admin.users.index') }}">{{ __('admin/usersPages.All Users') }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/usersPages.Deleted Users') }}</li>
                 </ol>
             </nav>
 
@@ -22,21 +24,18 @@ __('admin/usersPages.All Users')])
                         {{-- Card Head --}}
                         <div class="card-header card-header-primary">
                             <div class="row">
-                                <div class="col-6 ltr:text-left rtl:text-right font-bold self-center text-gray-100">
-                                    <p class=""> {{ __('admin/usersPages.Here you can manage users') }}</p>
-                                </div>
-                                <div class="col-6 ltr:text-right rtl:text-left">
-                                    <a href="{{ route('admin.users.create') }}"
-                                        class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold"><i
-                                            class="fa fa-plus rtl:ml-2 ltr:mr-2"></i>{{ __('admin/usersPages.Add User') }}</a>
+                                <div class="col-12 ltr:text-left rtl:text-right font-bold self-center text-gray-100">
+                                    <p class="">
+                                        {{ __('admin/usersPages.Here you can Restore / Permanently delete users') }}</p>
                                 </div>
                             </div>
                         </div>
 
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
+
                             {{-- Data Table Start --}}
-                            @livewire('admin.users.users-datatable')
+                            @livewire('admin.users.deleted-users-datatable')
                             {{-- Data Table End --}}
 
                         </div>
@@ -57,8 +56,41 @@ __('admin/usersPages.All Users')])
     @livewireScripts
 
     <script>
-        // #### User Soft Delete ####
-        window.addEventListener('swalConfirmSoftDelete', function(e) {
+        // #### User Force Delete ####
+        window.addEventListener('swalConfirm', function(e) {
+            Swal.fire({
+                icon: e.detail.icon,
+                text: e.detail.text,
+                confirmButtonText: e.detail.confirmButtonText,
+                denyButtonText: e.detail.denyButtonText,
+                denyButtonColor: e.detail.denyButtonColor,
+                confirmButtonColor: e.detail.confirmButtonColor,
+                focusDeny: e.detail.focusDeny,
+                showDenyButton: true,
+                showLoaderOnConfirm: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.emit(e.detail.method, e.detail.user_id);
+                }
+            });
+        });
+
+        window.addEventListener('swalDone', function(e) {
+            Swal.fire({
+                text: e.detail.text,
+                icon: e.detail.icon,
+                position: 'top-right',
+                showConfirmButton: false,
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+            })
+        });
+        // #### User Force Delete ####
+
+
+        // #### Restore ####
+        window.addEventListener('swalRestore', function(e) {
             Swal.fire({
                 icon: 'warning',
                 text: e.detail.text,
@@ -66,53 +98,17 @@ __('admin/usersPages.All Users')])
                 confirmButtonText: e.detail.confirmButtonText,
                 denyButtonText: e.detail.denyButtonText,
                 denyButtonColor: 'gray',
-                confirmButtonColor: 'red',
-                focusDeny: true,
-                showLoaderOnConfirm: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Livewire.emit('softDeleteUser', e.detail.user_id);
-                }
-            });
-        });
-
-        window.addEventListener('swalUserDeleted', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        });
-        // #### User Soft Delete ####
-
-        window.addEventListener('swalEditRolesSelect', function(e) {
-            Swal.fire({
-                title: e.detail.title,
-                input: 'select',
-                inputOptions: JSON.parse(e.detail.data),
-                inputValue: e.detail.selected,
-                customClass: {
-                    input: 'role-grapper rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300',
-                },
-                showDenyButton: true,
-                confirmButtonText: e.detail.confirmButtonText,
-                denyButtonText: e.detail.denyButtonText,
-                denyButtonColor: 'gray',
                 confirmButtonColor: 'green',
+                focusDeny: false,
                 showLoaderOnConfirm: true,
-
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit('editRoles', e.detail.user_id, result.value);
+                    Livewire.emit('restoreUser', e.detail.user_id);
                 }
             });
         });
 
-        window.addEventListener('swalUserRoleChanged', function(e) {
+        window.addEventListener('swalUserRestored', function(e) {
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
@@ -123,5 +119,6 @@ __('admin/usersPages.All Users')])
                 timerProgressBar: true,
             })
         });
+        // #### Restore ####
     </script>
 @endpush

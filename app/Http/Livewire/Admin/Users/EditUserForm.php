@@ -294,7 +294,7 @@ class EditUserForm extends Component
             ]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalPasswordReset', [
-                "text" => __('admin/usersPages.Password hasn\'n been reset'),
+                "text" => __('admin/usersPages.Password hasn\'t been reset'),
                 'icon' => 'error'
             ]);
         }

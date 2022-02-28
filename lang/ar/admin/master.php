@@ -16,4 +16,6 @@ return [
     'edit roles'                =>      'تعديل الدور والصلاحيات',
     'Soft Deleted Users'        =>      'المستخدمين المحذوفين مؤقتاً',
     'Soft Deleted Users Table'  =>      'جدول المستخدمين المحذوفين مؤقتاً',
+    'Roles Management'          =>      'إدارة الأدوار',
+
 ];
