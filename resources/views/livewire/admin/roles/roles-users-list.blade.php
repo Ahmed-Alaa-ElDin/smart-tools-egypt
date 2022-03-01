@@ -3,8 +3,7 @@
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div class="py-3 bg-white space-y-6">
-                    <div class="grid grid-cols-3 gap-6 items-center">
-
+                    <div class="grid grid-cols-2 gap-6 items-center">
 
                         {{-- Search Box --}}
                         <div class="col-span-1">
@@ -19,7 +18,7 @@
                         </div>
 
                         {{-- Download --}}
-                        <div class="form-inline col-span-1 justify-center">
+                        {{-- <div class="form-inline col-span-1 justify-center">
                             <div class="flex justify-center">
                                 <button class="btn btn-success dropdown-toggle btn-round btn-sm text-white font-bold "
                                     type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -38,7 +37,8 @@
                                         {{ __('admin/usersPages.download all pdf') }}</a>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
+
                         {{-- Pagination Number --}}
                         <div class="form-inline col-span-1 justify-end my-2">
                             {{ __('pagination.Show') }} &nbsp;

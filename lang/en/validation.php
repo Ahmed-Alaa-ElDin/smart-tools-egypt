@@ -162,6 +162,8 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'selectedPermissions' => 'Permissions'
+    ],
 
 ];

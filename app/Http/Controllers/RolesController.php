@@ -23,7 +23,7 @@ class RolesController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.users.createRole');
     }
 
     /**
@@ -56,7 +56,7 @@ class RolesController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('admin.users.editRole',compact('id'));
     }
 
     /**
@@ -81,4 +81,27 @@ class RolesController extends Controller
     {
         //
     }
+
+    /**
+    * Display the specified role's permissions.
+    *
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
+   public function showPermissions($id)
+   {
+       return view('admin.users.rolesPermissions', compact('id'));
+   }
+
+   /**
+    * Display the specified role's users.
+    *
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
+    public function showUsers($id)
+    {
+        return view('admin.users.rolesUsers', compact('id'));
+    }
+
 }

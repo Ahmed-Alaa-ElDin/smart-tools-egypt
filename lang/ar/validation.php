@@ -85,7 +85,7 @@ return [
     ],
     'string'               => 'يجب أن يكون حقل :attribute نصآ.',
     'timezone'             => 'يجب أن يكون :attribute نطاقًا زمنيًا صحيحًا',
-    'unique'               => 'قيمة حقل :attribute مُستخدمة من قبل',
+    'unique'               => 'قيمة حقل :attribute مُستخدمه من قبل',
     'uploaded'             => 'فشل في تحميل :attribute',
     'url'                  => 'صيغة رابط :attribute غير صحيحة',
     'The Email Address is required when role is admin.' => 'حقل البريد الالكتروني مطلوب عندما يكون الدور مدير',
@@ -175,6 +175,7 @@ return [
         'addresses.*.city_id'           =>  'المدينة',
         'addresses.*.details'           =>  'تفاصيل العنوان',
         'addresses.*.special_marque'    =>  'العلامة المميزة',
+        'selectedPermissions' => 'الصلاحيات'
     ],
 
     /*
@@ -193,7 +194,6 @@ return [
             // or tomorrow
             'today' => 'اليوم'
         ]
-    ]
-
+    ],
 
 ];

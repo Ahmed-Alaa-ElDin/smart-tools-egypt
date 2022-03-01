@@ -50,8 +50,8 @@
                 </li>
 
                 {{-- Profile Dropdown --}}
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="#pablo" id="navbarDropdownProfile" data-toggle="dropdown"
+                <li class="nav-item dropdown min-w-max">
+                    <a class="nav-link flex flex-row flex-nowrap items-center gap-x-4 py-1" id="navbarDropdownProfile" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         @if (auth()->user()->profile_photo_path)
                             <img class="h-10 w-10 rounded-full"
@@ -60,7 +60,7 @@
                         @else
                             <i class="fa-regular fa-user"></i>
                         @endif
-                        <span class="ltr:ml-2 rtl:mr-2">{{ auth()->user()->f_name }}</span>
+                        <span class="font-bold">{{ auth()->user()->f_name }}</span>
                         <p class="d-lg-none d-md-block">
                             {{ __('admin/master.Account') }}
                         </p>

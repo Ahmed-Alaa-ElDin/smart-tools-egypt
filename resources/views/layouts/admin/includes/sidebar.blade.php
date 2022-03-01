@@ -36,7 +36,7 @@
                             src="{{ asset('storage/images/profiles/cropped200/' . auth()->user()->profile_photo_path) }}"
                             alt="{{ auth()->user()->f_name . ' ' . auth()->user()->l_name . 'profile image' }}">
                     @else
-                        <i class="fa-regular fa-user"></i>
+                        <i class="fa-regular fa-fw fa-user"></i>
                     @endif
                     <span class="ltr:ml-2 rtl:mr-2">{{ auth()->user()->f_name }} <b class="caret"></b></span>
                 </a>
@@ -59,7 +59,7 @@
             @can('See Dashboard')
                 <li class="nav-item {{ $activeSection == 'dashboard' ? ' active' : '' }}">
                     <a class="nav-link" href="{{ route('admin.dashboard') }}">
-                        <i class="fa-solid fa-chart-line"></i>
+                        <i class="fa-solid fa-fw fa-chart-line"></i>
                         <span>{{ __('admin/master.dashboard') }}</span>
                     </a>
                 </li>
@@ -70,7 +70,7 @@
                 <li class="nav-item {{ $activeSection == 'Users' ? ' active' : '' }}">
                     <a class="nav-link" data-toggle="collapse" href="#users"
                         aria-expanded="{{ $activeSection == 'Users' ? 'true' : 'false' }}">
-                        <i class="fa-solid fa-user"></i>
+                        <i class="fa-solid fa-fw fa-user"></i>
                         <span>{{ __('admin/master.users') }}
                             <b class="caret"></b>
                         </span>
@@ -82,7 +82,7 @@
                             {{-- See All Users --}}
                             <li class="nav-item {{ $activePage == 'All Users' ? ' active' : '' }}">
                                 <a class="nav-link" href="{{ route('admin.users.index') }}">
-                                    <i class="fa-solid fa-user-group"></i>
+                                    <i class="fa-solid fa-fw fa-user-group"></i>
                                     <span>{{ __('admin/master.All Users') }}
                                     </span> </a>
                             </li>
@@ -91,7 +91,7 @@
                             @can('Add New User')
                                 <li class="nav-item {{ $activePage == 'Add User' ? ' active' : '' }}">
                                     <a class="nav-link" href="{{ route('admin.users.create') }}">
-                                        <i class="fa-solid fa-user-plus"></i>
+                                        <i class="fa-solid fa-fw fa-user-plus"></i>
                                         <span>{{ __('admin/master.add user') }}
                                         </span> </a>
                                 </li>
@@ -101,17 +101,17 @@
                             @can('Force Delete User')
                                 <li class="nav-item {{ $activePage == 'Deleted Users' ? ' active' : '' }}">
                                     <a class="nav-link" href="{{ route('admin.users.softDeletedUsers') }}">
-                                        <i class="fa-solid fa-users-slash"></i>
+                                        <i class="fa-solid fa-fw fa-users-slash"></i>
                                         <span>{{ __('admin/master.Soft Deleted Users') }}
                                         </span> </a>
                                 </li>
                             @endcan
 
-                            {{-- Soft Deleted Users --}}
+                            {{-- Manage Roles --}}
                             @can('See All Roles')
                                 <li class="nav-item {{ $activePage == 'Roles Management' ? ' active' : '' }}">
                                     <a class="nav-link" href="{{ route('admin.roles.index') }}">
-                                        <i class="fa-solid fa-key"></i>
+                                        <i class="fa-solid fa-fw fa-key"></i>
                                         <span>{{ __('admin/master.Roles Management') }}
                                         </span> </a>
                                 </li>

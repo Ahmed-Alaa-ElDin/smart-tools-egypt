@@ -18,6 +18,10 @@ Route::group([
     Route::get('/users/export-pdf',[UsersController::class,'exportPDF'])->name('users.exportPDF');
     Route::get('/users/deleted-users',[UsersController::class,'softDeletedUsers'])->name('users.softDeletedUsers');
     Route::resource('/users', UsersController::class);
+
+
+    Route::get('/roles/roles-permissions/{id}',[RolesController::class,'showPermissions'])->name('roles.showPermissions');
+    Route::get('/roles/roles-users/{id}',[RolesController::class,'showUsers'])->name('roles.showUsers');
     Route::resource('/roles', RolesController::class);
     // ############## Users Routes End ##############
 

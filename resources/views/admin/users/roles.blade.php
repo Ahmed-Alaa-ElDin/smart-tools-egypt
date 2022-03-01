@@ -41,8 +41,7 @@ __('admin/usersPages.Roles Management')])
                         <div class="card-body overflow-hidden">
 
                             {{-- Form Start --}}
-                            {{-- todo --}}
-                            {{-- @livewire('admin.users.add-user-form') --}}
+                            @livewire('admin.roles.roles-datatable')
                             {{-- content --}}
 
                         </div>
@@ -61,4 +60,38 @@ __('admin/usersPages.Roles Management')])
 {{-- Extra Scripts --}}
 @push('js')
     @livewireScripts
+
+    <script>
+        // #### Role Delete ####
+        window.addEventListener('swalConfirmDelete', function(e) {
+            Swal.fire({
+                icon: 'warning',
+                text: e.detail.text,
+                showDenyButton: true,
+                confirmButtonText: e.detail.confirmButtonText,
+                denyButtonText: e.detail.denyButtonText,
+                denyButtonColor: 'gray',
+                confirmButtonColor: 'red',
+                focusDeny: true,
+                showLoaderOnConfirm: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.emit('deleteRole', e.detail.role_id);
+                }
+            });
+        });
+
+        window.addEventListener('swalRoleDeleted', function(e) {
+            Swal.fire({
+                text: e.detail.text,
+                icon: e.detail.icon,
+                position: 'top-right',
+                showConfirmButton: false,
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+            })
+        });
+        // #### Role Delete ####
+    </script>
 @endpush
