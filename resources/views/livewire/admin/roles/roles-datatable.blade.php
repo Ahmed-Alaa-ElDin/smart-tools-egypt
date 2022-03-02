@@ -6,7 +6,6 @@
                     <div class="py-3 bg-white space-y-6">
                         <div class="grid grid-cols-2 gap-6 items-center">
 
-
                             {{-- Search Box --}}
                             <div class="col-span-1">
                                 <div class="mt-1 flex rounded-md shadow-sm">
@@ -102,7 +101,7 @@
                                         <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                             {{-- Permissions List --}}
-                                            @can("See User's Details")
+                                            @can("See Role's Permissions")
                                                 <a href="{{ route('admin.roles.showPermissions', [$role->id]) }}"
                                                     title="{{ __('admin/usersPages.View permissions List') }}"
                                                     class="m-0"><i
@@ -110,7 +109,7 @@
                                             @endcan
 
                                             {{-- Users List --}}
-                                            @can("See User's Details")
+                                            @can("See Role's Users")
                                                 <a href="{{ route('admin.roles.showUsers', [$role->id]) }}"
                                                     title="{{ __('admin/usersPages.View Users List') }}"
                                                     class="m-0"><i
@@ -118,14 +117,14 @@
                                             @endcan
 
                                             {{-- Edit Button --}}
-                                            @can('Edit User')
+                                            @can('Edit Role')
                                                 <a href="{{ route('admin.roles.edit', [$role->id]) }}"
                                                     title="{{ __('admin/usersPages.Edit') }}" class="m-0"><i
                                                         class="fa-solid fa-pen-to-square fa-fw p-2 text-white bg-edit hover:bg-editHover rounded"></i></a>
                                             @endcan
 
                                             {{-- Delete Button --}}
-                                            @can('Soft Delete User')
+                                            @can('Delete Role')
                                                 <a href="#" title="{{ __('admin/usersPages.Delete') }}"
                                                     wire:click.prevent="deleteConfirm({{ $role->id }})"
                                                     class="m-0"><i

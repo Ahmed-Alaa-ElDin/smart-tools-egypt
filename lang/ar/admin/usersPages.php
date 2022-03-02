@@ -189,6 +189,8 @@ return [
     'View permissions List'                     =>      'عرض قائمة الصلاحيات',
     'View Users List'                           =>      'عرض قائمة المستخدمين',
     'Role\'s Permissions List'                  =>      "قائمة الصلاحيات الخاصة بالدور",
+    'Role\'s Users List'                        =>      "قائمة المستخدمين لهذا الدور",
+    'Here you can view the list of role\'s users'                       =>      "يمكنك استعراض المستخدمين أصحاب هذا الدور عن طريق هذا الجدول",
     'Here you can view the list of role\'s permissions'                 =>      "يمكنك استعراض الصلاحيات الخاصة بالدور عن طريق هذا الجدول",
     'Active'                                    =>      "مفعل",
     'Activate'                                  =>      "تفعيل",

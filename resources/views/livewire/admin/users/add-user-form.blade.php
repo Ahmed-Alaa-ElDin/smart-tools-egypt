@@ -112,15 +112,51 @@
             </div>
 
             {{-- Phone --}}
-            <div class="col-span-6 md:col-span-5">
-                <input
-                    class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('phone') border-red-900 border-2 @enderror"
-                    type="text" wire:model.lazy="phone" placeholder="{{ __('admin/usersPages.Phone') }}" dir="ltr"
-                    tabindex="6">
-                @error('phone')
-                    <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
+            <div class="col-span-12 md:col-span-5 grid grid-cols-6 gap-y-2">
+                @foreach ($phones as $index => $phone)
+                    {{-- Add remove button if their are more than one phone number --}}
+                    @if (count($phones) > 1)
+                        <div class="col-span-1">
+                            <button
+                                class=" bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full shadow btn btn-xs"
+                                wire:click.prevent='removePhone({{ $index }})'
+                                title="{{ __('admin/usersPages.Delete') }}"><i class="fa fa-minus"></i></button>
+                        </div>
+                    @endif
+
+                    {{-- phone input field --}}
+                    <input
+                        class="@if (count($phones) > 1) col-span-4 @else col-span-5 @endif py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
+                        type="text" wire:model.lazy="phones.{{ $index }}.phone"
+                        placeholder="{{ __('admin/usersPages.Phone') }}" dir="ltr" tabindex="6">
+
+                    {{-- Default Radio Button --}}
+                    <div class="col-span-1  flex flex-column justify-center items-center gap-1">
+                        <label for="defaultPhone{{ $index }}"
+                            class="text-xs text-black m-0 cursor-pointer">{{ __('admin/usersPages.Default') }}</label>
+                        <input type="radio" id="defaultPhone{{ $index }}" wire:model.lazy="defaultPhone"
+                            value="{{ $index }}"
+                            class="appearance-none checked:bg-primary outline-none ring-0 cursor-pointer">
+                    </div>
+                @endforeach
+
+                {{-- Error Messages --}}
+                @error('phones.*.phone')
+                    <div class="inline-block mt-2 col-span-6 bg-red-700 rounded text-white shadow px-3 py-1">
                         {{ $message }}</div>
                 @enderror
+
+                @error('defaultPhone')
+                    <div class="inline-block mt-2 col-span-3 bg-red-700 rounded text-white shadow px-3 py-1">
+                        {{ $message }}</div>
+                @enderror
+
+
+                {{-- Add New Phone Button --}}
+                <button
+                    class="col-start-3 col-span-2 bg-rose-500 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm text-center text-xs"
+                    wire:click.prevent="addPhone" title="{{ __('admin/usersPages.Add') }}"><i
+                        class="fa fa-plus rtl:ml-2 ltr:mr-2"></i>{{ __('admin/usersPages.Add') }}</button>
             </div>
         </div>
 
@@ -199,108 +235,138 @@
                 class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">{{ __('admin/usersPages.Address') }}</label>
             {{-- User Address Select Boxes --}}
             <div class="grid grid-cols-3 gap-x-4 gap-y-2 col-span-12 md:col-span-10">
+                @foreach ($addresses as $index => $address)
+                    <div class="bg-red-200 rounded col-span-3 grid grid-cols-3 gap-x-4 gap-y-2 p-2 ">
+                        <div class="col-span-3 flex justify-around bg-red-300 p-2 rounded-xl md:p-1">
 
-                {{-- Country --}}
-                <div class="col-span-3 lg:col-span-1 grid grid-cols-3 items-center">
-                    <label class="col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
-                        for="country">{{ __('admin/usersPages.Country') }}</label>
-                    <select
-                        class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('country') border-red-900 border-2 @enderror"
-                        wire:model='country' id="country" tabindex="10">
-                        @forelse ($countries as $country)
-                            <option value="{{ $country->id }}">{{ $country->name }}</option>
-                        @empty
-                            <option value="">{{ __('admin/usersPages.No Countries in Database') }}</option>
-                        @endforelse
-                    </select>
+                            {{-- Default Radio Button --}}
+                            <div class="flex flex-column md:flex-row justify-center items-center gap-1">
+                                <label for="defaultAddress{{ $index }}"
+                                    class="text-xs text-black m-0 cursor-pointer">{{ __('admin/usersPages.Default') }}</label>
+                                <input type="radio" id="defaultAddress{{ $index }}"
+                                    wire:model.lazy="defaultAddress" value="{{ $index }}"
+                                    class="appearance-none checked:bg-primary outline-none ring-0 cursor-pointer">
+                            </div>
 
-                    @error('country')
-                        <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                            {{ $message }}</div>
-                    @enderror
-
-                </div>
-
-                {{-- Governorate --}}
-                <div class="col-span-3 lg:col-span-1 grid grid-cols-3 items-center">
-                    <label class="col-span-1 rtl:text-xs select-none cursor-pointer text-black font-medium m-0 mx-3"
-                        for="governorate">{{ __('admin/usersPages.Governorate') }}</label>
-                    <select
-                        class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('governorate   ') border-red-900 border-2 @enderror"
-                        wire:model='governorate' id="governorate" tabindex="11">
-                        @forelse ($governorates as $governorate)
-                            <option value="{{ $governorate->id }}">{{ $governorate->name }}</option>
-                        @empty
-                            @if ($country == null)
-                                <option value="">{{ __('admin/usersPages.Please Choose Country First') }}</option>
-                            @else
-                                <option value="">{{ __('admin/usersPages.No Governorates in Database') }}</option>
+                            {{-- Add remove button if their are more than one address --}}
+                            @if (count($addresses) > 1)
+                                <div>
+                                    <button
+                                        class=" bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded-full shadow btn btn-xs"
+                                        wire:click.prevent='removeAddress({{ $index }})'
+                                        title="{{ __('admin/usersPages.Delete') }}"><i
+                                            class="fa fa-minus"></i></button>
+                                </div>
                             @endif
-                        @endforelse
-                    </select>
 
-                    @error('governorate')
-                        <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                            {{ $message }}</div>
-                    @enderror
+                        </div>
 
-                </div>
+                        {{-- Country --}}
+                        <div class="col-span-3 lg:col-span-1 grid grid-cols-3 items-center">
+                            <label class="col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
+                                for="country{{ $index }}">{{ __('admin/usersPages.Country') }}</label>
+                            <select
+                                class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
+                                wire:model='addresses.{{ $index }}.country_id'
+                                wire:change='$emit("countryUpdated",{{ $index }})'
+                                id="country{{ $index }}">
+                                @forelse ($countries as $country)
+                                    <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                @empty
+                                    <option value="">{{ __('admin/usersPages.No Countries in Database') }}</option>
+                                @endforelse
+                            </select>
+                        </div>
 
-                {{-- City --}}
-                <div class="col-span-3 lg:col-span-1 grid grid-cols-3 items-center">
-                    <label class="col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
-                        for="city">{{ __('admin/usersPages.City') }}</label>
+                        {{-- Governorate --}}
+                        <div class="col-span-3 lg:col-span-1 grid grid-cols-3 items-center">
+                            <label
+                                class="col-span-1 rtl:text-xs select-none cursor-pointer text-black font-medium m-0 mx-3"
+                                for="governorate{{ $index }}">{{ __('admin/usersPages.Governorate') }}</label>
+                            <select
+                                class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
+                                wire:model='addresses.{{ $index }}.governorate_id'
+                                id="governorate{{ $index }}"
+                                wire:change='$emit("governorateUpdated",{{ $index }})'>
+                                @forelse ($governorates[$index] as $governorate)
+                                    <option value="{{ $governorate['id'] }}">
+                                        {{ $governorate['name'][session('locale')] }}</option>
+                                @empty
+                                    @if ($country == null)
+                                        <option value="">{{ __('admin/usersPages.Please Choose Country First') }}
+                                        </option>
+                                    @else
+                                        <option value="">{{ __('admin/usersPages.No Governorates in Database') }}
+                                        </option>
+                                    @endif
+                                @endforelse
+                            </select>
+                        </div>
 
-                    <select
-                        class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('city  ') border-red-900 border-2 @enderror"
-                        wire:model='city' id="city" tabindex="12">
-                        @forelse ($cities as $city)
-                            <option value="{{ $city->id }}">{{ $city->name }}</option>
-                        @empty
-                            @if ($governorate == null)
-                                <option value="">{{ __('admin/usersPages.Please Choose Governorate First') }}
-                                </option>
-                            @else
-                                <option value="">{{ __('admin/usersPages.No Cities in Database') }}</option>
-                            @endif
-                        @endforelse
-                    </select>
+                        {{-- City --}}
+                        <div class="col-span-3 lg:col-span-1 grid grid-cols-3 items-center">
+                            <label class="col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
+                                for="city{{ $index }}">{{ __('admin/usersPages.City') }}</label>
 
-                    @error('city')
-                        <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                            {{ $message }}</div>
-                    @enderror
+                            <select
+                                class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
+                                wire:model='addresses.{{ $index }}.city_id' id="city{{ $index }}"
+                                wire:change='$emit("cityUpdated",{{ $index }})'>
+                                @forelse ($cities[$index] as $city)
+                                    <option value="{{ $city['id'] }}">{{ $city['name'][session('locale')] }}
+                                    </option>
+                                @empty
+                                    @if ($addresses[$index]['governorate_id'] == null)
+                                        <option value="">{{ __('admin/usersPages.Please Choose Governorate First') }}
+                                        </option>
+                                    @else
+                                        <option value="">{{ __('admin/usersPages.No Cities in Database') }}</option>
+                                    @endif
+                                @endforelse
+                            </select>
+                        </div>
 
-                </div>
+                        {{-- Details --}}
+                        <div class="details col-span-3 grid grid-cols-6 justify-between items-center m-0">
+                            <label
+                                class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
+                                for="details{{ $index }}">{{ __('admin/usersPages.Address Details') }}</label>
+                            <textarea id="details{{ $index }}" rows="2"
+                                wire:model.lazy="addresses.{{ $index }}.details" dir="rtl"
+                                placeholder="{{ __('admin/usersPages.Please mention the details of the address such as street name, building number, ... etc.') }}"
+                                class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 overflow-hidden"></textarea>
+                        </div>
 
-                {{-- Details --}}
-                <div class="details col-span-3 grid grid-cols-6 justify-between items-center m-0">
-                    <label class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
-                        for="details">{{ __('admin/usersPages.Address Details') }}</label>
-                    <textarea id="details" rows="2" wire:model="details" tabindex="13" dir="rtl"
-                        placeholder="{{ __('admin/usersPages.Please mention the details of the address such as street name, building number, ... etc.') }}"
-                        class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 overflow-hidden"></textarea>
-                    @error('details')
-                        <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                            {{ $message }}</div>
-                    @enderror
+                        {{-- Special Marque --}}
+                        <div class="special_marque col-span-3 grid grid-cols-6 justify-between items-center">
+                            <label
+                                class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
+                                for="special_marque{{ $index }}">{{ __('admin/usersPages.Special Marque') }}</label>
+                            <textarea id="special_marque{{ $index }}" rows="2"
+                                wire:model.lazy="addresses.{{ $index }}.special_marque" dir="rtl"
+                                placeholder="{{ __('admin/usersPages.Please mention any special marque such as mosque, grocery, ... etc.') }}"
+                                class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"></textarea>
+                        </div>
+                    </div>
+                @endforeach
 
-                </div>
+                @error('addresses.*')
+                    <div
+                        class="inline-block mt-2 col-span-3 md:col-span-1 md:col-start-2 bg-red-700 rounded text-white shadow px-3 py-1">
+                        {{ $message }}</div>
+                @enderror
+                @error('defaultAddress')
+                    <div
+                        class="inline-block mt-2 col-span-3 md:col-span-1 md:col-start-2 bg-red-700 rounded text-white shadow px-3 py-1">
+                        {{ $message }}</div>
+                @enderror
 
-                {{-- Special Marque --}}
-                <div class="special_marque col-span-3 grid grid-cols-6 justify-between items-center">
-                    <label class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
-                        for="special_marque">{{ __('admin/usersPages.Special Marque') }}</label>
-                    <textarea id="special_marque" rows="2" wire:model="special_marque" dir="rtl"
-                        placeholder="{{ __('admin/usersPages.Please mention any special marque such as mosque, grocery, ... etc.') }}"
-                        class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"></textarea>
-                    @error('special_marque')
-                        <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                            {{ $message }}</div>
-                    @enderror
 
-                </div>
-
+                {{-- Add New Address Button --}}
+                <button
+                    class="col-start-2 col-span-1 bg-rose-500 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm text-center text-xs"
+                    wire:click.prevent="addAddress" title="{{ __('admin/usersPages.Add') }}"><i
+                        class="fa fa-plus rtl:ml-2 ltr:mr-2"></i>{{ __('admin/usersPages.Add') }}</button>
             </div>
         </div>
 

@@ -25,11 +25,15 @@ __('admin/usersPages.All Users')])
                                 <div class="col-6 ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class=""> {{ __('admin/usersPages.Here you can manage users') }}</p>
                                 </div>
-                                <div class="col-6 ltr:text-right rtl:text-left">
-                                    <a href="{{ route('admin.users.create') }}"
-                                        class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold"><i
-                                            class="fa fa-plus rtl:ml-2 ltr:mr-2"></i>{{ __('admin/usersPages.Add User') }}</a>
-                                </div>
+
+                                {{-- Add New User Button --}}
+                                @can('Add New User')
+                                    <div class="col-6 ltr:text-right rtl:text-left">
+                                        <a href="{{ route('admin.users.create') }}"
+                                            class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold"><i
+                                                class="fa fa-plus rtl:ml-2 ltr:mr-2"></i>{{ __('admin/usersPages.Add User') }}</a>
+                                    </div>
+                                @endcan
                             </div>
                         </div>
 

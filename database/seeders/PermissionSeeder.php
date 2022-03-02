@@ -28,7 +28,14 @@ class PermissionSeeder extends Seeder
             ['name' => "Soft Delete User"],
             ['name' => "Force Delete User"],
             ['name' => "Restore User"],
+
+            // Roles
             ['name' => "See All Roles"],
+            ['name' => "Add New Role"],
+            ['name' => "See Role's Permissions"],
+            ['name' => "See Role's Users"],
+            ['name' => "Edit Role"],
+            ['name' => "Delete Role"],
         ];
 
         foreach ($permissions as $permission) {

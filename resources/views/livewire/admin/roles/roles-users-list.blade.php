@@ -17,27 +17,6 @@
                             </div>
                         </div>
 
-                        {{-- Download --}}
-                        {{-- <div class="form-inline col-span-1 justify-center">
-                            <div class="flex justify-center">
-                                <button class="btn btn-success dropdown-toggle btn-round btn-sm text-white font-bold "
-                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-sync-alt"></i> &nbsp; {{ __('admin/usersPages.Export Users') }}
-                                    &nbsp;</button>
-                                <div class="dropdown-menu">
-                                    <a href="{{ route('admin.users.exportExcel') }}"
-                                        class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600"><i
-                                            class="fas fa-file-excel"></i>
-                                        &nbsp;&nbsp;
-                                        {{ __('admin/usersPages.download all excel') }}</a>
-                                    <a href="{{ route('admin.users.exportPDF') }}"
-                                        class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600"><i
-                                            class="fas fa-file-pdf"></i>
-                                        &nbsp;&nbsp;
-                                        {{ __('admin/usersPages.download all pdf') }}</a>
-                                </div>
-                            </div>
-                        </div> --}}
 
                         {{-- Pagination Number --}}
                         <div class="form-inline col-span-1 justify-end my-2">

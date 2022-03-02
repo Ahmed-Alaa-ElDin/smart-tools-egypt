@@ -46,7 +46,7 @@ class EditUserForm extends Component
         return [
             'f_name.ar' => 'required|string|max:20|min:3',
             'f_name.en' => 'nullable|string|max:20|min:3',
-            'l_name.ar' => 'required|string|max:20|min:3',
+            'l_name.ar' => 'nullable|string|max:20|min:3',
             'l_name.en' => 'nullable|string|max:20|min:3',
             'email' => 'nullable|required_if:role,2|required_without:phones.0.phone|email|max:50|min:3|unique:users,email,' . $this->user_id,
             'phones.*.phone' => 'nullable|required_without:email|digits_between:8,11|' . Rule::unique('phones')->ignore($this->user_id, 'user_id'),
@@ -78,7 +78,7 @@ class EditUserForm extends Component
         // All Roles
         $this->roles = Role::get();
 
-        // Set User Data
+        // get User Data
         $this->user = User::with('phones')->with('addresses')->findOrFail($this->user_id);
 
         // get old image
@@ -134,7 +134,7 @@ class EditUserForm extends Component
         ]];
 
         // all Addresses
-        $this->countries = Country::get();
+        $this->countries = Country::orderBy('name')->get();
 
         if ($this->countries->count()) {
             // User Has Addresses
