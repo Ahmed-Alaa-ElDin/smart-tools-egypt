@@ -81,7 +81,9 @@ class EditUserForm extends Component
         // Set User Data
         $this->user = User::with('phones')->with('addresses')->findOrFail($this->user_id);
 
+        // get old image
         $this->oldImage = $this->user->profile_photo_path;
+
         // First name
         $this->f_name = [
             'ar' => $this->user->getTranslation('f_name', 'ar'),
