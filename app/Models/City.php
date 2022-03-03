@@ -35,4 +35,10 @@ class City extends Model
     {
         return $this->hasManyThrough(User::class, Address::class);
     }
+
+    // Many to Many relationship  City --> Zones
+    public function zones()
+    {
+        return $this->belongsToMany(Zone::class, 'address_zone', 'city_id', 'zone_id');
+    }
 }

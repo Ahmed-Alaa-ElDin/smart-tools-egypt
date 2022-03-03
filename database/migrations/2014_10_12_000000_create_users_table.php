@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('password');
             $table->tinyInteger('gender')->default(0)->comment('0 -> Male , 1 -> Female');
             $table->date('birth_date')->default(Carbon::now());
-            $table->string('profile_photo_path', 2048)->nullable();
+            $table->string('profile_photo_path')->nullable();
             $table->decimal('balance')->default(0);
             $table->integer('points')->default(0);
             $table->integer('visit_num')->default(1)->unsigned();

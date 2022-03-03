@@ -13,14 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('deliveries', function (Blueprint $table) {
+        Schema::create('zones', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email',50)->unique()->nullable();
-            $table->string('logo_path')->nullable();
+            $table->unsignedBigInteger('delivery_id');
+            $table->integer('min_size')->default(5)->comment('in KG');
+            $table->decimal('min_charge',7,2)->default(0);
+            $table->decimal('kg_charge',5,2)->default(0);
             $table->tinyInteger('is_active')->default(0)->comment('0 -> Inactive , 1 -> Active');
-            $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('delivery_id')->references('id')->on('deliveries')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('deliveries');
+        Schema::dropIfExists('zones');
     }
 };

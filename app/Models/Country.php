@@ -34,4 +34,10 @@ class Country extends Model
     {
         return $this->hasManyThrough(User::class, Address::class);
     }
+
+    // Many to Many relationship  Country --> Zones
+    public function zones()
+    {
+        return $this->belongsToMany(Zone::class, 'address_zone', 'country_id', 'zone_id');
+    }
 }

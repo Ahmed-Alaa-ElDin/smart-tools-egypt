@@ -121,6 +121,53 @@
                 </li>
             @endcan
 
+            {{-- Users --}}
+            @can('See All Users')
+                <li class="nav-item {{ $activeSection == 'Users' ? ' active' : '' }}">
+                    <a class="nav-link" data-toggle="collapse" href="#users"
+                        aria-expanded="{{ $activeSection == 'Users' ? 'true' : 'false' }}">
+                        <i class="fa-solid fa-fw fa-user"></i>
+                        <span>{{ __('admin/master.users') }}
+                            <b class="caret"></b>
+                        </span>
+                    </a>
+
+                    <div class="collapse {{ $activeSection == 'Users' ? ' show' : '' }}" id="users">
+                        <ul class="nav">
+
+                            {{-- See All Users --}}
+                            <li class="nav-item {{ $activePage == 'All Users' ? ' active' : '' }}">
+                                <a class="nav-link" href="{{ route('admin.users.index') }}">
+                                    <i class="fa-solid fa-fw fa-user-group"></i>
+                                    <span>{{ __('admin/master.All Users') }}
+                                    </span> </a>
+                            </li>
+
+                            {{-- Add New User --}}
+                            @can('Add New User')
+                                <li class="nav-item {{ $activePage == 'Add User' ? ' active' : '' }}">
+                                    <a class="nav-link" href="{{ route('admin.users.create') }}">
+                                        <i class="fa-solid fa-fw fa-user-plus"></i>
+                                        <span>{{ __('admin/master.add user') }}
+                                        </span> </a>
+                                </li>
+                            @endcan
+
+                            {{-- Soft Deleted Users --}}
+                            @can('Force Delete User')
+                                <li class="nav-item {{ $activePage == 'Deleted Users' ? ' active' : '' }}">
+                                    <a class="nav-link" href="{{ route('admin.users.softDeletedUsers') }}">
+                                        <i class="fa-solid fa-fw fa-users-slash"></i>
+                                        <span>{{ __('admin/master.Soft Deleted Users') }}
+                                        </span> </a>
+                                </li>
+                            @endcan
+
+                        </ul>
+                    </div>
+                </li>
+            @endcan
+
 
         </ul>
     </div>

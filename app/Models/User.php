@@ -33,7 +33,6 @@ class User extends Authenticatable
         'l_name',
         'email',
         'password',
-        'phone',
         'gender',
         'visit_num',
         'last_visit_at',
@@ -70,7 +69,6 @@ class User extends Authenticatable
      * @var array
      */
     // protected $appends = [
-    //     'profile_photo_url',
     // ];
 
     // One to many relationship  User --> Addresses
@@ -79,6 +77,7 @@ class User extends Authenticatable
         return $this->hasMany(Address::class);
     }
 
+    // One to many relationship  User --> phones
     public function phones()
     {
         return $this->hasMany(Phone::class);
