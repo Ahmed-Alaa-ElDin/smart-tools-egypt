@@ -30,8 +30,11 @@ __('admin/usersPages.All Users')])
                                 @can('Add New User')
                                     <div class="col-6 ltr:text-right rtl:text-left">
                                         <a href="{{ route('admin.users.create') }}"
-                                            class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold"><i
-                                                class="fa fa-plus rtl:ml-2 ltr:mr-2"></i>{{ __('admin/usersPages.Add User') }}</a>
+                                            class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">
+                                            <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                                add
+                                            </span>
+                                            {{ __('admin/usersPages.Add User') }}</a>
                                     </div>
                                 @endcan
                             </div>

@@ -1,7 +1,13 @@
 @if ($sortNewBy !== $field)
-    <i class="text-green-400 fas fa-sort"></i>
+    <span class="material-icons text-green-400">
+        unfold_more
+    </span>
 @elseif ($sortNewDirection == 'DESC')
-    <i class="text-white fas fa-sort-up"></i>
+    <span class="material-icons text-white">
+        arrow_drop_up
+    </span>
 @else
-    <i class="text-white fas fa-sort-down"></i>
+    <span class="material-icons text-white">
+        arrow_drop_down
+    </span>
 @endif

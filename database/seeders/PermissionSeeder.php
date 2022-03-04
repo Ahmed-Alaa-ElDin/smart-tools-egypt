@@ -36,6 +36,14 @@ class PermissionSeeder extends Seeder
             ['name' => "See Role's Users"],
             ['name' => "Edit Role"],
             ['name' => "Delete Role"],
+
+            // Delivery System
+            ['name' => "See Delivary System"],
+            ['name' => "See All Roles"],
+            ['name' => "See All Roles"],
+            ['name' => "See All Roles"],
+            ['name' => "See All Roles"],
+
         ];
 
         foreach ($permissions as $permission) {

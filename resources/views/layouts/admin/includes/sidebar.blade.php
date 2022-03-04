@@ -36,7 +36,9 @@
                             src="{{ asset('storage/images/profiles/cropped200/' . auth()->user()->profile_photo_path) }}"
                             alt="{{ auth()->user()->f_name . ' ' . auth()->user()->l_name . 'profile image' }}">
                     @else
-                        <i class="fa-regular fa-fw fa-user"></i>
+                        <span class="material-icons">
+                            person
+                        </span>
                     @endif
                     <span class="ltr:ml-2 rtl:mr-2">{{ auth()->user()->f_name }} <b class="caret"></b></span>
                 </a>
@@ -59,7 +61,9 @@
             @can('See Dashboard')
                 <li class="nav-item {{ $activeSection == 'dashboard' ? ' active' : '' }}">
                     <a class="nav-link" href="{{ route('admin.dashboard') }}">
-                        <i class="fa-solid fa-fw fa-chart-line"></i>
+                        <span class="material-icons">
+                            dashboard
+                        </span>
                         <span>{{ __('admin/master.dashboard') }}</span>
                     </a>
                 </li>
@@ -70,7 +74,9 @@
                 <li class="nav-item {{ $activeSection == 'Users' ? ' active' : '' }}">
                     <a class="nav-link" data-toggle="collapse" href="#users"
                         aria-expanded="{{ $activeSection == 'Users' ? 'true' : 'false' }}">
-                        <i class="fa-solid fa-fw fa-user"></i>
+                        <span class="material-icons">
+                            manage_accounts
+                        </span>
                         <span>{{ __('admin/master.users') }}
                             <b class="caret"></b>
                         </span>
@@ -82,18 +88,22 @@
                             {{-- See All Users --}}
                             <li class="nav-item {{ $activePage == 'All Users' ? ' active' : '' }}">
                                 <a class="nav-link" href="{{ route('admin.users.index') }}">
-                                    <i class="fa-solid fa-fw fa-user-group"></i>
-                                    <span>{{ __('admin/master.All Users') }}
-                                    </span> </a>
+                                    <span class="material-icons">
+                                        people
+                                    </span>
+                                    <span>{{ __('admin/master.All Users') }} </span>
+                                </a>
                             </li>
 
                             {{-- Add New User --}}
                             @can('Add New User')
                                 <li class="nav-item {{ $activePage == 'Add User' ? ' active' : '' }}">
                                     <a class="nav-link" href="{{ route('admin.users.create') }}">
-                                        <i class="fa-solid fa-fw fa-user-plus"></i>
-                                        <span>{{ __('admin/master.add user') }}
-                                        </span> </a>
+                                        <span class="material-icons">
+                                            person_add
+                                        </span>
+                                        <span>{{ __('admin/master.add user') }} </span>
+                                    </a>
                                 </li>
                             @endcan
 
@@ -101,9 +111,11 @@
                             @can('Force Delete User')
                                 <li class="nav-item {{ $activePage == 'Deleted Users' ? ' active' : '' }}">
                                     <a class="nav-link" href="{{ route('admin.users.softDeletedUsers') }}">
-                                        <i class="fa-solid fa-fw fa-users-slash"></i>
-                                        <span>{{ __('admin/master.Soft Deleted Users') }}
-                                        </span> </a>
+                                        <span class="material-icons">
+                                            person_off
+                                        </span>
+                                        <span>{{ __('admin/master.Soft Deleted Users') }} </span>
+                                    </a>
                                 </li>
                             @endcan
 
@@ -111,9 +123,11 @@
                             @can('See All Roles')
                                 <li class="nav-item {{ $activePage == 'Roles Management' ? ' active' : '' }}">
                                     <a class="nav-link" href="{{ route('admin.roles.index') }}">
-                                        <i class="fa-solid fa-fw fa-key"></i>
-                                        <span>{{ __('admin/master.Roles Management') }}
-                                        </span> </a>
+                                        <span class="material-icons">
+                                            admin_panel_settings
+                                        </span>
+                                        <span>{{ __('admin/master.Roles Management') }} </span>
+                                    </a>
                                 </li>
                             @endcan
                         </ul>
@@ -121,45 +135,65 @@
                 </li>
             @endcan
 
-            {{-- Users --}}
+            {{-- Delivary System --}}
             @can('See All Users')
-                <li class="nav-item {{ $activeSection == 'Users' ? ' active' : '' }}">
-                    <a class="nav-link" data-toggle="collapse" href="#users"
-                        aria-expanded="{{ $activeSection == 'Users' ? 'true' : 'false' }}">
-                        <i class="fa-solid fa-fw fa-user"></i>
-                        <span>{{ __('admin/master.users') }}
+                <li class="nav-item {{ $activeSection == 'Delivery System' ? ' active' : '' }}">
+                    <a class="nav-link" data-toggle="collapse" href="#delivery"
+                        aria-expanded="{{ $activeSection == 'Delivery System' ? 'true' : 'false' }}">
+                        <span class="material-icons">
+                            local_shipping
+                        </span>
+                        <span>{{ __('admin/master.Delivery System') }}
                             <b class="caret"></b>
                         </span>
                     </a>
 
-                    <div class="collapse {{ $activeSection == 'Users' ? ' show' : '' }}" id="users">
+                    <div class="collapse {{ $activeSection == 'Delivery System' ? ' show' : '' }}" id="delivery">
                         <ul class="nav">
 
-                            {{-- See All Users --}}
-                            <li class="nav-item {{ $activePage == 'All Users' ? ' active' : '' }}">
+                            {{-- Delivery Companies --}}
+                            <li class="nav-item {{ $activePage == 'Delivery Companies' ? ' active' : '' }}">
                                 <a class="nav-link" href="{{ route('admin.users.index') }}">
-                                    <i class="fa-solid fa-fw fa-user-group"></i>
-                                    <span>{{ __('admin/master.All Users') }}
-                                    </span> </a>
+                                    <span class="material-icons">
+                                        business
+                                    </span>
+                                    <span>{{ __('admin/master.Delivery Companies') }} </span>
+                                </a>
                             </li>
 
-                            {{-- Add New User --}}
+                            {{-- Countries --}}
                             @can('Add New User')
-                                <li class="nav-item {{ $activePage == 'Add User' ? ' active' : '' }}">
+                                <li class="nav-item {{ $activePage == 'Countries' ? ' active' : '' }}">
                                     <a class="nav-link" href="{{ route('admin.users.create') }}">
-                                        <i class="fa-solid fa-fw fa-user-plus"></i>
-                                        <span>{{ __('admin/master.add user') }}
-                                        </span> </a>
+                                        <span class="material-icons">
+                                            public
+                                        </span>
+                                        <span>{{ __('admin/master.Countries') }}</span>
+                                    </a>
                                 </li>
                             @endcan
 
-                            {{-- Soft Deleted Users --}}
+                            {{-- Governorates --}}
                             @can('Force Delete User')
-                                <li class="nav-item {{ $activePage == 'Deleted Users' ? ' active' : '' }}">
+                                <li class="nav-item {{ $activePage == 'Governorates' ? ' active' : '' }}">
                                     <a class="nav-link" href="{{ route('admin.users.softDeletedUsers') }}">
-                                        <i class="fa-solid fa-fw fa-users-slash"></i>
-                                        <span>{{ __('admin/master.Soft Deleted Users') }}
-                                        </span> </a>
+                                        <span class="material-icons">
+                                            travel_explore
+                                        </span>
+                                        <span>{{ __('admin/master.Governorates') }}</span>
+                                    </a>
+                                </li>
+                            @endcan
+
+                            {{-- Cities --}}
+                            @can('Force Delete User')
+                                <li class="nav-item {{ $activePage == 'Cities' ? ' active' : '' }}">
+                                    <a class="nav-link" href="{{ route('admin.users.softDeletedUsers') }}">
+                                        <span class="material-icons">
+                                            location_city
+                                        </span>
+                                        <span>{{ __('admin/master.Cities') }}</span>
+                                    </a>
                                 </li>
                             @endcan
 

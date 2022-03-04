@@ -7,7 +7,9 @@
 
             {{-- Loading Spinner --}}
             <div wire:loading wire:target="photo" class="col-span-12 my-2">
-                <i class="fa-solid fa-circle-notch fa-spin"></i>
+                <span class="material-icons">
+                    hourglass_full
+                </span>
                 <span> &nbsp;&nbsp; {{ __('admin/usersPages.Uploading ...') }}</span>
             </div>
 
@@ -120,7 +122,11 @@
                             <button
                                 class=" bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full shadow btn btn-xs"
                                 wire:click.prevent='removePhone({{ $index }})'
-                                title="{{ __('admin/usersPages.Delete') }}"><i class="fa fa-minus"></i></button>
+                                title="{{ __('admin/usersPages.Delete') }}">
+                                <span class="material-icons">
+                                    remove
+                                </span>
+                            </button>
                         </div>
                     @endif
 
@@ -155,8 +161,11 @@
                 {{-- Add New Phone Button --}}
                 <button
                     class="col-start-3 col-span-2 bg-rose-500 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm text-center text-xs"
-                    wire:click.prevent="addPhone" title="{{ __('admin/usersPages.Add') }}"><i
-                        class="fa fa-plus rtl:ml-2 ltr:mr-2"></i>{{ __('admin/usersPages.Add') }}</button>
+                    wire:click.prevent="addPhone" title="{{ __('admin/usersPages.Add') }}">
+                    <span class="material-icons rtl:ml-1 ltr:mr-1">
+                        add
+                    </span>
+                    {{ __('admin/usersPages.Add') }}</button>
             </div>
         </div>
 
@@ -254,8 +263,9 @@
                                     <button
                                         class=" bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded-full shadow btn btn-xs"
                                         wire:click.prevent='removeAddress({{ $index }})'
-                                        title="{{ __('admin/usersPages.Delete') }}"><i
-                                            class="fa fa-minus"></i></button>
+                                        title="{{ __('admin/usersPages.Delete') }}"><span class="material-icons">
+                                            remove
+                                            </span></button>
                                 </div>
                             @endif
 
@@ -365,8 +375,11 @@
                 {{-- Add New Address Button --}}
                 <button
                     class="col-start-2 col-span-1 bg-rose-500 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm text-center text-xs"
-                    wire:click.prevent="addAddress" title="{{ __('admin/usersPages.Add') }}"><i
-                        class="fa fa-plus rtl:ml-2 ltr:mr-2"></i>{{ __('admin/usersPages.Add') }}</button>
+                    wire:click.prevent="addAddress" title="{{ __('admin/usersPages.Add') }}"> <span
+                        class="material-icons rtl:ml-1 ltr:mr-1">
+                        add
+                    </span>
+                    {{ __('admin/usersPages.Add') }}</button>
             </div>
         </div>
 

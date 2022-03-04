@@ -24,7 +24,9 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="material-icons">notifications</i>
+                        <span class="material-icons">
+                            notifications
+                        </span>
                         <span class="notification">5</span>
                         <p class="d-lg-none d-md-block">
                             {{ __('Some Actions') }}
@@ -51,14 +53,16 @@
 
                 {{-- Profile Dropdown --}}
                 <li class="nav-item dropdown min-w-max">
-                    <a class="nav-link flex flex-row flex-nowrap items-center gap-x-4 py-1" id="navbarDropdownProfile" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link flex flex-row flex-nowrap items-center gap-x-4 py-1" id="navbarDropdownProfile"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         @if (auth()->user()->profile_photo_path)
                             <img class="h-10 w-10 rounded-full"
                                 src="{{ asset('storage/images/profiles/cropped200/' . auth()->user()->profile_photo_path) }}"
                                 alt="{{ auth()->user()->f_name . ' ' . auth()->user()->l_name . 'profile image' }}">
                         @else
-                            <i class="fa-regular fa-user"></i>
+                            <span class="material-icons">
+                                person
+                            </span>
                         @endif
                         <span class="font-bold">{{ auth()->user()->f_name }}</span>
                         <p class="d-lg-none d-md-block">

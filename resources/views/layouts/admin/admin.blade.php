@@ -18,7 +18,8 @@
         name='viewport' />
 
     {{-- Fonts --}}
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Material+Icons" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;400;700;900&display=swap" rel="stylesheet">
     @if (LaravelLocalization::getCurrentLocale() == 'ar')
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap"
@@ -26,7 +27,7 @@
     @endif
 
     {{-- Icons --}}
-    <link href="{{ asset('assets/admin/css/all.min.css') }}" rel="stylesheet" />
+    {{-- <link href="{{ asset('assets/admin/css/all.min.css') }}" rel="stylesheet" /> --}}
 
     {{-- Main CSS Files --}}
     <link href="{{ asset('assets/admin/css/material-dashboard.min.css') }}" rel="stylesheet" />
@@ -60,7 +61,7 @@
     {{-- <script src="{{ asset('assets/admin/js/plugins/perfect-scrollbar.jquery.min.js') }}"></script> --}}
 
     {{-- Font Awesome --}}
-    <script src="{{ asset('assets/admin/js/plugins/all.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/admin/js/plugins/all.min.js') }}"></script> --}}
 
     <!-- Plugin for the momentJs  -->
     {{-- <script src="{{ asset('assets/admin/js/plugins/moment.min.js') }}"></script>

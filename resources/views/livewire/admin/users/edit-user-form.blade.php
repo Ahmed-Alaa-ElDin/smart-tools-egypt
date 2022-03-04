@@ -6,7 +6,9 @@
 
             {{-- Loading Spinner --}}
             <div wire:loading wire:target="photo" class="col-span-12 my-2">
-                <i class="fa-solid fa-circle-notch fa-spin"></i>
+                <span class="material-icons">
+                    hourglass_full
+                </span>
                 <span> &nbsp;&nbsp; {{ __('admin/usersPages.Uploading ...') }}</span>
             </div>
 
@@ -21,7 +23,6 @@
                         wire:click.prevent='removePhoto'>{{ __('admin/usersPages.Remove / Replace Profile Image') }}</button>
                 </div>
             @else
-
                 {{-- Upload New Image --}}
                 <label for="photo" class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">
                     {{ __('admin/usersPages.Profile Image') }} </label>
@@ -122,7 +123,11 @@
                             <button
                                 class=" bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full shadow btn btn-xs"
                                 wire:click.prevent='removePhone({{ $index }})'
-                                title="{{ __('admin/usersPages.Delete') }}"><i class="fa fa-minus"></i></button>
+                                title="{{ __('admin/usersPages.Delete') }}">
+                                <span class="material-icons">
+                                    remove
+                                </span>
+                            </button>
                         </div>
                     @endif
 
@@ -137,7 +142,8 @@
                         <label for="defaultPhone{{ $index }}"
                             class="text-xs text-black m-0 cursor-pointer">{{ __('admin/usersPages.Default') }}</label>
                         <input type="radio" id="defaultPhone{{ $index }}" wire:model.lazy="defaultPhone"
-                            value="{{ $index }}" class="appearance-none checked:bg-primary outline-none ring-0 cursor-pointer">
+                            value="{{ $index }}"
+                            class="appearance-none checked:bg-primary outline-none ring-0 cursor-pointer">
                     </div>
                 @endforeach
 
@@ -156,8 +162,11 @@
                 {{-- Add New Phone Button --}}
                 <button
                     class="col-start-3 col-span-2 bg-rose-500 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm text-center text-xs"
-                    wire:click.prevent="addPhone" title="{{ __('admin/usersPages.Add') }}"><i
-                        class="fa fa-plus rtl:ml-2 ltr:mr-2"></i>{{ __('admin/usersPages.Add') }}</button>
+                    wire:click.prevent="addPhone" title="{{ __('admin/usersPages.Add') }}"> <span
+                        class="material-icons rtl:ml-1 ltr:mr-1">
+                        add
+                    </span>
+                    {{ __('admin/usersPages.Add') }}</button>
             </div>
         </div>
 
@@ -256,8 +265,9 @@
                                     <button
                                         class=" bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded-full shadow btn btn-xs"
                                         wire:click.prevent='removeAddress({{ $index }})'
-                                        title="{{ __('admin/usersPages.Delete') }}"><i
-                                            class="fa fa-minus"></i></button>
+                                        title="{{ __('admin/usersPages.Delete') }}"><span class="material-icons">
+                                            remove
+                                        </span></button>
                                 </div>
                             @endif
 
@@ -312,7 +322,8 @@
 
                             <select
                                 class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                                wire:model='addresses.{{ $index }}.city_id'  id="city{{ $index }}" wire:change='$emit("cityUpdated",{{ $index }})'>
+                                wire:model='addresses.{{ $index }}.city_id' id="city{{ $index }}"
+                                wire:change='$emit("cityUpdated",{{ $index }})'>
                                 @forelse ($cities[$index] as $city)
                                     <option value="{{ $city['id'] }}">{{ $city['name'][session('locale')] }}
                                     </option>
@@ -366,14 +377,18 @@
                 {{-- Add New Address Button --}}
                 <button
                     class="col-start-2 col-span-1 bg-rose-500 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm text-center text-xs"
-                    wire:click.prevent="addAddress" title="{{ __('admin/usersPages.Add') }}"><i
-                        class="fa fa-plus rtl:ml-2 ltr:mr-2"></i>{{ __('admin/usersPages.Add') }}</button>
+                    wire:click.prevent="addAddress" title="{{ __('admin/usersPages.Add') }}"> <span
+                        class="material-icons rtl:ml-1 ltr:mr-1">
+                        add
+                    </span>
+                    {{ __('admin/usersPages.Add') }}</button>
             </div>
         </div>
 
         {{-- Password Notification --}}
         <div class="grid grid-cols-12 gap-x-6 gap-y-2 items-center bg-yellow-100 p-2 rounded text-center">
-            <button wire:click.prevent = 'resetPasswordConfirm' class="col-span-6 col-start-4 md:col-span-4 md:col-start-5 bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Reset Password') }}</button>
+            <button wire:click.prevent='resetPasswordConfirm'
+                class="col-span-6 col-start-4 md:col-span-4 md:col-start-5 bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Reset Password') }}</button>
             <label
                 class="col-span-12 text-black font-bold m-0 text-center">{{ __('admin/usersPages.Password Notification') }}</label>
         </div>

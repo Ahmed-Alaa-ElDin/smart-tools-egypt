@@ -16,15 +16,19 @@
             <tbody class="text-center">
                 @forelse ($allPermissions as $permission)
                     @if ($loop->odd)
-                        <tr >
+                        <tr>
                             <td class="px-3 py-2 bg-red-100">
                                 {{ $permission->name }}
                             </td>
                             <td class="px-3 py-2 bg-red-100">
                                 @if (in_array($permission->id, $rolesPermissions))
-                                    <i class="fas fa-check text-success"></i>
+                                    <span class="text-success pt-1 font-bold material-icons">
+                                        check
+                                    </span>
                                 @else
-                                    <i class="fas fa-times text-danger"></i>
+                                    <span class="text-danger pt-1 font-bold material-icons">
+                                        close
+                                    </span>
                                 @endif
                             </td>
                         @else
@@ -32,19 +36,23 @@
                             </td>
                             <td class="px-3 py-2 bg-gray-100">
                                 @if (in_array($permission->id, $rolesPermissions))
-                                    <i class="fas fa-check text-success"></i>
+                                    <span class="text-success pt-1 font-bold material-icons">
+                                        check
+                                    </span>
                                 @else
-                                    <i class="fas fa-times text-danger"></i>
+                                    <span class="text-danger pt-1 font-bold material-icons">
+                                        close
+                                    </span>
                                 @endif
                             </td>
                         </tr>
                     @endif
                 @empty
-                <tr>
-                    <td class="text-center py-2 font-bold" colspan="4">
-                        {{ __('admin/usersPages.No permissions in the database') }}
-                    </td>
-                </tr>
+                    <tr>
+                        <td class="text-center py-2 font-bold" colspan="4">
+                            {{ __('admin/usersPages.No permissions in the database') }}
+                        </td>
+                    </tr>
                 @endforelse
             </tbody>
         </table>

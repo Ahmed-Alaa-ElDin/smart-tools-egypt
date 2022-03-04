@@ -10,7 +10,10 @@
                             <div class="mt-1 flex rounded-md shadow-sm">
                                 <span
                                     class="inline-flex items-center px-3 ltr:rounded-l-md rtl:rounded-r-md border border-r-0 border-gray-300 bg-gray-50 text-center text-gray-500 text-sm">
-                                    <i class="fa-solid fa-magnifying-glass"></i> </span>
+                                    <span class="material-icons">
+                                        search
+                                    </span>
+                                </span>
                                 <input type="text" name="company-website" id="company-website" wire:model='search'
                                     class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                                     placeholder="{{ __('admin/usersPages.Search ...') }}">
@@ -43,7 +46,9 @@
                                 <th wire:click="sortBy('f_name')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/usersPages.Name') }} &nbsp;
-                                    @include('partials._sort_icon', ['field' => 'f_name'])
+                                    @include('partials._sort_icon', [
+                                        'field' => 'f_name',
+                                    ])
                                 </th>
 
                                 {{-- Email --}}
@@ -58,7 +63,9 @@
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/usersPages.Balance') }}&nbsp;
-                                        @include('partials._sort_icon', ['field' => 'balance'])
+                                        @include('partials._sort_icon', [
+                                            'field' => 'balance',
+                                        ])
                                     </div>
                                 </th>
 
@@ -67,7 +74,9 @@
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/usersPages.Visits No.') }} &nbsp;
-                                        @include('partials._sort_icon', ['field' => 'visit_num'])
+                                        @include('partials._sort_icon', [
+                                            'field' => 'visit_num',
+                                        ])
                                     </div>
                                 </th>
 
@@ -101,7 +110,9 @@
                                                 @else
                                                     <div
                                                         class="h-10 w-10 rounded-full text-white bg-secondary flex justify-center items-center">
-                                                        <i class="fa-regular fa-user fa-fw"></i>
+                                                        <span class="material-icons">
+                                                            account_circle
+                                                        </span>
                                                     </div>
                                                 @endif
                                             </div>
@@ -132,32 +143,47 @@
 
                                         {{-- User Details --}}
                                         @can("See User's Details")
-                                            <a href="#" title="{{ __('admin/usersPages.View') }}"
-                                                class="m-0"><i
-                                                    class="fa-solid fa-eye fa-fw p-2 text-white bg-view hover:bg-viewHover rounded"></i></a>
+                                            <a href="#" title="{{ __('admin/usersPages.View') }}" class="m-0">
+                                                <span
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
+                                                    visibility
+                                                </span>
+                                            </a>
                                         @endcan
 
                                         {{-- Edit Button --}}
                                         @can('Edit User')
                                             <a href="{{ route('admin.users.edit', ['user' => $user->id]) }}"
-                                                title="{{ __('admin/usersPages.Edit') }}" class="m-0"><i
-                                                    class="fa-solid fa-pen-to-square fa-fw p-2 text-white bg-edit hover:bg-editHover rounded"></i></a>
+                                                title="{{ __('admin/usersPages.Edit') }}" class="m-0">
+                                                <span
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
+                                                    edit
+                                                </span>
+                                            </a>
                                         @endcan
 
                                         {{-- Edit Role Button --}}
                                         @can("Edit User's Role")
                                             <a href="#" title="{{ __('admin/usersPages.Role') }}"
                                                 wire:click.prevent="editRolesSelect({{ $user->id }})"
-                                                class="m-0"><i
-                                                    class="fa-solid fa-key fa-fw p-2 text-white bg-role hover:bg-roleHover rounded"></i></a>
+                                                class="m-0">
+                                                <span
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-role hover:bg-roleHover rounded">
+                                                    key
+                                                </span>
+                                            </a>
                                         @endcan
 
                                         {{-- Soft Delete Button --}}
                                         @can('Soft Delete User')
                                             <a href="#" title="{{ __('admin/usersPages.Delete') }}"
                                                 wire:click.prevent="deleteConfirm({{ $user->id }})"
-                                                class="m-0"><i
-                                                    class="fa-solid fa-trash-can fa-fw p-2 text-white bg-delete hover:bg-deleteHover rounded"></i></a>
+                                                class="m-0">
+                                                <span
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
+                                                    delete
+                                                </span>
+                                            </a>
                                         @endcan
                                     </td>
                                 </tr>
