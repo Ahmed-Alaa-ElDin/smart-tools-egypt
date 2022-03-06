@@ -135,7 +135,7 @@
                 </li>
             @endcan
 
-            {{-- Delivary System --}}
+            {{-- Delivery System --}}
             @can('See All Users')
                 <li class="nav-item {{ $activeSection == 'Delivery System' ? ' active' : '' }}">
                     <a class="nav-link" data-toggle="collapse" href="#delivery"
@@ -153,7 +153,7 @@
 
                             {{-- Delivery Companies --}}
                             <li class="nav-item {{ $activePage == 'Delivery Companies' ? ' active' : '' }}">
-                                <a class="nav-link" href="{{ route('admin.users.index') }}">
+                                <a class="nav-link" href="{{ route('admin.deliveries.index') }}">
                                     <span class="material-icons">
                                         business
                                     </span>

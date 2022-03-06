@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Zone;
 use Illuminate\Http\Request;
 
-class ZoneController extends Controller
+class ZonesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -82,4 +83,15 @@ class ZoneController extends Controller
     {
         //
     }
+
+        /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createZone($delivery_id)
+    {
+        return view("admin.zones.create",compact('delivery_id'));
+    }
+
 }

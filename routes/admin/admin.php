@@ -2,9 +2,10 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UsersController;
-use App\Http\Controllers\RolesController;
+use App\Http\Controllers\Admin\DeliveryController;
+use App\Http\Controllers\Admin\RolesController;
+use App\Http\Controllers\Admin\ZonesController;
 use Illuminate\Support\Facades\Route;
-use RealRashid\SweetAlert\Facades\Alert;
 
 Route::group([
     'middleware' => ['auth'],
@@ -24,5 +25,13 @@ Route::group([
     Route::get('/roles/roles-users/{id}',[RolesController::class,'showUsers'])->name('roles.showUsers');
     Route::resource('/roles', RolesController::class);
     // ############## Users Routes End ##############
+
+
+    // ############## Delivery System Routes Start ##############
+    Route::resource('/deliveries', DeliveryController::class);
+
+    Route::get('/zones/delivery-zones/{delivery_id}',[ZonesController::class,'createZone'])->name('roles.deliveryZones.create');
+    Route::resource('/zones', ZonesController::class);
+    // ############## Delivery System Routes End ##############
 
 });

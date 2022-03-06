@@ -60,6 +60,12 @@ return [
             'visibility' => 'public',
         ],
 
+        'deliveryCompanies' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/images/deliveryCompanies'),
+            'url' => env('APP_URL') . '/images/deliveryCompanies',
+            'visibility' => 'public',
+        ],
     ],
 
     /*
@@ -76,6 +82,7 @@ return [
     'links' => [
         public_path('storage') => storage_path('app/public'),
         public_path('images/profiles') => storage_path('app/public/images/profiles'),
+        public_path('images/deliveryCompanies') => storage_path('app/public/images/deliveryCompanies'),
     ],
 
 ];

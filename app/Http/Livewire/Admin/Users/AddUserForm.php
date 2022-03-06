@@ -103,22 +103,6 @@ class AddUserForm extends Component
             $this->governorates[0] = Governorate::where('country_id', $this->addresses[0]['country_id'])->get()->toArray();
             $this->cities[0] = City::where('governorate_id', $this->addresses[0]['governorate_id'])->get()->toArray();
         }
-
-
-        // // Choose first country
-        // $this->country = $this->countries->first()->id ?? Null;
-
-        // // get all governorates
-        // if ($this->country != Null) {
-        //     $this->governorates = Governorate::where('country_id', $this->country)->orderBy('name')->get();
-
-        //     // Choose first governorate
-        //     $this->governorate = $this->governorates->count() ? $this->governorates->first()->id : Null;
-
-        //     // get all cities
-        //     $this->cities = City::where('governorate_id', $this->governorate)->orderBy('name')->get();
-        //     $this->city = $this->cities->first()->id ?? Null;
-        // }
     }
 
     // Called with every update
@@ -217,23 +201,12 @@ class AddUserForm extends Component
     {
         $this->validateOnly($photo);
 
-        $this->image_name = 'profile-' . time() . '-' . rand() . '.' . $this->photo->getClientOriginalExtension();
+        $imageUpload = imageUpload($photo, 'profile-', 'profiles');
 
-        // Crop and resize photo
-        try {
-            $manager = new ImageManager();
+        $this->temp_path = $imageUpload["temporaryUrl"];
 
-            $manager->make($this->photo)->resize(200, null, function ($constraint) {
-                $constraint->aspectRatio();
-            })->crop(200, 200)->save('storage/images/profiles/cropped200/' . $this->image_name);
-        } catch (\Throwable $th) {
-        }
+        $this->image_name = $imageUpload["image_name"];
 
-        // Upload photo and get link
-        $this->photo->storeAs('original', $this->image_name, 'profiles');
-
-        // for photo rendering
-        $this->temp_path = $this->photo->temporaryUrl();
     }
 
     // remove image
@@ -256,7 +229,7 @@ class AddUserForm extends Component
             $user = User::create([
                 'f_name' => [
                     'ar' => $this->f_name['ar'],
-                    'en' => $this->f_name['en'],
+                    'en' => $this->f_name['en'] != null ? $this->f_name['en'] : $this->f_name['ar'],
                 ],
                 'l_name' => [
                     'ar' => $this->l_name['ar'],
@@ -330,7 +303,7 @@ class AddUserForm extends Component
         } catch (Throwable $th) {
             DB::rollback();
 
-            Session::flash('error', __('admin/usersPages.User hasn\'t been added'));
+            Session::flash('error', __("admin/usersPages.User hasn't been added"));
             redirect()->route('admin.users.index');
         }
     }

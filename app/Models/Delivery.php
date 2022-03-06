@@ -32,4 +32,10 @@ class Delivery extends Model
     {
         return $this->hasMany(Zone::class);
     }
+
+    // One to many relationship  Delivery --> phones
+    public function phones()
+    {
+        return $this->hasMany(DeliveryPhone::class);
+    }
 }

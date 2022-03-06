@@ -5,19 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Phone extends Model
+class DeliveryPhone extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'delivery_id',
         'phone',
         'default',
     ];
 
-    // One to many relationship (Reverse)  User --> Phones
-    public function user()
+    // One to many relationship (Reverse)  Delivery Company --> Phones
+    public function delivery()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Delivery::class);
     }
 }

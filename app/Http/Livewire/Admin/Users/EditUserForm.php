@@ -16,7 +16,6 @@ use Illuminate\Validation\Rule;
 use Intervention\Image\ImageManager;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use RealRashid\SweetAlert\Facades\Alert;
 use Spatie\Permission\Models\Role;
 use Throwable;
 
@@ -71,10 +70,8 @@ class EditUserForm extends Component
     }
 
     // Called Once at the beginning
-    public function mount($user_id)
+    public function mount()
     {
-        $this->user_id = $user_id;
-
         // All Roles
         $this->roles = Role::get();
 
@@ -296,7 +293,7 @@ class EditUserForm extends Component
             ]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalPasswordReset', [
-                "text" => __('admin/usersPages.Password hasn\'t been reset'),
+                "text" => __("admin/usersPages.Password hasn't been reset"),
                 'icon' => 'error'
             ]);
         }
@@ -390,7 +387,7 @@ class EditUserForm extends Component
         } catch (\Throwable $th) {
             DB::rollback();
 
-            Session::flash('error', __('admin/usersPages.User hasn\'t been updated'));
+            Session::flash('error', __("admin/usersPages.User hasn't been updated"));
             redirect()->route('admin.users.index');
         }
     }

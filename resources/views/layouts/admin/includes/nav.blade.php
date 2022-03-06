@@ -52,7 +52,7 @@
                 </li>
 
                 {{-- Profile Dropdown --}}
-                <li class="nav-item dropdown min-w-max">
+                <li class="nav-item dropdown min-w-max cursor-pointer">
                     <a class="nav-link flex flex-row flex-nowrap items-center gap-x-4 py-1" id="navbarDropdownProfile"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         @if (auth()->user()->profile_photo_path)

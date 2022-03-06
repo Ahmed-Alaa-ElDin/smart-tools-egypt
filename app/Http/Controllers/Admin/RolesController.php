@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Delivery;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class DeliveryController extends Controller
+class RolesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class DeliveryController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.users.roles');
     }
 
     /**
@@ -24,7 +24,7 @@ class DeliveryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.users.createRole');
     }
 
     /**
@@ -41,10 +41,10 @@ class DeliveryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Delivery  $delivery
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Delivery $delivery)
+    public function show($id)
     {
         //
     }
@@ -52,22 +52,22 @@ class DeliveryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Delivery  $delivery
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Delivery $delivery)
+    public function edit($id)
     {
-        //
+        return view('admin.users.editRole',compact('id'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Delivery  $delivery
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Delivery $delivery)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -75,11 +75,34 @@ class DeliveryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Delivery  $delivery
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Delivery $delivery)
+    public function destroy($id)
     {
         //
     }
+
+    /**
+    * Display the specified role's permissions.
+    *
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
+   public function showPermissions($id)
+   {
+       return view('admin.users.rolesPermissions', compact('id'));
+   }
+
+   /**
+    * Display the specified role's users.
+    *
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
+    public function showUsers($id)
+    {
+        return view('admin.users.rolesUsers', compact('id'));
+    }
+
 }

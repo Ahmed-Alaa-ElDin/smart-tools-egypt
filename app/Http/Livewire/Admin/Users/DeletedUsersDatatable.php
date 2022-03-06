@@ -96,7 +96,7 @@ class DeletedUsersDatatable extends Component
             ]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('admin/usersPages.User hasn\'t been deleted'),
+                "text" => __("admin/usersPages.User hasn't been deleted"),
                 'icon' => 'error'
             ]);
         }
@@ -132,7 +132,7 @@ class DeletedUsersDatatable extends Component
             ]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('admin/usersPages.User hasn\'t been restored'),
+                "text" => __("admin/usersPages.User hasn't been restored"),
                 'icon' => 'error'
             ]);
         }

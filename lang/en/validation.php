@@ -163,7 +163,9 @@ return [
     */
 
     'attributes' => [
-        'selectedPermissions' => 'Permissions'
+        'selectedPermissions' => 'Permissions',
+        'phones.*.phone' => 'phone',
+        'selectedPermissions' => 'Permissions',
     ],
 
 ];

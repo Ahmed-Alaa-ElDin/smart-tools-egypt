@@ -93,7 +93,7 @@ class RolesUsersList extends Component
             ]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalUserDeleted', [
-                "text" => __('admin/usersPages.User hasn\'t been deleted'),
+                "text" => __("admin/usersPages.User hasn't been deleted"),
                 'icon' => 'error'
             ]);
         }

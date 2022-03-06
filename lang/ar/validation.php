@@ -175,7 +175,11 @@ return [
         'addresses.*.city_id'           =>  'المدينة',
         'addresses.*.details'           =>  'تفاصيل العنوان',
         'addresses.*.special_marque'    =>  'العلامة المميزة',
-        'selectedPermissions' => 'الصلاحيات'
+        'selectedPermissions' => 'الصلاحيات',
+        'phones.*.phone' => 'الهاتف',
+        'name.ar' => "الاسم بالعربية",
+        'name.en' => "الاسم بالإنجليزية",
+
     ],
 
     /*

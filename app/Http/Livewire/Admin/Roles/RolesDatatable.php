@@ -79,7 +79,7 @@ class RolesDatatable extends Component
             ]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalRoleDeleted', [
-                "text" => __('admin/usersPages.Role hasn\'t been deleted'),
+                "text" => __("admin/usersPages.Role hasn't been deleted"),
                 'icon' => 'error'
             ]);
         }

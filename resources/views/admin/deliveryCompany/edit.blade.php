@@ -1,5 +1,5 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Users', 'activePage' => 'Add User', 'titlePage' =>
-__('admin/usersPages.Add User')])
+@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage' =>
+__('admin/deliveriesPages.Edit Delivery Company')])
 
 @section('content')
     <div class="content">
@@ -8,10 +8,10 @@ __('admin/usersPages.Add User')])
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.dashboard') }}">{{ __('admin/usersPages.Dashboard') }}</a></li>
-                    <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.users.index') }}">{{ __('admin/usersPages.All Users') }}</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/usersPages.Add User') }}</li>
+                            href="{{ route('admin.dashboard') }}">{{ __('admin/deliveriesPages.Dashboard') }}</a></li>
+                            <li class="breadcrumb-item hover:text-primary"><a
+                                href="{{ route('admin.deliveries.index') }}">{{ __('admin/deliveriesPages.Delivery Companies') }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ __('admin/deliveriesPages.Edit Delivery Company') }}</li>
                 </ol>
             </nav>
 
@@ -26,7 +26,7 @@ __('admin/usersPages.Add User')])
                             <div class="row">
                                 <div class="col-12 ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
-                                        {{ __('admin/usersPages.Through this form you can add new user') }}</p>
+                                        {{ __('admin/deliveriesPages.Through this form you can edit delivery company data') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -35,7 +35,7 @@ __('admin/usersPages.Add User')])
                         <div class="card-body overflow-hidden">
 
                             {{-- Form Start --}}
-                            @livewire('admin.users.add-user-form')
+                            @livewire('admin.deliveries.edit-delivery-form', ['delivery_id' => $delivery])
                             {{-- content --}}
 
                         </div>
