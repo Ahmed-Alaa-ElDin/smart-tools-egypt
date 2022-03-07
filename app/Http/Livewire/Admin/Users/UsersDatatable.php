@@ -13,18 +13,20 @@ class UsersDatatable extends Component
 {
     use WithPagination;
 
-    public $sortBy = 'f_name';
+    public $sortBy;
     public $sortDirection = 'ASC';
     public $perPage;
 
     public $search = "";
 
-    protected $listeners = ['softDeleteUser','editRoles'];
+    protected $listeners = ['softDeleteUser', 'editRoles'];
 
     // Render Once
     public function mount()
     {
         $this->perPage = Config::get('constants.constants.PAGINATION');
+
+        $this->sortBy = 'f_name->' . session('locale');
     }
 
     // Render With each update
@@ -62,7 +64,9 @@ class UsersDatatable extends Component
         } else {
             $this->sortDirection = 'ASC';
         }
-
+        if ($field == 'f_name') {
+            return $this->sortBy = 'f_name->' . session('locale');
+        }
         return $this->sortBy = $field;
     }
 
@@ -119,7 +123,6 @@ class UsersDatatable extends Component
                 "text" => __('admin/usersPages.New role assigned successfully'),
                 'icon' => 'success'
             ]);
-
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalUserRoleChanged', [
                 "text" => __('admin/usersPages.New role hasn\'n been assigned'),

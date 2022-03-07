@@ -127,8 +127,8 @@
                                 wire:click.prevent='removePhone({{ $index }})'
                                 title="{{ __('admin/usersPages.Delete') }}">
                                 <span class="material-icons">
-                                    remove
-                                </span>
+close
+</span>
                             </button>
                         </div>
                     @endif
@@ -268,7 +268,7 @@
                                         class=" bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded-full shadow btn btn-xs"
                                         wire:click.prevent='removeAddress({{ $index }})'
                                         title="{{ __('admin/usersPages.Delete') }}"><span class="material-icons">
-                                            remove
+                                            close
                                         </span></button>
                                 </div>
                             @endif

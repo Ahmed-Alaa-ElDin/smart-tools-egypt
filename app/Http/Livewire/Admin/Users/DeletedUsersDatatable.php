@@ -11,7 +11,7 @@ class DeletedUsersDatatable extends Component
 {
     use WithPagination;
 
-    public $sortBy = 'f_name';
+    public $sortBy;
     public $sortDirection = 'ASC';
     public $perPage;
 
@@ -23,6 +23,8 @@ class DeletedUsersDatatable extends Component
     public function mount()
     {
         $this->perPage = Config::get('constants.constants.PAGINATION');
+
+        $this->sortBy = 'f_name->' . session('locale');
     }
 
     // Render With each update
@@ -64,6 +66,9 @@ class DeletedUsersDatatable extends Component
             $this->sortDirection = 'ASC';
         }
 
+        if ($field == 'f_name') {
+            return $this->sortBy = 'f_name->' . session('locale');
+        }
         return $this->sortBy = $field;
     }
 

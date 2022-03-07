@@ -92,8 +92,8 @@
                                 wire:click.prevent='removePhone({{ $index }})'
                                 title="{{ __('admin/deliveriesPages.Delete') }}">
                                 <span class="material-icons">
-                                    remove
-                                </span>
+close
+</span>
                             </button>
                         </div>
                     @endif

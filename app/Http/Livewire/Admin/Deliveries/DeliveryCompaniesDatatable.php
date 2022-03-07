@@ -11,7 +11,7 @@ class DeliveryCompaniesDatatable extends Component
 {
     use WithPagination;
 
-    public $sortBy = 'name';
+    public $sortBy;
     public $sortDirection = 'ASC';
     public $perPage;
 
@@ -23,6 +23,8 @@ class DeliveryCompaniesDatatable extends Component
     public function mount()
     {
         $this->perPage = Config::get('constants.constants.PAGINATION');
+
+        $this->sortBy = 'name->' . session('locale');
     }
 
     // Render With each update
@@ -56,6 +58,9 @@ class DeliveryCompaniesDatatable extends Component
             $this->sortDirection = 'ASC';
         }
 
+        if ($field == 'name') {
+            return $this->sortBy = 'name->' . session('locale');
+        }
         return $this->sortBy = $field;
     }
 

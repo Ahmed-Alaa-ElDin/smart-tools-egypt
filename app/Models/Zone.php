@@ -51,4 +51,10 @@ class Zone extends Model
     {
         return $this->belongsToMany(City::class, 'address_zone', 'zone_id', 'city_id');
     }
+
+    // One to many relationship Zone --> Destinations
+    public function destinations()
+    {
+        return $this->hasMany(Destination::class);
+    }
 }

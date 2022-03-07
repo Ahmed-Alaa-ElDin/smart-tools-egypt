@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AddressZone extends Model
+class Destination extends Model
 {
     use HasFactory;
 
@@ -17,4 +17,10 @@ class AddressZone extends Model
         'city_id',
         'zone_id',
     ];
+
+    // One to many relationship (reverse) Zone --> Destinations
+    public function zone()
+    {
+        return $this->belongsTo(Zone::class);
+    }
 }

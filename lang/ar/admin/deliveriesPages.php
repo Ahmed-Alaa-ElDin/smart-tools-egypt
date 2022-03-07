@@ -52,6 +52,23 @@ return [
     "Add Zone" => "إضافة منطقة",
     "Zones" => "المناطق",
     "Company Name" => "اسم الشركة",
+    "Add Delivery Company's Zones" => "إضافة مناطق لشركة الشحن",
+    "Through this form you can add new zones to delivery company" => "من خلال هذه الصفحة يمكنك إضافة مناطق لشركة الشحن",
+    "Zone Name" => "اسم المنطقة",
+    "Shipping Fees" => "مصاريف الشحن",
+    "Cities" => "المناطق",
+    "Add Destination" => "إضافة وجهة",
+    "Select All" => "اختيار الكل",
+    "Deselect All" => "إلغاء اختيار الكل",
+    "Base Fees (EGP)" => "المصاريف الأساسية (بالجنية)",
+    "Base Weight (Kg)" => "الوزن الأساسي (بالكيلو)",
+    "Fees by Kg" => "المصاريف لكل كيلو زائد",
+    "Delete Zone" => "حذف المنطقة",
+    "Delete Destination" => "حذف الوجهة",
+    "N/A" => "غير متوفر",
+    "Back to Companies" => "الرجوع إلى الشركات",
+    "Select Country" => "اختر بلد",
+    "Select Governorate" => "اختر محافظة",
 
 
 ];

@@ -96,7 +96,7 @@ class AddUserForm extends Component
         ]];
 
         // get all countries
-        $this->countries = Country::orderBy('name')->get();
+        $this->countries = Country::orderBy('name->'.session('locale'))->get();
 
         if ($this->countries->count()) {
             // User Has Addresses

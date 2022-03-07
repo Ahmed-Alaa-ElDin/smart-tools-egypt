@@ -44,7 +44,7 @@ class RolesDatatable extends Component
         $this->resetPage();
     }
 
-    // Add coditions of sorting
+    // Add conditions of sorting
     public function sortBy($field)
     {
         if ($this->sortDirection == 'ASC') {

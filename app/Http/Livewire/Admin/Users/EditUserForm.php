@@ -131,7 +131,7 @@ class EditUserForm extends Component
         ]];
 
         // all Addresses
-        $this->countries = Country::orderBy('name')->get();
+        $this->countries = Country::orderBy('name->'.session('locale'))->get();
 
         if ($this->countries->count()) {
             // User Has Addresses
