@@ -69,6 +69,10 @@ return [
     "Back to Companies" => "Back to Companies",
     "Select Country" => "Select Country",
     "Select Governorate" => "Select Governorate",
+    "Zones have been added successfully" => "Zones have been added successfully",
+    "Zones haven't been added" => "Zones haven't been added",
+    "Cities" => "Cities",
+    "Cities" => "Cities",
     "Cities" => "Cities",
     "Cities" => "Cities",
 

@@ -69,6 +69,7 @@ return [
     "Back to Companies" => "الرجوع إلى الشركات",
     "Select Country" => "اختر بلد",
     "Select Governorate" => "اختر محافظة",
-
+    "Zones have been added successfully" => "تم إضافة المناطق بنجاح",
+    "Zones haven't been added" => "لم تتم إضافة المناطق",
 
 ];

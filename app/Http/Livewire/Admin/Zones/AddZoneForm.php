@@ -9,6 +9,7 @@ use App\Models\Destination;
 use App\Models\Governorate;
 use App\Models\Zone;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 
 class AddZoneForm extends Component
@@ -37,7 +38,6 @@ class AddZoneForm extends Component
         ]
     ];
 
-    protected $listeners = ['citySelected'];
 
     // Validation Rules
     public function rules()
@@ -149,15 +149,6 @@ class AddZoneForm extends Component
         }
     }
 
-    public function citySelected($zone_index, $des_index, $city)
-    {
-        if (in_array($city, $this->zones[$zone_index]['destinations'][$des_index]['cities'])) {
-            $this->zones[$zone_index]['destinations'][$des_index]['cities'] = array_diff($this->zones[$zone_index]['destinations'][$des_index]['cities'], [$city]);
-        } else {
-            array_push($this->zones[$zone_index]['destinations'][$des_index]['cities'], $city);
-        }
-    }
-
     public function selectAll($zone_index, $des_index)
     {
         array_map(function ($value) use ($zone_index, $des_index) {
@@ -170,24 +161,18 @@ class AddZoneForm extends Component
         $this->zones[$zone_index]['destinations'][$des_index]['cities'] = [];
     }
 
-
-
     public function addDestination($zone_index)
     {
         $des_index = array_push(
             $this->zones[$zone_index]['destinations'],
             [
                 'country_id' => 1,
-                'governorates' => [],
+                'governorates' => Governorate::where('country_id', 1)->orderBy('name->' . session('locale'))->get()->toArray(),
                 'governorate_id' => '',
                 'allCities' => [],
                 'cities' => []
             ]
         );
-
-        // dd($des_index);
-        // $this->countryUpdated($zone_index, $des_index);
-
     }
 
     public function removeDestination($zone_index, $des_index)
@@ -205,6 +190,8 @@ class AddZoneForm extends Component
         $this->validate();
 
         DB::beginTransaction();
+
+        $this->delivery->zones()->delete();
 
         try {
             foreach ($this->zones as $zone_index => $zone) {
@@ -234,10 +221,15 @@ class AddZoneForm extends Component
             }
 
             DB::commit();
-        } catch (\Throwable $th) {
 
+            Session::flash('success', __('admin/deliveriesPages.Zones have been added successfully'));
+            redirect()->route('admin.deliveries.index');
+
+        } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+
+            Session::flash('error', __("admin/deliveriesPages.Zones haven't been added"));
+            redirect()->route('admin.deliveries.index');
         }
     }
 }

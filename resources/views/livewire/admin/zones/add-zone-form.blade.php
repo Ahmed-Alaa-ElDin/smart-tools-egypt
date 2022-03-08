@@ -24,7 +24,9 @@
             <div class="grid grid-cols-12 gap-x-4 gap-y-2 col-span-12 md:col-span-10">
 
                 @foreach ($zones as $zone_index => $zone)
-                    <div class="bg-gray-200 rounded-xl col-span-12 grid grid-cols-12 gap-x-4 gap-y-2 p-2 ">
+
+                {{-- ########### Zone Start ########### --}}
+                    <div class="bg-gray-200 rounded-xl col-span-12 grid grid-cols-12 gap-x-4 gap-y-2 p-2 " wire:key="{{ 'zone_'.$zone_index }}">
 
                         {{-- toolbar --}}
                         <div class="col-span-12 flex justify-between items-center bg-gray-300 py-1 px-2 rounded-xl">
@@ -162,13 +164,12 @@
                             {{-- Zone's Destinations --}}
 
                             @foreach ($zone['destinations'] as $des_index => $destination)
-                                <div class="col-span-12 grid grid-cols-12 bg-gray-300 p-2 gap-x-2 gap-y-2 rounded-xl">
+                                <div class="col-span-12 grid grid-cols-12 bg-gray-300 p-2 gap-x-2 gap-y-2 rounded-xl" wire:key="{{ 'zone_'.$zone_index.'_des_'.$des_index }}">
 
                                     {{-- Destination toolbar --}}
                                     <div class="col-span-12 sm:col-span-4 sm:order-2 flex items-start md:p-1">
                                         <div
                                             class="flex justify-around items-center bg-gray-400 py-1 rounded-xl w-full">
-
 
                                             {{-- Select All button --}}
                                             <div class="text-gray-900 bg-white p-1 m-0 shadow rounded cursor-pointer btn @if (empty($zones[$zone_index]['destinations'][$des_index]['allCities'])) hidden @endif"
@@ -208,15 +209,9 @@
 
                                         </div>
                                     </div>
-                                    <div class="col-span-12">
 
-                                        @php
-                                            dump($this->zones[$zone_index]['destinations']);
-                                        @endphp
-                                    </div>
                                     <div
                                         class="col-span-12 sm:col-span-8 grid grid-cols-12 gap-x-2 gap-y-2 sm:order-1 ">
-
 
                                         {{-- Country --}}
                                         <div class="col-span-12 lg:col-span-12 grid grid-cols-3 items-center">

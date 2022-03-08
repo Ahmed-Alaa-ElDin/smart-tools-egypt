@@ -9,8 +9,6 @@ class Destination extends Model
 {
     use HasFactory;
 
-    protected $table = 'address_zone';
-
     protected $fillable = [
         'country_id',
         'governorate_id',
