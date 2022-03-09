@@ -169,7 +169,7 @@ class AddDeliveryForm extends Component
             } elseif ($zones) {
                 $delivery_id = $delivery->id;
                 Session::flash('success', __('admin/deliveriesPages.Delivery added successfully'));
-                redirect()->route('admin.roles.deliveryZones.create', ['delivery_id' => $delivery_id]);
+                redirect()->route('admin.roles.deliveryZones.edit', ['delivery_id' => $delivery_id]);
             } else {
                 Session::flash('success', __('admin/deliveriesPages.Delivery added successfully'));
                 redirect()->route('admin.deliveries.index');

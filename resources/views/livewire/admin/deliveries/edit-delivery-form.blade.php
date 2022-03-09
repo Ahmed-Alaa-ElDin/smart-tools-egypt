@@ -17,7 +17,8 @@
             {{-- preview --}}
             @if ($temp_path || $oldImage)
                 <div class="col-span-12 text-center w-1/2 md:w-1/4 my-2">
-                    <img src="{{ $temp_path ?? asset('storage/images/deliveryCompanies/original/' . $oldImage) }}" class="rounded-xl">
+                    <img src="{{ $temp_path ?? asset('storage/images/deliveryCompanies/original/' . $oldImage) }}"
+                        class="rounded-xl">
                 </div>
                 <div class="col-span-12 text-center">
                     <button class="btn btn-danger btn-sm text-bold"
@@ -92,8 +93,8 @@
                                 wire:click.prevent='removePhone({{ $index }})'
                                 title="{{ __('admin/deliveriesPages.Delete') }}">
                                 <span class="material-icons">
-close
-</span>
+                                    close
+                                </span>
                             </button>
                         </div>
                     @endif
@@ -140,7 +141,7 @@ close
         {{-- Active --}}
         <div class="grid grid-cols-12  items-center text-center my-2">
             <div
-                class="col-span-6 md:col-span-4 col-start-4 grid grid-cols-6 md:grid-cols-4 gap-x-6 gap-y-1 items-center bg-red-100 p-2 rounded text-center">
+                class="col-span-6 md:col-span-4 grid grid-cols-6 md:grid-cols-4 gap-x-6 gap-y-1 items-center bg-red-100 p-2 rounded text-center">
                 <label
                     class="col-span-6 md:col-span-2 text-black font-bold m-0 text-center">{{ __('admin/deliveriesPages.Active') }}</label>
 
@@ -153,6 +154,12 @@ close
                     <div class="inline-block mt-2 col-span-6 md:col-span-4 bg-red-700 rounded text-white shadow px-3 py-1">
                         {{ $message }}</div>
                 @enderror
+            </div>
+            <div class="col-span-6 md:col-span-8">
+                {{-- Save and Add Zones --}}
+                <button type="button" wire:click.prevent="save(false,true)"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __("admin/deliveriesPages.Update and Edit Company's Zones") }}</button>
+
             </div>
         </div>
 

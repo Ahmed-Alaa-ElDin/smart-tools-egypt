@@ -15,28 +15,7 @@ use Livewire\Component;
 class AddZoneForm extends Component
 {
     // public Properties
-    public $delivery_id, $delivery, $countries, $governorates, $cities, $zones = [
-        0 => [
-            'name' => [
-                'ar' => '',
-                'en' => ''
-            ],
-            'min_size' => '',
-            'min_charge' => '',
-            'kg_charge' => '',
-            'is_active' => 1,
-            'destinations' => [
-                0 => [
-                    'country_id' => 1,
-                    'governorates' => [],
-                    'governorate_id' => '',
-                    'allCities' => [],
-                    'cities' => []
-                ],
-            ],
-            'max' => 0
-        ]
-    ];
+    public $delivery_id, $delivery, $countries, $governorates, $cities, $zones;
 
 
     // Validation Rules
@@ -54,54 +33,111 @@ class AddZoneForm extends Component
         ];
     }
 
+    // Run once in the beginning
     public function mount()
     {
+        // get all delivery companies
         $this->delivery = Delivery::with('zones')->findOrFail($this->delivery_id);
 
+        // get delivery company name
         $this->name = [
             'ar' => $this->delivery->getTranslation('name', 'ar'),
             'en' => $this->delivery->getTranslation('name', 'en')
         ];
 
+        // get all countries
         $this->countries = Country::get()->toArray();
 
-        foreach ($this->zones as $zone_i => $zone) {
-            foreach ($zone['destinations'] as $des_i => $destination) {
-                if ($destination['country_id']) {
-                    $country_id = $destination['country_id'];
-                    $this->zones[$zone_i]['destinations'][$des_i]['governorates'] = Governorate::where('country_id', $country_id)->orderBy('name->' . session('locale'))->get()->toArray();
-                }
+        // Get all zone for this delivery company
+        $zonesQuery = Zone::with('destinations')->where('delivery_id', $this->delivery_id);
 
-                if ($destination['governorate_id']) {
-                    $governorate_id = $destination['governorate_id'];
+        // save zones to zones variable
+        $this->zones = $zonesQuery->count() ? $zonesQuery->get() : [
+            0 => [
+                'name' => [
+                    'ar' => '',
+                    'en' => ''
+                ],
+                'min_size' => '',
+                'min_charge' => '',
+                'kg_charge' => '',
+                'is_active' => 1,
+                'destinations' => [
+                    0 => [
+                        'country_id' => 1,
+                        'governorates' => Governorate::where('country_id', 1)->get()->toArray(),
+                        'governorate_id' => '',
+                        'allCities' => [],
+                        'cities' => []
+                    ],
+                ],
+                'max' => 1
+            ]
+        ];
 
-                    $this->zones[$zone_i]['destinations'][$des_i]['allCities'] = City::where('governorate_id', $governorate_id)->orderBy('name->' . session('locale'))->get()->toArray();
+        // run only on update
+        if ($zonesQuery->count()) {
+
+            // create temp variable for zones
+            $zones = $this->zones->toArray();
+
+            foreach ($zones as $zone_index => $zone) {
+
+                // add maximization property
+                $zones[$zone_index]['max'] = $zone_index ? 0 : 1;
+
+                // create temp variable of destinations
+                $destinations = $this->zones[$zone_index]->destinations->groupBy('governorate_id')->toArray();
+
+                // remove old destinations from zones
+                $zones[$zone_index]['destinations'] = [];
+
+                foreach ($destinations as $governorate_id => $destination) {
+                    $country_id = $destination[0]['country_id'];
+
+                    $cities = array_map(function ($dest) {
+                        return $dest['city_id'];
+                    }, $destinations[$governorate_id]);
+
+                    $zones[$zone_index]['destinations'][] = [
+                        'country_id' => $country_id,
+                        'governorates' => Governorate::where('country_id', $country_id)->orderBy('name->' . session('locale'))->get()->toArray(),
+                        'governorate_id' => $governorate_id,
+                        'allCities' => City::where('governorate_id', $governorate_id)->orderBy('name->' . session('locale'))->get()->toArray(),
+                        'cities' => $cities
+                    ];
                 }
             }
+
+            $this->zones = $zones;
         }
     }
 
-
+    // render after each update
     public function render()
     {
         return view('livewire.admin.zones.add-zone-form');
     }
 
+    // Activate / Deactivate zones
     public function activate($zone_index)
     {
         $this->zones[$zone_index]['is_active'] = $this->zones[$zone_index]['is_active'] ? 0 : 1;
     }
 
+    // Maximize / Minimize zone tab
     public function maximize($zone_index)
     {
         $this->zones[$zone_index]['max'] = $this->zones[$zone_index]['max'] ? 0 : 1;
     }
 
+    // Remove Zone
     public function removeZone($zone_index)
     {
         unset($this->zones[$zone_index]);
     }
 
+    // Add New Zone
     public function addZone()
     {
         array_push(
@@ -116,11 +152,12 @@ class AddZoneForm extends Component
                 'kg_charge' => '',
                 'is_active' => 1,
                 'destinations' => [],
-                'max' => 0
+                'max' => 1
             ]
         );
     }
 
+    // run on country change
     public function countryUpdated($zone_index, $des_index)
     {
         $country_id = $this->zones[$zone_index]['destinations'][$des_index]['country_id'];
@@ -136,6 +173,7 @@ class AddZoneForm extends Component
         }
     }
 
+    // run on governorate change
     public function governorateUpdated($zone_index, $des_index)
     {
         $governorate_id = $this->zones[$zone_index]['destinations'][$des_index]['governorate_id'];
@@ -149,6 +187,7 @@ class AddZoneForm extends Component
         }
     }
 
+    // Select all cities
     public function selectAll($zone_index, $des_index)
     {
         array_map(function ($value) use ($zone_index, $des_index) {
@@ -156,11 +195,13 @@ class AddZoneForm extends Component
         }, $this->zones[$zone_index]['destinations'][$des_index]['allCities']);
     }
 
+    // Deselect all cities
     public function deselectAll($zone_index, $des_index)
     {
         $this->zones[$zone_index]['destinations'][$des_index]['cities'] = [];
     }
 
+    // Add destination
     public function addDestination($zone_index)
     {
         $des_index = array_push(
@@ -175,16 +216,19 @@ class AddZoneForm extends Component
         );
     }
 
+    // remove Destination
     public function removeDestination($zone_index, $des_index)
     {
         unset($this->zones[$zone_index]['destinations'][$des_index]);
     }
 
+    // run with every update (real time validation)
     public function updated($field)
     {
         $this->validateOnly($field);
     }
 
+    // Save / Update
     public function save()
     {
         $this->validate();
@@ -224,7 +268,6 @@ class AddZoneForm extends Component
 
             Session::flash('success', __('admin/deliveriesPages.Zones have been added successfully'));
             redirect()->route('admin.deliveries.index');
-
         } catch (\Throwable $th) {
             DB::rollBack();
 

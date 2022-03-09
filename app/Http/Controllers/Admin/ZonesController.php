@@ -89,9 +89,9 @@ class ZonesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function createZone($delivery_id)
+    public function editZone($delivery_id)
     {
-        return view("admin.zones.create",compact('delivery_id'));
+        return view("admin.zones.edit",compact('delivery_id'));
     }
 
 }

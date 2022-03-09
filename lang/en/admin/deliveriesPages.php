@@ -71,7 +71,7 @@ return [
     "Select Governorate" => "Select Governorate",
     "Zones have been added successfully" => "Zones have been added successfully",
     "Zones haven't been added" => "Zones haven't been added",
-    "Cities" => "Cities",
+    "Update and Edit Company's Zones" => "Update and Edit Company's Zones",
     "Cities" => "Cities",
     "Cities" => "Cities",
     "Cities" => "Cities",

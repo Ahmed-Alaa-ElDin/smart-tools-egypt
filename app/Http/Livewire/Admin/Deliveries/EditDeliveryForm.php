@@ -146,7 +146,7 @@ class EditDeliveryForm extends Component
     ######################## Logo : End ############################
 
     // Final Validate and add to database
-    public function save($new = false)
+    public function save($new = false, $zones = false)
     {
         $this->validate();
 
@@ -194,6 +194,10 @@ class EditDeliveryForm extends Component
             if ($new) {
                 Session::flash('success', __('admin/deliveriesPages.Delivery updated successfully'));
                 redirect()->route('admin.deliveries.create');
+            } elseif ($zones) {
+                $delivery_id = $this->delivery_id;
+                Session::flash('success', __('admin/deliveriesPages.Delivery updated successfully'));
+                redirect()->route('admin.roles.deliveryZones.edit', ['delivery_id' => $delivery_id]);
             } else {
                 Session::flash('success', __('admin/deliveriesPages.Delivery updated successfully'));
                 redirect()->route('admin.deliveries.index');

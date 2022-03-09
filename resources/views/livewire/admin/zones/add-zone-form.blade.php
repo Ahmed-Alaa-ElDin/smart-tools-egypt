@@ -33,7 +33,7 @@
 
                             {{-- Zone Name Preview --}}
                             <div
-                                class="bg-white w-1/2 p-1 rounded-full @if (!$zone['max']) hidden @endif">
+                                class="bg-white w-1/2 p-1 rounded-full @if ($zone['max']) hidden @endif">
                                 {{ $zone['name'][session('locale')] != '' ? $zone['name'][session('locale')] : __('admin/deliveriesPages.N/A') }}
                             </div>
 
@@ -50,7 +50,7 @@
                                 {{-- Maximize / Minimize --}}
                                 <div class="btn bg-white p-2 rounded-full text-black"
                                     wire:click="maximize({{ $zone_index }})">
-                                    @if (!$zone['max'])
+                                    @if ($zone['max'])
                                         <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
                                             width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
                                             viewBox="0 0 1024 1024">
@@ -81,7 +81,7 @@
                         </div>
 
                         <div
-                            class="col-span-12 grid grid-cols-12 gap-x-4 gap-y-2 p-2 @if ($zone['max']) hidden @endif">
+                            class="col-span-12 grid grid-cols-12 gap-x-4 gap-y-2 p-2 @if (!$zone['max']) hidden @endif">
 
                             {{-- Zone Name --}}
                             <div class="col-span-12 grid grid-cols-12 gap-x-4 gap-y-2 p-2 items-center">

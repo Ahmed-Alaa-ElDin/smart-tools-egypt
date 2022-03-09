@@ -20,26 +20,6 @@
                             </div>
                         </div>
 
-                        {{-- Download --}}
-                        {{-- <div class="form-inline col-span-1 justify-center">
-                            <div class="flex justify-center">
-                                <div class="dropdown-menu">
-                                    <a href="{{ route('admin.deliveries.exportExcel') }}"
-                                        class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600">
-                                        <span class="material-icons">
-                                            file_present
-                                        </span> &nbsp;&nbsp;
-                                        {{ __('admin/deliveriesPages.download all excel') }}</a>
-                                    <a href="{{ route('admin.deliveries.exportPDF') }}"
-                                        class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600">
-                                        <span class="material-icons">
-                                            picture_as_pdf
-                                        </span>
-                                        &nbsp;&nbsp;
-                                        {{ __('admin/deliveriesPages.download all pdf') }}</a>
-                                </div>
-                            </div>
-                        </div> --}}
                         {{-- Pagination Number --}}
                         <div class="form-inline col-span-1 justify-end my-2">
                             {{ __('pagination.Show') }} &nbsp;
@@ -66,7 +46,7 @@
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Name') }} &nbsp;
                                     @include('partials._sort_icon', [
-                                        'field' => 'name->'.session('locale'),
+                                        'field' => 'name->' . session('locale'),
                                     ])
                                 </th>
 
@@ -78,11 +58,13 @@
                                 </th>
 
                                 {{-- Active --}}
-                                <th wire:click="sortBy('is_active')" scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
-                                    {{ __('admin/deliveriesPages.Active') }}&nbsp;
-                                    @include('partials._sort_icon', ['field' => 'is_active'])
-                                </th>
+                                @can('Activate Delivery')
+                                    <th wire:click="sortBy('is_active')" scope="col"
+                                        class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                        {{ __('admin/deliveriesPages.Active') }}&nbsp;
+                                        @include('partials._sort_icon', ['field' => 'is_active'])
+                                    </th>
+                                @endcan
 
                                 {{-- Manage --}}
                                 <th scope="col"
@@ -132,16 +114,18 @@
                                     </td>
 
                                     {{-- Active --}}
-                                    <td class="px-6 py-2 text-center whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">{!! $delivery->is_active ? '<span class="text-green-600">' . __('admin/deliveriesPages.Active') . '</span>' : '<span class="text-red-600">' . __('admin/deliveriesPages.Inactive') . '</span>' !!}
-                                            {!! $delivery->is_active ? '<span class="block cursor-pointer material-icons text-green-600" wire:click="activate('.$delivery->id.')">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600" wire:click="activate('.$delivery->id.')">toggle_off</span>' !!}
-                                        </div>
-                                    </td>
+                                    @can('Activate Delivery')
+                                        <td class="px-6 py-2 text-center whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">{!! $delivery->is_active ? '<span class="text-green-600">' . __('admin/deliveriesPages.Active') . '</span>' : '<span class="text-red-600">' . __('admin/deliveriesPages.Inactive') . '</span>' !!}
+                                                {!! $delivery->is_active ? '<span class="block cursor-pointer material-icons text-green-600" wire:click="activate(' . $delivery->id . ')">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600" wire:click="activate(' . $delivery->id . ')">toggle_off</span>' !!}
+                                            </div>
+                                        </td>
+                                    @endcan
 
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- Delivery Company Details --}}
-                                        @can("See User's Details")
+                                        @can("See Delivery's Details")
                                             <a href="#" title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-0">
 
@@ -153,7 +137,7 @@
                                         @endcan
 
                                         {{-- Edit Button --}}
-                                        @can('Edit User')
+                                        @can('Edit Delivery')
                                             <a href="{{ route('admin.deliveries.edit', ['delivery' => $delivery->id]) }}"
                                                 title="{{ __('admin/deliveriesPages.Edit') }}" class="m-0">
                                                 <span
@@ -164,8 +148,9 @@
                                         @endcan
 
                                         {{-- Edit Company Zone --}}
-                                        @can("See User's Details")
-                                            <a href="#" title="{{ __('admin/deliveriesPages.Edit Zones') }}"
+                                        @can("Edit Zone")
+                                            <a href="{{ route('admin.roles.deliveryZones.edit', ['delivery_id' => $delivery->id]) }}"
+                                                title="{{ __('admin/deliveriesPages.Edit Zones') }}"
                                                 class="m-0">
 
                                                 <span
@@ -176,7 +161,7 @@
                                         @endcan
 
                                         {{-- Delete Button --}}
-                                        @can('Soft Delete User')
+                                        @can('Soft Delete Delivery')
                                             <a href="#" title="{{ __('admin/deliveriesPages.Delete') }}"
                                                 wire:click.prevent="deleteConfirm({{ $delivery->id }})"
                                                 class="m-0">

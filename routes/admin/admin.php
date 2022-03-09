@@ -30,7 +30,8 @@ Route::group([
     // ############## Delivery System Routes Start ##############
     Route::resource('/deliveries', DeliveryController::class);
 
-    Route::get('/zones/delivery-zones/{delivery_id}',[ZonesController::class,'createZone'])->name('roles.deliveryZones.create');
+    // Route::get('/zones/delivery-zones/{delivery_id}/create',[ZonesController::class,'createZone'])->name('roles.deliveryZones.create');
+    Route::get('/zones/delivery-zones/{delivery_id}/edit',[ZonesController::class,'editZone'])->name('roles.deliveryZones.edit');
     Route::resource('/zones', ZonesController::class);
     // ############## Delivery System Routes End ##############
 

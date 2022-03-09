@@ -136,7 +136,7 @@
             @endcan
 
             {{-- Delivery System --}}
-            @can('See All Users')
+            @can('See Delivery System')
                 <li class="nav-item {{ $activeSection == 'Delivery System' ? ' active' : '' }}">
                     <a class="nav-link" data-toggle="collapse" href="#delivery"
                         aria-expanded="{{ $activeSection == 'Delivery System' ? 'true' : 'false' }}">

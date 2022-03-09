@@ -140,7 +140,7 @@ close
         {{-- Active --}}
         <div class="grid grid-cols-12  items-center text-center my-2">
             <div
-                class="col-span-6 md:col-span-4 col-start-4 grid grid-cols-6 md:grid-cols-4 gap-x-6 gap-y-1 items-center bg-red-100 p-2 rounded text-center">
+                class="col-span-6 md:col-span-4 grid grid-cols-6 md:grid-cols-4 gap-x-6 gap-y-1 items-center bg-red-100 p-2 rounded text-center">
                 <label
                     class="col-span-6 md:col-span-2 text-black font-bold m-0 text-center">{{ __('admin/deliveriesPages.Active') }}</label>
 

@@ -39,6 +39,15 @@ class PermissionSeeder extends Seeder
 
             // Delivery System
             ['name' => "See Delivery System"],
+            ['name' => "Add Delivery"],
+            ['name' => "Edit Delivery"],
+            ['name' => "See Delivery's Details"],
+            ['name' => "Add Zone"],
+            ['name' => "Edit Zone"],
+            ['name' => "Soft Delete Delivery"],
+            ['name' => "Force Delete Delivery"],
+            ['name' => "Restore Delivery"],
+            ['name' => "Activate Delivery"],
         ];
 
         foreach ($permissions as $permission) {

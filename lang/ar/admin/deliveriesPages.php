@@ -71,5 +71,6 @@ return [
     "Select Governorate" => "اختر محافظة",
     "Zones have been added successfully" => "تم إضافة المناطق بنجاح",
     "Zones haven't been added" => "لم تتم إضافة المناطق",
+    "Update and Edit Company's Zones" => "تحديث بيانات الشركة وتعديل مناطقها",
 
 ];

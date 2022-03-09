@@ -41,6 +41,18 @@ class RoleSeeder extends Seeder
             ['name' => "See Role's Users"],
             ['name' => "Edit Role"],
             ['name' => "Delete Role"],
+
+            ['name' => "See Delivery System"],
+            ['name' => "Add Delivery"],
+            ['name' => "Edit Delivery"],
+            ['name' => "See Delivery's Details"],
+            ['name' => "Add Zone"],
+            ['name' => "Edit Zone"],
+            ['name' => "Soft Delete Delivery"],
+            ['name' => "Force Delete Delivery"],
+            ['name' => "Restore Delivery"],
+            ['name' => "Activate Delivery"],
+
         ];
 
         $admin->givePermissionTo($adminPermissions);

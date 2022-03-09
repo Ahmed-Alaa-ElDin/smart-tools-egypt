@@ -30,7 +30,7 @@ __('admin/deliveriesPages.Delivery Companies')])
                                 </div>
 
                                 {{-- Add New Delivery Company Button --}}
-                                @can('Add New User')
+                                @can('Add Delivery')
                                     <div class="col-6 ltr:text-right rtl:text-left">
                                         <a href="{{ route('admin.deliveries.create') }}"
                                             class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">
