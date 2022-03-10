@@ -78,35 +78,52 @@ class AddZoneForm extends Component
         // run only on update
         if ($zonesQuery->count()) {
 
+            $zones_raw = $zonesQuery->get()->toArray();
+
             // create temp variable for zones
-            $zones = $this->zones->toArray();
+            $zones = [];
 
-            foreach ($zones as $zone_index => $zone) {
+            foreach ($zones_raw as $key0 => $zone_raw) {
 
-                // add maximization property
-                $zones[$zone_index]['max'] = $zone_index ? 0 : 1;
+                $zones[] = [
+                    'name' => [
+                        'ar' => $zone_raw['name']['ar'],
+                        'en' => $zone_raw['name']['en']
+                    ],
+                    'min_size' => $zone_raw['min_size'],
+                    'min_charge' => $zone_raw['min_charge'],
+                    'kg_charge' => $zone_raw['kg_charge'],
+                    'is_active' => $zone_raw['is_active'],
+                    'destinations' => [],
+                    'max' => $key0 ? 0 : 1
+                ];
 
-                // create temp variable of destinations
-                $destinations = $this->zones[$zone_index]->destinations->groupBy('governorate_id')->toArray();
+                $destinations_raw = Destination::get()->where('zone_id', $zone_raw['id']);
 
-                // remove old destinations from zones
-                $zones[$zone_index]['destinations'] = [];
+                $destinations = [];
 
-                foreach ($destinations as $governorate_id => $destination) {
-                    $country_id = $destination[0]['country_id'];
+                $countries_ids = $destinations_raw->groupBy('country_id')->keys();
 
-                    $cities = array_map(function ($dest) {
-                        return $dest['city_id'];
-                    }, $destinations[$governorate_id]);
+                foreach ($countries_ids as $key1 => $country_id) {
+                    $governorates_raw = $destinations_raw->where('country_id', $country_id);
 
-                    $zones[$zone_index]['destinations'][] = [
-                        'country_id' => $country_id,
-                        'governorates' => Governorate::where('country_id', $country_id)->orderBy('name->' . session('locale'))->get()->toArray(),
-                        'governorate_id' => $governorate_id,
-                        'allCities' => City::where('governorate_id', $governorate_id)->orderBy('name->' . session('locale'))->get()->toArray(),
-                        'cities' => $cities
-                    ];
+                    $governorates_ids = $governorates_raw->groupBy('governorate_id')->keys();
+
+                    foreach ($governorates_ids as $key2 => $governorate_id) {
+
+                        $cities = $governorates_raw->where('governorate_id', $governorate_id)->groupBy('city_id')->keys()->toArray();
+
+                        $destinations[] = [
+                            'country_id' => $country_id,
+                            'governorates' => Governorate::where('country_id', $country_id)->get()->toArray(),
+                            'governorate_id' => $governorate_id,
+                            'allCities' => City::where('governorate_id', $governorate_id)->get()->toArray(),
+                            'cities' => $cities
+                        ];
+                    }
                 }
+
+                $zones[$key0]['destinations'] = $destinations;
             }
 
             $this->zones = $zones;

@@ -27,8 +27,8 @@ class AddDeliveryForm extends Component
     public function rules()
     {
         return [
-            'name.ar'                       => 'required|string|max:20|min:3',
-            'name.en'                       => 'nullable|string|max:20|min:3',
+            'name.ar'                       => 'required|string|max:30|min:3',
+            'name.en'                       => 'nullable|string|max:30|min:3',
             'email'                         => 'nullable|required_without:phones.' . $this->defaultPhone . '.phone|email|max:50|min:3|unique:deliveries,email',
             'phones.*.phone'                => 'nullable|required_without:email|digits_between:8,11|' . Rule::unique('phones'),
             'photo'                         => 'nullable|mimes:jpg,jpeg,png|max:2048',
@@ -169,7 +169,7 @@ class AddDeliveryForm extends Component
             } elseif ($zones) {
                 $delivery_id = $delivery->id;
                 Session::flash('success', __('admin/deliveriesPages.Delivery added successfully'));
-                redirect()->route('admin.roles.deliveryZones.edit', ['delivery_id' => $delivery_id]);
+                redirect()->route('admin.zones.deliveryZones.edit', ['delivery_id' => $delivery_id]);
             } else {
                 Session::flash('success', __('admin/deliveriesPages.Delivery added successfully'));
                 redirect()->route('admin.deliveries.index');

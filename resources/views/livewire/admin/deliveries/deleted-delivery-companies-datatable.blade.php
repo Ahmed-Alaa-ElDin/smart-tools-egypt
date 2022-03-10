@@ -1,39 +1,55 @@
 <div>
+
     <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div class="py-3 bg-white space-y-6">
-                    <div class="flex justify-between gap-6 items-center">
+                    <div class="grid grid-cols-3 gap-6 items-center">
 
 
                         {{-- Search Box --}}
-                        <div class="mt-1 flex rounded-md shadow-sm">
-                            <span
-                                class="inline-flex items-center px-3 ltr:rounded-l-md rtl:rounded-r-md border border-r-0 border-gray-300 bg-gray-50 text-center text-gray-500 text-sm">
-                                <span class="material-icons">
-                                    search
-                                </span> </span>
-                            <input type="text" name="company-website" id="company-website" wire:model='search'
-                                class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
-                                placeholder="{{ __('admin/deliveriesPages.Search ...') }}">
+                        <div class="col-span-1">
+                            <div class="mt-1 flex rounded-md shadow-sm">
+                                <span
+                                    class="inline-flex items-center px-3 ltr:rounded-l-md rtl:rounded-r-md border border-r-0 border-gray-300 bg-gray-50 text-center text-gray-500 text-sm">
+                                    <span class="material-icons">
+                                        search
+                                    </span> </span>
+                                <input type="text" name="company-website" id="company-website" wire:model='search'
+                                    class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
+                                    placeholder="{{ __('admin/deliveriesPages.Search ...') }}">
+                            </div>
                         </div>
 
-                        {{-- Search Box --}}
-                        @can('Force Delete Delivery')
-                            <div class="ltr:text-right rtl:text-left">
-                                <a href="{{ route('admin.deliveries.softDeletedDeliveries') }}"
-                                    class="btn btn-sm bg-red-600 hover:bg-red-700 focus:bg-red-600 active:bg-red-600 font-bold">
-                                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                        height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" class="inline-block text-xl rtl:ml-2 ltr:mr-2">
-                                        <path fill="currentColor"
-                                            d="M20 8h-3V4H3c-1.11 0-2 .89-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4M6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5s1.5.67 1.5 1.5s-.67 1.5-1.5 1.5m6.54-6.38l-1.42 1.42L9 11.41l-2.12 2.13l-1.41-1.42L7.59 10L5.46 7.88l1.42-1.41L9 8.59l2.12-2.12l1.42 1.41L10.41 10l2.13 2.12M18 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5s1.5.67 1.5 1.5s-.67 1.5-1.5 1.5M17 12V9.5h2.5l1.96 2.5H17Z" />
-                                    </svg>
-                                    {{ __('admin/deliveriesPages.Soft Deleted Companies') }}</a>
+                        {{-- Manage All --}}
+                        <div class="form-inline col-span-1 justify-center">
+                            <div class="flex justify-center">
+                                <button class="btn btn-success dropdown-toggle btn-round btn-sm text-white font-bold "
+                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="material-icons">
+                                        manage_history
+                                    </span> &nbsp; {{ __('admin/deliveriesPages.Manage All') }}
+                                    &nbsp;</button>
+                                <div class="dropdown-menu">
+                                    <a href="#" wire:click.prevent="restoreAllConfirm"
+                                        class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600">
+                                        <span class="material-icons">
+                                            restore
+                                        </span>
+                                        &nbsp;&nbsp;
+                                        {{ __('admin/deliveriesPages.Restore All') }}</a>
+                                    <a href="#" wire:click.prevent="forceDeleteAllConfirm"
+                                        class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600">
+                                        <span class="material-icons">
+                                            delete
+                                        </span>
+                                        &nbsp;&nbsp;
+                                        {{ __('admin/deliveriesPages.Delete All Permanently') }}</a>
+                                </div>
                             </div>
-                        @endcan
-
+                        </div>
                         {{-- Pagination Number --}}
-                        <div class="form-inline justify-end my-2">
+                        <div class="form-inline col-span-1 justify-end my-2">
                             {{ __('pagination.Show') }} &nbsp;
                             <select wire:model='perPage' class="form-control w-auto px-3 cursor-pointer">
                                 <option>5</option>
@@ -49,6 +65,7 @@
 
                 <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                     <table class="min-w-full divide-y divide-gray-200">
+
                         {{-- Data Table Header --}}
                         <thead class="bg-gray-50">
                             <tr>
@@ -68,15 +85,6 @@
                                     {{ __('admin/deliveriesPages.Contacts') }}&nbsp;
                                     @include('partials._sort_icon', ['field' => 'email'])
                                 </th>
-
-                                {{-- Active --}}
-                                @can('Activate Delivery')
-                                    <th wire:click="sortBy('is_active')" scope="col"
-                                        class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
-                                        {{ __('admin/deliveriesPages.Active') }}&nbsp;
-                                        @include('partials._sort_icon', ['field' => 'is_active'])
-                                    </th>
-                                @endcan
 
                                 {{-- Manage --}}
                                 <th scope="col"
@@ -125,15 +133,6 @@
                                         </div>
                                     </td>
 
-                                    {{-- Active --}}
-                                    @can('Activate Delivery')
-                                        <td class="px-6 py-2 text-center whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{!! $delivery->is_active ? '<span class="text-green-600">' . __('admin/deliveriesPages.Active') . '</span>' : '<span class="text-red-600">' . __('admin/deliveriesPages.Inactive') . '</span>' !!}
-                                                {!! $delivery->is_active ? '<span class="block cursor-pointer material-icons text-green-600" wire:click="activate(' . $delivery->id . ')">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600" wire:click="activate(' . $delivery->id . ')">toggle_off</span>' !!}
-                                            </div>
-                                        </td>
-                                    @endcan
-
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- Delivery Company Details --}}
@@ -148,34 +147,22 @@
                                             </a>
                                         @endcan
 
-                                        {{-- Edit Button --}}
-                                        @can('Edit Delivery')
-                                            <a href="{{ route('admin.deliveries.edit', ['delivery' => $delivery->id]) }}"
-                                                title="{{ __('admin/deliveriesPages.Edit') }}" class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
-                                                    edit
-                                                </span>
-                                            </a>
-                                        @endcan
-
-                                        {{-- Edit Company Zone --}}
-                                        @can('Edit Zone')
-                                            <a href="{{ route('admin.zones.deliveryZones.edit', ['delivery_id' => $delivery->id]) }}"
-                                                title="{{ __('admin/deliveriesPages.Edit Zones') }}"
+                                        {{-- Restore Button --}}
+                                        @can('Restore Delivery')
+                                            <a href="#" title="{{ __('admin/deliveriesPages.Restore') }}"
+                                                wire:click.prevent="restoreConfirm({{ $delivery->id }})"
                                                 class="m-0">
-
                                                 <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-role hover:bg-roleHover rounded">
-                                                    edit_location_alt
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-green-500 hover:bg-green-700 rounded">
+                                                    restore
                                                 </span>
                                             </a>
                                         @endcan
 
-                                        {{-- Delete Button --}}
-                                        @can('Soft Delete Delivery')
-                                            <a href="#" title="{{ __('admin/deliveriesPages.Delete') }}"
-                                                wire:click.prevent="deleteConfirm({{ $delivery->id }})"
+                                        {{-- Permanent Delete Button --}}
+                                        @can('Force Delete Delivery')
+                                            <a href="#" title="{{ __('admin/deliveriesPages.Delete Permanently') }}"
+                                                wire:click.prevent="forceDeleteConfirm({{ $delivery->id }})"
                                                 class="m-0">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">

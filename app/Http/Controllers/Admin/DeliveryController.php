@@ -83,4 +83,9 @@ class DeliveryController extends Controller
     {
         //
     }
+
+    public function softDeletedDeliveries()
+    {
+        return view('admin.deliveryCompany.softDeleted');
+    }
 }

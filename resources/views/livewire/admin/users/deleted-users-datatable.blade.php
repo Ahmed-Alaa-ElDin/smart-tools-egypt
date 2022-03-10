@@ -28,25 +28,28 @@
                                     type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="material-icons">
                                         manage_accounts
-                                        </span> &nbsp; {{ __('admin/usersPages.Manage All') }}
+                                    </span> &nbsp; {{ __('admin/usersPages.Manage All') }}
                                     &nbsp;</button>
                                 <div class="dropdown-menu">
-                                    <a href="#" wire:click.prevent="restoreAllConfirm"
-                                        class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600">
-                                        <span
-                                        class="material-icons">
-                                        restore
-                                    </span>
-                                &nbsp;&nbsp;
-                                        {{ __('admin/usersPages.Restore All') }}</a>
-                                    <a href="#" wire:click.prevent="forceDeleteAllConfirm"
-                                        class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600">
-                                        <span
-                                            class="material-icons">
-                                            delete
-                                        </span>
-                                        &nbsp;&nbsp;
-                                        {{ __('admin/usersPages.Delete All Permanently') }}</a>
+                                    @can('Restore User')
+                                        <a href="#" wire:click.prevent="restoreAllConfirm"
+                                            class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600">
+                                            <span class="material-icons">
+                                                restore
+                                            </span>
+                                            &nbsp;&nbsp;
+                                            {{ __('admin/usersPages.Restore All') }}</a>
+                                    @endcan
+
+                                    @can('Force Delete User')
+                                        <a href="#" wire:click.prevent="forceDeleteAllConfirm"
+                                            class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600">
+                                            <span class="material-icons">
+                                                delete
+                                            </span>
+                                            &nbsp;&nbsp;
+                                            {{ __('admin/usersPages.Delete All Permanently') }}</a>
+                                    @endcan
                                 </div>
                             </div>
                         </div>
@@ -181,24 +184,28 @@
                                         @endcan
 
                                         {{-- Restore Button --}}
-                                        <a href="#" title="{{ __('admin/usersPages.Restore') }}"
-                                            wire:click.prevent="restoreConfirm({{ $user->id }})"
-                                            class="m-0">
-                                            <span
-                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-green-500 hover:bg-green-700 rounded">
-                                                restore
-                                            </span>
-                                        </a>
+                                        @can('Restore User')
+                                            <a href="#" title="{{ __('admin/usersPages.Restore') }}"
+                                                wire:click.prevent="restoreConfirm({{ $user->id }})"
+                                                class="m-0">
+                                                <span
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-green-500 hover:bg-green-700 rounded">
+                                                    restore
+                                                </span>
+                                            </a>
+                                        @endcan
 
                                         {{-- Permanent Delete Button --}}
-                                        <a href="#" title="{{ __('admin/usersPages.Delete Permanently') }}"
-                                            wire:click.prevent="forceDeleteConfirm({{ $user->id }})"
-                                            class="m-0">
-                                            <span
-                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
-                                                delete
-                                            </span>
-                                        </a>
+                                        @can('Force Delete User')
+                                            <a href="#" title="{{ __('admin/usersPages.Delete Permanently') }}"
+                                                wire:click.prevent="forceDeleteConfirm({{ $user->id }})"
+                                                class="m-0">
+                                                <span
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
+                                                    delete
+                                                </span>
+                                            </a>
+                                        @endcan
                                     </td>
                                 </tr>
 
