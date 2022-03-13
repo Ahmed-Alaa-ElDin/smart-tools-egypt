@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Translatable\HasTranslations;
 
 class Governorate extends Model
 {
     use HasFactory;
     use HasTranslations;
+    use SoftDeletes;
 
     public $translatable = ['name'];
 
@@ -39,12 +41,12 @@ class Governorate extends Model
     // Has many through relationship  Governorate --> users
     public function users()
     {
-        return $this->hasManyThrough(User::class, Address::class);
+        return $this->belongsToMany(User::class, 'addresses');
     }
 
-    // Many to Many relationship  Governorate --> Zones
-    public function zones()
+    // Has many through relationship  Governorate --> Deliveries
+    public function deliveries()
     {
-        return $this->belongsToMany(Zone::class, 'address_zone', 'governorate_id', 'zone_id');
+        return $this->belongsToMany(Delivery::class, 'destinations')->distinct('deliveries.id');
     }
 }
