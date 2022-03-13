@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Delivery;
+use App\Models\Country;
 use Illuminate\Http\Request;
 
-class DeliveryController extends Controller
+class CountriesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class DeliveryController extends Controller
      */
     public function index()
     {
-        return view('admin.deliveryCompany.index');
+        return view('admin.countries.index');
     }
 
     /**
@@ -25,7 +25,7 @@ class DeliveryController extends Controller
      */
     public function create()
     {
-        return view('admin.deliveryCompany.create');
+        return view('admin.countries.create');
     }
 
     /**
@@ -42,10 +42,10 @@ class DeliveryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Delivery  $delivery
+     * @param  \App\Models\Country  $country
      * @return \Illuminate\Http\Response
      */
-    public function show(Delivery $delivery)
+    public function show(Country $country)
     {
         //
     }
@@ -53,22 +53,22 @@ class DeliveryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Delivery  $delivery
+     * @param  \App\Models\Country  $country
      * @return \Illuminate\Http\Response
      */
-    public function edit($delivery)
+    public function edit($country)
     {
-        return view('admin.deliveryCompany.edit', compact('delivery'));
+        return view('admin.countries.edit',compact('country'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Delivery  $delivery
+     * @param  \App\Models\Country  $country
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Delivery $delivery)
+    public function update(Request $request, Country $country)
     {
         //
     }
@@ -76,16 +76,21 @@ class DeliveryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Delivery  $delivery
+     * @param  \App\Models\Country  $country
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Delivery $delivery)
+    public function destroy(Country $country)
     {
         //
     }
 
-    public function softDeletedDeliveries()
+    public function softDeletedCountries()
     {
-        return view('admin.deliveryCompany.softDeleted');
+        return view('admin.countries.softDeleted');
+    }
+
+    public function governoratesCountry(Country $country_id)
+    {
+        return view('admin.countries.governorates',compact('country_id'));
     }
 }

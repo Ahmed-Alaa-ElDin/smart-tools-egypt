@@ -255,7 +255,7 @@ class AddZoneForm extends Component
         $this->delivery->zones()->delete();
 
         try {
-            foreach ($this->zones as $zone_index => $zone) {
+            foreach ($this->zones as $zone) {
                 $new_zone = Zone::create([
                     "name" => [
                         'ar' => $zone['name']['ar'],
@@ -268,10 +268,11 @@ class AddZoneForm extends Component
                     "is_active" => $zone['is_active'],
                 ]);
 
-                foreach ($zone['destinations'] as $des_index => $destination) {
+                foreach ($zone['destinations'] as $destination) {
 
-                    foreach ($destination['cities'] as $city_index => $city) {
+                    foreach ($destination['cities'] as $city) {
                         Destination::create([
+                            "delivery_id" => $this->delivery_id,
                             'zone_id' => $new_zone->id,
                             'country_id' => $destination['country_id'],
                             'governorate_id' => $destination['governorate_id'],

@@ -18,7 +18,7 @@
                                 placeholder="{{ __('admin/deliveriesPages.Search ...') }}">
                         </div>
 
-                        {{-- Search Box --}}
+                        {{-- Seft deleted Delivery Companies --}}
                         @can('Force Delete Delivery')
                             <div class="ltr:text-right rtl:text-left">
                                 <a href="{{ route('admin.deliveries.softDeletedDeliveries') }}"

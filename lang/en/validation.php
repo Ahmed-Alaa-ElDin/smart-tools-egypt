@@ -174,6 +174,8 @@ return [
         'zones.*.destinations.*.governorate_id' => 'Governorate',
         'selectedPermissions' => 'Permissions',
         'selectedPermissions' => 'Permissions',
+        'name.ar'               => 'name in Arabic',
+        'name.en'               => 'name in English',
     ],
 
 ];

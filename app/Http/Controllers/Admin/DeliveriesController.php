@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Country;
+use App\Models\Delivery;
 use Illuminate\Http\Request;
 
-class CountryController extends Controller
+class DeliveriesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class CountryController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.deliveryCompany.index');
     }
 
     /**
@@ -25,7 +25,7 @@ class CountryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.deliveryCompany.create');
     }
 
     /**
@@ -42,10 +42,10 @@ class CountryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Country  $country
+     * @param  \App\Models\Delivery  $delivery
      * @return \Illuminate\Http\Response
      */
-    public function show(Country $country)
+    public function show(Delivery $delivery)
     {
         //
     }
@@ -53,22 +53,22 @@ class CountryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Country  $country
+     * @param  \App\Models\Delivery  $delivery
      * @return \Illuminate\Http\Response
      */
-    public function edit(Country $country)
+    public function edit($delivery)
     {
-        //
+        return view('admin.deliveryCompany.edit', compact('delivery'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Country  $country
+     * @param  \App\Models\Delivery  $delivery
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Country $country)
+    public function update(Request $request, Delivery $delivery)
     {
         //
     }
@@ -76,11 +76,16 @@ class CountryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Country  $country
+     * @param  \App\Models\Delivery  $delivery
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Country $country)
+    public function destroy(Delivery $delivery)
     {
         //
+    }
+
+    public function softDeletedDeliveries()
+    {
+        return view('admin.deliveryCompany.softDeleted');
     }
 }

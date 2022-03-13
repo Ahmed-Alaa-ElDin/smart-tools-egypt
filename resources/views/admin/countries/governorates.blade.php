@@ -1,6 +1,5 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => 'Delivery Companies', 'titlePage'
-=>
-__('admin/deliveriesPages.Delivery Companies')])
+@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage'
+=> __("admin/deliveriesPages.'s Governorates",['name'=>$country_id->name])])
 
 @section('content')
     <div class="content">
@@ -10,8 +9,12 @@ __('admin/deliveriesPages.Delivery Companies')])
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item hover:text-primary"><a
                             href="{{ route('admin.dashboard') }}">{{ __('admin/deliveriesPages.Dashboard') }}</a></li>
+                    <li class="breadcrumb-item hover:text-primary"><a
+                            href="{{ route('admin.countries.index') }}">{{ __('admin/deliveriesPages.All Countries') }}</a>
+                    </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        {{ __('admin/deliveriesPages.Delivery Companies') }}</li>
+                        {{ __("admin/deliveriesPages.'s Governorates",['name'=>$country_id->name]) }}
+                    </li>
                 </ol>
             </nav>
 
@@ -26,18 +29,18 @@ __('admin/deliveriesPages.Delivery Companies')])
                             <div class="row">
                                 <div class="col-6 ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
-                                        {{ __('admin/deliveriesPages.Here you can manage delivery companies') }}</p>
+                                        {{ __("admin/deliveriesPages.Here you can manage country's governorates") }}</p>
                                 </div>
 
-                                {{-- Add New Delivery Company Button --}}
-                                @can('Add Delivery')
+                                {{-- Add New Governorate Button --}}
+                                @can('Add Governorate')
                                     <div class="col-6 ltr:text-right rtl:text-left">
-                                        <a href="{{ route('admin.deliveries.create') }}"
+                                        <a href="{{ route('admin.countries.create') }}"
                                             class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">
                                             <span class="material-icons rtl:ml-1 ltr:mr-1">
                                                 add
                                             </span>
-                                            {{ __('admin/deliveriesPages.Add Company') }}</a>
+                                            {{ __('admin/deliveriesPages.Add Governorate') }}</a>
                                     </div>
                                 @endcan
                             </div>
@@ -46,9 +49,8 @@ __('admin/deliveriesPages.Delivery Companies')])
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Data Table Start --}}
-                            @livewire('admin.deliveries.delivery-companies-datatable')
+                            @livewire('admin.countries.governorates-country-datatable' , ['country_id' => $country_id->id])
                             {{-- Data Table End --}}
-
                         </div>
                     </div>
                 </div>
@@ -67,7 +69,7 @@ __('admin/deliveriesPages.Delivery Companies')])
     @livewireScripts
 
     <script>
-        // #### Delivery Soft Delete ####
+        // #### Governorate Soft Delete ####
         window.addEventListener('swalConfirmSoftDelete', function(e) {
             Swal.fire({
                 icon: 'warning',
@@ -80,12 +82,12 @@ __('admin/deliveriesPages.Delivery Companies')])
                 focusDeny: true,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit('softDeleteDelivery', e.detail.delivery_id);
+                    Livewire.emit('softDeleteGovernorate', e.detail.governorate_id);
                 }
             });
         });
 
-        window.addEventListener('swalDeliveryDeleted', function(e) {
+        window.addEventListener('swalGovernorateDeleted', function(e) {
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
@@ -96,21 +98,6 @@ __('admin/deliveriesPages.Delivery Companies')])
                 timerProgressBar: true,
             })
         });
-        // #### Delivery Soft Delete ####
-
-
-        // #### Delivery Activation / Deactivation ####
-        window.addEventListener('swalDeliveryActivated', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        });
-        // #### Delivery Activation / Deactivation ####
+        // #### Governorate Soft Delete ####
     </script>
 @endpush

@@ -15,12 +15,15 @@ return new class extends Migration
     {
         Schema::create('destinations', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('delivery_id');
             $table->unsignedBigInteger('zone_id');
             $table->unsignedBigInteger('country_id');
             $table->unsignedBigInteger('governorate_id');
             $table->unsignedBigInteger('city_id');
             $table->timestamps();
 
+            $table->foreign('delivery_id')->references('id')->on('deliveries')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('zone_id')->references('id')->on('zones')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('governorate_id')->references('id')->on('governorates')->onDelete('cascade')->onUpdate('cascade');

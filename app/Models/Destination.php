@@ -10,6 +10,7 @@ class Destination extends Model
     use HasFactory;
 
     protected $fillable = [
+        'delivery_id',
         'country_id',
         'governorate_id',
         'city_id',

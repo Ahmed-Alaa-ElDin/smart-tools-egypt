@@ -119,7 +119,4 @@ class DeliveryCompaniesDatatable extends Component
     }
     ######## Activation Toggle #########
 
-
-
-
 }

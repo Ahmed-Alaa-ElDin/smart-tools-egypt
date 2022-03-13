@@ -70,7 +70,6 @@ __('admin/deliveriesPages.Deleted Delivery Companies')])
                 confirmButtonColor: e.detail.confirmButtonColor,
                 focusDeny: e.detail.focusDeny,
                 showDenyButton: true,
-                showLoaderOnConfirm: true,
             }).then((result) => {
                 if (result.isConfirmed) {
                     Livewire.emit(e.detail.method, e.detail.delivery_id);
@@ -103,7 +102,6 @@ __('admin/deliveriesPages.Deleted Delivery Companies')])
                 denyButtonColor: 'gray',
                 confirmButtonColor: 'green',
                 focusDeny: false,
-                showLoaderOnConfirm: true,
             }).then((result) => {
                 if (result.isConfirmed) {
                     Livewire.emit('restoreDelivery', e.detail.delivery_id);

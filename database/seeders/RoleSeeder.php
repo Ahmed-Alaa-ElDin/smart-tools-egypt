@@ -53,6 +53,13 @@ class RoleSeeder extends Seeder
             ['name' => "Restore Delivery"],
             ['name' => "Activate Delivery"],
 
+            ['name' => "See All Countries"],
+            ['name' => "Add Country"],
+            ['name' => "Edit Country"],
+            ['name' => "Soft Delete Country"],
+            ['name' => "Force Delete Country"],
+            ['name' => "Restore Country"],
+
         ];
 
         $admin->givePermissionTo($adminPermissions);

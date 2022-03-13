@@ -48,6 +48,15 @@ class PermissionSeeder extends Seeder
             ['name' => "Force Delete Delivery"],
             ['name' => "Restore Delivery"],
             ['name' => "Activate Delivery"],
+
+            // Country
+            ['name' => "See All Countries"],
+            ['name' => "Add Country"],
+            ['name' => "Edit Country"],
+            ['name' => "Soft Delete Country"],
+            ['name' => "Force Delete Country"],
+            ['name' => "Restore Country"],
+
         ];
 
         foreach ($permissions as $permission) {

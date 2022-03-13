@@ -66,7 +66,6 @@ __('admin/usersPages.Edit User')])
                 confirmButtonColor: 'orange',
                 focusDeny: true,
                 denyButtonText: e.detail.denyButtonText,
-                showLoaderOnConfirm: true,
             }).then((result) => {
                 if (result.isConfirmed) {
                     Livewire.emit('resetPassword');

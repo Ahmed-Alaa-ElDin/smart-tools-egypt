@@ -67,7 +67,6 @@ __('admin/usersPages.Deleted Users')])
                 confirmButtonColor: e.detail.confirmButtonColor,
                 focusDeny: e.detail.focusDeny,
                 showDenyButton: true,
-                showLoaderOnConfirm: true,
             }).then((result) => {
                 if (result.isConfirmed) {
                     Livewire.emit(e.detail.method, e.detail.user_id);
@@ -100,7 +99,6 @@ __('admin/usersPages.Deleted Users')])
                 denyButtonColor: 'gray',
                 confirmButtonColor: 'green',
                 focusDeny: false,
-                showLoaderOnConfirm: true,
             }).then((result) => {
                 if (result.isConfirmed) {
                     Livewire.emit('restoreUser', e.detail.user_id);

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Deliveries;
+namespace App\Http\Livewire\Admin\Countries;
 
-use App\Models\Delivery;
+use App\Models\Country;
 use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class DeletedDeliveryCompaniesDatatable extends Component
+class DeletedCountriesDatatable extends Component
 {
     use WithPagination;
 
@@ -17,7 +17,7 @@ class DeletedDeliveryCompaniesDatatable extends Component
 
     public $search = "";
 
-    protected $listeners = ['forceDeleteDelivery', 'restoreDelivery', 'forceDeleteAllDeliveries', 'restoreAllDeliveries'];
+    protected $listeners = ['forceDeleteCountry', 'restoreCountry', 'forceDeleteAllCountries', 'restoreAllCountries'];
 
     // Render Once
     public function mount()
@@ -30,19 +30,16 @@ class DeletedDeliveryCompaniesDatatable extends Component
     // Render With each update
     public function render()
     {
-        $deliveries = Delivery::onlyTrashed()->with('phones')
+        $countries = Country::onlyTrashed()->with('deliveries')->with('governorates')->with('users')->with('cities')
             ->where(function ($query) {
-                return $query->where('name->en', 'like', '%' . $this->search . '%')
-                    ->orWhere('name->ar', 'like', '%' . $this->search . '%')
-                    ->orWhere('email', 'like', '%' . $this->search . '%')
-                    ->orWhereHas('phones', function ($query) {
-                        $query->where('phone', 'like', '%' . $this->search . '%');
-                    });
+                return $query
+                    ->where('name->en', 'like', '%' . $this->search . '%')
+                    ->orWhere('name->ar', 'like', '%' . $this->search . '%');
             })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
-        return view('livewire.admin.deliveries.deleted-delivery-companies-datatable', compact('deliveries'));
+        return view('livewire.admin.countries.deleted-countries-datatable', compact('countries'));
     }
 
     // reset pagination after new search
@@ -67,35 +64,35 @@ class DeletedDeliveryCompaniesDatatable extends Component
     }
 
     ######## Force Delete #########
-    public function forceDeleteConfirm($delivery_id)
+    public function forceDeleteConfirm($country_id)
     {
         $this->dispatchBrowserEvent('swalConfirm', [
-            "text" => __('admin/deliveriesPages.Are you sure, you want to delete this delivery permanently ?'),
+            "text" => __('admin/deliveriesPages.Are you sure, you want to delete this country permanently ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
             'denyButtonColor' => 'gray',
             'confirmButtonColor' => 'red',
             'focusDeny' => true,
             'icon' => 'warning',
-            'method' => 'forceDeleteDelivery',
-            'delivery_id' => $delivery_id,
+            'method' => 'forceDeleteCountry',
+            'country_id' => $country_id,
         ]);
     }
 
-    public function forceDeleteDelivery($delivery_id)
+    public function forceDeleteCountry($country_id)
     {
         try {
-            $delivery = Delivery::onlyTrashed()->findOrFail($delivery_id);
+            $country = Country::onlyTrashed()->findOrFail($country_id);
 
-            $delivery->forceDelete();
+            $country->forceDelete();
 
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('admin/deliveriesPages.Delivery has been deleted permanently successfully'),
+                "text" => __('admin/deliveriesPages.Country has been deleted permanently successfully'),
                 'icon' => 'info'
             ]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __("admin/deliveriesPages.Delivery hasn't been deleted permanently"),
+                "text" => __("admin/deliveriesPages.Country hasn't been deleted permanently"),
                 'icon' => 'error'
             ]);
         }
@@ -103,35 +100,35 @@ class DeletedDeliveryCompaniesDatatable extends Component
     ######## Force Delete #########
 
     ######## Restore #########
-    public function restoreConfirm($delivery_id)
+    public function restoreConfirm($country_id)
     {
         $this->dispatchBrowserEvent('swalConfirm', [
-            "text" => __('admin/deliveriesPages.Are you sure, you want to restore this delivery ?'),
+            "text" => __('admin/deliveriesPages.Are you sure, you want to restore this country ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Confirm'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
             'denyButtonColor' => 'gray',
             'confirmButtonColor' => 'green',
             'focusDeny' => false,
             'icon' => 'warning',
-            'method' => 'restoreDelivery',
-            'delivery_id' => $delivery_id,
+            'method' => 'restoreCountry',
+            'country_id' => $country_id,
         ]);
     }
 
-    public function restoreDelivery($delivery_id)
+    public function restoreCountry($country_id)
     {
         try {
-            $delivery = Delivery::onlyTrashed()->findOrFail($delivery_id);
+            $country = Country::onlyTrashed()->findOrFail($country_id);
 
-            $delivery->restore();
+            $country->restore();
 
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('admin/deliveriesPages.Delivery has been restored successfully'),
+                "text" => __('admin/deliveriesPages.Country has been restored successfully'),
                 'icon' => 'success'
             ]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __("admin/deliveriesPages.Delivery hasn't been restored"),
+                "text" => __("admin/deliveriesPages.Country hasn't been restored"),
                 'icon' => 'error'
             ]);
         }
@@ -143,30 +140,30 @@ class DeletedDeliveryCompaniesDatatable extends Component
     public function forceDeleteAllConfirm()
     {
         $this->dispatchBrowserEvent('swalConfirm', [
-            "text" => __('admin/deliveriesPages.Are you sure, you want to delete all deliveries permanently ?'),
+            "text" => __('admin/deliveriesPages.Are you sure, you want to delete all countries permanently ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
             'denyButtonColor' => 'gray',
             'confirmButtonColor' => 'red',
             'focusDeny' => false,
             'icon' => 'warning',
-            'method' => 'forceDeleteAllDeliveries',
-            'delivery_id' => ''
+            'method' => 'forceDeleteAllCountries',
+            'country_id' => ''
         ]);
     }
 
-    public function forceDeleteAllDeliveries()
+    public function forceDeleteAllCountries()
     {
         try {
-            Delivery::onlyTrashed()->forceDelete();
+            Country::onlyTrashed()->forceDelete();
 
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('admin/deliveriesPages.All deliveries have been deleted successfully'),
+                "text" => __('admin/deliveriesPages.All countries have been deleted successfully'),
                 'icon' => 'info'
             ]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('admin/deliveriesPages.All deliveries haven\'t been deleted'),
+                "text" => __('admin/deliveriesPages.All countries haven\'t been deleted'),
                 'icon' => 'error'
             ]);
         }
@@ -178,30 +175,30 @@ class DeletedDeliveryCompaniesDatatable extends Component
     public function restoreAllConfirm()
     {
         $this->dispatchBrowserEvent('swalConfirm', [
-            "text" => __('admin/deliveriesPages.Are you sure, you want to restore all deliveries ?'),
+            "text" => __('admin/deliveriesPages.Are you sure, you want to restore all countries ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Confirm'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
             'denyButtonColor' => 'gray',
             'confirmButtonColor' => 'green',
             'focusDeny' => false,
             'icon' => 'warning',
-            'method' => 'restoreAllDeliveries',
-            'delivery_id' => '',
+            'method' => 'restoreAllCountries',
+            'country_id' => '',
         ]);
     }
 
-    public function restoreAllDeliveries()
+    public function restoreAllCountries()
     {
         try {
-            $delivery = Delivery::onlyTrashed()->restore();
+            $country = Country::onlyTrashed()->restore();
 
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('admin/deliveriesPages.All deliveries have been restored successfully'),
+                "text" => __('admin/deliveriesPages.All countries have been restored successfully'),
                 'icon' => 'success'
             ]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('admin/deliveriesPages.All deliveries haven\'t been restored'),
+                "text" => __('admin/deliveriesPages.All countries haven\'t been restored'),
                 'icon' => 'error'
             ]);
         }

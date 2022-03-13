@@ -80,7 +80,6 @@ __('admin/usersPages.Roles Management')])
                 denyButtonColor: 'gray',
                 confirmButtonColor: 'red',
                 focusDeny: true,
-                showLoaderOnConfirm: true,
             }).then((result) => {
                 if (result.isConfirmed) {
                     Livewire.emit('deleteRole', e.detail.role_id);

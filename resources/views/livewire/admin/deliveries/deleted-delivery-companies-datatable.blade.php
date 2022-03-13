@@ -31,23 +31,30 @@
                                     </span> &nbsp; {{ __('admin/deliveriesPages.Manage All') }}
                                     &nbsp;</button>
                                 <div class="dropdown-menu">
-                                    <a href="#" wire:click.prevent="restoreAllConfirm"
-                                        class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600">
-                                        <span class="material-icons">
-                                            restore
-                                        </span>
-                                        &nbsp;&nbsp;
-                                        {{ __('admin/deliveriesPages.Restore All') }}</a>
-                                    <a href="#" wire:click.prevent="forceDeleteAllConfirm"
-                                        class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600">
-                                        <span class="material-icons">
-                                            delete
-                                        </span>
-                                        &nbsp;&nbsp;
-                                        {{ __('admin/deliveriesPages.Delete All Permanently') }}</a>
+
+                                    @can('Restore Delivery')
+                                        <a href="#" wire:click.prevent="restoreAllConfirm"
+                                            class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600">
+                                            <span class="material-icons">
+                                                restore
+                                            </span>
+                                            &nbsp;&nbsp;
+                                            {{ __('admin/deliveriesPages.Restore All') }}</a>
+                                    @endcan
+
+                                    @can('Force Delete Delivery')
+                                        <a href="#" wire:click.prevent="forceDeleteAllConfirm"
+                                            class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600">
+                                            <span class="material-icons">
+                                                delete
+                                            </span>
+                                            &nbsp;&nbsp;
+                                            {{ __('admin/deliveriesPages.Delete All Permanently') }}</a>
+                                    @endcan
                                 </div>
                             </div>
                         </div>
+
                         {{-- Pagination Number --}}
                         <div class="form-inline col-span-1 justify-end my-2">
                             {{ __('pagination.Show') }} &nbsp;

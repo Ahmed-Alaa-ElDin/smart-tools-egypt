@@ -70,7 +70,6 @@ __('admin/usersPages.Role\'s Users List')])
                 denyButtonColor: 'gray',
                 confirmButtonColor: 'red',
                 focusDeny: true,
-                showLoaderOnConfirm: true,
             }).then((result) => {
                 if (result.isConfirmed) {
                     Livewire.emit('softDeleteUser', e.detail.user_id);
@@ -105,7 +104,6 @@ __('admin/usersPages.Role\'s Users List')])
                 denyButtonText: e.detail.denyButtonText,
                 denyButtonColor: 'gray',
                 confirmButtonColor: 'green',
-                showLoaderOnConfirm: true,
 
             }).then((result) => {
                 if (result.isConfirmed) {

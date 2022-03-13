@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\Admin\CountriesController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UsersController;
-use App\Http\Controllers\Admin\DeliveryController;
+use App\Http\Controllers\Admin\DeliveriesController;
+use App\Http\Controllers\Admin\GovernorateController;
 use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\ZonesController;
 use App\Models\City;
+use App\Models\Country;
 use App\Models\Destination;
 use App\Models\Governorate;
 use App\Models\Zone;
@@ -33,11 +36,17 @@ Route::group([
 
 
     // ############## Delivery System Routes Start ##############
-    Route::get('/deliveries/deleted-delivery-companies', [DeliveryController::class, 'softDeletedDeliveries'])->name('deliveries.softDeletedDeliveries');
-    Route::resource('/deliveries', DeliveryController::class);
+    Route::get('/deliveries/deleted-delivery-companies', [DeliveriesController::class, 'softDeletedDeliveries'])->name('deliveries.softDeletedDeliveries');
+    Route::resource('/deliveries', DeliveriesController::class);
 
     Route::get('/zones/delivery-zones/{delivery_id}/edit', [ZonesController::class, 'editZone'])->name('zones.deliveryZones.edit');
     Route::resource('/zones', ZonesController::class);
-    // ############## Delivery System Routes End ##############
 
+    Route::get('/countries/{country_id}/governorates-country', [CountriesController::class, 'governoratesCountry'])->name('countries.governoratesCountry');
+    Route::get('/countries/deleted-countries', [CountriesController::class, 'softDeletedCountries'])->name('countries.softDeletedCountries');
+    Route::resource('/countries', CountriesController::class);
+
+
+    Route::resource('/governorates', GovernorateController::class);
+    // ############## Delivery System Routes End ##############
 });

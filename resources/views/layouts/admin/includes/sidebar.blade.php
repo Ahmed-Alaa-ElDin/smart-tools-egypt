@@ -111,7 +111,7 @@
                             @can('Force Delete User')
                                 <li class="nav-item {{ $activePage == 'Deleted Users' ? ' active' : '' }}">
                                     <a class="nav-link" href="{{ route('admin.users.softDeletedUsers') }}">
-                                        <span class="material-icons">
+                                        <span class="material-icons rtl:ml-2 ltr:mr-2">
                                             person_off
                                         </span>
                                         <span>{{ __('admin/master.Soft Deleted Users') }} </span>
@@ -164,7 +164,7 @@
                             {{-- Countries --}}
                             @can('Add New User')
                                 <li class="nav-item {{ $activePage == 'Countries' ? ' active' : '' }}">
-                                    <a class="nav-link" href="{{ route('admin.users.create') }}">
+                                    <a class="nav-link" href="{{ route('admin.countries.index') }}">
                                         <span class="material-icons">
                                             public
                                         </span>
