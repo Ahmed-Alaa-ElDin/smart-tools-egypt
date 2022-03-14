@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Country;
 use Illuminate\Http\Request;
 
-class RolesController extends Controller
+class CountryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,7 @@ class RolesController extends Controller
      */
     public function index()
     {
-        return view('admin.users.roles');
+        return view('admin.countries.index');
     }
 
     /**
@@ -24,7 +25,7 @@ class RolesController extends Controller
      */
     public function create()
     {
-        return view('admin.users.createRole');
+        return view('admin.countries.create');
     }
 
     /**
@@ -41,10 +42,10 @@ class RolesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Country  $country
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Country $country)
     {
         //
     }
@@ -52,22 +53,22 @@ class RolesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Country  $country
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($country)
     {
-        return view('admin.users.editRole',compact('id'));
+        return view('admin.countries.edit',compact('country'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Country  $country
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Country $country)
     {
         //
     }
@@ -75,34 +76,27 @@ class RolesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Country  $country
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Country $country)
     {
         //
     }
 
-    /**
-    * Display the specified role's permissions.
-    *
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
-   public function showPermissions($id)
-   {
-       return view('admin.users.rolesPermissions', compact('id'));
-   }
-
-   /**
-    * Display the specified role's users.
-    *
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
-    public function showUsers($id)
+    public function softDeletedCountries()
     {
-        return view('admin.users.rolesUsers', compact('id'));
+        return view('admin.countries.softDeleted');
+    }
+
+    public function governoratesCountry(Country $country)
+    {
+        return view('admin.countries.governorates',compact('country'));
+    }
+
+    public function citiesCountry(Country $country)
+    {
+        return view('admin.countries.cities',compact('country'));
     }
 
 }

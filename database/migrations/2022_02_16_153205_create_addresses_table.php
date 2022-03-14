@@ -15,19 +15,19 @@ return new class extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->unsigned();
-            $table->unsignedBigInteger('country_id')->unsigned();
-            $table->unsignedBigInteger('governorate_id')->unsigned();
-            $table->unsignedBigInteger('city_id')->unsigned();
+            $table->unsignedBigInteger('user_id')->nullable()->unsigned();
+            $table->unsignedBigInteger('country_id')->nullable()->unsigned();
+            $table->unsignedBigInteger('governorate_id')->nullable()->unsigned();
+            $table->unsignedBigInteger('city_id')->nullable()->unsigned();
             $table->text('details');
             $table->text('special_marque');
             $table->tinyInteger('default')->default(0)->comment('0 --> Not default , 1 --> Default');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('governorate_id')->references('id')->on('governorates')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->nullOnDelete()->onUpdate('cascade');
+            $table->foreign('country_id')->references('id')->on('countries')->nullOnDelete()->onUpdate('cascade');
+            $table->foreign('governorate_id')->references('id')->on('governorates')->nullOnDelete()->onUpdate('cascade');
+            $table->foreign('city_id')->references('id')->on('cities')->nullOnDelete()->onUpdate('cascade');
 
         });
     }

@@ -44,55 +44,55 @@ class GovernoratesCountryDatatable extends Component
         return view('livewire.admin.countries.governorates-country-datatable', compact('governorates'));
     }
 
-        // reset pagination after new search
-        public function updatingSearch()
-        {
-            $this->resetPage();
+    // reset pagination after new search
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    // Add conditions of sorting
+    public function sortBy($field)
+    {
+        if ($this->sortDirection == 'ASC') {
+            $this->sortDirection = 'DESC';
+        } else {
+            $this->sortDirection = 'ASC';
         }
 
-        // Add coditions of sorting
-        public function sortBy($field)
-        {
-            if ($this->sortDirection == 'ASC') {
-                $this->sortDirection = 'DESC';
-            } else {
-                $this->sortDirection = 'ASC';
-            }
-
-            if ($field == 'name') {
-                return $this->sortBy = 'name->' . session('locale');
-            }
-            return $this->sortBy = $field;
+        if ($field == 'name') {
+            return $this->sortBy = 'name->' . session('locale');
         }
+        return $this->sortBy = $field;
+    }
 
-        ######## Soft Delete #########
-        public function deleteConfirm($governorate_id)
-        {
-            $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
-                "text" => __('admin/deliveriesPages.Are you sure, you want to delete this governorate ?'),
-                'confirmButtonText' => __('admin/deliveriesPages.Delete'),
-                'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-                'governorate_id' => $governorate_id,
+    ######## Soft Delete #########
+    public function deleteConfirm($governorate_id)
+    {
+        $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
+            "text" => __('admin/deliveriesPages.Are you sure, you want to delete this governorate ?'),
+            'confirmButtonText' => __('admin/deliveriesPages.Delete'),
+            'denyButtonText' => __('admin/deliveriesPages.Cancel'),
+            'governorate_id' => $governorate_id,
+        ]);
+    }
+
+    public function softDeleteGovernorate($governorate_id)
+    {
+        try {
+            $governorate = Governorate::findOrFail($governorate_id);
+            $governorate->delete();
+
+            $this->dispatchBrowserEvent('swalGovernorateDeleted', [
+                "text" => __('admin/deliveriesPages.Governorate has been deleted successfully'),
+                'icon' => 'success'
+            ]);
+        } catch (\Throwable $th) {
+            $this->dispatchBrowserEvent('swalGovernorateDeleted', [
+                "text" => __("admin/deliveriesPages.Governorate hasn't been deleted"),
+                'icon' => 'error'
             ]);
         }
-
-        public function softDeleteGovernorate($governorate_id)
-        {
-            try {
-                $governorate = Governorate::findOrFail($governorate_id);
-                $governorate->delete();
-
-                $this->dispatchBrowserEvent('swalGovernorateDeleted', [
-                    "text" => __('admin/deliveriesPages.Governorate has been deleted successfully'),
-                    'icon' => 'success'
-                ]);
-            } catch (\Throwable $th) {
-                $this->dispatchBrowserEvent('swalGovernorateDeleted', [
-                    "text" => __("admin/deliveriesPages.Governorate hasn't been deleted"),
-                    'icon' => 'error'
-                ]);
-            }
-        }
-        ######## Soft Delete #########
+    }
+    ######## Soft Delete #########
 
 }

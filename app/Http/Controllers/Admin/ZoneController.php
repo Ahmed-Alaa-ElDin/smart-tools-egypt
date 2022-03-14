@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Country;
+use App\Models\Zone;
 use Illuminate\Http\Request;
 
-class CountriesController extends Controller
+class ZoneController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class CountriesController extends Controller
      */
     public function index()
     {
-        return view('admin.countries.index');
+        //
     }
 
     /**
@@ -25,7 +25,7 @@ class CountriesController extends Controller
      */
     public function create()
     {
-        return view('admin.countries.create');
+        //
     }
 
     /**
@@ -42,10 +42,10 @@ class CountriesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Country  $country
+     * @param  \App\Models\Zone  $zone
      * @return \Illuminate\Http\Response
      */
-    public function show(Country $country)
+    public function show(Zone $zone)
     {
         //
     }
@@ -53,22 +53,22 @@ class CountriesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Country  $country
+     * @param  \App\Models\Zone  $zone
      * @return \Illuminate\Http\Response
      */
-    public function edit($country)
+    public function edit(Zone $zone)
     {
-        return view('admin.countries.edit',compact('country'));
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Country  $country
+     * @param  \App\Models\Zone  $zone
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Country $country)
+    public function update(Request $request, Zone $zone)
     {
         //
     }
@@ -76,21 +76,22 @@ class CountriesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Country  $country
+     * @param  \App\Models\Zone  $zone
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Country $country)
+    public function destroy(Zone $zone)
     {
         //
     }
 
-    public function softDeletedCountries()
+        /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function editZone($delivery_id)
     {
-        return view('admin.countries.softDeleted');
+        return view("admin.zones.edit",compact('delivery_id'));
     }
 
-    public function governoratesCountry(Country $country_id)
-    {
-        return view('admin.countries.governorates',compact('country_id'));
-    }
 }

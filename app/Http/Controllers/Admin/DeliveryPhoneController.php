@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DeliveryPhone;
 use Illuminate\Http\Request;
 
-class DeliveryPhonesController extends Controller
+class DeliveryPhoneController extends Controller
 {
     /**
      * Display a listing of the resource.

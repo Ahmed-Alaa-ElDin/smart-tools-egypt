@@ -57,6 +57,22 @@ class PermissionSeeder extends Seeder
             ['name' => "Force Delete Country"],
             ['name' => "Restore Country"],
 
+            // Governorate
+            ['name' => "See All Governorates"],
+            ['name' => "Add Governorate"],
+            ['name' => "Edit Governorate"],
+            ['name' => "Soft Delete Governorate"],
+            ['name' => "Force Delete Governorate"],
+            ['name' => "Restore Governorate"],
+
+            // City
+            ['name' => "See All Cities"],
+            ['name' => "Add City"],
+            ['name' => "Edit City"],
+            ['name' => "Soft Delete City"],
+            ['name' => "Force Delete City"],
+            ['name' => "Restore City"],
+
         ];
 
         foreach ($permissions as $permission) {

@@ -136,5 +136,14 @@ return [
     "All countries have been restored successfully" => "All countries have been restored successfully",
     "All countries haven\'t been restored" => "All countries haven\'t been restored",
     "Cities" => "Cities",
+    "'s Cities" => ":name's Cities",
+    "Governorate Name" => "Governorate Name",
+    "Here you can manage country's cities" => "Here you can manage country's cities",
+    "Add City" => "Add City",
+    "Soft Deleted Cities" => "Soft Deleted Cities",
+    "Are you sure, you want to delete this city ?" => "Are you sure, you want to delete this city ?",
+    "City has been deleted successfully" => "City has been deleted successfully",
+    "City hasn't been deleted" => "City hasn't been deleted",
+
 
 ];

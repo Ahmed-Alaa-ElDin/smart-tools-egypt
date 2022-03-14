@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Zone;
+use App\Models\Delivery;
 use Illuminate\Http\Request;
 
-class ZonesController extends Controller
+class DeliveryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class ZonesController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.deliveryCompany.index');
     }
 
     /**
@@ -25,7 +25,7 @@ class ZonesController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.deliveryCompany.create');
     }
 
     /**
@@ -42,10 +42,10 @@ class ZonesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Zone  $zone
+     * @param  \App\Models\Delivery  $delivery
      * @return \Illuminate\Http\Response
      */
-    public function show(Zone $zone)
+    public function show(Delivery $delivery)
     {
         //
     }
@@ -53,22 +53,22 @@ class ZonesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Zone  $zone
+     * @param  \App\Models\Delivery  $delivery
      * @return \Illuminate\Http\Response
      */
-    public function edit(Zone $zone)
+    public function edit($delivery)
     {
-        //
+        return view('admin.deliveryCompany.edit', compact('delivery'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Zone  $zone
+     * @param  \App\Models\Delivery  $delivery
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Zone $zone)
+    public function update(Request $request, Delivery $delivery)
     {
         //
     }
@@ -76,22 +76,16 @@ class ZonesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Zone  $zone
+     * @param  \App\Models\Delivery  $delivery
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Zone $zone)
+    public function destroy(Delivery $delivery)
     {
         //
     }
 
-        /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function editZone($delivery_id)
+    public function softDeletedDeliveries()
     {
-        return view("admin.zones.edit",compact('delivery_id'));
+        return view('admin.deliveryCompany.softDeleted');
     }
-
 }

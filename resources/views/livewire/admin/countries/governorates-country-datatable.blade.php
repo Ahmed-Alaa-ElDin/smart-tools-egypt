@@ -18,6 +18,18 @@
                                 placeholder="{{ __('admin/deliveriesPages.Search ...') }}">
                         </div>
 
+                        {{-- Soft Deleted Countries --}}
+                        @can('Force Delete Governorate')
+                            <div class="ltr:text-right rtl:text-left">
+                                <a href="{{ route('admin.governorates.softDeletedGovernorates') }}"
+                                    class="btn btn-sm bg-red-600 hover:bg-red-700 focus:bg-red-600 active:bg-red-600 font-bold">
+                                    <span class="material-icons rtl:ml-2 ltr:mr-2">
+                                        delete_forever
+                                    </span>
+                                    {{ __('admin/deliveriesPages.Soft Deleted Governorates') }}</a>
+                            </div>
+                        @endcan
+
                         {{-- Pagination Number --}}
                         <div class="form-inline justify-end my-2">
                             {{ __('pagination.Show') }} &nbsp;
@@ -49,30 +61,26 @@
                                 </th>
 
                                 {{-- Country Name --}}
-                                <th wire:click="sortBy('countries->name')" scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                <th scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
                                     {{ __('admin/deliveriesPages.Country Name') }}
-                                    @include('partials._sort_icon', [
-                                        'field' => 'name->' . session('locale'),
-                                    ])
-
                                 </th>
 
                                 {{-- Cities No. --}}
                                 <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
                                     {{ __('admin/deliveriesPages.Cities No.') }}
                                 </th>
 
                                 {{-- Users No. --}}
                                 <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
                                     {{ __('admin/deliveriesPages.Users No.') }}
                                 </th>
 
                                 {{-- Deliverry Comp. No. --}}
                                 <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
                                     {{ __('admin/deliveriesPages.Delivery Comp. No.') }}
                                 </th>
 
@@ -134,7 +142,7 @@
                                             <a href="#" title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
-                                                    {{ $governorate->users->count() }}
+                                                    {{ $governorate->users->groupBy('id')->count('id') }}
                                                 </span>
 
                                                 <span class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">
@@ -155,7 +163,7 @@
                                             <a href="#" title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
-                                                    {{ $governorate->deliveries->count() }}
+                                                    {{ $governorate->deliveries->groupBy('id')->count('id') }}
                                                 </span>
 
                                                 <span class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">
@@ -174,7 +182,7 @@
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- Edit Button --}}
-                                        @can('Edit Delivery')
+                                        @can('Edit Governorate')
                                             <a href="{{ route('admin.governorates.edit', [$governorate->id]) }}"
                                                 title="{{ __('admin/deliveriesPages.Edit') }}" class="m-0">
                                                 <span
@@ -185,7 +193,7 @@
                                         @endcan
 
                                         {{-- Delete Button --}}
-                                        @can('Soft Delete Delivery')
+                                        @can('Soft Delete Governorate')
                                             <a href="#" title="{{ __('admin/deliveriesPages.Delete') }}"
                                                 wire:click.prevent="deleteConfirm({{ $governorate->id }})"
                                                 class="m-0">

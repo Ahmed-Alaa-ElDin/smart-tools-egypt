@@ -1,5 +1,5 @@
 @extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage'
-=> __("admin/deliveriesPages.'s Governorates",['name'=>$country->name])])
+=> __("admin/deliveriesPages.'s Cities",['name'=>$country->name])])
 
 @section('content')
     <div class="content">
@@ -13,7 +13,7 @@
                             href="{{ route('admin.countries.index') }}">{{ __('admin/deliveriesPages.All Countries') }}</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        {{ __("admin/deliveriesPages.'s Governorates",['name'=>$country->name]) }}
+                        {{ __("admin/deliveriesPages.'s Cities",['name'=>$country->name]) }}
                     </li>
                 </ol>
             </nav>
@@ -29,18 +29,18 @@
                             <div class="row">
                                 <div class="col-6 ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
-                                        {{ __("admin/deliveriesPages.Here you can manage country's governorates") }}</p>
+                                        {{ __("admin/deliveriesPages.Here you can manage country's cities") }}</p>
                                 </div>
 
-                                {{-- Add New Governorate Button --}}
-                                @can('Add Governorate')
+                                {{-- Add New City Button --}}
+                                @can('Add City')
                                     <div class="col-6 ltr:text-right rtl:text-left">
-                                        <a href="{{ route('admin.governorates.create') }}"
+                                        <a href="{{ route('admin.cities.create') }}"
                                             class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">
                                             <span class="material-icons rtl:ml-1 ltr:mr-1">
                                                 add
                                             </span>
-                                            {{ __('admin/deliveriesPages.Add Governorate') }}</a>
+                                            {{ __('admin/deliveriesPages.Add City') }}</a>
                                     </div>
                                 @endcan
                             </div>
@@ -49,7 +49,7 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Data Table Start --}}
-                            @livewire('admin.countries.governorates-country-datatable' , ['country_id' => $country->id])
+                            @livewire('admin.countries.cities-country-datatable' , ['country_id' => $country->id])
                             {{-- Data Table End --}}
                         </div>
                     </div>
@@ -69,7 +69,7 @@
     @livewireScripts
 
     <script>
-        // #### Governorate Soft Delete ####
+        // #### City Soft Delete ####
         window.addEventListener('swalConfirmSoftDelete', function(e) {
             Swal.fire({
                 icon: 'warning',
@@ -82,12 +82,12 @@
                 focusDeny: true,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit('softDeleteGovernorate', e.detail.governorate_id);
+                    Livewire.emit('softDeleteCity', e.detail.city_id);
                 }
             });
         });
 
-        window.addEventListener('swalGovernorateDeleted', function(e) {
+        window.addEventListener('swalCityDeleted', function(e) {
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
@@ -98,6 +98,6 @@
                 timerProgressBar: true,
             })
         });
-        // #### Governorate Soft Delete ####
+        // #### City Soft Delete ####
     </script>
 @endpush

@@ -2,13 +2,15 @@
 
 namespace App\Http\Livewire\Admin\Countries;
 
+use App\Models\City;
 use App\Models\Country;
 use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class CountriesDatatable extends Component
+class CitiesCountryDatatable extends Component
 {
+
     use WithPagination;
 
     public $sortBy;
@@ -17,26 +19,31 @@ class CountriesDatatable extends Component
 
     public $search = "";
 
-    protected $listeners = ['softDeleteCountry'];
+    public $country_id;
 
-    // Render Once
+    protected $listeners = ['softDeleteCity'];
+
     public function mount()
     {
+
         $this->perPage = Config::get('constants.constants.PAGINATION');
 
-        $this->sortBy = 'name->' . session('locale');
+        $this->sortBy = 'cities.name->' . session('locale');
     }
 
-    // Render With each update
     public function render()
     {
-        $countries = Country::with('deliveries')->with('governorates')->with('users')->with('cities')
-            ->where('name->en', 'like', '%' . $this->search . '%')
-            ->orWhere('name->ar', 'like', '%' . $this->search . '%')
+        $country  = Country::with('cities')->findOrFail($this->country_id);
+        $cities = $country->cities()->with('governorate')->with('users')->with('deliveries')
+            ->where(function ($query) {
+                return $query
+                    ->where('cities.name->en', 'like', '%' . $this->search . '%')
+                    ->orWhere('cities.name->ar', 'like', '%' . $this->search . '%');
+            })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
-        return view('livewire.admin.countries.countries-datatable', compact('countries'));
+        return view('livewire.admin.countries.cities-country-datatable', compact('country', 'cities'));
     }
 
     // reset pagination after new search
@@ -61,33 +68,32 @@ class CountriesDatatable extends Component
     }
 
     ######## Soft Delete #########
-    public function deleteConfirm($country_id)
+    public function deleteConfirm($city_id)
     {
         $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
-            "text" => __('admin/deliveriesPages.Are you sure, you want to delete this company ?'),
+            "text" => __('admin/deliveriesPages.Are you sure, you want to delete this city ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'country_id' => $country_id,
+            'city_id' => $city_id,
         ]);
     }
 
-    public function softDeleteCountry($country_id)
+    public function softDeleteCity($city_id)
     {
         try {
-            $user = Country::findOrFail($country_id);
-            $user->delete();
+            $city = City::findOrFail($city_id);
+            $city->delete();
 
-            $this->dispatchBrowserEvent('swalCountryDeleted', [
-                "text" => __('admin/deliveriesPages.Country has been deleted successfully'),
+            $this->dispatchBrowserEvent('swalCityDeleted', [
+                "text" => __('admin/deliveriesPages.City has been deleted successfully'),
                 'icon' => 'success'
             ]);
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('swalCountryDeleted', [
-                "text" => __("admin/deliveriesPages.Country hasn't been deleted"),
+            $this->dispatchBrowserEvent('swalCityDeleted', [
+                "text" => __("admin/deliveriesPages.City hasn't been deleted"),
                 'icon' => 'error'
             ]);
         }
     }
     ######## Soft Delete #########
-
 }

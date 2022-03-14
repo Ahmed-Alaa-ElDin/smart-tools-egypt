@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin\City;
+use App\Models\City;
 use Illuminate\Http\Request;
 
 class CityController extends Controller

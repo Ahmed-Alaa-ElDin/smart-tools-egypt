@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\Admin\CountriesController;
+use App\Http\Controllers\Admin\CityController;
+use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\UsersController;
-use App\Http\Controllers\Admin\DeliveriesController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\DeliveryController;
 use App\Http\Controllers\Admin\GovernorateController;
-use App\Http\Controllers\Admin\RolesController;
-use App\Http\Controllers\Admin\ZonesController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\ZoneController;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Destination;
@@ -23,30 +24,34 @@ Route::group([
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // ############## Users Routes Start ##############
-    Route::get('/users/export-excel', [UsersController::class, 'exportExcel'])->name('users.exportExcel');
-    Route::get('/users/export-pdf', [UsersController::class, 'exportPDF'])->name('users.exportPDF');
-    Route::get('/users/deleted-users', [UsersController::class, 'softDeletedUsers'])->name('users.softDeletedUsers');
-    Route::resource('/users', UsersController::class);
+    Route::get('/users/export-excel', [UserController::class, 'exportExcel'])->name('users.exportExcel');
+    Route::get('/users/export-pdf', [UserController::class, 'exportPDF'])->name('users.exportPDF');
+    Route::get('/users/deleted-users', [UserController::class, 'softDeletedUsers'])->name('users.softDeletedUsers');
+    Route::resource('/users', UserController::class);
 
 
-    Route::get('/roles/roles-permissions/{id}', [RolesController::class, 'showPermissions'])->name('roles.showPermissions');
-    Route::get('/roles/roles-users/{id}', [RolesController::class, 'showUsers'])->name('roles.showUsers');
-    Route::resource('/roles', RolesController::class);
+    Route::get('/roles/roles-permissions/{id}', [RoleController::class, 'showPermissions'])->name('roles.showPermissions');
+    Route::get('/roles/roles-users/{id}', [RoleController::class, 'showUsers'])->name('roles.showUsers');
+    Route::resource('/roles', RoleController::class);
     // ############## Users Routes End ##############
 
 
     // ############## Delivery System Routes Start ##############
-    Route::get('/deliveries/deleted-delivery-companies', [DeliveriesController::class, 'softDeletedDeliveries'])->name('deliveries.softDeletedDeliveries');
-    Route::resource('/deliveries', DeliveriesController::class);
+    Route::get('/deliveries/deleted-delivery-companies', [DeliveryController::class, 'softDeletedDeliveries'])->name('deliveries.softDeletedDeliveries');
+    Route::resource('/deliveries', DeliveryController::class);
 
-    Route::get('/zones/delivery-zones/{delivery_id}/edit', [ZonesController::class, 'editZone'])->name('zones.deliveryZones.edit');
-    Route::resource('/zones', ZonesController::class);
+    Route::get('/zones/delivery-zones/{delivery_id}/edit', [ZoneController::class, 'editZone'])->name('zones.deliveryZones.edit');
+    Route::resource('/zones', ZoneController::class);
 
-    Route::get('/countries/{country_id}/governorates-country', [CountriesController::class, 'governoratesCountry'])->name('countries.governoratesCountry');
-    Route::get('/countries/deleted-countries', [CountriesController::class, 'softDeletedCountries'])->name('countries.softDeletedCountries');
-    Route::resource('/countries', CountriesController::class);
+    Route::get('/countries/{country}/governorates-country', [CountryController::class, 'governoratesCountry'])->name('countries.governoratesCountry');
+    Route::get('/countries/{country}/cities-country', [CountryController::class, 'citiesCountry'])->name('countries.citiesCountry');
+    Route::get('/countries/deleted-countries', [CountryController::class, 'softDeletedCountries'])->name('countries.softDeletedCountries');
+    Route::resource('/countries', CountryController::class);
 
-
+    Route::get('/governorates/deleted-governorates', [GovernorateController::class, 'softDeletedGovernorates'])->name('governorates.softDeletedGovernorates');
     Route::resource('/governorates', GovernorateController::class);
+
+    Route::get('/cities/deleted-cities', [CityController::class, 'softDeletedCities'])->name('cities.softDeletedCities');
+    Route::resource('/cities', CityController::class);
     // ############## Delivery System Routes End ##############
 });

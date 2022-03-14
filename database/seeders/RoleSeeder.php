@@ -24,8 +24,10 @@ class RoleSeeder extends Seeder
         ]);
 
         $adminPermissions = [
+            // Dashboard
             ['name' => "See Dashboard"],
 
+            // Users
             ['name' => "See All Users"],
             ['name' => "Add New User"],
             ['name' => "See User's Details"],
@@ -35,6 +37,7 @@ class RoleSeeder extends Seeder
             ['name' => "Force Delete User"],
             ['name' => "Restore User"],
 
+            // Roles
             ['name' => "See All Roles"],
             ['name' => "Add New Role"],
             ['name' => "See Role's Permissions"],
@@ -42,6 +45,7 @@ class RoleSeeder extends Seeder
             ['name' => "Edit Role"],
             ['name' => "Delete Role"],
 
+            // Delivery System
             ['name' => "See Delivery System"],
             ['name' => "Add Delivery"],
             ['name' => "Edit Delivery"],
@@ -53,12 +57,29 @@ class RoleSeeder extends Seeder
             ['name' => "Restore Delivery"],
             ['name' => "Activate Delivery"],
 
+            // Country
             ['name' => "See All Countries"],
             ['name' => "Add Country"],
             ['name' => "Edit Country"],
             ['name' => "Soft Delete Country"],
             ['name' => "Force Delete Country"],
             ['name' => "Restore Country"],
+
+            // Governorate
+            ['name' => "See All Governorates"],
+            ['name' => "Add Governorate"],
+            ['name' => "Edit Governorate"],
+            ['name' => "Soft Delete Governorate"],
+            ['name' => "Force Delete Governorate"],
+            ['name' => "Restore Governorate"],
+
+            // City
+            ['name' => "See All Cities"],
+            ['name' => "Add City"],
+            ['name' => "Edit City"],
+            ['name' => "Soft Delete City"],
+            ['name' => "Force Delete City"],
+            ['name' => "Restore City"],
 
         ];
 
