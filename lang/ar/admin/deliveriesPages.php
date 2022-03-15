@@ -149,5 +149,12 @@ return [
     "Add User" => "إضافة مستخدم",
     "'s Delivery Companies" => "شركات تشحن إلى :name",
     "Here you can manage country's delivery companies" => "من خلال هذه الصفحة يمكنك التحكم بالتركات التي تقوم بالشحن إلى ببلد معين",
+    "All Governorates" => "جميع المحافظات",
+    "Here you can manage governorates" => "من خلال هذه الصفحة يمكنتك التحكم بجميع المحافظات",
+    "Through this form you can add new governorate" => "من خلال هذه الصفحة يمكنك التحكم بالمحافظات",
+    "Country" => "البلد",
+    "Save and Add New Governorate" => "حفظ وإضافة محافظة جديدة",
+    "Governorate Created successfully" => "تم إضافة المحافظة بنجاح",
+    "Governorate hasn't been Created" => "لم يتم إضافة المحافظة",
 
 ];

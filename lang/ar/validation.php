@@ -188,6 +188,7 @@ return [
         'zones.*.kg_charge' => 'المصاريف لكل كجم زائد',
         'zones.*.destinations.*.country_id' => 'البلد',
         'zones.*.destinations.*.governorate_id' => 'المحافظة',
+        'country_id'            => 'البلد',
 
     ],
 

@@ -23,15 +23,15 @@ __('admin/deliveriesPages.Delivery Companies')])
 
                         {{-- Card Head --}}
                         <div class="card-header card-header-primary">
-                            <div class="row">
-                                <div class="col-6 ltr:text-left rtl:text-right font-bold self-center text-gray-100">
+                            <div class="flex justify-between">
+                                <div class=" ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
                                         {{ __('admin/deliveriesPages.Here you can manage delivery companies') }}</p>
                                 </div>
 
                                 {{-- Add New Delivery Company Button --}}
                                 @can('Add Delivery')
-                                    <div class="col-6 ltr:text-right rtl:text-left">
+                                    <div class="ltr:text-right rtl:text-left">
                                         <a href="{{ route('admin.deliveries.create') }}"
                                             class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">
                                             <span class="material-icons rtl:ml-1 ltr:mr-1">

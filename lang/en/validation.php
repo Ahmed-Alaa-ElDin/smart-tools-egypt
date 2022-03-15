@@ -163,19 +163,20 @@ return [
     */
 
     'attributes' => [
-        'selectedPermissions' => 'Permissions',
-        'phones.*.phone' => 'phone',
-        'zones.*.name.ar' => 'Name in Arabic',
-        'zones.*.name.en' => 'Name in English',
-        'zones.*.min_charge' => 'Minimum Fees',
-        'zones.*.min_size' => 'Minimum Size',
-        'zones.*.kg_charge' => 'Fees/Kg',
-        'zones.*.destinations.*.country_id' => 'Country',
+        'selectedPermissions'   => 'Permissions',
+        'phones.*.phone'        => 'phone',
+        'zones.*.name.ar'       => 'Name in Arabic',
+        'zones.*.name.en'       => 'Name in English',
+        'zones.*.min_charge'    => 'Minimum Fees',
+        'zones.*.min_size'      => 'Minimum Size',
+        'zones.*.kg_charge'     => 'Fees/Kg',
+        'zones.*.destinations.*.country_id'     => 'Country',
         'zones.*.destinations.*.governorate_id' => 'Governorate',
-        'selectedPermissions' => 'Permissions',
-        'selectedPermissions' => 'Permissions',
+        'selectedPermissions'   => 'Permissions',
+        'selectedPermissions'   => 'Permissions',
         'name.ar'               => 'name in Arabic',
         'name.en'               => 'name in English',
+        'country_id'            => 'Country',
     ],
 
 ];

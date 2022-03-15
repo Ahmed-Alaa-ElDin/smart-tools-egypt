@@ -147,6 +147,20 @@ return [
     "'s Users" => ":name's Users",
     "Here you can manage country's users" => "Here you can manage country's users",
     "Add User" => "Add User",
+    "Through this form you can add new governorate" => "Through this form you can add new governorate",
+    "Country" => "Country",
+    "Save and Add New Governorate" => "Save and Add New Governorate",
+    "Governorate Created successfully" => "Governorate Created successfully",
+    "Governorate hasn't been Created" => "Governorate hasn't been Created",
+    "Cities" => "Cities",
+    "Cities" => "Cities",
+    "Cities" => "Cities",
+    "Cities" => "Cities",
+    "Cities" => "Cities",
+    "Cities" => "Cities",
+    "Cities" => "Cities",
+    "Cities" => "Cities",
+    "Cities" => "Cities",
 
 
 ];

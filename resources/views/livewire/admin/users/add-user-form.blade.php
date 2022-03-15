@@ -207,7 +207,7 @@
                             wire:model.lazy="role" id="role" tabindex="8">
                             @forelse ($roles as $role)
                                 <option value="{{ $role->id }}">
-                                    {{ __('admin/usersPages.' . $role->name) }}</option>
+                                    {{ $role->name }}</option>
                             @empty
                                 <option value="">{{ __('admin/usersPages.No Roles in the database') }}
                                 </option>
