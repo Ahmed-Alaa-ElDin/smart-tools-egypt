@@ -1,5 +1,5 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Users', 'activePage' => 'All Users', 'titlePage' =>
-__('admin/usersPages.All Users')])
+@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage'
+=> __("admin/deliveriesPages.'s Users",['name'=>$country->name])])
 
 @section('content')
     <div class="content">
@@ -8,8 +8,13 @@ __('admin/usersPages.All Users')])
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.dashboard') }}">{{ __('admin/usersPages.Dashboard') }}</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/usersPages.All Users') }}</li>
+                            href="{{ route('admin.dashboard') }}">{{ __('admin/deliveriesPages.Dashboard') }}</a></li>
+                    <li class="breadcrumb-item hover:text-primary"><a
+                            href="{{ route('admin.countries.index') }}">{{ __('admin/deliveriesPages.All Countries') }}</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        {{ __("admin/deliveriesPages.'s Users", ['name' => $country->name]) }}
+                    </li>
                 </ol>
             </nav>
 
@@ -23,7 +28,8 @@ __('admin/usersPages.All Users')])
                         <div class="card-header card-header-primary">
                             <div class="row">
                                 <div class="col-6 ltr:text-left rtl:text-right font-bold self-center text-gray-100">
-                                    <p class=""> {{ __('admin/usersPages.Here you can manage users') }}</p>
+                                    <p class="">
+                                        {{ __("admin/deliveriesPages.Here you can manage country's users") }}</p>
                                 </div>
 
                                 {{-- Add New User Button --}}
@@ -34,7 +40,7 @@ __('admin/usersPages.All Users')])
                                             <span class="material-icons rtl:ml-1 ltr:mr-1">
                                                 add
                                             </span>
-                                            {{ __('admin/usersPages.Add User') }}</a>
+                                            {{ __('admin/deliveriesPages.Add User') }}</a>
                                     </div>
                                 @endcan
                             </div>
@@ -43,9 +49,8 @@ __('admin/usersPages.All Users')])
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Data Table Start --}}
-                            @livewire('admin.users.users-datatable')
+                            @livewire('admin.countries.users-country-datatable' , ['country_id' => $country->id])
                             {{-- Data Table End --}}
-
                         </div>
                     </div>
                 </div>

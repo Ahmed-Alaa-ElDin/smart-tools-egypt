@@ -96,7 +96,7 @@
                             </li>
 
                             {{-- Add New User --}}
-                            @can('Add New User')
+                            @can('Add User')
                                 <li class="nav-item {{ $activePage == 'Add User' ? ' active' : '' }}">
                                     <a class="nav-link" href="{{ route('admin.users.create') }}">
                                         <span class="material-icons">
@@ -162,7 +162,7 @@
                             </li>
 
                             {{-- Countries --}}
-                            @can('Add New User')
+                            @can('See All Countries')
                                 <li class="nav-item {{ $activePage == 'Countries' ? ' active' : '' }}">
                                     <a class="nav-link" href="{{ route('admin.countries.index') }}">
                                         <span class="material-icons">
@@ -174,9 +174,9 @@
                             @endcan
 
                             {{-- Governorates --}}
-                            @can('Force Delete User')
+                            @can('See All Governorates')
                                 <li class="nav-item {{ $activePage == 'Governorates' ? ' active' : '' }}">
-                                    <a class="nav-link" href="{{ route('admin.users.softDeletedUsers') }}">
+                                    <a class="nav-link" href="{{ route('admin.governorates.index') }}">
                                         <span class="material-icons">
                                             travel_explore
                                         </span>
@@ -186,9 +186,9 @@
                             @endcan
 
                             {{-- Cities --}}
-                            @can('Force Delete User')
+                            @can('See All Cities')
                                 <li class="nav-item {{ $activePage == 'Cities' ? ' active' : '' }}">
-                                    <a class="nav-link" href="{{ route('admin.users.softDeletedUsers') }}">
+                                    <a class="nav-link" href="{{ route('admin.cities.index') }}">
                                         <span class="material-icons">
                                             location_city
                                         </span>

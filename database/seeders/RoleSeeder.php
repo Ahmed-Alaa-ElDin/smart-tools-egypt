@@ -29,7 +29,7 @@ class RoleSeeder extends Seeder
 
             // Users
             ['name' => "See All Users"],
-            ['name' => "Add New User"],
+            ['name' => "Add User"],
             ['name' => "See User's Details"],
             ['name' => "Edit User"],
             ['name' => "Edit User's Role"],
@@ -39,7 +39,7 @@ class RoleSeeder extends Seeder
 
             // Roles
             ['name' => "See All Roles"],
-            ['name' => "Add New Role"],
+            ['name' => "Add Role"],
             ['name' => "See Role's Permissions"],
             ['name' => "See Role's Users"],
             ['name' => "Edit Role"],

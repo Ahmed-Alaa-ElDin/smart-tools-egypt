@@ -99,4 +99,15 @@ class CountryController extends Controller
         return view('admin.countries.cities',compact('country'));
     }
 
+    public function usersCountry(Country $country)
+    {
+        return view('admin.countries.users',compact('country'));
+    }
+
+    public function deliveriesCountry(Country $country)
+    {
+        return view('admin.countries.deliveries',compact('country'));
+    }
+
+
 }

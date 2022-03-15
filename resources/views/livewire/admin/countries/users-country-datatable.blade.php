@@ -12,15 +12,39 @@
                                     class="inline-flex items-center px-3 ltr:rounded-l-md rtl:rounded-r-md border border-r-0 border-gray-300 bg-gray-50 text-center text-gray-500 text-sm">
                                     <span class="material-icons">
                                         search
-                                    </span>
-                                </span>
+                                    </span> </span>
                                 <input type="text" name="company-website" id="company-website" wire:model='search'
                                     class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                                     placeholder="{{ __('admin/usersPages.Search ...') }}">
                             </div>
                         </div>
 
-
+                        {{-- Download --}}
+                        {{-- <div class="form-inline col-span-1 justify-center">
+                            <div class="flex justify-center">
+                                <button class="btn btn-success dropdown-toggle btn-round btn-sm text-white font-bold "
+                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="material-icons">
+                                        file_download
+                                    </span> &nbsp; {{ __('admin/usersPages.Export Users') }}
+                                    &nbsp;</button>
+                                <div class="dropdown-menu">
+                                    <a href="{{ route('admin.users.exportExcel') }}"
+                                        class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600">
+                                        <span class="material-icons">
+                                            file_present
+                                        </span> &nbsp;&nbsp;
+                                        {{ __('admin/usersPages.download all excel') }}</a>
+                                    <a href="{{ route('admin.users.exportPDF') }}"
+                                        class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600">
+                                        <span class="material-icons">
+                                            picture_as_pdf
+                                        </span>
+                                        &nbsp;&nbsp;
+                                        {{ __('admin/usersPages.download all pdf') }}</a>
+                                </div>
+                            </div>
+                        </div> --}}
                         {{-- Pagination Number --}}
                         <div class="form-inline col-span-1 justify-end my-2">
                             {{ __('pagination.Show') }} &nbsp;
@@ -47,7 +71,7 @@
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/usersPages.Name') }} &nbsp;
                                     @include('partials._sort_icon', [
-                                        'field' => 'f_name',
+                                        'field' => 'f_name->' . session('locale'),
                                     ])
                                 </th>
 
@@ -173,6 +197,7 @@
                                                 </span>
                                             </a>
                                         @endcan
+
 
                                         {{-- Soft Delete Button --}}
                                         @can('Soft Delete User')

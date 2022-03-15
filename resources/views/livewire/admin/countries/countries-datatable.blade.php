@@ -153,7 +153,8 @@
                                     {{-- Users. No. --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
                                         @if ($country->users->count())
-                                            <a href="#" title="{{ __('admin/deliveriesPages.View') }}"
+                                            <a href="{{ route('admin.countries.usersCountry', [$country->id]) }}"
+                                                title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
                                                     {{ $country->users->groupBy('id')->count('id') }}
@@ -174,7 +175,8 @@
                                     {{-- Deliverry Comp. No. --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
                                         @if ($country->deliveries->count())
-                                            <a href="#" title="{{ __('admin/deliveriesPages.View') }}"
+                                            <a href="{{ route('admin.countries.deliveriesCountry', [$country->id]) }}"
+                                                title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
                                                     {{ $country->deliveries->count() }}

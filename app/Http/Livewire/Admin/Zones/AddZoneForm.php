@@ -65,7 +65,7 @@ class AddZoneForm extends Component
                 'destinations' => [
                     0 => [
                         'country_id' => 1,
-                        'governorates' => Governorate::where('country_id', 1)->get()->toArray(),
+                        'governorates' => Governorate::where('country_id', 1)->orderBy('name->' . session('locale'))->get()->toArray(),
                         'governorate_id' => '',
                         'allCities' => [],
                         'cities' => []

@@ -144,6 +144,9 @@ return [
     "Are you sure, you want to delete this city ?" => "Are you sure, you want to delete this city ?",
     "City has been deleted successfully" => "City has been deleted successfully",
     "City hasn't been deleted" => "City hasn't been deleted",
+    "'s Users" => ":name's Users",
+    "Here you can manage country's users" => "Here you can manage country's users",
+    "Add User" => "Add User",
 
 
 ];

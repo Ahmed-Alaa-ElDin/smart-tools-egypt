@@ -83,4 +83,9 @@ class User extends Authenticatable
         return $this->hasMany(Phone::class);
     }
 
+    // One to many through relationship  User --> Countries
+    public function countries()
+    {
+        return $this->belongsToMany(Country::class, 'addresses');
+    }
 }

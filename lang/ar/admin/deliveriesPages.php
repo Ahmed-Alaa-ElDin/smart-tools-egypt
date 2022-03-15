@@ -144,5 +144,10 @@ return [
     "Are you sure, you want to delete this city ?" => "هل أنت متأكد من حذف هذه المنطقة ؟",
     "City has been deleted successfully" => "تم حذف المنطقة بنجاح",
     "City hasn't been deleted" => "لم يتم حذف المنطقة",
+    "'s Users" => "مستخدمين من  :name",
+    "Here you can manage country's users" => "من خلال هذه الصفحة يمكنك التحكم بالمستخدمين القاطنين ببلد معين",
+    "Add User" => "إضافة مستخدم",
+    "'s Delivery Companies" => "شركات تشحن إلى :name",
+    "Here you can manage country's delivery companies" => "من خلال هذه الصفحة يمكنك التحكم بالتركات التي تقوم بالشحن إلى ببلد معين",
 
 ];
