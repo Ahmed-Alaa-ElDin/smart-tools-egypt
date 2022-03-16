@@ -50,6 +50,9 @@ Route::group([
     Route::get('/countries/deleted-countries', [CountryController::class, 'softDeletedCountries'])->name('countries.softDeletedCountries');
     Route::resource('/countries', CountryController::class);
 
+    Route::get('/governorates/{governorate}/cities-governorate', [GovernorateController::class, 'citiesGovernorate'])->name('governorates.citiesGovernorate');
+    Route::get('/governorates/{governorate}/users-governorate', [GovernorateController::class, 'usersGovernorate'])->name('governorates.usersGovernorate');
+    Route::get('/governorates/{governorate}/deliveries-governorate', [GovernorateController::class, 'deliveriesGovernorate'])->name('governorates.deliveriesGovernorate');
     Route::get('/governorates/deleted-governorates', [GovernorateController::class, 'softDeletedGovernorates'])->name('governorates.softDeletedGovernorates');
     Route::resource('/governorates', GovernorateController::class);
 

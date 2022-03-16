@@ -2,13 +2,13 @@
 
 namespace App\Http\Livewire\Admin\Governorates;
 
-use App\Models\Country;
+use App\Models\City;
 use App\Models\Governorate;
 use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class GovernoratesDatatable extends Component
+class CitiesGovernorateDatatable extends Component
 {
     use WithPagination;
 
@@ -18,33 +18,31 @@ class GovernoratesDatatable extends Component
 
     public $search = "";
 
-    protected $listeners = ['softDeleteGovernorate'];
+    public $governorate_id;
+
+    protected $listeners = ['softDeleteCity'];
 
     public function mount()
     {
 
         $this->perPage = Config::get('constants.constants.PAGINATION');
 
-        $this->sortBy = 'governorates.name->' . session('locale');
+        $this->sortBy = 'cities.name->' . session('locale');
     }
 
     public function render()
     {
-        $governorates = Governorate::with('country')->with('deliveries')->with('users')->with('cities')
-            ->join('countries','countries.id','=','governorates.country_id')
-            ->select('governorates.*','countries.name as country_name')
+        $governorate  = Governorate::with('cities')->with('country')->findOrFail($this->governorate_id);
+        $cities = $governorate->cities()->with('governorate')->with('users')->with('deliveries')
             ->where(function ($query) {
                 return $query
-                    ->where('governorates.name->en', 'like', '%' . $this->search . '%')
-                    ->orWhere('governorates.name->ar', 'like', '%' . $this->search . '%')
-                    ->orWhere('countries.name->en', 'like', '%' . $this->search . '%')
-                    ->orWhere('countries.name->ar', 'like', '%' . $this->search . '%');
-
+                    ->where('cities.name->en', 'like', '%' . $this->search . '%')
+                    ->orWhere('cities.name->ar', 'like', '%' . $this->search . '%');
             })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
-        return view('livewire.admin.governorates.governorates-datatable', compact('governorates'));
+        return view('livewire.admin.governorates.cities-governorate-datatable', compact('governorate', 'cities'));
     }
 
     // reset pagination after new search
@@ -69,34 +67,32 @@ class GovernoratesDatatable extends Component
     }
 
     ######## Soft Delete #########
-    public function deleteConfirm($governorate_id)
+    public function deleteConfirm($city_id)
     {
         $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
-            "text" => __('admin/deliveriesPages.Are you sure, you want to delete this governorate ?'),
+            "text" => __('admin/deliveriesPages.Are you sure, you want to delete this city ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'governorate_id' => $governorate_id,
+            'city_id' => $city_id,
         ]);
     }
 
-    public function softDeleteGovernorate($governorate_id)
+    public function softDeleteCity($city_id)
     {
         try {
-            $governorate = Governorate::findOrFail($governorate_id);
-            $governorate->delete();
+            $city = City::findOrFail($city_id);
+            $city->delete();
 
-            $this->dispatchBrowserEvent('swalGovernorateDeleted', [
-                "text" => __('admin/deliveriesPages.Governorate has been deleted successfully'),
+            $this->dispatchBrowserEvent('swalCityDeleted', [
+                "text" => __('admin/deliveriesPages.City has been deleted successfully'),
                 'icon' => 'success'
             ]);
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('swalGovernorateDeleted', [
-                "text" => __("admin/deliveriesPages.Governorate hasn't been deleted"),
+            $this->dispatchBrowserEvent('swalCityDeleted', [
+                "text" => __("admin/deliveriesPages.City hasn't been deleted"),
                 'icon' => 'error'
             ]);
         }
     }
     ######## Soft Delete #########
-
-
 }

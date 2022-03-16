@@ -1,5 +1,5 @@
 @extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage' =>
-__('admin/deliveriesPages.Edit Country')])
+__('admin/deliveriesPages.Edit Governorate')])
 
 @section('content')
     <div class="content">
@@ -8,12 +8,15 @@ __('admin/deliveriesPages.Edit Country')])
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item hover:text-primary">
-                        <a href="{{ route('admin.dashboard') }}">{{ __('admin/deliveriesPages.Dashboard') }}</a>
+                        <a href="{{ route('admin.dashboard') }}">{{ __('admin/deliveriesPages.Dashboard') }}
+                        </a>
                     </li>
-                    <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.countries.index') }}">{{ __('admin/deliveriesPages.All Countries') }}</a>
+                    <li class="breadcrumb-item hover:text-primary">
+                        <a href="{{ route('admin.governorates.index') }}">{{ __('admin/deliveriesPages.All Governorates') }}
+                        </a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/deliveriesPages.Edit Country') }}
+                    <li class="breadcrumb-item active" aria-current="page">
+                        {{ __('admin/deliveriesPages.Edit Governorate') }}
                     </li>
                 </ol>
             </nav>
@@ -29,7 +32,7 @@ __('admin/deliveriesPages.Edit Country')])
                             <div class="row">
                                 <div class="col-12 ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
-                                    {{ __('admin/deliveriesPages.Through this form you can edit the country') }}
+                                        {{ __('admin/deliveriesPages.Through this form you can edit the governorate') }}
                                     </p>
                                 </div>
                             </div>
@@ -39,8 +42,7 @@ __('admin/deliveriesPages.Edit Country')])
                         <div class="card-body overflow-hidden">
 
                             {{-- Form Start --}}
-                            @livewire('admin.countries.edit-country-form', ['country_id' => $country])
-                            {{-- content --}}
+                            @livewire('admin.governorates.edit-governorate-form',['governorate_id' => $governorate])
 
                         </div>
                     </div>

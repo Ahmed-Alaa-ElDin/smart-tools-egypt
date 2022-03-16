@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Countries;
+namespace App\Http\Livewire\Admin\Governorates;
 
-use App\Models\Country;
 use App\Models\Delivery;
+use App\Models\Governorate;
 use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 use Livewire\WithPagination;
-use PHPUnit\Framework\Constraint\Count;
 
-class DeliveriesCountryDatatable extends Component
+class DeliveriesGovernorateDatatable extends Component
 {
     use WithPagination;
 
@@ -17,7 +16,7 @@ class DeliveriesCountryDatatable extends Component
     public $sortDirection = 'ASC';
     public $perPage;
 
-    public $country_id;
+    public $governorate_id;
 
     public $search = "";
 
@@ -34,21 +33,22 @@ class DeliveriesCountryDatatable extends Component
     // Render With each update
     public function render()
     {
-        $deliveries = Country::with('deliveries')->findOrFail($this->country_id)
+        $deliveries = Governorate::with('deliveries')->findOrFail($this->governorate_id)
             ->deliveries()->with('phones')
-            ->where(function ($query) {
+            ->where(function ($query)
+            {
                 return $query->where('name->en', 'like', '%' . $this->search . '%')
-                    ->orWhere('name->ar', 'like', '%' . $this->search . '%')
-                    ->orWhere('email', 'like', '%' . $this->search . '%')
-                    ->orWhereHas('phones', function ($query) {
-                        $query->where('phone', 'like', '%' . $this->search . '%');
-                    });
+                ->orWhere('name->ar', 'like', '%' . $this->search . '%')
+                ->orWhere('email', 'like', '%' . $this->search . '%')
+                ->orWhereHas('phones', function ($query) {
+                    $query->where('phone', 'like', '%' . $this->search . '%');
+                });
             })
             ->distinct('deliveries.id')
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
-        return view('livewire.admin.countries.deliveries-country-datatable', compact('deliveries'));
+        return view('livewire.admin.governorates.deliveries-governorate-datatable', compact('deliveries'));
     }
 
     // reset pagination after new search
@@ -126,4 +126,5 @@ class DeliveriesCountryDatatable extends Component
         }
     }
     ######## Activation Toggle #########
+
 }

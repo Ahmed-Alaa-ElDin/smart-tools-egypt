@@ -56,9 +56,9 @@ class GovernorateController extends Controller
      * @param  \App\Models\Governorate  $governorate
      * @return \Illuminate\Http\Response
      */
-    public function edit(Governorate $governorate)
+    public function edit($governorate)
     {
-        //
+        return view('admin.governorates.edit',compact('governorate'));
     }
 
     /**
@@ -83,4 +83,26 @@ class GovernorateController extends Controller
     {
         //
     }
+
+    public function softDeletedGovernorates()
+    {
+        return view('admin.governorates.softDeleted');
+    }
+
+    public function citiesGovernorate(Governorate $governorate)
+    {
+        return view('admin.governorates.cities',compact('governorate'));
+    }
+
+    public function usersGovernorate(Governorate $governorate)
+    {
+        return view('admin.governorates.users',compact('governorate'));
+    }
+
+    public function deliveriesGovernorate(Governorate $governorate)
+    {
+        return view('admin.governorates.deliveries',compact('governorate'));
+    }
+
+
 }

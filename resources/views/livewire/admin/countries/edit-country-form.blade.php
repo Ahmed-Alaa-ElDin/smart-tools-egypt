@@ -2,7 +2,7 @@
     {{-- Country New Name --}}
     <div class="col-span-12 grid grid-cols-12 gap-x-4 gap-y-2 p-2 items-center">
         <label
-            class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">{{ __('admin/deliveriesPages.Country New Name') }}</label>
+            class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">{{ __('admin/deliveriesPages.Name') }}</label>
         {{-- Name Ar --}}
         <div class="col-span-6 md:col-span-5">
             <input

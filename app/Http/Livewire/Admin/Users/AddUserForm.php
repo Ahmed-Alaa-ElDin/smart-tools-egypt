@@ -45,7 +45,7 @@ class AddUserForm extends Component
             'f_name.en'                     => 'nullable|string|max:20|min:3',
             'l_name.ar'                     => 'nullable|string|max:20|min:3',
             'l_name.en'                     => 'nullable|string|max:20|min:3',
-            'email'                         => 'nullable|required_if:role,2|required_without:phones.0.phone|email|max:50|min:3|unique:users,email',
+            'email'                         => 'nullable|required_if:role,2|required_without:phones.' . $this->defaultPhone . '.phone|email|max:50|min:3|unique:users,email',
             'phones.*.phone'                => 'nullable|required_without:email|digits_between:8,11|' . Rule::unique('phones'),
             'gender'                        => 'in:0,1',
             'role'                          => 'exists:roles,id',
@@ -100,8 +100,8 @@ class AddUserForm extends Component
 
         if ($this->countries->count()) {
             // User Has Addresses
-            $this->governorates[0] = Governorate::where('country_id', $this->addresses[0]['country_id'])->get()->toArray();
-            $this->cities[0] = City::where('governorate_id', $this->addresses[0]['governorate_id'])->get()->toArray();
+            $this->governorates[0] = Governorate::where('country_id', $this->addresses[0]['country_id'])->orderBy('name->' . session('locale'))->get()->toArray();
+            $this->cities[0] = City::where('governorate_id', $this->addresses[0]['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray();
         }
     }
 
@@ -152,15 +152,15 @@ class AddUserForm extends Component
     ################ Addresses #####################
     public function countryUpdated($index)
     {
-        $this->governorates[$index] = Governorate::where('country_id', $this->addresses[$index]['country_id'])->get()->toArray();
+        $this->governorates[$index] = Governorate::where('country_id', $this->addresses[$index]['country_id'])->orderBy('name->' . session('locale'))->get()->toArray();
         $this->addresses[$index]['governorate_id'] = count($this->governorates[$index]) ? $this->governorates[$index][0]['id'] : '';
-        $this->cities[$index] = count($this->governorates[$index]) ? City::where('governorate_id', $this->addresses[$index]['governorate_id'])->get()->toArray() : [];
+        $this->cities[$index] = count($this->governorates[$index]) ? City::where('governorate_id', $this->addresses[$index]['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray() : [];
         $this->addresses[$index]['city_id'] = $this->cities[$index] ? $this->cities[$index][0]['id'] : '';
     }
 
     public function governorateUpdated($index)
     {
-        $this->cities[$index] = City::where('governorate_id', $this->addresses[$index]['governorate_id'])->get()->toArray();
+        $this->cities[$index] = City::where('governorate_id', $this->addresses[$index]['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray();
         $this->addresses[$index]['city_id'] = $this->cities[$index] ? $this->cities[$index][0]['id'] : '';
     }
 
@@ -177,11 +177,11 @@ class AddUserForm extends Component
 
         array_push($this->addresses, $newAddress);
 
-        $governorates = Governorate::where('country_id', 1)->get()->toArray();
+        $governorates = Governorate::where('country_id', 1)->orderBy('name->' . session('locale'))->get()->toArray();
 
         array_push($this->governorates, $governorates);
 
-        array_push($this->cities, City::where('governorate_id', 1)->get()->toArray());
+        array_push($this->cities, City::where('governorate_id', 1)->orderBy('name->' . session('locale'))->get()->toArray());
     }
 
 

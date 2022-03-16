@@ -19,14 +19,14 @@
                         </div>
 
                         {{-- Soft Deleted Countries --}}
-                        @can('Force Delete Governorate')
+                        @can('Force Delete City')
                             <div class="ltr:text-right rtl:text-left">
-                                <a href="{{ route('admin.governorates.softDeletedGovernorates') }}"
+                                <a href="{{ route('admin.cities.softDeletedCities') }}"
                                     class="btn btn-sm bg-red-600 hover:bg-red-700 focus:bg-red-600 active:bg-red-600 font-bold">
                                     <span class="material-icons rtl:ml-2 ltr:mr-2">
                                         delete_forever
                                     </span>
-                                    {{ __('admin/deliveriesPages.Soft Deleted Governorates') }}</a>
+                                    {{ __('admin/deliveriesPages.Soft Deleted Cities') }}</a>
                             </div>
                         @endcan
 
@@ -52,35 +52,35 @@
                             <tr>
 
                                 {{-- Name --}}
-                                <th wire:click="sortBy('name')" scope="col"
+                                <th wire:click="sortBy('cities.name->{{ session('locale') }}')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Name') }} &nbsp;
                                     @include('partials._sort_icon', [
-                                        'field' => 'name->' . session('locale'),
+                                        'field' => 'cities->name->' . session('locale'),
                                     ])
                                 </th>
 
                                 {{-- Country Name --}}
                                 <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Country Name') }}
                                 </th>
 
-                                {{-- Cities No. --}}
+                                {{-- Governorate Name --}}
                                 <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
-                                    {{ __('admin/deliveriesPages.Cities No.') }}
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                    {{ __('admin/deliveriesPages.Governorate Name') }}
                                 </th>
 
                                 {{-- Users No. --}}
                                 <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Users No.') }}
                                 </th>
 
                                 {{-- Deliverry Comp. No. --}}
                                 <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Delivery Comp. No.') }}
                                 </th>
 
@@ -95,13 +95,13 @@
 
                         {{-- Data Table Body --}}
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse ($governorates as $governorate)
+                            @forelse ($cities as $city)
                                 {{-- name --}}
                                 <tr>
                                     <td class="px-6 py-2 whitespace-nowrap">
                                         <div class="flex items-center content-center justify-center">
                                             <div class="text-sm font-medium text-gray-900">
-                                                {{ $governorate->name }}
+                                                {{ $city->name }}
                                             </div>
                                         </div>
                                     </td>
@@ -115,36 +115,22 @@
                                         </div>
                                     </td>
 
-                                    {{-- Cities No. --}}
+                                    {{-- Governorate Name --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
-                                        @if ($governorate->cities->count())
-                                            <a href="{{ route('admin.governorates.citiesGovernorate', [$governorate->id]) }}"
-                                                title="{{ __('admin/deliveriesPages.View') }}"
-                                                class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
-                                                <span class="bg-white rounded py-1 px-2">
-                                                    {{ $governorate->cities->count() }}
-                                                </span>
-
-                                                <span class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">
-                                                    visibility
-                                                </span>
-                                            </a>
-                                        @else
-                                            <div
-                                                class="m-auto text-sm bg-red-400 rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
-                                                <span class="bg-white rounded py-1 px-2">0</span>
+                                        <div class="flex items-center content-center justify-center">
+                                            <div class="text-sm font-medium text-gray-900">
+                                                {{ $city->governorate->name }}
                                             </div>
-                                        @endif
+                                        </div>
                                     </td>
 
                                     {{-- Users. No. --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
-                                        @if ($governorate->users->count())
-                                            <a href="{{ route('admin.governorates.usersGovernorate', [$governorate->id]) }}"
-                                                title="{{ __('admin/deliveriesPages.View') }}"
+                                        @if ($city->users->count())
+                                            <a href="#" title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
-                                                    {{ $governorate->users->groupBy('id')->count('id') }}
+                                                    {{ $city->users->groupBy('id')->count('id') }}
                                                 </span>
 
                                                 <span class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">
@@ -161,12 +147,11 @@
 
                                     {{-- Deliverry Comp. No. --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
-                                        @if ($governorate->deliveries->count())
-                                            <a href="{{ route('admin.governorates.deliveriesGovernorate', [$governorate->id]) }}"
-                                                title="{{ __('admin/deliveriesPages.View') }}"
+                                        @if ($city->deliveries->count())
+                                            <a href="#" title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
-                                                    {{ $governorate->deliveries->groupBy('id')->count('id') }}
+                                                    {{ $city->deliveries->groupBy('id')->count('id') }}
                                                 </span>
 
                                                 <span class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">
@@ -185,8 +170,8 @@
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- Edit Button --}}
-                                        @can('Edit Governorate')
-                                            <a href="{{ route('admin.governorates.edit', [$governorate->id]) }}"
+                                        @can('Edit City')
+                                            <a href="{{ route('admin.cities.edit', [$city->id]) }}"
                                                 title="{{ __('admin/deliveriesPages.Edit') }}" class="m-0">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
@@ -196,9 +181,9 @@
                                         @endcan
 
                                         {{-- Delete Button --}}
-                                        @can('Soft Delete Governorate')
+                                        @can('Soft Delete City')
                                             <a href="#" title="{{ __('admin/deliveriesPages.Delete') }}"
-                                                wire:click.prevent="deleteConfirm({{ $governorate->id }})"
+                                                wire:click.prevent="deleteConfirm({{ $city->id }})"
                                                 class="m-0">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
@@ -219,7 +204,7 @@
                     </table>
                 </div>
                 <div class="mt-3">
-                    {{ $governorates->links() }}
+                    {{ $cities->links() }}
                 </div>
             </div>
         </div>

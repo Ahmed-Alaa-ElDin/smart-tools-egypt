@@ -47,7 +47,7 @@ class EditUserForm extends Component
             'f_name.en' => 'nullable|string|max:20|min:3',
             'l_name.ar' => 'nullable|string|max:20|min:3',
             'l_name.en' => 'nullable|string|max:20|min:3',
-            'email' => 'nullable|required_if:role,2|required_without:phones.0.phone|email|max:50|min:3|unique:users,email,' . $this->user_id,
+            'email' => 'nullable|required_if:role,2|required_without:phones.' . $this->defaultPhone . '.phone|email|max:50|min:3|unique:users,email,' . $this->user_id,
             'phones.*.phone' => 'nullable|required_without:email|digits_between:8,11|' . Rule::unique('phones')->ignore($this->user_id, 'user_id'),
             'gender' => 'in:0,1',
             'role' => 'exists:roles,id',

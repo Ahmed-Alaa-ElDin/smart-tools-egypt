@@ -53,7 +53,7 @@ class EditCountryForm extends Component
             $this->country->update([
                 "name" => [
                     "ar" => $this->name['ar'],
-                    "en" => $this->name['en']
+                    "en" => $this->name['en'] != null ? $this->name['en'] : $this->name['ar']
                 ]
             ]);
 
@@ -61,7 +61,6 @@ class EditCountryForm extends Component
 
             Session::flash('success', __('admin/deliveriesPages.Country updated successfully'));
             redirect()->route('admin.countries.index');
-
         } catch (\Throwable $th) {
             DB::rollBack();
 

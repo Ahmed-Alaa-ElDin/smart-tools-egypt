@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 
-class AddGovernorateForm extends Component
+class EditGovernorateForm extends Component
 {
     public $name = [
         'ar' => '',
         'en' => ''
-    ], $country_id;
+    ], $country_id, $governorate_id;
 
     // validation rules
     public function rules()
@@ -29,12 +29,21 @@ class AddGovernorateForm extends Component
     public function mount()
     {
         $this->countries = Country::get();
+
+        $this->governorate = Governorate::findOrFail($this->governorate_id);
+
+        $this->country_id = $this->governorate->country_id;
+
+        $this->name = [
+            'ar' => $this->governorate->getTranslation('name', 'ar'),
+            'en' => $this->governorate->getTranslation('name', 'en')
+        ];
     }
 
     // Run with every update
     public function render()
     {
-        return view('livewire.admin.governorates.add-governorate-form');
+        return view('livewire.admin.governorates.edit-governorate-form');
     }
 
     // Real Time Validation
@@ -44,14 +53,14 @@ class AddGovernorateForm extends Component
     }
 
     // Commit the update
-    public function save($new = false)
+    public function save()
     {
         $this->validate();
 
         try {
             DB::beginTransaction();
 
-            Governorate::create([
+            $this->governorate->update([
                 "name" => [
                     "ar" => $this->name['ar'],
                     "en" => $this->name['en'] != null ? $this->name['en'] : $this->name['ar']
@@ -62,17 +71,12 @@ class AddGovernorateForm extends Component
             DB::commit();
 
 
-            if ($new) {
-                Session::flash('success', __('admin/deliveriesPages.Governorate Created successfully'));
-                redirect()->route('admin.governorates.create');
-            } else {
-                Session::flash('success', __('admin/deliveriesPages.Governorate Created successfully'));
-                redirect()->route('admin.governorates.index');
-            }
+            Session::flash('success', __('admin/deliveriesPages.Governorate Updated successfully'));
+            redirect()->route('admin.governorates.index');
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            Session::flash('error', __("admin/deliveriesPages.Governorate hasn't been Created"));
+            Session::flash('error', __("admin/deliveriesPages.Governorate hasn't been Updated"));
             redirect()->route('admin.governorates.index');
         }
     }

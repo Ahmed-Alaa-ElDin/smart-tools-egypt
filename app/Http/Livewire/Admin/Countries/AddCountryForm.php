@@ -46,7 +46,7 @@ class AddCountryForm extends Component
             Country::create([
                 "name" => [
                     "ar" => $this->name['ar'],
-                    "en" => $this->name['en']
+                    "en" => $this->name['en'] != null ? $this->name['en']: $this->name['ar']
                 ]
             ]);
 

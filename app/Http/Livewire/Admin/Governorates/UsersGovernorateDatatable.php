@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Countries;
+namespace App\Http\Livewire\Admin\Governorates;
 
-use App\Models\Country;
+use App\Models\Governorate;
 use App\Models\User;
 use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
 
-class UsersCountryDatatable extends Component
+class UsersGovernorateDatatable extends Component
 {
     use WithPagination;
 
     public $sortBy;
     public $sortDirection = 'ASC';
     public $perPage;
-    public $country_id;
+    public $governorate_id;
 
     public $search = "";
 
@@ -33,8 +33,7 @@ class UsersCountryDatatable extends Component
     // Render With each update
     public function render()
     {
-        $users  = Country::with('users')->findOrFail($this->country_id)
-            ->users()->with('phones')->with('roles')
+        $users  = Governorate::with('users')->findOrFail($this->governorate_id)->users()->with('phones')->with('roles')
             ->where(function ($query) {
                 return $query
                     ->where('f_name->en', 'like', '%' . $this->search . '%')
@@ -53,7 +52,7 @@ class UsersCountryDatatable extends Component
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
-        return view('livewire.admin.countries.users-country-datatable', compact('users'));
+        return view('livewire.admin.governorates.users-governorate-datatable', compact('users'));
     }
 
     // reset pagination after new search
