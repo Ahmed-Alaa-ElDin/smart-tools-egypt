@@ -177,6 +177,7 @@ return [
         'name.ar'               => 'name in Arabic',
         'name.en'               => 'name in English',
         'country_id'            => 'Country',
+        'governorate_id'        => 'Governorate',
     ],
 
 ];

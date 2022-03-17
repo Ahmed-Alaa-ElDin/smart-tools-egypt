@@ -174,8 +174,27 @@ return [
     "Here you can manage governorate's cities" => "Here you can manage governorate's cities",
     "Here you can manage governorate's users" => "Here you can manage governorate's users",
     "Here you can manage governorate's delivery companies" => "Here you can manage governorate's delivery companies",
+    "All Cities" => "All Cities",
+    "Here you can manage cities" => "Here you can manage cities",
+    "Through this form you can add new city" => "Through this form you can add new city",
+    "Country & Governorate" => "Country & Governorate",
+    "Choose a country" => "Choose a country",
+    "No Countries in the database" => "No Countries in the database",
+    "Choose a governorate" => "Choose a governorate",
+    "No Governorates in the database" => "No Governorates in the database",
+    "Save and Add New City" => "Save and Add New City",
+    "City Created successfully" => "City Created successfully",
+    "City hasn't been Created" => "City hasn't been Created",
 
 
+    "Cities" => "Cities",
+    "Cities" => "Cities",
+    "Cities" => "Cities",
+    "Cities" => "Cities",
+    "Cities" => "Cities",
+    "Cities" => "Cities",
+    "Cities" => "Cities",
+    "Cities" => "Cities",
     "Cities" => "Cities",
 
 

@@ -15,7 +15,7 @@ class CityController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.cities.index');
     }
 
     /**
@@ -25,7 +25,7 @@ class CityController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.cities.create');
     }
 
     /**

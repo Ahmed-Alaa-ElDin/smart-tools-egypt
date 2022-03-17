@@ -189,6 +189,7 @@ return [
         'zones.*.destinations.*.country_id' => 'البلد',
         'zones.*.destinations.*.governorate_id' => 'المحافظة',
         'country_id'            => 'البلد',
+        'governorate_id'        => 'المحافظة',
 
     ],
 

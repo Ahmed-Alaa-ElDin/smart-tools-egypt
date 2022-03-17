@@ -39,7 +39,7 @@
                     <option value="{{ $country->id }}">
                         {{ $country->name }}</option>
                 @empty
-                    <option value="">{{ __('admin/usersPages.No Roles in the database') }}
+                    <option value="">{{ __('admin/usersPages.No Countries in the database') }}
                     </option>
                 @endforelse
             </select>
