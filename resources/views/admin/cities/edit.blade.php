@@ -1,5 +1,5 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Users', 'activePage' => '', 'titlePage' =>
-__('admin/usersPages.Role\'s Permissions List')])
+@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage' =>
+__('admin/deliveriesPages.Edit City')])
 
 @section('content')
     <div class="content">
@@ -7,13 +7,16 @@ __('admin/usersPages.Role\'s Permissions List')])
             {{-- Breadcrumb --}}
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb text-sm">
-                    <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.dashboard') }}">{{ __('admin/usersPages.Dashboard') }}</a></li>
-                    <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.users.index') }}">{{ __('admin/usersPages.All Users') }}</a></li>
-                    <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.roles.index') }}">{{ __('admin/usersPages.Roles Management') }}</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/usersPages.Role\'s Permissions List') }}
+                    <li class="breadcrumb-item hover:text-primary">
+                        <a href="{{ route('admin.dashboard') }}">{{ __('admin/deliveriesPages.Dashboard') }}
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item hover:text-primary">
+                        <a href="{{ route('admin.cities.index') }}">{{ __('admin/deliveriesPages.All Cities') }}
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        {{ __('admin/deliveriesPages.Edit City') }}
                     </li>
                 </ol>
             </nav>
@@ -28,7 +31,9 @@ __('admin/usersPages.Role\'s Permissions List')])
                         <div class="card-header card-header-primary">
                             <div class="row">
                                 <div class="col-12 ltr:text-left rtl:text-right font-bold self-center text-gray-100">
-                                    <p class=""> {{ __('admin/usersPages.Here you can view the list of role\'s permissions') }}</p>
+                                    <p class="">
+                                        {{ __('admin/deliveriesPages.Through this form you can edit city') }}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -36,8 +41,8 @@ __('admin/usersPages.Role\'s Permissions List')])
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
 
-                            {{-- List Start --}}
-                            @livewire('admin.roles.roles-permissions-list',['role_id' => $id])
+                            {{-- Form Start --}}
+                            @livewire('admin.cities.edit-city-form',['city_id' => $city])
 
                         </div>
                     </div>

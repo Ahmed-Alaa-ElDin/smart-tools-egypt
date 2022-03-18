@@ -1,5 +1,5 @@
 @extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage'
-=> __("admin/deliveriesPages.'s Delivery Companies",['name'=>$governorate->name])])
+=> __("admin/deliveriesPages.'s Delivery Companies",['name'=>$city->name])])
 
 @section('content')
     <div class="content">
@@ -10,10 +10,10 @@
                     <li class="breadcrumb-item hover:text-primary"><a
                             href="{{ route('admin.dashboard') }}">{{ __('admin/deliveriesPages.Dashboard') }}</a></li>
                     <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.governorates.index') }}">{{ __('admin/deliveriesPages.All Governorates') }}</a>
+                            href="{{ route('admin.cities.index') }}">{{ __('admin/deliveriesPages.All Cities') }}</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        {{ __("admin/deliveriesPages.'s Delivery Companies", ['name' => $governorate->name]) }}
+                        {{ __("admin/deliveriesPages.'s Delivery Companies", ['name' => $city->name]) }}
                     </li>
                 </ol>
             </nav>
@@ -29,7 +29,7 @@
                             <div class="flex justify-between">
                                 <div class="ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
-                                        {{ __("admin/deliveriesPages.Here you can manage governorate's delivery companies") }}
+                                        {{ __("admin/deliveriesPages.Here you can manage city's delivery companies") }}
                                     </p>
                                 </div>
 
@@ -50,7 +50,7 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Data Table Start --}}
-                            @livewire('admin.governorates.deliveries-governorate-datatable' , ['governorate_id' => $governorate->id])
+                            @livewire('admin.cities.deliveries-city-datatable' , ['city_id' => $city->id])
                             {{-- Data Table End --}}
                         </div>
                     </div>

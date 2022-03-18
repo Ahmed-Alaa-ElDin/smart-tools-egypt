@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Governorates;
+namespace App\Http\Livewire\Admin\Cities;
 
-use App\Models\Governorate;
+use App\Models\City;
 use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class DeletedGovernoratesDatatable extends Component
+class DeletedCitiesDatatable extends Component
 {
     use WithPagination;
 
@@ -17,34 +17,36 @@ class DeletedGovernoratesDatatable extends Component
 
     public $search = "";
 
-    protected $listeners = ['forceDeleteGovernorate', 'restoreGovernorate', 'forceDeleteAllGovernorates', 'restoreAllGovernorates'];
+    protected $listeners = ['forceDeleteCity', 'restoreCity', 'forceDeleteAllCities', 'restoreAllCities'];
 
     // Render Once
     public function mount()
     {
         $this->perPage = Config::get('constants.constants.PAGINATION');
 
-        $this->sortBy = 'governorates.name->' . session('locale');
+        $this->sortBy = 'cities.name->' . session('locale');
     }
 
     // Render With each update
     public function render()
     {
-        $governorates = Governorate::onlyTrashed()->with('country')->with('deliveries')->with('users')->with('cities')
-            ->join('countries','countries.id','=','governorates.country_id')
-            ->select('governorates.*','countries.name as country_name')
+        $cities = City::onlyTrashed()->with('governorate')->with('users')->with('deliveries')
+            ->join('governorates', 'governorates.id', '=', 'governorate_id')
+            ->join('countries', 'countries.id', '=', 'governorates.country_id')
+            ->select('cities.*', 'governorates.name as governorate_name', 'countries.name->' . session('locale') . ' as country_name')
             ->where(function ($query) {
                 return $query
-                    ->where('governorates.name->en', 'like', '%' . $this->search . '%')
+                    ->where('cities.name->en', 'like', '%' . $this->search . '%')
+                    ->orWhere('cities.name->ar', 'like', '%' . $this->search . '%')
                     ->orWhere('governorates.name->ar', 'like', '%' . $this->search . '%')
-                    ->orWhere('countries.name->en', 'like', '%' . $this->search . '%')
-                    ->orWhere('countries.name->ar', 'like', '%' . $this->search . '%');
-
+                    ->orWhere('governorates.name->en', 'like', '%' . $this->search . '%')
+                    ->orWhere('countries.name->ar', 'like', '%' . $this->search . '%')
+                    ->orWhere('countries.name->en', 'like', '%' . $this->search . '%');
             })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
-        return view('livewire.admin.governorates.deleted-governorates-datatable', compact('governorates'));
+        return view('livewire.admin.cities.deleted-cities-datatable', compact('cities'));
     }
 
     // reset pagination after new search
@@ -69,35 +71,35 @@ class DeletedGovernoratesDatatable extends Component
     }
 
     ######## Force Delete #########
-    public function forceDeleteConfirm($governorate_id)
+    public function forceDeleteConfirm($city_id)
     {
         $this->dispatchBrowserEvent('swalConfirm', [
-            "text" => __('admin/deliveriesPages.Are you sure, you want to delete this governorate permanently ?'),
+            "text" => __('admin/deliveriesPages.Are you sure, you want to delete this city permanently ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
             'denyButtonColor' => 'gray',
             'confirmButtonColor' => 'red',
             'focusDeny' => true,
             'icon' => 'warning',
-            'method' => 'forceDeleteGovernorate',
-            'governorate_id' => $governorate_id,
+            'method' => 'forceDeleteCity',
+            'city_id' => $city_id,
         ]);
     }
 
-    public function forceDeleteGovernorate($governorate_id)
+    public function forceDeleteCity($city_id)
     {
         try {
-            $governorate = Governorate::onlyTrashed()->findOrFail($governorate_id);
+            $city = City::onlyTrashed()->findOrFail($city_id);
 
-            $governorate->forceDelete();
+            $city->forceDelete();
 
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('admin/deliveriesPages.Governorate has been deleted permanently successfully'),
+                "text" => __('admin/deliveriesPages.City has been deleted permanently successfully'),
                 'icon' => 'info'
             ]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __("admin/deliveriesPages.Governorate hasn't been deleted permanently"),
+                "text" => __("admin/deliveriesPages.City hasn't been deleted permanently"),
                 'icon' => 'error'
             ]);
         }
@@ -105,35 +107,35 @@ class DeletedGovernoratesDatatable extends Component
     ######## Force Delete #########
 
     ######## Restore #########
-    public function restoreConfirm($governorate_id)
+    public function restoreConfirm($city_id)
     {
         $this->dispatchBrowserEvent('swalConfirm', [
-            "text" => __('admin/deliveriesPages.Are you sure, you want to restore this governorate ?'),
+            "text" => __('admin/deliveriesPages.Are you sure, you want to restore this city ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Confirm'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
             'denyButtonColor' => 'gray',
             'confirmButtonColor' => 'green',
             'focusDeny' => false,
             'icon' => 'warning',
-            'method' => 'restoreGovernorate',
-            'governorate_id' => $governorate_id,
+            'method' => 'restoreCity',
+            'city_id' => $city_id,
         ]);
     }
 
-    public function restoreGovernorate($governorate_id)
+    public function restoreCity($city_id)
     {
         try {
-            $governorate = Governorate::onlyTrashed()->findOrFail($governorate_id);
+            $city = City::onlyTrashed()->findOrFail($city_id);
 
-            $governorate->restore();
+            $city->restore();
 
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('admin/deliveriesPages.Governorate has been restored successfully'),
+                "text" => __('admin/deliveriesPages.City has been restored successfully'),
                 'icon' => 'success'
             ]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __("admin/deliveriesPages.Governorate hasn't been restored"),
+                "text" => __("admin/deliveriesPages.City hasn't been restored"),
                 'icon' => 'error'
             ]);
         }
@@ -145,30 +147,30 @@ class DeletedGovernoratesDatatable extends Component
     public function forceDeleteAllConfirm()
     {
         $this->dispatchBrowserEvent('swalConfirm', [
-            "text" => __('admin/deliveriesPages.Are you sure, you want to delete all governorates permanently ?'),
+            "text" => __('admin/deliveriesPages.Are you sure, you want to delete all cities permanently ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
             'denyButtonColor' => 'gray',
             'confirmButtonColor' => 'red',
             'focusDeny' => false,
             'icon' => 'warning',
-            'method' => 'forceDeleteAllGovernorates',
-            'governorate_id' => ''
+            'method' => 'forceDeleteAllCities',
+            'city_id' => ''
         ]);
     }
 
-    public function forceDeleteAllGovernorates()
+    public function forceDeleteAllCities()
     {
         try {
-            Governorate::onlyTrashed()->forceDelete();
+            City::onlyTrashed()->forceDelete();
 
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('admin/deliveriesPages.All governorates have been deleted successfully'),
+                "text" => __('admin/deliveriesPages.All cities have been deleted successfully'),
                 'icon' => 'info'
             ]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('admin/deliveriesPages.All governorates haven\'t been deleted'),
+                "text" => __('admin/deliveriesPages.All cities haven\'t been deleted'),
                 'icon' => 'error'
             ]);
         }
@@ -180,34 +182,33 @@ class DeletedGovernoratesDatatable extends Component
     public function restoreAllConfirm()
     {
         $this->dispatchBrowserEvent('swalConfirm', [
-            "text" => __('admin/deliveriesPages.Are you sure, you want to restore all governorates ?'),
+            "text" => __('admin/deliveriesPages.Are you sure, you want to restore all cities ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Confirm'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
             'denyButtonColor' => 'gray',
             'confirmButtonColor' => 'green',
             'focusDeny' => false,
             'icon' => 'warning',
-            'method' => 'restoreAllGovernorates',
-            'governorate_id' => '',
+            'method' => 'restoreAllCities',
+            'city_id' => '',
         ]);
     }
 
-    public function restoreAllGovernorates()
+    public function restoreAllCities()
     {
         try {
-            $governorate = Governorate::onlyTrashed()->restore();
+            $governorate = City::onlyTrashed()->restore();
 
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('admin/deliveriesPages.All governorates have been restored successfully'),
+                "text" => __('admin/deliveriesPages.All cities have been restored successfully'),
                 'icon' => 'success'
             ]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('admin/deliveriesPages.All governorates haven\'t been restored'),
+                "text" => __('admin/deliveriesPages.All cities haven\'t been restored'),
                 'icon' => 'error'
             ]);
         }
     }
     ######## Restore All #########
-
 }

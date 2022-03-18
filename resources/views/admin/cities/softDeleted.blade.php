@@ -1,5 +1,5 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage'
-=> __("admin/deliveriesPages.'s Delivery Companies",['name'=>$governorate->name])])
+@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage' =>
+__('admin/deliveriesPages.Deleted Cities')])
 
 @section('content')
     <div class="content">
@@ -10,11 +10,10 @@
                     <li class="breadcrumb-item hover:text-primary"><a
                             href="{{ route('admin.dashboard') }}">{{ __('admin/deliveriesPages.Dashboard') }}</a></li>
                     <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.governorates.index') }}">{{ __('admin/deliveriesPages.All Governorates') }}</a>
+                            href="{{ route('admin.cities.index') }}">{{ __('admin/deliveriesPages.All Cities') }}</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        {{ __("admin/deliveriesPages.'s Delivery Companies", ['name' => $governorate->name]) }}
-                    </li>
+                        {{ __('admin/deliveriesPages.Deleted Cities') }}</li>
                 </ol>
             </nav>
 
@@ -26,32 +25,22 @@
 
                         {{-- Card Head --}}
                         <div class="card-header card-header-primary">
-                            <div class="flex justify-between">
-                                <div class="ltr:text-left rtl:text-right font-bold self-center text-gray-100">
+                            <div class="row">
+                                <div class="col-12 ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
-                                        {{ __("admin/deliveriesPages.Here you can manage governorate's delivery companies") }}
+                                        {{ __('admin/deliveriesPages.Here you can Restore / Permanently delete cities') }}
                                     </p>
                                 </div>
-
-                                {{-- Add New Delivery Button --}}
-                                @can('Add Delivery')
-                                    <div class="ltr:text-right rtl:text-left">
-                                        <a href="{{ route('admin.deliveries.create') }}"
-                                            class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">
-                                            <span class="material-icons rtl:ml-1 ltr:mr-1">
-                                                add
-                                            </span>
-                                            {{ __('admin/deliveriesPages.Add Delivery Company') }}</a>
-                                    </div>
-                                @endcan
                             </div>
                         </div>
 
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
+
                             {{-- Data Table Start --}}
-                            @livewire('admin.governorates.deliveries-governorate-datatable' , ['governorate_id' => $governorate->id])
+                            @livewire('admin.cities.deleted-cities-datatable')
                             {{-- Data Table End --}}
+
                         </div>
                     </div>
                 </div>
@@ -70,8 +59,40 @@
     @livewireScripts
 
     <script>
-        // #### Delivery Soft Delete ####
-        window.addEventListener('swalConfirmSoftDelete', function(e) {
+        // #### City Force Delete ####
+        window.addEventListener('swalConfirm', function(e) {
+            Swal.fire({
+                icon: e.detail.icon,
+                text: e.detail.text,
+                confirmButtonText: e.detail.confirmButtonText,
+                denyButtonText: e.detail.denyButtonText,
+                denyButtonColor: e.detail.denyButtonColor,
+                confirmButtonColor: e.detail.confirmButtonColor,
+                focusDeny: e.detail.focusDeny,
+                showDenyButton: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.emit(e.detail.method, e.detail.city_id);
+                }
+            });
+        });
+
+        window.addEventListener('swalDone', function(e) {
+            Swal.fire({
+                text: e.detail.text,
+                icon: e.detail.icon,
+                position: 'top-right',
+                showConfirmButton: false,
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+            })
+        });
+        // #### City Force Delete ####
+
+
+        // #### Restore ####
+        window.addEventListener('swalRestore', function(e) {
             Swal.fire({
                 icon: 'warning',
                 text: e.detail.text,
@@ -79,16 +100,16 @@
                 confirmButtonText: e.detail.confirmButtonText,
                 denyButtonText: e.detail.denyButtonText,
                 denyButtonColor: 'gray',
-                confirmButtonColor: 'red',
-                focusDeny: true,
+                confirmButtonColor: 'green',
+                focusDeny: false,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit('softDeleteDelivery', e.detail.delivery_id);
+                    Livewire.emit('restoreCity', e.detail.city_id);
                 }
             });
         });
 
-        window.addEventListener('swalDeliveryDeleted', function(e) {
+        window.addEventListener('swalCityRestored', function(e) {
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
@@ -99,21 +120,6 @@
                 timerProgressBar: true,
             })
         });
-        // #### Delivery Soft Delete ####
-
-
-        // #### Delivery Activation / Deactivation ####
-        window.addEventListener('swalDeliveryActivated', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        });
-        // #### Delivery Activation / Deactivation ####
+        // #### Restore ####
     </script>
 @endpush

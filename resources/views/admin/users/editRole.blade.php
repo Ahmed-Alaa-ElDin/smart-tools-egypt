@@ -6,7 +6,7 @@ __('admin/usersPages.Edit Role')])
         <div class="container-fluid">
             {{-- Breadcrumb --}}
             <nav aria-label="breadcrumb" role="navigation">
-                <ol class="breadcrumb">
+                <ol class="breadcrumb text-sm">
                     <li class="breadcrumb-item hover:text-primary"><a
                             href="{{ route('admin.dashboard') }}">{{ __('admin/usersPages.Dashboard') }}</a></li>
                     <li class="breadcrumb-item hover:text-primary"><a

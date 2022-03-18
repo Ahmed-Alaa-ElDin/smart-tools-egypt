@@ -18,17 +18,39 @@
                                 placeholder="{{ __('admin/deliveriesPages.Search ...') }}">
                         </div>
 
-                        {{-- Soft Deleted Countries --}}
-                        @can('Force Delete City')
-                            <div class="ltr:text-right rtl:text-left">
-                                <a href="{{ route('admin.cities.softDeletedCities') }}"
-                                    class="btn btn-sm bg-red-600 hover:bg-red-700 focus:bg-red-600 active:bg-red-600 font-bold">
-                                    <span class="material-icons rtl:ml-2 ltr:mr-2">
-                                        delete_forever
-                                    </span>
-                                    {{ __('admin/deliveriesPages.Soft Deleted Cities') }}</a>
+                        {{-- Manage All --}}
+                        <div class="form-inline col-span-1 justify-center">
+                            <div class="flex justify-center">
+                                <button class="btn btn-success dropdown-toggle btn-round btn-sm text-white font-bold "
+                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="material-icons">
+                                        manage_history
+                                    </span> &nbsp; {{ __('admin/deliveriesPages.Manage All') }}
+                                    &nbsp;</button>
+                                <div class="dropdown-menu">
+
+                                    @can('Restore Country')
+                                        <a href="#" wire:click.prevent="restoreAllConfirm"
+                                            class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600">
+                                            <span class="material-icons">
+                                                restore
+                                            </span>
+                                            &nbsp;&nbsp;
+                                            {{ __('admin/deliveriesPages.Restore All') }}</a>
+                                    @endcan
+
+                                    @can('Force Delete Country')
+                                        <a href="#" wire:click.prevent="forceDeleteAllConfirm"
+                                            class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600">
+                                            <span class="material-icons">
+                                                delete
+                                            </span>
+                                            &nbsp;&nbsp;
+                                            {{ __('admin/deliveriesPages.Delete All Permanently') }}</a>
+                                    @endcan
+                                </div>
                             </div>
-                        @endcan
+                        </div>
 
                         {{-- Pagination Number --}}
                         <div class="form-inline justify-end my-2">
@@ -133,8 +155,7 @@
                                     {{-- Users. No. --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
                                         @if ($city->users->count())
-                                            <a href="{{ route('admin.cities.usersCity', [$city->id]) }}"
-                                                title="{{ __('admin/deliveriesPages.View') }}"
+                                            <a href="#" title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
                                                     {{ $city->users->groupBy('id')->count('id') }}
@@ -155,8 +176,7 @@
                                     {{-- Deliverry Comp. No. --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
                                         @if ($city->deliveries->count())
-                                            <a href="{{ route('admin.cities.deliveriesCity', [$city->id]) }}"
-                                                title="{{ __('admin/deliveriesPages.View') }}"
+                                            <a href="#" title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
                                                     {{ $city->deliveries->groupBy('id')->count('id') }}
@@ -177,21 +197,22 @@
 
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
-                                        {{-- Edit Button --}}
-                                        @can('Edit City')
-                                            <a href="{{ route('admin.cities.edit', [$city->id]) }}"
-                                                title="{{ __('admin/deliveriesPages.Edit') }}" class="m-0">
+                                        {{-- Restore Button --}}
+                                        @can('Restore Delivery')
+                                            <a href="#" title="{{ __('admin/deliveriesPages.Restore') }}"
+                                                wire:click.prevent="restoreConfirm({{ $city->id }})"
+                                                class="m-0">
                                                 <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
-                                                    edit
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-green-500 hover:bg-green-700 rounded">
+                                                    restore
                                                 </span>
                                             </a>
                                         @endcan
 
-                                        {{-- Delete Button --}}
-                                        @can('Soft Delete City')
-                                            <a href="#" title="{{ __('admin/deliveriesPages.Delete') }}"
-                                                wire:click.prevent="deleteConfirm({{ $city->id }})"
+                                        {{-- Permanent Delete Button --}}
+                                        @can('Force Delete Delivery')
+                                            <a href="#" title="{{ __('admin/deliveriesPages.Delete Permanently') }}"
+                                                wire:click.prevent="forceDeleteConfirm({{ $city->id }})"
                                                 class="m-0">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
@@ -199,6 +220,7 @@
                                                 </span>
                                             </a>
                                         @endcan
+
                                     </td>
                                 </tr>
                             @empty

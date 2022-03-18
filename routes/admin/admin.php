@@ -56,6 +56,8 @@ Route::group([
     Route::get('/governorates/deleted-governorates', [GovernorateController::class, 'softDeletedGovernorates'])->name('governorates.softDeletedGovernorates');
     Route::resource('/governorates', GovernorateController::class);
 
+    Route::get('/cities/{city}/users-city', [CityController::class, 'usersCity'])->name('cities.usersCity');
+    Route::get('/cities/{city}/deliveries-city', [CityController::class, 'deliveriesCity'])->name('cities.deliveriesCity');
     Route::get('/cities/deleted-cities', [CityController::class, 'softDeletedCities'])->name('cities.softDeletedCities');
     Route::resource('/cities', CityController::class);
     // ############## Delivery System Routes End ##############

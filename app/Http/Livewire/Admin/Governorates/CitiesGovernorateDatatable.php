@@ -32,17 +32,24 @@ class CitiesGovernorateDatatable extends Component
 
     public function render()
     {
-        $governorate  = Governorate::with('cities')->with('country')->findOrFail($this->governorate_id);
-        $cities = $governorate->cities()->with('governorate')->with('users')->with('deliveries')
+        $cities = City::with('governorate')->with('users')->with('deliveries')
+            ->join('governorates', 'governorates.id', '=', 'governorate_id')
+            ->join('countries', 'countries.id', '=', 'governorates.country_id')
+            ->select('cities.*', 'governorates.name as governorate_name', 'countries.name->' . session('locale') . ' as country_name')
+            ->where('governorates.id', $this->governorate_id)
             ->where(function ($query) {
                 return $query
                     ->where('cities.name->en', 'like', '%' . $this->search . '%')
-                    ->orWhere('cities.name->ar', 'like', '%' . $this->search . '%');
+                    ->orWhere('cities.name->ar', 'like', '%' . $this->search . '%')
+                    ->orWhere('governorates.name->ar', 'like', '%' . $this->search . '%')
+                    ->orWhere('governorates.name->en', 'like', '%' . $this->search . '%')
+                    ->orWhere('countries.name->ar', 'like', '%' . $this->search . '%')
+                    ->orWhere('countries.name->en', 'like', '%' . $this->search . '%');
             })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
-        return view('livewire.admin.governorates.cities-governorate-datatable', compact('governorate', 'cities'));
+        return view('livewire.admin.governorates.cities-governorate-datatable', compact('cities'));
     }
 
     // reset pagination after new search

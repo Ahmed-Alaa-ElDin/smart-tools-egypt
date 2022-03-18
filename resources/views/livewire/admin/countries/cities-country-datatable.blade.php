@@ -56,14 +56,8 @@
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Name') }} &nbsp;
                                     @include('partials._sort_icon', [
-                                        'field' => 'cities->name->' . session('locale'),
+                                        'field' => 'cities.name->' . session('locale'),
                                     ])
-                                </th>
-
-                                {{-- Country Name --}}
-                                <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
-                                    {{ __('admin/deliveriesPages.Country Name') }}
                                 </th>
 
                                 {{-- Governorate Name --}}
@@ -71,20 +65,28 @@
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Governorate Name') }}
                                     @include('partials._sort_icon', [
-                                        'field' => 'name->' . session('locale'),
+                                        'field' => 'governorates.name->' . session('locale'),
                                     ])
+                                </th>
 
+                                {{-- Country Name --}}
+                                <th wire:click="sortBy('country_name')" scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                    {{ __('admin/deliveriesPages.Country Name') }}
+                                    @include('partials._sort_icon', [
+                                        'field' => 'country_name',
+                                    ])
                                 </th>
 
                                 {{-- Users No. --}}
                                 <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
                                     {{ __('admin/deliveriesPages.Users No.') }}
                                 </th>
 
                                 {{-- Deliverry Comp. No. --}}
                                 <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
                                     {{ __('admin/deliveriesPages.Delivery Comp. No.') }}
                                 </th>
 
@@ -110,15 +112,6 @@
                                         </div>
                                     </td>
 
-                                    {{-- Country Name --}}
-                                    <td class="px-6 py-2 text-center whitespace-nowrap">
-                                        <div class="flex items-center content-center justify-center">
-                                            <div class="text-sm font-medium text-gray-900">
-                                                {{ $country->name }}
-                                            </div>
-                                        </div>
-                                    </td>
-
                                     {{-- Governorate Name --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
                                         <div class="flex items-center content-center justify-center">
@@ -128,10 +121,20 @@
                                         </div>
                                     </td>
 
+                                    {{-- Country Name --}}
+                                    <td class="px-6 py-2 text-center whitespace-nowrap">
+                                        <div class="flex items-center content-center justify-center">
+                                            <div class="text-sm font-medium text-gray-900">
+                                                {{ $city->country_name }}
+                                            </div>
+                                        </div>
+                                    </td>
+
                                     {{-- Users. No. --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
                                         @if ($city->users->count())
-                                            <a href="#" title="{{ __('admin/deliveriesPages.View') }}"
+                                            <a href="{{ route('admin.cities.usersCity', [$city->id]) }}"
+                                                title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
                                                     {{ $city->users->groupBy('id')->count('id') }}
@@ -152,7 +155,8 @@
                                     {{-- Deliverry Comp. No. --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
                                         @if ($city->deliveries->count())
-                                            <a href="#" title="{{ __('admin/deliveriesPages.View') }}"
+                                            <a href="{{ route('admin.cities.deliveriesCity', [$city->id]) }}"
+                                                title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
                                                     {{ $city->deliveries->groupBy('id')->count('id') }}

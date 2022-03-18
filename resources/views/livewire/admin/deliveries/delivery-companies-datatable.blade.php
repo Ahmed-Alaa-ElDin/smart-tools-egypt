@@ -138,7 +138,7 @@
 
                                         {{-- Delivery Company Details --}}
                                         @can("See Delivery's Details")
-                                            <a href="#" title="{{ __('admin/deliveriesPages.View') }}"
+                                            <a href="{{ route('admin.deliveries.show', ['delivery' => $delivery->id]) }}"title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-0">
 
                                                 <span

@@ -6,7 +6,7 @@ __('admin/deliveriesPages.Deleted Countries')])
         <div class="container-fluid">
             {{-- Breadcrumb --}}
             <nav aria-label="breadcrumb" role="navigation">
-                <ol class="breadcrumb">
+                <ol class="breadcrumb text-sm">
                     <li class="breadcrumb-item hover:text-primary"><a
                             href="{{ route('admin.dashboard') }}">{{ __('admin/deliveriesPages.Dashboard') }}</a></li>
                     <li class="breadcrumb-item hover:text-primary"><a

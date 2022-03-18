@@ -1,5 +1,5 @@
 @extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage'
-=> __("admin/deliveriesPages.'s Delivery Companies",['name'=>$governorate->name])])
+=> __("admin/deliveriesPages.'s Users",['name'=>$city->name])])
 
 @section('content')
     <div class="content">
@@ -10,10 +10,10 @@
                     <li class="breadcrumb-item hover:text-primary"><a
                             href="{{ route('admin.dashboard') }}">{{ __('admin/deliveriesPages.Dashboard') }}</a></li>
                     <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.governorates.index') }}">{{ __('admin/deliveriesPages.All Governorates') }}</a>
+                            href="{{ route('admin.cities.index') }}">{{ __('admin/deliveriesPages.All Cities') }}</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        {{ __("admin/deliveriesPages.'s Delivery Companies", ['name' => $governorate->name]) }}
+                        {{ __("admin/deliveriesPages.'s Users", ['name' => $city->name]) }}
                     </li>
                 </ol>
             </nav>
@@ -27,21 +27,20 @@
                         {{-- Card Head --}}
                         <div class="card-header card-header-primary">
                             <div class="flex justify-between">
-                                <div class="ltr:text-left rtl:text-right font-bold self-center text-gray-100">
+                                <div class=" ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
-                                        {{ __("admin/deliveriesPages.Here you can manage governorate's delivery companies") }}
-                                    </p>
+                                        {{ __("admin/deliveriesPages.Here you can manage city's users") }}</p>
                                 </div>
 
-                                {{-- Add New Delivery Button --}}
-                                @can('Add Delivery')
+                                {{-- Add New User Button --}}
+                                @can('Add User')
                                     <div class="ltr:text-right rtl:text-left">
-                                        <a href="{{ route('admin.deliveries.create') }}"
+                                        <a href="{{ route('admin.users.create') }}"
                                             class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">
                                             <span class="material-icons rtl:ml-1 ltr:mr-1">
                                                 add
                                             </span>
-                                            {{ __('admin/deliveriesPages.Add Delivery Company') }}</a>
+                                            {{ __('admin/deliveriesPages.Add User') }}</a>
                                     </div>
                                 @endcan
                             </div>
@@ -50,7 +49,7 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Data Table Start --}}
-                            @livewire('admin.governorates.deliveries-governorate-datatable' , ['governorate_id' => $governorate->id])
+                            @livewire('admin.cities.users-city-datatable' , ['city_id' => $city->id])
                             {{-- Data Table End --}}
                         </div>
                     </div>
@@ -70,7 +69,7 @@
     @livewireScripts
 
     <script>
-        // #### Delivery Soft Delete ####
+        // #### User Soft Delete ####
         window.addEventListener('swalConfirmSoftDelete', function(e) {
             Swal.fire({
                 icon: 'warning',
@@ -83,12 +82,12 @@
                 focusDeny: true,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit('softDeleteDelivery', e.detail.delivery_id);
+                    Livewire.emit('softDeleteUser', e.detail.user_id);
                 }
             });
         });
 
-        window.addEventListener('swalDeliveryDeleted', function(e) {
+        window.addEventListener('swalUserDeleted', function(e) {
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
@@ -99,11 +98,31 @@
                 timerProgressBar: true,
             })
         });
-        // #### Delivery Soft Delete ####
+        // #### User Soft Delete ####
 
+        window.addEventListener('swalEditRolesSelect', function(e) {
+            Swal.fire({
+                title: e.detail.title,
+                input: 'select',
+                inputOptions: JSON.parse(e.detail.data),
+                inputValue: e.detail.selected,
+                customClass: {
+                    input: 'role-grapper rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300',
+                },
+                showDenyButton: true,
+                confirmButtonText: e.detail.confirmButtonText,
+                denyButtonText: e.detail.denyButtonText,
+                denyButtonColor: 'gray',
+                confirmButtonColor: 'green',
 
-        // #### Delivery Activation / Deactivation ####
-        window.addEventListener('swalDeliveryActivated', function(e) {
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.emit('editRoles', e.detail.user_id, result.value);
+                }
+            });
+        });
+
+        window.addEventListener('swalUserRoleChanged', function(e) {
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
@@ -114,6 +133,5 @@
                 timerProgressBar: true,
             })
         });
-        // #### Delivery Activation / Deactivation ####
     </script>
 @endpush

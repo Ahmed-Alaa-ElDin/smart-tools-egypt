@@ -175,7 +175,7 @@
 
                                         {{-- User Details --}}
                                         @can("See User's Details")
-                                            <a href="#" title="{{ __('admin/usersPages.View') }}" class="m-0">
+                                            <a href="{{ route('admin.users.show', ['user' => $user->id]) }}" title="{{ __('admin/usersPages.View') }}" class="m-0">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
                                                     visibility

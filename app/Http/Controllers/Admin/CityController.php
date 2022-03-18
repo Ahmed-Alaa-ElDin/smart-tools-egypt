@@ -56,9 +56,9 @@ class CityController extends Controller
      * @param  \App\Models\Admin\City  $city
      * @return \Illuminate\Http\Response
      */
-    public function edit(City $city)
+    public function edit($city)
     {
-        //
+        return view('admin.cities.edit',compact('city'));
     }
 
     /**
@@ -83,4 +83,20 @@ class CityController extends Controller
     {
         //
     }
+
+    public function softDeletedCities()
+    {
+        return view('admin.cities.softDeleted');
+    }
+
+    public function usersCity(City $city)
+    {
+        return view('admin.cities.users',compact('city'));
+    }
+
+    public function deliveriesCity(City $city)
+    {
+        return view('admin.cities.deliveries',compact('city'));
+    }
+
 }
