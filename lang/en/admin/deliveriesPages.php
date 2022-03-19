@@ -203,6 +203,8 @@ return [
     "All cities haven\'t been restored" => "All cities haven\'t been restored",
     "Here you can manage city's users" => "Here you can manage city's users",
     "Here you can manage city's delivery companies" => "Here you can manage city's delivery companies",
+    "Edit City" => "Edit City",
+    "Through this form you can edit the city" => "Through this form you can edit the city",
 
 
     "Cities" => "Cities",

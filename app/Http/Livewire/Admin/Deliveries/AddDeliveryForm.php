@@ -42,6 +42,9 @@ class AddDeliveryForm extends Component
     {
         return [
             'phones.*.phone.digits_between' => __('validation.The phone numbers must contain digits between 8 & 11'),
+            'attributes' => [
+                'phones.*.phone' => "phone"
+            ]
         ];
     }
 

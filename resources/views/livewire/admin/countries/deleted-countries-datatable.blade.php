@@ -83,27 +83,39 @@
                                 </th>
 
                                 {{-- Governorates No. --}}
-                                <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
+                                <th wire:click="sortBy('governorates_count')" scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Governorates No.') }}
+                                    @include('partials._sort_icon', [
+                                        'field' => 'governorates_count',
+                                    ])
                                 </th>
 
                                 {{-- Cities No. --}}
-                                <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
+                                <th wire:click="sortBy('cities_count')" scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Cities No.') }}
+                                    @include('partials._sort_icon', [
+                                        'field' => 'cities_count',
+                                    ])
                                 </th>
 
                                 {{-- Users No. --}}
-                                <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
+                                <th wire:click="sortBy('users_count')" scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Users No.') }}
+                                    @include('partials._sort_icon', [
+                                        'field' => 'users_count',
+                                    ])
                                 </th>
 
                                 {{-- Deliverry Comp. No. --}}
-                                <th scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
+                                <th wire:click="sortBy('deliveries_count')" scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Delivery Comp. No.') }}
+                                    @include('partials._sort_icon', [
+                                        'field' => 'deliveries_count',
+                                    ])
                                 </th>
 
                                 {{-- Manage --}}
@@ -130,12 +142,12 @@
 
                                     {{-- Governorates No. --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
-                                        @if ($country->governorates->count())
+                                        @if ($country->governorates_count)
                                             <a href="{{ route('admin.countries.governoratesCountry', [$country->id]) }}"
                                                 title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
-                                                    {{ $country->governorates->count() }}
+                                                    {{ $country->governorates_count }}
                                                 </span>
 
                                                 <span class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">
@@ -152,11 +164,11 @@
 
                                     {{-- Cities No. --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
-                                        @if ($country->cities->count())
+                                        @if ($country->cities_count)
                                             <a href="#" title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
-                                                    {{ $country->cities->count() }}
+                                                    {{ $country->cities_count }}
                                                 </span>
 
                                                 <span class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">
@@ -173,11 +185,12 @@
 
                                     {{-- Users. No. --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
-                                        @if ($country->users->count())
-                                            <a href="#" title="{{ __('admin/deliveriesPages.View') }}"
+                                        @if ($country->users_count)
+                                            <a href="{{ route('admin.countries.usersCountry', [$country->id]) }}"
+                                                title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
-                                                    {{ $country->users->count() }}
+                                                    {{ $country->users_count }}
                                                 </span>
 
                                                 <span class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">
@@ -194,11 +207,11 @@
 
                                     {{-- Deliverry Comp. No. --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
-                                        @if ($country->deliveries->count())
-                                            <a href="#" title="{{ __('admin/deliveriesPages.View') }}"
+                                        @if ($country->deliveries_count)
+                                            <a href="{{ route('admin.countries.deliveriesCountry', [$country->id]) }}" title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
-                                                    {{ $country->deliveries->count() }}
+                                                    {{ $country->deliveries_count }}
                                                 </span>
 
                                                 <span class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">

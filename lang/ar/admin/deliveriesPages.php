@@ -207,5 +207,7 @@ return [
     "All cities haven\'t been restored" => "لم يتم استعادة جميع المناطق",
     "Here you can manage city's users" => "من خلال هذه الصفحة يمكنك التحكم بالمستخدمين القاطنين بمنطقة معين",
     "Here you can manage city's delivery companies" => "من خلال هذه الصفحة يمكنك التحكم بالشركات التي تقوم بالشحن إلى منطقة معين",
+    "Edit City" => "تعديل المنطقة",
+    "Through this form you can edit the city" => "من خلال هذه الصفحة يمكنك تحديث بيانات المنطقة",
 
 ];

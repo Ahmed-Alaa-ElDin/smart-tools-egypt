@@ -93,43 +93,51 @@
 
                                         {{-- Permissions Numbers --}}
                                         <td class="px-6 py-2 text-center whitespace-nowrap">
-                                            <div class="text-sm text-gray-500">
-                                                {{ $role->permissions_count }}
-                                            </div>
+                                            @if ($role->permissions_count)
+                                                <a href="{{ route('admin.roles.showPermissions', [$role->id]) }}"
+                                                    title="{{ __('admin/usersPages.View permissions List') }}"
+                                                    class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
+                                                    <span class="bg-white rounded py-1 px-2">
+                                                        {{ $role->permissions_count }}
+                                                    </span>
+
+                                                    <span
+                                                        class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">
+                                                        visibility
+                                                    </span>
+                                                </a>
+                                            @else
+                                                <div
+                                                    class="m-auto text-sm bg-red-400 rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
+                                                    <span class="bg-white rounded py-1 px-2">0</span>
+                                                </div>
+                                            @endif
                                         </td>
 
-                                        {{-- User Numbers --}}
+                                        {{-- Users. No. --}}
                                         <td class="px-6 py-2 text-center whitespace-nowrap">
-                                            <div class="text-sm text-gray-500">
-                                                {{ $role->users_count }}
-                                            </div>
+                                            @if ($role->users_count)
+                                                <a href="{{ route('admin.roles.showUsers', [$role->id]) }}"
+                                                    title="{{ __('admin/usersPages.View Users List') }}"
+                                                    class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
+                                                    <span class="bg-white rounded py-1 px-2">
+                                                        {{ $role->users_count }}
+                                                    </span>
+
+                                                    <span
+                                                        class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">
+                                                        visibility
+                                                    </span>
+                                                </a>
+                                            @else
+                                                <div
+                                                    class="m-auto text-sm bg-red-400 rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
+                                                    <span class="bg-white rounded py-1 px-2">0</span>
+                                                </div>
+                                            @endif
                                         </td>
 
                                         <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
-
-                                            {{-- Permissions List --}}
-                                            @can("See Role's Permissions")
-                                                <a href="{{ route('admin.roles.showPermissions', [$role->id]) }}"
-                                                    title="{{ __('admin/usersPages.View permissions List') }}"
-                                                    class="m-0">
-                                                    <span
-                                                        class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
-                                                        key
-                                                    </span>
-                                                </a>
-                                            @endcan
-
-                                            {{-- Users List --}}
-                                            @can("See Role's Users")
-                                                <a href="{{ route('admin.roles.showUsers', [$role->id]) }}"
-                                                    title="{{ __('admin/usersPages.View Users List') }}"
-                                                    class="m-0">
-                                                    <span
-                                                        class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
-                                                        people
-                                                    </span>
-                                                </a>
-                                            @endcan
 
                                             {{-- Edit Button --}}
                                             @can('Edit Role')

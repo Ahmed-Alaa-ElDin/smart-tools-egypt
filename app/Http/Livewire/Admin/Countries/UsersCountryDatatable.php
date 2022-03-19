@@ -33,7 +33,7 @@ class UsersCountryDatatable extends Component
     // Render With each update
     public function render()
     {
-        $users  = Country::with('users')->findOrFail($this->country_id)
+        $users  = Country::withTrashed()->with('users')->findOrFail($this->country_id)
             ->users()->with('phones')->with('roles')
             ->where(function ($query) {
                 return $query

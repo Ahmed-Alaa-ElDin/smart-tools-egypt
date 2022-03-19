@@ -26,20 +26,27 @@ class GovernoratesCountryDatatable extends Component
 
         $this->perPage = Config::get('constants.constants.PAGINATION');
 
-        $this->sortBy = 'name->' . session('locale');
+        $this->sortBy = 'governorates.name->' . session('locale');
     }
 
     public function render()
     {
         $governorates = Governorate::with('country')->with('deliveries')->with('users')->with('cities')
-            ->where('country_id', $this->country_id)
+            ->join('countries', 'countries.id', '=', 'governorates.country_id')
+            ->select('governorates.*', 'countries.name as country_name')
+            ->withCount('users')
+            ->withCount('deliveries')
+            ->withCount('cities')
+            ->where('country_id',$this->country_id)
             ->where(function ($query) {
                 return $query
-                    ->where('name->en', 'like', '%' . $this->search . '%')
-                    ->orWhere('name->ar', 'like', '%' . $this->search . '%');
+                    ->where('governorates.name->en', 'like', '%' . $this->search . '%')
+                    ->orWhere('governorates.name->ar', 'like', '%' . $this->search . '%')
+                    ->orWhere('countries.name->en', 'like', '%' . $this->search . '%')
+                    ->orWhere('countries.name->ar', 'like', '%' . $this->search . '%');
             })
             ->orderBy($this->sortBy, $this->sortDirection)
-            ->paginate($this->perPage);;
+            ->paginate($this->perPage);
 
         return view('livewire.admin.countries.governorates-country-datatable', compact('governorates'));
     }

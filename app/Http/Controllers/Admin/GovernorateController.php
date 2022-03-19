@@ -89,18 +89,24 @@ class GovernorateController extends Controller
         return view('admin.governorates.softDeleted');
     }
 
-    public function citiesGovernorate(Governorate $governorate)
+    public function citiesGovernorate($governorate)
     {
+        $governorate = Governorate::withTrashed()->findOrFail($governorate);
+
         return view('admin.governorates.cities',compact('governorate'));
     }
 
-    public function usersGovernorate(Governorate $governorate)
+    public function usersGovernorate($governorate)
     {
+        $governorate = Governorate::withTrashed()->findOrFail($governorate);
+
         return view('admin.governorates.users',compact('governorate'));
     }
 
-    public function deliveriesGovernorate(Governorate $governorate)
+    public function deliveriesGovernorate($governorate)
     {
+        $governorate = Governorate::withTrashed()->findOrFail($governorate);
+
         return view('admin.governorates.deliveries',compact('governorate'));
     }
 

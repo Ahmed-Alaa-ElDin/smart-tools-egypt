@@ -34,6 +34,8 @@ class DeletedCitiesDatatable extends Component
             ->join('governorates', 'governorates.id', '=', 'governorate_id')
             ->join('countries', 'countries.id', '=', 'governorates.country_id')
             ->select('cities.*', 'governorates.name as governorate_name', 'countries.name->' . session('locale') . ' as country_name')
+            ->withCount('users')
+            ->withCount('deliveries')
             ->where(function ($query) {
                 return $query
                     ->where('cities.name->en', 'like', '%' . $this->search . '%')

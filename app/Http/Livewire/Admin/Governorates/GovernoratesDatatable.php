@@ -31,15 +31,17 @@ class GovernoratesDatatable extends Component
     public function render()
     {
         $governorates = Governorate::with('country')->with('deliveries')->with('users')->with('cities')
-            ->join('countries','countries.id','=','governorates.country_id')
-            ->select('governorates.*','countries.name as country_name')
+            ->join('countries', 'countries.id', '=', 'governorates.country_id')
+            ->select('governorates.*', 'countries.name as country_name')
+            ->withCount('users')
+            ->withCount('deliveries')
+            ->withCount('cities')
             ->where(function ($query) {
                 return $query
                     ->where('governorates.name->en', 'like', '%' . $this->search . '%')
                     ->orWhere('governorates.name->ar', 'like', '%' . $this->search . '%')
                     ->orWhere('countries.name->en', 'like', '%' . $this->search . '%')
                     ->orWhere('countries.name->ar', 'like', '%' . $this->search . '%');
-
             })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);

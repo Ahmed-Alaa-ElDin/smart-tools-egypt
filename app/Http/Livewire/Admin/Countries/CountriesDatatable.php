@@ -31,8 +31,15 @@ class CountriesDatatable extends Component
     public function render()
     {
         $countries = Country::with('deliveries')->with('governorates')->with('users')->with('cities')
-            ->where('name->en', 'like', '%' . $this->search . '%')
-            ->orWhere('name->ar', 'like', '%' . $this->search . '%')
+            ->withCount('users')
+            ->withCount('deliveries')
+            ->withCount('cities')
+            ->withCount('governorates')
+            ->where(function ($query) {
+                return $query
+                    ->where('name->en', 'like', '%' . $this->search . '%')
+                    ->orWhere('name->ar', 'like', '%' . $this->search . '%');
+            })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 

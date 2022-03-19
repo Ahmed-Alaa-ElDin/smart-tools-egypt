@@ -32,7 +32,7 @@ __('admin/deliveriesPages.Edit City')])
                             <div class="row">
                                 <div class="col-12 ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
-                                        {{ __('admin/deliveriesPages.Through this form you can edit city') }}
+                                        {{ __('admin/deliveriesPages.Through this form you can edit the city') }}
                                     </p>
                                 </div>
                             </div>

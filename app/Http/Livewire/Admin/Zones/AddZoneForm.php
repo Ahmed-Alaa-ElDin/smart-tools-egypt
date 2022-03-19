@@ -252,6 +252,7 @@ class AddZoneForm extends Component
 
         DB::beginTransaction();
 
+        $this->delivery->destinations()->delete();
         $this->delivery->zones()->delete();
 
         try {

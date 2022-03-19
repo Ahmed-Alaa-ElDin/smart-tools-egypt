@@ -61,7 +61,7 @@
                 <select
                     class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('role') border-red-900 border-2 @enderror"
                     wire:model.lazy="governorate_id" id="governorate" tabindex="8">
-                    @if ($governorates->count())
+                    @if ($governorates_count)
                         <option value="">{{ __('admin/deliveriesPages.Choose a governorate') }}</option>
                         @foreach ($governorates as $governorate)
                             <option value="{{ $governorate->id }}"

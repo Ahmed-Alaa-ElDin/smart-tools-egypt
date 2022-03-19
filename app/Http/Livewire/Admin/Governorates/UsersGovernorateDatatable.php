@@ -33,7 +33,7 @@ class UsersGovernorateDatatable extends Component
     // Render With each update
     public function render()
     {
-        $users  = Governorate::with('users')->findOrFail($this->governorate_id)->users()->with('phones')->with('roles')
+        $users  = Governorate::withTrashed()->with('users')->findOrFail($this->governorate_id)->users()->with('phones')->with('roles')
             ->where(function ($query) {
                 return $query
                     ->where('f_name->en', 'like', '%' . $this->search . '%')

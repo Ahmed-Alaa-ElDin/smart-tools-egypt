@@ -89,23 +89,31 @@ class CountryController extends Controller
         return view('admin.countries.softDeleted');
     }
 
-    public function governoratesCountry(Country $country)
+    public function governoratesCountry($country)
     {
+        $country = Country::withTrashed()->findOrFail($country);
+
         return view('admin.countries.governorates',compact('country'));
     }
 
-    public function citiesCountry(Country $country)
+    public function citiesCountry($country)
     {
+        $country = Country::withTrashed()->findOrFail($country);
+
         return view('admin.countries.cities',compact('country'));
     }
 
-    public function usersCountry(Country $country)
+    public function usersCountry($country)
     {
+        $country = Country::withTrashed()->findOrFail($country);
+
         return view('admin.countries.users',compact('country'));
     }
 
-    public function deliveriesCountry(Country $country)
+    public function deliveriesCountry($country)
     {
+        $country = Country::withTrashed()->findOrFail($country);
+
         return view('admin.countries.deliveries',compact('country'));
     }
 

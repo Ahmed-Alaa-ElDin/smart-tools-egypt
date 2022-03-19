@@ -31,6 +31,11 @@ class DeletedCountriesDatatable extends Component
     public function render()
     {
         $countries = Country::onlyTrashed()->with('deliveries')->with('governorates')->with('users')->with('cities')
+            ->withCount('deliveries')
+            ->withCount('governorates')
+            ->withCount('users')
+            ->withCount('cities')
+
             ->where(function ($query) {
                 return $query
                     ->where('name->en', 'like', '%' . $this->search . '%')

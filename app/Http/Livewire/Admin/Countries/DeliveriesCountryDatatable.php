@@ -34,7 +34,7 @@ class DeliveriesCountryDatatable extends Component
     // Render With each update
     public function render()
     {
-        $deliveries = Country::with('deliveries')->findOrFail($this->country_id)
+        $deliveries = Country::withTrashed()->with('deliveries')->findOrFail($this->country_id)
             ->deliveries()->with('phones')
             ->where(function ($query) {
                 return $query->where('name->en', 'like', '%' . $this->search . '%')

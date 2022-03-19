@@ -33,7 +33,7 @@ class DeliveriesGovernorateDatatable extends Component
     // Render With each update
     public function render()
     {
-        $deliveries = Governorate::with('deliveries')->findOrFail($this->governorate_id)
+        $deliveries = Governorate::withTrashed()->with('deliveries')->findOrFail($this->governorate_id)
             ->deliveries()->with('phones')
             ->where(function ($query)
             {

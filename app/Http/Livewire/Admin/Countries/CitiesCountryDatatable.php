@@ -37,6 +37,8 @@ class CitiesCountryDatatable extends Component
             ->join('governorates', 'governorates.id', '=', 'governorate_id')
             ->join('countries', 'countries.id', '=', 'governorates.country_id')
             ->select('cities.*', 'governorates.name as governorate_name', 'countries.name->' . session('locale') . ' as country_name')
+            ->withCount('users')
+            ->withCount('deliveries')
             ->where('countries.id',$this->country_id)
             ->where(function ($query) {
                 return $query
