@@ -27,9 +27,9 @@ return new class extends Migration
             $table->integer('points')->default(0);
             $table->integer('visit_num')->default(1)->unsigned();
             $table->timestamp('last_visit_at')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->softDeletes();
-            $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
         });
     }

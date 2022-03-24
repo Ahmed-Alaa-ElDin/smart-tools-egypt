@@ -41,6 +41,18 @@ class AddRoleForm extends Component
         $this->validateOnly($field);
     }
 
+    // Select All Permissions
+    public function selectAll()
+    {
+        $this->selectedPermissions = Permission::get()->pluck('name')->toArray();
+    }
+
+    // Deselect All Permissions
+    public function deselectAll()
+    {
+        $this->selectedPermissions = [];
+    }
+
     // Final Validate and add to database
     public function save($new = false)
     {

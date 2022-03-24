@@ -83,6 +83,12 @@ class User extends Authenticatable
         return $this->hasMany(Phone::class);
     }
 
+    // One to many relationship  User --> Products
+    public function products()
+    {
+        return $this->hasMany(Product::class,'created_by');
+    }
+
     // One to many through relationship  User --> Countries
     public function countries()
     {

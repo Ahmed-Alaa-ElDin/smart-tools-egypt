@@ -32,7 +32,7 @@ class CitiesGovernorateDatatable extends Component
 
     public function render()
     {
-        $cities = City::with('governorate')->with('users')->with('deliveries')
+        $cities = City::with('governorate','users','deliveries')
             ->join('governorates', 'governorates.id', '=', 'governorate_id')
             ->join('countries', 'countries.id', '=', 'governorates.country_id')
             ->select('cities.*', 'governorates.name as governorate_name', 'countries.name->' . session('locale') . ' as country_name')

@@ -22,5 +22,14 @@ return [
     'Countries'                 =>      'البلاد',
     'Governorates'              =>      'المحافظات',
     'Cities'                    =>      'المناطق',
+    'Categories System'         =>      'أقسام المنتجات',
+    'Super Categories'          =>      'الأقسام الرئيسية',
+    'Categories'                =>      'الأقسام الفرعية',
+    'Sub Categories'            =>      'الأقسام المباشرة',
+    'Products'                  =>      'المنتجات',
+    'All Products'              =>      'جميع المنتجات',
+    'Add Product'               =>      'إضافة منتج',
+    'Soft Deleted Products'     =>      'المنتجات المحذوفة مؤقتاً',
+    'Brands'                    =>      'العلامات التجارية',
 
 ];

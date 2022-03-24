@@ -34,7 +34,7 @@ class UsersCountryDatatable extends Component
     public function render()
     {
         $users  = Country::withTrashed()->with('users')->findOrFail($this->country_id)
-            ->users()->with('phones')->with('roles')
+            ->users()->with('phones','roles')
             ->where(function ($query) {
                 return $query
                     ->where('f_name->en', 'like', '%' . $this->search . '%')

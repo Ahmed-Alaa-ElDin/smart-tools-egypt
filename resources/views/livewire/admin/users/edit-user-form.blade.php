@@ -1,5 +1,6 @@
 <div>
     <form method="post" enctype="multipart/form-data">
+
         {{-- Image --}}
         <div
             class="grid grid-cols-12 gap-x-6 gap-y-2 items-center bg-gray-100 p-2 text-center my-2 justify-items-center rounded">

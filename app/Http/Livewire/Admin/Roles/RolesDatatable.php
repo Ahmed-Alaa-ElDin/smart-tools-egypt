@@ -28,7 +28,7 @@ class RolesDatatable extends Component
     // Render With each update
     public function render()
     {
-        $roles = Role::with('users')->with('permissions')
+        $roles = Role::with('users','permissions')
             ->where('name', 'like', '%' . $this->search . '%')
             ->withCount('users')
             ->withCount('permissions')

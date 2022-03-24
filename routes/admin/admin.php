@@ -1,17 +1,22 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DeliveryController;
 use App\Http\Controllers\Admin\GovernorateController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\SubcategoryController;
+use App\Http\Controllers\Admin\SupercategoryController;
 use App\Http\Controllers\Admin\ZoneController;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Destination;
 use App\Models\Governorate;
+use App\Models\Supercategory;
 use App\Models\Zone;
 use Illuminate\Routing\Route as RoutingRoute;
 use Illuminate\Support\Facades\Route;
@@ -23,12 +28,27 @@ Route::group([
 ], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // ############## Products Routes Start ##############
+    Route::get('/products/deleted-products', [ProductController::class, 'softDeletedProducts'])->name('products.softDeletedProducts');
+    Route::resource('/products', ProductController::class);
+
+    Route::resource('/brands', BrandController::class);
+    // ############## Products Routes End ##############
+
+
+    // ############## Categories Routes Start ##############
+    Route::resource('/super-categories', SupercategoryController::class);
+
+    Route::resource('/categories', CategoryController::class);
+
+    Route::resource('/sub-categories', SubcategoryController::class);
+    // ############## Categories Routes End ##############
+
     // ############## Users Routes Start ##############
     Route::get('/users/export-excel', [UserController::class, 'exportExcel'])->name('users.exportExcel');
     Route::get('/users/export-pdf', [UserController::class, 'exportPDF'])->name('users.exportPDF');
     Route::get('/users/deleted-users', [UserController::class, 'softDeletedUsers'])->name('users.softDeletedUsers');
     Route::resource('/users', UserController::class);
-
 
     Route::get('/roles/roles-permissions/{id}', [RoleController::class, 'showPermissions'])->name('roles.showPermissions');
     Route::get('/roles/roles-users/{id}', [RoleController::class, 'showUsers'])->name('roles.showUsers');

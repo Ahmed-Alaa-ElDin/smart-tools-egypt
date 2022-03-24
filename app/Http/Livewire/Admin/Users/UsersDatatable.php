@@ -32,7 +32,7 @@ class UsersDatatable extends Component
     // Render With each update
     public function render()
     {
-        $users = User::with('phones')->with('roles')
+        $users = User::with('phones','roles')
             ->where('f_name->en', 'like', '%' . $this->search . '%')
             ->orWhere('f_name->ar', 'like', '%' . $this->search . '%')
             ->orWhere('l_name->en', 'like', '%' . $this->search . '%')

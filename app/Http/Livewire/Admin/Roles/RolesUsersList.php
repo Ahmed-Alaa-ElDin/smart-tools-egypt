@@ -31,7 +31,7 @@ class RolesUsersList extends Component
     // Render With each update
     public function render()
     {
-        $users = User::with('phones')->with('roles')
+        $users = User::with('phones','roles')
             ->whereHas('roles', function ($query) {
                 $query->where('id', $this->role_id);
             })

@@ -30,7 +30,7 @@ class DeletedCountriesDatatable extends Component
     // Render With each update
     public function render()
     {
-        $countries = Country::onlyTrashed()->with('deliveries')->with('governorates')->with('users')->with('cities')
+        $countries = Country::onlyTrashed()->with('deliveries','governorates','users','cities')
             ->withCount('deliveries')
             ->withCount('governorates')
             ->withCount('users')

@@ -14,7 +14,7 @@ return [
     "Delete" => "حذف",
     'No data available according to your search' => 'لا يوجد نتائج مطابقة للبحث',
     'No data in this table' => 'لا يوجد بيانات بهذا الجدول',
-    "Uploading ..." => "تحميل",
+    'Uploading ...' =>      'جاري التحميل ...',
     "Remove / Replace Logo" => "حذف / استبدال شعار الشركة",
     "Logo" => "شعار الشركة",
     "in Arabic" => "بالعربية",

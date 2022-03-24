@@ -17,7 +17,6 @@ use Intervention\Image\ImageManager;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Spatie\Permission\Models\Role;
-use Throwable;
 
 class EditUserForm extends Component
 {
@@ -76,7 +75,7 @@ class EditUserForm extends Component
         $this->roles = Role::get();
 
         // get User Data
-        $this->user = User::with('phones')->with('addresses')->findOrFail($this->user_id);
+        $this->user = User::with('phones','addresses')->findOrFail($this->user_id);
 
         // get old image
         $this->oldImage = $this->user->profile_photo_path;

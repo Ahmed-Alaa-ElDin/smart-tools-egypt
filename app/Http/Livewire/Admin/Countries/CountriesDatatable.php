@@ -30,7 +30,7 @@ class CountriesDatatable extends Component
     // Render With each update
     public function render()
     {
-        $countries = Country::with('deliveries')->with('governorates')->with('users')->with('cities')
+        $countries = Country::with('deliveries','governorates','users','cities')
             ->withCount('users')
             ->withCount('deliveries')
             ->withCount('cities')

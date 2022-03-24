@@ -30,7 +30,7 @@ class DeletedUsersDatatable extends Component
     // Render With each update
     public function render()
     {
-        $users = User::onlyTrashed()->with('phones')->with('roles')
+        $users = User::onlyTrashed()->with('phones','roles')
             ->where(function ($query) {
                 $query
                     ->where('f_name->en', 'like', '%' . $this->search . '%')

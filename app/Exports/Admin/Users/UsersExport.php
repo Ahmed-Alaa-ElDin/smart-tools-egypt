@@ -26,7 +26,7 @@ class UsersExport implements FromCollection, WithHeadings, WithStyles, WithMappi
      */
     public function collection()
     {
-        $users = User::with('roles')->with('phones')->with('addresses')->get();
+        $users = User::with('roles','phones','addresses')->get();
         $this->count = $users->count();
 
         return $users;

@@ -30,7 +30,7 @@ class DeletedCitiesDatatable extends Component
     // Render With each update
     public function render()
     {
-        $cities = City::onlyTrashed()->with('governorate')->with('users')->with('deliveries')
+        $cities = City::onlyTrashed()->with('governorate','users','deliveries')
             ->join('governorates', 'governorates.id', '=', 'governorate_id')
             ->join('countries', 'countries.id', '=', 'governorates.country_id')
             ->select('cities.*', 'governorates.name as governorate_name', 'countries.name->' . session('locale') . ' as country_name')

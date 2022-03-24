@@ -33,7 +33,7 @@ class UsersCityDatatable extends Component
     // Render With each update
     public function render()
     {
-        $users  = City::with('users')->findOrFail($this->city_id)->users()->with('phones')->with('roles')
+        $users  = City::with('users')->findOrFail($this->city_id)->users()->with('phones','roles')
             ->where(function ($query) {
                 return $query
                     ->where('f_name->en', 'like', '%' . $this->search . '%')
