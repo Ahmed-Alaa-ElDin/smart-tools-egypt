@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('file_name');
             $table->unsignedBigInteger('product_id');
             $table->tinyInteger('is_thumbnail')->default(0)->comment('0 -> No , 1 -> Yes');
+            $table->tinyInteger('featured')->default(0)->comment('0 -> No , 1 -> Yes');
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');

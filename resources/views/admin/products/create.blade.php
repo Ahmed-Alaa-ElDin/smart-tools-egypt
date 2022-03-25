@@ -94,7 +94,7 @@ __('admin/productsPages.Add Product')])
             selector: '#description_ar',
             setup: function(editor) {
                 editor.on('blur', function(e) {
-                    window.livewire.emit('description', tinymce.get(e.target.id).getContent())
+                    window.livewire.emit('descriptionAr', tinymce.get(e.target.id).getContent())
                 });
             }
         });
@@ -106,7 +106,7 @@ __('admin/productsPages.Add Product')])
             selector: '#description_en',
             setup: function(editor) {
                 editor.on('blur', function(e) {
-                    window.livewire.emit('description', tinymce.get(e.target.id).getContent())
+                    window.livewire.emit('descriptionEn', tinymce.get(e.target.id).getContent())
                 });
             }
         });
@@ -118,7 +118,7 @@ __('admin/productsPages.Add Product')])
             selector: '#seo_description',
             setup: function(editor) {
                 editor.on('blur', function(e) {
-                    window.livewire.emit('description', tinymce.get(e.target.id).getContent())
+                    window.livewire.emit('descriptionSeo', tinymce.get(e.target.id).getContent())
                 });
             }
         });

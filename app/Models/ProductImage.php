@@ -13,6 +13,7 @@ class ProductImage extends Model
         'file_name',
         'product_id',
         'is_thumbnail',
+        'featured',
     ];
 
     // One to many relationship (Reverse) SProduct --> Image
@@ -25,4 +26,5 @@ class ProductImage extends Model
     {
         return $query->where('is_thumbnail',1)->first();
     }
+
 }

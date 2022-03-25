@@ -33,6 +33,7 @@ class Product extends Model
         'meta_description',
         'free_shipping',
         'publish',
+        'under_reviewing',
         'created_by',
         'brand_id',
         'subcategory_id',
