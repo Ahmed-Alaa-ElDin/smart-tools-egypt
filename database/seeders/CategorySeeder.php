@@ -167,6 +167,7 @@ class CategorySeeder extends Seeder
             'slug' =>'sad-sada-sada-as',
             'barcode' =>'2323432',
             'base_price' =>'423.34',
+            'final_price' =>'212.34',
             'brand_id' => 1,
             'subcategory_id' => 1,
         ]);
@@ -176,6 +177,7 @@ class CategorySeeder extends Seeder
             'slug' =>'sad-sada-dsadas-as',
             'barcode' =>'3242342',
             'base_price' =>'213.34',
+            'final_price' =>'24.34',
             'brand_id' => 2,
             'subcategory_id' => 3,
 
@@ -186,6 +188,7 @@ class CategorySeeder extends Seeder
             'slug' =>'sad-3fds-sada-as',
             'barcode' =>'1312',
             'base_price' =>'3.34',
+            'final_price' =>'2.34',
             'brand_id' => 3,
             'subcategory_id' => 6,
 
@@ -196,6 +199,7 @@ class CategorySeeder extends Seeder
             'slug' =>'sad-wqeqwe-sada-as',
             'barcode' =>'234234',
             'base_price' =>'123.34',
+            'final_price' =>'12.34',
             'brand_id' => 2,
             'subcategory_id' => 7,
 
@@ -206,6 +210,7 @@ class CategorySeeder extends Seeder
             'slug' =>'sad-dsadasd-sada-as',
             'barcode' =>'324234234',
             'base_price' =>'876.34',
+            'final_price' =>'212.34',
             'brand_id' => 4,
             'subcategory_id' => 8,
 
@@ -216,6 +221,7 @@ class CategorySeeder extends Seeder
             'slug' =>'sad-sada-sada-as',
             'barcode' =>'2323432',
             'base_price' =>'423.34',
+            'final_price' =>'212.34',
             'brand_id' => 1,
             'subcategory_id' => 3,
 
@@ -226,6 +232,7 @@ class CategorySeeder extends Seeder
             'slug' =>'sad-sada-sada-as',
             'barcode' =>'2323432',
             'base_price' =>'423.34',
+            'final_price' =>'22.34',
             'brand_id' => 1,
             'subcategory_id' => 9,
         ]);

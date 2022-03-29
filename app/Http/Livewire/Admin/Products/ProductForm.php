@@ -5,7 +5,9 @@ namespace App\Http\Livewire\Admin\Products;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Intervention\Image\ImageManager;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -14,53 +16,45 @@ class ProductForm extends Component
 {
     use WithFileUploads;
 
-    public $gallery_images = [], $gallery_temp_paths = [], $old_gallery_images = [], $gallery_images_name = [], $featured = 0;
-    public $thumbnail_image, $thumbnail_temp_path, $old_thumbnail_image,  $thumbnail_image_name;
+    public $product_id;
+    public $gallery_images = [], $gallery_images_name = [], $featured = 0, $deletedImages = [];
+    public $thumbnail_image,  $thumbnail_image_name;
     public $video;
-    public $name = [], $subcategory_id, $brand_id, $model, $barcode, $weight, $description = ['ar' => '', 'en' => ''], $publish = true, $refundable = true;
+    public $name = ["ar" => "", "en" => ""], $subcategory_id, $brand_id, $model, $barcode, $weight, $description = ['ar' => '', 'en' => ''], $publish = true, $refundable = true;
     public $base_price, $discount, $final_price, $points, $free_shipping = false, $reviewing = false, $quantity, $low_stock;
     public $title, $description_seo;
-
 
     protected $listeners = ["descriptionAr", "descriptionEn", "descriptionSeo"];
 
     public function rules()
     {
         return [
-            'gallery_images.*' => 'nullable|mimes:jpg,jpeg,png|max:2048',
-            'thumbnail_image' => 'nullable|mimes:jpg,jpeg,png|max:2048',
-            'video' => 'nullable|active_url',
+            'gallery_images.*'    =>        'nullable|mimes:jpg,jpeg,png|max:2048',
+            'thumbnail_image'     =>        'nullable|mimes:jpg,jpeg,png|max:2048',
+            'video'               =>        'nullable|active_url',
 
-            'name.ar'                     => 'required|string|max:100|min:3',
-            'name.en'                     => 'nullable|string|max:100|min:3',
+            'name.ar'             =>        'required|string|max:100|min:3',
+            'name.en'             =>        'nullable|string|max:100|min:3',
 
-            'brand_id' => 'required|exists:brands,id',
-            'subcategory_id' => 'required|exists:subcategories,id',
-            'model' => 'nullable|string|max:100',
-            'barcode' => 'nullable|string|max:200',
-            'weight' => 'nullable|numeric|min:0',
-            'publish' => 'boolean',
-            'refundable' => 'boolean',
+            'brand_id'            =>        'required|exists:brands,id',
+            'subcategory_id'      =>        'required|exists:subcategories,id',
+            'model'               =>        'nullable|string|max:100',
+            'barcode'             =>        'nullable|string|max:200',
+            'weight'              =>        'nullable|numeric|min:0|max:999999',
+            'publish'             =>        'boolean',
+            'refundable'          =>        'boolean',
 
-            'base_price' => 'required|numeric|min:0',
-            'discount' => 'nullable|numeric|min:0',
-            'final_price' => 'nullable|numeric|min:0',
-            'points' => 'nullable|integer|min:0',
-            'free_shipping' => 'boolean',
-            'reviewing' => 'boolean',
-            'quantity' => 'nullable|numeric|min:0',
-            'low_stock' => 'nullable|numeric|min:0',
+            'base_price'          =>        'required|numeric|min:0|max:999999',
+            'discount'            =>        'nullable|numeric|min:0|max:100',
+            'final_price'         =>        'nullable|numeric|min:0|max:999999|lte:base_price',
+            'points'              =>        'nullable|integer|min:0|max:999999',
+            'free_shipping'       =>        'boolean',
+            'reviewing'           =>        'boolean',
+            'quantity'            =>        'nullable|numeric|min:0',
+            'low_stock'           =>        'nullable|numeric|min:0',
 
-            'title'                     => 'nullable|string|max:100|min:3',
+            'title'               =>        'nullable|string|max:100|min:3',
 
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'phones.*.phone.digits_between' => __('validation.The phone numbers must contain digits between 8 & 11'),
-            'email.required_if' => __('validation.The Email Address is required when role is admin.'),
         ];
     }
 
@@ -70,6 +64,72 @@ class ProductForm extends Component
         $this->categories = Category::with('subcategories')->get();
 
         $this->brands = Brand::get();
+
+        if ($this->product_id) {
+
+            // Get Old Product's data
+            $product = Product::findOrFail($this->product_id);
+
+            $this->product = $product;
+
+            // Old Media
+            $products_images = ProductImage::where('product_id', $product->id)->get();
+
+            $this->gallery_images_name = $products_images
+                ->where('is_thumbnail', 0)
+                ->pluck('file_name')
+                ->toArray();
+
+            $this->gallery_images_featured = $products_images
+                ->where('is_thumbnail', 0)
+                ->pluck('featured')
+                ->toArray();
+
+            foreach ($this->gallery_images_featured as $key => $value) {
+                if ($value == 1) {
+                    $this->featured = $key;
+                }
+            }
+
+            $this->thumbnail_image_name = $products_images
+                ->where('is_thumbnail', 1)
+                ->first() ? $products_images->where('is_thumbnail', 1)->first()->file_name : null;
+
+            $this->video = $product->video;
+
+            // Old Product's Info
+            $this->name = [
+                'ar' => $product->getTranslation('name', 'ar'),
+                'en' => $product->getTranslation('name', 'en')
+            ];
+
+            $this->subcategory_id = $product->subcategory_id;
+            $this->brand_id = $product->brand_id;
+            $this->model = $product->model;
+            $this->barcode = $product->barcode;
+            $this->weight = $product->weight;
+            $this->description = [
+                'ar' => $product->getTranslation('description', 'ar'),
+                'en' => $product->getTranslation('description', 'en'),
+            ];
+
+            $this->publish = $product->publish;
+            $this->refundable = $product->refundable;
+
+            // Old Stock and Price
+            $this->base_price = $product->base_price;
+            $this->discount = round(-100 * (($product->final_price - $product->base_price) / $product->base_price), 2);
+            $this->final_price = $product->final_price;
+            $this->points = $product->points;
+            $this->free_shipping = $product->free_shipping;
+            $this->reviewing = $product->under_reviewing;
+            $this->quantity = $product->quantity;
+            $this->low_stock = $product->low_stock;
+
+            // SEO
+            $this->title = $product->meta_title;
+            $this->description_seo = $product->meta_description;
+        }
     }
 
     // Run with every update
@@ -119,24 +179,9 @@ class ProductForm extends Component
             'gallery_images.*' => 'nullable|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // dd($photos);
-
         foreach ($gallery_images as $key => $gallery_image) {
-            $image_name = 'product-' . time() . '-' . rand();
-            $this->gallery_images_name[] = $image_name;
-
-            // Crop and resize photo
             try {
-                $manager = new ImageManager();
-
-                $manager->make($gallery_image)->encode('webp')->resize(200, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->crop(200, 200)->save('storage/images/products/cropped200/' . $image_name);
-
-                $manager->make($gallery_image)->encode('webp')->save('storage/images/products/original/' . $image_name);
-
-                // for photo rendering
-                $this->gallery_temp_paths[] = $gallery_image->temporaryUrl();
+                $this->gallery_images_name[] = singleImageUpload($gallery_image, 'product-', 'products');
             } catch (\Throwable $th) {
                 throw $th;
             }
@@ -151,20 +196,33 @@ class ProductForm extends Component
     // remove image
     public function deleteImage($key)
     {
-        unset($this->gallery_images_name[$key]);
-        unset($this->gallery_temp_paths[$key]);
-        unset($this->gallery_images[$key]);
-        unset($this->old_gallery_images[$key]);
+        $this->deletedImages[] = $this->gallery_images_name[$key];
 
-        $this->featured = array_key_first($this->gallery_images);
+        unset($this->gallery_images_name[$key]);
+        unset($this->gallery_images[$key]);
+
+        if ($key == $this->featured) {
+            $this->featured = array_key_first($this->gallery_images_name);
+        }
+    }
+
+    public function deleteOldImage($key)
+    {
+        $this->deletedImages[] = $this->gallery_images_name[$key];
+
+        unset($this->gallery_images_name[$key]);
+
+        if ($key == $this->featured) {
+            $this->featured = array_key_first($this->gallery_images_name);
+        }
     }
 
     public function removePhoto()
     {
-        $this->gallery_images_name = null;
-        $this->gallery_images = null;
-        $this->gallery_temp_paths = null;
-        $this->old_gallery_images = null;
+        array_push($this->deletedImages, ...$this->gallery_images_name);
+
+        $this->gallery_images_name = [];
+        $this->gallery_images = [];
     }
     ######################## Gallery Images : End ############################
 
@@ -174,21 +232,9 @@ class ProductForm extends Component
     {
         $this->validateOnly($thumbnail_image);
 
-        $image_name = 'product-thumbnail-' . time() . '-' . rand();
-        $this->thumbnail_image_name[] = $image_name;
-
         // Crop and resize photo
         try {
-            $manager = new ImageManager();
-
-            $manager->make($thumbnail_image)->encode('webp')->resize(200, null, function ($constraint) {
-                $constraint->aspectRatio();
-            })->crop(200, 200)->save('storage/images/products/cropped200/' . $image_name);
-
-            $manager->make($thumbnail_image)->encode('webp')->save('storage/images/products/original/' . $image_name);
-
-            // for photo rendering
-            $this->thumbnail_temp_path = $thumbnail_image->temporaryUrl();
+            $this->thumbnail_image_name = singleImageUpload($thumbnail_image, 'product-', 'products');
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -196,9 +242,9 @@ class ProductForm extends Component
 
     public function deleteThumbnail()
     {
+        $this->deletedImages[] = $this->thumbnail_image_name;
+
         $this->thumbnail_image = null;
-        $this->thumbnail_temp_path = null;
-        $this->old_thumbnail_image = null;
         $this->thumbnail_image_name = null;
     }
     ######################## Thumbnail Image : Start ############################
@@ -210,10 +256,19 @@ class ProductForm extends Component
         $this->validateOnly($field);
 
         if ($field == 'base_price') {
+            if ($this->base_price == null) {
+                $this->base_price = 0;
+            }
             $this->final_price = round($this->base_price - ($this->base_price * ($this->discount / 100)), 2);
         } elseif ($field == 'discount') {
+            if ($this->discount == null) {
+                $this->discount = 0;
+            }
             $this->final_price = round($this->base_price - ($this->base_price * ($this->discount / 100)), 2);
         } elseif ($field == 'final_price') {
+            if ($this->final_price == null) {
+                $this->final_price = 0;
+            }
             $this->discount = round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2);
         }
     }
@@ -244,7 +299,7 @@ class ProductForm extends Component
     ######################## Updated SEO description : End ############################
 
 
-    ######################## Updated SEO description : End ############################
+    ######################## Save New Product : Start ############################
     public function save($new = false)
     {
         $this->validate();
@@ -252,11 +307,146 @@ class ProductForm extends Component
         DB::beginTransaction();
 
         try {
-            $product = Product::create([]);
+            $product = Product::create([
+                'name' => [
+                    'ar' => $this->name['ar'],
+                    'en' => $this->name['en'] ?? $this->name['ar']
+                ],
+                'slug' => $this->name['en'] ? strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $this->name['en']))) : '',
+                'barcode' => $this->barcode,
+                'weight' => $this->weight ?? 0,
+                'quantity' => $this->quantity ?? 0,
+                'low_stock' => $this->low_stock ?? 0,
+                'base_price' => $this->base_price,
+                'final_price' => $this->final_price,
+                'points' => $this->points,
+                'description' => [
+                    'ar' => $this->description['ar'] ?? $this->description['en'],
+                    'en' => $this->description['en'] ?? $this->description['ar']
+                ],
+                'model' => $this->model,
+                'refundable' => $this->refundable ? 1 : 0,
+                'video' => $this->video,
+                'meta_title' => $this->title,
+                'meta_description' => $this->description_seo,
+                'free_shipping' => $this->free_shipping ? 1 : 0,
+                'publish' => $this->publish ? 1 : 0,
+                'under_reviewing' => $this->reviewing ? 1 : 0,
+                'created_by' => auth()->user()->id,
+                'brand_id' => $this->brand_id,
+                'subcategory_id' => $this->subcategory_id,
+            ]);
+
+            if (count($this->gallery_images_name)) {
+                foreach ($this->gallery_images_name as $key => $gallery_image_name) {
+                    ProductImage::create([
+                        'file_name' => $gallery_image_name,
+                        'product_id' => $product->id,
+                        'featured' => $key == $this->featured ? 1 : 0,
+                    ]);
+                }
+            }
+
+            if ($this->thumbnail_image_name != null) {
+                ProductImage::create([
+                    'file_name' => $this->thumbnail_image_name,
+                    'product_id' => $product->id,
+                    'is_thumbnail' => 1,
+                ]);
+            }
+
+            DB::commit();
+
+            if ($new) {
+                Session::flash('success', __('admin/productsPages.Product added successfully'));
+                redirect()->route('admin.products.create');
+            } else {
+                Session::flash('success', __('admin/productsPages.Product added successfully'));
+                redirect()->route('admin.products.index');
+            }
         } catch (\Throwable $th) {
-            //throw $th;
+            DB::rollBack();
+            // throw $th;
+            Session::flash('error', __("admin/productsPages.Product hasn't been added"));
+            redirect()->route('admin.products.index');
         }
     }
-    ######################## Updated SEO description : End ############################
+    ######################## Save New Product : End ############################
+
+    ######################## Save Updated Product : Start ############################
+    public function update()
+    {
+        $this->validate();
+
+        DB::beginTransaction();
+
+        try {
+            $this->product->update([
+                'name' => [
+                    'ar' => $this->name['ar'],
+                    'en' => $this->name['en'] ?? $this->name['ar']
+                ],
+                'slug' => $this->name['en'] ? strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $this->name['en']))) : '',
+                'barcode' => $this->barcode,
+                'weight' => $this->weight ?? 0,
+                'quantity' => $this->quantity ?? 0,
+                'low_stock' => $this->low_stock ?? 0,
+                'base_price' => $this->base_price,
+                'final_price' => $this->final_price,
+                'points' => $this->points,
+                'description' => [
+                    'ar' => $this->description['ar'] ?? $this->description['en'],
+                    'en' => $this->description['en'] ?? $this->description['ar']
+                ],
+                'model' => $this->model,
+                'refundable' => $this->refundable ? 1 : 0,
+                'video' => $this->video,
+                'meta_title' => $this->title,
+                'meta_description' => $this->description_seo,
+                'free_shipping' => $this->free_shipping ? 1 : 0,
+                'publish' => $this->publish ? 1 : 0,
+                'under_reviewing' => $this->reviewing ? 1 : 0,
+                'created_by' => auth()->user()->id,
+                'brand_id' => $this->brand_id,
+                'subcategory_id' => $this->subcategory_id,
+            ]);
+
+            $this->product->images()->delete();
+
+            if (count($this->gallery_images_name)) {
+                foreach ($this->gallery_images_name as $key => $gallery_image_name) {
+                    ProductImage::create([
+                        'file_name' => $gallery_image_name,
+                        'product_id' => $this->product->id,
+                        'featured' => $key == $this->featured ? 1 : 0,
+                    ]);
+                }
+            }
+
+            if ($this->thumbnail_image_name != null) {
+                ProductImage::create([
+                    'file_name' => $this->thumbnail_image_name,
+                    'product_id' => $this->product->id,
+                    'is_thumbnail' => 1,
+                ]);
+            }
+
+
+            foreach ($this->deletedImages as $key => $deletedImage) {
+                imageDelete($deletedImage, 'products');
+            }
+
+            DB::commit();
+
+            Session::flash('success', __('admin/productsPages.Product updated successfully'));
+            redirect()->route('admin.products.index');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+            Session::flash('error', __("admin/productsPages.Product hasn't been updated"));
+            redirect()->route('admin.products.index');
+        }
+    }
+    ######################## Save Updated Product : End ############################
 
 }

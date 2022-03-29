@@ -13,7 +13,7 @@ class Product extends Model
     use HasTranslations;
     use SoftDeletes;
 
-    public $translatable = ['name', 'description', 'meta_title', 'meta_description'];
+    public $translatable = ['name', 'description'];
 
     protected $fillable = [
         'name',

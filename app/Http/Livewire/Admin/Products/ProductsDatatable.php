@@ -26,28 +26,44 @@ class ProductsDatatable extends Component
     {
         $this->perPage = Config::get('constants.constants.PAGINATION');
 
-        $this->sortBy = 'name->' . session('locale');
+        $this->sortBy = 'products.name->' . session('locale');
     }
 
     // Render With each update
     public function render()
     {
-        $products = Product::with('subcategory','brand','thumbnail')
-            // ->where('f_name->en', 'like', '%' . $this->search . '%')
-            // ->orWhere('f_name->ar', 'like', '%' . $this->search . '%')
-            // ->orWhere('l_name->en', 'like', '%' . $this->search . '%')
-            // ->orWhere('l_name->ar', 'like', '%' . $this->search . '%')
-            // ->orWhere('email', 'like', '%' . $this->search . '%')
-            // ->orWhereHas('phones', function ($query) {
-            //     $query->where('phone', 'like', '%' . $this->search . '%');
-            // })
-            // ->orWhereHas('roles', function ($query) {
-            //     $query->where('name', 'like', '%' . $this->search . '%');
-            // })
+        $products = Product::select([
+            'products.id',
+            'products.name',
+            'brand_id',
+            'subcategory_id',
+            'quantity',
+            'low_stock',
+            'base_price',
+            'final_price',
+            'points',
+            'publish',
+            'under_reviewing',
+            'subcategories.name as subcategory_name',
+            'brands.name as brand_name'
+        ])->with('subcategory', 'brand', 'thumbnail')
+            ->join('brands', 'brand_id', '=', 'brands.id')
+            ->join('subcategories', 'subcategory_id', '=', 'subcategories.id')
+            ->where('products.name->en', 'like', '%' . $this->search . '%')
+            ->orWhere('products.name->ar', 'like', '%' . $this->search . '%')
+            ->orWhereHas('subcategory', function ($query) {
+                $query->where('name->en', 'like', '%' . $this->search . '%')
+                    ->orWhere('name->ar', 'like', '%' . $this->search . '%');
+            })
+            ->orWhereHas('brand', function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%');
+            })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
+        // dd($products);
         // dd($products->first());
+        // dd($products->get());
 
         return view('livewire.admin.products.products-datatable', compact('products'));
     }
@@ -71,4 +87,55 @@ class ProductsDatatable extends Component
         }
         return $this->sortBy = $field;
     }
+
+    public function publish($product_id)
+    {
+        $product = Product::findOrFail($product_id);
+
+        try {
+            $product->update([
+                'publish' => $product->publish ? 0 : 1
+            ]);
+
+            $this->dispatchBrowserEvent('swalProductPublished', [
+                "text" => $product->publish ? __('admin/productsPages.Product has been published') : __('admin/productsPages.Product has been hidden'),
+                'icon' => 'success'
+            ]);
+        } catch (\Throwable $th) {
+            $this->dispatchBrowserEvent('swalProductPublished', [
+                "text" => $product->publish ? __("admin/productsPages.Product hasn't been published") : __("admin/productsPages.Product hasn't been hidden"),
+                'icon' => 'error'
+            ]);
+        }
+    }
+
+    ######## Soft Delete #########
+    public function deleteConfirm($product_id)
+    {
+        $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
+            "text" => __('admin/productsPages.Are you sure, you want to delete this product ?'),
+            'confirmButtonText' => __('admin/productsPages.Delete'),
+            'denyButtonText' => __('admin/productsPages.Cancel'),
+            'product_id' => $product_id,
+        ]);
+    }
+
+    public function softDeleteProduct($product_id)
+    {
+        try {
+            $product = Product::findOrFail($product_id);
+            $product->delete();
+
+            $this->dispatchBrowserEvent('swalProductDeleted', [
+                "text" => __('admin/productsPages.Product has been deleted successfully'),
+                'icon' => 'success'
+            ]);
+        } catch (\Throwable $th) {
+            $this->dispatchBrowserEvent('swalProductDeleted', [
+                "text" => __("admin/productsPages.Product hasn't been deleted"),
+                'icon' => 'error'
+            ]);
+        }
+    }
+    ######## Soft Delete #########
 }

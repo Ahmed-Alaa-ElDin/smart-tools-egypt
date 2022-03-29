@@ -50,6 +50,12 @@ return [
     'ipv4'                 => 'يجب أن يكون حقل :attribute عنوان IPv4 ذا بنية صحيحة.',
     'ipv6'                 => 'يجب أن يكون حقل :attribute عنوان IPv6 ذا بنية صحيحة.',
     'json'                 => 'يجب أن يكون حقل :attribute نصا من نوع JSON.',
+    'lte' => [
+        'numeric' => 'حقل :attribute لابد أن يكون أقل من أو يساوي :value.',
+        'file' => 'حقل :attribute لابد أن يكون أقل من أو يساوي :value كيلوبايت.',
+        'string' => 'حقل :attribute لابد أن يكون أقل من أو يساوي :value حرف.',
+        'array' => 'حقل :attribute لا يمكن أن يحتوي على أكثر من :value عناصر/عنصر.',
+    ],
     'max'                  => [
         'numeric' => 'يجب أن تكون قيمة حقل :attribute مساوية أو أصغر من :max.',
         'file'    => 'يجب أن لا يتجاوز حجم ملف :attribute :max كيلوبايت',

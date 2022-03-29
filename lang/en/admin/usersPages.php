@@ -121,7 +121,7 @@ return [
     'Search ...'                                =>      'Search ...',
     'Points'                                    =>      'Points',
     'Through this form you can add new user'    =>      'Through this form you can add a new user',
-    'Through this form you can edit user data'  =>      'Through this form you can edit the user data',
+    'Through this form you can edit user data'  =>      "Through this form you can edit the user's data",
     'in Arabic'                                 =>      'in Arabic',
     'in English'                                =>      'in English',
     'Other Information'                         =>      'Other Information',

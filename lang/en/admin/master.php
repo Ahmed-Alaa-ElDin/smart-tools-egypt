@@ -25,7 +25,7 @@ return [
     'Categories System'         =>      'Categories System',
     'Super Categories'          =>      'Main Categories',
     'Categories'                =>      'Categories',
-    'Sub Categories'            =>      'Sub-Categories',
+    'Sub Categories'            =>      'Subcategories',
     'Products'                  =>      'Products',
     'All Products'              =>      'All Products',
     'Add Product'               =>      'Add Product',

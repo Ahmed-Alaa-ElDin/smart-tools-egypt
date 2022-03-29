@@ -32,7 +32,7 @@ return new class extends Migration
             $table->tinyInteger('refundable')->default(1)->comment('0 -> No , 1 -> Yes');
             $table->tinyInteger('free_shipping')->default(0)->comment('0 -> No , 1 -> Yes');
             $table->tinyInteger('publish')->default(1)->comment('0 -> No , 1 -> Yes');
-            $table->tinyInteger('under_reviewing')->default(1)->comment('0 -> No , 1 -> Yes');
+            $table->tinyInteger('under_reviewing')->default(0)->comment('0 -> No , 1 -> Yes');
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->unsignedBigInteger('subcategory_id')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();

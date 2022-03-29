@@ -1,5 +1,5 @@
 @extends('layouts.admin.admin', ['activeSection' => 'Products', 'activePage' => 'All Products', 'titlePage'
-=> __('admin/deliveriesPages.All Products')])
+=> __('admin/productsPages.All Products')])
 
 @section('content')
     <div class="content">
@@ -8,8 +8,8 @@
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb text-sm">
                     <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.dashboard') }}">{{ __('admin/deliveriesPages.Dashboard') }}</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/deliveriesPages.All Products') }}
+                            href="{{ route('admin.dashboard') }}">{{ __('admin/productsPages.Dashboard') }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/productsPages.All Products') }}
                     </li>
                 </ol>
             </nav>
@@ -25,7 +25,7 @@
                             <div class="flex justify-between">
                                 <div class=" ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
-                                        {{ __('admin/deliveriesPages.Here you can manage products') }}</p>
+                                        {{ __('admin/productsPages.Here you can manage products') }}</p>
                                 </div>
 
                                 {{-- Add New Product Button --}}
@@ -35,7 +35,7 @@
                                         <span class="material-icons rtl:ml-1 ltr:mr-1">
                                             add
                                         </span>
-                                        {{ __('admin/deliveriesPages.Add Product') }}</a>
+                                        {{ __('admin/productsPages.Add Product') }}</a>
                                 </div>
                             </div>
                         </div>
@@ -93,5 +93,19 @@
             })
         });
         // #### Product Soft Delete ####
+
+        // #### Delivery Activation / Deactivation ####
+        window.addEventListener('swalProductPublished', function(e) {
+            Swal.fire({
+                text: e.detail.text,
+                icon: e.detail.icon,
+                position: 'top-right',
+                showConfirmButton: false,
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+            })
+        });
+        // #### Delivery Activation / Deactivation ####
     </script>
 @endpush

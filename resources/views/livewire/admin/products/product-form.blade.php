@@ -27,11 +27,11 @@
                 <label for="gallery_images" class="col-span-12 text-xs text-gray-700 font-bold text-center">
                     {{ __('admin/productsPages.Gallery Images') }} </label>
 
-                @if (!empty($gallery_temp_paths))
+                @if (!empty($gallery_images_name))
                     {{-- preview --}}
                     <div class="col-span-12 grid grid-cols-1 gap-3 items-center w-full">
                         <div class="text-center flex flex-wrap gap-3 justify-around">
-                            @foreach ($gallery_temp_paths as $key => $gallery_temp_path)
+                            @foreach ($gallery_images_name as $key => $gallery_image_name)
                                 <div class="relative w-25">
                                     <span
                                         class="material-icons absolute rounded-circle bg-red-500 w-6 h-6 text-white left-2 top-2 text-sm font-bold cursor-pointer flex items-center justify-center select-none"
@@ -45,7 +45,7 @@
                                         right-2 top-2 text-sm font-bold cursor-pointer flex items-center justify-center"
                                         wire:click="setFeatured({{ $key }})"
                                         title="{{ __('admin/productsPages.Make Featured') }}">done</span>
-                                    <img src="{{ $gallery_temp_path }}" class="rounded-xl">
+                                    <img src="{{ asset('storage/images/products/original/' . $gallery_image_name) }}" class="rounded-xl">
                                 </div>
                             @endforeach
                         </div>
@@ -63,18 +63,7 @@
                                 class="col-span-1 bg-red-700 rounded text-white shadow px-3 py-1">{{ $message }}</span>
                         @enderror
 
-                        <div class="mt-3 text-center">
-                            <button class="btn btn-danger btn-sm text-bold"
-                                wire:click.prevent='removePhoto'>{{ __('admin/productsPages.Remove / Replace All Product Image') }}</button>
-                        </div>
-                    </div>
-                @elseif (!empty($old_gallery_images))
-                    <div class="col-span-12">
-                        <div class="col-span-12 text-center">
-                            <img src="{{ asset('storage/images/products/original/' . $old_gallery_images) }}"
-                                class="rounded-xl m-auto">
-                        </div>
-                        <div class="col-span-12 text-center">
+                        <div class="mt-1 text-center">
                             <button class="btn btn-danger btn-sm text-bold"
                                 wire:click.prevent='removePhoto'>{{ __('admin/productsPages.Remove / Replace All Product Image') }}</button>
                         </div>
@@ -113,7 +102,7 @@
                 <label for="thumbnail_image" class="col-span-12 text-xs text-gray-700 font-bold text-center">
                     {{ __('admin/productsPages.Thumbnail Image') }} </label>
 
-                @if (!empty($thumbnail_temp_path))
+                @if ($thumbnail_image_name != null)
                     {{-- preview --}}
                     <div class="col-span-12 grid grid-cols-1 gap-3 items-center w-full">
                         <div class="text-center flex flex-wrap gap-3 justify-around">
@@ -122,21 +111,10 @@
                                     class="material-icons absolute rounded-circle bg-red-500 w-6 h-6 text-white left-2 top-2 text-sm font-bold cursor-pointer flex items-center justify-center select-none"
                                     wire:click="deleteThumbnail"
                                     title="{{ __('admin/productsPages.Delete Image') }}">clear</span>
-                                <img src="{{ $thumbnail_temp_path }}" class="rounded-xl">
+                                <img src="{{ asset('storage/images/products/original/' . $thumbnail_image_name) }}" class="rounded-xl">
                             </div>
                         </div>
 
-                    </div>
-                @elseif (!empty($old_thumbnail_image))
-                    <div class="col-span-12">
-                        <div class="col-span-12 text-center">
-                            <img src="{{ asset('storage/images/products/original/' . $old_thumbnail_image) }}"
-                                class="rounded-xl m-auto">
-                        </div>
-                        <div class="col-span-12 text-center">
-                            <button class="btn btn-danger btn-sm text-bold"
-                                wire:click.prevent='removePhoto'>{{ __('admin/productsPages.Remove / Replace All Product Image') }}</button>
-                        </div>
                     </div>
                 @else
                     {{-- Upload New Image --}}
@@ -197,7 +175,7 @@
                     <input
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('name.ar') border-red-900 border-2 @enderror"
                         type="text" wire:model.lazy="name.ar" id="name"
-                        placeholder="{{ __('admin/productsPages.in Arabic') }}" maxlength="100">
+                        placeholder="{{ __('admin/productsPages.in Arabic') }}" maxlength="100" required>
                     @error('name.ar')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                             {{ $message }}</div>
@@ -224,7 +202,7 @@
                 <div class="col-span-12 sm:col-span-8 ">
                     <select
                         class="rounded w-full cursor-pointer py-1 text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('brand_id') border-red-900 border-2 @enderror"
-                        wire:model.lazy="brand_id" id="brand_id">
+                        wire:model.lazy="brand_id" id="brand_id" required>
                         @if ($categories->count())
                             <option value="">
                                 {{ __('admin/productsPages.Choose a brand') }}
@@ -256,7 +234,7 @@
                 <div class="col-span-3 sm:col-span-2">
                     <select
                         class="rounded w-full cursor-pointer py-1 text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('subcategory_id') border-red-900 border-2 @enderror"
-                        wire:model.lazy="subcategory_id" id="subcategory_id">
+                        wire:model.lazy="subcategory_id" id="subcategory_id" required>
                         @if ($categories->count())
                             <option value="">
                                 {{ __('admin/productsPages.Choose a subcategories') }}
@@ -381,7 +359,9 @@
                     <div class="col-span-6 md:col-span-5">
                         <div wire:ignore
                             class="py-1 w-full px-6 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 cursor-text @error('description.ar') border-red-900 border-2 @enderror"
-                            type="text" id="description_ar" placeholder="{{ __('admin/productsPages.in Arabic') }}">
+                            type="text" id="description_ar" wire:model="description.ar"
+                            placeholder="{{ __('admin/productsPages.in Arabic') }}">
+                            {!! $description['ar'] !!}
                         </div>
 
                         @error('description.ar')
@@ -395,6 +375,7 @@
                     <div wire:ignore class="col-span-6 md:col-span-5 ">
                         <div class="py-1 w-full px-6 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 cursor-text @error('description.en') border-red-900 border-2 @enderror"
                             type="text" id="description_en" placeholder="{{ __('admin/productsPages.in English') }}">
+                            {!! $description['en'] !!}
                         </div>
                     </div>
 
@@ -435,7 +416,7 @@
                     <input
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('base_price') border-red-900 border-2 @enderror"
                         type="text" wire:model.lazy="base_price" id="base_price"
-                        placeholder="{{ __('admin/productsPages.EGP') }}">
+                        placeholder="{{ __('admin/productsPages.EGP') }}" required>
                     @error('base_price')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                             {{ $message }}</div>
@@ -611,7 +592,7 @@
                 <div class="col-span-12 sm:col-span-10 md:col-span-6 lg:col-span-12">
                     <div wire:ignore
                         class="py-1 w-full px-6 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 cursor-text @error('seo_description') border-red-900 border-2 @enderror"
-                        type="text" id="seo_description" placeholder="{{ __('admin/productsPages.in English') }}">
+                        type="text" id="seo_description" placeholder="{{ __('admin/productsPages.in English') }}">{!! $description_seo !!}
                     </div>
 
                     @error('seo_description')
@@ -629,14 +610,19 @@
 
     {{-- Buttons Section Start --}}
     <div class="col-span-12 w-full flex mt-2 justify-around">
+        @if ($product_id != null)
+        <button type="button" wire:click.prevent="update"
+            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Update') }}</button>
+        @else
         {{-- Save and Back --}}
         <button type="button" wire:click.prevent="save"
             class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save') }}</button>
         {{-- Save and New --}}
         <button type="button" wire:click.prevent="save('true')"
             class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save and Add New Product') }}</button>
+        @endif
         {{-- Back --}}
-        <a href="{{ route('admin.users.index') }}"
+        <a href="{{ route('admin.products.index') }}"
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Back') }}</a>
 
     </div>

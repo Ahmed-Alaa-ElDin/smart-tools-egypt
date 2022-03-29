@@ -97,7 +97,6 @@ class DeliveryCompaniesDatatable extends Component
     ######## Activation Toggle #########
     public function activate($delivery_id)
     {
-        // dd($delivery_id);
         $delivery = Delivery::findOrFail($delivery_id);
 
         try {
