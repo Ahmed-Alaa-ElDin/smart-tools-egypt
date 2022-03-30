@@ -70,6 +70,8 @@ class ProductForm extends Component
             // Get Old Product's data
             $product = Product::findOrFail($this->product_id);
 
+            // $this->product_id = null;
+
             $this->product = $product;
 
             // Old Media
@@ -118,8 +120,8 @@ class ProductForm extends Component
 
             // Old Stock and Price
             $this->base_price = $product->base_price;
-            $this->discount = round(-100 * (($product->final_price - $product->base_price) / $product->base_price), 2);
             $this->final_price = $product->final_price;
+            $this->discount = round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2);
             $this->points = $product->points;
             $this->free_shipping = $product->free_shipping;
             $this->reviewing = $product->under_reviewing;

@@ -49,4 +49,10 @@ class Country extends Model
     {
         return $this->belongsToMany(Delivery::class, 'destinations')->distinct('deliveries.id');
     }
+
+    // One to many relationship  Country --> Brands
+    public function brands()
+    {
+        return $this->hasMany(Brand::class);
+    }
 }

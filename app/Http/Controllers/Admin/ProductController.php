@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\Admin\Products\ProductsExports;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -82,5 +85,36 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+    }
+
+    /**
+     * Exports all products from products datatable as xlsx
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportExcel()
+    {
+        return Excel::download(new ProductsExports, 'Products-' . Carbon::now()->format('d-m-Y') . '.xlsx');
+    }
+
+    /**
+     * Exports all products from products datatable as pdf
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportPDF()
+    {
+        return Excel::download(new ProductsExports, 'Products-' . Carbon::now()->format('d-m-Y') . '.pdf', \Maatwebsite\Excel\Excel::MPDF);
+    }
+
+    /**
+     * See Soft Deleted Products
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function softDeletedProducts()
+    {
+        return view('admin.products.softDeleted');
     }
 }

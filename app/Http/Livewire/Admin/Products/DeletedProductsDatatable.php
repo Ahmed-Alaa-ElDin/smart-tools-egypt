@@ -3,13 +3,11 @@
 namespace App\Http\Livewire\Admin\Products;
 
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Spatie\Permission\Models\Role;
 
-class ProductsDatatable extends Component
+class DeletedProductsDatatable extends Component
 {
     use WithPagination;
 
@@ -21,7 +19,7 @@ class ProductsDatatable extends Component
 
     public $selectedProducts = [];
 
-    protected $listeners = ['softDeleteProduct', 'softDeleteAllProduct', 'publishAllProduct', 'hideAllProduct'];
+    protected $listeners = ['forceDeleteProduct', 'forceDeleteAllProduct', 'publishAllProduct', 'hideAllProduct', 'restoreProduct', 'restoreAllProduct'];
 
     // Render Once
     public function mount()
@@ -34,7 +32,7 @@ class ProductsDatatable extends Component
     // Render With each update
     public function render()
     {
-        $products = Product::select([
+        $products = Product::onlyTrashed()->select([
             'products.id',
             'products.name',
             'brand_id',
@@ -51,21 +49,23 @@ class ProductsDatatable extends Component
         ])->with('subcategory', 'brand', 'thumbnail')
             ->join('brands', 'brand_id', '=', 'brands.id')
             ->join('subcategories', 'subcategory_id', '=', 'subcategories.id')
-            ->where('products.name->en', 'like', '%' . $this->search . '%')
-            ->orWhere('products.name->ar', 'like', '%' . $this->search . '%')
-            ->orWhere('products.base_price', 'like', '%' . $this->search . '%')
-            ->orWhere('products.final_price', 'like', '%' . $this->search . '%')
-            ->orWhereHas('subcategory', function ($query) {
-                $query->where('name->en', 'like', '%' . $this->search . '%')
-                    ->orWhere('name->ar', 'like', '%' . $this->search . '%');
-            })
-            ->orWhereHas('brand', function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%');
+            ->where(function ($q) {
+                $q->where('products.name->en', 'like', '%' . $this->search . '%')
+                    ->orWhere('products.name->ar', 'like', '%' . $this->search . '%')
+                    ->orWhere('products.base_price', 'like', '%' . $this->search . '%')
+                    ->orWhere('products.final_price', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('subcategory', function ($query) {
+                        $query->where('name->en', 'like', '%' . $this->search . '%')
+                            ->orWhere('name->ar', 'like', '%' . $this->search . '%');
+                    })
+                    ->orWhereHas('brand', function ($query) {
+                        $query->where('name', 'like', '%' . $this->search . '%');
+                    });
             })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
-        return view('livewire.admin.products.products-datatable', compact('products'));
+        return view('livewire.admin.products.deleted-products-datatable', compact('products'));
     }
 
     // reset pagination after new search
@@ -90,7 +90,7 @@ class ProductsDatatable extends Component
 
     public function publish($product_id)
     {
-        $product = Product::findOrFail($product_id);
+        $product = Product::withTrashed()->findOrFail($product_id);
 
         try {
             $product->update([
@@ -109,40 +109,73 @@ class ProductsDatatable extends Component
         }
     }
 
-    ######## Soft Delete #########
+    ######## Force Delete #########
     public function deleteConfirm($product_id)
     {
         $this->dispatchBrowserEvent('swalConfirm', [
-            "text" => __('admin/productsPages.Are you sure, you want to delete this product ?'),
+            "text" => __('admin/productsPages.Are you sure, you want to permanently delete this product ?'),
             'confirmButtonText' => __('admin/productsPages.Delete'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
             'confirmButtonColor' => 'red',
-            'func' => 'softDeleteProduct',
+            'func' => 'forceDeleteProduct',
             'product_id' => $product_id,
         ]);
     }
 
-    public function softDeleteProduct($product_id)
+    public function forceDeleteProduct($product_id)
     {
         try {
-            $product = Product::findOrFail($product_id);
-            $product->delete();
+            $product = Product::withTrashed()->findOrFail($product_id);
+            $product->forceDelete();
 
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('admin/productsPages.Product has been deleted successfully'),
+                "text" => __('admin/productsPages.Product has been deleted permanently successfully'),
                 'icon' => 'success'
             ]);
 
             $this->selectedProducts = [];
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __("admin/productsPages.Product hasn't been deleted"),
+                "text" => __("admin/productsPages.Product hasn't been deleted permanently"),
                 'icon' => 'error'
             ]);
         }
     }
-    ######## Soft Delete #########
+    ######## Force Delete #########
 
+    ######## Restore #########
+    public function restoreConfirm($product_id)
+    {
+        $this->dispatchBrowserEvent('swalConfirm', [
+            "text" => __('admin/productsPages.Are you sure, you want to restore this product ?'),
+            'confirmButtonText' => __('admin/productsPages.Restore'),
+            'denyButtonText' => __('admin/productsPages.Cancel'),
+            'confirmButtonColor' => 'green',
+            'func' => 'restoreProduct',
+            'product_id' => $product_id,
+        ]);
+    }
+
+    public function restoreProduct($product_id)
+    {
+        try {
+            $product = Product::withTrashed()->findOrFail($product_id);
+            $product->restore();
+
+            $this->dispatchBrowserEvent('swalDone', [
+                "text" => __('admin/productsPages.Product has been restored successfully'),
+                'icon' => 'success'
+            ]);
+
+            $this->selectedProducts = [];
+        } catch (\Throwable $th) {
+            $this->dispatchBrowserEvent('swalDone', [
+                "text" => __("admin/productsPages.Product hasn't been restored"),
+                'icon' => 'error'
+            ]);
+        }
+    }
+    ######## Restore #########
 
     ######## Unselect All Products #########
     public function unselectAll()
@@ -151,43 +184,79 @@ class ProductsDatatable extends Component
     }
     ######## Unselect All Products #########
 
-    ######## Soft Delete All Selected Products #########
+    ######## Force Delete All Selected Products #########
     public function deleteAllConfirm()
     {
         $this->dispatchBrowserEvent('swalConfirm', [
-            "text" => __('admin/productsPages.Are you sure, you want to delete all selected products ?'),
+            "text" => __('admin/productsPages.Are you sure, you want to delete all selected products permanently?'),
             'confirmButtonText' => __('admin/productsPages.Delete'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
             'confirmButtonColor' => 'red',
-            'func' => 'softDeleteAllProduct',
+            'func' => 'forceDeleteAllProduct',
             'product_id' => '',
         ]);
     }
 
-    public function softDeleteAllProduct()
+    public function forceDeleteAllProduct()
     {
         try {
             foreach ($this->selectedProducts as $key => $selectedProduct) {
 
-                $product = Product::findOrFail($selectedProduct);
-                $product->delete();
+                $product = Product::withTrashed()->findOrFail($selectedProduct);
+                $product->forceDelete();
             }
 
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('admin/productsPages.Products have been deleted successfully'),
+                "text" => __('admin/productsPages.Products have been deleted permanently successfully'),
                 'icon' => 'success'
             ]);
 
             $this->selectedProducts = [];
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __("admin/productsPages.Products haven't been deleted"),
+                "text" => __("admin/productsPages.Products haven't been deleted permanently"),
                 'icon' => 'error'
             ]);
         }
     }
-    ######## Soft Delete All Selected Products #########
+    ######## Force Delete All Selected Products #########
 
+    ######## Restore All Selected Products #########
+    public function restoreAllConfirm()
+    {
+        $this->dispatchBrowserEvent('swalConfirm', [
+            "text" => __('admin/productsPages.Are you sure, you want to restore all selected products?'),
+            'confirmButtonText' => __('admin/productsPages.Restore'),
+            'denyButtonText' => __('admin/productsPages.Cancel'),
+            'confirmButtonColor' => 'green',
+            'func' => 'restoreAllProduct',
+            'product_id' => '',
+        ]);
+    }
+
+    public function restoreAllProduct()
+    {
+        try {
+            foreach ($this->selectedProducts as $key => $selectedProduct) {
+
+                $product = Product::withTrashed()->findOrFail($selectedProduct);
+                $product->restore();
+            }
+
+            $this->dispatchBrowserEvent('swalDone', [
+                "text" => __('admin/productsPages.Products have been restored successfully'),
+                'icon' => 'success'
+            ]);
+
+            $this->selectedProducts = [];
+        } catch (\Throwable $th) {
+            $this->dispatchBrowserEvent('swalDone', [
+                "text" => __("admin/productsPages.Products haven't been restored"),
+                'icon' => 'error'
+            ]);
+        }
+    }
+    ######## Restore All Selected Products #########
 
     ######## Publish All Selected Products #########
     public function publishAllConfirm()
@@ -207,7 +276,7 @@ class ProductsDatatable extends Component
 
         try {
             foreach ($this->selectedProducts as $key => $selectedProduct) {
-                $product = Product::findOrFail($selectedProduct);
+                $product = Product::withTrashed()->findOrFail($selectedProduct);
 
                 $product->update([
                     'publish' => 1
@@ -247,7 +316,7 @@ class ProductsDatatable extends Component
 
         try {
             foreach ($this->selectedProducts as $key => $selectedProduct) {
-                $product = Product::findOrFail($selectedProduct);
+                $product = Product::withTrashed()->findOrFail($selectedProduct);
 
                 $product->update([
                     'publish' => 0

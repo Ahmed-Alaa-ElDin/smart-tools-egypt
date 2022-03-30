@@ -17,5 +17,7 @@
     "role_id" : "الدور",
     "User has been restored successfully" : "تم استعادة المستخدم بنجاح",
     "Restoring Confirmation" : "تأكيد استعادة",
-    "Restore" : "استعادة"
+    "Restore" : "استعادة",
+    "Yes" : "نعم",
+    "No" : "لا"
 }

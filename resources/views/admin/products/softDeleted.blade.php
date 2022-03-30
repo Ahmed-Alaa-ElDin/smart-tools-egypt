@@ -1,5 +1,5 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Products', 'activePage' => 'All Products', 'titlePage'
-=> __('admin/productsPages.All Products')])
+@extends('layouts.admin.admin', ['activeSection' => 'Products', 'activePage' => 'Deleted Products', 'titlePage'
+=> __('admin/productsPages.Deleted Products')])
 
 @section('content')
     <div class="content">
@@ -9,7 +9,10 @@
                 <ol class="breadcrumb text-sm">
                     <li class="breadcrumb-item hover:text-primary"><a
                             href="{{ route('admin.dashboard') }}">{{ __('admin/productsPages.Dashboard') }}</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/productsPages.All Products') }}
+                    <li class="breadcrumb-item hover:text-primary"><a
+                            href="{{ route('admin.products.index') }}">{{ __('admin/productsPages.All Products') }}</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/productsPages.Deleted Products') }}
                     </li>
                 </ol>
             </nav>
@@ -22,29 +25,22 @@
 
                         {{-- Card Head --}}
                         <div class="card-header card-header-primary">
-                            <div class="flex justify-between">
-                                <div class=" ltr:text-left rtl:text-right font-bold self-center text-gray-100">
+                            <div class="row">
+                                <div class="col-12 ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
-                                        {{ __('admin/productsPages.Here you can manage products') }}</p>
-                                </div>
-
-                                {{-- Add New Product Button --}}
-                                <div class="ltr:text-right rtl:text-left">
-                                    <a href="{{ route('admin.products.create') }}"
-                                        class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">
-                                        <span class="material-icons rtl:ml-1 ltr:mr-1">
-                                            add
-                                        </span>
-                                        {{ __('admin/productsPages.Add Product') }}</a>
+                                        {{ __('admin/productsPages.Here you can Restore / Permanently delete products') }}
+                                    </p>
                                 </div>
                             </div>
                         </div>
 
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
+
                             {{-- Data Table Start --}}
-                            @livewire('admin.products.products-datatable')
+                            @livewire('admin.products.deleted-products-datatable')
                             {{-- Data Table End --}}
+
                         </div>
                     </div>
                 </div>

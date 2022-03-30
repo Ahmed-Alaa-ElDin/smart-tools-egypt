@@ -21,6 +21,13 @@
                             </span> &nbsp; {{ __('admin/productsPages.Control selected products') }}
                             &nbsp;</button>
                         <div class="dropdown-menu text-black ">
+                            <a wire:click.prevent="restoreAllConfirm"
+                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600 hover:text-white focus:text-white cursor-pointer">
+                                <span class="material-icons">
+                                    restore
+                                </span> &nbsp;&nbsp;
+                                {{ __('admin/productsPages.Restore All') }}
+                            </a>
                             <a wire:click.prevent="deleteAllConfirm"
                                 class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-red-600 focus:bg-red-600 hover:text-white focus:text-white cursor-pointer">
                                 <span class="material-icons">
@@ -66,33 +73,6 @@
                             placeholder="{{ __('admin/productsPages.Search ...') }}">
                     </div>
                 </div>
-
-                {{-- Download --}}
-                <div class="form-inline col-span-1 justify-center">
-                <div class="flex justify-center">
-                    <button class="btn btn-success dropdown-toggle btn-round btn-sm text-white font-bold "
-                        type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="material-icons">
-                            file_download
-                        </span> &nbsp; {{ __('admin/productsPages.Export Products') }}
-                        &nbsp;</button>
-                    <div class="dropdown-menu">
-                        <a href="{{ route('admin.products.exportExcel') }}"
-                            class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600">
-                            <span class="material-icons">
-                                file_present
-                            </span> &nbsp;&nbsp;
-                            {{ __('admin/productsPages.download all excel') }}</a>
-                        <a href="{{ route('admin.products.exportPDF') }}"
-                            class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600">
-                            <span class="material-icons">
-                                picture_as_pdf
-                            </span>
-                            &nbsp;&nbsp;
-                            {{ __('admin/productsPages.download all pdf') }}</a>
-                    </div>
-                </div>
-            </div>
 
                 {{-- Pagination Number --}}
                 <div class="form-inline col-span-1 justify-end my-2">
@@ -318,18 +298,19 @@
                                             </a>
                                         @endcan
 
-                                        {{-- Edit Button --}}
-                                        @can('Edit User')
-                                            <a href="{{ route('admin.products.edit', ['product' => $product->id]) }}"
-                                                title="{{ __('admin/productsPages.Edit') }}" class="m-0">
+                                        {{-- Force Delete Button --}}
+                                        @can('Soft Delete User')
+                                            <a href="#" title="{{ __('admin/productsPages.Restore') }}"
+                                                wire:click.prevent="restoreConfirm({{ $product->id }})"
+                                                class="m-0">
                                                 <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
-                                                    edit
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-green-500 hover:bg-green-700 rounded">
+                                                    restore
                                                 </span>
                                             </a>
                                         @endcan
 
-                                        {{-- Soft Delete Button --}}
+                                        {{-- Force Delete Button --}}
                                         @can('Soft Delete User')
                                             <a href="#" title="{{ __('admin/productsPages.Delete') }}"
                                                 wire:click.prevent="deleteConfirm({{ $product->id }})"

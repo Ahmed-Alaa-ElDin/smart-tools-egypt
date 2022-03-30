@@ -16,7 +16,6 @@ use Illuminate\Validation\Rule;
 use Intervention\Image\ImageManager;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use RealRashid\SweetAlert\Facades\Alert;
 use Spatie\Permission\Models\Role;
 use Throwable;
 
