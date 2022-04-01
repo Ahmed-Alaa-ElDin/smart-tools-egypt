@@ -48,9 +48,9 @@
 
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
-                            {{-- Data Table Start --}}
+                            {{-- Datatable Start --}}
                             @livewire('admin.cities.users-city-datatable' , ['city_id' => $city->id])
-                            {{-- Data Table End --}}
+                            {{-- Datatable End --}}
                         </div>
                     </div>
                 </div>

@@ -37,9 +37,9 @@ __('admin/deliveriesPages.Deleted Governorates')])
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
 
-                            {{-- Data Table Start --}}
+                            {{-- Datatable Start --}}
                             @livewire('admin.governorates.deleted-governorates-datatable')
-                            {{-- Data Table End --}}
+                            {{-- Datatable End --}}
 
                         </div>
                     </div>

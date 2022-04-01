@@ -45,9 +45,9 @@ __('admin/deliveriesPages.Delivery Companies')])
 
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
-                            {{-- Data Table Start --}}
+                            {{-- Datatable Start --}}
                             @livewire('admin.deliveries.delivery-companies-datatable')
-                            {{-- Data Table End --}}
+                            {{-- Datatable End --}}
 
                         </div>
                     </div>

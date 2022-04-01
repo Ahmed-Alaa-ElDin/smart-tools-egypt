@@ -185,7 +185,7 @@ return [
         'barcode'               => 'Barcode',
         'gallery_images.*'      => 'gallery images',
         'weight'                => 'weight',
-        'subcategory_id'        => 'Subcategory',
+        'logo'                  => 'Logo',
         'subcategory_id'        => 'Subcategory',
         'subcategory_id'        => 'Subcategory',
         'subcategory_id'        => 'Subcategory',

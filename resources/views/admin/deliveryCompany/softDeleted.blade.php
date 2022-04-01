@@ -37,9 +37,9 @@ __('admin/deliveriesPages.Deleted Delivery Companies')])
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
 
-                            {{-- Data Table Start --}}
+                            {{-- Datatable Start --}}
                             @livewire('admin.deliveries.deleted-delivery-companies-datatable')
-                            {{-- Data Table End --}}
+                            {{-- Datatable End --}}
 
                         </div>
                     </div>

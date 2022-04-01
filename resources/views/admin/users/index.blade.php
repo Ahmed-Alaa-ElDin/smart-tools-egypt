@@ -42,9 +42,9 @@ __('admin/usersPages.All Users')])
 
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
-                            {{-- Data Table Start --}}
+                            {{-- Datatable Start --}}
                             @livewire('admin.users.users-datatable')
-                            {{-- Data Table End --}}
+                            {{-- Datatable End --}}
 
                         </div>
                     </div>

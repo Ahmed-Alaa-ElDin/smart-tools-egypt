@@ -15,7 +15,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.brands.index');
     }
 
     /**
@@ -25,7 +25,7 @@ class BrandController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.brands.create');
     }
 
     /**
@@ -56,9 +56,9 @@ class BrandController extends Controller
      * @param  \App\Models\Brand  $brand
      * @return \Illuminate\Http\Response
      */
-    public function edit(Brand $brand)
+    public function edit($brand)
     {
-        //
+        return view('admin.brands.edit', compact('brand'));
     }
 
     /**
@@ -82,5 +82,15 @@ class BrandController extends Controller
     public function destroy(Brand $brand)
     {
         //
+    }
+
+    public function productsBrand(Brand $brand)
+    {
+        return view('admin.brands.products', compact('brand'));
+    }
+
+    public function softDeletedBrands()
+    {
+        return view('admin.brands.softDeleted');
     }
 }

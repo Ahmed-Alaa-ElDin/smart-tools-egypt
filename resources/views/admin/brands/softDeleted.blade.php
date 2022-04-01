@@ -1,5 +1,5 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage' =>
-__('admin/deliveriesPages.Deleted Cities')])
+@extends('layouts.admin.admin', ['activeSection' => 'Products', 'activePage' => '', 'titlePage'
+=> __('admin/productsPages.Deleted Brands')])
 
 @section('content')
     <div class="content">
@@ -8,12 +8,12 @@ __('admin/deliveriesPages.Deleted Cities')])
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb text-sm">
                     <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.dashboard') }}">{{ __('admin/deliveriesPages.Dashboard') }}</a></li>
+                            href="{{ route('admin.dashboard') }}">{{ __('admin/productsPages.Dashboard') }}</a></li>
                     <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.cities.index') }}">{{ __('admin/deliveriesPages.All Cities') }}</a>
+                            href="{{ route('admin.brands.index') }}">{{ __('admin/productsPages.Brands') }}</a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        {{ __('admin/deliveriesPages.Deleted Cities') }}</li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/productsPages.Deleted Brands') }}
+                    </li>
                 </ol>
             </nav>
 
@@ -28,7 +28,7 @@ __('admin/deliveriesPages.Deleted Cities')])
                             <div class="row">
                                 <div class="col-12 ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
-                                        {{ __('admin/deliveriesPages.Here you can Restore / Permanently delete cities') }}
+                                        {{ __('admin/productsPages.Here you can Restore / Permanently delete brands') }}
                                     </p>
                                 </div>
                             </div>
@@ -38,7 +38,7 @@ __('admin/deliveriesPages.Deleted Cities')])
                         <div class="card-body overflow-hidden">
 
                             {{-- Datatable Start --}}
-                            @livewire('admin.cities.deleted-cities-datatable')
+                            @livewire('admin.brands.deleted-brands-datatable')
                             {{-- Datatable End --}}
 
                         </div>
@@ -59,20 +59,21 @@ __('admin/deliveriesPages.Deleted Cities')])
     @livewireScripts
 
     <script>
-        // #### City Force Delete ####
+        // #### Brands Sweetalert ####
         window.addEventListener('swalConfirm', function(e) {
+
             Swal.fire({
-                icon: e.detail.icon,
+                icon: 'warning',
                 text: e.detail.text,
+                showDenyButton: true,
                 confirmButtonText: e.detail.confirmButtonText,
                 denyButtonText: e.detail.denyButtonText,
-                denyButtonColor: e.detail.denyButtonColor,
+                denyButtonColor: 'gray',
                 confirmButtonColor: e.detail.confirmButtonColor,
-                focusDeny: e.detail.focusDeny,
-                showDenyButton: true,
+                focusDeny: true,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit(e.detail.method, e.detail.city_id);
+                    Livewire.emit(e.detail.func, e.detail.brand_id);
                 }
             });
         });
@@ -88,38 +89,6 @@ __('admin/deliveriesPages.Deleted Cities')])
                 timerProgressBar: true,
             })
         });
-        // #### City Force Delete ####
-
-
-        // #### Restore ####
-        window.addEventListener('swalRestore', function(e) {
-            Swal.fire({
-                icon: 'warning',
-                text: e.detail.text,
-                showDenyButton: true,
-                confirmButtonText: e.detail.confirmButtonText,
-                denyButtonText: e.detail.denyButtonText,
-                denyButtonColor: 'gray',
-                confirmButtonColor: 'green',
-                focusDeny: false,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Livewire.emit('restoreCity', e.detail.city_id);
-                }
-            });
-        });
-
-        window.addEventListener('swalCityRestored', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        });
-        // #### Restore ####
+        // #### Brands Sweetalert ####
     </script>
 @endpush

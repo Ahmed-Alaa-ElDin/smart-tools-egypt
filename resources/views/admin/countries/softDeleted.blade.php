@@ -37,9 +37,9 @@ __('admin/deliveriesPages.Deleted Countries')])
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
 
-                            {{-- Data Table Start --}}
+                            {{-- Datatable Start --}}
                             @livewire('admin.countries.deleted-countries-datatable')
-                            {{-- Data Table End --}}
+                            {{-- Datatable End --}}
 
                         </div>
                     </div>

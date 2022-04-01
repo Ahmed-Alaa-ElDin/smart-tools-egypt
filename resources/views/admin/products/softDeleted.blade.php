@@ -37,9 +37,9 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
 
-                            {{-- Data Table Start --}}
+                            {{-- Datatable Start --}}
                             @livewire('admin.products.deleted-products-datatable')
-                            {{-- Data Table End --}}
+                            {{-- Datatable End --}}
 
                         </div>
                     </div>

@@ -1,5 +1,5 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => 'Governorates', 'titlePage'
-=> __('admin/deliveriesPages.All Governorates')])
+@extends('layouts.admin.admin', ['activeSection' => 'Products', 'activePage' => 'Brands', 'titlePage'
+=> __('admin/productsPages.Brands')])
 
 @section('content')
     <div class="content">
@@ -8,8 +8,8 @@
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb text-sm">
                     <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.dashboard') }}">{{ __('admin/deliveriesPages.Dashboard') }}</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/deliveriesPages.All Governorates') }}
+                            href="{{ route('admin.dashboard') }}">{{ __('admin/productsPages.Dashboard') }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/productsPages.Brands') }}
                     </li>
                 </ol>
             </nav>
@@ -25,27 +25,25 @@
                             <div class="flex justify-between">
                                 <div class=" ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
-                                        {{ __('admin/deliveriesPages.Here you can manage governorates') }}</p>
+                                        {{ __('admin/productsPages.Here you can manage brands') }}</p>
                                 </div>
 
-                                {{-- Add New Governorate Button --}}
-                                @can('Add Governorate')
-                                    <div class="ltr:text-right rtl:text-left">
-                                        <a href="{{ route('admin.governorates.create') }}"
-                                            class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">
-                                            <span class="material-icons rtl:ml-1 ltr:mr-1">
-                                                add
-                                            </span>
-                                            {{ __('admin/deliveriesPages.Add Governorate') }}</a>
-                                    </div>
-                                @endcan
+                                {{-- Add New Brands Button --}}
+                                <div class="ltr:text-right rtl:text-left">
+                                    <a href="{{ route('admin.brands.create') }}"
+                                        class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">
+                                        <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                            add
+                                        </span>
+                                        {{ __('admin/productsPages.Add Brand') }}</a>
+                                </div>
                             </div>
                         </div>
 
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Datatable Start --}}
-                            @livewire('admin.governorates.governorates-datatable')
+                            @livewire('admin.brands.brands-datatable')
                             {{-- Datatable End --}}
                         </div>
                     </div>
@@ -65,8 +63,9 @@
     @livewireScripts
 
     <script>
-        // #### Governorate Soft Delete ####
-        window.addEventListener('swalConfirmSoftDelete', function(e) {
+        // #### Brands Sweetalert ####
+        window.addEventListener('swalConfirm', function(e) {
+
             Swal.fire({
                 icon: 'warning',
                 text: e.detail.text,
@@ -74,16 +73,16 @@
                 confirmButtonText: e.detail.confirmButtonText,
                 denyButtonText: e.detail.denyButtonText,
                 denyButtonColor: 'gray',
-                confirmButtonColor: 'red',
+                confirmButtonColor: e.detail.confirmButtonColor,
                 focusDeny: true,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit('softDeleteGovernorate', e.detail.governorate_id);
+                    Livewire.emit(e.detail.func, e.detail.brand_id);
                 }
             });
         });
 
-        window.addEventListener('swalGovernorateDeleted', function(e) {
+        window.addEventListener('swalDone', function(e) {
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
@@ -94,6 +93,6 @@
                 timerProgressBar: true,
             })
         });
-        // #### Governorate Soft Delete ####
+        // #### Brands Sweetalert ####
     </script>
 @endpush

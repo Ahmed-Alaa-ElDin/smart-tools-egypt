@@ -34,9 +34,9 @@ __('admin/usersPages.Deleted Users')])
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
 
-                            {{-- Data Table Start --}}
+                            {{-- Datatable Start --}}
                             @livewire('admin.users.deleted-users-datatable')
-                            {{-- Data Table End --}}
+                            {{-- Datatable End --}}
 
                         </div>
                     </div>

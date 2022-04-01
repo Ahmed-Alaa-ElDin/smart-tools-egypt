@@ -69,30 +69,30 @@
 
                 {{-- Download --}}
                 <div class="form-inline col-span-1 justify-center">
-                <div class="flex justify-center">
-                    <button class="btn btn-success dropdown-toggle btn-round btn-sm text-white font-bold "
-                        type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="material-icons">
-                            file_download
-                        </span> &nbsp; {{ __('admin/productsPages.Export Products') }}
-                        &nbsp;</button>
-                    <div class="dropdown-menu">
-                        <a href="{{ route('admin.products.exportExcel') }}"
-                            class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600">
+                    <div class="flex justify-center">
+                        <button class="btn btn-success dropdown-toggle btn-round btn-sm text-white font-bold "
+                            type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="material-icons">
-                                file_present
-                            </span> &nbsp;&nbsp;
-                            {{ __('admin/productsPages.download all excel') }}</a>
-                        <a href="{{ route('admin.products.exportPDF') }}"
-                            class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600">
-                            <span class="material-icons">
-                                picture_as_pdf
-                            </span>
-                            &nbsp;&nbsp;
-                            {{ __('admin/productsPages.download all pdf') }}</a>
+                                file_download
+                            </span> &nbsp; {{ __('admin/productsPages.Export Products') }}
+                            &nbsp;</button>
+                        <div class="dropdown-menu">
+                            <a href="{{ route('admin.products.exportExcel') }}"
+                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600">
+                                <span class="material-icons">
+                                    file_present
+                                </span> &nbsp;&nbsp;
+                                {{ __('admin/productsPages.download all excel') }}</a>
+                            <a href="{{ route('admin.products.exportPDF') }}"
+                                class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600">
+                                <span class="material-icons">
+                                    picture_as_pdf
+                                </span>
+                                &nbsp;&nbsp;
+                                {{ __('admin/productsPages.download all pdf') }}</a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
                 {{-- Pagination Number --}}
                 <div class="form-inline col-span-1 justify-end my-2">
@@ -116,7 +116,7 @@
 
                 <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                     <table class="min-w-full divide-y divide-gray-200">
-                        {{-- Data Table Header --}}
+                        {{-- Datatable Header --}}
                         <thead class="bg-gray-50">
                             <tr>
                                 {{-- Multiple Select Header --}}
@@ -200,7 +200,7 @@
                             </tr>
                         </thead>
 
-                        {{-- Data Table Body --}}
+                        {{-- Datatable Body --}}
                         <tbody class="bg-white divide-y divide-gray-200">
                             @forelse ($products as $product)
                                 <tr>
@@ -241,14 +241,14 @@
                                     {{-- Brand Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
                                         <div class="flex items-center content-center justify-center">
-                                            {{ $product->brand->name }}
+                                            {{ $product->brand ? $product->brand->name : __('N/A') }}
                                         </div>
                                     </td>
 
                                     {{-- Sub Category Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
                                         <div class="flex items-center content-center justify-center">
-                                            {{ $product->subcategory->name }}
+                                            {{ $product->subcategory ? $product->subcategory->name : __('N/A') }}
                                         </div>
                                     </td>
 

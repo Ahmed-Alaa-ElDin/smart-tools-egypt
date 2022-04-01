@@ -203,7 +203,7 @@
                     <select
                         class="rounded w-full cursor-pointer py-1 text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('brand_id') border-red-900 border-2 @enderror"
                         wire:model.lazy="brand_id" id="brand_id" required>
-                        @if ($categories->count())
+                        @if ($brands->count())
                             <option value="">
                                 {{ __('admin/productsPages.Choose a brand') }}
                             </option>

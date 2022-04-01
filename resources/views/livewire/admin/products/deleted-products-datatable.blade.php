@@ -298,7 +298,7 @@
                                             </a>
                                         @endcan
 
-                                        {{-- Force Delete Button --}}
+                                        {{-- Restore Button --}}
                                         @can('Soft Delete User')
                                             <a href="#" title="{{ __('admin/productsPages.Restore') }}"
                                                 wire:click.prevent="restoreConfirm({{ $product->id }})"
