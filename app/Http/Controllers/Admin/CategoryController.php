@@ -15,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.categories.index');
     }
 
     /**
@@ -25,7 +25,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.categories.create');
     }
 
     /**
@@ -56,9 +56,9 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit($category)
     {
-        //
+        return view('admin.categories.edit',compact('category'));
     }
 
     /**
@@ -83,4 +83,10 @@ class CategoryController extends Controller
     {
         //
     }
+
+    public function softDeletedCategories()
+    {
+        return view('admin.categories.softDeleted');
+    }
+
 }

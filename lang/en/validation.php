@@ -186,7 +186,7 @@ return [
         'gallery_images.*'      => 'gallery images',
         'weight'                => 'weight',
         'logo'                  => 'Logo',
-        'subcategory_id'        => 'Subcategory',
+        'supercategory_id'      => 'Main Category',
         'subcategory_id'        => 'Subcategory',
         'subcategory_id'        => 'Subcategory',
         'subcategory_id'        => 'Subcategory',

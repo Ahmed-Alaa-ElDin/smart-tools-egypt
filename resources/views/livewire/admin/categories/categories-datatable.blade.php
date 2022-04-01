@@ -20,38 +20,14 @@
                     </div>
                 </div>
 
-                {{-- Manage All --}}
-                <div class="form-inline col-span-1 justify-center">
-                    <div class="flex justify-center">
-                        <button class="btn btn-success dropdown-toggle btn-round btn-sm text-white font-bold "
-                            type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="material-icons">
-                                manage_history
-                            </span> &nbsp; {{ __('admin/productsPages.Manage All') }}
-                            &nbsp;</button>
-                        <div class="dropdown-menu">
-
-                            @can('Restore Country')
-                                <a href="#" wire:click.prevent="restoreAllConfirm"
-                                    class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600">
-                                    <span class="material-icons">
-                                        restore
-                                    </span>
-                                    &nbsp;&nbsp;
-                                    {{ __('admin/productsPages.Restore All') }}</a>
-                            @endcan
-
-                            @can('Force Delete Country')
-                                <a href="#" wire:click.prevent="forceDeleteAllConfirm"
-                                    class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600">
-                                    <span class="material-icons">
-                                        delete
-                                    </span>
-                                    &nbsp;&nbsp;
-                                    {{ __('admin/productsPages.Delete All Permanently') }}</a>
-                            @endcan
-                        </div>
-                    </div>
+                {{-- Soft Deleted Countries --}}
+                <div class="ltr:text-right rtl:text-left">
+                    <a href="{{ route('admin.categories.softDeletedCategories') }}"
+                        class="btn btn-sm bg-red-600 hover:bg-red-700 focus:bg-red-600 active:bg-red-600 font-bold">
+                        <span class="material-icons rtl:ml-2 ltr:mr-2">
+                            delete_forever
+                        </span>
+                        {{ __('admin/productsPages.Soft Deleted Categories') }}</a>
                 </div>
 
                 {{-- Pagination Number --}}
@@ -80,23 +56,23 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 {{-- Name Header --}}
-                                <th wire:click="sortBy('name->{{ session('locale') }}')" scope="col"
+                                <th wire:click="sortBy('categories.name->{{ session('locale') }}')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/productsPages.Name') }} &nbsp;
                                         @include('partials._sort_icon', [
-                                            'field' => 'name->' . session('locale'),
+                                            'field' => 'categories.name->' . session('locale'),
                                         ])
                                     </div>
                                 </th>
 
-                                {{-- Category Header --}}
-                                <th wire:click="sortBy('categories_count')" scope="col"
+                                {{-- Super Category Header --}}
+                                <th wire:click="sortBy('supercategory_name->{{ session('locale') }}')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
-                                        {{ __('admin/productsPages.No. of Categories') }}&nbsp;
+                                        {{ __('admin/productsPages.Supercategory') }}&nbsp;
                                         @include('partials._sort_icon', [
-                                            'field' => 'categories_count',
+                                            'field' => 'supercategory_name->' . session('locale'),
                                         ])
                                     </div>
                                 </th>
@@ -125,71 +101,31 @@
 
                         {{-- Datatable Body --}}
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse ($supercategories as $supercategory)
+                            @forelse ($categories as $category)
                                 <tr>
 
                                     {{-- Icon & Name Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
-                                        <div class="flex items-center content-center ">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                @if ($supercategory->icon != null)
-                                                    <div
-                                                        class="h-10 w-10 rounded-full text-white bg-secondary flex justify-center items-center">
-                                                        <span class="material-icons">
-                                                            {!! $supercategory->icon !!}
-                                                        </span>
-                                                    </div>
-                                                @else
-                                                    <div
-                                                        class="h-10 w-10 rounded-full text-white bg-secondary flex justify-center items-center">
-                                                        <span class="material-icons">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-                                                                role="img" width="1em" height="1em"
-                                                                preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"
-                                                                class="inline-block">
-                                                                <path fill="currentColor"
-                                                                    d="M30 30h-8V4h8zm-10 0h-8V12h8zm-10 0H2V18h8z" />
-                                                            </svg>
-                                                        </span>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                            <div class="ltr:ml-4 rtl:mr-4 text-sm  truncate font-medium text-gray-900">
-                                                {{ $supercategory->name }}
-                                            </div>
+                                        <div class="text-center text-sm  truncate font-medium text-gray-900">
+                                            {{ $category->name }}
                                         </div>
                                     </td>
 
-                                    {{-- Category Body --}}
+                                    {{-- Supercategory Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
-                                        @if ($supercategory->categories_count)
-                                            <a href="{{ route('admin.supercategories.categoriesSupercategory', [$supercategory->id]) }}"
-                                                title="{{ __('admin/deliveriesPages.View') }}"
-                                                class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
-                                                <span class="bg-white rounded py-1 px-2">
-                                                    {{ $supercategory->categories_count }}
-                                                </span>
-
-                                                <span class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">
-                                                    visibility
-                                                </span>
-                                            </a>
-                                        @else
-                                            <div
-                                                class="m-auto text-sm bg-red-400 rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
-                                                <span class="bg-white rounded py-1 px-2">0</span>
-                                            </div>
-                                        @endif
+                                        <div class="text-center text-sm  truncate font-medium text-gray-900">
+                                            {{ $category->supercategory ? $category->supercategory->name : __('N/A') }}
+                                        </div>
                                     </td>
 
-                                    {{-- Products Count Body --}}
+                                    {{-- SubCategory Count Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
-                                        @if ($supercategory->subcategories_count)
-                                            <a href="{{ route('admin.supercategories.subcategoriesSupercategory', [$supercategory->id]) }}"
+                                        @if ($category->subcategories_count)
+                                            <a href="{{ route('admin.categories.subcategoriesCategory', [$category->id]) }}"
                                                 title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
-                                                    {{ $supercategory->subcategories_count }}
+                                                    {{ $category->subcategories_count }}
                                                 </span>
 
                                                 <span class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">
@@ -207,14 +143,13 @@
                                     {{-- Manage Body --}}
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
-                                        {{-- Restore Button --}}
-                                        @can('Soft Delete User')
-                                            <a href="#" title="{{ __('admin/productsPages.Restore') }}"
-                                                wire:click.prevent="restoreConfirm({{ $supercategory->id }})"
-                                                class="m-0">
+                                        {{-- Edit Button --}}
+                                        @can('Edit User')
+                                            <a href="{{ route('admin.categories.edit', ['category' => $category->id]) }}"
+                                                title="{{ __('admin/productsPages.Edit') }}" class="m-0">
                                                 <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-green-500 hover:bg-green-700 rounded">
-                                                    restore
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
+                                                    edit
                                                 </span>
                                             </a>
                                         @endcan
@@ -222,7 +157,7 @@
                                         {{-- Soft Delete Button --}}
                                         @can('Soft Delete User')
                                             <a href="#" title="{{ __('admin/productsPages.Delete') }}"
-                                                wire:click.prevent="deleteConfirm({{ $supercategory->id }})"
+                                                wire:click.prevent="deleteConfirm({{ $category->id }})"
                                                 class="m-0">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
@@ -246,7 +181,7 @@
         </div>
 
         <div class="mt-4">
-            {{ $supercategories->links() }}
+            {{ $categories->links() }}
         </div>
     </div>
 </div>

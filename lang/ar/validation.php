@@ -210,6 +210,7 @@ return [
         'title'                 => 'العنوان',
         'weight'                => 'الوزن',
         'logo'                  => 'الشعار',
+        'supercategory_id'      => 'القسم الرئيسي',
 
     ],
 

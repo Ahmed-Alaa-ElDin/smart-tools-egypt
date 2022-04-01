@@ -92,7 +92,6 @@ class SupercategoriesDatatable extends Component
                 'icon' => 'success'
             ]);
 
-            $this->selectedSupercategorys = [];
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/productsPages.Supercategory hasn't been deleted"),
