@@ -20,14 +20,14 @@
                     </div>
                 </div>
 
-                {{-- Soft Deleted Brands --}}
+                {{-- Soft Deleted Countries --}}
                 <div class="ltr:text-right rtl:text-left">
-                    <a href="{{ route('admin.brands.softDeletedBrands') }}"
+                    <a href="{{ route('admin.supercategories.softDeletedSupercategories') }}"
                         class="btn btn-sm bg-red-600 hover:bg-red-700 focus:bg-red-600 active:bg-red-600 font-bold">
                         <span class="material-icons rtl:ml-2 ltr:mr-2">
                             delete_forever
                         </span>
-                        {{ __('admin/productsPages.Soft Deleted Brands') }}</a>
+                        {{ __('admin/productsPages.Soft Deleted Supercategories') }}</a>
                 </div>
 
                 {{-- Pagination Number --}}
@@ -56,34 +56,34 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 {{-- Name Header --}}
-                                <th wire:click="sortBy('name')" scope="col"
+                                <th wire:click="sortBy('name->{{ session('locale') }}')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/productsPages.Name') }} &nbsp;
                                         @include('partials._sort_icon', [
-                                            'field' => 'name',
+                                            'field' => 'name->' . session('locale'),
                                         ])
                                     </div>
                                 </th>
 
-                                {{-- Country Header --}}
-                                <th wire:click="sortBy('country_id')" scope="col"
+                                {{-- Category Header --}}
+                                <th wire:click="sortBy('categories_count')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
-                                        {{ __('admin/productsPages.Country') }}&nbsp;
+                                        {{ __('admin/productsPages.No. of Categories') }}&nbsp;
                                         @include('partials._sort_icon', [
-                                            'field' => 'country_id',
+                                            'field' => 'categories_count',
                                         ])
                                     </div>
                                 </th>
 
-                                {{-- Products Count Header --}}
-                                <th wire:click="sortBy('products_count')" scope="col"
+                                {{-- Subcategory Header --}}
+                                <th wire:click="sortBy('subcategories_count')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
-                                        {{ __('admin/productsPages.No. of Products') }}&nbsp;
+                                        {{ __('admin/productsPages.No. of Subcategories') }}&nbsp;
                                         @include('partials._sort_icon', [
-                                            'field' => 'products_count',
+                                            'field' => 'subcategories_count',
                                         ])
                                     </div>
                                 </th>
@@ -101,55 +101,74 @@
 
                         {{-- Datatable Body --}}
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse ($brands as $brand)
+                            @forelse ($supercategories as $supercategory)
                                 <tr>
 
-                                    {{-- Photo & Name Body --}}
+                                    {{-- Icon & Name Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
-                                        <div class="flex items-center content-center w-64">
+                                        <div class="flex items-center content-center ">
                                             <div class="flex-shrink-0 h-10 w-10">
-                                                @if ($brand->logo_path != null)
-                                                    <img class="h-10 w-10 rounded-full"
-                                                        src="{{ asset('storage/images/logos/cropped200/' . $brand->logo_path) }}"
-                                                        alt="{{ $brand->name . '-logo' }}">
+                                                @if ($supercategory->icon != null)
+                                                    <div
+                                                        class="h-10 w-10 rounded-full text-white bg-secondary flex justify-center items-center">
+                                                        <span class="material-icons">
+                                                            {!! $supercategory->icon !!}
+                                                        </span>
+                                                    </div>
                                                 @else
                                                     <div
                                                         class="h-10 w-10 rounded-full text-white bg-secondary flex justify-center items-center">
                                                         <span class="material-icons">
                                                             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
                                                                 role="img" width="1em" height="1em"
-                                                                preserveAspectRatio="xMidYMid meet" viewBox="0 0 64 64">
+                                                                preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"
+                                                                class="inline-block">
                                                                 <path fill="currentColor"
-                                                                    d="M36.604 23.043c-.623-.342-1.559-.512-2.805-.512h-6.693v7.795h6.525c1.295 0 2.268-.156 2.916-.473c1.146-.551 1.721-1.639 1.721-3.268c0-1.757-.555-2.939-1.664-3.542" />
-                                                                <path fill="currentColor"
-                                                                    d="M32.002 2C15.434 2 2 15.432 2 32s13.434 30 30.002 30s30-13.432 30-30s-13.432-30-30-30m12.82 44.508h-6.693a20.582 20.582 0 0 1-.393-1.555a14.126 14.126 0 0 1-.256-2.5l-.041-2.697c-.023-1.85-.344-3.084-.959-3.701c-.613-.615-1.766-.924-3.453-.924h-5.922v11.377H21.18V17.492h13.879c1.984.039 3.51.289 4.578.748s1.975 1.135 2.717 2.027a9.07 9.07 0 0 1 1.459 2.441c.357.893.537 1.908.537 3.051c0 1.379-.348 2.732-1.043 4.064s-1.844 2.273-3.445 2.826c1.338.537 2.287 1.303 2.844 2.293c.559.99.838 2.504.838 4.537v1.949c0 1.324.053 2.225.16 2.697c.16.748.533 1.299 1.119 1.652v.731z" />
+                                                                    d="M30 30h-8V4h8zm-10 0h-8V12h8zm-10 0H2V18h8z" />
                                                             </svg>
                                                         </span>
                                                     </div>
                                                 @endif
                                             </div>
                                             <div
-                                                class="ltr:ml-4 rtl:mr-4 text-sm w-64 truncate font-medium text-gray-900">
-                                                {{ $brand->name }}
+                                                class="ltr:ml-4 rtl:mr-4 text-sm  truncate font-medium text-gray-900">
+                                                {{ $supercategory->name }}
                                             </div>
                                         </div>
                                     </td>
 
-                                    {{-- Country Body --}}
+                                    {{-- Category Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
-                                        <div class="flex items-center content-center justify-center">
-                                            {{ $brand->country ? $brand->country->name : __('N/A') }}
+                                        @if ($supercategory->categories_count)
+                                        <a
+                                        href="{{ route('admin.supercategories.categoriesSupercategory', [$supercategory->id]) }}"
+                                            title="{{ __('admin/deliveriesPages.View') }}"
+                                            class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
+                                            <span class="bg-white rounded py-1 px-2">
+                                                {{ $supercategory->categories_count }}
+                                            </span>
+
+                                            <span class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">
+                                                visibility
+                                            </span>
+                                        </a>
+                                    @else
+                                        <div
+                                            class="m-auto text-sm bg-red-400 rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
+                                            <span class="bg-white rounded py-1 px-2">0</span>
                                         </div>
+                                    @endif
                                     </td>
 
                                     {{-- Products Count Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
-                                        @if ($brand->products_count)
-                                            <a href="{{ route('admin.brands.productsBrand', [$brand->id]) }}"
+                                        @if ($supercategory->subcategories_count)
+                                            <a
+                                            href="{{ route('admin.supercategories.subcategoriesSupercategory', [$supercategory->id]) }}"
                                                 title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
-                                                    {{ $brand->products_count }}
+                                                    {{ $supercategory->subcategories_count }}
                                                 </span>
 
                                                 <span class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">
@@ -167,20 +186,9 @@
                                     {{-- Manage Body --}}
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
-                                        {{-- User Details --}}
-                                        @can("See User's Details")
-                                            <a href="{{ route('admin.brands.show', ['brand' => $brand->id]) }}"
-                                                title="{{ __('admin/productsPages.View') }}" class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
-                                                    visibility
-                                                </span>
-                                            </a>
-                                        @endcan
-
                                         {{-- Edit Button --}}
                                         @can('Edit User')
-                                            <a href="{{ route('admin.brands.edit', ['brand' => $brand->id]) }}"
+                                            <a href="{{ route('admin.supercategories.edit', ['supercategory' => $supercategory->id]) }}"
                                                 title="{{ __('admin/productsPages.Edit') }}" class="m-0">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
@@ -192,7 +200,7 @@
                                         {{-- Soft Delete Button --}}
                                         @can('Soft Delete User')
                                             <a href="#" title="{{ __('admin/productsPages.Delete') }}"
-                                                wire:click.prevent="deleteConfirm({{ $brand->id }})"
+                                                wire:click.prevent="deleteConfirm({{ $supercategory->id }})"
                                                 class="m-0">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
@@ -216,7 +224,7 @@
         </div>
 
         <div class="mt-4">
-            {{ $brands->links() }}
+            {{ $supercategories->links() }}
         </div>
     </div>
 </div>

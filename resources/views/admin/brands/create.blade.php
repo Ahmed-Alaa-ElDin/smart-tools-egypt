@@ -90,7 +90,7 @@
         // tinymce for SEO Description
         tinymce.init({
             ...options,
-            directionality: 'ltr',
+            directionality: 'rtl',
             selector: '#seo_description',
             setup: function(editor) {
                 editor.on('blur', function(e) {

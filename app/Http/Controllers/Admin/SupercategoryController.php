@@ -15,7 +15,7 @@ class SupercategoryController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.supercategories.index');
     }
 
     /**
@@ -25,7 +25,7 @@ class SupercategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.supercategories.create');
     }
 
     /**
@@ -56,9 +56,9 @@ class SupercategoryController extends Controller
      * @param  \App\Models\Supercategory  $supercategory
      * @return \Illuminate\Http\Response
      */
-    public function edit(Supercategory $supercategory)
+    public function edit($supercategory)
     {
-        //
+        return view('admin.supercategories.edit',compact('supercategory'));
     }
 
     /**
@@ -83,4 +83,10 @@ class SupercategoryController extends Controller
     {
         //
     }
+
+    public function softDeletedSupercategories()
+    {
+        return view('admin.supercategories.softDeleted');
+    }
+
 }

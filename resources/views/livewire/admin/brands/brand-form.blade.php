@@ -142,7 +142,7 @@
                     <input
                         class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('title') border-red-900 border-2 @enderror"
                         type="text" wire:model.lazy="title" id="title"
-                        placeholder="{{ __('admin/productsPages.in English') }}">
+                        >
                     @error('title')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                             {{ $message }}</div>
@@ -159,7 +159,7 @@
                 <div class="col-span-12 sm:col-span-10 md:col-span-6 lg:col-span-12">
                     <div wire:ignore
                         class="py-1 w-full px-6 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 cursor-text @error('seo_description') border-red-900 border-2 @enderror"
-                        type="text" id="seo_description" placeholder="{{ __('admin/productsPages.in English') }}">
+                        type="text" id="seo_description" >
                         {!! $description_seo !!}
                     </div>
 

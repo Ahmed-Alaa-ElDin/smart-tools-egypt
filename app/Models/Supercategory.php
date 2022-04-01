@@ -27,4 +27,10 @@ class Supercategory extends Model
     {
         return $this->hasMany(Category::class);
     }
+
+    // One to many through relationship  Super-Category --> Sub-Categories
+    public function subcategories()
+    {
+        return $this->hasManyThrough(Subcategory::class, Category::class);
+    }
 }

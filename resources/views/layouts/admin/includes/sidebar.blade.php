@@ -189,10 +189,10 @@
                     <div class="collapse {{ $activeSection == 'Categories System' ? ' show' : '' }}" id="categories">
                         <ul class="nav">
 
-                            {{-- See Super Categories --}}
-                            <li class="nav-item {{ $activePage == 'Super Categories' ? ' active' : '' }}">
+                            {{-- See Supercategories --}}
+                            <li class="nav-item {{ $activePage == 'Supercategories' ? ' active' : '' }}">
                                 <a class="nav-link"
-                                    href="{{ route('admin.super-categories.index') }}">
+                                    href="{{ route('admin.supercategories.index') }}">
                                     <span class="material-icons">
                                         <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
                                             height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"
@@ -200,7 +200,7 @@
                                             <path fill="currentColor" d="M30 30h-8V4h8zm-10 0h-8V12h8zm-10 0H2V18h8z" />
                                         </svg>
                                     </span>
-                                    <span>{{ __('admin/master.Super Categories') }} </span>
+                                    <span>{{ __('admin/master.Supercategories') }} </span>
                                 </a>
                             </li>
 
@@ -223,7 +223,7 @@
                             {{-- See Sub Categories --}}
                             <li class="nav-item {{ $activePage == 'Sub Categories' ? ' active' : '' }}">
                                 <a class="nav-link"
-                                    href="{{ route('admin.sub-categories.index') }}">
+                                    href="{{ route('admin.subcategories.index') }}">
                                     <span class="material-icons">
                                         <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
                                             height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"
@@ -235,7 +235,6 @@
                                     <span>{{ __('admin/master.Sub Categories') }} </span>
                                 </a>
                             </li>
-
 
                         </ul>
                     </div>

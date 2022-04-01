@@ -1,5 +1,5 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Products', 'activePage' => 'Add Product', 'titlePage' =>
-__('admin/productsPages.Add Product')])
+@extends('layouts.admin.admin', ['activeSection' => 'Categories System', 'activePage' => '', 'titlePage'
+=> __('admin/productsPages.Add Supercategory')])
 
 @section('content')
     <div class="content">
@@ -12,11 +12,11 @@ __('admin/productsPages.Add Product')])
                         </a>
                     </li>
                     <li class="breadcrumb-item hover:text-primary">
-                        <a href="{{ route('admin.products.index') }}">{{ __('admin/productsPages.All Products') }}
+                        <a href="{{ route('admin.supercategories.index') }}">{{ __('admin/productsPages.Supercategories') }}
                         </a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        {{ __('admin/productsPages.Add Product') }}
+                        {{ __('admin/productsPages.Add Supercategory') }}
                     </li>
                 </ol>
             </nav>
@@ -32,7 +32,7 @@ __('admin/productsPages.Add Product')])
                             <div class="row">
                                 <div class="col-12 ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
-                                        {{ __('admin/productsPages.Through this form you can add new product') }}
+                                        {{ __('admin/productsPages.Through this form you can add new supercategory') }}
                                     </p>
                                 </div>
                             </div>
@@ -42,7 +42,7 @@ __('admin/productsPages.Add Product')])
                         <div class="card-body overflow-hidden">
 
                             {{-- Form Start --}}
-                            @livewire('admin.products.product-form')
+                            @livewire('admin.supercategories.supercategory-form')
 
                         </div>
                     </div>
@@ -75,7 +75,6 @@ __('admin/productsPages.Add Product')])
                 'directionality',
                 'table',
                 'autoresize',
-                // 'fullscreen'
             ],
             toolbar: 'ltr rtl | ' +
                 'bold italic backcolor fontsizeselect| alignleft aligncenter ' +
@@ -86,30 +85,6 @@ __('admin/productsPages.Add Product')])
             content_style: '.mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before { text-align: center ; width: 100% }'
 
         }
-
-        // tinymce for Description
-        tinymce.init({
-            ...options,
-            directionality: 'rtl',
-            selector: '#description_ar',
-            setup: function(editor) {
-                editor.on('blur', function(e) {
-                    window.livewire.emit('descriptionAr', tinymce.get(e.target.id).getContent())
-                });
-            }
-        });
-
-        // tinymce for Description
-        tinymce.init({
-            ...options,
-            directionality: 'ltr',
-            selector: '#description_en',
-            setup: function(editor) {
-                editor.on('blur', function(e) {
-                    window.livewire.emit('descriptionEn', tinymce.get(e.target.id).getContent())
-                });
-            }
-        });
 
         // tinymce for SEO Description
         tinymce.init({

@@ -18,7 +18,7 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        // Super Categories
+        // Supercategories
         $clothes = Supercategory::create([
             'name' => ['en' => 'Clothes', 'ar' => 'ملابس'],
         ]);

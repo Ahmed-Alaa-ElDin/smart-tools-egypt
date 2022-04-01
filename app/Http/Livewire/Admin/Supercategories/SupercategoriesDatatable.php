@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Brands;
+namespace App\Http\Livewire\Admin\Supercategories;
 
-use App\Models\Brand;
+use App\Models\Supercategory;
 use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class BrandsDatatable extends Component
+class SupercategoriesDatatable extends Component
 {
     use WithPagination;
 
@@ -17,35 +17,33 @@ class BrandsDatatable extends Component
 
     public $search = "";
 
-    protected $listeners = ['softDeleteBrand'];
+    protected $listeners = ['softDeleteSupercategory'];
 
     // Render Once
     public function mount()
     {
         $this->perPage = Config::get('constants.constants.PAGINATION');
 
-        $this->sortBy = 'name';
+        $this->sortBy = 'name->' . session('locale');
     }
 
     // Render With each update
     public function render()
     {
-        $brands = Brand::
-            select([
-                'id',
-                'name',
-                'logo_path',
-                'country_id',
-            ])->
-            with('country')
-            ->withCount('products')
-            ->where('name', 'like', '%' . $this->search . '%')
-            ->orWhereHas('country', function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%');
+        $supercategories = Supercategory::select([
+            'id',
+            'name',
+            'icon',
+        ])
+            ->withCount('categories')
+            ->withCount('subcategories')
+            ->where(function ($q) {
+                return $q
+                    ->where('name', 'like', '%' . $this->search . '%');
             })
             ->orderBy($this->sortBy, $this->sortDirection)->paginate($this->perPage);
 
-        return view('livewire.admin.brands.brands-datatable', compact('brands'));
+        return view('livewire.admin.supercategories.supercategories-datatable', compact('supercategories'));
     }
 
     // reset pagination after new search
@@ -62,41 +60,45 @@ class BrandsDatatable extends Component
         } else {
             $this->sortDirection = 'ASC';
         }
+
+        if ($field == 'name') {
+            return $this->sortBy = 'name->' . session('locale');
+        }
+
         return $this->sortBy = $field;
     }
 
     ######## Soft Delete #########
-    public function deleteConfirm($brand_id)
+    public function deleteConfirm($supercategories_id)
     {
         $this->dispatchBrowserEvent('swalConfirm', [
-            "text" => __('admin/productsPages.Are you sure, you want to delete this brand ?'),
+            "text" => __('admin/productsPages.Are you sure, you want to delete this supercategory ?'),
             'confirmButtonText' => __('admin/productsPages.Delete'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
             'confirmButtonColor' => 'red',
-            'func' => 'softDeleteBrand',
-            'brand_id' => $brand_id,
+            'func' => 'softDeleteSupercategory',
+            'supercategory_id' => $supercategories_id,
         ]);
     }
 
-    public function softDeleteBrand($brand_id)
+    public function softDeleteSupercategory($supercategories_id)
     {
         try {
-            $product = Brand::findOrFail($brand_id);
+            $product = Supercategory::findOrFail($supercategories_id);
             $product->delete();
 
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('admin/productsPages.Brand has been deleted successfully'),
+                "text" => __('admin/productsPages.Supercategory has been deleted successfully'),
                 'icon' => 'success'
             ]);
 
-            $this->selectedBrands = [];
+            $this->selectedSupercategorys = [];
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __("admin/productsPages.Brand hasn't been deleted"),
+                "text" => __("admin/productsPages.Supercategory hasn't been deleted"),
                 'icon' => 'error'
             ]);
         }
     }
     ######## Soft Delete #########
-
 }

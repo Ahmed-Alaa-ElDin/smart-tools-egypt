@@ -23,7 +23,7 @@ return [
     'Governorates'              =>      'المحافظات',
     'Cities'                    =>      'المناطق',
     'Categories System'         =>      'أقسام المنتجات',
-    'Super Categories'          =>      'الأقسام الرئيسية',
+    'Supercategories'          =>      'الأقسام الرئيسية',
     'Categories'                =>      'الأقسام الفرعية',
     'Sub Categories'            =>      'الأقسام المباشرة',
     'Products'                  =>      'المنتجات',

@@ -23,7 +23,7 @@ return [
     'Governorates'              =>      'Governorates',
     'Cities'                    =>      'Cities',
     'Categories System'         =>      'Categories System',
-    'Super Categories'          =>      'Main Categories',
+    'Supercategories'          =>      'Main Categories',
     'Categories'                =>      'Categories',
     'Sub Categories'            =>      'Subcategories',
     'Products'                  =>      'Products',

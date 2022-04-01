@@ -114,7 +114,7 @@ __('admin/productsPages.Edit Product')])
         // tinymce for SEO Description
         tinymce.init({
             ...options,
-            directionality: 'ltr',
+            directionality: 'rtl',
             selector: '#seo_description',
             setup: function(editor) {
                 editor.on('blur', function(e) {
@@ -122,9 +122,5 @@ __('admin/productsPages.Edit Product')])
                 });
             }
         });
-
-        Livewire.on('setDescription', (postId) => {
-            alert('A post was added with the id of: ' + postId);
-        })
     </script>
 @endpush

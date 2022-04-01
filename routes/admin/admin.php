@@ -35,11 +35,17 @@ Route::group([
 
 
     // ############## Categories Routes Start ##############
-    Route::resource('/super-categories', SupercategoryController::class);
+    // todo: add  categories-supercategory & subcategories-supercategory
+    Route::get('/countries/{supercategory}/categories-supercategory', [SupercategoryController::class, 'categoriesSupercategory'])->name('supercategories.categoriesSupercategory');
+    Route::get('/countries/{supercategory}/subcategories-supercategory', [SupercategoryController::class, 'subcategoriesSupercategory'])->name('supercategories.subcategoriesSupercategory');
+    Route::get('/supercategories/deleted-supercategories', [SupercategoryController::class, 'softDeletedSupercategories'])->name('supercategories.softDeletedSupercategories');
+    Route::resource('/supercategories', SupercategoryController::class);
 
+    Route::get('/countries/{category}/subcategories-category', [CategoryController::class, 'subcategoriescategory'])->name('categories.subcategoriescategory');
+    Route::get('/categories/deleted-categories', [CategoryController::class, 'softDeletedcategories'])->name('categories.softDeletedcategories');
     Route::resource('/categories', CategoryController::class);
 
-    Route::resource('/sub-categories', SubcategoryController::class);
+    Route::resource('/subcategories', SubcategoryController::class);
     // ############## Categories Routes End ##############
 
     // ############## Users Routes Start ##############
