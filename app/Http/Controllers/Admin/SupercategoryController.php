@@ -89,4 +89,9 @@ class SupercategoryController extends Controller
         return view('admin.supercategories.softDeleted');
     }
 
+    public function categoriesSupercategory(Supercategory $supercategory)
+    {
+        return view('admin.supercategories.categories',compact('supercategory'));
+    }
+
 }

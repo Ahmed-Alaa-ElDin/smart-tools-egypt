@@ -233,5 +233,6 @@ return [
     "Are you sure, you want to restore all supercategories ?"       =>       "هل أنت متأكد من استعادة جميع الأقسام الفرعية ؟",
     "All supercategories have been restored successfully"           =>       "تم استعادة جميع الأقسام الفرعية بنجاح",
     "All supercategories haven\'t been restored"        =>       "لم يتم استعادة جميع الأقسام الفرعية",
+    "'s Categories"                                     =>       "الأقسام الفرعية ل:name",
 
 ];
