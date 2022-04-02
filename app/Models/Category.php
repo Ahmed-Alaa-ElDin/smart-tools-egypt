@@ -28,7 +28,7 @@ class Category extends Model
         return $this->hasMany(Subcategory::class);
     }
 
-    // One to many relationship (Reverse)  Super-Category --> Categories
+    // One to many relationship (Inverse)  Super-Category --> Categories
     public function supercategory()
     {
         return $this->belongsTo(Supercategory::class);

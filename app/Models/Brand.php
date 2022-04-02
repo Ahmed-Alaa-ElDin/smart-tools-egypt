@@ -25,7 +25,7 @@ class Brand extends Model
         return $this->hasMany(Product::class);
     }
 
-    // One to many relationship (Reverse)  Country --> Brands
+    // One to many relationship (Inverse)  Country --> Brands
     public function country()
     {
         return $this->belongsTo(Country::class);

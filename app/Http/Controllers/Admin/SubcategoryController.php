@@ -15,7 +15,7 @@ class SubcategoryController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.subcategories.index');
     }
 
     /**
@@ -25,7 +25,7 @@ class SubcategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.subcategories.create');
     }
 
     /**
@@ -56,9 +56,9 @@ class SubcategoryController extends Controller
      * @param  \App\Models\Subcategory  $subcategory
      * @return \Illuminate\Http\Response
      */
-    public function edit(Subcategory $subcategory)
+    public function edit($subcategory)
     {
-        //
+        return view('admin.subcategories.edit',compact('subcategory'));
     }
 
     /**
@@ -83,4 +83,15 @@ class SubcategoryController extends Controller
     {
         //
     }
+
+    public function softDeletedSubcategories()
+    {
+        return view('admin.subcategories.softDeleted');
+    }
+
+    public function productsSubcategory(Subcategory $subcategory)
+    {
+        return view('admin.subcategories.products',compact('subcategory'));
+    }
+
 }

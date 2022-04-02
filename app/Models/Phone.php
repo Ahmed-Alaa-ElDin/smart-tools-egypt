@@ -15,7 +15,7 @@ class Phone extends Model
         'default',
     ];
 
-    // One to many relationship (Reverse)  User --> Phones
+    // One to many relationship (Inverse)  User --> Phones
     public function user()
     {
         return $this->belongsTo(User::class);

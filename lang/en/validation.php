@@ -187,7 +187,7 @@ return [
         'weight'                => 'weight',
         'logo'                  => 'Logo',
         'supercategory_id'      => 'Main Category',
-        'subcategory_id'        => 'Subcategory',
+        'category_id'           => 'Category',
         'subcategory_id'        => 'Subcategory',
         'subcategory_id'        => 'Subcategory',
         'subcategory_id'        => 'Subcategory',

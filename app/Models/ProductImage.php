@@ -16,7 +16,7 @@ class ProductImage extends Model
         'featured',
     ];
 
-    // One to many relationship (Reverse) SProduct --> Image
+    // One to many relationship (Inverse) SProduct --> Image
     public function product()
     {
         return $this->belongsTo(Product::class);

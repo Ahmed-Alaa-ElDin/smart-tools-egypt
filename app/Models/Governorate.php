@@ -26,7 +26,7 @@ class Governorate extends Model
         return $this->hasMany(City::class);
     }
 
-    // One to many relationship (Reverse)  Country --> Governorates
+    // One to many relationship (Inverse)  Country --> Governorates
     public function country()
     {
         return $this->belongsTo(Country::class);

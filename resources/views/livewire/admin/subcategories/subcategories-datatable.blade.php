@@ -1,5 +1,4 @@
 <div>
-    {{-- @dump($selectedProducts) --}}
     <div class="flex flex-col">
 
         {{-- Search and Pagination Control --}}
@@ -22,12 +21,12 @@
 
                 {{-- Soft Deleted Countries --}}
                 <div class="ltr:text-right rtl:text-left">
-                    <a href="{{ route('admin.categories.softDeletedCategories') }}"
+                    <a href="{{ route('admin.subcategories.softDeletedSubcategories') }}"
                         class="btn btn-sm bg-red-600 hover:bg-red-700 focus:bg-red-600 active:bg-red-600 font-bold">
                         <span class="material-icons rtl:ml-2 ltr:mr-2">
                             delete_forever
                         </span>
-                        {{ __('admin/productsPages.Soft Deleted Categories') }}</a>
+                        {{ __('admin/productsPages.Soft Deleted Subcategories') }}</a>
                 </div>
 
                 {{-- Pagination Number --}}
@@ -56,17 +55,28 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 {{-- Name Header --}}
-                                <th wire:click="sortBy('categories.name->{{ session('locale') }}')" scope="col"
+                                <th wire:click="sortBy('subcategories.name->{{ session('locale') }}')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/productsPages.Name') }} &nbsp;
                                         @include('partials._sort_icon', [
-                                            'field' => 'categories.name->' . session('locale'),
+                                            'field' => 'subcategories.name->' . session('locale'),
                                         ])
                                     </div>
                                 </th>
 
-                                {{-- Super Category Header --}}
+                                {{-- Category Header --}}
+                                <th wire:click="sortBy('category_name->{{ session('locale') }}')" scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                    <div class="min-w-max">
+                                        {{ __('admin/productsPages.Category') }}&nbsp;
+                                        @include('partials._sort_icon', [
+                                            'field' => 'category_name->' . session('locale'),
+                                        ])
+                                    </div>
+                                </th>
+
+                                {{-- Subcategory Header --}}
                                 <th wire:click="sortBy('supercategory_name->{{ session('locale') }}')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
@@ -77,13 +87,13 @@
                                     </div>
                                 </th>
 
-                                {{-- Subcategory Header --}}
-                                <th wire:click="sortBy('subcategories_count')" scope="col"
+                                {{-- Products Count Header --}}
+                                <th wire:click="sortBy('products_count')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
-                                        {{ __('admin/productsPages.No. of Subcategories') }}&nbsp;
+                                        {{ __('admin/productsPages.No. of Products') }}&nbsp;
                                         @include('partials._sort_icon', [
-                                            'field' => 'subcategories_count',
+                                            'field' => 'products_count',
                                         ])
                                     </div>
                                 </th>
@@ -101,31 +111,39 @@
 
                         {{-- Datatable Body --}}
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse ($categories as $category)
+                            @forelse ($subcategories as $subcategory)
                                 <tr>
 
                                     {{-- Name Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
                                         <div class="text-center text-sm  truncate font-medium text-gray-900">
-                                            {{ $category->name }}
+                                            {{ $subcategory->name }}
+                                        </div>
+                                    </td>
+
+                                    {{-- Category Body --}}
+                                    <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
+                                        <div class="text-center text-sm  truncate font-medium text-gray-900">
+                                            {{ $subcategory->category ? $subcategory->category->name : __('N/A') }}
                                         </div>
                                     </td>
 
                                     {{-- Supercategory Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
                                         <div class="text-center text-sm  truncate font-medium text-gray-900">
-                                            {{ $category->supercategory ? $category->supercategory->name : __('N/A') }}
+                                            {{ $subcategory->supercategory ? $subcategory->supercategory->name : __('N/A') }}
                                         </div>
                                     </td>
 
-                                    {{-- SubCategory Count Body --}}
+                                    {{-- Products Count Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
-                                        @if ($category->subcategories_count)
-                                            <a href="{{ route('admin.categories.subcategoriesCategory', [$category->id]) }}"
+                                        @if ($subcategory->products_count)
+                                            <a
+                                            href="{{ route('admin.subcategories.productsSubcategory', [$subcategory->id]) }}"
                                                 title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
-                                                    {{ $category->subcategories_count }}
+                                                    {{ $subcategory->products_count }}
                                                 </span>
 
                                                 <span class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">
@@ -145,7 +163,7 @@
 
                                         {{-- Edit Button --}}
                                         @can('Edit User')
-                                            <a href="{{ route('admin.categories.edit', ['category' => $category->id]) }}"
+                                            <a href="{{ route('admin.subcategories.edit', ['subcategory' => $subcategory->id]) }}"
                                                 title="{{ __('admin/productsPages.Edit') }}" class="m-0">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
@@ -157,7 +175,7 @@
                                         {{-- Soft Delete Button --}}
                                         @can('Soft Delete User')
                                             <a href="#" title="{{ __('admin/productsPages.Delete') }}"
-                                                wire:click.prevent="deleteConfirm({{ $category->id }})"
+                                                wire:click.prevent="deleteConfirm({{ $subcategory->id }})"
                                                 class="m-0">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
@@ -181,7 +199,7 @@
         </div>
 
         <div class="mt-4">
-            {{ $categories->links() }}
+            {{ $subcategories->links() }}
         </div>
     </div>
 </div>

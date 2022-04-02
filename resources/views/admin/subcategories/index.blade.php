@@ -1,5 +1,5 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Categories System', 'activePage' => '', 'titlePage'
-=> __("admin/productsPages.'s Categories",['name'=>$supercategory->name])])
+@extends('layouts.admin.admin', ['activeSection' => 'Categories System', 'activePage' => 'Subcategories', 'titlePage'
+=> __('admin/productsPages.Subcategories')])
 
 @section('content')
     <div class="content">
@@ -9,11 +9,7 @@
                 <ol class="breadcrumb text-sm">
                     <li class="breadcrumb-item hover:text-primary"><a
                             href="{{ route('admin.dashboard') }}">{{ __('admin/productsPages.Dashboard') }}</a></li>
-                    <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.supercategories.index') }}">{{ __('admin/productsPages.Supercategories') }}</a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        {{ __("admin/productsPages.'s Categories", ['name' => $supercategory->name]) }}
+                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/productsPages.Subcategories') }}
                     </li>
                 </ol>
             </nav>
@@ -29,17 +25,17 @@
                             <div class="flex justify-between">
                                 <div class=" ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
-                                        {{ __('admin/productsPages.Here you can manage categories') }}</p>
+                                        {{ __('admin/productsPages.Here you can manage subcategories') }}</p>
                                 </div>
 
-                                {{-- Add New Category Button --}}
+                                {{-- Add New Subcategories Button --}}
                                 <div class="ltr:text-right rtl:text-left">
-                                    <a href="{{ route('admin.categories.create') }}"
+                                    <a href="{{ route('admin.subcategories.create') }}"
                                         class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">
                                         <span class="material-icons rtl:ml-1 ltr:mr-1">
                                             add
                                         </span>
-                                        {{ __('admin/productsPages.Add Category') }}</a>
+                                        {{ __('admin/productsPages.Add Subcategory') }}</a>
                                 </div>
                             </div>
                         </div>
@@ -47,7 +43,7 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Datatable Start --}}
-                            @livewire('admin.categories.categories-datatable',['search' => $supercategory->name])
+                            @livewire('admin.subcategories.subcategories-datatable')
                             {{-- Datatable End --}}
                         </div>
                     </div>
@@ -67,7 +63,7 @@
     @livewireScripts
 
     <script>
-        // #### Category Sweetalert ####
+        // #### Subcategories Sweetalert ####
         window.addEventListener('swalConfirm', function(e) {
 
             Swal.fire({
@@ -81,7 +77,7 @@
                 focusDeny: true,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit(e.detail.func, e.detail.category_id);
+                    Livewire.emit(e.detail.func, e.detail.subcategory_id);
                 }
             });
         });
@@ -97,6 +93,6 @@
                 timerProgressBar: true,
             })
         });
-        // #### Category Sweetalert ####
+        // #### Subcategories Sweetalert ####
     </script>
 @endpush

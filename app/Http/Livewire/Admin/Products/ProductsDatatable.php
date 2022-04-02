@@ -35,22 +35,23 @@ class ProductsDatatable extends Component
     public function render()
     {
         $products = Product::select([
-            'products.id',
-            'products.name',
-            'brand_id',
-            'subcategory_id',
-            'quantity',
-            'low_stock',
-            'base_price',
-            'final_price',
-            'points',
-            'publish',
-            'under_reviewing',
-            'subcategories.name as subcategory_name',
-            'brands.name as brand_name'
-        ])->with('subcategory', 'brand', 'thumbnail')
-            ->join('brands', 'brand_id', '=', 'brands.id')
-            ->join('subcategories', 'subcategory_id', '=', 'subcategories.id')
+                'products.id',
+                'products.name',
+                'brand_id',
+                'subcategory_id',
+                'quantity',
+                'low_stock',
+                'base_price',
+                'final_price',
+                'points',
+                'publish',
+                'under_reviewing',
+                'subcategories.name as subcategory_name',
+                'brands.name as brand_name'
+            ])
+            ->with('subcategory', 'brand', 'thumbnail')
+            ->leftJoin('brands', 'brand_id', '=', 'brands.id')
+            ->leftJoin('subcategories', 'subcategory_id', '=', 'subcategories.id')
             ->where('products.name->en', 'like', '%' . $this->search . '%')
             ->orWhere('products.name->ar', 'like', '%' . $this->search . '%')
             ->orWhere('products.base_price', 'like', '%' . $this->search . '%')
@@ -65,6 +66,7 @@ class ProductsDatatable extends Component
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
+        // dd($products);
         return view('livewire.admin.products.products-datatable', compact('products'));
     }
 

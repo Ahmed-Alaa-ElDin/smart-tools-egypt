@@ -89,4 +89,9 @@ class CategoryController extends Controller
         return view('admin.categories.softDeleted');
     }
 
+    public function subcategoriesCategory(Category $category)
+    {
+        return view('admin.categories.subcategories',compact('category'));
+    }
+
 }

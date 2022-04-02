@@ -94,4 +94,10 @@ class SupercategoryController extends Controller
         return view('admin.supercategories.categories',compact('supercategory'));
     }
 
+    public function subcategoriesSupercategory(Supercategory $supercategory)
+    {
+        return view('admin.supercategories.subcategories',compact('supercategory'));
+    }
+
+
 }

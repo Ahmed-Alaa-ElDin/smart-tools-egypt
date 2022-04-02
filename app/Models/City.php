@@ -20,7 +20,7 @@ class City extends Model
         'governorate_id',
     ];
 
-    // One to many relationship (Reverse)  Governorate --> Cities
+    // One to many relationship (Inverse)  Governorate --> Cities
     public function governorate()
     {
         return $this->belongsTo(Governorate::class);

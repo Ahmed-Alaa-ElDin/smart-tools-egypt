@@ -221,7 +221,7 @@
                             </li>
 
                             {{-- See Sub Categories --}}
-                            <li class="nav-item {{ $activePage == 'Sub Categories' ? ' active' : '' }}">
+                            <li class="nav-item {{ $activePage == 'Subcategories' ? ' active' : '' }}">
                                 <a class="nav-link"
                                     href="{{ route('admin.subcategories.index') }}">
                                     <span class="material-icons">

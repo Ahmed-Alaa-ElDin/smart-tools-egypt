@@ -39,7 +39,8 @@ class SupercategoriesDatatable extends Component
             ->withCount('subcategories')
             ->where(function ($q) {
                 return $q
-                    ->where('name', 'like', '%' . $this->search . '%');
+                    ->where('name->ar', 'like', '%' . $this->search . '%')
+                    ->orWhere('name->en', 'like', '%' . $this->search . '%');
             })
             ->orderBy($this->sortBy, $this->sortDirection)->paginate($this->perPage);
 
@@ -84,8 +85,8 @@ class SupercategoriesDatatable extends Component
     public function softDeleteSupercategory($supercategories_id)
     {
         try {
-            $product = Supercategory::findOrFail($supercategories_id);
-            $product->delete();
+            $supercategory = Supercategory::findOrFail($supercategories_id);
+            $supercategory->delete();
 
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('admin/productsPages.Supercategory has been deleted successfully'),

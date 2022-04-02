@@ -15,7 +15,7 @@ class DeliveryPhone extends Model
         'default',
     ];
 
-    // One to many relationship (Reverse)  Delivery Company --> Phones
+    // One to many relationship (Inverse)  Delivery Company --> Phones
     public function delivery()
     {
         return $this->belongsTo(Delivery::class);

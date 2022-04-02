@@ -37,7 +37,7 @@ class CategoriesDatatable extends Component
                 'supercategories.id as supercategory_id',
                 'supercategory_id'
             ])
-            ->join('supercategories', 'supercategory_id', '=', 'supercategories.id')
+            ->leftJoin('supercategories', 'supercategory_id', '=', 'supercategories.id')
             ->with(['supercategory' => function ($q) {
                 return $q->select('id', 'name');
             }])
