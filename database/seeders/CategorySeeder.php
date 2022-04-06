@@ -169,7 +169,6 @@ class CategorySeeder extends Seeder
             'base_price' =>'423.34',
             'final_price' =>'212.34',
             'brand_id' => 1,
-            'subcategory_id' => 1,
         ]);
 
         Product::create([
@@ -179,7 +178,6 @@ class CategorySeeder extends Seeder
             'base_price' =>'213.34',
             'final_price' =>'24.34',
             'brand_id' => 2,
-            'subcategory_id' => 3,
 
         ]);
 
@@ -190,7 +188,6 @@ class CategorySeeder extends Seeder
             'base_price' =>'3.34',
             'final_price' =>'2.34',
             'brand_id' => 3,
-            'subcategory_id' => 6,
 
         ]);
 
@@ -201,7 +198,6 @@ class CategorySeeder extends Seeder
             'base_price' =>'123.34',
             'final_price' =>'12.34',
             'brand_id' => 2,
-            'subcategory_id' => 7,
 
         ]);
 
@@ -212,7 +208,6 @@ class CategorySeeder extends Seeder
             'base_price' =>'876.34',
             'final_price' =>'212.34',
             'brand_id' => 4,
-            'subcategory_id' => 8,
 
         ]);
 
@@ -223,7 +218,6 @@ class CategorySeeder extends Seeder
             'base_price' =>'423.34',
             'final_price' =>'212.34',
             'brand_id' => 1,
-            'subcategory_id' => 3,
 
         ]);
 
@@ -234,7 +228,6 @@ class CategorySeeder extends Seeder
             'base_price' =>'423.34',
             'final_price' =>'22.34',
             'brand_id' => 1,
-            'subcategory_id' => 9,
         ]);
     }
 }

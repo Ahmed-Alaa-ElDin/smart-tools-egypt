@@ -72,7 +72,7 @@ class GovernoratesCountryDatatable extends Component
         return $this->sortBy = $field;
     }
 
-    ######## Soft Delete #########
+    ######## Deleted #########
     public function deleteConfirm($governorate_id)
     {
         $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
@@ -100,6 +100,6 @@ class GovernoratesCountryDatatable extends Component
             ]);
         }
     }
-    ######## Soft Delete #########
+    ######## Deleted #########
 
 }

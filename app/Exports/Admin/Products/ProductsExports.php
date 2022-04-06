@@ -109,7 +109,7 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
             $product->model ?? __('N/A'),
             $product->barcode ?? __('N/A'),
             $product->brand ? $product->brand->name : __('N/A'),
-            $product->brand->country ? $product->brand->country->name : __('N/A'),
+            $product->brand && $product->brand->country ? $product->brand->country->name : __('N/A'),
             $product->subcategory ? $product->subcategory->getTranslation('name', session('locale')) : __('N/A'),
             $product->subcategory ? ($product->subcategory->category ? $product->subcategory->category->getTranslation('name', session('locale')) : __('N/A')) : __('N/A'),
             $product->subcategory ? ($product->subcategory->category ? ($product->subcategory->category->supercategory ? $product->subcategory->category->supercategory->getTranslation('name', session('locale')) : __('N/A')) : __('N/A')) : __('N/A'),

@@ -59,7 +59,7 @@ __('admin/usersPages.Role\'s Users List')])
     @livewireScripts
 
     <script>
-        // #### User Soft Delete ####
+        // #### User Deleted ####
         window.addEventListener('swalConfirmSoftDelete', function(e) {
             Swal.fire({
                 icon: 'warning',
@@ -88,7 +88,7 @@ __('admin/usersPages.Role\'s Users List')])
                 timerProgressBar: true,
             })
         });
-        // #### User Soft Delete ####
+        // #### User Deleted ####
 
         window.addEventListener('swalEditRolesSelect', function(e) {
             Swal.fire({

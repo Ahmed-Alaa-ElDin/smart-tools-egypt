@@ -65,7 +65,7 @@ class BrandsDatatable extends Component
         return $this->sortBy = $field;
     }
 
-    ######## Soft Delete #########
+    ######## Deleted #########
     public function deleteConfirm($brand_id)
     {
         $this->dispatchBrowserEvent('swalConfirm', [
@@ -97,6 +97,6 @@ class BrandsDatatable extends Component
             ]);
         }
     }
-    ######## Soft Delete #########
+    ######## Deleted #########
 
 }

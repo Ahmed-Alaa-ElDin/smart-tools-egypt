@@ -36,7 +36,6 @@ class DeletedProductsDatatable extends Component
             'products.id',
             'products.name',
             'brand_id',
-            'subcategory_id',
             'quantity',
             'low_stock',
             'base_price',
@@ -44,17 +43,15 @@ class DeletedProductsDatatable extends Component
             'points',
             'publish',
             'under_reviewing',
-            'subcategories.name as subcategory_name',
             'brands.name as brand_name'
-        ])->with('subcategory', 'brand', 'thumbnail')
+        ])->with('subcategories', 'brand', 'thumbnail')
             ->join('brands', 'brand_id', '=', 'brands.id')
-            ->join('subcategories', 'subcategory_id', '=', 'subcategories.id')
             ->where(function ($q) {
                 $q->where('products.name->en', 'like', '%' . $this->search . '%')
                     ->orWhere('products.name->ar', 'like', '%' . $this->search . '%')
                     ->orWhere('products.base_price', 'like', '%' . $this->search . '%')
                     ->orWhere('products.final_price', 'like', '%' . $this->search . '%')
-                    ->orWhereHas('subcategory', function ($query) {
+                    ->orWhereHas('subcategories', function ($query) {
                         $query->where('name->en', 'like', '%' . $this->search . '%')
                             ->orWhere('name->ar', 'like', '%' . $this->search . '%');
                     })

@@ -20,14 +20,14 @@
                     </div>
                 </div>
 
-                {{-- Soft Deleted Brands --}}
+                {{-- Deleted Brands --}}
                 <div class="ltr:text-right rtl:text-left">
                     <a href="{{ route('admin.brands.softDeletedBrands') }}"
                         class="btn btn-sm bg-red-600 hover:bg-red-700 focus:bg-red-600 active:bg-red-600 font-bold">
                         <span class="material-icons rtl:ml-2 ltr:mr-2">
                             delete_forever
                         </span>
-                        {{ __('admin/productsPages.Soft Deleted Brands') }}</a>
+                        {{ __('admin/productsPages.Deleted Brands') }}</a>
                 </div>
 
                 {{-- Pagination Number --}}
@@ -167,17 +167,6 @@
                                     {{-- Manage Body --}}
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
-                                        {{-- User Details --}}
-                                        @can("See User's Details")
-                                            <a href="{{ route('admin.brands.show', ['brand' => $brand->id]) }}"
-                                                title="{{ __('admin/productsPages.View') }}" class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
-                                                    visibility
-                                                </span>
-                                            </a>
-                                        @endcan
-
                                         {{-- Edit Button --}}
                                         @can('Edit User')
                                             <a href="{{ route('admin.brands.edit', ['brand' => $brand->id]) }}"
@@ -189,8 +178,8 @@
                                             </a>
                                         @endcan
 
-                                        {{-- Soft Delete Button --}}
-                                        @can('Soft Delete User')
+                                        {{-- Deleted Button --}}
+                                        @can('Deleted User')
                                             <a href="#" title="{{ __('admin/productsPages.Delete') }}"
                                                 wire:click.prevent="deleteConfirm({{ $brand->id }})"
                                                 class="m-0">

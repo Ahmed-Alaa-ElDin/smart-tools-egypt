@@ -30,7 +30,9 @@ class GovernoratesDatatable extends Component
 
     public function render()
     {
-        $governorates = Governorate::with('country', 'deliveries', 'users', 'cities')
+        $governorates = Governorate::with(['country' => function ($query) {
+            $query->withTrashed();
+        }, 'deliveries', 'users', 'cities'])
             ->join('countries', 'countries.id', '=', 'governorates.country_id')
             ->select('governorates.*', 'countries.name as country_name')
             ->withCount('users')
@@ -70,7 +72,7 @@ class GovernoratesDatatable extends Component
         return $this->sortBy = $field;
     }
 
-    ######## Soft Delete #########
+    ######## Deleted #########
     public function deleteConfirm($governorate_id)
     {
         $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
@@ -98,7 +100,7 @@ class GovernoratesDatatable extends Component
             ]);
         }
     }
-    ######## Soft Delete #########
+    ######## Deleted #########
 
 
 }

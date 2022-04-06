@@ -108,7 +108,7 @@ class ProductController extends Controller
     }
 
     /**
-     * See Soft Deleted Products
+     * See Deleted Products
      *
      * @return \Illuminate\Http\Response
      */

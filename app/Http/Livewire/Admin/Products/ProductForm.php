@@ -6,6 +6,8 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\Subcategory;
+use App\Models\Supercategory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Intervention\Image\ImageManager;
@@ -20,11 +22,12 @@ class ProductForm extends Component
     public $gallery_images = [], $gallery_images_name = [], $featured = 0, $deletedImages = [];
     public $thumbnail_image,  $thumbnail_image_name;
     public $video;
-    public $name = ["ar" => "", "en" => ""], $subcategory_id, $brand_id, $model, $barcode, $weight, $description = ['ar' => '', 'en' => ''], $publish = true, $refundable = true;
+    public $name = ["ar" => "", "en" => ""], $brand_id, $model, $barcode, $weight, $description = ['ar' => '', 'en' => ''], $publish = true, $refundable = true;
     public $base_price, $discount, $final_price, $points, $free_shipping = false, $reviewing = false, $quantity, $low_stock;
     public $title, $description_seo;
+    public $parentCategories;
 
-    protected $listeners = ["descriptionAr", "descriptionEn", "descriptionSeo"];
+    protected $listeners = ["descriptionAr", "descriptionEn", "descriptionSeo", "supercategoryUpdated", "categoryUpdated"];
 
     public function rules()
     {
@@ -37,7 +40,9 @@ class ProductForm extends Component
             'name.en'             =>        'nullable|string|max:100|min:3',
 
             'brand_id'            =>        'required|exists:brands,id',
-            'subcategory_id'      =>        'required|exists:subcategories,id',
+            'parentCategories.*.supercategory_id'     =>        'required|gt:0|exists:supercategories,id',
+            'parentCategories.*.category_id'          =>        'required|gt:0|exists:categories,id',
+            'parentCategories.*.subcategory_id'       =>        'required|gt:0|exists:subcategories,id',
             'model'               =>        'nullable|string|max:100',
             'barcode'             =>        'nullable|string|max:200',
             'weight'              =>        'nullable|numeric|min:0|max:999999',
@@ -58,19 +63,25 @@ class ProductForm extends Component
         ];
     }
 
+    public function messages()
+    {
+        return [
+            'parentCategories.*.supercategory_id.gt' => __('validation.required'),
+            'parentCategories.*.category_id.gt' => __('validation.required'),
+            'parentCategories.*.subcategory_id.gt' => __('validation.required'),
+        ];
+    }
+
     // Called Once at the beginning
     public function mount()
     {
-        $this->categories = Category::with('subcategories')->get();
 
         $this->brands = Brand::get();
 
         if ($this->product_id) {
 
             // Get Old Product's data
-            $product = Product::findOrFail($this->product_id);
-
-            // $this->product_id = null;
+            $product = Product::with(['subcategories' => fn ($q) => $q->with(['category' => fn ($q) => $q->with('supercategory')])])->findOrFail($this->product_id);
 
             $this->product = $product;
 
@@ -105,7 +116,32 @@ class ProductForm extends Component
                 'en' => $product->getTranslation('name', 'en')
             ];
 
-            $this->subcategory_id = $product->subcategory_id;
+            // old Subcategories
+            if (count($this->product->subcategories)) {
+                foreach ($this->product->subcategories as $key => $subcategory) {
+                    $this->parentCategories[] = [
+                        'supercategories' => Supercategory::select('id', 'name')->get()->toArray(),
+                        'supercategory_id' => $subcategory->category->supercategory->id,
+                        'categories' => Category::where('supercategory_id', $subcategory->category->supercategory->id)->get()->toArray(),
+                        'category_id' => $subcategory->category->id,
+                        'subcategories' => Subcategory::where('category_id', $subcategory->category->id)->get()->toArray(),
+                        'subcategory_id' => $subcategory->id,
+                    ];
+                }
+            } else {
+                $this->parentCategories = [
+                    [
+                        'supercategory_id' => 0,
+                        'supercategories' => null,
+                        'category_id' => 0,
+                        'categories' => null,
+                        'subcategory_id' => 0,
+                        'subcategories' => null,
+                    ]
+                ];
+                $this->parentCategories[0]['supercategories'] = Supercategory::select('id', 'name')->get()->toArray();
+            }
+
             $this->brand_id = $product->brand_id;
             $this->model = $product->model;
             $this->barcode = $product->barcode;
@@ -131,6 +167,17 @@ class ProductForm extends Component
             // SEO
             $this->title = $product->meta_title;
             $this->description_seo = $product->meta_description;
+        } else {
+            $this->parentCategories = [
+                [
+                    'supercategory_id' => 0,
+                    'supercategories' => null,
+                    'category_id' => 0,
+                    'categories' => null,
+                    'subcategory_id' => 0,
+                    'subcategories' => null,
+                ]
+            ];
         }
     }
 
@@ -277,6 +324,60 @@ class ProductForm extends Component
     ######################## Real Time Validation : End ############################
 
 
+    ######################## Updated Supercategory : End ############################
+    public function supercategoryUpdated($key)
+    {
+        if ($this->parentCategories[$key]['supercategory_id'] != 0) {
+            $this->parentCategories[$key]['categories'] = Category::select('id', 'name', 'supercategory_id')->where('supercategory_id', $this->parentCategories[$key]['supercategory_id'])->get()->toArray();
+            $this->parentCategories[$key]['category_id'] = 0;
+            $this->parentCategories[$key]['subcategories'] = null;
+            $this->parentCategories[$key]['subcategory_id'] = 0;
+        } else {
+            $this->parentCategories[$key]['categories'] = null;
+            $this->parentCategories[$key]['category_id'] = 0;
+            $this->parentCategories[$key]['subcategories'] = null;
+            $this->parentCategories[$key]['subcategory_id'] = 0;
+        }
+    }
+    ######################## Updated Supercategory : End ############################
+
+
+    ######################## Updated Supercategory : End ############################
+    public function categoryUpdated($key)
+    {
+        if ($this->parentCategories[$key]['category_id'] != 0) {
+            $this->parentCategories[$key]['subcategories'] = Subcategory::select('id', 'name', 'category_id')->where('category_id', $this->parentCategories[$key]['category_id'])->get()->toArray();
+            $this->parentCategories[$key]['subcategory_id'] = 0;
+        } else {
+            $this->parentCategories[$key]['subcategories'] = null;
+            $this->parentCategories[$key]['subcategory_id'] = 0;
+        }
+    }
+    ######################## Updated Supercategory : End ############################
+
+
+    ######################## Delete Subcategory : End ############################
+    public function deleteSubcategory($index)
+    {
+        unset($this->parentCategories[$index]);
+    }
+    ######################## Delete Subcategory : End ############################
+
+    ######################## Add Subcategory : End ############################
+    public function addSubcategory()
+    {
+        $this->parentCategories[] = [
+            'supercategory_id' => 0,
+            'supercategories' => Supercategory::select('id', 'name')->get()->toArray(),
+            'category_id' => 0,
+            'categories' => null,
+            'subcategory_id' => 0,
+            'subcategories' => null,
+        ];
+    }
+    ######################## Add Subcategory : End ############################
+
+
     ######################## Updated Arabic description : Start ############################
     public function descriptionAr($value)
     {
@@ -304,6 +405,7 @@ class ProductForm extends Component
     ######################## Save New Product : Start ############################
     public function save($new = false)
     {
+        // dd(array_map(fn ($value) => $value['subcategory_id'], $this->parentCategories));
         $this->validate();
 
         DB::beginTransaction();
@@ -336,8 +438,13 @@ class ProductForm extends Component
                 'under_reviewing' => $this->reviewing ? 1 : 0,
                 'created_by' => auth()->user()->id,
                 'brand_id' => $this->brand_id,
-                'subcategory_id' => $this->subcategory_id,
             ]);
+
+            // Add Subcategories
+            if (count($this->parentCategories)) {
+                $subcategories_id = array_map(fn ($value) => $value['subcategory_id'], $this->parentCategories);
+                $product->subcategories()->attach($subcategories_id);
+            }
 
             if (count($this->gallery_images_name)) {
                 foreach ($this->gallery_images_name as $key => $gallery_image_name) {
@@ -410,8 +517,11 @@ class ProductForm extends Component
                 'under_reviewing' => $this->reviewing ? 1 : 0,
                 'created_by' => auth()->user()->id,
                 'brand_id' => $this->brand_id,
-                'subcategory_id' => $this->subcategory_id,
             ]);
+
+            // Add Subcategories
+            $subcategories_id = array_map(fn ($value) => $value['subcategory_id'], $this->parentCategories);
+            $this->product->subcategories()->sync($subcategories_id);
 
             $this->product->images()->delete();
 

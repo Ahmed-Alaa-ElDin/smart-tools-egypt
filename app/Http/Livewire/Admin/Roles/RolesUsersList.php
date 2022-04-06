@@ -70,7 +70,7 @@ class RolesUsersList extends Component
         return $this->sortBy = $field;
     }
 
-    ######## Soft Delete #########
+    ######## Deleted #########
     public function deleteConfirm($user_id)
     {
         $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
@@ -98,7 +98,7 @@ class RolesUsersList extends Component
             ]);
         }
     }
-    ######## Soft Delete #########
+    ######## Deleted #########
 
 
     ######## Edit User Roles #########

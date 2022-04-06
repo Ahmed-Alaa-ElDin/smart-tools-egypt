@@ -69,7 +69,7 @@ class SupercategoriesDatatable extends Component
         return $this->sortBy = $field;
     }
 
-    ######## Soft Delete #########
+    ######## Deleted #########
     public function deleteConfirm($supercategories_id)
     {
         $this->dispatchBrowserEvent('swalConfirm', [
@@ -100,5 +100,5 @@ class SupercategoriesDatatable extends Component
             ]);
         }
     }
-    ######## Soft Delete #########
+    ######## Deleted #########
 }

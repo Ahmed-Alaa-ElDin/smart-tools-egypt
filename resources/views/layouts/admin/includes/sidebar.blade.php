@@ -140,14 +140,14 @@
                                 </a>
                             </li>
 
-                            {{-- Soft Deleted Users --}}
+                            {{-- Deleted Users --}}
                             <li class="nav-item {{ $activePage == 'Deleted Products' ? ' active' : '' }}">
                                 <a class="nav-link"
                                     href="{{ route('admin.products.softDeletedProducts') }}">
                                     <span class="material-icons rtl:ml-2 ltr:mr-2">
                                         auto_delete
                                     </span>
-                                    <span>{{ __('admin/master.Soft Deleted Products') }} </span>
+                                    <span>{{ __('admin/master.Deleted Products') }} </span>
                                 </a>
                             </li>
 
@@ -279,14 +279,14 @@
                                 </li>
                             @endcan
 
-                            {{-- Soft Deleted Users --}}
+                            {{-- Deleted Users --}}
                             @can('Force Delete User')
                                 <li class="nav-item {{ $activePage == 'Deleted Users' ? ' active' : '' }}">
                                     <a class="nav-link" href="{{ route('admin.users.softDeletedUsers') }}">
                                         <span class="material-icons rtl:ml-2 ltr:mr-2">
                                             person_off
                                         </span>
-                                        <span>{{ __('admin/master.Soft Deleted Users') }} </span>
+                                        <span>{{ __('admin/master.Deleted Users') }} </span>
                                     </a>
                                 </li>
                             @endcan

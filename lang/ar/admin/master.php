@@ -14,8 +14,8 @@ return [
     'edit user'                 =>      'تعديل بيانات المستخدم',
     'show user'                 =>      'الملف الشخصي للمستخدم',
     'edit roles'                =>      'تعديل الدور والصلاحيات',
-    'Soft Deleted Users'        =>      'المستخدمين المحذوفين مؤقتاً',
-    'Soft Deleted Users Table'  =>      'جدول المستخدمين المحذوفين مؤقتاً',
+    'Deleted Users'        =>      'المستخدمين المحذوفين مؤقتاً',
+    'Deleted Users Table'  =>      'جدول المستخدمين المحذوفين مؤقتاً',
     'Roles Management'          =>      'إدارة الأدوار',
     'Delivery System'           =>      'نظم الشحن',
     'Delivery Companies'        =>      'شركات الشحن',
@@ -29,7 +29,7 @@ return [
     'Products'                  =>      'المنتجات',
     'All Products'              =>      'جميع المنتجات',
     'Add Product'               =>      'إضافة منتج',
-    'Soft Deleted Products'     =>      'المنتجات المحذوفة مؤقتاً',
+    'Deleted Products'     =>      'المنتجات المحذوفة مؤقتاً',
     'Brands'                    =>      'العلامات التجارية',
 
 ];

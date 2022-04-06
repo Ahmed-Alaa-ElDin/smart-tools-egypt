@@ -192,7 +192,7 @@ return [
         'zones.*.min_charge' => 'المصاريف الأساسية',
         'zones.*.min_size' => 'الوزن الأساسي',
         'zones.*.kg_charge' => 'المصاريف لكل كجم زائد',
-        'zones.*.destinations.*.country_id' => 'البلد',
+        'zones.*.destinations.*.country_id'     => 'البلد',
         'zones.*.destinations.*.governorate_id' => 'المحافظة',
         'country_id'            => 'البلد',
         'governorate_id'        => 'المحافظة',
@@ -212,8 +212,10 @@ return [
         'logo'                  => 'الشعار',
         'supercategory_id'      => 'القسم الرئيسي',
         'category_id'           => 'القسم الفرعي',
-
-    ],
+        'parentCategories.*.supercategory_id'     => 'القسم الرئيسي',
+        'parentCategories.*.category_id'          => 'القسم الفرعي',
+        'parentCategories.*.subcategory_id'       => 'القسم المباشر',
+],
 
     /*
     |--------------------------------------------------------------------------

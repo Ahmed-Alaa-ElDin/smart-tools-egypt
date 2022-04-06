@@ -69,7 +69,7 @@
     @livewireScripts
 
     <script>
-        // #### User Soft Delete ####
+        // #### User Deleted ####
         window.addEventListener('swalConfirmSoftDelete', function(e) {
             Swal.fire({
                 icon: 'warning',
@@ -98,7 +98,7 @@
                 timerProgressBar: true,
             })
         });
-        // #### User Soft Delete ####
+        // #### User Deleted ####
 
         window.addEventListener('swalEditRolesSelect', function(e) {
             Swal.fire({

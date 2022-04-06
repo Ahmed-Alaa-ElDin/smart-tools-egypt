@@ -186,7 +186,7 @@
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- Restore Button --}}
-                                        @can('Soft Delete User')
+                                        @can('Deleted User')
                                             <a href="#" title="{{ __('admin/productsPages.Restore') }}"
                                                 wire:click.prevent="restoreConfirm({{ $subcategory->id }})"
                                                 class="m-0">
@@ -197,8 +197,8 @@
                                             </a>
                                         @endcan
 
-                                        {{-- Soft Delete Button --}}
-                                        @can('Soft Delete User')
+                                        {{-- Deleted Button --}}
+                                        @can('Deleted User')
                                             <a href="#" title="{{ __('admin/productsPages.Delete') }}"
                                                 wire:click.prevent="deleteConfirm({{ $subcategory->id }})"
                                                 class="m-0">

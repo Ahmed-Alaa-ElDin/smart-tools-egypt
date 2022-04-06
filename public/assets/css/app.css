@@ -694,6 +694,9 @@ select {
 .col-span-2 {
   grid-column: span 2 / span 2 !important;
 }
+.col-span-10 {
+  grid-column: span 10 / span 10 !important;
+}
 .col-start-3 {
   grid-column-start: 3 !important;
 }
@@ -1321,13 +1324,13 @@ select {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(107 114 128 / var(--tw-bg-opacity)) !important;
 }
-.bg-rose-500 {
-  --tw-bg-opacity: 1 !important;
-  background-color: rgb(244 63 94 / var(--tw-bg-opacity)) !important;
-}
 .bg-red-300 {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(252 165 165 / var(--tw-bg-opacity)) !important;
+}
+.bg-rose-500 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(244 63 94 / var(--tw-bg-opacity)) !important;
 }
 .bg-yellow-100 {
   --tw-bg-opacity: 1 !important;
@@ -1371,6 +1374,9 @@ select {
 }
 .p-4 {
   padding: 1rem !important;
+}
+.p-3 {
+  padding: 0.75rem !important;
 }
 .p-6 {
   padding: 1.5rem !important;
@@ -1555,6 +1561,10 @@ select {
 .text-gray-400 {
   --tw-text-opacity: 1 !important;
   color: rgb(156 163 175 / var(--tw-text-opacity)) !important;
+}
+.text-red-500 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(239 68 68 / var(--tw-text-opacity)) !important;
 }
 .text-gray-200 {
   --tw-text-opacity: 1 !important;
@@ -1752,9 +1762,17 @@ select {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(29 78 216 / var(--tw-bg-opacity)) !important;
 }
+.hover\:bg-green-800:hover {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(22 101 52 / var(--tw-bg-opacity)) !important;
+}
 .hover\:bg-gray-700:hover {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(55 65 81 / var(--tw-bg-opacity)) !important;
+}
+.hover\:bg-white:hover {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity)) !important;
 }
 .hover\:bg-rose-700:hover {
   --tw-bg-opacity: 1 !important;
@@ -1932,6 +1950,10 @@ select {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(220 38 38 / var(--tw-bg-opacity)) !important;
 }
+.active\:bg-white:active {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity)) !important;
+}
 .active\:bg-gray-900:active {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(17 24 39 / var(--tw-bg-opacity)) !important;
@@ -2091,6 +2113,10 @@ select {
     grid-column: span 5 / span 5 !important;
   }
 
+  .sm\:col-span-11 {
+    grid-column: span 11 / span 11 !important;
+  }
+
   .sm\:col-start-4 {
     grid-column-start: 4 !important;
   }
@@ -2233,6 +2259,10 @@ select {
     grid-column-start: 3 !important;
   }
 
+  .md\:col-start-4 {
+    grid-column-start: 4 !important;
+  }
+
   .md\:col-start-2 {
     grid-column-start: 2 !important;
   }
@@ -2299,12 +2329,12 @@ select {
     grid-column: span 6 / span 6 !important;
   }
 
-  .lg\:col-span-3 {
-    grid-column: span 3 / span 3 !important;
-  }
-
   .lg\:col-span-2 {
     grid-column: span 2 / span 2 !important;
+  }
+
+  .lg\:col-span-3 {
+    grid-column: span 3 / span 3 !important;
   }
 
   .lg\:col-span-10 {

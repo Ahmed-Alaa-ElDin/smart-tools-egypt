@@ -69,7 +69,7 @@
     @livewireScripts
 
     <script>
-        // #### Governorate Soft Delete ####
+        // #### Governorate Deleted ####
         window.addEventListener('swalConfirmSoftDelete', function(e) {
             Swal.fire({
                 icon: 'warning',
@@ -98,6 +98,6 @@
                 timerProgressBar: true,
             })
         });
-        // #### Governorate Soft Delete ####
+        // #### Governorate Deleted ####
     </script>
 @endpush

@@ -150,13 +150,10 @@
                                 </th>
 
                                 {{-- Sub Category Header --}}
-                                <th wire:click="sortBy('subcategory_name->{{ session('locale') }}')" scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                <th scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/productsPages.Subcategory') }}&nbsp;
-                                        @include('partials._sort_icon', [
-                                            'field' => 'subcategory_name->' . session('locale'),
-                                        ])
                                     </div>
                                 </th>
 
@@ -247,8 +244,17 @@
 
                                     {{-- Sub Category Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
-                                        <div class="flex items-center content-center justify-center">
-                                            {{ $product->subcategory ? $product->subcategory->name : __('N/A') }}
+                                        <div class="flex flex-wrap items-center content-center justify-center">
+                                            @forelse ($product->subcategories as $subcategory)
+                                                <span class="inline-block">
+                                                    {{ $subcategory->name }}
+                                                </span>
+                                                @if (!$loop->last)
+                                                    &nbsp; {{ ',' }} &nbsp;
+                                                @endif
+                                            @empty
+                                                {{ __('N/A') }}
+                                            @endforelse
                                         </div>
                                     </td>
 
@@ -329,8 +335,8 @@
                                             </a>
                                         @endcan
 
-                                        {{-- Soft Delete Button --}}
-                                        @can('Soft Delete User')
+                                        {{-- Deleted Button --}}
+                                        @can('Deleted User')
                                             <a href="#" title="{{ __('admin/productsPages.Delete') }}"
                                                 wire:click.prevent="deleteConfirm({{ $product->id }})"
                                                 class="m-0">

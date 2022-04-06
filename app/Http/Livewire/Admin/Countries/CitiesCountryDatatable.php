@@ -76,7 +76,7 @@ class CitiesCountryDatatable extends Component
         return $this->sortBy = $field;
     }
 
-    ######## Soft Delete #########
+    ######## Deleted #########
     public function deleteConfirm($city_id)
     {
         $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
@@ -104,5 +104,5 @@ class CitiesCountryDatatable extends Component
             ]);
         }
     }
-    ######## Soft Delete #########
+    ######## Deleted #########
 }

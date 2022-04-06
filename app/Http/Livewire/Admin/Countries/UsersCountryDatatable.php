@@ -76,7 +76,7 @@ class UsersCountryDatatable extends Component
         return $this->sortBy = $field;
     }
 
-    ######## Soft Delete #########
+    ######## Deleted #########
     public function deleteConfirm($user_id)
     {
         $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
@@ -104,7 +104,7 @@ class UsersCountryDatatable extends Component
             ]);
         }
     }
-    ######## Soft Delete #########
+    ######## Deleted #########
 
 
     ######## Edit User Roles #########

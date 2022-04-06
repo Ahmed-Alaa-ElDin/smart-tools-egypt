@@ -33,7 +33,7 @@ class RoleSeeder extends Seeder
             ['name' => "See User's Details"],
             ['name' => "Edit User"],
             ['name' => "Edit User's Role"],
-            ['name' => "Soft Delete User"],
+            ['name' => "Deleted User"],
             ['name' => "Force Delete User"],
             ['name' => "Restore User"],
 
@@ -52,7 +52,7 @@ class RoleSeeder extends Seeder
             ['name' => "See Delivery's Details"],
             ['name' => "Add Zone"],
             ['name' => "Edit Zone"],
-            ['name' => "Soft Delete Delivery"],
+            ['name' => "Deleted Delivery"],
             ['name' => "Force Delete Delivery"],
             ['name' => "Restore Delivery"],
             ['name' => "Activate Delivery"],
@@ -61,7 +61,7 @@ class RoleSeeder extends Seeder
             ['name' => "See All Countries"],
             ['name' => "Add Country"],
             ['name' => "Edit Country"],
-            ['name' => "Soft Delete Country"],
+            ['name' => "Deleted Country"],
             ['name' => "Force Delete Country"],
             ['name' => "Restore Country"],
 
@@ -69,7 +69,7 @@ class RoleSeeder extends Seeder
             ['name' => "See All Governorates"],
             ['name' => "Add Governorate"],
             ['name' => "Edit Governorate"],
-            ['name' => "Soft Delete Governorate"],
+            ['name' => "Deleted Governorate"],
             ['name' => "Force Delete Governorate"],
             ['name' => "Restore Governorate"],
 
@@ -77,7 +77,7 @@ class RoleSeeder extends Seeder
             ['name' => "See All Cities"],
             ['name' => "Add City"],
             ['name' => "Edit City"],
-            ['name' => "Soft Delete City"],
+            ['name' => "Deleted City"],
             ['name' => "Force Delete City"],
             ['name' => "Restore City"],
 

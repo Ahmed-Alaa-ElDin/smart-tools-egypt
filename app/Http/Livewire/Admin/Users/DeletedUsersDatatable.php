@@ -167,7 +167,6 @@ class DeletedUsersDatatable extends Component
             User::onlyTrashed()->forceDelete();
 
             $this->dispatchBrowserEvent('swalDone', [
-                // todo
                 "text" => __('admin/usersPages.All users have been deleted successfully'),
                 'icon' => 'success'
             ]);

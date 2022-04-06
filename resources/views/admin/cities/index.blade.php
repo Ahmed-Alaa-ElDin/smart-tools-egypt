@@ -65,7 +65,7 @@
     @livewireScripts
 
     <script>
-        // #### City Soft Delete ####
+        // #### City Deleted ####
         window.addEventListener('swalConfirmSoftDelete', function(e) {
             Swal.fire({
                 icon: 'warning',
@@ -94,6 +94,6 @@
                 timerProgressBar: true,
             })
         });
-        // #### City Soft Delete ####
+        // #### City Deleted ####
     </script>
 @endpush

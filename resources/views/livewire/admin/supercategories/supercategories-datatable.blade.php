@@ -20,14 +20,14 @@
                     </div>
                 </div>
 
-                {{-- Soft Deleted Countries --}}
+                {{-- Deleted Countries --}}
                 <div class="ltr:text-right rtl:text-left">
                     <a href="{{ route('admin.supercategories.softDeletedSupercategories') }}"
                         class="btn btn-sm bg-red-600 hover:bg-red-700 focus:bg-red-600 active:bg-red-600 font-bold">
                         <span class="material-icons rtl:ml-2 ltr:mr-2">
                             delete_forever
                         </span>
-                        {{ __('admin/productsPages.Soft Deleted Supercategories') }}</a>
+                        {{ __('admin/productsPages.Deleted Supercategories') }}</a>
                 </div>
 
                 {{-- Pagination Number --}}
@@ -197,8 +197,8 @@
                                             </a>
                                         @endcan
 
-                                        {{-- Soft Delete Button --}}
-                                        @can('Soft Delete User')
+                                        {{-- Deleted Button --}}
+                                        @can('Deleted User')
                                             <a href="#" title="{{ __('admin/productsPages.Delete') }}"
                                                 wire:click.prevent="deleteConfirm({{ $supercategory->id }})"
                                                 class="m-0">

@@ -174,8 +174,8 @@
                                             </a>
                                         @endcan
 
-                                        {{-- Soft Delete Button --}}
-                                        @can('Soft Delete User')
+                                        {{-- Deleted Button --}}
+                                        @can('Deleted User')
                                             <a href="#" title="{{ __('admin/usersPages.Delete') }}"
                                                 wire:click.prevent="deleteConfirm({{ $user->id }})"
                                                 class="m-0">

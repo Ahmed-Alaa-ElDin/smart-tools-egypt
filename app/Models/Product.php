@@ -36,7 +36,6 @@ class Product extends Model
         'under_reviewing',
         'created_by',
         'brand_id',
-        'subcategory_id',
     ];
 
     // One to many relationship (Inverse)  Brand --> Products
@@ -51,10 +50,10 @@ class Product extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    // One to many relationship (Inverse)  User --> Products
-    public function subcategory()
+    // Many to many relationship  Subcategories --> Products
+    public function subcategories()
     {
-        return $this->belongsTo(Subcategory::class);
+        return $this->belongsToMany(Subcategory::class);
     }
 
     // One to many relationship Product --> Image

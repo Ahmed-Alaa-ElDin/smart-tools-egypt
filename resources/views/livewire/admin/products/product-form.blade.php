@@ -45,7 +45,8 @@
                                         right-2 top-2 text-sm font-bold cursor-pointer flex items-center justify-center"
                                         wire:click="setFeatured({{ $key }})"
                                         title="{{ __('admin/productsPages.Make Featured') }}">done</span>
-                                    <img src="{{ asset('storage/images/products/original/' . $gallery_image_name) }}" class="rounded-xl">
+                                    <img src="{{ asset('storage/images/products/original/' . $gallery_image_name) }}"
+                                        class="rounded-xl">
                                 </div>
                             @endforeach
                         </div>
@@ -111,7 +112,8 @@
                                     class="material-icons absolute rounded-circle bg-red-500 w-6 h-6 text-white left-2 top-2 text-sm font-bold cursor-pointer flex items-center justify-center select-none"
                                     wire:click="deleteThumbnail"
                                     title="{{ __('admin/productsPages.Delete Image') }}">clear</span>
-                                <img src="{{ asset('storage/images/products/original/' . $thumbnail_image_name) }}" class="rounded-xl">
+                                <img src="{{ asset('storage/images/products/original/' . $thumbnail_image_name) }}"
+                                    class="rounded-xl">
                             </div>
                         </div>
 
@@ -162,7 +164,8 @@
         <div
             class="grid grid-cols-12 gap-y-3 gap-x-4 items-center bg-red-100 p-4 text-center justify-items-center rounded shadow">
 
-            <div class="col-span-12 font-bold text-black mb-2">{{ __('admin/productsPages.Product Information') }}
+            <div class="col-span-12 font-bold text-black mb-2">
+                {{ __('admin/productsPages.Product Information') }}
             </div>
 
             {{-- Name Start --}}
@@ -194,6 +197,24 @@
                 </div>
             </div>
             {{-- Name End --}}
+
+            {{-- Model Start --}}
+            <div class="col-span-6 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full">
+                <label for="model"
+                    class="col-span-3 sm:col-span-1 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/productsPages.Model') }}</label>
+                <div class="col-span-3 sm:col-span-2">
+                    <input id="model"
+                        class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('model') border-red-900 border-2 @enderror"
+                        type="text" wire:model.lazy="model" placeholder="{{ __('admin/productsPages.Model') }}"
+                        maxlength="100">
+
+                    @error('model')
+                        <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
+                            {{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+            {{-- Model End --}}
 
             {{-- Brand Start --}}
             <div class="col-span-6 grid grid-cols-12 gap-x-4 gap-y-2 items-center w-full">
@@ -228,59 +249,139 @@
             {{-- Brand End --}}
 
             {{-- Category Start --}}
-            <div class="col-span-6 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full">
-                <label for="subcategory_id"
-                    class="col-span-3 sm:col-span-1 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/productsPages.Subcategory') }}</label>
-                <div class="col-span-3 sm:col-span-2">
-                    <select
-                        class="rounded w-full cursor-pointer py-1 text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('subcategory_id') border-red-900 border-2 @enderror"
-                        wire:model.lazy="subcategory_id" id="subcategory_id" required>
-                        @if ($categories->count())
-                            <option value="">
-                                {{ __('admin/productsPages.Choose a subcategories') }}
-                            </option>
-                            @foreach ($categories as $category)
-                                <option disabled>
-                                    {{ __($category->name) }}
-                                </option>
-                                @foreach ($category->subcategories as $subcategory)
-                                    <option value="{{ $subcategory->id }}">
-                                        {{ __($subcategory->name) }}
-                                    </option>
-                                @endforeach
-                            @endforeach
-                        @else
-                            <option value="">
-                                {{ __('admin/productsPages.No Subcategories in the database') }}
-                            </option>
-                        @endif
-                    </select>
+            <div class="col-span-12 bg-red-200 w-full rounded-xl p-2 grid grid-cols-6 gap-1">
 
-                    @error('subcategory_id')
-                        <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                            {{ $message }}</div>
-                    @enderror
+                @foreach ($parentCategories as $key => $parentCategory)
+                    {{-- Subcategory Item --}}
+                    <div class="col-span-6 bg-red-300 rounded-xl p-3 grid grid-cols-12 gap-2"
+                        wire:key="{{ 'parentCategories-' . $key }}">
+
+                        {{-- SelectBoxes --}}
+                        <div class="col-span-10 sm:col-span-11 grid grid-cols-12 gap-x-4 gap-y-1">
+                            {{-- Supercategory --}}
+                            <div class="col-span-12 sm:col-span-6 items-center w-full">
+                                <select
+                                    class="rounded w-full cursor-pointer py-1 text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('parentCategories.' . $key . '.supercategory_id') border-red-900 border-2 @enderror"
+                                    wire:model.lazy="parentCategories.{{ $key }}.supercategory_id"
+                                    wire:change="supercategoryUpdated({{ $key }})" required>
+                                    @if ($parentCategory['supercategories'])
+                                        <option value="0">
+                                            {{ __('admin/productsPages.Choose a supercategory') }}
+                                        </option>
+                                        @foreach ($parentCategory['supercategories'] as $supercategory)
+                                            <option value="{{ $supercategory['id'] }}">
+                                                {{ $supercategory['name']['ar'] }}
+                                            </option>
+                                        @endforeach
+                                    @else
+                                        <option value="0">
+                                            {{ __('admin/productsPages.No Supercategories in the database') }}
+                                        </option>
+                                    @endif
+                                </select>
+
+                                @error('parentCategories.' . $key . '.supercategory_id')
+                                    <div
+                                        class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
+                                        {{ $message }}</div>
+                                @enderror
+                            </div>
+                            {{-- Supercategory --}}
+
+                            {{-- Category --}}
+                            @if ($parentCategory['supercategory_id'])
+                                <div class="col-span-12 sm:col-span-6 items-center w-full">
+                                    <select
+                                        class="rounded w-full cursor-pointer py-1 text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('parentCategories.' . $key . '.category_id') border-red-900 border-2 @enderror"
+                                        wire:model.lazy="parentCategories.{{ $key }}.category_id"
+                                        wire:change="categoryUpdated({{ $key }})" required>
+                                        @if ($parentCategory['categories'])
+                                            <option value="0">
+                                                {{ __('admin/productsPages.Choose a category') }}
+                                            </option>
+                                            @foreach ($parentCategory['categories'] as $category)
+                                                <option value="{{ $category['id'] }}">
+                                                    {{ $category['name']['ar'] }}
+                                                </option>
+                                            @endforeach
+                                        @else
+                                            <option value="0">
+                                                {{ __('admin/productsPages.No Categories in the database') }}
+                                            </option>
+                                        @endif
+                                    </select>
+
+                                    @error('parentCategories.' . $key . '.category_id')
+                                        <div
+                                            class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
+                                            {{ $message }}</div>
+                                    @enderror
+                                </div>
+                            @endif
+                            {{-- Category --}}
+
+                            {{-- Subcategory --}}
+                            @if ($parentCategory['category_id'])
+                                <div class="col-span-12 sm:col-span-6 sm:col-start-4 items-center w-full">
+                                    <select
+                                        class="rounded w-full cursor-pointer py-1 text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('parentCategories.' . $key . '.subcategory_id') border-red-900 border-2 @enderror"
+                                        wire:model.lazy="parentCategories.{{ $key }}.subcategory_id" required>
+                                        @if ($parentCategory['subcategories'])
+                                            <option value="0">
+                                                {{ __('admin/productsPages.Choose a subcategory') }}
+                                            </option>
+                                            @foreach ($parentCategory['subcategories'] as $subcategory)
+                                                <option value="{{ $subcategory['id'] }}">
+                                                    {{ $subcategory['name']['ar'] }}
+                                                </option>
+                                            @endforeach
+                                        @else
+                                            <option value="o">
+                                                {{ __('admin/productsPages.No Subcategories in the database') }}
+                                            </option>
+                                        @endif
+                                    </select>
+
+                                    @error('parentCategories.' . $key . '.subcategory_id')
+                                        <div
+                                            class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
+                                            {{ $message }}</div>
+                                    @enderror
+                                </div>
+                            @endif
+                            {{-- Subcategory --}}
+
+                        </div>
+                        {{-- SelectBoxes --}}
+
+                        {{-- Delete Subcategory --}}
+                        <div
+                            class="text-center col-span-2 sm:col-span-1 bg-red-700 rounded-full p-1 flex items-center justify-center">
+                            <a href="#" wire:click.prevent="deleteSubcategory({{ $key }})"
+                                class="inline-block w-6 h-6 bg-white hover:bg-white focus:bg-white active:bg-white font-bold rounded-full">
+                                <span class="material-icons text-red-500 text-xs font-bold shadow-xl">
+                                    remove
+                                </span>
+                            </a>
+                        </div>
+                        {{-- Delete Subcategory --}}
+                    </div>
+                    {{-- Subcategory Item --}}
+                @endforeach
+
+                {{-- Add New Subcategory --}}
+                <div class="text-center col-span-6">
+                    <a href="#" wire:click.prevent="addSubcategory"
+                        class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">
+                        <span class="material-icons rtl:ml-1 ltr:mr-1">
+                            add
+                        </span>
+                        {{ __('admin/productsPages.Add Subcategory') }}</a>
                 </div>
+                {{-- Add New Subcategory --}}
+
             </div>
             {{-- Category End --}}
-
-            {{-- Model Start --}}
-            <div class="col-span-6 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full">
-                <label for="model"
-                    class="col-span-3 sm:col-span-1 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/productsPages.Model') }}</label>
-                <div class="col-span-3 sm:col-span-2">
-                    <input id="model"
-                        class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('model') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="model" placeholder="{{ __('admin/productsPages.Model') }}"
-                        maxlength="100">
-
-                    @error('model')
-                        <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                            {{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
-            {{-- Model End --}}
 
             {{-- Barcode Start --}}
             <div class="col-span-6 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full">
@@ -319,10 +420,11 @@
             {{-- Weight End --}}
 
             {{-- Publish Start --}}
-            <div class="col-span-3 grid grid-cols-2 gap-y-2 gap-x-2 items-center w-full">
+            <div
+                class="col-span-6 md:col-span-3 md:col-start-4 lg:col-span-6 lg:col-start-1 grid grid-cols-2 gap-y-2 gap-x-2 items-center w-full">
                 <label wire:click="publish"
-                    class="col-span-2 md:col-span-1 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/productsPages.Publish') }}</label>
-                <div class="col-span-2 md:col-span-1">
+                    class="col-span-1 lg:col-span-2 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/productsPages.Publish') }}</label>
+                <div class="col-span-1 lg:col-span-2">
                     {!! $publish ? '<span class="block cursor-pointer material-icons text-green-600 select-none" wire:click="publish">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="publish">toggle_off</span>' !!}
 
                     @error('publish')
@@ -335,10 +437,10 @@
             {{-- Publish End --}}
 
             {{-- Refundable Start --}}
-            <div class="col-span-3 grid grid-cols-2 gap-y-2 items-center w-full">
+            <div class="col-span-6 md:col-span-3 lg:col-span-6 grid grid-cols-2 gap-y-2 items-center w-full">
                 <label wire:click="refund"
-                    class="col-span-2 md:col-span-1 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/productsPages.Refundable') }}</label>
-                <div class="col-span-2 md:col-span-1">
+                    class="col-span-1 lg:col-span-2 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/productsPages.Refundable') }}</label>
+                <div class="col-span-1 lg:col-span-2">
                     {!! $refundable ? '<span class="block cursor-pointer material-icons text-green-600 select-none" wire:click="refund">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="refund">toggle_off</span>' !!}
 
                     @error('refundable')
@@ -374,7 +476,7 @@
                     {{-- Description En --}}
                     <div wire:ignore class="col-span-6 md:col-span-5 ">
                         <div class="py-1 w-full px-6 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 cursor-text @error('description.en') border-red-900 border-2 @enderror"
-                            type="text" id="description_en" >
+                            type="text" id="description_en" placeholder="{{ __('admin/productsPages.in English') }}">
                             {!! $description['en'] !!}
                         </div>
                     </div>
@@ -574,8 +676,7 @@
                 <div class="col-span-12 sm:col-span-10 md:col-span-6 lg:col-span-12">
                     <input
                         class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('title') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="title" id="title"
-                        >
+                        type="text" wire:model.lazy="title" id="title">
                     @error('title')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                             {{ $message }}</div>
@@ -592,7 +693,7 @@
                 <div class="col-span-12 sm:col-span-10 md:col-span-6 lg:col-span-12">
                     <div wire:ignore
                         class="py-1 w-full px-6 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 cursor-text @error('seo_description') border-red-900 border-2 @enderror"
-                        type="text" id="seo_description" >{!! $description_seo !!}
+                        type="text" id="seo_description">{!! $description_seo !!}
                     </div>
 
                     @error('seo_description')
@@ -611,15 +712,15 @@
     {{-- Buttons Section Start --}}
     <div class="col-span-12 w-full flex mt-2 justify-around">
         @if ($product_id != null)
-        <button type="button" wire:click.prevent="update"
-            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Update') }}</button>
+            <button type="button" wire:click.prevent="update"
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Update') }}</button>
         @else
-        {{-- Save and Back --}}
-        <button type="button" wire:click.prevent="save"
-            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save') }}</button>
-        {{-- Save and New --}}
-        <button type="button" wire:click.prevent="save('true')"
-            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save and Add New Product') }}</button>
+            {{-- Save and Back --}}
+            <button type="button" wire:click.prevent="save"
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save') }}</button>
+            {{-- Save and New --}}
+            <button type="button" wire:click.prevent="save('true')"
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save and Add New Product') }}</button>
         @endif
         {{-- Back --}}
         <a href="{{ route('admin.products.index') }}"

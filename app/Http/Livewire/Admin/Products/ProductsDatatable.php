@@ -38,7 +38,6 @@ class ProductsDatatable extends Component
                 'products.id',
                 'products.name',
                 'brand_id',
-                'subcategory_id',
                 'quantity',
                 'low_stock',
                 'base_price',
@@ -46,17 +45,15 @@ class ProductsDatatable extends Component
                 'points',
                 'publish',
                 'under_reviewing',
-                'subcategories.name as subcategory_name',
                 'brands.name as brand_name'
             ])
-            ->with('subcategory', 'brand', 'thumbnail')
+            ->with('subcategories', 'brand', 'thumbnail')
             ->leftJoin('brands', 'brand_id', '=', 'brands.id')
-            ->leftJoin('subcategories', 'subcategory_id', '=', 'subcategories.id')
             ->where('products.name->en', 'like', '%' . $this->search . '%')
             ->orWhere('products.name->ar', 'like', '%' . $this->search . '%')
             ->orWhere('products.base_price', 'like', '%' . $this->search . '%')
             ->orWhere('products.final_price', 'like', '%' . $this->search . '%')
-            ->orWhereHas('subcategory', function ($query) {
+            ->orWhereHas('subcategories', function ($query) {
                 $query->where('name->en', 'like', '%' . $this->search . '%')
                     ->orWhere('name->ar', 'like', '%' . $this->search . '%');
             })
@@ -66,7 +63,6 @@ class ProductsDatatable extends Component
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
-        // dd($products);
         return view('livewire.admin.products.products-datatable', compact('products'));
     }
 
@@ -111,7 +107,7 @@ class ProductsDatatable extends Component
         }
     }
 
-    ######## Soft Delete #########
+    ######## Deleted #########
     public function deleteConfirm($product_id)
     {
         $this->dispatchBrowserEvent('swalConfirm', [
@@ -143,7 +139,7 @@ class ProductsDatatable extends Component
             ]);
         }
     }
-    ######## Soft Delete #########
+    ######## Deleted #########
 
 
     ######## Unselect All Products #########
@@ -153,7 +149,7 @@ class ProductsDatatable extends Component
     }
     ######## Unselect All Products #########
 
-    ######## Soft Delete All Selected Products #########
+    ######## Deleted All Selected Products #########
     public function deleteAllConfirm()
     {
         $this->dispatchBrowserEvent('swalConfirm', [
@@ -188,7 +184,7 @@ class ProductsDatatable extends Component
             ]);
         }
     }
-    ######## Soft Delete All Selected Products #########
+    ######## Deleted All Selected Products #########
 
 
     ######## Publish All Selected Products #########

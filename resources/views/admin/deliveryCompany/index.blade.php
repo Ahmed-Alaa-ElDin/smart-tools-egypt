@@ -67,7 +67,7 @@ __('admin/deliveriesPages.Delivery Companies')])
     @livewireScripts
 
     <script>
-        // #### Delivery Soft Delete ####
+        // #### Delivery Deleted ####
         window.addEventListener('swalConfirmSoftDelete', function(e) {
             Swal.fire({
                 icon: 'warning',
@@ -96,7 +96,7 @@ __('admin/deliveriesPages.Delivery Companies')])
                 timerProgressBar: true,
             })
         });
-        // #### Delivery Soft Delete ####
+        // #### Delivery Deleted ####
 
 
         // #### Delivery Activation / Deactivation ####

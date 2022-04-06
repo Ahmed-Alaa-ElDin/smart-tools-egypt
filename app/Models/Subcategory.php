@@ -36,9 +36,9 @@ class Subcategory extends Model
         return $this->belongsToThrough(Supercategory::class, Category::class);
     }
 
-    // One to many relationship Subcategory --> Products
+    // Many to many relationship  Subcategories --> Products
     public function products()
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsToMany(Product::class);
     }
 }

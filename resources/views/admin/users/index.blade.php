@@ -64,7 +64,7 @@ __('admin/usersPages.All Users')])
     @livewireScripts
 
     <script>
-        // #### User Soft Delete ####
+        // #### User Deleted ####
         window.addEventListener('swalConfirmSoftDelete', function(e) {
             Swal.fire({
                 icon: 'warning',
@@ -93,8 +93,10 @@ __('admin/usersPages.All Users')])
                 timerProgressBar: true,
             })
         });
-        // #### User Soft Delete ####
+        // #### User Deleted ####
 
+
+        // #### User Edit Role ####
         window.addEventListener('swalEditRolesSelect', function(e) {
             Swal.fire({
                 title: e.detail.title,
@@ -128,5 +130,30 @@ __('admin/usersPages.All Users')])
                 timerProgressBar: true,
             })
         });
+        // #### User Edit Role ####
+
+        // #### User Add Points ####
+        window.addEventListener('swalAddPointsForm', function(e) {
+            Swal.fire({
+                title: e.detail.title,
+                input: 'number',
+                customClass: {
+                    title: 'text-lg mt-4',
+                    input: 'role-grapper rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300',
+                },
+                showDenyButton: true,
+                confirmButtonText: e.detail.confirmButtonText,
+                denyButtonText: e.detail.denyButtonText,
+                denyButtonColor: 'gray',
+                confirmButtonColor: 'green',
+
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.emit('addPoints', e.detail.user_id, result.value);
+                }
+            });
+        });
+        // #### User Add Points ####
+
     </script>
 @endpush

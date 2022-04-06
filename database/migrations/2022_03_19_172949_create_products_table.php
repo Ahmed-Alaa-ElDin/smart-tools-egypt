@@ -34,13 +34,11 @@ return new class extends Migration
             $table->tinyInteger('publish')->default(1)->comment('0 -> No , 1 -> Yes');
             $table->tinyInteger('under_reviewing')->default(0)->comment('0 -> No , 1 -> Yes');
             $table->unsignedBigInteger('brand_id')->nullable();
-            $table->unsignedBigInteger('subcategory_id')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('brand_id')->references('id')->on('brands')->nullOnDelete()->onUpdate('cascade');
-            $table->foreign('subcategory_id')->references('id')->on('subcategories')->nullOnDelete()->onUpdate('cascade');
             $table->foreign('created_by')->references('id')->on('users')->nullOnDelete()->onUpdate('cascade');
         });
     }

@@ -16,7 +16,7 @@
                         placeholder="{{ __('admin/deliveriesPages.Search ...') }}">
                 </div>
 
-                {{-- Soft Deleted Countries --}}
+                {{-- Deleted Countries --}}
                 @can('Force Delete Governorate')
                     <div class="ltr:text-right rtl:text-left">
                         <a href="{{ route('admin.governorates.softDeletedGovernorates') }}"
@@ -24,7 +24,7 @@
                             <span class="material-icons rtl:ml-2 ltr:mr-2">
                                 delete_forever
                             </span>
-                            {{ __('admin/deliveriesPages.Soft Deleted Governorates') }}</a>
+                            {{ __('admin/deliveriesPages.Deleted Governorates') }}</a>
                     </div>
                 @endcan
 
@@ -207,7 +207,7 @@
                                         @endcan
 
                                         {{-- Delete Button --}}
-                                        @can('Soft Delete Governorate')
+                                        @can('Deleted Governorate')
                                             <a href="#" title="{{ __('admin/deliveriesPages.Delete') }}"
                                                 wire:click.prevent="deleteConfirm({{ $governorate->id }})"
                                                 class="m-0">

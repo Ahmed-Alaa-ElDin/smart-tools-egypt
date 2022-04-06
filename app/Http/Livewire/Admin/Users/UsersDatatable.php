@@ -19,7 +19,7 @@ class UsersDatatable extends Component
 
     public $search = "";
 
-    protected $listeners = ['softDeleteUser', 'editRoles'];
+    protected $listeners = ['softDeleteUser', 'editRoles', 'addPoints'];
 
     // Render Once
     public function mount()
@@ -70,7 +70,7 @@ class UsersDatatable extends Component
         return $this->sortBy = $field;
     }
 
-    ######## Soft Delete #########
+    ######## Deleted #########
     public function deleteConfirm($user_id)
     {
         $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
@@ -98,7 +98,7 @@ class UsersDatatable extends Component
             ]);
         }
     }
-    ######## Soft Delete #########
+    ######## Deleted #########
 
 
     ######## Edit User Roles #########
@@ -131,4 +131,38 @@ class UsersDatatable extends Component
         }
     }
     ######## Edit User Roles #########
+
+    ######## Add Points #########
+    public function addPointsForm($user_id)
+    {
+        $this->dispatchBrowserEvent('swalAddPointsForm', [
+            'title' => __('admin/usersPages.Enter the points you want to add'),
+            'confirmButtonText' => __('admin/usersPages.Add'),
+            'denyButtonText' => __('admin/usersPages.Cancel'),
+            'user_id' => $user_id,
+        ]);
+    }
+
+    public function addPoints($user_id, $points)
+    {
+        try {
+            $user = User::findOrFail($user_id);
+
+            $user->points = $user->points + $points;
+
+            $user->save();
+
+            $this->dispatchBrowserEvent('swalUserRoleChanged', [
+                "text" => __('admin/usersPages.Points added successfully'),
+                'icon' => 'success'
+            ]);
+        } catch (\Throwable $th) {
+            $this->dispatchBrowserEvent('swalUserRoleChanged', [
+                "text" => __("admin/usersPages.Points haven't been added"),
+                'icon' => 'error'
+            ]);
+        }
+    }
+    ######## Add Points #########
+
 }

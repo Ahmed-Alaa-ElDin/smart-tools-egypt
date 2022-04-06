@@ -78,7 +78,7 @@ class CategoriesDatatable extends Component
         return $this->sortBy = $field;
     }
 
-    ######## Soft Delete #########
+    ######## Deleted #########
     public function deleteConfirm($category_id)
     {
         $this->dispatchBrowserEvent('swalConfirm', [
@@ -109,5 +109,5 @@ class CategoriesDatatable extends Component
             ]);
         }
     }
-    ######## Soft Delete #########
+    ######## Deleted #########
 }

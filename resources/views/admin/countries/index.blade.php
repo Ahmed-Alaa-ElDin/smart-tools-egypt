@@ -65,7 +65,7 @@
     @livewireScripts
 
     <script>
-        // #### Country Soft Delete ####
+        // #### Country Deleted ####
         window.addEventListener('swalConfirmSoftDelete', function(e) {
             Swal.fire({
                 icon: 'warning',
@@ -94,6 +94,6 @@
                 timerProgressBar: true,
             })
         });
-        // #### Country Soft Delete ####
+        // #### Country Deleted ####
     </script>
 @endpush

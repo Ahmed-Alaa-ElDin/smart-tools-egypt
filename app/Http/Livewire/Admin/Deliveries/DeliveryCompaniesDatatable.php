@@ -64,7 +64,7 @@ class DeliveryCompaniesDatatable extends Component
         return $this->sortBy = $field;
     }
 
-    ######## Soft Delete #########
+    ######## Deleted #########
     public function deleteConfirm($delivery_id)
     {
         $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
@@ -92,7 +92,7 @@ class DeliveryCompaniesDatatable extends Component
             ]);
         }
     }
-    ######## Soft Delete #########
+    ######## Deleted #########
 
     ######## Activation Toggle #########
     public function activate($delivery_id)

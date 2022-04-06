@@ -70,7 +70,7 @@
     @livewireScripts
 
     <script>
-        // #### Delivery Soft Delete ####
+        // #### Delivery Deleted ####
         window.addEventListener('swalConfirmSoftDelete', function(e) {
             Swal.fire({
                 icon: 'warning',
@@ -99,7 +99,7 @@
                 timerProgressBar: true,
             })
         });
-        // #### Delivery Soft Delete ####
+        // #### Delivery Deleted ####
 
 
         // #### Delivery Activation / Deactivation ####
