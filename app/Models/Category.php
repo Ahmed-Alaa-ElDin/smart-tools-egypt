@@ -33,4 +33,10 @@ class Category extends Model
     {
         return $this->belongsTo(Supercategory::class);
     }
+
+    // many to many relationship (polymorphic)  Category --> Coupons
+    public function coupons()
+    {
+        return $this->morphToMany(Coupon::class, 'couponable');
+    }
 }

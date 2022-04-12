@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Config;
-
 return [
     "Dashboard"                                                             =>      "Dashboard",
     "Add Product"                                                           =>      "Add Product",

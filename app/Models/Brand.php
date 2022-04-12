@@ -30,4 +30,10 @@ class Brand extends Model
     {
         return $this->belongsTo(Country::class);
     }
+
+    // many to many relationship (polymorphic)  Brand --> Coupons
+    public function coupons()
+    {
+        return $this->morphToMany(Coupon::class, 'couponable');
+    }
 }

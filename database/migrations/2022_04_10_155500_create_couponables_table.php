@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('coupons', function (Blueprint $table) {
+        Schema::create('couponables', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
-            $table->decimal('value')->default(0);
-            $table->tinyInteger('type')->default(0)->comment('0 -> percentage , 1 -> fixed');
-            $table->integer('number')->nullable();
-            $table->date('expire_at');
+            $table->unsignedBigInteger('coupon_id');
+            $table->string('couponable_type');
+            $table->unsignedBigInteger('couponable_id');
             $table->timestamps();
+
+            $table->foreign('coupon_id')->references('id')->on('coupons')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('coupons');
+        Schema::dropIfExists('couponables');
     }
 };

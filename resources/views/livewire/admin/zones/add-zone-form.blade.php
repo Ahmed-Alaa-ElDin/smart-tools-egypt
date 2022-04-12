@@ -24,9 +24,9 @@
             <div class="grid grid-cols-12 gap-x-4 gap-y-2 col-span-12 md:col-span-10">
 
                 @foreach ($zones as $zone_index => $zone)
-
-                {{-- ########### Zone Start ########### --}}
-                    <div class="bg-gray-200 rounded-xl col-span-12 grid grid-cols-12 gap-x-4 gap-y-2 p-2 " wire:key="{{ 'zone_'.$zone_index }}">
+                    {{-- ########### Zone Start ########### --}}
+                    <div class="bg-gray-200 rounded-xl col-span-12 grid grid-cols-12 gap-x-4 gap-y-2 p-2 "
+                        wire:key="{{ 'zone_' . $zone_index }}">
 
                         {{-- toolbar --}}
                         <div class="col-span-12 flex justify-between items-center bg-gray-300 py-1 px-2 rounded-xl">
@@ -164,7 +164,8 @@
                             {{-- Zone's Destinations --}}
 
                             @foreach ($zone['destinations'] as $des_index => $destination)
-                                <div class="col-span-12 grid grid-cols-12 bg-gray-300 p-2 gap-x-2 gap-y-2 rounded-xl" wire:key="{{ 'zone_'.$zone_index.'_des_'.$des_index }}">
+                                <div class="col-span-12 grid grid-cols-12 bg-gray-300 p-2 gap-x-2 gap-y-2 rounded-xl"
+                                    wire:key="{{ 'zone_' . $zone_index . '_des_' . $des_index }}">
 
                                     {{-- Destination toolbar --}}
                                     <div class="col-span-12 sm:col-span-4 sm:order-2 flex items-start md:p-1">
@@ -276,9 +277,7 @@
                                                 @foreach ($zones[$zone_index]['destinations'][$des_index]['allCities'] as $city_index => $city)
                                                     <label
                                                         for="zone_{{ $zone_index }}_destination_{{ $des_index }}_city_{{ $city_index }}"
-                                                        class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($city['id'], $zones[$zone_index]['destinations'][$des_index]['cities'])) bg-green-200 @endif select-none"
-                                                        {{-- wire:click="$emit('citySelected',{{ $zone_index }},{{ $des_index }},{{ $city['id'] }})" --}}
-                                                        >
+                                                        class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($city['id'], $zones[$zone_index]['destinations'][$des_index]['cities'])) bg-green-200 @endif select-none">
                                                         {{ $city['name'][session('locale')] }}
                                                         <input type="checkbox"
                                                             wire:model="zones.{{ $zone_index }}.destinations.{{ $des_index }}.cities"

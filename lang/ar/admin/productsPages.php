@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Config;
-
 return [
     "Dashboard"                                                                 =>      "لوحة التحكم",
     "Add Product"                                                               =>      "إضافة منتج جديد",
@@ -133,7 +131,7 @@ return [
     "Are you sure, you want to delete this brand ?"                             =>      "هل أنت متأكد من حذف هذه العلامة التجارية ؟",
     "Brand has been deleted successfully"                                       =>      "تم حذف العلامة التجارية بنجاح",
     "Brand hasn't been deleted"                                                 =>      "لم يتم حذف العلامة التجارية",
-    "Deleted Brands"                                                       =>      "العلامات التجارية المحذوفة مؤقتاً",
+    "Deleted Brands"                                                            =>      "العلامات التجارية المحذوفة مؤقتاً",
     "Through this form you can add new brand"                                   =>      "من خلال هذه الصفحة يمكنك إضافة علامة تجارية جديدة",
     "Logo"                                                                      =>      "الشعار",
     "Brand Information"                                                         =>      "معلومات العلامة التجارية",
@@ -167,7 +165,7 @@ return [
     "Supercategories"                                                           =>      "الأقسام الرئيسية",
     "Here you can manage main categories"                                       =>      "من خلال هذه الصفحة يمكنك التحكم بالأقسام الرئيسية",
     "Add Supercategory"                                                         =>      "إضافة قسم رئيسي",
-    "Deleted Supercategories"                                              =>      "الأقسام الرئيسية المحذوفة مؤقتاً",
+    "Deleted Supercategories"                                                   =>      "الأقسام الرئيسية المحذوفة مؤقتاً",
     "No. of Categories"                                                         =>      "عدد الأقسام الفرعية",
     "No. of Subcategories"                                                      =>      "عدد الأقسام المباشرة",
     "Supercategory Information"                                                 =>      "معلومات القسم الرئيسي",

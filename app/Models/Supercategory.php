@@ -33,4 +33,10 @@ class Supercategory extends Model
     {
         return $this->hasManyThrough(Subcategory::class, Category::class);
     }
+
+    // many to many relationship (polymorphic)  Super-Category --> Coupons
+    public function coupons()
+    {
+        return $this->morphToMany(Coupon::class,'couponable');
+    }
 }

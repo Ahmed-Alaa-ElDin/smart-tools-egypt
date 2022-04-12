@@ -96,6 +96,7 @@ return [
     'url'                  => 'صيغة رابط :attribute غير صحيحة',
     'The Email Address is required when role is admin.' => 'حقل البريد الالكتروني مطلوب عندما يكون الدور مدير',
     'The phone numbers must contain digits between 8 & 11' => 'يجب أن تحتوي أرقام التليفونات على أرقم تتكون من 8 إلى 11 رقم',
+    "maxif" => ":attribute لابد أن تكون أقل من 100%",
 
     /*
     |--------------------------------------------------------------------------
@@ -215,7 +216,13 @@ return [
         'parentCategories.*.supercategory_id'     => 'القسم الرئيسي',
         'parentCategories.*.category_id'          => 'القسم الفرعي',
         'parentCategories.*.subcategory_id'       => 'القسم المباشر',
-],
+        'code'                  => 'الكود',
+        'type'                  => 'نوع الخصم',
+        'value'                 => 'القيمة',
+        'expire_at'             => 'تاريخ الإنتهاء',
+        'number'                => 'عدد قسائم الشراء',
+
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -230,7 +237,9 @@ return [
     'values' => [
         // or whatever fields you wanna translate
         'birth_date' => [
-            // or tomorrow
+            'today' => 'اليوم'
+        ],
+        'expire_at' => [
             'today' => 'اليوم'
         ]
     ],

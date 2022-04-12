@@ -94,6 +94,77 @@
                 </li>
             @endcan
 
+            {{-- Orders --}}
+            @can('See All Users')
+                <li class="nav-item {{ $activeSection == 'Orders' ? ' active' : '' }}">
+                    <a class="nav-link" data-toggle="collapse" href="#orders"
+                        aria-expanded="{{ $activeSection == 'Orders' ? 'true' : 'false' }}">
+                        <span class="material-icons">
+                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+                                preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                <g fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2">
+                                    <path stroke-linecap="round"
+                                        d="M11.029 2.54a2 2 0 0 1 1.942 0l7.515 4.174a1 1 0 0 1 .514.874v8.235a2 2 0 0 1-1.029 1.748l-7 3.89a2 2 0 0 1-1.942 0l-7-3.89A2 2 0 0 1 3 15.824V7.588a1 1 0 0 1 .514-.874L11.03 2.54Z" />
+                                    <path stroke-linecap="round" d="m7.5 4.5l9 5V13M6 12.328L9 14" />
+                                    <path d="m3 7l9 5m0 0l9-5m-9 5v10" />
+                                </g>
+                            </svg> </span>
+                        <span>{{ __('admin/master.Orders') }}
+                            <b class="caret"></b>
+                        </span>
+                    </a>
+
+                    <div class="collapse {{ $activeSection == 'Orders' ? ' show' : '' }}" id="orders">
+                        <ul class="nav">
+
+                            {{-- See All Orders --}}
+                            <li class="nav-item {{ $activePage == 'All Orders' ? ' active' : '' }}">
+                                <a class="nav-link" href="{{ route('admin.orders.index') }}">
+                                    <span class="material-icons">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1.13em"
+                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 576 512">
+                                            <path fill="currentColor"
+                                                d="M560 288h-80v96l-32-21.3l-32 21.3v-96h-80c-8.8 0-16 7.2-16 16v192c0 8.8 7.2 16 16 16h224c8.8 0 16-7.2 16-16V304c0-8.8-7.2-16-16-16zm-384-64h224c8.8 0 16-7.2 16-16V16c0-8.8-7.2-16-16-16h-80v96l-32-21.3L256 96V0h-80c-8.8 0-16 7.2-16 16v192c0 8.8 7.2 16 16 16zm64 64h-80v96l-32-21.3L96 384v-96H16c-8.8 0-16 7.2-16 16v192c0 8.8 7.2 16 16 16h224c8.8 0 16-7.2 16-16V304c0-8.8-7.2-16-16-16z" />
+                                        </svg>
+                                    </span>
+                                    <span>{{ __('admin/master.All Orders') }} </span>
+                                </a>
+                            </li>
+
+                            {{-- Add Order --}}
+                            <li class="nav-item {{ $activePage == 'Add Order' ? ' active' : '' }}">
+                                <a class="nav-link" href="{{ route('admin.orders.create') }}">
+                                    <span class="material-icons">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
+                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                            <path fill="currentColor"
+                                                d="M12 9c.55 0 1-.45 1-1V6h2c.55 0 1-.45 1-1s-.45-1-1-1h-2V2c0-.55-.45-1-1-1s-1 .45-1 1v2H9c-.55 0-1 .45-1 1s.45 1 1 1h2v2c0 .55.45 1 1 1zm-5 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2s-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2s2-.9 2-2s-.9-2-2-2zm-8.9-5h7.45c.75 0 1.41-.41 1.75-1.03l3.24-6.14a.998.998 0 0 0-.4-1.34a.996.996 0 0 0-1.36.41L15.55 11H8.53L4.27 2H2c-.55 0-1 .45-1 1s.45 1 1 1h1l3.6 7.59l-1.35 2.44C4.52 15.37 5.48 17 7 17h11c.55 0 1-.45 1-1s-.45-1-1-1H7l1.1-2z" />
+                                        </svg>
+                                    </span>
+                                    <span>{{ __('admin/master.Add Order') }} </span>
+                                </a>
+                            </li>
+
+                            {{-- Deleted Orders --}}
+                            <li class="nav-item {{ $activePage == 'Deleted Orders' ? ' active' : '' }}">
+                                <a class="nav-link" href="{{ route('admin.orders.softDeletedOrders') }}">
+                                    <span class="material-icons rtl:ml-2 ltr:mr-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
+                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                            <path fill="currentColor"
+                                                d="M14.12 8.53L12 6.41L9.88 8.54L8.46 7.12L10.59 5L8.47 2.88l1.41-1.41L12 3.59l2.12-2.13l1.42 1.42L13.41 5l2.12 2.12l-1.41 1.41M7 18a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2a2 2 0 0 1 2-2m10 0a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2a2 2 0 0 1 2-2m-9.83-3.25a.25.25 0 0 0 .25.25H19v2H7a2 2 0 0 1-2-2c0-.35.09-.68.25-.96l1.35-2.45L3 4H1V2h3.27l.94 2l.95 2l2.24 4.73l.13.27h7.02l2.76-5l1.1-2h.01l1.74.96l-3.86 7.01c-.34.62-1 1.03-1.75 1.03H8.1l-.9 1.63l-.03.12Z" />
+                                        </svg>
+                                    </span>
+                                    <span>{{ __('admin/master.Deleted Orders') }} </span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+            @endcan
+
+
             {{-- Products --}}
             @can('See All Users')
                 <li class="nav-item {{ $activeSection == 'Products' ? ' active' : '' }}">
@@ -116,8 +187,7 @@
 
                             {{-- See All Products --}}
                             <li class="nav-item {{ $activePage == 'All Products' ? ' active' : '' }}">
-                                <a class="nav-link"
-                                    href="{{ route('admin.products.index') }}">
+                                <a class="nav-link" href="{{ route('admin.products.index') }}">
                                     <span class="material-icons">
                                         <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
                                             height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
@@ -131,8 +201,7 @@
 
                             {{-- Add Product --}}
                             <li class="nav-item {{ $activePage == 'Add Product' ? ' active' : '' }}">
-                                <a class="nav-link"
-                                    href="{{ route('admin.products.create') }}">
+                                <a class="nav-link" href="{{ route('admin.products.create') }}">
                                     <span class="material-icons">
                                         control_point
                                     </span>
@@ -142,8 +211,7 @@
 
                             {{-- Deleted Users --}}
                             <li class="nav-item {{ $activePage == 'Deleted Products' ? ' active' : '' }}">
-                                <a class="nav-link"
-                                    href="{{ route('admin.products.softDeletedProducts') }}">
+                                <a class="nav-link" href="{{ route('admin.products.softDeletedProducts') }}">
                                     <span class="material-icons rtl:ml-2 ltr:mr-2">
                                         auto_delete
                                     </span>
@@ -153,8 +221,7 @@
 
                             {{-- Brands --}}
                             <li class="nav-item {{ $activePage == 'Brands' ? ' active' : '' }}">
-                                <a class="nav-link"
-                                    href="{{ route('admin.brands.index') }}">
+                                <a class="nav-link" href="{{ route('admin.brands.index') }}">
                                     <span class="material-icons rtl:ml-2 ltr:mr-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
                                             height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 64 64">
@@ -172,6 +239,72 @@
                 </li>
             @endcan
 
+            {{-- Offers --}}
+            @can('See All Users')
+                <li class="nav-item {{ $activeSection == 'Offers' ? ' active' : '' }}">
+                    <a class="nav-link" data-toggle="collapse" href="#offers"
+                        aria-expanded="{{ $activeSection == 'Offers' ? 'true' : 'false' }}">
+                        <span class="material-icons">
+                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+                                preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="m20.749 12l1.104-1.908a1 1 0 0 0-.365-1.366l-1.91-1.104v-2.2a1 1 0 0 0-1-1h-2.199l-1.103-1.909a1.008 1.008 0 0 0-.607-.466a.993.993 0 0 0-.759.1L12 3.251l-1.91-1.105a1 1 0 0 0-1.366.366L7.62 4.422H5.421a1 1 0 0 0-1 1v2.199l-1.91 1.104a.998.998 0 0 0-.365 1.367L3.25 12l-1.104 1.908a1.004 1.004 0 0 0 .364 1.367l1.91 1.104v2.199a1 1 0 0 0 1 1h2.2l1.104 1.91a1.01 1.01 0 0 0 .866.5c.174 0 .347-.046.501-.135l1.908-1.104l1.91 1.104a1.001 1.001 0 0 0 1.366-.365l1.103-1.91h2.199a1 1 0 0 0 1-1v-2.199l1.91-1.104a1 1 0 0 0 .365-1.367L20.749 12zM9.499 6.99a1.5 1.5 0 1 1-.001 3.001a1.5 1.5 0 0 1 .001-3.001zm.3 9.6l-1.6-1.199l6-8l1.6 1.199l-6 8zm4.7.4a1.5 1.5 0 1 1 .001-3.001a1.5 1.5 0 0 1-.001 3.001z" />
+                            </svg>
+                        </span>
+                        <span>{{ __('admin/master.Offers') }}
+                            <b class="caret"></b>
+                        </span>
+                    </a>
+
+                    <div class="collapse {{ $activeSection == 'Offers' ? ' show' : '' }}" id="offers">
+                        <ul class="nav">
+
+                            {{-- See All Offers --}}
+                            <li class="nav-item {{ $activePage == 'All Offers' ? ' active' : '' }}">
+                                <a class="nav-link" href="{{ route('admin.offers.index') }}">
+                                    <span class="material-icons">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="m6 12l36 4v24L6 36V12Zm32 3.555V8L6 12"/></svg>                                    </span>
+                                    <span>{{ __('admin/master.All Offers') }} </span>
+                                </a>
+                            </li>
+
+                            {{-- Add Offer --}}
+                            <li class="nav-item {{ $activePage == 'Add Offer' ? ' active' : '' }}">
+                                <a class="nav-link" href="{{ route('admin.offers.create') }}">
+                                    <span class="material-icons">
+                                        control_point
+                                    </span>
+                                    <span>{{ __('admin/master.Add Offer') }} </span>
+                                </a>
+                            </li>
+
+                            {{-- Deleted Offers --}}
+                            <li class="nav-item {{ $activePage == 'Deleted Offers' ? ' active' : '' }}">
+                                <a class="nav-link" href="{{ route('admin.offers.softDeletedOffers') }}">
+                                    <span class="material-icons rtl:ml-2 ltr:mr-2">
+                                        auto_delete                                    </span>
+                                    <span>{{ __('admin/master.Deleted Offers') }} </span>
+                                </a>
+                            </li>
+
+                            {{-- All Coupons --}}
+                            <li class="nav-item {{ $activePage == 'All Coupons' ? ' active' : '' }}">
+                                <a class="nav-link" href="{{ route('admin.coupons.index') }}">
+                                    <span class="material-icons rtl:ml-2 ltr:mr-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
+                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                            <path fill="currentColor"
+                                                d="M21 5H3a1 1 0 0 0-1 1v4h.893c.996 0 1.92.681 2.08 1.664A2.001 2.001 0 0 1 3 14H2v4a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-4h-1a2.001 2.001 0 0 1-1.973-2.336c.16-.983 1.084-1.664 2.08-1.664H22V6a1 1 0 0 0-1-1zM11 17H9v-2h2v2zm0-4H9v-2h2v2zm0-4H9V7h2v2z" />
+                                        </svg>
+                                    </span>
+                                    <span>{{ __('admin/master.All Coupons') }} </span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+            @endcan
 
             {{-- Categories --}}
             @can('See All Users')
@@ -191,8 +324,7 @@
 
                             {{-- See Supercategories --}}
                             <li class="nav-item {{ $activePage == 'Supercategories' ? ' active' : '' }}">
-                                <a class="nav-link"
-                                    href="{{ route('admin.supercategories.index') }}">
+                                <a class="nav-link" href="{{ route('admin.supercategories.index') }}">
                                     <span class="material-icons">
                                         <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
                                             height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"
@@ -206,8 +338,7 @@
 
                             {{-- See Categories --}}
                             <li class="nav-item {{ $activePage == 'Categories' ? ' active' : '' }}">
-                                <a class="nav-link"
-                                    href="{{ route('admin.categories.index') }}">
+                                <a class="nav-link" href="{{ route('admin.categories.index') }}">
                                     <span class="material-icons">
                                         <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
                                             height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"
@@ -222,8 +353,7 @@
 
                             {{-- See Sub Categories --}}
                             <li class="nav-item {{ $activePage == 'Subcategories' ? ' active' : '' }}">
-                                <a class="nav-link"
-                                    href="{{ route('admin.subcategories.index') }}">
+                                <a class="nav-link" href="{{ route('admin.subcategories.index') }}">
                                     <span class="material-icons">
                                         <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
                                             height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"

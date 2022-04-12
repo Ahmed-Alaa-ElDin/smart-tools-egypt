@@ -65,6 +65,12 @@ class Product extends Model
     // One to one relationship Product --> Thumbnail
     public function thumbnail()
     {
-        return $this->hasOne(ProductImage::class,'product_id')->where('is_thumbnail',1);
+        return $this->hasOne(ProductImage::class, 'product_id')->where('is_thumbnail', 1);
+    }
+
+    // many to many relationship (polymorphic)  Product --> Coupons
+    public function coupons()
+    {
+        return $this->morphToMany(Coupon::class, 'couponable');
     }
 }

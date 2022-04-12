@@ -68,20 +68,20 @@ class CountriesDatatable extends Component
     }
 
     ######## Deleted #########
-    public function deleteConfirm($country_id)
+    public function deleteConfirm($coupon_id)
     {
         $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
-            "text" => __('admin/deliveriesPages.Are you sure, you want to delete this company ?'),
+            "text" => __('admin/deliveriesPages.Are you sure, you want to delete this coupon ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'country_id' => $country_id,
+            'coupon_id' => $coupon_id,
         ]);
     }
 
-    public function softDeleteCountry($country_id)
+    public function softDeleteCountry($coupon_id)
     {
         try {
-            $user = Country::findOrFail($country_id);
+            $user = Country::findOrFail($coupon_id);
             $user->delete();
 
             $this->dispatchBrowserEvent('swalCountryDeleted', [

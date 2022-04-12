@@ -132,6 +132,7 @@ return [
     'uuid' => 'The :attribute must be a valid UUID.',
     'The Email Address is required when role is admin.' => 'The Email Address is required when role is admin.',
     'The phone numbers must contain digits between 8 & 11' => 'The phone numbers must contain digits between 8 & 11',
+    "maxif" => "The :attribute must be less than or equal 100%",
 
 
     /*
@@ -191,9 +192,11 @@ return [
         'parentCategories.*.supercategory_id'         => 'Main Category',
         'parentCategories.*.category_id'              => 'Category',
         'parentCategories.*.subcategory_id'           => 'Subcategory',
-        'subcategory_id'        => 'Subcategory',
-        'subcategory_id'        => 'Subcategory',
-        'subcategory_id'        => 'Subcategory',
+        'code'                  => 'Code',
+        'type'                  => 'Type',
+        'value'                 => 'Value',
+        'expire_at'             => 'Expiration Date',
+        'number'                => 'Number',
     ],
 
 ];

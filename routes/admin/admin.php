@@ -11,9 +11,17 @@ Route::group([
 ], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // ############## Orders Routes Start ##############
+    require_once __DIR__ . "/orders/orders.php";
+    // ############## Orders Routes End ##############
+
     // ############## Products Routes Start ##############
     require_once __DIR__ . "/products_brands/products_brands.php";
     // ############## Products Routes End ##############
+
+    // ############## Offers Routes Start ##############
+    require_once __DIR__ . "/offers/offers.php";
+    // ############## Offers Routes End ##############
 
     // ############## Categories Routes Start ##############
     require_once __DIR__ . "/categories/categories.php";
