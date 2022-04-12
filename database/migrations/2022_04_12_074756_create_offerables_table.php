@@ -13,15 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('coupons', function (Blueprint $table) {
+        Schema::create('offerables', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
+            $table->unsignedBigInteger('offer_id');
+            $table->string('offerable_type');
+            $table->unsignedBigInteger('offerable_id');
             $table->decimal('value')->default(0);
-            $table->tinyInteger('type')->default(0)->comment('0 -> percentage , 1 -> fixed, 2 -> points, 3 -> free shipping');
-            $table->tinyInteger('on_orders')->default(0)->comment('0 -> No , 1 -> Yes');
+            $table->tinyInteger('type')->default(0)->comment('0 -> percentage , 1 -> fixed , 2 -> Points');
             $table->integer('number')->nullable();
-            $table->date('expire_at');
             $table->timestamps();
+
+            $table->foreign('offer_id')->references('id')->on('offers')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -32,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('coupons');
+        Schema::dropIfExists('offerables');
     }
 };

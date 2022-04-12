@@ -47,4 +47,10 @@ class Subcategory extends Model
     {
         return $this->morphToMany(Coupon::class, 'couponable');
     }
+
+    // many to many relationship (polymorphic)  Sub-Category --> Offers
+    public function offers()
+    {
+        return $this->morphToMany(Offer::class, 'offerable');
+    }
 }

@@ -16,6 +16,7 @@ class Coupon extends Model
         'value',
         'type',
         'number',
+        'on_orders',
         'expire_at',
     ];
 

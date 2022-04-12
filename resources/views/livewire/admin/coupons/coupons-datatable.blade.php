@@ -105,8 +105,8 @@
                                     <td class="px-6 py-2 whitespace-nowrap">
                                         <div class="flex items-center content-center justify-center">
                                             <div class="text-sm font-medium text-gray-900">
-                                                {{ $coupon->value }}
-                                                {{ $coupon->type == 0 ? '%' : __('admin/offersPages.EPG') }}
+                                                {{ $coupon->type != 2 && $coupon->type != 3 ? $coupon->value : '' }}
+                                                {{ $coupon->type == 0? '%': ($coupon->type == 1? __('admin/offersPages.EPG'): ($coupon->type == 2? trans_choice('admin/offersPages.Points value', $coupon->value, ['points' => $coupon->value]): __('admin/offersPages.Free Shipping'))) }}
                                             </div>
                                         </div>
                                     </td>
@@ -136,15 +136,13 @@
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- Edit Button --}}
-                                        @can('Edit Country')
-                                            <a href="{{ route('admin.coupons.edit', [$coupon->id]) }}"
-                                                title="{{ __('admin/offersPages.Edit') }}" class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
-                                                    edit
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="{{ route('admin.coupons.edit', [$coupon->id]) }}"
+                                            title="{{ __('admin/offersPages.Edit') }}" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
+                                                edit
+                                            </span>
+                                        </a>
 
                                         {{-- Delete Button --}}
                                         <a href="#" title="{{ __('admin/offersPages.Delete') }}"
