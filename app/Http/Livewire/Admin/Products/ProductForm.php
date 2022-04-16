@@ -181,13 +181,6 @@ class ProductForm extends Component
         }
     }
 
-    // Run with every update
-    public function render()
-    {
-        return view('livewire.admin.products.product-form');
-    }
-
-
     ######################## Publish Toggle : Start ############################
     public function publish()
     {
@@ -465,6 +458,10 @@ class ProductForm extends Component
             }
 
             DB::commit();
+
+            foreach ($this->deletedImages as $key => $deletedImage) {
+                imageDelete($deletedImage, 'products');
+            }
 
             if ($new) {
                 Session::flash('success', __('admin/productsPages.Product added successfully'));

@@ -55,9 +55,36 @@ __('admin/offersPages.Add Offer')])
 {{-- Extra Styles --}}
 @push('css')
     @livewireStyles
+
+    <link rel="stylesheet" href={{ asset('assets/js/plugins/daterangepicker-master/daterangepicker.css') }}>
 @endpush
 
 {{-- Extra Scripts --}}
 @push('js')
     @livewireScripts
+
+    <script src="{{ asset('assets/js/plugins/daterangepicker-master/daterangepicker.js') }}"></script>
+
+    <script>
+        $(function() {
+            $('input[name="date_range"]').daterangepicker({
+                "minYear": 2022,
+                "timePicker": true,
+                "opens": "center",
+                "drops": "auto",
+                "applyButtonClasses": "btn-success",
+                "cancelClass": "btn-danger",
+                "showDropdowns": true,
+                locale: {
+                    format: 'YYYY-MM-DD hh:mm A',
+                }
+            }, function(start, end, label) {
+                Livewire.emit('daterangeUpdated', start.format('YYYY-MM-DD hh:mm:ss'), end.format(
+                    'YYYY-MM-DD hh:mm:ss'));
+                console.log('New date range selected: ' + start.format('YYYY-MM-DD HH:mm') + ' to ' + end
+                    .format(
+                        'YYYY-MM-DD HH:mm') + ' (predefined range: ' + label + ')');
+            });
+        });
+    </script>
 @endpush

@@ -80,6 +80,13 @@ return [
             'url' => env('APP_URL') . '/images/logos',
             'visibility' => 'public',
         ],
+
+        'banners' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/images/banners'),
+            'url' => env('APP_URL') . '/images/banners',
+            'visibility' => 'public',
+        ],
     ],
 
     /*
@@ -95,10 +102,11 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
-        public_path('images/profiles') => storage_path('app/public/images/profiles'),
-        public_path('images/deliveryCompanies') => storage_path('app/public/images/deliveryCompanies'),
-        public_path('images/products') => storage_path('app/public/images/products'),
-        public_path('images/logos') => storage_path('app/public/images/logos'),
+        // public_path('storage/images/profiles') => storage_path('app/public/images/profiles'),
+        // public_path('storage/images/deliveryCompanies') => storage_path('app/public/images/deliveryCompanies'),
+        // public_path('storage/images/products') => storage_path('app/public/images/products'),
+        // public_path('storage/images/logos') => storage_path('app/public/images/logos'),
+        // public_path('storage/images/banners') => storage_path('app/public/images/banners'),
     ],
 
 ];

@@ -15,7 +15,7 @@ class OfferController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.offers.index');
     }
 
     /**
@@ -56,9 +56,9 @@ class OfferController extends Controller
      * @param  \App\Models\Offer  $offer
      * @return \Illuminate\Http\Response
      */
-    public function edit(Offer $offer)
+    public function edit($offer)
     {
-        //
+        return view('admin.offers.edit', compact('offer'));
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(),'middleware' => [ 'lo
 	});
 
     require_once __DIR__ . "/admin/auth.php";
+    require_once __DIR__ . "/front/front.php";
     require_once __DIR__ . "/admin/admin.php";
 });
 

@@ -2,7 +2,7 @@
     data-image="{{ asset('assets/img/logos/smart-tools-logo-only-400.png') }}">
     <div class="logo">
         <a href="https://creative-tim.com/" class="simple-text logo-normal">
-            <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}" alt="" width="50px">
+            <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}" alt="Smart Tools Egypt Logo" width="50px">
             {{ 'Smart Tools' }}
         </a>
     </div>
@@ -275,15 +275,6 @@
                                         control_point
                                     </span>
                                     <span>{{ __('admin/master.Add Offer') }} </span>
-                                </a>
-                            </li>
-
-                            {{-- Deleted Offers --}}
-                            <li class="nav-item {{ $activePage == 'Deleted Offers' ? ' active' : '' }}">
-                                <a class="nav-link" href="{{ route('admin.offers.softDeletedOffers') }}">
-                                    <span class="material-icons rtl:ml-2 ltr:mr-2">
-                                        auto_delete                                    </span>
-                                    <span>{{ __('admin/master.Deleted Offers') }} </span>
                                 </a>
                             </li>
 

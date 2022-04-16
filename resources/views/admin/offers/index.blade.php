@@ -1,5 +1,5 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Orders', 'activePage' => 'All Orders', 'titlePage'
-=> __('admin/ordersPages.All Orders')])
+@extends('layouts.admin.admin', ['activeSection' => 'Offers', 'activePage' => 'All Offers', 'titlePage'
+=> __('admin/offersPages.All Offers')])
 
 @section('content')
     <div class="content">
@@ -8,8 +8,8 @@
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb text-sm">
                     <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.dashboard') }}">{{ __('admin/ordersPages.Dashboard') }}</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/ordersPages.All Orders') }}
+                            href="{{ route('admin.dashboard') }}">{{ __('admin/offersPages.Dashboard') }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/offersPages.All Offers') }}
                     </li>
                 </ol>
             </nav>
@@ -25,17 +25,17 @@
                             <div class="flex justify-between">
                                 <div class=" ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
-                                        {{ __('admin/ordersPages.Here you can manage orders') }}</p>
+                                        {{ __('admin/offersPages.Here you can manage offers') }}</p>
                                 </div>
 
-                                {{-- Add New Order Button --}}
+                                {{-- Add New Offer Button --}}
                                 <div class="ltr:text-right rtl:text-left">
-                                    <a href="{{ route('admin.orders.create') }}"
+                                    <a href="{{ route('admin.offers.create') }}"
                                         class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">
                                         <span class="material-icons rtl:ml-1 ltr:mr-1">
                                             add
                                         </span>
-                                        {{ __('admin/ordersPages.Add Order') }}</a>
+                                        {{ __('admin/offersPages.Add Offer') }}</a>
                                 </div>
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Datatable Start --}}
-                            @livewire('admin.orders.orders-datatable')
+                            @livewire('admin.offers.offers-datatable')
                             {{-- Datatable End --}}
                         </div>
                     </div>
@@ -63,7 +63,7 @@
     @livewireScripts
 
     <script>
-        // #### Order Sweetalert ####
+        // #### Offer Sweetalert ####
         window.addEventListener('swalConfirm', function(e) {
 
             Swal.fire({
@@ -77,7 +77,7 @@
                 focusDeny: true,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit(e.detail.func, e.detail.order_id);
+                    Livewire.emit(e.detail.func, e.detail.offer_id);
                 }
             });
         });
@@ -93,6 +93,6 @@
                 timerProgressBar: true,
             })
         });
-        // #### Order Sweetalert ####
+        // #### Offer Sweetalert ####
     </script>
 @endpush

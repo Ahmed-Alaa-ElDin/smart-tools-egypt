@@ -26,9 +26,6 @@
             rel="stylesheet">
     @endif
 
-    {{-- Icons --}}
-    {{-- <link href="{{ asset('assets/admin/css/all.min.css') }}" rel="stylesheet" /> --}}
-
     {{-- Main CSS Files --}}
     <link href="{{ asset('assets/admin/css/material-dashboard.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ mix('assets/css/app.css') }}">
@@ -54,20 +51,25 @@
             </div>
         </div>
     @endauth
+
     <!--   Core JS Files   -->
     <script src="{{ asset('assets/admin/js/core/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/admin/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('assets/admin/js/core/bootstrap-material-design.min.js') }}"></script>
     {{-- <script src="{{ asset('assets/admin/js/plugins/perfect-scrollbar.jquery.min.js') }}"></script> --}}
 
-    {{-- Font Awesome --}}
-    {{-- <script src="{{ asset('assets/admin/js/plugins/all.min.js') }}"></script> --}}
+    <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc --> --}}
+    <script src="{{ asset('assets/admin/js/material-dashboard.min.js') }}" type="text/javascript"></script>
+
+    <!--  Plugin for Sweet Alert -->
+    <script src="{{ asset('assets/js/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+
+    <!-- Chartist JS -->
+    <script src="{{ asset('assets/admin/js/plugins/chartist.min.js') }}"></script>
 
     <!-- Plugin for the momentJs  -->
-    {{-- <script src="{{ asset('assets/admin/js/plugins/moment.min.js') }}"></script>
-        <!--  Plugin for Sweet Alert --> --}}
-    {{-- <script src="{{ asset('assets/admin/js/plugins/sweetalert2.js') }}"></script> --}}
-    <script src="{{ asset('assets/js/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('assets/admin/js/plugins/moment.min.js') }}"></script>
+
     {{-- <!-- Forms Validations Plugin -->
         <script src="{{ asset('assets/admin/js/plugins/jquery.validate.min.js') }}"></script>
         <!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
@@ -94,18 +96,8 @@
         <script src="{{ asset('assets/admin/js/plugins/arrive.min.js') }}"></script>
         <!--  Google Maps Plugin    -->
         <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE'"></script>
-    <!-- Chartist JS --> --}}
-    <script src="{{ asset('assets/admin/js/plugins/chartist.min.js') }}"></script>
-    {{-- <!--  Notifications Plugin    -->
-        <script src="{{ asset('assets/admin/js/plugins/bootstrap-notify.js') }}"></script>
-        <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc --> --}}
-    <script src="{{ asset('assets/admin/js/material-dashboard.min.js') }}" type="text/javascript"></script>
-
-    {{-- <!-- Material Dashboard DEMO methods, don't include it in your project! -->
-        <script src="{{ asset('assets/admin/demo/demo.js') }}"></script>
-        <script src="{{ asset('assets/admin/js/settings.js') }}"></script> --}}
-
-    {{-- @include('sweetalert::alert') --}}
+    <!--  Notifications Plugin    -->
+        <script src="{{ asset('assets/admin/js/plugins/bootstrap-notify.js') }}"></script> --}}
 
     <script>
         @if (Session::has('success'))
@@ -127,7 +119,7 @@
         @endif
     </script>
 
-
+    {{-- Custom Js Files --}}
     @stack('js')
 </body>
 

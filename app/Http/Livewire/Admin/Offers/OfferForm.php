@@ -2,30 +2,50 @@
 
 namespace App\Http\Livewire\Admin\Offers;
 
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Offer;
+use App\Models\Product;
+use App\Models\Subcategory;
+use App\Models\Supercategory;
+use App\Rules\Maxif;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class OfferForm extends Component
 {
+    use WithFileUploads;
+
     public $offer_id;
 
-    public $name = ['en' => '', 'ar' => ''], $expire_at, $number, $on_orders = 0;
+    public $banner, $banner_name, $deletedImages = [];
+    public $date_range = ['start' => '', 'end' => ''];
+    public $title = ['en' => '', 'ar' => ''], $free_shipping = false, $on_orders = 0, $type, $value = 0, $offer_number;
 
-    protected $listeners = ["brandUpdated", "supercategoryUpdated", "categoryUpdated", "subcategoryUpdated"];
+    protected $listeners = ["daterangeUpdated"];
 
     public function rules()
     {
         return [
-            "code"                              =>      "required|string",
-            "type"                              =>      "required|in:0,1,2,3",
-            "value"                             =>      ["required", "numeric", new Maxif($this->type), "min:0"],
-            'expire_at'                         =>      "date",
-            'number'                            =>      "nullable|numeric|min:0",
-            'items.*.brand_id'                  =>      "exclude_if:items.*.brand_id,all|nullable|exists:brands,id",
-            'items.*.supercategory_id'          =>      "exclude_if:items.*.supercategory_id,all|nullable|exists:supercategories,id",
-            'items.*.category_id'               =>      "exclude_if:items.*.category_id,all|nullable|exists:categories,id",
-            'items.*.subcategory_id'            =>      "exclude_if:items.*.subcategory_id,all|nullable|exists:subcategories,id",
-            'items.*.products_id.*'             =>      "nullable|exists:products,id",
-            'on_orders'                         =>      "nullable"
+            'banner'                        =>      'nullable|mimes:jpg,jpeg,png|max:2048',
+            "title.ar"                      =>      "required|string|max:30",
+            "title.en"                      =>      "required|string|max:30",
+            'date_range.start'              =>      "required|date",
+            'date_range.end'                =>      "required|date",
+            "type"                          =>      "nullable|in:0,1,2,3",
+            "value"                         =>      ["nullable", "numeric", new Maxif($this->type), "min:0"],
+            'offer_number'                  =>      "nullable|numeric|min:0",
+            'items.*.brand_id'              =>      "exclude_if:items.*.brand_id,all|nullable|exists:brands,id",
+            'items.*.supercategory_id'      =>      "exclude_if:items.*.supercategory_id,all|nullable|exists:supercategories,id",
+            'items.*.category_id'           =>      "exclude_if:items.*.category_id,all|nullable|exists:categories,id",
+            'items.*.subcategory_id'        =>      "exclude_if:items.*.subcategory_id,all|nullable|exists:subcategories,id",
+            'items.*.products_id.*'         =>      "nullable|exists:products,id",
+            'items.*.type'                  =>      "required|in:0,1,2,3",
+            'items.*.value'                 =>      ["required", "numeric", "min:0"],
+            'items.*.offer_number'          =>      "nullable|numeric|min:0",
+            'on_orders'                     =>      "nullable"
         ];
     }
 
@@ -43,7 +63,7 @@ class OfferForm extends Component
         $this->supercategories = Supercategory::select('id', 'name')->get()->toArray();
 
         if ($this->offer_id) {
-            $offer = Coupon::with([
+            $offer = Offer::with([
                 'products' => function ($q) {
                     $q->select('products.id', 'products.name', 'brand_id');
                 },
@@ -63,35 +83,44 @@ class OfferForm extends Component
 
             $this->offer = $offer;
 
-            $this->code = $offer->code;
+            $this->title = [
+                'en' => $offer->getTranslation('title', 'en'),
+                'ar' => $offer->getTranslation('title', 'ar')
+            ];
             $this->type = $offer->type;
             $this->value = $offer->value;
-            $this->expire_at = $offer->expire_at;
-            $this->number = $offer->number;
+            $this->offer_number = $offer->number;
+            $this->date_range = [
+                'start' => $offer->start_at,
+                'end' => $offer->expire_at,
+            ];
             $this->on_orders = $offer->on_orders;
+            $this->free_shipping = $offer->free_shipping;
+            $this->banner_name = $offer->banner;
 
             if ($offer->supercategories->count()) {
                 $this->oldSupercategories = $offer->supercategories->toArray();
-                $this->oldSupercategories_id = $offer->supercategories->pluck('id')->toArray();
+                $this->deleteSupercategories_id = [];
             }
             if ($offer->categories->count()) {
                 $this->oldCategories = $offer->categories->toArray();
-                $this->oldCategories_id = $offer->categories->pluck('id')->toArray();
+                $this->deleteCategories_id = [];
             }
             if ($offer->subcategories->count()) {
                 $this->oldSubcategories = $offer->subcategories->toArray();
-                $this->oldSubcategories_id = $offer->subcategories->pluck('id')->toArray();
+                $this->deleteSubcategories_id = [];
             }
             if ($offer->brands->count()) {
                 $this->oldBrands = $offer->brands->toArray();
-                $this->oldBrands_id = $offer->brands->pluck('id')->toArray();
+                $this->deleteBrands_id = [];
             }
             if ($offer->products->count()) {
                 $this->oldProducts = $offer->products->toArray();
-                $this->oldProducts_id = $offer->products->pluck('id')->toArray();
+                $this->deleteProducts_id = [];
             }
 
             $this->items = [];
+
         } else {
             $this->items = [[
                 'item_type' => 'category',
@@ -103,6 +132,9 @@ class OfferForm extends Component
                 'brand_id' => 'all',
                 'products' => [],
                 'products_id' => [],
+                'value' => 0.0,
+                'type' => 0,
+                'offer_number' => '',
             ]];
         }
     }
@@ -118,6 +150,39 @@ class OfferForm extends Component
     }
     // Validate inputs on blur : End
 
+    ######################## Banner Image : Start ############################
+    // validate and upload photo
+    public function updatedBanner($banner)
+    {
+        // Crop and resize photo
+        try {
+            $this->banner_name = singleImageUpload($banner, 'offer-', 'banners');
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function deleteBanner()
+    {
+        $this->deletedImages[] = $this->banner_name;
+
+        $this->banner = null;
+        $this->banner_name = null;
+    }
+    ######################## Banner Image : Start ############################
+
+    ######################## Get Selected Datetime Range : Start ############################
+    public function daterangeUpdated($start, $end)
+    {
+        $this->validateOnly($this->date_range['start']);
+        $this->validateOnly($this->date_range['end']);
+
+        $this->date_range = [
+            'start' => $start,
+            'end' => $end
+        ];
+    }
+    ######################## Get Selected Datetime Range : End ############################
 
     // Select All Products : Start
     public function selectAll($item_key)
@@ -152,6 +217,9 @@ class OfferForm extends Component
             'brand_id' => 'all',
             'products' => [],
             'products_id' => [],
+            'value' => 0.0,
+            'type' => 0,
+            'offer_number' => '',
         ];
     }
     // Restore the default values of item : End
@@ -227,6 +295,9 @@ class OfferForm extends Component
             'brand_id' => 'all',
             'products' => [],
             'products_id' => [],
+            'value' => 0.0,
+            'type' => 0,
+            'offer_number' => '',
         ];
     }
     // Add Item : End
@@ -239,44 +310,78 @@ class OfferForm extends Component
     }
     // Delete Item : End
 
+    public function freeShipping()
+    {
+        $this->free_shipping = !$this->free_shipping;
+    }
 
-    ######################## Save New Coupon : Start ############################
+    ######################## Save New Offer : Start ############################
     public function save($new = false)
     {
+        // dd($this->offer_number);
         $this->validate();
-
 
         DB::beginTransaction();
 
         try {
-            $offer = Coupon::create([
-                'code' => $this->code,
-                'type' => $this->type,
-                'value' => $this->value,
-                'expire_at' => $this->expire_at,
-                'number'  => $this->number ?? null,
+            $offer = Offer::create([
+                'title' => [
+                    'en' => $this->title['en'],
+                    'ar' => $this->title['ar'],
+                ],
+                'start_at' => $this->date_range['start'],
+                'expire_at' => $this->date_range['end'],
+                'type' => $this->type ?? 0,
+                'value' => $this->value ?? 0,
+                'number'  => $this->offer_number ?? 0,
+                'banner' => $this->banner_name ?? null,
+                'free_shipping' => $this->free_shipping ? 1 : 0
             ]);
 
             foreach ($this->items as $item) {
                 if ($item['item_type'] == 'category') {
                     if ($item['supercategory_id'] == 'all') {
                         $supercategories = Supercategory::select('id')->get()->pluck('id');
-                        $offer->supercategories()->attach($supercategories);
+                        $offer->supercategories()->attach($supercategories, [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                            'number' => $item['offer_number'],
+                        ]);
                     } elseif ($item['category_id'] == 'all') {
                         $categories = Category::select('id', 'supercategory_id')->where('supercategory_id', $item['supercategory_id'])->get()->pluck('id');
-                        $offer->categories()->attach($categories);
+                        $offer->categories()->attach($categories, [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                            'number' => $item['offer_number'],
+                        ]);
                     } elseif ($item['subcategory_id'] == 'all') {
                         $subcategories = Subcategory::select('id', 'category_id')->where('category_id', $item['category_id'])->get()->pluck('id');
-                        $offer->subcategories()->attach($subcategories);
+                        $offer->subcategories()->attach($subcategories, [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                            'number' => $item['offer_number'],
+                        ]);
                     } else {
-                        $offer->products()->attach($item['products_id']);
+                        $offer->products()->attach($item['products_id'], [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                            'number' => $item['offer_number'],
+                        ]);
                     }
                 } elseif ($item['item_type'] == 'brand') {
                     if ($item['brand_id'] == 'all') {
                         $brands = Brand::select('id')->get()->pluck('id');
-                        $offer->brands()->attach($brands);
+                        $offer->brands()->attach($brands, [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                            'number' => $item['offer_number'],
+                        ]);
                     } else {
-                        $offer->products()->attach($item['products_id']);
+                        $offer->products()->attach($item['products_id'], [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                            'number' => $item['offer_number'],
+                        ]);
                     }
                 } elseif ($item['item_type'] == 'order') {
                     $offer->on_orders = 1;
@@ -286,23 +391,27 @@ class OfferForm extends Component
 
             DB::commit();
 
+            foreach ($this->deletedImages as $key => $deletedImage) {
+                imageDelete($deletedImage, 'banners');
+            }
+
             if ($new) {
-                Session::flash('success', __('admin/offersPages.Coupon added successfully'));
+                Session::flash('success', __('admin/offersPages.Offer added successfully'));
                 redirect()->route('admin.offers.create');
             } else {
-                Session::flash('success', __('admin/offersPages.Coupon added successfully'));
+                Session::flash('success', __('admin/offersPages.Offer added successfully'));
                 redirect()->route('admin.offers.index');
             }
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
-            Session::flash('error', __("admin/offersPages.Coupon hasn't been added"));
+            Session::flash('error', __("admin/offersPages.Offer hasn't been added"));
             redirect()->route('admin.offers.index');
         }
     }
-    ######################## Save New Coupon : End ############################
+    ######################## Save New Offer : End ############################
 
-    ######################## Save Updated Coupon : Start ############################
+    ######################## Save Updated Offer : Start ############################
     public function update()
     {
         $this->validate();
@@ -311,54 +420,84 @@ class OfferForm extends Component
 
         try {
             $this->offer->update([
-                'code' => $this->code,
-                'type' => $this->type,
-                'value' => $this->value,
-                'expire_at' => $this->expire_at,
-                'number'  => $this->number ?? null,
-                'on_orders'  => $this->on_orders ?? 0,
+                'title' => [
+                    'en' => $this->title['en'],
+                    'ar' => $this->title['ar'],
+                ],
+                'start_at' => $this->date_range['start'],
+                'expire_at' => $this->date_range['end'],
+                'type' => $this->type ?? 0,
+                'value' => $this->value ?? 0,
+                'number'  => $this->offer_number ?? 0,
+                'banner' => $this->banner_name ?? null,
+                'free_shipping' => $this->free_shipping ? 1 : 0,
+                'on_orders' => $this->on_orders
             ]);
 
-            if (isset($this->oldSupercategories_id)) {
-                $this->offer->supercategories()->sync($this->oldSupercategories_id);
+            if (isset($this->deleteSupercategories_id)) {
+                $this->offer->supercategories()->detach($this->deleteSupercategories_id);
             }
 
-            if (isset($this->oldCategories_id)) {
-                $this->offer->categories()->sync($this->oldCategories_id);
+            if (isset($this->deleteCategories_id)) {
+                $this->offer->categories()->detach($this->deleteCategories_id);
             }
 
-            if (isset($this->oldSubcategories_id)) {
-                $this->offer->subcategories()->sync($this->oldSubcategories_id);
+            if (isset($this->deleteSubcategories_id)) {
+                $this->offer->subcategories()->detach($this->deleteSubcategories_id);
             }
 
-            if (isset($this->oldBrands_id)) {
-                $this->offer->brands()->sync($this->oldBrands_id);
+            if (isset($this->deleteBrands_id)) {
+                $this->offer->brands()->detach($this->deleteBrands_id);
             }
 
-            if (isset($this->oldProducts_id)) {
-                $this->offer->products()->sync($this->oldProducts_id);
+            if (isset($this->deleteProducts_id)) {
+                $this->offer->products()->detach($this->deleteProducts_id);
             }
 
             foreach ($this->items as $item) {
                 if ($item['item_type'] == 'category') {
                     if ($item['supercategory_id'] == 'all') {
                         $supercategories = Supercategory::select('id')->get()->pluck('id');
-                        $this->offer->supercategories()->attach($supercategories);
+                        $this->offer->supercategories()->attach($supercategories, [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                            'number' => $item['offer_number'],
+                        ]);
                     } elseif ($item['category_id'] == 'all') {
                         $categories = Category::select('id', 'supercategory_id')->where('supercategory_id', $item['supercategory_id'])->get()->pluck('id');
-                        $this->offer->categories()->attach($categories);
+                        $this->offer->categories()->attach($categories, [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                            'number' => $item['offer_number'],
+                        ]);
                     } elseif ($item['subcategory_id'] == 'all') {
                         $subcategories = Subcategory::select('id', 'category_id')->where('category_id', $item['category_id'])->get()->pluck('id');
-                        $this->offer->subcategories()->attach($subcategories);
+                        $this->offer->subcategories()->attach($subcategories, [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                            'number' => $item['offer_number'],
+                        ]);
                     } else {
-                        $this->offer->products()->attach($item['products_id']);
+                        $this->offer->products()->attach($item['products_id'], [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                            'number' => $item['offer_number'],
+                        ]);
                     }
                 } elseif ($item['item_type'] == 'brand') {
                     if ($item['brand_id'] == 'all') {
                         $brands = Brand::select('id')->get()->pluck('id');
-                        $this->offer->brands()->attach($brands);
+                        $this->offer->brands()->attach($brands, [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                            'number' => $item['offer_number'],
+                        ]);
                     } else {
-                        $this->offer->products()->attach($item['products_id']);
+                        $this->offer->products()->attach($item['products_id'], [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                            'number' => $item['offer_number'],
+                        ]);
                     }
                 } elseif ($item['item_type'] == 'order') {
                     $this->offer->on_orders = 1;
@@ -368,14 +507,18 @@ class OfferForm extends Component
 
             DB::commit();
 
-            Session::flash('success', __('admin/offersPages.Coupon updated successfully'));
+            foreach ($this->deletedImages as $key => $deletedImage) {
+                imageDelete($deletedImage, 'banners');
+            }
+
+            Session::flash('success', __('admin/offersPages.Offer updated successfully'));
             redirect()->route('admin.offers.index');
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
-            Session::flash('error', __("admin/offersPages.Coupon hasn't been updated"));
+            Session::flash('error', __("admin/offersPages.Offer hasn't been updated"));
             redirect()->route('admin.offers.index');
         }
     }
-    ######################## Save Updated Coupon : End ############################
+    ######################## Save Updated Offer : End ############################
 }

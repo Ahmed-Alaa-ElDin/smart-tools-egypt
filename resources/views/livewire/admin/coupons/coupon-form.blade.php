@@ -155,7 +155,7 @@
                     {{-- Model Type : End --}}
 
                     {{-- Select All button : Start --}}
-                    <div class="text-gray-900 bg-white p-1 m-0 shadow rounded cursor-pointer btn @if (empty($items[$item_key]['products'])) hidden @endif "
+                    <div class="text-gray-900 bg-white p-1 m-0 shadow rounded cursor-pointer btn @if (empty($items[$item_key]['products_id'])) hidden @endif "
                         wire:click="selectAll({{ $item_key }})"
                         title="{{ __('admin/offersPages.Select All') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
