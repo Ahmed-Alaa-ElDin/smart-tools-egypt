@@ -10911,7 +10911,7 @@ fieldset[disabled] .form-group.is-focused .form-check .form-check-label {
     top: -2px;
     float: left;
     padding-right: 10px;
-    display: inline-block
+    /* display: inline-block */
 }
 
 .form-check .form-check-label .circle:before {
@@ -12635,12 +12635,6 @@ label.radio-inline {
     line-height: 1.5
 }
 
-.checkbox label,
-.radio label,
-label {
-    /* font-size: .875rem */
-}
-
 .bmd-label-floating,
 .bmd-label-placeholder {
     top: .6125rem
@@ -13096,7 +13090,6 @@ fieldset[disabled] .form-group .form-control {
     border-radius: 10px;
     text-align: center;
     line-height: 19px;
-    vertical-align: middle;
     display: block
 }
 
@@ -13112,10 +13105,10 @@ fieldset[disabled] .form-group .form-control {
     border-radius: 3px;
     line-height: 20px;
     margin-left: 5px;
-    -webkit-border-radius: ;
-    -moz-border-radius: ;
-    -ms-border-radius: ;
-    -o-border-radius: ;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -ms-border-radius: 2px;
+    -o-border-radius: 2px;
 }
 
 .navbar .collapse .navbar-nav .nav-item.lang .nav-link {
@@ -13907,7 +13900,7 @@ h2.title {
 .dropdown-menu a:active,
 .dropdown-menu a:focus,
 .dropdown-menu a:hover {
-    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px var(--secondary-color)33366;
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px var(--secondary-color);
     background-color: var(--secondary-color);
     color: #fff
 }
@@ -14232,7 +14225,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 .wrapper {
     position: relative;
     top: 0;
-    min-height: 100vh
+    min-height: 900vh
 }
 
 .sidebar {
@@ -14356,7 +14349,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 .sidebar .nav li .dropdown-menu a:focus,
 .sidebar .nav li .dropdown-menu a:hover,
 .sidebar .nav li:hover>a {
-    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px var(--secondary-color)33366;
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px var(--secondary-color);
     background-color: var(--secondary-color);
     color: #fff;
 }
@@ -17589,11 +17582,6 @@ screen and (-ms-high-contrast:active) {
         position: static
     }
 
-    body,
-    html {
-        overflow-x: hidden
-    }
-
     .nav-open .menu-on-left .main-panel,
     .nav-open .menu-on-left .navbar-fixed>div,
     .nav-open .menu-on-left .wrapper-full-page {
@@ -18205,3 +18193,6 @@ screen and (-ms-high-contrast:active) {
 }
 
 
+.splide__track {
+    height: inherit !important;
+}

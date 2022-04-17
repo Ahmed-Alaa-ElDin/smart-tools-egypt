@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "dropzone": "^6.0.0-beta.2",
-        "sweetalert2": "^11.4.4"
+        "sweetalert2": "^11.4.4",
+        "tailwind-scrollbar": "^1.3.1"
     }
 }

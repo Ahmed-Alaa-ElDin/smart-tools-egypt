@@ -41,7 +41,7 @@
                     class="col-span-12 md:col-span-6 md:col-start-4 form-control block w-full px-2 py-1 text-sm font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
                     id="banner" type="file" type="image" wire:model.lazy="banner">
                 <span class="col-span-12 text-xs text-gray-400">
-                    {{ __('admin/offersPages.Use 600x300 sizes image') }}</span>
+                    {{ __('admin/offersPages.Use 700x300 sizes image') }}</span>
                 @error('banner')
                     <span class="col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">{{ $message }}</span>
                 @enderror

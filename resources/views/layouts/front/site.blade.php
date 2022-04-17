@@ -30,8 +30,11 @@
     <link href="{{ asset('assets/front/css/material-dashboard.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ mix('assets/css/app.css') }}">
     @if (LaravelLocalization::getCurrentLocale() == 'ar')
-        <link href="{{ asset('assets/front/css/material-dashboard-rtl.css') }}" rel="stylesheet" />
+        {{-- <link href="{{ asset('assets/front/css/material-dashboard-rtl.css') }}" rel="stylesheet" /> --}}
     @endif
+
+    {{-- Slick --}}
+    <link href="{{ asset('assets/front/css/splide.min.css') }}" rel="stylesheet" />
 
     @stack('css')
 
@@ -40,87 +43,23 @@
 <body class="{{ $class ?? '' }}">
     <div class="wrapper">
 
-        {{-- Top Nav : Start --}}
+        {{-- Top Bar : Start --}}
         @include('layouts.front.includes.top_nav')
-        {{-- Top Nav : End --}}
+        {{-- Top Bar : End --}}
 
         {{-- Header : Start --}}
         @include('layouts.front.includes.header')
         {{-- Header : End --}}
 
-        <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            dasdas
+        {{-- Top Slider : Start --}}
+        @include('layouts.front.includes.top_slider')
+        {{-- Top Slider : End --}}
+
 
         {{-- @include('layouts.admin.includes.sidebar') --}}
         <div class="main-panel">
             {{-- @include('layouts.admin.includes.nav') --}}
-            
+
             @yield('content')
             {{-- @include('layouts.admin.includes.footer') --}}
         </div>
@@ -144,6 +83,46 @@
     <!-- Plugin for the momentJs  -->
     <script src="{{ asset('assets/front/js/plugins/moment.min.js') }}"></script>
 
+    <!-- Plugin for the Slick  -->
+    <script src="{{ asset('assets/front/js/plugins/splide.min.js') }}"></script>
+    <script>
+        // new Splide('.main-slider').mount();
+        $(document).ready(function() {
+            var splide = new Splide('.splide', {
+                @if (LaravelLocalization::getCurrentLocale() == 'ar')
+                    direction: 'rtl',
+                    pagination: 'rtl',
+                @else
+                    pagination: 'ltr',
+                @endif
+                autoplay: true,
+                // perPage: 2,
+                type: 'loop',
+                keyboard: true,
+                // wheel: true,
+                cover:true,
+                height:"inherit",
+                // autoHeight: true,
+            });
+            splide.mount();
+        });
+        // $(document).ready(function() {
+        //     $('.main-slider').slick({
+        //         autoplay: true,
+        //         arrows: false,
+        //         dots: true,
+        //         infinite: true,
+        //         adaptiveHeight: false,
+
+        @if (LaravelLocalization::getCurrentLocale() == 'ar')
+            // rtl: true,
+            //
+        @endif
+
+        //         // setting - name: setting - value
+        //     });
+        // });
+    </script>
     {{-- <!-- Forms Validations Plugin -->
         <script src="{{ asset('assets/front/js/plugins/jquery.validate.min.js') }}"></script>
         <!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->

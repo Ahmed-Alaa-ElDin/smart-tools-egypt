@@ -1,27 +1,35 @@
-<header class="sticky top-0 py-4 bg-white shadow border-b z-40">
-    <div class="relative logo-bar-area">
-        <div class="container">
-            <div class="flex items-center justify-between gap-3">
+<header class="sticky top-0 bg-white shadow border-b z-40">
 
+    {{-- Middle Bar : Start --}}
+    <div class="relative logo-bar-area py-3">
+        <div class="container">
+            <div class="flex items-center justify-between gap-4">
+
+                {{-- Logo : Start --}}
                 <div class="col-auto xl:col-3 pl-0 pr-3 flex items-center flex-col">
-                    <a href="{{ route('front.homepage') }}" class="flex items-center gap-2 simple-text logo-normal uppercase font-bold">
-                        <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}" alt="Smart Tools Egypt Logo">
-                        {{ __('Smart Tools Egypt') }}
+                    <a href="{{ route('front.homepage') }}"
+                        class="flex items-center gap-2 simple-text logo-normal uppercase font-bold">
+                        <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}"
+                            alt="Smart Tools Egypt Logo">
+                        {{ __('front/homePage.Smart Tools Egypt') }}
                     </a>
                 </div>
+                {{-- Logo : End --}}
 
-                <div class="grow front-header-search flex items-center bg-white">
+                {{-- Search : Start --}}
+                <div class="grow front-header-search flex items-center bg-white ">
                     <div class="relative grow">
-                        <label class="relative block">
+                        <label class="relative block m-0">
                             <span class="sr-only">Search</span>
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+                            <span class="absolute inset-y-0 rtl:left-1.5 ltr:right-1.5 flex items-center pl-2">
                                 <span class="material-icons">
                                     search
                                 </span>
                             </span>
                             <input
-                                class="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-                                placeholder="Search for anything..." type="text" name="search" />
+                                class="placeholder:italic placeholder:text-slate-400 text-gray-800 block bg-white w-full border border-slate-300 rounded-md py-2 ltr:pr-10 ltr:pl-3 rtl:pl-10 rtl:pr-3 shadow-sm focus:outline-none focus:border-gray-600 focus:ring-gray-600 focus:ring-1 sm:text-sm font-bold"
+                                placeholder="{{ __("front/homePage.I'm Shopping for ...") }}" type="text"
+                                name="search" />
                         </label>
                         <div class="typed-search-box stop-propagation document-click-hidden hidden bg-white rounded shadow-lg absolute left-0 top-100 w-100"
                             style="min-height: 200px">
@@ -41,46 +49,64 @@
                         </div>
                     </div>
                 </div>
+                {{-- Search : End --}}
 
+                {{-- Compare : Start --}}
                 <div class="hidden lg:block ml-3 mr-0">
                     <div class="" id="compare">
                         <a href="https://demo.activeitzone.com/ecommerce/compare"
-                            class="flex items-center text-reset">
-                            <i class="la la-refresh la-2x opacity-80"></i>
-                            <span class="grow ml-1">
-                                <span class="badge badge-primary badge-inline badge-pill">0</span>
-                                <span class="nav-box-text hidden d-xl-block opacity-70">قارن</span>
+                            class="flex gap-2 items-center text-reset">
+                            {{-- <i class="la la-refresh la-2x opacity-80"></i> --}}
+                            <span class="material-icons">
+                                compare_arrows
+                            </span>
+                            <span class="grow ml-1 text-center">
+                                <span class="badge bg-red-600 mb-1 text-white badge-inline badge-pill">0</span>
+                                <span class="nav-box-text text-xs hidden xl:block opacity-70">
+                                    {{ __('front/homePage.Compare') }}
+                                </span>
                             </span>
                         </a>
                     </div>
                 </div>
+                {{-- Compare : End --}}
 
+                {{-- Wishlist : Start --}}
                 <div class="hidden lg:block ml-3 mr-0">
                     <div class="" id="wishlist">
                         <a href="https://demo.activeitzone.com/ecommerce/wishlists"
-                            class="flex items-center text-reset">
-                            <i class="la la-heart-o la-2x opacity-80"></i>
-                            <span class="grow ml-1">
-                                <span class="badge badge-primary badge-inline badge-pill">0</span>
-                                <span class="nav-box-text hidden d-xl-block opacity-70">قائمة
-                                    الرغبات</span>
+                            class="flex items-center gap-2 text-reset">
+                            <span class="material-icons">
+                                favorite
+                            </span>
+                            <span class="grow ml-1 text-center">
+                                <span class="badge bg-red-600 mb-1 text-white badge-inline badge-pill">0</span>
+                                <span class="nav-box-text text-xs hidden xl:block opacity-70">
+                                    {{ __('front/homePage.Wishlist') }}
+                                </span>
                             </span>
                         </a>
                     </div>
                 </div>
+                {{-- Wishlist : End --}}
 
-                <div class="hidden lg:block  align-self-stretch ml-3 mr-0" data-hover="dropdown">
+                {{-- Cart : End --}}
+                <div class="hidden lg:block align-self-stretch ml-3 mr-0" data-hover="dropdown">
                     <div class="nav-cart-box dropdown h-100" id="cart_items">
-                        <a href="javascript:void(0)" class="flex items-center text-reset h-100"
+                        <a href="javascript:void(0)" class="flex items-center gap-2 text-reset h-100"
                             data-toggle="dropdown" data-display="static">
-                            <i class="la la-shopping-cart la-2x opacity-80"></i>
-                            <span class="grow ml-1">
-                                <span class="badge badge-primary badge-inline badge-pill cart-count">0</span>
-                                <span class="nav-box-text hidden d-xl-block opacity-70">عربة
-                                    التسوق</span>
+                            <span class="material-icons">
+                                shopping_cart
+                            </span>
+                            <span class="grow ml-1 text-center">
+                                <span
+                                    class="badge bg-red-600 mb-1 text-white badge-inline badge-pill cart-count">0</span>
+                                <span class="nav-box-text text-xs hidden xl:block opacity-70">
+                                    {{ __('front/homePage.Cart') }}
+                                </span>
                             </span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg p-0 stop-propagation">
+                        <div class="dropdown-menu dropdown-menu-auto dropdown-menu-lg p-0 stop-propagation">
 
                             <div class="text-center p-3">
                                 <i class="las la-frown la-3x opacity-60 mb-3"></i>
@@ -90,8 +116,62 @@
                         </div>
                     </div>
                 </div>
+                {{-- Cart : End --}}
 
             </div>
         </div>
     </div>
+    {{-- Middle Bar : End --}}
+
+    {{-- Lower Bar : Start --}}
+    <div class="bg-white border-top border-gray-200 py-1">
+        <div class="container">
+            <ul class="list-inline mb-0 pl-0 mobile-hor-swipe flex flex-nowrap justify-center gap-2 text-center">
+                <li class="list-inline-item mr-0 min-w-max">
+                    <a href="https://demo.activeitzone.com/ecommerce/"
+                        class="opacity-60 text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
+                        Home
+                    </a>
+                </li>
+                <li class="list-inline-item mr-0 min-w-max">
+                    <a href="https://demo.activeitzone.com/ecommerce/flash-deals"
+                        class="opacity-60 text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
+                        Flash Sale
+                    </a>
+                </li>
+                <li class="list-inline-item mr-0 min-w-max">
+                    <a href="https://demo.activeitzone.com/ecommerce/blog"
+                        class="opacity-60 text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
+                        Blogs
+                    </a>
+                </li>
+                <li class="list-inline-item mr-0 min-w-max">
+                    <a href="https://demo.activeitzone.com/ecommerce/brands"
+                        class="opacity-60 text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
+                        All Brands
+                    </a>
+                </li>
+                <li class="list-inline-item mr-0 min-w-max">
+                    <a href="https://demo.activeitzone.com/ecommerce/categories"
+                        class="opacity-60 text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
+                        All Categories
+                    </a>
+                </li>
+                <li class="list-inline-item mr-0 min-w-max">
+                    <a href="https://demo.activeitzone.com/ecommerce/sellers"
+                        class="opacity-60 text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
+                        All Sellers
+                    </a>
+                </li>
+                <li class="list-inline-item mr-0 min-w-max">
+                    <a href="https://demo.activeitzone.com/ecommerce/coupons"
+                        class="opacity-60 text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
+                        Coupons
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    {{-- Lower Bar : End --}}
+
 </header>
