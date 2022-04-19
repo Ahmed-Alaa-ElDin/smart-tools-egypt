@@ -14225,7 +14225,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 .wrapper {
     position: relative;
     top: 0;
-    min-height: 900vh
+    min-height: 100vh
 }
 
 .sidebar {

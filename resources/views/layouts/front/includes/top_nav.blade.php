@@ -1,4 +1,4 @@
-<div class="top-nav bg-white border-b z-50">
+<nav class="top-nav bg-white border-b z-50">
     <div class="container">
         <div class="flex items-center">
 
@@ -137,4 +137,4 @@
             </div>
         </div>
     </div>
-</div>
+</nav>

@@ -1,4 +1,4 @@
-<header class="sticky top-0 bg-white shadow border-b z-40">
+<header class="sticky top-0 bg-white shadow border-b z-40 overflow-hidden">
 
     {{-- Middle Bar : Start --}}
     <div class="relative logo-bar-area py-3">
@@ -11,7 +11,9 @@
                         class="flex items-center gap-2 simple-text logo-normal uppercase font-bold">
                         <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}"
                             alt="Smart Tools Egypt Logo">
-                        {{ __('front/homePage.Smart Tools Egypt') }}
+                        <span class="hidden md:block">
+                            {{ __('front/homePage.Smart Tools Egypt') }}
+                        </span>
                     </a>
                 </div>
                 {{-- Logo : End --}}
@@ -27,7 +29,7 @@
                                 </span>
                             </span>
                             <input
-                                class="placeholder:italic placeholder:text-slate-400 text-gray-800 block bg-white w-full border border-slate-300 rounded-md py-2 ltr:pr-10 ltr:pl-3 rtl:pl-10 rtl:pr-3 shadow-sm focus:outline-none focus:border-gray-600 focus:ring-gray-600 focus:ring-1 sm:text-sm font-bold"
+                                class="placeholder:italic placeholder:text-slate-400 text-gray-800 block bg-white w-full border border-slate-300 rounded-md py-2 ltr:pr-10 ltr:pl-3 rtl:pl-10 rtl:pr-3 shadow-sm focus:outline-none focus:border-gray-600 focus:ring-gray-600 focus:ring-1 sm:text-xs md:text-sm font-bold"
                                 placeholder="{{ __("front/homePage.I'm Shopping for ...") }}" type="text"
                                 name="search" />
                         </label>
@@ -124,48 +126,48 @@
     {{-- Middle Bar : End --}}
 
     {{-- Lower Bar : Start --}}
-    <div class="bg-white border-top border-gray-200 py-1">
+    <div class="bg-white border-top border-gray-200 py-1 scrollbar scrollbar-hidden-x">
         <div class="container">
-            <ul class="list-inline mb-0 pl-0 mobile-hor-swipe flex flex-nowrap justify-center gap-2 text-center">
-                <li class="list-inline-item mr-0 min-w-max">
+            <ul class="flex flex-nowrap justify-between lg:justify-center items-center gap-2 text-center">
+                <li class="min-w-max">
                     <a href="https://demo.activeitzone.com/ecommerce/"
-                        class="opacity-60 text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
+                        class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
                         Home
                     </a>
                 </li>
-                <li class="list-inline-item mr-0 min-w-max">
+                <li class="min-w-max">
                     <a href="https://demo.activeitzone.com/ecommerce/flash-deals"
-                        class="opacity-60 text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
+                        class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
                         Flash Sale
                     </a>
                 </li>
-                <li class="list-inline-item mr-0 min-w-max">
+                <li class="min-w-max">
                     <a href="https://demo.activeitzone.com/ecommerce/blog"
-                        class="opacity-60 text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
+                        class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
                         Blogs
                     </a>
                 </li>
-                <li class="list-inline-item mr-0 min-w-max">
+                <li class="min-w-max">
                     <a href="https://demo.activeitzone.com/ecommerce/brands"
-                        class="opacity-60 text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
+                        class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
                         All Brands
                     </a>
                 </li>
-                <li class="list-inline-item mr-0 min-w-max">
+                <li class="min-w-max">
                     <a href="https://demo.activeitzone.com/ecommerce/categories"
-                        class="opacity-60 text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
+                        class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
                         All Categories
                     </a>
                 </li>
-                <li class="list-inline-item mr-0 min-w-max">
+                <li class="min-w-max">
                     <a href="https://demo.activeitzone.com/ecommerce/sellers"
-                        class="opacity-60 text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
+                        class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
                         All Sellers
                     </a>
                 </li>
-                <li class="list-inline-item mr-0 min-w-max">
+                <li class="min-w-max">
                     <a href="https://demo.activeitzone.com/ecommerce/coupons"
-                        class="opacity-60 text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
+                        class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
                         Coupons
                     </a>
                 </li>

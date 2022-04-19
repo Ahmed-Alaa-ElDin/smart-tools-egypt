@@ -41,7 +41,7 @@
 </head>
 
 <body class="{{ $class ?? '' }}">
-    <div class="wrapper">
+    <div class="wrapper pb-12 lg:pb-0">
 
         {{-- Top Bar : Start --}}
         @include('layouts.front.includes.top_nav')
@@ -51,10 +51,30 @@
         @include('layouts.front.includes.header')
         {{-- Header : End --}}
 
-        {{-- Top Slider : Start --}}
-        @include('layouts.front.includes.top_slider')
-        {{-- Top Slider : End --}}
+        {{-- Main Body : Start --}}
+        <div class="grid grid-cols-1">
+            {{-- Top Slider : Start --}}
+            @include('layouts.front.includes.top_slider')
+            {{-- Top Slider : End --}}
 
+            {{-- Offer Bar : Start --}}
+            @include('layouts.front.includes.offer_bar')
+            {{-- Offer Bar : End --}}
+
+            {{-- Flash Sale : Start --}}
+            @include('layouts.front.includes.flash_sale')
+            {{-- Flash Sale : End --}}
+
+            {{-- Top Categories & Brands : Start --}}
+            @include('layouts.front.includes.top_categories_brands')
+            {{-- Top Categories & Brands : End --}}
+
+        </div>
+        {{-- Main Body : End --}}
+
+        {{-- Mobile Header : Start --}}
+        @include('layouts.front.includes.mobile_header')
+        {{-- Mobile Header : End --}}
 
         {{-- @include('layouts.admin.includes.sidebar') --}}
         <div class="main-panel">
@@ -88,7 +108,7 @@
     <script>
         // new Splide('.main-slider').mount();
         $(document).ready(function() {
-            var splide = new Splide('.splide', {
+            var main_slider = new Splide('#main-slider', {
                 @if (LaravelLocalization::getCurrentLocale() == 'ar')
                     direction: 'rtl',
                     pagination: 'rtl',
@@ -99,12 +119,40 @@
                 // perPage: 2,
                 type: 'loop',
                 keyboard: true,
-                // wheel: true,
-                cover:true,
-                height:"inherit",
-                // autoHeight: true,
+                cover: true,
+                height: "inherit",
             });
-            splide.mount();
+            main_slider.mount();
+
+            var flash_sale_slider = new Splide('#flash-sale-slider', {
+                @if (LaravelLocalization::getCurrentLocale() == 'ar')
+                    direction: 'rtl',
+                    pagination: 'rtl',
+                @else
+                    pagination: 'ltr',
+                @endif
+                perPage: 5,
+                perMove: 2,
+                drag: 'free',
+                breakpoints: {
+                    1200: {
+                        perPage: 3,
+                    },
+                    770: {
+                        perPage: 2,
+                    },
+                    500: {
+                        perPage: 1,
+                    },
+                },
+                type: 'slide',
+                keyboard: true,
+                cover: true,
+                height: "inherit",
+            });
+            flash_sale_slider.mount();
+
+            $('[data-toggle="tooltip"]').tooltip()
         });
         // $(document).ready(function() {
         //     $('.main-slider').slick({
