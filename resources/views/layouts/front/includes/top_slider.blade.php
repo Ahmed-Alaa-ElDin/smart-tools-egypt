@@ -16,7 +16,7 @@
                 <li class="group" data-id="1">
                     <div
                         class="relative w-full cursor-pointer group-hover:shadow p-1 group-hover:after:block after:hidden after:content-[''] after:w-7 after:h-7 after:rotate-45 ltr:after:border-t-8 ltr:after:border-r-8 rtl:after:border-b-8 rtl:after:border-l-8 after:border-white after:absolute ltr:after:-right-1 rtl:after:-left-1 after:top-2">
-                        <a href="https://demo.activeitzone.com/ecommerce/category/women-clothing-fashion"
+                        <a href="-clothing-fashion"
                             class="text-truncate text-reset py-2 px-3 block text-sm flex gap-3 items-center">
                             <span class="material-icons">
                                 checkroom
@@ -31,8 +31,7 @@
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/watch-hyau2">Women
+                                        <a class="text-reset" href="au2">Women
                                             Watch</a>
                                     </li>
                                 </ul>
@@ -40,8 +39,7 @@
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/women-dress-04vbn">Women
+                                        <a class="text-reset" href="vbn">Women
                                             Dress</a>
                                     </li>
                                 </ul>
@@ -53,7 +51,7 @@
                 <li class="group" data-id="1">
                     <div
                         class="relative w-full cursor-pointer group-hover:shadow p-1 group-hover:after:block after:hidden after:content-[''] after:w-7 after:h-7 after:rotate-45 ltr:after:border-t-8 ltr:after:border-r-8 rtl:after:border-b-8 rtl:after:border-l-8 after:border-white after:absolute ltr:after:-right-1 rtl:after:-left-1 after:top-2">
-                        <a href="https://demo.activeitzone.com/ecommerce/category/women-clothing-fashion"
+                        <a href="g-fashion"
                             class="text-truncate text-reset py-2 px-3 block text-sm flex gap-3 items-center">
                             <span class="material-icons">
                                 checkroom
@@ -68,83 +66,67 @@
                             <div class="card shadow border-0 m-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Hot-Categories">Hot
+                                        <a class="text-reset" href="#">Hot
                                             Categories</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Party-Dress">Party
+                                        <a class="text-reset" href="#">Party
                                             Dress</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Beauty-&amp;-Health">Beauty
+                                        <a class="text-reset" href="#">Beauty
                                             &amp; Health</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Women-shoe">Women
+                                        <a class="text-reset" href="#">Women
                                             shoe</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Sleeping-Dress">Sleeping
+                                        <a class="text-reset" href="#">Sleeping
                                             Dress</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Casual-Dress">Casual
+                                        <a class="text-reset" href="#">Casual
                                             Dress</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Hoodies-&amp;-Sweatshirts">Hoodies
+                                        <a class="text-reset" href="#">Hoodies
                                             &amp; Sweatshirts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Jackets">Jackets</a>
+                                        <a class="text-reset" href="#">Jackets</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/T-shirts">T-shirts</a>
+                                        <a class="text-reset" href="#">T-shirts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Shirts">Shirts</a>
+                                        <a class="text-reset" href="#">Shirts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Socks">Socks</a>
+                                        <a class="text-reset" href="#">Socks</a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Wedding-&amp;-events">Wedding
+                                        <a class="text-reset" href="#">Wedding
                                             &amp; events</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Wedding-Dresses">Wedding
+                                        <a class="text-reset" href="#">Wedding
                                             Dresses</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Evening-Dresses">Evening
+                                        <a class="text-reset" href="#">Evening
                                             Dresses</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Prom-Dresses">Prom
+                                        <a class="text-reset" href="#">Prom
                                             Dresses</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Bridesmaid-Dresses">Bridesmaid
+                                        <a class="text-reset" href="#">Bridesmaid
                                             Dresses</a>
                                     </li>
                                 </ul>
@@ -152,66 +134,53 @@
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Bottom">Bottom</a>
+                                        <a class="text-reset" href="#">Bottom</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Skirts">Skirts</a>
+                                        <a class="text-reset" href="#">Skirts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Leggings">Leggings</a>
+                                        <a class="text-reset" href="#">Leggings</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Jeans">Jeans</a>
+                                        <a class="text-reset" href="#">Jeans</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Pant-&amp;-caprices">Pant
+                                        <a class="text-reset" href="#">Pant
                                             &amp; caprices</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Shorts">Shorts</a>
+                                        <a class="text-reset" href="#">Shorts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Formal-Pants">Formal
+                                        <a class="text-reset" href="#">Formal
                                             Pants</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Casual-pants">Casual
+                                        <a class="text-reset" href="#">Casual
                                             pants</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Cargo-pants">Cargo
+                                        <a class="text-reset" href="#">Cargo
                                             pants</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Jeans">Jeans</a>
+                                        <a class="text-reset" href="#">Jeans</a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Tops-&amp;-sets">Tops
+                                        <a class="text-reset" href="#">Tops
                                             &amp; sets</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Tank-tops">Tank
+                                        <a class="text-reset" href="#">Tank
                                             tops</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Suit-&amp;-sets">Suit
+                                        <a class="text-reset" href="#">Suit
                                             &amp; sets</a>
                                     </li>
                                 </ul>
@@ -219,38 +188,30 @@
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Accessories">Accessories</a>
+                                        <a class="text-reset" href="#">Accessories</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Eyewear-&amp;-accessories">Eyewear
+                                        <a class="text-reset" href="#">Eyewear
                                             &amp; accessories</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Hats-&amp;-Caps">Hats
+                                        <a class="text-reset" href="#">Hats
                                             &amp; Caps</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Gloves">Gloves</a>
+                                        <a class="text-reset" href="#">Gloves</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Watch">Watch</a>
+                                        <a class="text-reset" href="#">Watch</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Wallet">Wallet</a>
+                                        <a class="text-reset" href="#">Wallet</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Belt">Belt</a>
+                                        <a class="text-reset" href="#">Belt</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Hats-&amp;-Cap">Hats
+                                        <a class="text-reset" href="#">Hats
                                             &amp; Cap</a>
                                     </li>
                                 </ul>
@@ -258,8 +219,7 @@
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/watch-hyau2">Women
+                                        <a class="text-reset" href="#">Women
                                             Watch</a>
                                     </li>
                                 </ul>
@@ -267,8 +227,7 @@
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/women-dress-04vbn">Women
+                                        <a class="text-reset" href="#">Women
                                             Dress</a>
                                     </li>
                                 </ul>
@@ -280,7 +239,7 @@
                 <li class="group" data-id="1">
                     <div
                         class="relative w-full cursor-pointer group-hover:shadow p-1 group-hover:after:block after:hidden after:content-[''] after:w-7 after:h-7 after:rotate-45 ltr:after:border-t-8 ltr:after:border-r-8 rtl:after:border-b-8 rtl:after:border-l-8 after:border-white after:absolute ltr:after:-right-1 rtl:after:-left-1 after:top-2">
-                        <a href="https://demo.activeitzone.com/ecommerce/category/women-clothing-fashion"
+                        <a href="-clothing-fashion"
                             class="text-truncate text-reset py-2 px-3 block text-sm flex gap-3 items-center">
                             <span class="material-icons">
                                 checkroom
@@ -295,83 +254,67 @@
                             <div class="card shadow border-0 m-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Hot-Categories">Hot
+                                        <a class="text-reset" href="#">Hot
                                             Categories</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Party-Dress">Party
+                                        <a class="text-reset" href="#">Party
                                             Dress</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Beauty-&amp;-Health">Beauty
+                                        <a class="text-reset" href="#">Beauty
                                             &amp; Health</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Women-shoe">Women
+                                        <a class="text-reset" href="#">Women
                                             shoe</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Sleeping-Dress">Sleeping
+                                        <a class="text-reset" href="#">Sleeping
                                             Dress</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Casual-Dress">Casual
+                                        <a class="text-reset" href="#">Casual
                                             Dress</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Hoodies-&amp;-Sweatshirts">Hoodies
+                                        <a class="text-reset" href="#">Hoodies
                                             &amp; Sweatshirts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Jackets">Jackets</a>
+                                        <a class="text-reset" href="#">Jackets</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/T-shirts">T-shirts</a>
+                                        <a class="text-reset" href="#">T-shirts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Shirts">Shirts</a>
+                                        <a class="text-reset" href="#">Shirts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Socks">Socks</a>
+                                        <a class="text-reset" href="#">Socks</a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Wedding-&amp;-events">Wedding
+                                        <a class="text-reset" href="#">Wedding
                                             &amp; events</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Wedding-Dresses">Wedding
+                                        <a class="text-reset" href="#">Wedding
                                             Dresses</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Evening-Dresses">Evening
+                                        <a class="text-reset" href="#">Evening
                                             Dresses</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Prom-Dresses">Prom
+                                        <a class="text-reset" href="#">Prom
                                             Dresses</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Bridesmaid-Dresses">Bridesmaid
+                                        <a class="text-reset" href="#">Bridesmaid
                                             Dresses</a>
                                     </li>
                                 </ul>
@@ -379,66 +322,53 @@
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Bottom">Bottom</a>
+                                        <a class="text-reset" href="#">Bottom</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Skirts">Skirts</a>
+                                        <a class="text-reset" href="#">Skirts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Leggings">Leggings</a>
+                                        <a class="text-reset" href="#">Leggings</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Jeans">Jeans</a>
+                                        <a class="text-reset" href="#">Jeans</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Pant-&amp;-caprices">Pant
+                                        <a class="text-reset" href="#">Pant
                                             &amp; caprices</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Shorts">Shorts</a>
+                                        <a class="text-reset" href="#">Shorts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Formal-Pants">Formal
+                                        <a class="text-reset" href="#">Formal
                                             Pants</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Casual-pants">Casual
+                                        <a class="text-reset" href="#">Casual
                                             pants</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Cargo-pants">Cargo
+                                        <a class="text-reset" href="#">Cargo
                                             pants</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Jeans">Jeans</a>
+                                        <a class="text-reset" href="#">Jeans</a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Tops-&amp;-sets">Tops
+                                        <a class="text-reset" href="#">Tops
                                             &amp; sets</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Tank-tops">Tank
+                                        <a class="text-reset" href="-tops">Tank
                                             tops</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Suit-&amp;-sets">Suit
+                                        <a class="text-reset" href="#">Suit
                                             &amp; sets</a>
                                     </li>
                                 </ul>
@@ -446,38 +376,30 @@
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Accessories">Accessories</a>
+                                        <a class="text-reset" href="#">Accessories</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Eyewear-&amp;-accessories">Eyewear
+                                        <a class="text-reset" href="#">Eyewear
                                             &amp; accessories</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Hats-&amp;-Caps">Hats
+                                        <a class="text-reset" href="#">Hats
                                             &amp; Caps</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Gloves">Gloves</a>
+                                        <a class="text-reset" href="#">Gloves</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Watch">Watch</a>
+                                        <a class="text-reset" href="#">Watch</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Wallet">Wallet</a>
+                                        <a class="text-reset" href="#">Wallet</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Belt">Belt</a>
+                                        <a class="text-reset" href="#">Belt</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Hats-&amp;-Cap">Hats
+                                        <a class="text-reset" href="#">Hats
                                             &amp; Cap</a>
                                     </li>
                                 </ul>
@@ -485,8 +407,7 @@
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/watch-hyau2">Women
+                                        <a class="text-reset" href="#">Women
                                             Watch</a>
                                     </li>
                                 </ul>
@@ -494,8 +415,7 @@
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/women-dress-04vbn">Women
+                                        <a class="text-reset" href="#">Women
                                             Dress</a>
                                     </li>
                                 </ul>
@@ -507,7 +427,7 @@
                 <li class="group" data-id="1">
                     <div
                         class="relative w-full cursor-pointer group-hover:shadow p-1 group-hover:after:block after:hidden after:content-[''] after:w-7 after:h-7 after:rotate-45 ltr:after:border-t-8 ltr:after:border-r-8 rtl:after:border-b-8 rtl:after:border-l-8 after:border-white after:absolute ltr:after:-right-1 rtl:after:-left-1 after:top-2">
-                        <a href="https://demo.activeitzone.com/ecommerce/category/women-clothing-fashion"
+                        <a href="-clothing-fashion"
                             class="text-truncate text-reset py-2 px-3 block text-sm flex gap-3 items-center">
                             <span class="material-icons">
                                 checkroom
@@ -522,83 +442,67 @@
                             <div class="card shadow-none border-0 m-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Hot-Categories">Hot
+                                        <a class="text-reset" href="#">Hot
                                             Categories</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Party-Dress">Party
+                                        <a class="text-reset" href="#">Party
                                             Dress</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Beauty-&amp;-Health">Beauty
+                                        <a class="text-reset" href="#">Beauty
                                             &amp; Health</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Women-shoe">Women
+                                        <a class="text-reset" href="#">Women
                                             shoe</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Sleeping-Dress">Sleeping
+                                        <a class="text-reset" href="#">Sleeping
                                             Dress</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Casual-Dress">Casual
+                                        <a class="text-reset" href="#">Casual
                                             Dress</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Hoodies-&amp;-Sweatshirts">Hoodies
+                                        <a class="text-reset" href="#">Hoodies
                                             &amp; Sweatshirts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Jackets">Jackets</a>
+                                        <a class="text-reset" href="#">Jackets</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/T-shirts">T-shirts</a>
+                                        <a class="text-reset" href="#">T-shirts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Shirts">Shirts</a>
+                                        <a class="text-reset" href="#">Shirts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Socks">Socks</a>
+                                        <a class="text-reset" href="#">Socks</a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Wedding-&amp;-events">Wedding
+                                        <a class="text-reset" href="#">Wedding
                                             &amp; events</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Wedding-Dresses">Wedding
+                                        <a class="text-reset" href="#">Wedding
                                             Dresses</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Evening-Dresses">Evening
+                                        <a class="text-reset" href="#">Evening
                                             Dresses</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Prom-Dresses">Prom
+                                        <a class="text-reset" href="#">Prom
                                             Dresses</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Bridesmaid-Dresses">Bridesmaid
+                                        <a class="text-reset" href="#">Bridesmaid
                                             Dresses</a>
                                     </li>
                                 </ul>
@@ -606,66 +510,53 @@
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Bottom">Bottom</a>
+                                        <a class="text-reset" href="#">Bottom</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Skirts">Skirts</a>
+                                        <a class="text-reset" href="#">Skirts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Leggings">Leggings</a>
+                                        <a class="text-reset" href="#">Leggings</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Jeans">Jeans</a>
+                                        <a class="text-reset" href="#">Jeans</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Pant-&amp;-caprices">Pant
+                                        <a class="text-reset" href="#">Pant
                                             &amp; caprices</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Shorts">Shorts</a>
+                                        <a class="text-reset" href="#">Shorts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Formal-Pants">Formal
+                                        <a class="text-reset" href="#">Formal
                                             Pants</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Casual-pants">Casual
+                                        <a class="text-reset" href="#">Casual
                                             pants</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Cargo-pants">Cargo
+                                        <a class="text-reset" href="#">Cargo
                                             pants</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Jeans">Jeans</a>
+                                        <a class="text-reset" href="#">Jeans</a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Tops-&amp;-sets">Tops
+                                        <a class="text-reset" href="#">Tops
                                             &amp; sets</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Tank-tops">Tank
+                                        <a class="text-reset" href="#">Tank
                                             tops</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Suit-&amp;-sets">Suit
+                                        <a class="text-reset" href="#">Suit
                                             &amp; sets</a>
                                     </li>
                                 </ul>
@@ -673,38 +564,30 @@
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Accessories">Accessories</a>
+                                        <a class="text-reset" href="#">Accessories</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Eyewear-&amp;-accessories">Eyewear
+                                        <a class="text-reset" href="#">Eyewear
                                             &amp; accessories</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Hats-&amp;-Caps">Hats
+                                        <a class="text-reset" href="#">Hats
                                             &amp; Caps</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Gloves">Gloves</a>
+                                        <a class="text-reset" href="#">Gloves</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Watch">Watch</a>
+                                        <a class="text-reset" href="#">Watch</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Wallet">Wallet</a>
+                                        <a class="text-reset" href="#">Wallet</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Belt">Belt</a>
+                                        <a class="text-reset" href="#">Belt</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Hats-&amp;-Cap">Hats
+                                        <a class="text-reset" href="#">Hats
                                             &amp; Cap</a>
                                     </li>
                                 </ul>
@@ -712,8 +595,7 @@
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/watch-hyau2">Women
+                                        <a class="text-reset" href="#">Women
                                             Watch</a>
                                     </li>
                                 </ul>
@@ -721,8 +603,7 @@
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/women-dress-04vbn">Women
+                                        <a class="text-reset" href="#">Women
                                             Dress</a>
                                     </li>
                                 </ul>
@@ -734,7 +615,7 @@
                 <li class="group" data-id="1">
                     <div
                         class="relative w-full cursor-pointer group-hover:shadow p-1 group-hover:after:block after:hidden after:content-[''] after:w-7 after:h-7 after:rotate-45 ltr:after:border-t-8 ltr:after:border-r-8 rtl:after:border-b-8 rtl:after:border-l-8 after:border-white after:absolute ltr:after:-right-1 rtl:after:-left-1 after:top-2">
-                        <a href="https://demo.activeitzone.com/ecommerce/category/women-clothing-fashion"
+                        <a href="-clothing-fashion"
                             class="text-truncate text-reset py-2 px-3 block text-sm flex gap-3 items-center">
                             <span class="material-icons">
                                 checkroom
@@ -749,83 +630,67 @@
                             <div class="card shadow-none border-0 m-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Hot-Categories">Hot
+                                        <a class="text-reset" href="#">Hot
                                             Categories</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Party-Dress">Party
+                                        <a class="text-reset" href="#">Party
                                             Dress</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Beauty-&amp;-Health">Beauty
+                                        <a class="text-reset" href="#">Beauty
                                             &amp; Health</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Women-shoe">Women
+                                        <a class="text-reset" href="#">Women
                                             shoe</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Sleeping-Dress">Sleeping
+                                        <a class="text-reset" href="#">Sleeping
                                             Dress</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Casual-Dress">Casual
+                                        <a class="text-reset" href="#">Casual
                                             Dress</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Hoodies-&amp;-Sweatshirts">Hoodies
+                                        <a class="text-reset" href="#">Hoodies
                                             &amp; Sweatshirts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Jackets">Jackets</a>
+                                        <a class="text-reset" href="#">Jackets</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/T-shirts">T-shirts</a>
+                                        <a class="text-reset" href="#">T-shirts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Shirts">Shirts</a>
+                                        <a class="text-reset" href="#">Shirts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Socks">Socks</a>
+                                        <a class="text-reset" href="#">Socks</a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Wedding-&amp;-events">Wedding
+                                        <a class="text-reset" href="#">Wedding
                                             &amp; events</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Wedding-Dresses">Wedding
+                                        <a class="text-reset" href="#">Wedding
                                             Dresses</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Evening-Dresses">Evening
+                                        <a class="text-reset" href="#">Evening
                                             Dresses</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Prom-Dresses">Prom
+                                        <a class="text-reset" href="#">Prom
                                             Dresses</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Bridesmaid-Dresses">Bridesmaid
+                                        <a class="text-reset" href="#">Bridesmaid
                                             Dresses</a>
                                     </li>
                                 </ul>
@@ -833,105 +698,80 @@
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Bottom">Bottom</a>
+                                        <a class="text-reset" href="#">Bottom</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Skirts">Skirts</a>
+                                        <a class="text-reset" href="#">Skirts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Leggings">Leggings</a>
+                                        <a class="text-reset" href="#">Leggings</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Jeans">Jeans</a>
+                                        <a class="text-reset" href="#">Jeans</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Pant-&amp;-caprices">Pant
+                                        <a class="text-reset" href="#">Pant
                                             &amp; caprices</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Shorts">Shorts</a>
+                                        <a class="text-reset" href="#">Shorts</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Formal-Pants">Formal
+                                        <a class="text-reset" href="#">Formal
                                             Pants</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Casual-pants">Casual
+                                        <a class="text-reset" href="-pants">Casual
                                             pants</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Cargo-pants">Cargo
-                                            pants</a>
+                                        <a class="text-reset" href="</a>
                                     </li>
-                                    <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Jeans">Jeans</a>
-                                    </li>
-                                </ul>
+                                    <li class="  mb-2 text-sm">
+                                            <a class="text-reset" href="#">Jeans</a>
+                                    </li>="card shadow-none border-0 m-0">
+                                    <ul class="list-unstyled my-2 text-center">
+                                        <li class="fw-600 border-y font-bold text-sm py-2 my-2">
+                                            <a class="text-reset">Tops
+                                                &amp; sets</a>
+                                        </li>
+                                        <li class="mb-2 text-sm">
+                                            <a class="text-reset" href="-tops">Tank
+                                                tops</a>
+                                        </li>
+                                        <li class="mb-2 text-sm">
+                                            <a class="text-reset" href="#">Suit
+                                                &amp; sets</a>
+                                        </li>
+                                    </ul>
                             </div>
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Tops-&amp;-sets">Tops
-                                            &amp; sets</a>
+                                        <a class="text-reset" href="#">Accessories</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Tank-tops">Tank
-                                            tops</a>
-                                    </li>
-                                    <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Suit-&amp;-sets">Suit
-                                            &amp; sets</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="card shadow-none border-0 m-0">
-                                <ul class="list-unstyled my-2 text-center">
-                                    <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Accessories">Accessories</a>
-                                    </li>
-                                    <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Eyewear-&amp;-accessories">Eyewear
+                                        <a class="text-reset" href="#">Eyewear
                                             &amp; accessories</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Hats-&amp;-Caps">Hats
+                                        <a class="text-reset" href="#">Hats
                                             &amp; Caps</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Gloves">Gloves</a>
+                                        <a class="text-reset" href="#">Gloves</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Watch">Watch</a>
+                                        <a class="text-reset" href="#">Watch</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Wallet">Wallet</a>
+                                        <a class="text-reset" href="#">Wallet</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Belt">Belt</a>
+                                        <a class="text-reset" href="#">Belt</a>
                                     </li>
                                     <li class="mb-2 text-sm">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/Hats-&amp;-Cap">Hats
+                                        <a class="text-reset" href="#">Hats
                                             &amp; Cap</a>
                                     </li>
                                 </ul>
@@ -939,8 +779,7 @@
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/watch-hyau2">Women
+                                        <a class="text-reset" href="#">Women
                                             Watch</a>
                                     </li>
                                 </ul>
@@ -948,8 +787,7 @@
                             <div class="card shadow-none border-0 m-0">
                                 <ul class="list-unstyled my-2 text-center">
                                     <li class="fw-600 border-y font-bold text-sm py-2 my-2">
-                                        <a class="text-reset"
-                                            href="https://demo.activeitzone.com/ecommerce/category/women-dress-04vbn">Women
+                                        <a class="text-reset" href="#">Women
                                             Dress</a>
                                     </li>
                                 </ul>
@@ -974,23 +812,25 @@
                 <div class="splide__track">
                     <ul class="splide__list">
                         <li class="splide__slide">
-                            <img
-                                src="https://1.bp.blogspot.com/-ZzFhLpwkDkM/ViH7KIM7PkI/AAAAAAAAYGc/t7FazLK096U/s1600/Diwali%2BOnline%2BSales%2B%2521%2521%2BDiwali%2BDhamaka%2BSales%2BOffer%2B%2526%2BDiscount%2BBuy%2BOne%2BGet%2BOne%2BFree%2BMaalFreeKaa.jpg"
+                            <img src="https://img.myloview.com/stickers/happy-valentines-day-sale-and-offer-banner-700-187715128.jpg"
                                 alt="">
                         </li>
                         <li class="splide__slide"><img
-                                src="https://adoptostaging.blob.core.windows.net/media/informal-job-offer-letter-template-4oc2pH.jpg"
+                                src="https://www.directferries.com/images/news_image/flash_offer_25_off_britain_ireland_ferries_29122.jpg"
                                 alt="">
                         </li>
                         <li class="splide__slide"><img
-                                src="https://shopfittingsonline.co.uk/ROB1/ROB1-SHOP/Images/Page/Special-Offer-New-1.jpg"
+                                src="https://img.myloview.com/stickers/happy-valentines-day-sale-and-offer-banner-design-700-188571782.jpg"
                                 alt=""></li>
                         <li class="splide__slide"><img
-                                src="{{ asset('assets/img/278254292_2564404687026623_3366262232933159335_n.jpg') }}"
-                                alt=""></li>
-                        <li class="splide__slide"><img src="https://img.pikbest.com/backgrounds/20200925/black-friday-sale-banner-with-limited-time-offer-v_3120091jpg!bw700" alt="">
+                                src="https://i.pinimg.com/736x/24/4c/a4/244ca478fc1f1835ebdcbd7e987a5174.jpg" alt="">
                         </li>
-                        <li class="splide__slide"><img src="https://conceptboard.com/wp-content/uploads/5.png" alt="">
+                        <li class="splide__slide">
+                            <img src="https://www.directferries.co.uk/images/news_image/up_to_15_off_ferries_to_northern_ireland_all_year_25814.jpg"
+                                alt="">
+                        </li>
+                        <li class="splide__slide">
+                            <img src="https://forexnewbonus.com/upload/media/20242/Win%20$150.jpg" alt="">
                         </li>
                     </ul>
                 </div>
@@ -1000,19 +840,24 @@
             {{-- Top Categories : Start --}}
             <div class="row-span-1 grid grid-cols-5 gap-3 justify-between items-center">
                 <a href="#" class="shadow rounded overflow-hidden bg-white p-1">
-                    <img src="https://mobiserve-eg.com/wp-content/uploads/2021/05/Air-Filters-Change-100x100.png" class="m-auto">
+                    <img src="https://mobiserve-eg.com/wp-content/uploads/2021/05/Air-Filters-Change-100x100.png"
+                        class="m-auto">
                 </a>
                 <a href="#" class="shadow rounded overflow-hidden bg-white p-1">
-                    <img src="https://mobiserve-eg.com/wp-content/uploads/2021/05/Air-Filters-Change-100x100.png" class="m-auto">
+                    <img src="https://mobiserve-eg.com/wp-content/uploads/2021/05/Air-Filters-Change-100x100.png"
+                        class="m-auto">
                 </a>
                 <a href="#" class="shadow rounded overflow-hidden bg-white p-1">
-                    <img src="https://mobiserve-eg.com/wp-content/uploads/2021/05/Air-Filters-Change-100x100.png" class="m-auto">
+                    <img src="https://mobiserve-eg.com/wp-content/uploads/2021/05/Air-Filters-Change-100x100.png"
+                        class="m-auto">
                 </a>
                 <a href="#" class="shadow rounded overflow-hidden bg-white p-1">
-                    <img src="https://mobiserve-eg.com/wp-content/uploads/2021/05/Air-Filters-Change-100x100.png" class="m-auto">
+                    <img src="https://mobiserve-eg.com/wp-content/uploads/2021/05/Air-Filters-Change-100x100.png"
+                        class="m-auto">
                 </a>
                 <a href="#" class="shadow rounded overflow-hidden bg-white p-1">
-                    <img src="https://mobiserve-eg.com/wp-content/uploads/2021/05/Air-Filters-Change-100x100.png" class="m-auto">
+                    <img src="https://mobiserve-eg.com/wp-content/uploads/2021/05/Air-Filters-Change-100x100.png"
+                        class="m-auto">
                 </a>
             </div>
             {{-- Top Categories : End --}}
@@ -1032,15 +877,13 @@
                 class="overflow-auto scrollbar scrollbar-thumb-secondary scrollbar-track-primary scrollbar-thin lg:h-80 p-2 bg-primary rounded-b">
                 <div class="grid grid-cols-4 lg:grid-cols-1 gap-2">
                     <div class="col-span-1">
-                        <a href="https://demo.activeitzone.com/ecommerce/product/Microsoft-Windows-10-pro-wVg2F"
-                            class="block p-2 text-reset bg-white h-100 rounded">
+                        <a href="#" class="block p-2 text-reset bg-white h-100 rounded">
                             <div class="items-center">
                                 <div class="">
                                     <div class="img">
                                         <img class="img-fit lazyloaded w-24 m-auto"
-                                            src="https://demo.activeitzone.com/ecommerce/public/uploads/all/VREgsy3guGKRJt4hXrUYzXIo6IWnJMwJ2N5Vv6cY.jpg"
-                                            data-src="https://demo.activeitzone.com/ecommerce/public/uploads/all/VREgsy3guGKRJt4hXrUYzXIo6IWnJMwJ2N5Vv6cY.jpg"
-                                            alt="Microsoft Windows 10 pro">
+                                            src="https://p.turbosquid.com/ts-thumb/Np/o1LCqU/rn/searchimageedited/png/1638461647/300x300/sharp_fit_q85/bd40184297d31c4363ab072cc773700b99df856d/searchimageedited.jpg"
+                                            data-src="#" alt="Microsoft Windows 10 pro">
                                     </div>
                                 </div>
                                 <div class="">
@@ -1052,14 +895,13 @@
                         </a>
                     </div>
                     <div class="col-span-1">
-                        <a href="https://demo.activeitzone.com/ecommerce/product/sungait-ultra-lightweight-rectangular-polarized-sunglasses-uv400-protection-1szdb"
-                            class="block p-2 text-reset bg-white h-100 rounded">
+                        <a href="#" class="block p-2 text-reset bg-white h-100 rounded">
                             <div class="items-center">
                                 <div class="">
                                     <div class="img">
                                         <img class="img-fit lazyloaded w-24 m-auto"
-                                            src="https://demo.activeitzone.com/ecommerce/public/uploads/all/xIT7SLG4ciNvO2z4cU47GhtmS1RDiRBlnbzlYwSu.jpg"
-                                            data-src="https://demo.activeitzone.com/ecommerce/public/uploads/all/xIT7SLG4ciNvO2z4cU47GhtmS1RDiRBlnbzlYwSu.jpg"
+                                            src="https://p.turbosquid.com/ts-thumb/Np/o1LCqU/rn/searchimageedited/png/1638461647/300x300/sharp_fit_q85/bd40184297d31c4363ab072cc773700b99df856d/searchimageedited.jpg"
+                                            data-src="#"
                                             alt="SUNGAIT Ultra Lightweight Rectangular Polarized Sunglasses UV400 Protection">
                                     </div>
                                 </div>
@@ -1073,15 +915,13 @@
                         </a>
                     </div>
                     <div class="col-span-1">
-                        <a href="https://demo.activeitzone.com/ecommerce/product/aurora-13-inch-bonnie-teddy-bear-w5rkd"
-                            class="block p-2 text-reset bg-white h-100 rounded">
+                        <a href="#" class="block p-2 text-reset bg-white h-100 rounded">
                             <div class="items-center">
                                 <div class="">
                                     <div class="img">
                                         <img class="img-fit lazyloaded w-24 m-auto"
-                                            src="https://demo.activeitzone.com/ecommerce/public/uploads/all/eCLJnjhyfirOBFf864tcsbJO2o7kM2mpCa3meREZ.jpg"
-                                            data-src="https://demo.activeitzone.com/ecommerce/public/uploads/all/eCLJnjhyfirOBFf864tcsbJO2o7kM2mpCa3meREZ.jpg"
-                                            alt="Aurora 13-inch Bonnie Teddy Bear">
+                                            src="https://p.turbosquid.com/ts-thumb/Np/o1LCqU/rn/searchimageedited/png/1638461647/300x300/sharp_fit_q85/bd40184297d31c4363ab072cc773700b99df856d/searchimageedited.jpg"
+                                            data-src="#" alt="Aurora 13-inch Bonnie Teddy Bear">
                                     </div>
                                 </div>
                                 <div class="">
@@ -1093,15 +933,13 @@
                         </a>
                     </div>
                     <div class="col-span-1">
-                        <a href="https://demo.activeitzone.com/ecommerce/product/apple---iphone-12-pro-max-5g-256gb-ohttv"
-                            class="block p-2 text-reset bg-white h-100 rounded">
+                        <a href="#" class="block p-2 text-reset bg-white h-100 rounded">
                             <div class="items-center">
                                 <div class="">
                                     <div class="img">
                                         <img class="img-fit lazyloaded w-24 m-auto"
-                                            src="https://demo.activeitzone.com/ecommerce/public/uploads/all/ct5MTUrbESEaVH71rdkenycBpltX2zwQdoK7b1o9.jpg"
-                                            data-src="https://demo.activeitzone.com/ecommerce/public/uploads/all/ct5MTUrbESEaVH71rdkenycBpltX2zwQdoK7b1o9.jpg"
-                                            alt="Apple - iPhone 12 Pro Max 5G 256GB">
+                                            src="https://p.turbosquid.com/ts-thumb/Np/o1LCqU/rn/searchimageedited/png/1638461647/300x300/sharp_fit_q85/bd40184297d31c4363ab072cc773700b99df856d/searchimageedited.jpg"
+                                            data-src="#" alt="Apple - iPhone 12 Pro Max 5G 256GB">
                                     </div>
                                 </div>
                                 <div class="">
@@ -1113,14 +951,13 @@
                         </a>
                     </div>
                     <div class="col-span-1">
-                        <a href="https://demo.activeitzone.com/ecommerce/product/sportoli-maxi-dresses-for-women-solid-lightweight-long-racerback-sleeveless-wpocket-z3kgv"
-                            class="block p-2 text-reset bg-white h-100 rounded">
+                        <a href="#" class="block p-2 text-reset bg-white h-100 rounded">
                             <div class="items-center">
                                 <div class="">
                                     <div class="img">
                                         <img class="img-fit lazyloaded w-24 m-auto"
-                                            src="https://demo.activeitzone.com/ecommerce/public/uploads/all/xIT7SLG4ciNvO2z4cU47GhtmS1RDiRBlnbzlYwSu.jpg"
-                                            data-src="https://demo.activeitzone.com/ecommerce/public/uploads/all/xIT7SLG4ciNvO2z4cU47GhtmS1RDiRBlnbzlYwSu.jpg"
+                                            src="https://p.turbosquid.com/ts-thumb/Np/o1LCqU/rn/searchimageedited/png/1638461647/300x300/sharp_fit_q85/bd40184297d31c4363ab072cc773700b99df856d/searchimageedited.jpg"
+                                            data-src="#"
                                             alt="SUNGAIT Ultra Lightweight Rectangular Polarized Sunglasses UV400 Protection">
                                     </div>
                                 </div>

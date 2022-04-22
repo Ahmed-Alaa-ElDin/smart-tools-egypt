@@ -15,7 +15,7 @@
                 {{-- Title : End --}}
 
                 {{-- View More Button : Start --}}
-                <a href="https://demo.activeitzone.com/ecommerce/flash-deal/falsh-sale-k7qpu"
+                <a href="#"
                     class="btn bg-secondary btn-sm shadow-md font-bold">{{ __('front/homePage.See All Categories') }}</a>
                 {{-- View More Button : End --}}
             </div>
@@ -26,8 +26,7 @@
 
                 {{-- Category : Start --}}
                 <div class="col-span-6 md:col-span-3">
-                    <a href="https://demo.activeitzone.com/ecommerce/category/women-clothing-fashion"
-                        class="bg-white border block rounded p-2 hover:shadow-md">
+                    <a href="#" class="bg-white border block rounded p-2 hover:shadow-md">
                         <div class="grid grid-cols-12 items-center">
 
                             {{-- Image : Start --}}
@@ -64,8 +63,7 @@
 
                 {{-- Category : Start --}}
                 <div class="col-span-6 md:col-span-3">
-                    <a href="https://demo.activeitzone.com/ecommerce/category/women-clothing-fashion"
-                        class="bg-white border block rounded p-2 hover:shadow-md">
+                    <a href="#" class="bg-white border block rounded p-2 hover:shadow-md">
                         <div class="grid grid-cols-12 items-center">
 
                             {{-- Image : Start --}}
@@ -120,8 +118,7 @@
                 {{-- Title : End --}}
 
                 {{-- View More Button : Start --}}
-                <a href="https://demo.activeitzone.com/ecommerce/flash-deal/falsh-sale-k7qpu"
-                    class="btn bg-secondary btn-sm shadow-md font-bold">{{ __('front/homePage.See All') }}</a>
+                <a href="#" class="btn bg-secondary btn-sm shadow-md font-bold">{{ __('front/homePage.See All') }}</a>
                 {{-- View More Button : End --}}
             </div>
             {{-- Header : End --}}
@@ -131,8 +128,7 @@
 
                 {{-- Brand : Start --}}
                 <div class="col-span-6 md:col-span-3">
-                    <a href="https://demo.activeitzone.com/ecommerce/category/women-clothing-fashion"
-                        class="bg-white border block rounded p-2 hover:shadow-md">
+                    <a href="#" class="bg-white border block rounded p-2 hover:shadow-md">
                         <div class="grid grid-cols-12 items-center">
 
                             {{-- Image : Start --}}
@@ -169,8 +165,7 @@
 
                 {{-- Brand : Start --}}
                 <div class="col-span-6 md:col-span-3">
-                    <a href="https://demo.activeitzone.com/ecommerce/category/women-clothing-fashion"
-                        class="bg-white border block rounded p-2 hover:shadow-md">
+                    <a href="#" class="bg-white border block rounded p-2 hover:shadow-md">
                         <div class="grid grid-cols-12 items-center">
 
                             {{-- Image : Start --}}

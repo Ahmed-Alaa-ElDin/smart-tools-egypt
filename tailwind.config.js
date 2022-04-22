@@ -18,6 +18,8 @@ module.exports = {
                 facebook: "#1877f2",
                 twitter: "#1da1f2",
                 google: "#dd4b39",
+                youtube: "#ff0000",
+                whatsapp: "#25d366",
                 view: "#3498db",
                 viewHover: "#2980b9",
                 edit: "#e67e22",

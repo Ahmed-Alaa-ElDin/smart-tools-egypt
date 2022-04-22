@@ -2,7 +2,8 @@
     data-image="{{ asset('assets/img/logos/smart-tools-logo-only-400.png') }}">
     <div class="logo">
         <a href="https://creative-tim.com/" class="simple-text logo-normal">
-            <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}" alt="Smart Tools Egypt Logo" width="50px">
+            <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}" alt="Smart Tools Egypt Logo"
+                width="50px">
             {{ 'Smart Tools' }}
         </a>
     </div>
@@ -263,7 +264,12 @@
                             <li class="nav-item {{ $activePage == 'All Offers' ? ' active' : '' }}">
                                 <a class="nav-link" href="{{ route('admin.offers.index') }}">
                                     <span class="material-icons">
-                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="m6 12l36 4v24L6 36V12Zm32 3.555V8L6 12"/></svg>                                    </span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
+                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48">
+                                            <path fill="none" stroke="currentColor" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="4"
+                                                d="m6 12l36 4v24L6 36V12Zm32 3.555V8L6 12" />
+                                        </svg> </span>
                                     <span>{{ __('admin/master.All Offers') }} </span>
                                 </a>
                             </li>
@@ -495,6 +501,71 @@
                     </div>
                 </li>
             @endcan
+
+            {{-- Website Control --}}
+                <li class="nav-item {{ $activeSection == 'Site Control' ? ' active' : '' }}">
+                    <a class="nav-link" data-toggle="collapse" href="#delivery"
+                        aria-expanded="{{ $activeSection == 'Site Control' ? 'true' : 'false' }}">
+                        <span class="material-icons">
+                            settings
+                        </span>
+                        <span>{{ __('admin/master.Website Control') }}
+                            <b class="caret"></b>
+                        </span>
+                    </a>
+
+                    <div class="collapse {{ $activeSection == 'Site Control' ? ' show' : '' }}" id="delivery">
+                        <ul class="nav">
+
+                            {{-- HomePage --}}
+                            <li class="nav-item {{ $activePage == 'HomePage' ? ' active' : '' }}">
+                                <a class="nav-link" href="{{ route('admin.deliveries.index') }}">
+                                    <span class="material-icons">
+                                        space_dashboard
+                                    </span>
+                                    <span>{{ __('admin/master.HomePage') }} </span>
+                                </a>
+                            </li>
+
+                            {{-- Countries --}}
+                            @can('See All Countries')
+                                <li class="nav-item {{ $activePage == 'Countries' ? ' active' : '' }}">
+                                    <a class="nav-link" href="{{ route('admin.countries.index') }}">
+                                        <span class="material-icons">
+                                            public
+                                        </span>
+                                        <span>{{ __('admin/master.Countries') }}</span>
+                                    </a>
+                                </li>
+                            @endcan
+
+                            {{-- Governorates --}}
+                            @can('See All Governorates')
+                                <li class="nav-item {{ $activePage == 'Governorates' ? ' active' : '' }}">
+                                    <a class="nav-link" href="{{ route('admin.governorates.index') }}">
+                                        <span class="material-icons">
+                                            travel_explore
+                                        </span>
+                                        <span>{{ __('admin/master.Governorates') }}</span>
+                                    </a>
+                                </li>
+                            @endcan
+
+                            {{-- Cities --}}
+                            @can('See All Cities')
+                                <li class="nav-item {{ $activePage == 'Cities' ? ' active' : '' }}">
+                                    <a class="nav-link" href="{{ route('admin.cities.index') }}">
+                                        <span class="material-icons">
+                                            location_city
+                                        </span>
+                                        <span>{{ __('admin/master.Cities') }}</span>
+                                    </a>
+                                </li>
+                            @endcan
+
+                        </ul>
+                    </div>
+                </li>
 
 
         </ul>

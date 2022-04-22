@@ -3,7 +3,7 @@
         <div class="px-2 py-4 md:px-4 md:py-3 bg-white shadow rounded">
 
             {{-- Header : Start --}}
-            <div class="flex flex-wrap mb-3 justify-between items-baseline border-b">
+            <div class="flex flex-wrap mb-3 gap-2 justify-between items-baseline border-b text-center">
                 {{-- Title : Start --}}
                 <h3 class="h5 font-bold mb-0 w-full text-center md:w-auto">
                     <span
@@ -12,7 +12,8 @@
                 {{-- Title : End --}}
 
                 {{-- Timer : Start --}}
-                <div class="flex items-center justify-center content-end gap-2 mt-2" data-date="2025/01/01 00:00:00">
+                <div class="flex items-center justify-center content-end gap-2 mt-2 w-full md:w-auto"
+                    data-date="2025/01/01 00:00:00">
                     {{-- Day : Start --}}
                     <div class="countdown-item bg-primary flex justify-center items-center p-1 rounded shadow ">
                         <span
@@ -51,8 +52,10 @@
                 {{-- Timer : End --}}
 
                 {{-- View More Button : Start --}}
-                <a href="https://demo.activeitzone.com/ecommerce/flash-deal/falsh-sale-k7qpu"
-                class="btn bg-secondary btn-sm shadow-md w-100 md:w-auto font-bold">{{ __('front/homePage.View More') }}</a>
+                <div class="w-full md:w-auto">
+                    <a href="#"
+                        class="btn bg-secondary btn-sm shadow-md font-bold mb-3 md:mb-auto m-auto">{{ __('front/homePage.View More') }}</a>
+                </div>
                 {{-- View More Button : End --}}
             </div>
             {{-- Header : End --}}
@@ -83,8 +86,7 @@
                                         {{-- Base Discount : End --}}
 
                                         {{-- Product Image : Start --}}
-                                        <a href="https://demo.activeitzone.com/ecommerce/product/adidas-team-force-deodorant-body-spray-for-men-hof1s"
-                                            class="block">
+                                        <a href="#" class="block">
                                             <img class="img-fit mx-auto h-full md:h-58 lazyloaded"
                                                 src="https://static.dezeen.com/uploads/2016/11/i-pace-electric-car-jaguar-design_dezeen_sq-300x300.jpg">
                                         </a>
@@ -205,8 +207,7 @@
 
                                         {{-- Product Name : Start --}}
                                         <h3 class="text-sm mb-0 h-16 rtl:text-right">
-                                            <a href="https://demo.activeitzone.com/ecommerce/product/adidas-team-force-deodorant-body-spray-for-men-hof1s"
-                                                class="block text-gray-700">
+                                            <a href="#" class="block text-gray-700">
                                                 سيارة جامدة زوحليقة XDD يسبسيبسي
                                             </a>
                                         </h3>

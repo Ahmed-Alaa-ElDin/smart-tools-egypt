@@ -34,6 +34,10 @@ return [
     "Notifications"             =>      "الإشعارات",
     "Account"                   =>      "الحساب",
     "See All"                   =>      "عرض الكل",
+    "Home"                      =>      "الرئيسية",
+    "Flash Sale"                =>      "عروض لفترة محدودة",
+    "All Brands"                =>      "جميع العلامات التجارية",
+    "All Categories"            =>      "جميع الأقسام",
 
 
 ];

@@ -56,8 +56,7 @@
                 {{-- Compare : Start --}}
                 <div class="hidden lg:block ml-3 mr-0">
                     <div class="" id="compare">
-                        <a href="https://demo.activeitzone.com/ecommerce/compare"
-                            class="flex gap-2 items-center text-reset">
+                        <a href="#" class="flex gap-2 items-center text-reset">
                             {{-- <i class="la la-refresh la-2x opacity-80"></i> --}}
                             <span class="material-icons">
                                 compare_arrows
@@ -76,8 +75,7 @@
                 {{-- Wishlist : Start --}}
                 <div class="hidden lg:block ml-3 mr-0">
                     <div class="" id="wishlist">
-                        <a href="https://demo.activeitzone.com/ecommerce/wishlists"
-                            class="flex items-center gap-2 text-reset">
+                        <a href="#" class="flex items-center gap-2 text-reset">
                             <span class="material-icons">
                                 favorite
                             </span>
@@ -130,45 +128,27 @@
         <div class="container">
             <ul class="flex flex-nowrap justify-between lg:justify-center items-center gap-2 text-center">
                 <li class="min-w-max">
-                    <a href="https://demo.activeitzone.com/ecommerce/"
+                    <a href="{{ route('front.homepage') }}"
                         class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
-                        Home
+                        {{ __("front/homePage.Home") }}
                     </a>
                 </li>
                 <li class="min-w-max">
-                    <a href="https://demo.activeitzone.com/ecommerce/flash-deals"
+                    <a href="#"
                         class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
-                        Flash Sale
+                        {{ __("front/homePage.Flash Sale") }}
                     </a>
                 </li>
                 <li class="min-w-max">
-                    <a href="https://demo.activeitzone.com/ecommerce/blog"
+                    <a href="#"
                         class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
-                        Blogs
+                        {{ __("front/homePage.All Brands") }}
                     </a>
                 </li>
                 <li class="min-w-max">
-                    <a href="https://demo.activeitzone.com/ecommerce/brands"
+                    <a href="#"
                         class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
-                        All Brands
-                    </a>
-                </li>
-                <li class="min-w-max">
-                    <a href="https://demo.activeitzone.com/ecommerce/categories"
-                        class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
-                        All Categories
-                    </a>
-                </li>
-                <li class="min-w-max">
-                    <a href="https://demo.activeitzone.com/ecommerce/sellers"
-                        class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
-                        All Sellers
-                    </a>
-                </li>
-                <li class="min-w-max">
-                    <a href="https://demo.activeitzone.com/ecommerce/coupons"
-                        class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
-                        Coupons
+                        {{ __("front/homePage.All Categories") }}
                     </a>
                 </li>
             </ul>

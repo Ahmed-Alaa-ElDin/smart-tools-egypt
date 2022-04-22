@@ -31,8 +31,11 @@ Route::group([
     require_once __DIR__ . "/users_roles/users_roles.php";
     // ############## Users Routes End ##############
 
-
     // ############## Delivery System Routes Start ##############
     require_once __DIR__ . "/deliveries_addresses/deliveries_addresses.php";
     // ############## Delivery System Routes End ##############
+
+    // ############## Home Page Control Start ##############
+    require_once __DIR__ . "/homepage/homepage.php";
+    // ############## Home Page Control End ##############
 });

@@ -72,6 +72,10 @@
         </div>
         {{-- Main Body : End --}}
 
+        {{-- Footer : Start --}}
+        @include('layouts.front.includes.footer')
+        {{-- Footer : End --}}
+
         {{-- Mobile Header : Start --}}
         @include('layouts.front.includes.mobile_header')
         {{-- Mobile Header : End --}}
