@@ -53,21 +53,10 @@
 
         {{-- Main Body : Start --}}
         <div class="grid grid-cols-1">
-            {{-- Top Slider : Start --}}
-            @include('layouts.front.includes.top_slider')
-            {{-- Top Slider : End --}}
 
-            {{-- Offer Bar : Start --}}
-            @include('layouts.front.includes.offer_bar')
-            {{-- Offer Bar : End --}}
-
-            {{-- Flash Sale : Start --}}
-            @include('layouts.front.includes.flash_sale')
-            {{-- Flash Sale : End --}}
-
-            {{-- Top Categories & Brands : Start --}}
-            @include('layouts.front.includes.top_categories_brands')
-            {{-- Top Categories & Brands : End --}}
+            {{-- Content : Start --}}
+            @yield('content')
+            {{-- Content : End --}}
 
         </div>
         {{-- Main Body : End --}}
@@ -80,13 +69,6 @@
         @include('layouts.front.includes.mobile_header')
         {{-- Mobile Header : End --}}
 
-        {{-- @include('layouts.admin.includes.sidebar') --}}
-        <div class="main-panel">
-            {{-- @include('layouts.admin.includes.nav') --}}
-
-            @yield('content')
-            {{-- @include('layouts.admin.includes.footer') --}}
-        </div>
     </div>
 
     <!--   Core JS Files   -->
@@ -120,7 +102,6 @@
                     pagination: 'ltr',
                 @endif
                 autoplay: true,
-                // perPage: 2,
                 type: 'loop',
                 keyboard: true,
                 cover: true,

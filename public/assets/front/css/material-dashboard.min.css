@@ -18196,3 +18196,8 @@ screen and (-ms-high-contrast:active) {
 .splide__track {
     height: inherit !important;
 }
+
+.splide__slide img {
+    height: 100% !important;
+    width: 100% !important;
+}

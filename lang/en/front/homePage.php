@@ -38,7 +38,7 @@ return [
     "Flash Sale"                =>      "Flash Sale",
     "All Brands"                =>      "All Brands",
     "All Categories"            =>      "All Categories",
-    "Cart"                      =>      "Cart",
+    "Homepage"                  =>      "Homepage",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",

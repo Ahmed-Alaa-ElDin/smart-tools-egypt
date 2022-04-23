@@ -71,7 +71,7 @@ return [
     "Offer's Banner"                                        =>      "Offer's Banner",
     "Uploading ..."                                         =>      "Uploading ...",
     "Delete Image"                                          =>      "Delete Image",
-    "Use 700x300 sizes image"                               =>      "Use 700x300 sizes image",
+    "Use 700x250 sizes image"                               =>      "Use 700x250 sizes image",
     "Offer's Information"                                   =>      "Offer's Information",
     "offer's Title"                                         =>      "offer's Title",
     "in Arabic"                                             =>      "in Arabic",

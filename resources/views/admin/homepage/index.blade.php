@@ -51,7 +51,7 @@
                             <div class="grid grid-cols-12 gap-4 justify-between items-center">
 
                                 {{-- Slider : Start --}}
-                                <a href="{{ route('admin.banners.index') }}"
+                                <a href="{{ route('admin.site.banners.index') }}"
                                     class="col-span-6 md:col-span-3 bg-gray-100 rounded-xl shadow hover:shadow-lg cursor-pointer p-3 flex flex-col justify-center items-center gap-3">
                                     <span class="material-icons text-center text-9xl ">
                                         view_carousel

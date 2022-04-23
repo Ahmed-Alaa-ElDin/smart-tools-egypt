@@ -24,7 +24,7 @@ class HomepageBannerController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.homepage.slider.create');
     }
 
     /**
@@ -55,9 +55,9 @@ class HomepageBannerController extends Controller
      * @param  \App\Models\HomepageBanner  $homepageBanner
      * @return \Illuminate\Http\Response
      */
-    public function edit(HomepageBanner $homepageBanner)
+    public function edit($homepageBanner)
     {
-        //
+        return view('admin.homepage.slider.edit', compact('homepageBanner'));
     }
 
     /**

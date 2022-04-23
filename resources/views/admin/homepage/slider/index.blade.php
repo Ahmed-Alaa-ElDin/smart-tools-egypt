@@ -41,7 +41,7 @@
 
                                 {{-- Add New Home page section --}}
                                 <div class="ltr:text-right rtl:text-left">
-                                    <a href="{{ route('admin.banners.create') }}"
+                                    <a href="{{ route('admin.site.banners.create') }}"
                                         class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">
                                         <span class="material-icons rtl:ml-1 ltr:mr-1">
                                             add
@@ -54,58 +54,10 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
 
-                            {{-- Static Part : Start --}}
-                            <div class="grid grid-cols-12 gap-3 justify-between items-center">
+                            {{-- Datatable Start --}}
+                            @livewire('admin.banners.banners-datatable')
+                            {{-- Datatable End --}}
 
-                                {{-- Slider : Start --}}
-                                <a href=""
-                                    class="col-span-6 md:col-span-3 bg-gray-100 rounded-xl shadow hover:shadow-lg cursor-pointer p-3 flex flex-col justify-center items-center gap-3">
-                                    <span class="material-icons text-center text-9xl ">
-                                        view_carousel
-                                    </span>
-                                    <span class="text-center font-bold">
-                                        {{ __('admin/sitePages.Manage Main Slider') }}
-                                    </span>
-                                </a>
-                                {{-- Slider : End --}}
-
-                                {{-- Top Main Categories : Start --}}
-                                <div
-                                    class="col-span-6 md:col-span-3 bg-gray-100 rounded-xl shadow hover:shadow-lg cursor-pointer p-3 flex flex-col justify-center items-center gap-3">
-                                    <span class="material-icons text-center text-9xl ">
-                                        category
-                                    </span>
-                                    <span class="text-center font-bold">
-                                        {{ __('admin/sitePages.Manage Top Main Categories') }}
-                                    </span>
-                                </div>
-                                {{-- Top Main Categories : End --}}
-
-                                {{-- Top Categories : Start --}}
-                                <div
-                                    class="col-span-6 md:col-span-3 bg-gray-100 rounded-xl shadow hover:shadow-lg cursor-pointer p-3 flex flex-col justify-center items-center gap-3">
-                                    <span class="material-icons text-center text-9xl ">
-                                        hub
-                                    </span>
-                                    <span class="text-center font-bold">
-                                        {{ __('admin/sitePages.Manage Top Categories') }}
-                                    </span>
-                                </div>
-                                {{-- Top Categories : End --}}
-
-                                {{-- Today Deal : Start --}}
-                                <div
-                                    class="col-span-6 md:col-span-3 bg-gray-100 rounded-xl shadow hover:shadow-lg cursor-pointer p-3 flex flex-col justify-center items-center gap-3">
-                                    <span class="material-icons text-center text-9xl ">
-                                        percent
-                                    </span>
-                                    <span class="text-center font-bold">
-                                        {{ __("admin/sitePages.Manage Today's Deal") }}
-                                    </span>
-                                </div>
-                                {{-- Today Deal : End --}}
-                            </div>
-                            {{-- Static Part : End --}}
                         </div>
                     </div>
                 </div>
@@ -138,7 +90,7 @@
                 focusDeny: true,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit(e.detail.func, e.detail.offer_id);
+                    Livewire.emit(e.detail.func, e.detail.banner_id);
                 }
             });
         });

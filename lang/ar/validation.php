@@ -234,6 +234,11 @@ return [
         'items.*.type'          => 'نوع الخصم',
         'items.*.value'         => 'قيمة الخصم',
         'items.*.offer_number'  => 'عدد العروض',
+        'description.ar'        => 'الوصف بالعربية',
+        'description.en'        => 'الوصف بالإنجليزية',
+        'banner'                => 'البنر',
+        'rank'                  => 'الترتيب',
+        'banner_name'           => 'البنر',
 
     ],
 

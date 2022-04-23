@@ -9,6 +9,6 @@ class HomepageController extends Controller
 {
     public function index()
     {
-        return view('layouts.front.site');
+        return view('front.homepage.homepage');
     }
 }

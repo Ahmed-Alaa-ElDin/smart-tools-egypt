@@ -11,11 +11,14 @@ class HomepageBanner extends Model
     use HasFactory;
     use HasTranslations;
 
-    public $translatable = ['banner_name'];
+    public $translatable = ['description'];
 
     protected $fillable = [
         'banner_name',
         'description',
+        'link',
+        'rank',
         'active'
     ];
+
 }

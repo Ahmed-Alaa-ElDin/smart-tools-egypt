@@ -8,10 +8,10 @@
         </a>
     </div>
 
-    <div class="sidebar-wrapper">
+    <div class="sidebar-wrapper scrollbar scrollbar-thin scrollbar-thumb-red-100 scrollbar-track-gray-100">
 
         {{-- Nav Menu for mobile --}}
-        <ul class="nav navbar-nav nav-mobile-menu">
+        <ul class="nav navbar-nav nav-mobile-menu ">
 
             <li class="nav-item mt-2 flex justify-around ">
                 @foreach (LaravelLocalization::getSupportedLocales() as $lg => $lang)
@@ -504,7 +504,7 @@
 
             {{-- Website Control --}}
                 <li class="nav-item {{ $activeSection == 'Site Control' ? ' active' : '' }}">
-                    <a class="nav-link" data-toggle="collapse" href="#delivery"
+                    <a class="nav-link" data-toggle="collapse" href="#site"
                         aria-expanded="{{ $activeSection == 'Site Control' ? 'true' : 'false' }}">
                         <span class="material-icons">
                             settings
@@ -514,12 +514,12 @@
                         </span>
                     </a>
 
-                    <div class="collapse {{ $activeSection == 'Site Control' ? ' show' : '' }}" id="delivery">
+                    <div class="collapse {{ $activeSection == 'Site Control' ? ' show' : '' }}" id="site">
                         <ul class="nav">
 
                             {{-- HomePage --}}
                             <li class="nav-item {{ $activePage == 'HomePage' ? ' active' : '' }}">
-                                <a class="nav-link" href="{{ route('admin.deliveries.index') }}">
+                                <a class="nav-link" href="{{ route('admin.homepage') }}">
                                     <span class="material-icons">
                                         space_dashboard
                                     </span>

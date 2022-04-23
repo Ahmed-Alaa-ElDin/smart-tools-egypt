@@ -7,7 +7,7 @@
         {{-- ######################################################### --}}
         {{-- Logo Start --}}
         <div
-            class="grid grid-cols-12 gap-x-4 gap-y-2 items-center bg-gray-100 p-4 text-center justify-items-center rounded shadow">
+            class="grid grid-cols-12 gap-x-4 gap-y-2 items-center bg-gray-100 p-4 text-center  rounded shadow">
 
             <div class="col-span-12 font-bold text-black mb-2">{{ __('admin/productsPages.Logo') }}</div>
 
@@ -60,7 +60,7 @@
         {{-- ######################################################### --}}
         {{-- Brand Information Start --}}
         <div
-            class="grid grid-cols-12 gap-y-3 gap-x-4 items-center bg-red-100 p-4 text-center justify-items-center rounded shadow">
+            class="grid grid-cols-12 gap-y-3 gap-x-4 items-center bg-red-100 p-4 text-center  rounded shadow">
 
             <div class="col-span-12 font-bold text-black mb-2">
                 {{ __('admin/productsPages.Brand Information') }}
@@ -130,7 +130,7 @@
 
         {{-- SEO Start --}}
         <div
-            class="grid grid-cols-3 gap-x-6 gap-y-2 items-center bg-gray-100 p-4 text-center justify-items-center rounded shadow">
+            class="grid grid-cols-3 gap-x-6 gap-y-2 items-center bg-gray-100 p-4 text-center  rounded shadow">
 
             <div class="col-span-3 font-bold text-black mb-2">{{ __('admin/productsPages.SEO') }}</div>
 

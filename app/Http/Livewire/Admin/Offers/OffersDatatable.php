@@ -60,6 +60,10 @@ class OffersDatatable extends Component
             $this->sortDirection = 'ASC';
         }
 
+        if ($field == 'title') {
+            return $this->sortBy = 'title->' . session('locale');
+        }
+
         return $this->sortBy = $field;
     }
 

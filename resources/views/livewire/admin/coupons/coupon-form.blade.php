@@ -4,7 +4,7 @@
     {{-- ######################################################### --}}
     {{-- Coupon Information Start --}}
     <div
-        class="col-span-12 grid grid-cols-12 gap-y-3 gap-x-4 items-center bg-red-100 p-4 text-center justify-items-center rounded shadow">
+        class="col-span-12 grid grid-cols-12 gap-y-3 gap-x-4 items-center bg-red-100 p-4 text-center  rounded shadow">
 
         <div class="col-span-12 font-bold text-black mb-2">
             {{ __("admin/offersPages.Coupon's Information") }}
@@ -112,7 +112,7 @@
     {{-- ######################################################### --}}
     {{-- New Coupon Items Start --}}
     <div
-        class="col-span-12 grid grid-cols-12 gap-y-3 gap-x-4 items-center bg-gray-100 p-4 text-center justify-items-center rounded shadow">
+        class="col-span-12 grid grid-cols-12 gap-y-3 gap-x-4 items-center bg-gray-100 p-4 text-center  rounded shadow">
 
         <div class="col-span-12 font-bold text-black mb-2">
             {{ __("admin/offersPages.Coupon's Items") }}
@@ -427,7 +427,7 @@
     {{-- ######################################################### --}}
     @if ($coupon_id)
         <div
-            class="col-span-12 grid grid-cols-12 gap-y-3 gap-x-4 items-center bg-red-100 p-4 text-center justify-items-center rounded shadow">
+            class="col-span-12 grid grid-cols-12 gap-y-3 gap-x-4 items-center bg-red-100 p-4 text-center  rounded shadow">
 
             <div class="col-span-12 font-bold text-black mb-2">
                 {{ __('admin/offersPages.Old Items') }}
