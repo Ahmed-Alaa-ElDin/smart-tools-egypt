@@ -404,7 +404,7 @@ class OfferForm extends Component
             }
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+
             Session::flash('error', __("admin/offersPages.Offer hasn't been added"));
             redirect()->route('admin.offers.index');
         }

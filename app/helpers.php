@@ -12,11 +12,11 @@ function imageUpload($photo, $image_f_name, $folder_name)
     try {
         $manager = new ImageManager();
 
-        File::isDirectory('storage/images/' . $folder_name . '/cropped200/') || File::makeDirectory('storage/images/' . $folder_name . '/cropped200/', 0777, true, true);
+        File::isDirectory('storage/images/' . $folder_name . '/cropped100/') || File::makeDirectory('storage/images/' . $folder_name . '/cropped100/', 0777, true, true);
 
-        $manager->make($photo)->resize(200, null, function ($constraint) {
+        $manager->make($photo)->resize(100, null, function ($constraint) {
             $constraint->aspectRatio();
-        })->crop(200, 200)->save('storage/images/' . $folder_name . '/cropped200/' . $image_name);
+        })->crop(100, 100)->save('storage/images/' . $folder_name . '/cropped100/' . $image_name);
     } catch (\Throwable $th) {
     }
 
@@ -34,16 +34,22 @@ function singleImageUpload($photo, $image_f_name, $folder_name)
     try {
         $manager = new ImageManager();
 
-        File::isDirectory('storage/images/' . $folder_name . '/cropped200/') || File::makeDirectory('storage/images/' . $folder_name . '/cropped200/', 0777, true, true);
+        File::isDirectory('storage/images/' . $folder_name . '/cropped100/') || File::makeDirectory('storage/images/' . $folder_name . '/cropped100/', 0777, true, true);
+        File::isDirectory('storage/images/' . $folder_name . '/original/') || File::makeDirectory('storage/images/' . $folder_name . '/original/', 0777, true, true);
 
-        $manager->make($photo)->encode('webp')->resize(200, null, function ($constraint) {
+        // Save cropped Size
+        $manager->make($photo)->encode('webp')->resize(100, null, function ($constraint) {
             $constraint->aspectRatio();
-        })->crop(200, 200)->save('storage/images/' . $folder_name . '/cropped200/' . $image_name);
+        })->crop(100, 100)->save('storage/images/' . $folder_name . '/cropped100/' . $image_name);
+
+        // Save Original Size
+        $manager->make($photo)->encode('webp')->save('storage/images/' . $folder_name . '/original/' . $image_name);
+
+        // Upload photo and get Image name
+        // $photo->storeAs('original', $image_name, $folder_name);
     } catch (\Throwable $th) {
     }
 
-    // Upload photo and get link
-    $photo->storeAs('original', $image_name, $folder_name);
 
     return $image_name;
 }
@@ -51,5 +57,5 @@ function singleImageUpload($photo, $image_f_name, $folder_name)
 function imageDelete($image_f_name, $folder_name)
 {
     Storage::disk($folder_name)->delete('original/'.$image_f_name);
-    Storage::disk($folder_name)->delete('cropped200/'.$image_f_name);
+    Storage::disk($folder_name)->delete('cropped100/'.$image_f_name);
 }

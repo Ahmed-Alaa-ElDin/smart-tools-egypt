@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Banners;
+namespace App\Http\Livewire\Admin\Homepage\Banners;
 
 use App\Models\HomepageBanner;
 use Illuminate\Support\Facades\Config;
@@ -42,7 +42,7 @@ class BannersDatatable extends Component
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
-        return view('livewire.admin.banners.banners-datatable', compact('banners'));
+        return view('livewire.admin.homepage.banners.banners-datatable', compact('banners'));
     }
 
     // reset pagination after new search

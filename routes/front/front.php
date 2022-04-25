@@ -1,7 +1,5 @@
 <?php
 
-
-use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Front\HomepageController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,5 +9,4 @@ Route::group([
     'prefix' => '',
 ], function () {
     Route::get('/', [HomepageController::class, 'index'])->name('homepage');
-
 });

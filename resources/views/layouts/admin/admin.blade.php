@@ -58,7 +58,7 @@
     <script src="{{ asset('assets/admin/js/core/bootstrap-material-design.min.js') }}"></script>
     {{-- <script src="{{ asset('assets/admin/js/plugins/perfect-scrollbar.jquery.min.js') }}"></script> --}}
 
-    <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc --> --}}
+    <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="{{ asset('assets/admin/js/material-dashboard.min.js') }}" type="text/javascript"></script>
 
     <!--  Plugin for Sweet Alert -->

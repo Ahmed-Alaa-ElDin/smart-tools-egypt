@@ -22,6 +22,7 @@ class Subcategory extends Model
         'category_id',
         'meta_title',
         'meta_description',
+        'top',
     ];
 
     // One to many relationship (Inverse)  Category --> Sub-categories

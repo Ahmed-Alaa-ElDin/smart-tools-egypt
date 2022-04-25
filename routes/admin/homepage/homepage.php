@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\HomepageBannerController;
 use App\Http\Controllers\Admin\HomepageController;
-use App\Http\Controllers\HomepageBannerController;
-use Illuminate\Routing\RouteGroup;
+use App\Http\Controllers\Admin\TopSuperCategories;
 use Illuminate\Support\Facades\Route;
 
 // HomePage : Start
@@ -15,4 +15,7 @@ Route::group(['prefix' => '/site', 'as' => 'site.'], function () {
     Route::resource('/homepage/banners', HomepageBannerController::class);
     // Slider : Start
 
+    // Top Super Categories : Start
+    Route::get('/homepage/topsupercategories',[TopSuperCategories::class,'index'])->name('topsupercategories.index');
+    // Top Super Categories : End
 });

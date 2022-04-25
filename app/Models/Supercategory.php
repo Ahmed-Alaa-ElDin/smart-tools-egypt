@@ -20,6 +20,7 @@ class Supercategory extends Model
         'icon',
         'meta_title',
         'meta_description',
+        'top',
     ];
 
     // One to many relationship  Super-Category --> Categories

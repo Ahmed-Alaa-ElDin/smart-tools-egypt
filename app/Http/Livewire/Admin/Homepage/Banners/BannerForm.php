@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Banners;
+namespace App\Http\Livewire\Admin\Homepage\Banners;
 
 use App\Models\HomepageBanner;
 use Illuminate\Support\Facades\DB;

@@ -63,7 +63,7 @@
                                 {{-- Slider : End --}}
 
                                 {{-- Top Main Categories : Start --}}
-                                <a href="#"
+                                <a href="{{ route('admin.site.topsupercategories.index') }}"
                                     class="col-span-6 md:col-span-3 bg-gray-100 rounded-xl shadow hover:shadow-lg cursor-pointer p-3 flex flex-col justify-center items-center gap-3">
                                     <span class="material-icons text-center text-9xl ">
                                         category
@@ -74,7 +74,7 @@
                                 </a>
                                 {{-- Top Main Categories : End --}}
 
-                                {{-- Top Categories : Start --}}
+                                {{-- Top Sub Categories : Start --}}
                                 <a href="#"
                                     class="col-span-6 md:col-span-3 bg-gray-100 rounded-xl shadow hover:shadow-lg cursor-pointer p-3 flex flex-col justify-center items-center gap-3">
                                     <span class="material-icons text-center text-9xl ">
@@ -84,7 +84,7 @@
                                         {{ __('admin/sitePages.Manage Top Categories') }}
                                     </span>
                                 </a>
-                                {{-- Top Categories : End --}}
+                                {{-- Top Sub Categories : End --}}
 
                                 {{-- Today Deal : Start --}}
                                 <a href="#"

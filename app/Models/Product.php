@@ -36,6 +36,7 @@ class Product extends Model
         'under_reviewing',
         'created_by',
         'brand_id',
+        'today_deal',
     ];
 
     // One to many relationship (Inverse)  Brand --> Products

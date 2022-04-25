@@ -47,7 +47,7 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
 
-                            @livewire('admin.banners.banner-form',['banner_id'=> $homepageBanner])
+                            @livewire('admin.homepage.banners.banner-form',['banner_id'=> $homepageBanner])
 
                         </div>
                     </div>

@@ -69,7 +69,7 @@
             <div class="col-span-12 md:col-span-5">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('description.ar') border-red-900 border-2 @enderror"
-                    type="text" wire:model.lazy="description.ar" id="description"
+                    type="text" wire:model.lazy="description.ar" id="description" dir="rtl"
                     placeholder="{{ __('admin/sitePages.in Arabic') }}" maxlength="100" required>
                 @error('description.ar')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -81,7 +81,7 @@
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('description.en') border-red-900 border-2 @enderror"
                     type="text" wire:model.lazy="description.en" placeholder="{{ __('admin/sitePages.in English') }}"
-                    maxlength="100">
+                    maxlength="100" dir="ltr">
                 @error('description.en')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                         {{ $message }}</div>
@@ -99,7 +99,7 @@
             <div class="col-span-12 md:col-span-9">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('link') border-red-900 border-2 @enderror"
-                    type="url" wire:model.lazy="link" id="link" placeholder="{{ __('admin/sitePages.Link') }}">
+                    type="url" wire:model.lazy="link" id="link" placeholder="{{ __('admin/sitePages.Link') }}" dir="ltr">
                 @error('link')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                         {{ $message }}</div>

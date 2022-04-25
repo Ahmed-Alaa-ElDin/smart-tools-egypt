@@ -47,5 +47,17 @@ return [
     "Banner hasn't been updated"                                            =>      "لم يتم تحديث بيانات البنر",
     "Edit Banner"                                                           =>      "تحديث بيانات البنر",
     "Through this form you can edit this banner"                            =>      "من خلال هذه الصفحة يمكنك تحديث بيانات البنر",
+    "Top Supercategories has been updated successfully"                     =>      "تم تعديل قائمة أفضل الأقسام الرئيسية بنجاح",
+    "Top Supercategories hasn't been updated"                               =>      "لم يتم تعديل قائمة أفضل الأقسام الرئيسية",
+    "Choose a supercategory"                                                =>      "اختر قسم رئيسية",
+    "No supercategories in Database"                                        =>      "لا يوجد أقسام رئيسية في قاعدة البيانات",
+    "Number 1"                                                              =>      "الأول",
+    "Number 2"                                                              =>      "الثاني",
+    "Number 3"                                                              =>      "الثالث",
+    "Number 4"                                                              =>      "الرابع",
+    "Number 5"                                                              =>      "الخامس",
+    "Homepage's Top Supercategories"                                        =>      "أفضل الأقسام الرئيسية (الصفحة الرئيسية)",
+    "Here you can manage homepage's top supercategories"                    =>      "من خلال هذه الصفحة يمكنك التحكم بقائمة أفضل الأقسام الرئيسية",
+    "Add Supercategory"                                                     =>      "إضافة قسم رئيسي",
 
 ];

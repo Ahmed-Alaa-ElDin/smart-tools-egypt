@@ -48,7 +48,7 @@
                         <div class="card-body overflow-hidden">
 
                             {{-- Form Start --}}
-                            @livewire('admin.banners.banner-form')
+                            @livewire('admin.homepage.banners.banner-form')
 
                         </div>
                     </div>
