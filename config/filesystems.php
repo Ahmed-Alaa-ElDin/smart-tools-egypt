@@ -87,6 +87,13 @@ return [
             'url' => env('APP_URL') . '/images/banners',
             'visibility' => 'public',
         ],
+
+        'subcategories' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/images/subcategories'),
+            'url' => env('APP_URL') . '/images/subcategories',
+            'visibility' => 'public',
+        ],
     ],
 
     /*

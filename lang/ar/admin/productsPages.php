@@ -266,5 +266,6 @@ return [
     "All subcategories haven\'t been restored"                                  =>      "لم يتم استعادة جميع الأقسام المباشرة",
     "'s Subcategories"                                                          =>      "الأقسام المباشرة لل:name",
     "Choose a subcategory"                                                      =>      "اختر قسم مباشر",
+    "Image"                                                                     =>      "الصورة",
 
 ];

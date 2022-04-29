@@ -75,7 +75,7 @@
                                 {{-- Top Main Categories : End --}}
 
                                 {{-- Top Sub Categories : Start --}}
-                                <a href="#"
+                                <a href="{{ route('admin.site.topcategories.index') }}"
                                     class="col-span-6 md:col-span-3 bg-gray-100 rounded-xl shadow hover:shadow-lg cursor-pointer p-3 flex flex-col justify-center items-center gap-3">
                                     <span class="material-icons text-center text-9xl ">
                                         hub

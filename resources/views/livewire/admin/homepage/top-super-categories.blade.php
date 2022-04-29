@@ -1,7 +1,8 @@
 <div>
     <div class="grid grid-cols-12 gap-3">
         {{-- No 1 : Start --}}
-        <div class="col-span-12 md:col-span-6 rounded-xl p-3 bg-red-100 grid grid-cols-12 items-center justify-center gap-3">
+        <div
+            class="col-span-12 md:col-span-6 rounded-xl p-3 bg-red-100 grid grid-cols-12 items-center justify-center gap-3">
             <label class="col-span-12 md:col-span-3 text-black font-bold m-0 text-center"
                 for="country">{{ __('admin/sitePages.Number 1') }}</label>
             <select wire:model="selectedSupercategories.0" wire:key="selectedSupercategories.0"
@@ -28,7 +29,8 @@
         {{-- No 1 : End --}}
 
         {{-- No 2 : Start --}}
-        <div class="col-span-12 md:col-span-6 rounded-xl p-3 bg-gray-100 grid grid-cols-12 items-center justify-center gap-3">
+        <div
+            class="col-span-12 md:col-span-6 rounded-xl p-3 bg-gray-100 grid grid-cols-12 items-center justify-center gap-3">
             <label class="col-span-12 md:col-span-3 text-black font-bold m-0 text-center"
                 for="country">{{ __('admin/sitePages.Number 2') }}</label>
             <select wire:model="selectedSupercategories.1" wire:key="selectedSupercategories.1"
@@ -55,7 +57,8 @@
         {{-- No 2 : End --}}
 
         {{-- No 3 : Start --}}
-        <div class="col-span-12 md:col-span-6 rounded-xl p-3 bg-red-100 grid grid-cols-12 items-center justify-center gap-3">
+        <div
+            class="col-span-12 md:col-span-6 rounded-xl p-3 bg-red-100 grid grid-cols-12 items-center justify-center gap-3">
             <label class="col-span-12 md:col-span-3 text-black font-bold m-0 text-center"
                 for="country">{{ __('admin/sitePages.Number 3') }}</label>
             <select wire:model="selectedSupercategories.2" wire:key="selectedSupercategories.2"
@@ -82,7 +85,8 @@
         {{-- No 3 : End --}}
 
         {{-- No 4 : Start --}}
-        <div class="col-span-12 md:col-span-6 rounded-xl p-3 bg-gray-100 grid grid-cols-12 items-center justify-center gap-3">
+        <div
+            class="col-span-12 md:col-span-6 rounded-xl p-3 bg-gray-100 grid grid-cols-12 items-center justify-center gap-3">
             <label class="col-span-12 md:col-span-3 text-black font-bold m-0 text-center"
                 for="country">{{ __('admin/sitePages.Number 4') }}</label>
             <select wire:model="selectedSupercategories.3" wire:key="selectedSupercategories.3"
@@ -109,7 +113,8 @@
         {{-- No 4 : End --}}
 
         {{-- No 5 : Start --}}
-        <div class="col-span-12 md:col-span-6 md:col-start-4 rounded-xl p-3 bg-red-100 grid grid-cols-12 items-center justify-center gap-3">
+        <div
+            class="col-span-12 md:col-span-6 md:col-start-4 rounded-xl p-3 bg-red-100 grid grid-cols-12 items-center justify-center gap-3">
             <label class="col-span-12 md:col-span-3 text-black font-bold m-0 text-center"
                 for="country">{{ __('admin/sitePages.Number 5') }}</label>
             <select wire:model="selectedSupercategories.4" wire:key="selectedSupercategories.4"
@@ -145,5 +150,4 @@
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Back') }}</a>
     </div>
 
-    </div>
 </div>

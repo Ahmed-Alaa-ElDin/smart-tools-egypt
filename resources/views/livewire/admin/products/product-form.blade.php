@@ -270,7 +270,7 @@
                                         </option>
                                         @foreach ($parentCategory['supercategories'] as $supercategory)
                                             <option value="{{ $supercategory['id'] }}">
-                                                {{ $supercategory['name']['ar'] }}
+                                                {{ $supercategory['name'][session('locale')] }}
                                             </option>
                                         @endforeach
                                     @else
@@ -301,7 +301,7 @@
                                             </option>
                                             @foreach ($parentCategory['categories'] as $category)
                                                 <option value="{{ $category['id'] }}">
-                                                    {{ $category['name']['ar'] }}
+                                                    {{ $category['name'][session('locale')] }}
                                                 </option>
                                             @endforeach
                                         @else
@@ -332,7 +332,7 @@
                                             </option>
                                             @foreach ($parentCategory['subcategories'] as $subcategory)
                                                 <option value="{{ $subcategory['id'] }}">
-                                                    {{ $subcategory['name']['ar'] }}
+                                                    {{ $subcategory['name'][session('locale')] }}
                                                 </option>
                                             @endforeach
                                         @else
@@ -463,7 +463,7 @@
                             class="py-1 w-full px-6 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 cursor-text @error('description.ar') border-red-900 border-2 @enderror"
                             type="text" id="description_ar" wire:model="description.ar"
                             placeholder="{{ __('admin/productsPages.in Arabic') }}">
-                            {!! $description['ar'] !!}
+                            {!! $description[session('locale')] !!}
                         </div>
 
                         @error('description.ar')

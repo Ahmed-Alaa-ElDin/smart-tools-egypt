@@ -138,8 +138,7 @@
                                     {{-- Products Count Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
                                         @if ($subcategory->products_count)
-                                            <a
-                                            href="{{ route('admin.subcategories.productsSubcategory', [$subcategory->id]) }}"
+                                            <a href="{{ route('admin.subcategories.productsSubcategory', [$subcategory->id]) }}"
                                                 title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
@@ -162,27 +161,23 @@
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- Edit Button --}}
-                                        @can('Edit User')
-                                            <a href="{{ route('admin.subcategories.edit', ['subcategory' => $subcategory->id]) }}"
-                                                title="{{ __('admin/productsPages.Edit') }}" class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
-                                                    edit
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="{{ route('admin.subcategories.edit', ['subcategory' => $subcategory->id]) }}"
+                                            title="{{ __('admin/productsPages.Edit') }}" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
+                                                edit
+                                            </span>
+                                        </a>
 
                                         {{-- Deleted Button --}}
-                                        @can('Deleted User')
-                                            <a href="#" title="{{ __('admin/productsPages.Delete') }}"
-                                                wire:click.prevent="deleteConfirm({{ $subcategory->id }})"
-                                                class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
-                                                    delete
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="#" title="{{ __('admin/productsPages.Delete') }}"
+                                            wire:click.prevent="deleteConfirm({{ $subcategory->id }})"
+                                            class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
+                                                delete
+                                            </span>
+                                        </a>
                                     </td>
                                 </tr>
                             @empty

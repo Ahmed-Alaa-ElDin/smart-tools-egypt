@@ -77,6 +77,7 @@ class ProductForm extends Component
     {
 
         $this->brands = Brand::get();
+        $this->supercategories = Supercategory::select('id', 'name')->get()->toArray();
 
         if ($this->product_id) {
 
@@ -120,7 +121,7 @@ class ProductForm extends Component
             if (count($this->product->subcategories)) {
                 foreach ($this->product->subcategories as $key => $subcategory) {
                     $this->parentCategories[] = [
-                        'supercategories' => Supercategory::select('id', 'name')->get()->toArray(),
+                        'supercategories' => $this->supercategories,
                         'supercategory_id' => $subcategory->category->supercategory->id,
                         'categories' => Category::where('supercategory_id', $subcategory->category->supercategory->id)->get()->toArray(),
                         'category_id' => $subcategory->category->id,
@@ -132,14 +133,13 @@ class ProductForm extends Component
                 $this->parentCategories = [
                     [
                         'supercategory_id' => 0,
-                        'supercategories' => null,
+                        'supercategories' => $this->supercategories,
                         'category_id' => 0,
                         'categories' => null,
                         'subcategory_id' => 0,
                         'subcategories' => null,
                     ]
                 ];
-                $this->parentCategories[0]['supercategories'] = Supercategory::select('id', 'name')->get()->toArray();
             }
 
             $this->brand_id = $product->brand_id;
@@ -361,7 +361,7 @@ class ProductForm extends Component
     {
         $this->parentCategories[] = [
             'supercategory_id' => 0,
-            'supercategories' => Supercategory::select('id', 'name')->get()->toArray(),
+            'supercategories' => $this->supercategories,
             'category_id' => 0,
             'categories' => null,
             'subcategory_id' => 0,

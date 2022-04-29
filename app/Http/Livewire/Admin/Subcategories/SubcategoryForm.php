@@ -8,10 +8,18 @@ use App\Models\Supercategory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class SubcategoryForm extends Component
 {
+    use WithFileUploads;
+
     public $subcategory_id;
+
+    public $image;
+    public $image_name;
+    public $deletedImages = [];
+
     public $name = ['ar' => '', 'en' => ''];
     public $supercategory_id, $category_id;
     public $title, $description_seo;
@@ -21,6 +29,7 @@ class SubcategoryForm extends Component
     public function rules()
     {
         return [
+            'image'             =>      'nullable|mimes:jpg,jpeg,png|max:2048',
             'name.ar'           =>        'required|string|max:100|min:3',
             'name.en'           =>        'required|string|max:100|min:3',
             'supercategory_id'  =>        'required|exists:supercategories,id',
@@ -37,7 +46,7 @@ class SubcategoryForm extends Component
         if ($this->subcategory_id) {
 
             // Get Old Subcategory's data
-            $subcategory = Subcategory::with(['category','supercategory'])->findOrFail($this->subcategory_id);
+            $subcategory = Subcategory::with(['category', 'supercategory'])->findOrFail($this->subcategory_id);
 
             $this->subcategory = $subcategory;
 
@@ -50,6 +59,8 @@ class SubcategoryForm extends Component
             $this->category_id = $subcategory->category->id;
             $this->title = $subcategory->meta_title;
             $this->description_seo = $subcategory->meta_description;
+
+            $this->image_name = $subcategory->image_name;
         }
     }
 
@@ -75,6 +86,27 @@ class SubcategoryForm extends Component
         $this->category_id = null;
     }
 
+    ######################## Image : Start ############################
+    // validate and upload photo
+    public function updatedImage($image)
+    {
+        // Crop and resize photo
+        try {
+            $this->image_name = singleImageUpload($image, 'subcategory-', 'subcategories');
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function deleteImage()
+    {
+        $this->deletedImages[] = $this->image_name;
+
+        $this->image = null;
+        $this->image_name = null;
+    }
+    ######################## Image : Start ############################
+
     ######################## Updated SEO description : Start ############################
     public function descriptionSeo($value)
     {
@@ -97,9 +129,14 @@ class SubcategoryForm extends Component
                 'category_id' => $this->category_id,
                 'meta_title' => $this->title,
                 'meta_description' => $this->description_seo,
+                'image_name' => $this->image_name
             ]);
 
             DB::commit();
+
+            foreach ($this->deletedImages as $deletedImage) {
+                imageDelete($deletedImage, 'banners');
+            }
 
             if ($new) {
                 Session::flash('success', __('admin/productsPages.Subcategory added successfully'));
@@ -110,7 +147,7 @@ class SubcategoryForm extends Component
             }
         } catch (\Throwable $th) {
             DB::rollBack();
-            // throw $th;
+            throw $th;
             Session::flash('error', __("admin/productsPages.Subcategory hasn't been added"));
             redirect()->route('admin.subcategories.index');
         }
@@ -131,9 +168,14 @@ class SubcategoryForm extends Component
                 'category_id' => $this->category_id,
                 'meta_title' => $this->title,
                 'meta_description' => $this->description_seo,
+                'image_name' => $this->image_name
             ]);
 
             DB::commit();
+
+            foreach ($this->deletedImages as $deletedImage) {
+                imageDelete($deletedImage, 'banners');
+            }
 
             Session::flash('success', __('admin/productsPages.Subcategory updated successfully'));
             redirect()->route('admin.subcategories.index');

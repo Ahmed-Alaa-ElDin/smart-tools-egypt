@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('supercategories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('icon')->nullable();
+            $table->text('icon')->nullable();
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
-            $table->tinyInteger('top')->default(0)->comment('0 -> No , 1 -> Yes');
+            $table->tinyInteger('top')->default(0)->comment('0 -> No , >0 -> Yes');
             $table->timestamps();
             $table->softDeletes();
 
