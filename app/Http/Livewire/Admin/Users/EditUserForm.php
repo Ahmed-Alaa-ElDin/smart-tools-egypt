@@ -180,9 +180,9 @@ class EditUserForm extends Component
         try {
             $manager = new ImageManager();
 
-            $manager->make($this->photo)->resize(200, null, function ($constraint) {
+            $manager->make($this->photo)->resize(100, null, function ($constraint) {
                 $constraint->aspectRatio();
-            })->crop(200, 200)->save('storage/images/profiles/cropped200/' . $this->image_name);
+            })->crop(100, 100)->save('storage/images/profiles/cropped100/' . $this->image_name);
         } catch (\Throwable $th) {
         }
 

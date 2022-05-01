@@ -12935,7 +12935,6 @@ fieldset[disabled] .form-group .form-control {
     position: absolute;
     width: 100%;
     padding-top: 10px;
-    z-index: 1029
 }
 
 .navbar .navbar-wrapper {

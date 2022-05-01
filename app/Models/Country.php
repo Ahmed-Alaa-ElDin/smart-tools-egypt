@@ -19,6 +19,12 @@ class Country extends Model
         'name'
     ];
 
+    protected function asJson($value)
+    {
+        return json_encode($value, JSON_UNESCAPED_UNICODE);
+    }
+
+
     // One to many relationship  Country --> Governorates
     public function governorates()
     {

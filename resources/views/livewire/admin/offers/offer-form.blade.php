@@ -68,7 +68,7 @@
             <div class="col-span-6 md:col-span-5">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('title.ar') border-red-900 border-2 @enderror"
-                    type="text" wire:model.lazy="title.ar" id="title"
+                    type="text" wire:model.lazy="title.ar" id="title" dir="rtl"
                     placeholder="{{ __('admin/offersPages.in Arabic') }}" maxlength="100" required>
                 @error('title.ar')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -79,7 +79,7 @@
             <div class="col-span-6 md:col-span-5 ">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('title.en') border-red-900 border-2 @enderror"
-                    type="text" wire:model.lazy="title.en" placeholder="{{ __('admin/offersPages.in English') }}"
+                    type="text" wire:model.lazy="title.en" placeholder="{{ __('admin/offersPages.in English') }}" dir="ltr"
                     maxlength="100">
                 @error('title.en')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -119,7 +119,6 @@
                         {{ $message }}</div>
                 @enderror
             </div>
-
         </div>
         {{-- Free Shipping End --}}
 
@@ -621,7 +620,7 @@
 
         {{-- Add Item Start --}}
         <div class="col-span-12">
-            <div class="ltr:text-right rtl:text-left">
+            <div class="text-center">
                 <a href="#" wire:click.prevent="addItem"
                     class="btn btn-sm bg-gray-600 hover:bg-gray-700 focus:bg-gray-600 active:bg-gray-600 font-bold">
                     <span class="material-icons rtl:ml-1 ltr:mr-1">

@@ -63,13 +63,10 @@ class User extends Authenticatable
         'last_visit_at' => 'datetime'
     ];
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    // protected $appends = [
-    // ];
+    protected function asJson($value)
+    {
+        return json_encode($value, JSON_UNESCAPED_UNICODE);
+    }
 
     // One to many relationship  User --> Addresses
     public function addresses()

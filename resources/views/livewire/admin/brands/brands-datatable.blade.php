@@ -110,7 +110,7 @@
                                             <div class="flex-shrink-0 h-10 w-10">
                                                 @if ($brand->logo_path != null)
                                                     <img class="h-10 w-10 rounded-full"
-                                                        src="{{ asset('storage/images/logos/cropped200/' . $brand->logo_path) }}"
+                                                        src="{{ asset('storage/images/logos/cropped100/' . $brand->logo_path) }}"
                                                         alt="{{ $brand->name . '-logo' }}">
                                                 @else
                                                     <div

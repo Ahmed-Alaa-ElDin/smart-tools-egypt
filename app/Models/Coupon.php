@@ -16,6 +16,7 @@ class Coupon extends Model
         'value',
         'type',
         'number',
+        'free_shipping',
         'on_orders',
         'expire_at',
     ];
@@ -23,33 +24,33 @@ class Coupon extends Model
     // many to many relationship (polymorphic) (inverse)  Super-Category --> Coupons
     public function supercategories()
     {
-        return $this->morphedByMany(Supercategory::class, 'couponable');
+        return $this->morphedByMany(Supercategory::class, 'couponable')->withPivot('value', 'type');
     }
 
     // many to many relationship (polymorphic) (inverse)  Category --> Coupons
     public function categories()
     {
-        return $this->morphedByMany(Category::class, 'couponable');
+        return $this->morphedByMany(Category::class, 'couponable')->withPivot('value', 'type');
     }
 
 
     // many to many relationship (polymorphic) (inverse)  Subcategory --> Coupons
     public function subcategories()
     {
-        return $this->morphedByMany(Subcategory::class, 'couponable');
+        return $this->morphedByMany(Subcategory::class, 'couponable')->withPivot('value', 'type');
     }
 
 
     // many to many relationship (polymorphic) (inverse)  Brand --> Coupons
     public function brands()
     {
-        return $this->morphedByMany(Brand::class, 'couponable');
+        return $this->morphedByMany(Brand::class, 'couponable')->withPivot('value', 'type');
     }
 
 
     // many to many relationship (polymorphic) (inverse)  Product --> Coupons
     public function products()
     {
-        return $this->morphedByMany(Product::class, 'couponable');
+        return $this->morphedByMany(Product::class, 'couponable')->withPivot('value', 'type');
     }
 }

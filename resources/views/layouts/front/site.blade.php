@@ -91,71 +91,7 @@
 
     <!-- Plugin for the Slick  -->
     <script src="{{ asset('assets/front/js/plugins/splide.min.js') }}"></script>
-    <script>
-        // new Splide('.main-slider').mount();
-        $(document).ready(function() {
-            var main_slider = new Splide('#main-slider', {
-                @if (LaravelLocalization::getCurrentLocale() == 'ar')
-                    direction: 'rtl',
-                    pagination: 'rtl',
-                @else
-                    pagination: 'ltr',
-                @endif
-                autoplay: true,
-                type: 'loop',
-                keyboard: true,
-                cover: true,
-                height: "inherit",
-            });
-            main_slider.mount();
 
-            var flash_sale_slider = new Splide('#flash-sale-slider', {
-                @if (LaravelLocalization::getCurrentLocale() == 'ar')
-                    direction: 'rtl',
-                    pagination: 'rtl',
-                @else
-                    pagination: 'ltr',
-                @endif
-                perPage: 5,
-                perMove: 2,
-                drag: 'free',
-                breakpoints: {
-                    1200: {
-                        perPage: 3,
-                    },
-                    770: {
-                        perPage: 2,
-                    },
-                    500: {
-                        perPage: 1,
-                    },
-                },
-                type: 'slide',
-                keyboard: true,
-                cover: true,
-                height: "inherit",
-            });
-            flash_sale_slider.mount();
-
-            $('[data-toggle="tooltip"]').tooltip()
-        });
-        // $(document).ready(function() {
-        //     $('.main-slider').slick({
-        //         autoplay: true,
-        //         arrows: false,
-        //         dots: true,
-        //         infinite: true,
-        //         adaptiveHeight: false,
-
-        @if (LaravelLocalization::getCurrentLocale() == 'ar')
-            // rtl: true,
-            //
-        @endif
-
-        //         // setting - name: setting - value
-        //     });
-        // });
-    </script>
     {{-- <!-- Forms Validations Plugin -->
         <script src="{{ asset('assets/front/js/plugins/jquery.validate.min.js') }}"></script>
         <!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
@@ -203,6 +139,9 @@
             showConfirmButton: false,
             })
         @endif
+
+        // Initation of Popover
+        $('[data-toggle="tooltip"]').tooltip()
     </script>
 
     {{-- Custom Js Files --}}

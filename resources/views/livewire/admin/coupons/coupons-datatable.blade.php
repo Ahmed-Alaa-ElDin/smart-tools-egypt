@@ -47,15 +47,6 @@
                                     ])
                                 </th>
 
-                                {{-- Value --}}
-                                <th wire:click="sortBy('value')" scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
-                                    {{ __('admin/offersPages.Value') }}
-                                    @include('partials._sort_icon', [
-                                        'field' => 'value',
-                                    ])
-                                </th>
-
                                 {{-- Expiration Date --}}
                                 <th wire:click="sortBy('expire_at')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
@@ -67,7 +58,7 @@
                                     </div>
                                 </th>
 
-                                {{-- Expiration Date --}}
+                                {{-- Amount --}}
                                 <th wire:click="sortBy('number')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
@@ -96,16 +87,6 @@
                                         <div class="flex items-center content-center justify-center">
                                             <div class="text-sm font-medium text-gray-900">
                                                 {{ $coupon->code }}
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    {{-- Value --}}
-                                    <td class="px-6 py-2 whitespace-nowrap">
-                                        <div class="flex items-center content-center justify-center">
-                                            <div class="text-sm font-medium text-gray-900">
-                                                {{ $coupon->type != 2 && $coupon->type != 3 ? $coupon->value : '' }}
-                                                {{ $coupon->type == 0? '%': ($coupon->type == 1? __('admin/offersPages.EPG'): ($coupon->type == 2? trans_choice('admin/offersPages.Points value', $coupon->value, ['points' => $coupon->value]): __('admin/offersPages.Free Shipping'))) }}
                                             </div>
                                         </div>
                                     </td>

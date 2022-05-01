@@ -43,7 +43,7 @@ class OfferForm extends Component
             'items.*.subcategory_id'        =>      "exclude_if:items.*.subcategory_id,all|nullable|exists:subcategories,id",
             'items.*.products_id.*'         =>      "nullable|exists:products,id",
             'items.*.type'                  =>      "required|in:0,1,2,3",
-            'items.*.value'                 =>      ["required", "numeric", "min:0"],
+            'items.*.value'                 =>      ["required", "numeric", "min:0", "exclude_unless:items.*.type,0 | max:100"],
             'items.*.offer_number'          =>      "nullable|numeric|min:0",
             'on_orders'                     =>      "nullable"
         ];
@@ -120,7 +120,6 @@ class OfferForm extends Component
             }
 
             $this->items = [];
-
         } else {
             $this->items = [[
                 'item_type' => 'category',

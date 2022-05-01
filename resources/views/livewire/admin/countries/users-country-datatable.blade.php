@@ -129,7 +129,7 @@
                                             <div class="flex-shrink-0 h-10 w-10">
                                                 @if ($user->profile_photo_path)
                                                     <img class="h-10 w-10 rounded-full"
-                                                        src="{{ asset('storage/images/profiles/cropped200/' . $user->profile_photo_path) }}"
+                                                        src="{{ asset('storage/images/profiles/cropped100/' . $user->profile_photo_path) }}"
                                                         alt="{{ $user->f_name . ' ' . $user->l_name . 'profile image' }}">
                                                 @else
                                                     <div

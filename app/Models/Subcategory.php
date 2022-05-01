@@ -26,6 +26,11 @@ class Subcategory extends Model
         'image_name'
     ];
 
+    protected function asJson($value)
+    {
+        return json_encode($value, JSON_UNESCAPED_UNICODE);
+    }
+
     // One to many relationship (Inverse)  Category --> Sub-categories
     public function category()
     {

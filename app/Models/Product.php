@@ -39,6 +39,11 @@ class Product extends Model
         'today_deal',
     ];
 
+    protected function asJson($value)
+    {
+        return json_encode($value, JSON_UNESCAPED_UNICODE);
+    }
+
     // One to many relationship (Inverse)  Brand --> Products
     public function brand()
     {

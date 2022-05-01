@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Homepage\HomepageBannerController;
 use App\Http\Controllers\Admin\Homepage\HomepageController;
+use App\Http\Controllers\Admin\Homepage\TodayDealsController;
 use App\Http\Controllers\Admin\Homepage\TopCategories;
 use App\Http\Controllers\Admin\Homepage\TopSuperCategories;
 use Illuminate\Support\Facades\Route;
@@ -23,5 +24,9 @@ Route::group(['prefix' => '/site', 'as' => 'site.'], function () {
     // Top Super Categories : Start
     Route::get('/homepage/topcategories', [TopCategories::class, 'index'])->name('topcategories.index');
     // Top Super Categories : End
+
+    // Today's Deals : Start
+    Route::get('/homepage/today-deals', [TodayDealsController::class, 'index'])->name('today-deals.index');
+    // Today's Deals : End
 
 });

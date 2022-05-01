@@ -25,6 +25,12 @@ class Offer extends Model
         'number',
     ];
 
+    protected function asJson($value)
+    {
+        return json_encode($value, JSON_UNESCAPED_UNICODE);
+    }
+
+
     // many to many relationship (polymorphic) (inverse)  Super-Category --> Offers
     public function supercategories()
     {

@@ -117,6 +117,9 @@
             showConfirmButton: false,
             })
         @endif
+
+        // Initation of Popover
+        $('[data-toggle="tooltip"]').tooltip()
     </script>
 
     {{-- Custom Js Files --}}

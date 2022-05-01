@@ -55,7 +55,7 @@
                         <div class="card-body overflow-hidden">
 
                             {{-- Datatable Start --}}
-                            @livewire('admin.homepage.top-categories')
+                            @livewire('admin.homepage.topcategories.top-categories')
                             {{-- Datatable End --}}
 
                         </div>

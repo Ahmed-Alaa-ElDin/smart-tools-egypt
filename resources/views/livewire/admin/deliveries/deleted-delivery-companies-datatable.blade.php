@@ -112,7 +112,7 @@
                                             <div class="flex-shrink-0 h-10 w-10">
                                                 @if ($delivery->logo_path)
                                                     <img class="h-10 w-10 rounded-full"
-                                                        src="{{ asset('storage/images/deliveryCompanies/cropped200/' . $delivery->logo_path) }}"
+                                                        src="{{ asset('storage/images/deliveryCompanies/cropped100/' . $delivery->logo_path) }}"
                                                         alt="{{ $delivery->name . ' profile image' }}">
                                                 @else
                                                     <div

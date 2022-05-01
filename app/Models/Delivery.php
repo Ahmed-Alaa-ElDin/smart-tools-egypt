@@ -27,6 +27,12 @@ class Delivery extends Model
         'is_active',
     ];
 
+    protected function asJson($value)
+    {
+        return json_encode($value, JSON_UNESCAPED_UNICODE);
+    }
+
+
     // One to many relationship  Delivery --> Zones
     public function zones()
     {

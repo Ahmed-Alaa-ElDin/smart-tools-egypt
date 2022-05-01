@@ -28,6 +28,12 @@ class Zone extends Model
         'is_active',
     ];
 
+    protected function asJson($value)
+    {
+        return json_encode($value, JSON_UNESCAPED_UNICODE);
+    }
+
+
     // One to many relationship (reverse) Delivery --> Zones
     public function delivery()
     {

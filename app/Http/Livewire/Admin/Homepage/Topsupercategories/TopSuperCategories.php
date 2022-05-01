@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Homepage;
+namespace App\Http\Livewire\Admin\Homepage\Topsupercategories;
 
 use App\Models\Supercategory;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +26,7 @@ class TopSuperCategories extends Component
 
     public function render()
     {
-        return view('livewire.admin.homepage.top-super-categories');
+        return view('livewire.admin.homepage.topsupercategories.top-super-categories');
     }
 
     public function save()

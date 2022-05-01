@@ -51,7 +51,7 @@
                 <a class="nav-link" data-toggle="collapse" href="#profile" aria-expanded="false">
                     @if (auth()->user()->profile_photo_path)
                         <img class="h-10 w-10 rounded-full"
-                            src="{{ asset('storage/images/profiles/cropped200/' . auth()->user()->profile_photo_path) }}"
+                            src="{{ asset('storage/images/profiles/cropped100/' . auth()->user()->profile_photo_path) }}"
                             alt="{{ auth()->user()->f_name . ' ' . auth()->user()->l_name . 'profile image' }}">
                     @else
                         <span class="material-icons">
@@ -190,11 +190,7 @@
                             <li class="nav-item {{ $activePage == 'All Products' ? ' active' : '' }}">
                                 <a class="nav-link" href="{{ route('admin.products.index') }}">
                                     <span class="material-icons">
-                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-                                            <path fill="currentColor"
-                                                d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10zm0-2a8 8 0 1 0 0-16a8 8 0 0 0 0 16zm1.334-8a1.5 1.5 0 0 0 0-3H10.5v3h2.834zm0-5a3.5 3.5 0 0 1 0 7H10.5v3h-2V7h4.834z" />
-                                        </svg>
+                                        construction
                                     </span>
                                     <span>{{ __('admin/master.All Products') }} </span>
                                 </a>

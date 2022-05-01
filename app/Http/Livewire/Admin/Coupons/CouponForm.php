@@ -17,7 +17,7 @@ class CouponForm extends Component
 {
     public $coupon_id;
 
-    public $code, $type = 0, $value = 0, $expire_at, $number, $on_orders = 0;
+    public $code, $type = 0, $value = 0, $expire_at, $number, $on_orders = 0, $free_shipping =0;
 
     protected $listeners = ["brandUpdated", "supercategoryUpdated", "categoryUpdated", "subcategoryUpdated"];
 
@@ -34,6 +34,8 @@ class CouponForm extends Component
             'items.*.category_id'               =>      "exclude_if:items.*.category_id,all|nullable|exists:categories,id",
             'items.*.subcategory_id'            =>      "exclude_if:items.*.subcategory_id,all|nullable|exists:subcategories,id",
             'items.*.products_id.*'             =>      "nullable|exists:products,id",
+            'items.*.type'                      =>      "required|in:0,1,2,3",
+            'items.*.value'                     =>      ["required", "numeric", "min:0", "exclude_unless:items.*.type,0 | max:100"],
             'on_orders'                         =>      "nullable"
         ];
     }
@@ -78,25 +80,31 @@ class CouponForm extends Component
             $this->expire_at = $coupon->expire_at;
             $this->number = $coupon->number;
             $this->on_orders = $coupon->on_orders;
+            $this->free_shipping = $coupon->free_shipping;
 
             if ($coupon->supercategories->count()) {
                 $this->oldSupercategories = $coupon->supercategories->toArray();
+                $this->deleteSupercategories_id = [];
                 $this->oldSupercategories_id = $coupon->supercategories->pluck('id')->toArray();
             }
             if ($coupon->categories->count()) {
                 $this->oldCategories = $coupon->categories->toArray();
+                $this->deleteCategories_id = [];
                 $this->oldCategories_id = $coupon->categories->pluck('id')->toArray();
             }
             if ($coupon->subcategories->count()) {
                 $this->oldSubcategories = $coupon->subcategories->toArray();
+                $this->deleteSubcategories_id = [];
                 $this->oldSubcategories_id = $coupon->subcategories->pluck('id')->toArray();
             }
             if ($coupon->brands->count()) {
                 $this->oldBrands = $coupon->brands->toArray();
+                $this->deleteBrands_id = [];
                 $this->oldBrands_id = $coupon->brands->pluck('id')->toArray();
             }
             if ($coupon->products->count()) {
                 $this->oldProducts = $coupon->products->toArray();
+                $this->deleteProducts_id = [];
                 $this->oldProducts_id = $coupon->products->pluck('id')->toArray();
             }
 
@@ -112,6 +120,8 @@ class CouponForm extends Component
                 'brand_id' => 'all',
                 'products' => [],
                 'products_id' => [],
+                'value' => 0.0,
+                'type' => 0,
             ]];
         }
     }
@@ -161,6 +171,8 @@ class CouponForm extends Component
             'brand_id' => 'all',
             'products' => [],
             'products_id' => [],
+            'value' => 0.0,
+            'type' => 0,
         ];
     }
     // Restore the default values of item : End
@@ -236,6 +248,8 @@ class CouponForm extends Component
             'brand_id' => 'all',
             'products' => [],
             'products_id' => [],
+            'value' => 0.0,
+            'type' => 0,
         ];
     }
     // Add Item : End
@@ -247,6 +261,13 @@ class CouponForm extends Component
         unset($this->items[$item_key]);
     }
     // Delete Item : End
+
+    // Free Shipping : End
+    public function freeShipping()
+    {
+        $this->free_shipping = !$this->free_shipping;
+    }
+    // Free Shipping : End
 
 
     ######################## Save New Coupon : Start ############################
@@ -260,32 +281,51 @@ class CouponForm extends Component
         try {
             $coupon = Coupon::create([
                 'code' => $this->code,
-                'type' => $this->type,
-                'value' => $this->value,
                 'expire_at' => $this->expire_at,
                 'number'  => $this->number ?? null,
+                'type' => $this->type ?? 0,
+                'value' => $this->value ?? 0,
+                'free_shipping' => $this->free_shipping ? 1 : 0
             ]);
 
             foreach ($this->items as $item) {
                 if ($item['item_type'] == 'category') {
                     if ($item['supercategory_id'] == 'all') {
                         $supercategories = Supercategory::select('id')->get()->pluck('id');
-                        $coupon->supercategories()->attach($supercategories);
+                        $coupon->supercategories()->attach($supercategories, [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                        ]);
                     } elseif ($item['category_id'] == 'all') {
                         $categories = Category::select('id', 'supercategory_id')->where('supercategory_id', $item['supercategory_id'])->get()->pluck('id');
-                        $coupon->categories()->attach($categories);
+                        $coupon->categories()->attach($categories, [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                        ]);
                     } elseif ($item['subcategory_id'] == 'all') {
                         $subcategories = Subcategory::select('id', 'category_id')->where('category_id', $item['category_id'])->get()->pluck('id');
-                        $coupon->subcategories()->attach($subcategories);
+                        $coupon->subcategories()->attach($subcategories, [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                        ]);
                     } else {
-                        $coupon->products()->attach($item['products_id']);
+                        $coupon->products()->attach($item['products_id'], [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                        ]);
                     }
                 } elseif ($item['item_type'] == 'brand') {
                     if ($item['brand_id'] == 'all') {
                         $brands = Brand::select('id')->get()->pluck('id');
-                        $coupon->brands()->attach($brands);
+                        $coupon->brands()->attach($brands, [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                        ]);
                     } else {
-                        $coupon->products()->attach($item['products_id']);
+                        $coupon->products()->attach($item['products_id'], [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                        ]);
                     }
                 } elseif ($item['item_type'] == 'order') {
                     $coupon->on_orders = 1;
@@ -321,53 +361,72 @@ class CouponForm extends Component
         try {
             $this->coupon->update([
                 'code' => $this->code,
-                'type' => $this->type,
-                'value' => $this->value,
                 'expire_at' => $this->expire_at,
                 'number'  => $this->number ?? null,
-                'on_orders'  => $this->on_orders ?? 0,
+                'type' => $this->type ?? 0,
+                'value' => $this->value ?? 0,
+                'free_shipping' => $this->free_shipping ? 1 : 0
             ]);
 
-            if (isset($this->oldSupercategories_id)) {
-                $this->coupon->supercategories()->sync($this->oldSupercategories_id);
+            if (isset($this->deleteSupercategories_id)) {
+                $this->coupon->supercategories()->detach($this->deleteSupercategories_id);
             }
 
-            if (isset($this->oldCategories_id)) {
-                $this->coupon->categories()->sync($this->oldCategories_id);
+            if (isset($this->deleteCategories_id)) {
+                $this->coupon->categories()->detach($this->deleteCategories_id);
             }
 
-            if (isset($this->oldSubcategories_id)) {
-                $this->coupon->subcategories()->sync($this->oldSubcategories_id);
+            if (isset($this->deleteSubcategories_id)) {
+                $this->coupon->subcategories()->detach($this->deleteSubcategories_id);
             }
 
-            if (isset($this->oldBrands_id)) {
-                $this->coupon->brands()->sync($this->oldBrands_id);
+            if (isset($this->deleteBrands_id)) {
+                $this->coupon->brands()->detach($this->deleteBrands_id);
             }
 
-            if (isset($this->oldProducts_id)) {
-                $this->coupon->products()->sync($this->oldProducts_id);
+            if (isset($this->deleteProducts_id)) {
+                $this->coupon->products()->detach($this->deleteProducts_id);
             }
+
 
             foreach ($this->items as $item) {
                 if ($item['item_type'] == 'category') {
                     if ($item['supercategory_id'] == 'all') {
                         $supercategories = Supercategory::select('id')->get()->pluck('id');
-                        $this->coupon->supercategories()->attach($supercategories);
+                        $this->coupon->supercategories()->attach($supercategories, [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                        ]);
                     } elseif ($item['category_id'] == 'all') {
                         $categories = Category::select('id', 'supercategory_id')->where('supercategory_id', $item['supercategory_id'])->get()->pluck('id');
-                        $this->coupon->categories()->attach($categories);
+                        $this->coupon->categories()->attach($categories, [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                        ]);
                     } elseif ($item['subcategory_id'] == 'all') {
                         $subcategories = Subcategory::select('id', 'category_id')->where('category_id', $item['category_id'])->get()->pluck('id');
-                        $this->coupon->subcategories()->attach($subcategories);
+                        $this->coupon->subcategories()->attach($subcategories, [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                        ]);
                     } else {
-                        $this->coupon->products()->attach($item['products_id']);
+                        $this->coupon->products()->attach($item['products_id'], [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                        ]);
                     }
                 } elseif ($item['item_type'] == 'brand') {
                     if ($item['brand_id'] == 'all') {
                         $brands = Brand::select('id')->get()->pluck('id');
-                        $this->coupon->brands()->attach($brands);
+                        $this->coupon->brands()->attach($brands, [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                        ]);
                     } else {
-                        $this->coupon->products()->attach($item['products_id']);
+                        $this->coupon->products()->attach($item['products_id'], [
+                            'type' => $item['type'],
+                            'value' => $item['value'],
+                        ]);
                     }
                 } elseif ($item['item_type'] == 'order') {
                     $this->coupon->on_orders = 1;

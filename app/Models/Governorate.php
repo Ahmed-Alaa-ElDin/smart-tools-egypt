@@ -20,6 +20,12 @@ class Governorate extends Model
         'country_id',
     ];
 
+    protected function asJson($value)
+    {
+        return json_encode($value, JSON_UNESCAPED_UNICODE);
+    }
+
+
     // One to many relationship  Governorate --> Cities
     public function cities()
     {

@@ -215,15 +215,14 @@
                                         <div class="flex items-center content-center w-64">
                                             <div class="flex-shrink-0 h-10 w-10">
                                                 @if ($product->thumbnail)
-                                                    {{-- @dump($product->thumbnail) --}}
                                                     <img class="h-10 w-10 rounded-full"
-                                                        src="{{ asset('storage/images/products/cropped200/' . $product->thumbnail->file_name) }}"
+                                                        src="{{ asset('storage/images/products/cropped100/' . $product->thumbnail->file_name) }}"
                                                         alt="{{ $product->name . 'image' }}">
                                                 @else
                                                     <div
                                                         class="h-10 w-10 rounded-full text-white bg-secondary flex justify-center items-center">
                                                         <span class="material-icons">
-                                                            account_circle
+                                                            construction
                                                         </span>
                                                     </div>
                                                 @endif

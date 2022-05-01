@@ -1,5 +1,5 @@
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+<nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top z-40">
     <div class="container-fluid">
 
         {{-- Title --}}
@@ -57,7 +57,7 @@
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         @if (auth()->user()->profile_photo_path)
                             <img class="h-10 w-10 rounded-full"
-                                src="{{ asset('storage/images/profiles/cropped200/' . auth()->user()->profile_photo_path) }}"
+                                src="{{ asset('storage/images/profiles/cropped100/' . auth()->user()->profile_photo_path) }}"
                                 alt="{{ auth()->user()->f_name . ' ' . auth()->user()->l_name . 'profile image' }}">
                         @else
                             <span class="material-icons">

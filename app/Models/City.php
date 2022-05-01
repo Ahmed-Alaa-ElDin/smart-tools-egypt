@@ -20,6 +20,12 @@ class City extends Model
         'governorate_id',
     ];
 
+    protected function asJson($value)
+    {
+        return json_encode($value, JSON_UNESCAPED_UNICODE);
+    }
+
+
     // One to many relationship (Inverse)  Governorate --> Cities
     public function governorate()
     {

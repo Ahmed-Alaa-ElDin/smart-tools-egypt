@@ -22,6 +22,12 @@ class Category extends Model
         'meta_description',
     ];
 
+    protected function asJson($value)
+    {
+        return json_encode($value, JSON_UNESCAPED_UNICODE);
+    }
+
+
     // One to many relationship  Category --> Sub-Categories
     public function subcategories()
     {
