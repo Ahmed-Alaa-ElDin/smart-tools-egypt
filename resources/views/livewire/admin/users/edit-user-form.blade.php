@@ -1,9 +1,12 @@
 <div>
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
+
     <form method="post" enctype="multipart/form-data">
 
         {{-- Image --}}
-        <div
-            class="grid grid-cols-12 gap-x-6 gap-y-2 items-center bg-gray-100 p-2 text-center my-2  rounded">
+        <div class="grid grid-cols-12 gap-x-6 gap-y-2 items-center bg-gray-100 p-2 text-center my-2  rounded">
 
             {{-- Loading Spinner --}}
             <div wire:loading wire:target="photo" class="col-span-12 my-2">
@@ -346,8 +349,7 @@
                             <label
                                 class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                 for="details{{ $index }}">{{ __('admin/usersPages.Address Details') }}</label>
-                            <textarea id="details{{ $index }}" rows="2"
-                                wire:model.lazy="addresses.{{ $index }}.details" dir="rtl"
+                            <textarea id="details{{ $index }}" rows="2" wire:model.lazy="addresses.{{ $index }}.details" dir="rtl"
                                 placeholder="{{ __('admin/usersPages.Please mention the details of the address such as street name, building number, ... etc.') }}"
                                 class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 overflow-hidden"></textarea>
                         </div>

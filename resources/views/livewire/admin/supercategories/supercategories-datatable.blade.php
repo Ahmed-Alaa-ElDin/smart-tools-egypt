@@ -1,5 +1,7 @@
 <div>
-    {{-- @dump($selectedProducts) --}}
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
     <div class="flex flex-col">
 
         {{-- Search and Pagination Control --}}
@@ -130,8 +132,7 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                            <div
-                                                class="ltr:ml-4 rtl:mr-4 text-sm  truncate font-medium text-gray-900">
+                                            <div class="ltr:ml-4 rtl:mr-4 text-sm  truncate font-medium text-gray-900">
                                                 {{ $supercategory->name }}
                                             </div>
                                         </div>
@@ -140,31 +141,29 @@
                                     {{-- Category Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
                                         @if ($supercategory->categories_count)
-                                        <a
-                                        href="{{ route('admin.supercategories.categoriesSupercategory', [$supercategory->id]) }}"
-                                            title="{{ __('admin/deliveriesPages.View') }}"
-                                            class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
-                                            <span class="bg-white rounded py-1 px-2">
-                                                {{ $supercategory->categories_count }}
-                                            </span>
+                                            <a href="{{ route('admin.supercategories.categoriesSupercategory', [$supercategory->id]) }}"
+                                                title="{{ __('admin/deliveriesPages.View') }}"
+                                                class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
+                                                <span class="bg-white rounded py-1 px-2">
+                                                    {{ $supercategory->categories_count }}
+                                                </span>
 
-                                            <span class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">
-                                                visibility
-                                            </span>
-                                        </a>
-                                    @else
-                                        <div
-                                            class="m-auto text-sm bg-red-400 rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
-                                            <span class="bg-white rounded py-1 px-2">0</span>
-                                        </div>
-                                    @endif
+                                                <span class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">
+                                                    visibility
+                                                </span>
+                                            </a>
+                                        @else
+                                            <div
+                                                class="m-auto text-sm bg-red-400 rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
+                                                <span class="bg-white rounded py-1 px-2">0</span>
+                                            </div>
+                                        @endif
                                     </td>
 
                                     {{-- Products Count Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
                                         @if ($supercategory->subcategories_count)
-                                            <a
-                                            href="{{ route('admin.supercategories.subcategoriesSupercategory', [$supercategory->id]) }}"
+                                            <a href="{{ route('admin.supercategories.subcategoriesSupercategory', [$supercategory->id]) }}"
                                                 title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">

@@ -1,9 +1,12 @@
 <div>
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
+
     <form enctype="multipart/form-data">
         @csrf
         {{-- Image --}}
-        <div
-            class="grid grid-cols-12 gap-x-6 gap-y-2 items-center bg-gray-100 p-2 text-center my-2 	rounded">
+        <div class="grid grid-cols-12 gap-x-6 gap-y-2 items-center bg-gray-100 p-2 text-center my-2 	rounded">
 
             {{-- Loading Spinner --}}
             <div wire:loading wire:target="photo" class="col-span-12 my-2">

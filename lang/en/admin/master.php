@@ -40,8 +40,8 @@ return [
     'Add Offer'                 =>      'Add Offer',
     'Deleted Offers'            =>      'Deleted Offers',
     'All Coupons'               =>      'All Coupons',
-    'Categories'                =>      'Categories',
-    'Categories'                =>      'Categories',
-    'Categories'                =>      'Categories',
+    "Loading ..."               =>      "Loading ...",
+    'Website Control'           =>      'Website Control',
+    'HomePage'                  =>      'HomePage',
     'Categories'                =>      'Categories',
 ];

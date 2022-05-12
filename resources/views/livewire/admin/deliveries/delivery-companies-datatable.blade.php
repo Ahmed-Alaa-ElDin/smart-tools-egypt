@@ -1,4 +1,8 @@
 <div>
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
+
     <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -24,7 +28,8 @@
                                 <a href="{{ route('admin.deliveries.softDeletedDeliveries') }}"
                                     class="btn btn-sm bg-red-600 hover:bg-red-700 focus:bg-red-600 active:bg-red-600 font-bold">
                                     <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                        height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" class="inline-block text-xl rtl:ml-2 ltr:mr-2">
+                                        height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"
+                                        class="inline-block text-xl rtl:ml-2 ltr:mr-2">
                                         <path fill="currentColor"
                                             d="M20 8h-3V4H3c-1.11 0-2 .89-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4M6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5s1.5.67 1.5 1.5s-.67 1.5-1.5 1.5m6.54-6.38l-1.42 1.42L9 11.41l-2.12 2.13l-1.41-1.42L7.59 10L5.46 7.88l1.42-1.41L9 8.59l2.12-2.12l1.42 1.41L10.41 10l2.13 2.12M18 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5s1.5.67 1.5 1.5s-.67 1.5-1.5 1.5M17 12V9.5h2.5l1.96 2.5H17Z" />
                                     </svg>
@@ -139,8 +144,8 @@
 
                                         {{-- Delivery Company Details --}}
                                         @can("See Delivery's Details")
-                                            <a href="{{ route('admin.deliveries.show', ['delivery' => $delivery->id]) }}"title="{{ __('admin/deliveriesPages.View') }}"
-                                                class="m-0">
+                                            <a href="{{ route('admin.deliveries.show', ['delivery' => $delivery->id]) }}"
+                                                title="{{ __('admin/deliveriesPages.View') }}" class="m-0">
 
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">

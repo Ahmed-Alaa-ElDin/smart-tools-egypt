@@ -1,4 +1,8 @@
 <div>
+        {{-- Loader : Start --}}
+        <x-admin.waiting/>
+        {{-- Loader : End --}}
+
     <div>
         <div class="flex flex-col">
             <div class="py-3 bg-white space-y-6">

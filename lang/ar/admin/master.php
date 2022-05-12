@@ -40,5 +40,8 @@ return [
     'Add Offer'                 =>      'إضافة عرض جديد',
     'Deleted Offers'            =>      'العروض المحذوفة مؤقتا',
     'All Coupons'               =>      'جميع قسائم الشراء',
+    "Loading ..."               =>      "جاري التحميل ...",
+    'Website Control'           =>      'التحكم بالموقع',
+    'HomePage'                  =>      'الصفحة الرئيسية',
 
 ];

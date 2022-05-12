@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\Homepage\HomepageBannerController;
+use App\Http\Controllers\Admin\Homepage\BannerController;
 use App\Http\Controllers\Admin\Homepage\HomepageController;
 use App\Http\Controllers\Admin\Homepage\TodayDealsController;
 use App\Http\Controllers\Admin\Homepage\TopCategories;
@@ -14,7 +14,7 @@ Route::get('/site/homepage/create', [HomepageController::class, 'create'])->name
 
 Route::group(['prefix' => '/site', 'as' => 'site.'], function () {
     // Slider : Start
-    Route::resource('/homepage/banners', HomepageBannerController::class);
+    Route::resource('/homepage/banners', BannerController::class);
     // Slider : Start
 
     // Top Super Categories : Start

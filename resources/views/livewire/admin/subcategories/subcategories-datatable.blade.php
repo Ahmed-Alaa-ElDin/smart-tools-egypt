@@ -1,4 +1,8 @@
 <div>
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
+
     <div class="flex flex-col">
 
         {{-- Search and Pagination Control --}}

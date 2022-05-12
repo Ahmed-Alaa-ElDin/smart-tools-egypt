@@ -62,6 +62,12 @@ class Product extends Model
         return $this->belongsToMany(Subcategory::class);
     }
 
+    // Many to many through relationship  Categories --> Products
+    public function categories()
+    {
+        return $this->belongsToThrough(Category::class, Subcategory::class);
+    }
+
     // One to many relationship Product --> Image
     public function images()
     {
@@ -84,5 +90,11 @@ class Product extends Model
     public function offers()
     {
         return $this->morphToMany(Offer::class, 'offerable');
+    }
+
+    // Many to many relationship  Sections --> Products
+    public function sections()
+    {
+        return $this->belongsToMany(Section::class);
     }
 }

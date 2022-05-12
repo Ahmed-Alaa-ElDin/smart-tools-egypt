@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Homepage\Banners;
 
-use App\Models\HomepageBanner;
+use App\Models\Banner;
 use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -19,7 +19,7 @@ class BannersDatatable extends Component
     public $preview_ids = [];
 
     protected $listeners = [
-        'deleteHomepageBanner'
+        'deleteBanner'
     ];
 
     // Render Once
@@ -33,7 +33,7 @@ class BannersDatatable extends Component
     // Render With each update
     public function render()
     {
-        $banners = HomepageBanner::where(function ($query) {
+        $banners = Banner::where(function ($query) {
             return $query
                 ->where('description->ar', 'like', '%' . $this->search . '%')
                 ->orWhere('description->en', 'like', '%' . $this->search . '%')
@@ -69,7 +69,7 @@ class BannersDatatable extends Component
 
     public function checkRank($rank, $old_rank)
     {
-        $banner = HomepageBanner::where('rank', $rank)->first();
+        $banner = Banner::where('rank', $rank)->first();
 
         if ($banner) {
             $banner->rank = $old_rank;
@@ -82,7 +82,7 @@ class BannersDatatable extends Component
     ######## Rank UP : Start #########
     public function rankUp($banner_id)
     {
-        $banner = HomepageBanner::findOrFail($banner_id);
+        $banner = Banner::findOrFail($banner_id);
 
         if ($banner->rank > 1) {
             if ($banner->rank == 127) {
@@ -100,7 +100,7 @@ class BannersDatatable extends Component
     ######## Rank Down : Start #########
     public function rankDown($banner_id)
     {
-        $banner = HomepageBanner::findOrFail($banner_id);
+        $banner = Banner::findOrFail($banner_id);
 
         $this->checkRank($banner->rank + 1, $banner->rank);
 
@@ -134,15 +134,15 @@ class BannersDatatable extends Component
             'confirmButtonText' => __('admin/sitePages.Delete'),
             'denyButtonText' => __('admin/sitePages.Cancel'),
             'confirmButtonColor' => 'red',
-            'func' => 'deleteHomepageBanner',
+            'func' => 'deleteBanner',
             'banner_id' => $banner_id,
         ]);
     }
 
-    public function deleteHomepageBanner($banner_id)
+    public function deleteBanner($banner_id)
     {
         try {
-            $banner = HomepageBanner::findOrFail($banner_id);
+            $banner = Banner::findOrFail($banner_id);
 
             $banner->delete();
 

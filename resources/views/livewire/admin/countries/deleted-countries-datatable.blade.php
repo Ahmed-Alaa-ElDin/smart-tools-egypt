@@ -1,4 +1,8 @@
 <div>
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
+
     <div class="flex flex-col">
         <div class="py-3 bg-white space-y-6">
             <div class="flex justify-between gap-6 items-center">
@@ -208,7 +212,8 @@
                                     {{-- Deliverry Comp. No. --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
                                         @if ($country->deliveries_count)
-                                            <a href="{{ route('admin.countries.deliveriesCountry', [$country->id]) }}" title="{{ __('admin/deliveriesPages.View') }}"
+                                            <a href="{{ route('admin.countries.deliveriesCountry', [$country->id]) }}"
+                                                title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
                                                     {{ $country->deliveries_count }}

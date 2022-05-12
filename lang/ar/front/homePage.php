@@ -26,8 +26,8 @@ return [
     "Free Shipping"             =>      "شحن مجاني",
     "Top Categories"            =>      "أفضل الأقسام",
     "See All Categories"        =>      "عرض جميع الأقسام",
-    "Top Brands"                =>      "أفضل العلامات التجارية",
-    "See All Brands"            =>      "عرض جميع العلامات التجارية",
+    "Top Brands"                =>      "أفضل الماركات",
+    "See All Brands"            =>      "عرض جميع الماركات",
     "Home"                      =>      "الرئيسية",
     "Categories"                =>      "الأقسام",
     "Cart"                      =>      "السلة",
@@ -36,9 +36,15 @@ return [
     "See All"                   =>      "عرض الكل",
     "Home"                      =>      "الرئيسية",
     "Flash Sale"                =>      "عروض لفترة محدودة",
-    "All Brands"                =>      "جميع العلامات التجارية",
+    "All Brands"                =>      "جميع الماركات",
     "All Categories"            =>      "جميع الأقسام",
     "Homepage"                  =>      "الصفحة الرئيسية",
+    "Login"                     =>      "تسجيل الدخول",
+    "Register"                  =>      "التسجيل",
+    "Offers"                    =>      "العروض",
+    "Power tools"               =>      "عدد كهربائية",
+    "Hand tools"                =>      "عدد يدوية",
+    "Contact us"                =>      "اتصل بنا",
 
 
 ];

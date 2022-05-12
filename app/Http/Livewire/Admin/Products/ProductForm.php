@@ -10,7 +10,6 @@ use App\Models\Subcategory;
 use App\Models\Supercategory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use Intervention\Image\ImageManager;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -171,7 +170,7 @@ class ProductForm extends Component
             $this->parentCategories = [
                 [
                     'supercategory_id' => 0,
-                    'supercategories' => null,
+                    'supercategories' => $this->supercategories,
                     'category_id' => 0,
                     'categories' => null,
                     'subcategory_id' => 0,
@@ -179,6 +178,11 @@ class ProductForm extends Component
                 ]
             ];
         }
+    }
+
+    public function render()
+    {
+        return view('livewire.admin.products.product-form');
     }
 
     ######################## Publish Toggle : Start ############################

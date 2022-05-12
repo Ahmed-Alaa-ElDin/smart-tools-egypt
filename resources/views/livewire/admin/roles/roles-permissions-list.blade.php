@@ -1,4 +1,8 @@
 <div class="grid grid-cols-12">
+        {{-- Loader : Start --}}
+        <x-admin.waiting/>
+        {{-- Loader : End --}}
+
     <h2 class="h3 col-span-12 text-center m-3 font-bold">
         {{ $role->name }}
     </h2>

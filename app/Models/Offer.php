@@ -63,4 +63,10 @@ class Offer extends Model
     {
         return $this->morphedByMany(Product::class, 'offerable')->withPivot('number', 'value','type');
     }
+
+    // Many to many relationship  Sections --> Offers
+    public function sections()
+    {
+        return $this->belongsToMany(Section::class);
+    }
 }

@@ -44,7 +44,6 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
             'under_reviewing',
             'created_by',
             'brand_id',
-            'subcategory_id',
             'created_at',
             'updated_at'
         )->with(
@@ -52,10 +51,11 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
                 'brand' => function ($q) {
                     return $q->select('id', 'name')->with('country');
                 },
-                'subcategory' => function ($q) {
-                    return $q->with(['category' => function ($q) {
-                        return $q->with('supercategory');
-                    }]);
+                'subcategories' => function ($q) {
+                    return $q->select('subcategories.id', 'subcategories.name', 'category_id')
+                        ->with(['category' => function ($q) {
+                            return $q->with('supercategory');
+                        }]);
                 },
                 'user' => function ($q) {
                     return $q->select('id', 'f_name', 'l_name');
@@ -110,9 +110,9 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
             $product->barcode ?? __('N/A'),
             $product->brand ? $product->brand->name : __('N/A'),
             $product->brand && $product->brand->country ? $product->brand->country->name : __('N/A'),
-            $product->subcategory ? $product->subcategory->getTranslation('name', session('locale')) : __('N/A'),
-            $product->subcategory ? ($product->subcategory->category ? $product->subcategory->category->getTranslation('name', session('locale')) : __('N/A')) : __('N/A'),
-            $product->subcategory ? ($product->subcategory->category ? ($product->subcategory->category->supercategory ? $product->subcategory->category->supercategory->getTranslation('name', session('locale')) : __('N/A')) : __('N/A')) : __('N/A'),
+            $product->subcategories->first() ? $product->subcategories->first()->getTranslation('name', session('locale')) : __('N/A'),
+            $product->subcategories->first() ? ($product->subcategories->first()->category ? $product->subcategories->first()->category->getTranslation('name', session('locale')) : __('N/A')) : __('N/A'),
+            $product->subcategories->first() ? ($product->subcategories->first()->category ? ($product->subcategories->first()->category->supercategory ? $product->subcategories->first()->category->supercategory->getTranslation('name', session('locale')) : __('N/A')) : __('N/A')) : __('N/A'),
             $product->base_price ??  __('N/A'),
             $product->final_price ??  __('N/A'),
             $product->final_price ? round((100 * ($product->base_price - $product->final_price)) / $product->base_price, 2) . '%' :  '0%',
@@ -125,8 +125,8 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
             $product->free_shipping ? __('Yes') :  __('No'),
             $product->publish ? __('Yes') :  __('No'),
             $product->user ? $product->user->getTranslation('f_name', session('locale')) . " " . $product->user->getTranslation('l_name', session('locale')) : __('N/A'),
-            $product->created_at ? Carbon::createFromTimeStamp(strtotime($product->created_at))->format('m/d/Y') :__('N/A'),
-            $product->updated_at ? Carbon::createFromTimeStamp(strtotime($product->updated_at))->format('m/d/Y') :__('N/A'),
+            $product->created_at ? Carbon::createFromTimeStamp(strtotime($product->created_at))->format('m/d/Y') : __('N/A'),
+            $product->updated_at ? Carbon::createFromTimeStamp(strtotime($product->updated_at))->format('m/d/Y') : __('N/A'),
         ];
     }
 

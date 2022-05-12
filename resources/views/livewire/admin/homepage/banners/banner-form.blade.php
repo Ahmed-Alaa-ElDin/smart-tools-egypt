@@ -1,4 +1,8 @@
 <div class="grid grid-cols-12 gap-3 items-start">
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
+
     <div class="col-span-12 grid grid-cols-12 gap-y-3 gap-x-4 items-center bg-gray-100 p-4 text-center  rounded shadow">
         <div class="col-span-12 font-bold text-black mb-2">
             {{ __('admin/sitePages.Banner Image') }}
@@ -99,7 +103,8 @@
             <div class="col-span-12 md:col-span-9">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('link') border-red-900 border-2 @enderror"
-                    type="url" wire:model.lazy="link" id="link" placeholder="{{ __('admin/sitePages.Link') }}" dir="ltr">
+                    type="url" wire:model.lazy="link" id="link" placeholder="{{ __('admin/sitePages.Link') }}"
+                    dir="ltr">
                 @error('link')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                         {{ $message }}</div>
@@ -113,7 +118,8 @@
             <label for="rank"
                 class="col-span-1 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/sitePages.Rank') }}</label>
             <div class="col-span-1">
-                <input type="number" id="rank" min="0" max="127" wire:model.lazy="rank" class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('rank') border-red-900 border-2 @enderror">
+                <input type="number" id="rank" min="0" max="127" wire:model.lazy="rank"
+                    class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('rank') border-red-900 border-2 @enderror">
 
                 @error('rank')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">

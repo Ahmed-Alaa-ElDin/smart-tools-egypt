@@ -1,4 +1,7 @@
 <div class="flex flex-col gap-3">
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
 
     {{-- Search Box & Pagination & Add Product Button : Start --}}
     <div class="flex justify-between gap-3 items-center">
@@ -235,11 +238,11 @@ bg-gray-200 @endif select-none"
 
     {{-- Add Product Modal : Start --}}
     <div wire:click="$set('addProduct',0)"
-        class="@if ($addProduct) flex
+        class="backdrop-blur-sm cursor-pointer @if ($addProduct) flex
         @else
         hidden @endif fixed top-0 left-0 z-50 flex justify-center items-center gap-4 w-100 h-100 bg-gray-500/[.4]">
         <div wire:click.stop="$set('addProduct',1)"
-            class="rounded-xl bg-white w-3/4 md:w-1/2 border-4 border-primary p-3 flex flex-col gap-2">
+            class="cursor-default rounded-xl bg-white w-3/4 md:w-1/2 border-4 border-primary p-3 flex flex-col gap-2">
 
             <h4 class="h5 md:h4 font-bold mb-2 text-center m-0 event-none">
                 {{ __('admin/sitePages.Add Product to the list') }}

@@ -53,10 +53,7 @@ __('front/homePage.Homepage')])
                     },
                     770: {
                         perPage: 2,
-                    },
-                    500: {
-                        perPage: 1,
-                    },
+                    }
                 },
                 type: 'slide',
                 keyboard: true,

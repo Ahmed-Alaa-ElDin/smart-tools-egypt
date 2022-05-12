@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Homepage\Banners;
 
-use App\Models\HomepageBanner;
+use App\Models\Banner;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
@@ -30,7 +30,7 @@ class BannerForm extends Component
             "description"                   =>      "array",
             "description.ar"                =>      "required|string|max:100",
             "description.en"                =>      "required|string|max:100",
-            "rank"                          =>      "required|min:0|max:127|exclude_if:rank,127|unique:homepage_banners,rank," . $this->banner_id,
+            "rank"                          =>      "required|min:0|max:127|exclude_if:rank,127|unique:banners,rank," . $this->banner_id,
             'link'                          =>      "nullable|url",
         ];
     }
@@ -44,7 +44,7 @@ class BannerForm extends Component
     public function mount()
     {
         if ($this->banner_id) {
-            $banner = HomepageBanner::findOrFail($this->banner_id);
+            $banner = Banner::findOrFail($this->banner_id);
 
             $this->banner_model = $banner;
 
@@ -97,7 +97,7 @@ class BannerForm extends Component
         DB::beginTransaction();
 
         try {
-            HomepageBanner::create([
+            Banner::create([
                 'description' => [
                     'en' => $this->description['en'],
                     'ar' => $this->description['ar']

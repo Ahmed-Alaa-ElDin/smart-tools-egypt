@@ -1,4 +1,7 @@
 <div class="grid grid-cols-12 gap-3 items-start">
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
 
     {{-- Big Side Start --}}
     <div class="col-span-12 lg:col-span-8 w-full grid gap-3">
@@ -6,8 +9,7 @@
         {{-- ######################################################### --}}
         {{-- ######################################################### --}}
         {{-- Logo Start --}}
-        <div
-            class="grid grid-cols-12 gap-x-4 gap-y-2 items-center bg-gray-100 p-4 text-center  rounded shadow">
+        <div class="grid grid-cols-12 gap-x-4 gap-y-2 items-center bg-gray-100 p-4 text-center  rounded shadow">
 
             <div class="col-span-12 font-bold text-black mb-2">{{ __('admin/productsPages.Logo') }}</div>
 
@@ -59,8 +61,7 @@
         {{-- ######################################################### --}}
         {{-- ######################################################### --}}
         {{-- Brand Information Start --}}
-        <div
-            class="grid grid-cols-12 gap-y-3 gap-x-4 items-center bg-red-100 p-4 text-center  rounded shadow">
+        <div class="grid grid-cols-12 gap-y-3 gap-x-4 items-center bg-red-100 p-4 text-center  rounded shadow">
 
             <div class="col-span-12 font-bold text-black mb-2">
                 {{ __('admin/productsPages.Brand Information') }}
@@ -129,8 +130,7 @@
     <div class="col-span-12 lg:col-span-4 w-full grid gap-3">
 
         {{-- SEO Start --}}
-        <div
-            class="grid grid-cols-3 gap-x-6 gap-y-2 items-center bg-gray-100 p-4 text-center  rounded shadow">
+        <div class="grid grid-cols-3 gap-x-6 gap-y-2 items-center bg-gray-100 p-4 text-center  rounded shadow">
 
             <div class="col-span-3 font-bold text-black mb-2">{{ __('admin/productsPages.SEO') }}</div>
 
@@ -141,8 +141,7 @@
                 <div class="col-span-12 sm:col-span-10 md:col-span-6 lg:col-span-12">
                     <input
                         class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('title') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="title" id="title"
-                        >
+                        type="text" wire:model.lazy="title" id="title">
                     @error('title')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                             {{ $message }}</div>
@@ -159,7 +158,7 @@
                 <div class="col-span-12 sm:col-span-10 md:col-span-6 lg:col-span-12">
                     <div wire:ignore
                         class="py-1 w-full px-6 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 cursor-text @error('seo_description') border-red-900 border-2 @enderror"
-                        type="text" id="seo_description" >
+                        type="text" id="seo_description">
                         {!! $description_seo !!}
                     </div>
 

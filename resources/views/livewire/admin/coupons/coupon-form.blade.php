@@ -1,5 +1,9 @@
 <div class="grid grid-cols-12 gap-3 items-start">
 
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
+
     {{-- ######################################################### --}}
     {{-- ######################################################### --}}
     {{-- Coupon Information Start --}}
@@ -576,22 +580,22 @@
                                 <td class="p-2 bg-white">
                                     <div class="flex flex-wrap justify-center gap-3 items-center h-100">
                                         @foreach ($oldCategories as $category_key => $category)
-                                        <label for="old-category-{{ $category_key }}"
-                                        wire:key="old-category-{{ $category_key }}"
-                                        class=" px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($category['id'], $deleteCategories_id)) bg-red-200 @else bg-green-200 @endif select-none m-0">
-                                        <span>
-                                            {{ $category['name'][session('locale')] }}
-                                        </span>
-                                        <br>
-                                        <span>
-                                            {{ $category['pivot']['value'] }}
-                                            {{ $category['pivot']['type'] == 0? '%': ($category['pivot']['type'] == 1? __('admin/offersPages.EPG'): ($category['pivot']['type'] == 2? trans_choice('admin/offersPages.Points value', $category['pivot']['value'], ['points' => $category['pivot']['value']]): __('admin/offersPages.Free Shipping'))) }}
-                                        </span>
+                                            <label for="old-category-{{ $category_key }}"
+                                                wire:key="old-category-{{ $category_key }}"
+                                                class=" px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($category['id'], $deleteCategories_id)) bg-red-200 @else bg-green-200 @endif select-none m-0">
+                                                <span>
+                                                    {{ $category['name'][session('locale')] }}
+                                                </span>
+                                                <br>
+                                                <span>
+                                                    {{ $category['pivot']['value'] }}
+                                                    {{ $category['pivot']['type'] == 0? '%': ($category['pivot']['type'] == 1? __('admin/offersPages.EPG'): ($category['pivot']['type'] == 2? trans_choice('admin/offersPages.Points value', $category['pivot']['value'], ['points' => $category['pivot']['value']]): __('admin/offersPages.Free Shipping'))) }}
+                                                </span>
 
-                                        <input type="checkbox" wire:model="deleteCategories_id"
-                                            id="old-category-{{ $category_key }}"
-                                            value="{{ $category['id'] }}" class="hidden">
-                                    </label>
+                                                <input type="checkbox" wire:model="deleteCategories_id"
+                                                    id="old-category-{{ $category_key }}"
+                                                    value="{{ $category['id'] }}" class="hidden">
+                                            </label>
                                         @endforeach
                                     </div>
                                 </td>
@@ -605,22 +609,22 @@
                                 <td class="p-2 bg-white">
                                     <div class="flex flex-wrap justify-center gap-3 items-center h-100">
                                         @foreach ($oldSubcategories as $subcategory_key => $subcategory)
-                                        <label for="old-subcategory-{{ $subcategory_key }}"
-                                        wire:key="old-subcategory-{{ $subcategory_key }}"
-                                        class=" px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($subcategory['id'], $deleteSubcategories_id)) bg-red-200 @else bg-green-200 @endif select-none m-0">
-                                        <span>
-                                            {{ $subcategory['name'][session('locale')] }}
-                                        </span>
-                                        <br>
-                                        <span>
-                                            {{ $subcategory['pivot']['value'] }}
-                                            {{ $subcategory['pivot']['type'] == 0? '%': ($subcategory['pivot']['type'] == 1? __('admin/offersPages.EPG'): ($subcategory['pivot']['type'] == 2? trans_choice('admin/offersPages.Points value', $subcategory['pivot']['value'], ['points' => $subcategory['pivot']['value']]): __('admin/offersPages.Free Shipping'))) }}
-                                        </span>
+                                            <label for="old-subcategory-{{ $subcategory_key }}"
+                                                wire:key="old-subcategory-{{ $subcategory_key }}"
+                                                class=" px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($subcategory['id'], $deleteSubcategories_id)) bg-red-200 @else bg-green-200 @endif select-none m-0">
+                                                <span>
+                                                    {{ $subcategory['name'][session('locale')] }}
+                                                </span>
+                                                <br>
+                                                <span>
+                                                    {{ $subcategory['pivot']['value'] }}
+                                                    {{ $subcategory['pivot']['type'] == 0? '%': ($subcategory['pivot']['type'] == 1? __('admin/offersPages.EPG'): ($subcategory['pivot']['type'] == 2? trans_choice('admin/offersPages.Points value', $subcategory['pivot']['value'], ['points' => $subcategory['pivot']['value']]): __('admin/offersPages.Free Shipping'))) }}
+                                                </span>
 
-                                        <input type="checkbox" wire:model="deleteSubcategories_id"
-                                            id="old-subcategory-{{ $subcategory_key }}"
-                                            value="{{ $subcategory['id'] }}" class="hidden">
-                                    </label>
+                                                <input type="checkbox" wire:model="deleteSubcategories_id"
+                                                    id="old-subcategory-{{ $subcategory_key }}"
+                                                    value="{{ $subcategory['id'] }}" class="hidden">
+                                            </label>
                                         @endforeach
                                     </div>
                                 </td>
@@ -633,22 +637,22 @@
                                 <td class="p-2 bg-white">
                                     <div class="flex flex-wrap justify-center gap-3 items-center h-100">
                                         @foreach ($oldBrands as $brand_key => $brand)
-                                        <label for="old-brand-{{ $brand_key }}"
-                                        wire:key="old-brand-{{ $brand_key }}"
-                                        class="px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($brand['id'], $deleteBrands_id)) bg-red-200 @else bg-green-200 @endif select-none m-0">
-                                        <span>
-                                            {{ $brand['name'] }}
-                                        </span>
-                                        <br>
-                                        <span>
-                                            {{ $brand['pivot']['value'] }}
-                                            {{ $brand['pivot']['type'] == 0? '%': ($brand['pivot']['type'] == 1? __('admin/offersPages.EPG'): ($brand['pivot']['type'] == 2? trans_choice('admin/offersPages.Points value', $brand['pivot']['value'], ['points' => $brand['pivot']['value']]): __('admin/offersPages.Free Shipping'))) }}
-                                        </span>
+                                            <label for="old-brand-{{ $brand_key }}"
+                                                wire:key="old-brand-{{ $brand_key }}"
+                                                class="px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($brand['id'], $deleteBrands_id)) bg-red-200 @else bg-green-200 @endif select-none m-0">
+                                                <span>
+                                                    {{ $brand['name'] }}
+                                                </span>
+                                                <br>
+                                                <span>
+                                                    {{ $brand['pivot']['value'] }}
+                                                    {{ $brand['pivot']['type'] == 0? '%': ($brand['pivot']['type'] == 1? __('admin/offersPages.EPG'): ($brand['pivot']['type'] == 2? trans_choice('admin/offersPages.Points value', $brand['pivot']['value'], ['points' => $brand['pivot']['value']]): __('admin/offersPages.Free Shipping'))) }}
+                                                </span>
 
-                                        <input type="checkbox" wire:model="deleteBrands_id"
-                                            id="old-brand-{{ $brand_key }}" value="{{ $brand['id'] }}"
-                                            class="hidden">
-                                    </label>
+                                                <input type="checkbox" wire:model="deleteBrands_id"
+                                                    id="old-brand-{{ $brand_key }}" value="{{ $brand['id'] }}"
+                                                    class="hidden">
+                                            </label>
                                         @endforeach
                                     </div>
                                 </td>
@@ -661,22 +665,22 @@
                                 <td class="p-2 bg-white">
                                     <div class="flex flex-wrap justify-center gap-3 items-center h-100">
                                         @foreach ($oldProducts as $product_key => $product)
-                                        <label for="old-product-{{ $product_key }}"
-                                        wire:key="old-product-{{ $product_key }}"
-                                        class=" px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($product['id'], $deleteProducts_id)) bg-red-200 @else bg-green-200 @endif select-none m-0">
-                                        <span>
-                                            {{ $product['name'][session('locale')] }}
-                                        </span>
-                                        <br>
-                                        <span>
-                                            {{ $product['pivot']['value'] }}
-                                            {{ $product['pivot']['type'] == 0? '%': ($product['pivot']['type'] == 1? __('admin/offersPages.EPG'): ($product['pivot']['type'] == 2? trans_choice('admin/offersPages.Points value', $product['pivot']['value'], ['points' => $product['pivot']['value']]): __('admin/offersPages.Free Shipping'))) }}
-                                        </span>
+                                            <label for="old-product-{{ $product_key }}"
+                                                wire:key="old-product-{{ $product_key }}"
+                                                class=" px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($product['id'], $deleteProducts_id)) bg-red-200 @else bg-green-200 @endif select-none m-0">
+                                                <span>
+                                                    {{ $product['name'][session('locale')] }}
+                                                </span>
+                                                <br>
+                                                <span>
+                                                    {{ $product['pivot']['value'] }}
+                                                    {{ $product['pivot']['type'] == 0? '%': ($product['pivot']['type'] == 1? __('admin/offersPages.EPG'): ($product['pivot']['type'] == 2? trans_choice('admin/offersPages.Points value', $product['pivot']['value'], ['points' => $product['pivot']['value']]): __('admin/offersPages.Free Shipping'))) }}
+                                                </span>
 
-                                        <input type="checkbox" wire:model="deleteProducts_id"
-                                            id="old-product-{{ $product_key }}"
-                                            value="{{ $product['id'] }}" class="hidden">
-                                    </label>
+                                                <input type="checkbox" wire:model="deleteProducts_id"
+                                                    id="old-product-{{ $product_key }}"
+                                                    value="{{ $product['id'] }}" class="hidden">
+                                            </label>
                                         @endforeach
                                     </div>
                                 </td>

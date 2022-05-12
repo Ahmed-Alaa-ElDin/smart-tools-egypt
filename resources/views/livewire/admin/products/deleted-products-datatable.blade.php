@@ -1,5 +1,9 @@
 <div>
-    {{-- @dump($selectedProducts) --}}
+
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
+
     <div class="flex flex-col">
 
         {{-- Multiple Selection Section --}}

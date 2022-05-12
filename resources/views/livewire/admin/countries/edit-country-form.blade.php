@@ -1,4 +1,8 @@
 <div>
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
+
     {{-- Country New Name --}}
     <div class="col-span-12 grid grid-cols-12 gap-x-4 gap-y-2 p-2 items-center">
         <label
@@ -7,7 +11,8 @@
         <div class="col-span-6 md:col-span-5">
             <input
                 class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                type="text" wire:model.lazy="name.ar" placeholder="{{ __('admin/deliveriesPages.in Arabic') }}" required>
+                type="text" wire:model.lazy="name.ar" placeholder="{{ __('admin/deliveriesPages.in Arabic') }}"
+                required>
             @error('name.ar')
                 <div class="inline-block mt-2 col-span-12 w-full text-center bg-red-700 rounded text-white shadow px-3 py-1">
                     {{ $message }}</div>

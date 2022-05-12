@@ -1,4 +1,8 @@
 <div>
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
+
     <div class="grid grid-cols-12 gap-3">
         {{-- No 1 : Start --}}
         <div

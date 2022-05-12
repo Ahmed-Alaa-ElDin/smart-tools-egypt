@@ -27,7 +27,7 @@ class TodayDealsList extends Component
 
     public function render()
     {
-        $products = Product::select(['id', 'name', 'base_price', 'final_price', 'free_shipping', 'today_deal'])
+        $products = Product::select(['id', 'name', 'base_price', 'final_price','points', 'free_shipping', 'today_deal'])
             ->with(['thumbnail'])
             ->where('today_deal', '>', 0)
             ->where('under_reviewing', '=', 0)
@@ -138,17 +138,21 @@ class TodayDealsList extends Component
     }
     ######## Deleted #########
 
+    ######## Product Selected : Start ########
     public function productSelected($product_id, $product_name)
     {
         $this->searchProduct = $product_name;
         $this->product_id = $product_id;
         $this->showResult = 0;
     }
+    ######## Product Selected : End ########
 
+    ######## Show Results : Start ########
     public function showResults($status)
     {
         $this->showResult = $status;
     }
+    ######## Show Results : End ########
 
     ######## Save : Start #########
     public function add()
@@ -171,6 +175,4 @@ class TodayDealsList extends Component
         }
     }
     ######## Save : End #########
-    ######## Deleted #########
-
 }

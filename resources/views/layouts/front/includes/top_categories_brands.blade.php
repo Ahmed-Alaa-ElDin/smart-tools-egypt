@@ -118,7 +118,7 @@
                 {{-- Title : End --}}
 
                 {{-- View More Button : Start --}}
-                <a href="#" class="btn bg-secondary btn-sm shadow-md font-bold">{{ __('front/homePage.See All') }}</a>
+                <a href="#" class="btn bg-secondary btn-sm shadow-md font-bold">{{ __('front/homePage.See All Brands') }}</a>
                 {{-- View More Button : End --}}
             </div>
             {{-- Header : End --}}

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin\Homepage;
 
 use App\Http\Controllers\Controller;
-use App\Models\HomepageBanner;
+use App\Models\Banner;
 use Illuminate\Http\Request;
 
-class HomepageBannerController extends Controller
+class BannerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -42,10 +42,10 @@ class HomepageBannerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\HomepageBanner  $homepageBanner
+     * @param  \App\Models\Banner  $homepageBanner
      * @return \Illuminate\Http\Response
      */
-    public function show(HomepageBanner $homepageBanner)
+    public function show(Banner $homepageBanner)
     {
         //
     }
@@ -53,22 +53,22 @@ class HomepageBannerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\HomepageBanner  $homepageBanner
+     * @param  \App\Models\Banner  $homepageBanner
      * @return \Illuminate\Http\Response
      */
-    public function edit($homepageBanner)
+    public function edit($Banner)
     {
-        return view('admin.homepage.slider.edit', compact('homepageBanner'));
+        return view('admin.homepage.slider.edit', compact('Banner'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\HomepageBanner  $homepageBanner
+     * @param  \App\Models\Banner  $homepageBanner
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, HomepageBanner $homepageBanner)
+    public function update(Request $request, Banner $homepageBanner)
     {
         //
     }
@@ -76,10 +76,10 @@ class HomepageBannerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\HomepageBanner  $homepageBanner
+     * @param  \App\Models\Banner  $homepageBanner
      * @return \Illuminate\Http\Response
      */
-    public function destroy(HomepageBanner $homepageBanner)
+    public function destroy(Banner $homepageBanner)
     {
         //
     }

@@ -1,13 +1,16 @@
 <div class="grid grid-cols-12 gap-3 items-start">
 
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
+
     {{-- Big Side Start --}}
     <div class="col-span-12 lg:col-span-8 w-full grid gap-3">
 
         {{-- ######################################################### --}}
         {{-- ######################################################### --}}
         {{-- Supercategory Information Start --}}
-        <div
-            class="grid grid-cols-12 gap-y-3 gap-x-4 items-center bg-red-100 p-4 text-center  rounded shadow">
+        <div class="grid grid-cols-12 gap-y-3 gap-x-4 items-center bg-red-100 p-4 text-center  rounded shadow">
 
             <div class="col-span-12 font-bold text-black mb-2">
                 {{ __('admin/productsPages.Supercategory Information') }}
@@ -50,7 +53,8 @@
                 <div class="col-span-12 md:col-span-10">
                     <textarea name="icon" id="icon"
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('icon') border-red-900 border-2 @enderror"
-                        wire:model.lazy="icon" placeholder="{{ __('admin/productsPages.Past the SVG icon here') }}"></textarea>
+                        wire:model.lazy="icon"
+                        placeholder="{{ __('admin/productsPages.Past the SVG icon here') }}"></textarea>
 
                     @error('icon')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -72,8 +76,7 @@
     <div class="col-span-12 lg:col-span-4 w-full grid gap-3">
 
         {{-- SEO Start --}}
-        <div
-            class="grid grid-cols-3 gap-x-6 gap-y-2 items-center bg-gray-100 p-4 text-center  rounded shadow">
+        <div class="grid grid-cols-3 gap-x-6 gap-y-2 items-center bg-gray-100 p-4 text-center  rounded shadow">
 
             <div class="col-span-3 font-bold text-black mb-2">{{ __('admin/productsPages.SEO') }}</div>
 

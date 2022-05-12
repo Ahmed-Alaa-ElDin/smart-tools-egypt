@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
 
-class HomepageBanner extends Model
+class Banner extends Model
 {
     use HasFactory;
     use HasTranslations;
@@ -26,5 +26,10 @@ class HomepageBanner extends Model
         return json_encode($value, JSON_UNESCAPED_UNICODE);
     }
 
+    // Many to many relationship  Sections --> Banners
+    public function sections()
+    {
+        return $this->belongsToMany(Section::class);
+    }
 
 }

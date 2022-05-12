@@ -1,4 +1,8 @@
 <div>
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
+
     {{-- Country New Name --}}
     <div class="col-span-12 grid grid-cols-12 gap-x-4 gap-y-2 p-2 items-center">
         <label

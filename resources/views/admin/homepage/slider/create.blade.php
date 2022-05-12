@@ -16,7 +16,6 @@
                             {{ __('admin/sitePages.Homepage Control') }}
                         </a>
                     </li>
-
                     <li class="breadcrumb-item hover:text-primary">
                         <a href="{{ route('admin.site.banners.index') }}">{{ __("admin/sitePages.Homepage's Slider Control") }}
                         </a>

@@ -1,4 +1,8 @@
 <div class="grid grid-cols-12 gap-3">
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
+
     {{-- Governorate New Name --}}
     <div class="col-span-12 grid grid-cols-12 gap-x-4 gap-y-2 p-2 items-center bg-red-100 p-2 rounded text-center">
         <label

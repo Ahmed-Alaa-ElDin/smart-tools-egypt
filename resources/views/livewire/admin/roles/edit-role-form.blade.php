@@ -1,4 +1,8 @@
 <div>
+        {{-- Loader : Start --}}
+        <x-admin.waiting/>
+        {{-- Loader : End --}}
+
     <form enctype="multipart/form-data">
         @csrf
 

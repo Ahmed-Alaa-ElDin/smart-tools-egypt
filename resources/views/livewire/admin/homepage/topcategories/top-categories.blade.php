@@ -1,4 +1,8 @@
 <div>
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
+
     <div class="grid grid-cols-12 gap-3">
 
         {{-- No 1 : Start --}}
@@ -99,7 +103,8 @@
                 {{-- Edit Button : Start --}}
                 @if ($items[0]['subcategory_id'])
                     <div class="col-span-12 text-center">
-                        <a href="{{ route('admin.subcategories.edit', ['subcategory' => $items[0]['category_id']]) }}" target="_blank"
+                        <a href="{{ route('admin.subcategories.edit', ['subcategory' => $items[0]['category_id']]) }}"
+                            target="_blank"
                             class="bg-edit hover:bg-editHover text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Edit Subcategory') }}</a>
                     </div>
                 @endif
@@ -209,7 +214,8 @@
                 {{-- Edit Button : Start --}}
                 @if ($items[1]['subcategory_id'])
                     <div class="col-span-12 text-center">
-                        <a href="{{ route('admin.subcategories.edit', ['subcategory' => $items[1]['category_id']]) }}" target="_blank"
+                        <a href="{{ route('admin.subcategories.edit', ['subcategory' => $items[1]['category_id']]) }}"
+                            target="_blank"
                             class="bg-edit hover:bg-editHover text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Edit Subcategory') }}</a>
                     </div>
                 @endif
@@ -319,7 +325,8 @@
                 {{-- Edit Button : Start --}}
                 @if ($items[2]['subcategory_id'])
                     <div class="col-span-12 text-center">
-                        <a href="{{ route('admin.subcategories.edit', ['subcategory' => $items[2]['category_id']]) }}" target="_blank"
+                        <a href="{{ route('admin.subcategories.edit', ['subcategory' => $items[2]['category_id']]) }}"
+                            target="_blank"
                             class="bg-edit hover:bg-editHover text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Edit Subcategory') }}</a>
                     </div>
                 @endif
@@ -429,7 +436,8 @@
                 {{-- Edit Button : Start --}}
                 @if ($items[3]['subcategory_id'])
                     <div class="col-span-12 text-center">
-                        <a href="{{ route('admin.subcategories.edit', ['subcategory' => $items[3]['category_id']]) }}" target="_blank"
+                        <a href="{{ route('admin.subcategories.edit', ['subcategory' => $items[3]['category_id']]) }}"
+                            target="_blank"
                             class="bg-edit hover:bg-editHover text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Edit Subcategory') }}</a>
                     </div>
                 @endif
@@ -539,7 +547,8 @@
                 {{-- Edit Button : Start --}}
                 @if ($items[4]['subcategory_id'])
                     <div class="col-span-12 text-center">
-                        <a href="{{ route('admin.subcategories.edit', ['subcategory' => $items[4]['category_id']]) }}" target="_blank"
+                        <a href="{{ route('admin.subcategories.edit', ['subcategory' => $items[4]['category_id']]) }}"
+                            target="_blank"
                             class="bg-edit hover:bg-editHover text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Edit Subcategory') }}</a>
                     </div>
                 @endif

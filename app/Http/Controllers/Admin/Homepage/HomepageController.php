@@ -15,6 +15,6 @@ class HomepageController extends Controller
 
     public function create()
     {
-        # code...
+        return view('admin.homepage.sections.create');
     }
 }

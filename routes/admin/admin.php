@@ -9,7 +9,7 @@ Route::group([
     'as' =>   'admin.',
     'prefix' => '/admin',
 ], function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     // ############## Orders Routes Start ##############
     require_once __DIR__ . "/orders/orders.php";

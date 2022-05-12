@@ -118,10 +118,10 @@
                 <ul class="list-inline mb-0 h-100 flex justify-end items-center text-sm">
                     <li
                         class="list-inline-item text-xs font-bold ltr:mr-3 rtl:ml-3 ltr:border-r ltr:border-l-0 rtl:border-l rtl:border-r-0 ltr:pr-3 ltr:pl-0 rtl:pl-3 rtl:pr-0">
-                        <a href="#" class="text-reset d-inline-block opacity-60 py-2">تسجيل الدخول</a>
+                        <a href="#" class="text-reset d-inline-block opacity-60 py-2">{{ __('front/homePage.Login') }}</a>
                     </li>
                     <li class="list-inline-item text-xs font-bold">
-                        <a href="#" class="text-reset d-inline-block opacity-60 py-2">تسجيل</a>
+                        <a href="#" class="text-reset d-inline-block opacity-60 py-2">{{ __('front/homePage.Register') }}</a>
                     </li>
                 </ul>
             </div>
