@@ -100,8 +100,12 @@ return [
     "Flash Sale"                                                            =>      "عرض لفترة محدودة",
     "Save and Add New Section"                                              =>      "حفظ وإضافة قسم جديد",
     "Add Products to Section"                                               =>      "إضافة منتجات إلى القسم",
-    "No Results according to your search"                                   =>      "لا نتائج طبقاً لبحثك",
+    "No Results according to your search"                                   =>      "لا يوجد نتائج طبقاً لبحثك",
     "Section added successfully"                                            =>      "تم إضافة القسم بنجاح",
     "Section hasn't been added"                                             =>      "لم يتم إضافة القسم",
+    "Start Date"                                                            =>      "تاريخ البدء",
+    "End Date"                                                              =>      "تاريخ الإنتهاء",
+    "Add Banners to Section"                                                =>      "إضافة بنرات إلى القسم",
+    "Enter Banner's Description"                                            =>      "ادخل وصف البنر",
 
 ];

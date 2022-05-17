@@ -1,7 +1,7 @@
 <div>
-        {{-- Loader : Start --}}
-        <x-admin.waiting/>
-        {{-- Loader : End --}}
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
 
     <div class="flex flex-col">
         <div class="py-3 bg-white space-y-6">
@@ -45,10 +45,12 @@
                                 {{-- Code --}}
                                 <th wire:click="sortBy('title->{{ session('locale') }}')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
-                                    {{ __('admin/offersPages.Title') }} &nbsp;
-                                    @include('partials._sort_icon', [
-                                        'field' => 'title->' . session('locale'),
-                                    ])
+                                    <div class="min-w-max">
+                                        {{ __('admin/offersPages.Title') }} &nbsp;
+                                        @include('partials._sort_icon', [
+                                            'field' => 'title->' . session('locale'),
+                                        ])
+                                    </div>
                                 </th>
 
                                 {{-- Start Date --}}
@@ -76,10 +78,13 @@
                                 {{-- Free Shipping --}}
                                 <th wire:click="sortBy('free_shipping')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
-                                    {{ __('admin/offersPages.Free Shipping') }}
-                                    @include('partials._sort_icon', [
-                                        'field' => 'free_shipping',
-                                    ])
+                                    <div class="min-w-max">
+
+                                        {{ __('admin/offersPages.Free Shipping') }}
+                                        @include('partials._sort_icon', [
+                                            'field' => 'free_shipping',
+                                        ])
+                                    </div>
                                 </th>
 
                                 {{-- Manage --}}
@@ -111,7 +116,7 @@
                                                 {{ $offer->start_at }}
                                                 <br>
                                                 <span class="text-gray-500">
-                                                    {{ trans_choice('admin/offersPages.Days Remaining to Start',intval(Carbon\Carbon::now()->diffInDays($offer->start_at, false)),['days' => Carbon\Carbon::now()->diffInDays($offer->start_at)]) }}
+                                                    {{ trans_choice('admin/offersPages.Days Remaining to Start', intval(Carbon\Carbon::now()->diffInDays($offer->start_at, false)), ['days' => Carbon\Carbon::now()->diffInDays($offer->start_at)]) }}
                                                 </span>
                                             </div>
                                         </div>
@@ -124,7 +129,7 @@
                                                 {{ $offer->expire_at }}
                                                 <br>
                                                 <span class="text-gray-500">
-                                                    {{ trans_choice('admin/offersPages.Days Remaining',intval(Carbon\Carbon::now()->diffInDays($offer->expire_at, false)),['days' => Carbon\Carbon::now()->diffInDays($offer->expire_at, false)]) }}
+                                                    {{ trans_choice('admin/offersPages.Days Remaining', intval(Carbon\Carbon::now()->diffInDays($offer->expire_at, false)), ['days' => Carbon\Carbon::now()->diffInDays($offer->expire_at, false)]) }}
                                                 </span>
                                             </div>
                                         </div>
@@ -173,7 +178,7 @@
                             @empty
                                 <tr>
                                     <td class="text-center py-2 font-bold" colspan="6">
-                                        {{ $search == ''? __('admin/offersPages.No data in this table'): __('admin/offersPages.No data available according to your search') }}
+                                        {{ $search == '' ? __('admin/offersPages.No data in this table') : __('admin/offersPages.No data available according to your search') }}
                                     </td>
                                 </tr>
                             @endforelse

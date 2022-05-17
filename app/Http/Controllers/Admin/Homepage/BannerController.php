@@ -56,9 +56,9 @@ class BannerController extends Controller
      * @param  \App\Models\Banner  $homepageBanner
      * @return \Illuminate\Http\Response
      */
-    public function edit($Banner)
+    public function edit($banner)
     {
-        return view('admin.homepage.slider.edit', compact('Banner'));
+        return view('admin.homepage.slider.edit', compact('banner'));
     }
 
     /**

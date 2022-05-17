@@ -3,7 +3,6 @@
     <x-admin.waiting />
     {{-- Loader : End --}}
 
-
     <div class="bg-gray-100 rounded shadow p-3 grid grid-cols-12 gap-5 overflow-auto scrollbar scrollbar-hidden">
         {{-- Name Start --}}
         <div class="col-span-12 w-full grid grid-cols-12 gap-x-4 gap-y-2 items-center text-center">
@@ -105,16 +104,41 @@
 
     <div class="">
         @if ($type == 0)
+            @error('selected_products')
+                <div class="flex items-center justify-center" wire:key="selected_products">
+                    <div
+                        class="inline-block max-w-max m-auto col-span-12 bg-red-700 rounded text-white shadow px-3 py-1 w-full mb-2 text-center">
+                        {{ $message }}
+                    </div>
+                </div>
+            @enderror
             {{-- Products List : Start --}}
             @livewire('admin.homepage.sections.products-list-form')
             {{-- Products List : End --}}
-        @elseif ($type == 1)
+        @elseif ($type == 1 || $type == 2)
+            @error('selected_offer')
+                <div class="flex items-center justify-center" wire:key="selected_offer">
+                    <div
+                        class="inline-block max-w-max m-auto col-span-12 bg-red-700 rounded text-white shadow px-3 py-1 w-full mb-2 text-center">
+                        {{ $message }}
+                    </div>
+                </div>
+            @enderror
             {{-- Offers List : Start --}}
-            @livewire('admin.homepage.sections.products-list-form')
+            @livewire('admin.homepage.sections.offers-list-form')
             {{-- Offers List : End --}}
-        @elseif ($type == 2)
-
         @elseif ($type == 3)
+            @error('selected_banners')
+                <div class="flex items-center justify-center" wire:key="selected_offer">
+                    <div
+                        class="inline-block max-w-max m-auto col-span-12 bg-red-700 rounded text-white shadow px-3 py-1 w-full mb-2 text-center">
+                        {{ $message }}
+                    </div>
+                </div>
+            @enderror
+            {{-- Offers List : Start --}}
+            @livewire('admin.homepage.sections.banners-list-form')
+            {{-- Offers List : End --}}
         @endif
     </div>
 

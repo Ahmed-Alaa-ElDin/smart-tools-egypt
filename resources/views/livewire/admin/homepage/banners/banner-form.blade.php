@@ -118,7 +118,7 @@
             <label for="rank"
                 class="col-span-1 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/sitePages.Rank') }}</label>
             <div class="col-span-1">
-                <input type="number" id="rank" min="0" max="127" wire:model.lazy="rank"
+                <input type="number" id="rank" min="1" max="127" wire:model.lazy="rank"
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('rank') border-red-900 border-2 @enderror">
 
                 @error('rank')

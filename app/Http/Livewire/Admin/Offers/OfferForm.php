@@ -30,8 +30,8 @@ class OfferForm extends Component
     {
         return [
             'banner'                        =>      'nullable|mimes:jpg,jpeg,png|max:2048',
-            "title.ar"                      =>      "required|string|max:30",
-            "title.en"                      =>      "required|string|max:30",
+            "title.ar"                      =>      "required|string|max:100",
+            "title.en"                      =>      "required|string|max:100",
             'date_range.start'              =>      "required|date",
             'date_range.end'                =>      "required|date",
             "type"                          =>      "nullable|in:0,1,2,3",
@@ -317,7 +317,6 @@ class OfferForm extends Component
     ######################## Save New Offer : Start ############################
     public function save($new = false)
     {
-        // dd($this->offer_number);
         $this->validate();
 
         DB::beginTransaction();

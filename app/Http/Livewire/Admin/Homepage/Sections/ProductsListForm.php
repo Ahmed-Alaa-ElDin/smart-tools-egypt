@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Section;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -21,15 +22,18 @@ class ProductsListForm extends Component
 
     public $search = "";
 
-    protected $listeners = ['showResults', 'sectionSaved'];
+    protected $listeners = ['showResults'];
 
+    ######## Fires once in the beginning : Start ########
     public function mount()
     {
         $this->perPage = Config::get('constants.constants.PAGINATION');
 
         $this->products = [];
     }
+    ######## Fires once in the beginning : End ########
 
+    ######## Fires with each update : Start ########
     public function render()
     {
         $products = usort($this->products, function ($a, $b) {
@@ -53,12 +57,14 @@ class ProductsListForm extends Component
 
         return view('livewire.admin.homepage.sections.products-list-form', compact('products'));
     }
+    ######## Fires with each update : Start ########
 
-    ######## reset pagination after new search
+    ######## reset pagination after new search : Start ########
     public function updatingSearch()
     {
         $this->resetPage();
     }
+    ######## reset pagination after new search : End ########
 
     ######## Check Rank : Start ########
     public function checkRank($rank, $old_rank)
@@ -85,6 +91,8 @@ class ProductsListForm extends Component
                 $this->products[$product_key]['rank']--;
             }
         }
+
+        $this->emitTo('admin.homepage.sections.section-form', 'listUpdated', ['selected_products' => $this->products]);
     }
     ######## Rank UP : End #########
 
@@ -102,6 +110,8 @@ class ProductsListForm extends Component
                 $this->products[$product_key]['rank']++;
             }
         }
+
+        $this->emitTo('admin.homepage.sections.section-form', 'listUpdated', ['selected_products' => $this->products]);
     }
     ######## Rank Down : End #########
 
@@ -117,6 +127,8 @@ class ProductsListForm extends Component
                 "text" => __('admin/sitePages.Product has been removed from list successfully'),
                 'icon' => 'success'
             ]);
+
+            $this->emitTo('admin.homepage.sections.section-form', 'listUpdated', ['selected_products' => $this->products]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/sitePages.Product hasn't been removed from list"),
@@ -142,7 +154,7 @@ class ProductsListForm extends Component
     }
     ######## Show Results : End ########
 
-    ######## Save : Start #########
+    ######## Add Product to List : Start #########
     public function add()
     {
         try {
@@ -158,6 +170,8 @@ class ProductsListForm extends Component
                 "text" => __('admin/sitePages.Product has been added to the list successfully'),
                 'icon' => 'success'
             ]);
+
+            $this->emitTo('admin.homepage.sections.section-form', 'listUpdated', ['selected_products' => $this->products]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/sitePages.Product hasn't been added to the list"),
@@ -165,25 +179,5 @@ class ProductsListForm extends Component
             ]);
         }
     }
-    ######## Save : End #########
-
-    // Add Products to Section :: Start
-    public function sectionSaved($request)
-    {
-        DB::beginTransaction();
-
-        try {
-            $section = Section::findOrFail($request['section_id']);
-
-            foreach ($this->products as $product) {
-                $section->products()->attach($product['id'], ['rank' => $product['rank']]);
-            }
-
-            DB::commit();
-        } catch (\Throwable $th) {
-            DB::rollback();
-        }
-    }
-    // Add Products to Section :: End
-
+    ######## Add Product to List : End #########
 }

@@ -133,7 +133,9 @@ return [
     'The Email Address is required when role is admin.' => 'The Email Address is required when role is admin.',
     'The phone numbers must contain digits between 8 & 11' => 'The phone numbers must contain digits between 8 & 11',
     "maxif" => "The :attribute must be less than or equal 100%",
-
+    "The offer is required." => "The offer is required",
+    "Products are required." => "Products are required.",
+    "Banners are required." => "Banners are required.",
 
     /*
     |--------------------------------------------------------------------------
@@ -214,8 +216,8 @@ return [
         'description.en'        => 'description.en',
         'rank'                  => 'Rank',
         'banner_name'           => 'Banner',
-        'banner'                => 'Banner',
-        'banner'                => 'Banner',
+        'selected_offer'        => 'Offer',
+        'selected_banners'      => 'Banners',
         'banner'                => 'Banner',
         'banner'                => 'Banner',
         'banner'                => 'Banner',

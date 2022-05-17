@@ -97,6 +97,9 @@ return [
     'The Email Address is required when role is admin.' => 'حقل البريد الالكتروني مطلوب عندما يكون الدور مدير',
     'The phone numbers must contain digits between 8 & 11' => 'يجب أن تحتوي أرقام التليفونات على أرقم تتكون من 8 إلى 11 رقم',
     "maxif" => ":attribute لابد أن تكون أقل من 100%",
+    "The offer is required." => "العرض مطلوب.",
+    "Products are required." => "المنتجات مطلوبة.",
+    "Banners are required." => "البنرات مطلوبة.",
 
     /*
     |--------------------------------------------------------------------------
@@ -217,7 +220,7 @@ return [
         'parentCategories.*.category_id'          => 'القسم الفرعي',
         'parentCategories.*.subcategory_id'       => 'القسم المباشر',
         'code'                  => 'الكود',
-        'type'                  => 'نوع الخصم',
+        'type'                  => 'النوع',
         'value'                 => 'القيمة',
         'expire_at'             => 'تاريخ الإنتهاء',
         'number'                => 'عدد قسائم الشراء',
@@ -239,6 +242,9 @@ return [
         'banner'                => 'البنر',
         'rank'                  => 'الترتيب',
         'banner_name'           => 'البنر',
+        'selected_offer'        => 'العرض',
+        'selected_banners'      => 'البنرات',
+        'selected_products'     => 'المنتجات',
 
     ],
 
