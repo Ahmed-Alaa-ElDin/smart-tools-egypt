@@ -113,7 +113,7 @@
                 </div>
             @enderror
             {{-- Products List : Start --}}
-            @livewire('admin.homepage.sections.products-list-form')
+            @livewire('admin.homepage.sections.products-list-form', ['products'=>$selected_products??[]])
             {{-- Products List : End --}}
         @elseif ($type == 1 || $type == 2)
             @error('selected_offer')
@@ -125,7 +125,7 @@
                 </div>
             @enderror
             {{-- Offers List : Start --}}
-            @livewire('admin.homepage.sections.offers-list-form')
+            @livewire('admin.homepage.sections.offers-list-form', ['selected_offer'=>$selected_offer])
             {{-- Offers List : End --}}
         @elseif ($type == 3)
             @error('selected_banners')
@@ -137,7 +137,7 @@
                 </div>
             @enderror
             {{-- Offers List : Start --}}
-            @livewire('admin.homepage.sections.banners-list-form')
+            @livewire('admin.homepage.sections.banners-list-form', ['banners'=>$selected_banners??[]])
             {{-- Offers List : End --}}
         @endif
     </div>
@@ -156,7 +156,7 @@
                 class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Save and Add New Section') }}</button>
         @endif
         {{-- Back --}}
-        <a href="{{ route('admin.products.index') }}"
+        <a href="{{ route('admin.homepage') }}"
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Back') }}</a>
     </div>
     {{-- Buttons Section End --}}

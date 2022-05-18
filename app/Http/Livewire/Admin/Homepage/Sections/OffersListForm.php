@@ -3,12 +3,8 @@
 namespace App\Http\Livewire\Admin\Homepage\Sections;
 
 use App\Models\Offer;
-use App\Models\Section;
-use Carbon\Carbon;
+// use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Validation\Validator;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -17,8 +13,6 @@ class OffersListForm extends Component
     use WithPagination;
 
     public $selected_offer;
-
-    protected $listeners = ['sectionSaved'];
 
     ######## Fires once in the beginning : Start ########
     public function mount()
@@ -38,8 +32,8 @@ class OffersListForm extends Component
             'start_at',
             'expire_at',
         ])
-            ->where('start_at', '<=', Carbon::now())
-            ->where('expire_at', '>=', Carbon::now())
+            // ->where('start_at', '<=', Carbon::now())
+            // ->where('expire_at', '>=', Carbon::now())
             ->where(
                 fn ($q) => $q
                     ->where('title->ar', 'like', '%' . $this->search . '%')

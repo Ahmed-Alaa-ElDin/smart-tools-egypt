@@ -17,4 +17,9 @@ class HomepageController extends Controller
     {
         return view('admin.homepage.sections.create');
     }
+
+    public function edit($section_id)
+    {
+        return view('admin.homepage.sections.edit',compact('section_id'));
+    }
 }

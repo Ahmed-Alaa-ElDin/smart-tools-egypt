@@ -25,10 +25,10 @@ class SectionForm extends Component
             'title.en'                  =>      'required|string|max:100|min:3',
             'active'                    =>      'boolean',
             'type'                      =>      'required|in:0,1,2,3',
-            'selected_offer'            =>      'required_if:type,1,2|nullable|exists:offers,id',
-            "selected_products"         =>      'required_if:type,0|nullable|array|min:1',
+            'selected_offer'            =>      'exclude_unless:type,1,2|required|exists:offers,id',
+            "selected_products"         =>      'exclude_unless:type,0|required|array|min:1',
             "selected_products.*.id"    =>      'exists:products,id',
-            "selected_banners"          =>      'required_if:type,3|nullable|array|min:3|max:3',
+            "selected_banners"          =>      'exclude_unless:type,3|required|array|min:3|max:3',
             "selected_banners.*.id"     =>      'exists:banners,id',
         ];
     }
@@ -42,27 +42,71 @@ class SectionForm extends Component
         ];
     }
 
+    ############ Mount :: Start ############
+    public function mount()
+    {
+        if ($this->section_id) {
+            $this->section = Section::with([
+                'products' =>
+                fn ($q) => $q->select(['products.id', 'name', 'base_price', 'final_price', 'points', 'under_reviewing'])->with(['thumbnail'])->withPivot('rank'),
+                'offers',
+                'banners' => fn ($q) => $q->select(['banners.id', 'banner_name', 'description', 'link'])->withPivot('rank')
+            ])->findOrFail($this->section_id);
+
+            $this->title = [
+                'ar' => $this->section->getTranslation('title', 'ar'),
+                'en' => $this->section->getTranslation('title', 'en')
+            ];
+
+            $this->active = $this->section->active;
+
+            $this->type = $this->section->type;
+            // dd($this->section);
+            if ($this->type == 0) {
+                $this->selected_products = $this->section->products->toArray();
+                foreach ($this->selected_products as &$product) {
+                    $product['rank'] = $product['pivot']['rank'];
+                }
+            } elseif ($this->type == 1 || $this->type == 2) {
+                $this->selected_offer = $this->section->offers->count() ? $this->section->offers->first()->id : '';
+            } elseif ($this->type == 3) {
+                $this->selected_banners = $this->section->banners->toArray();
+                foreach ($this->selected_banners as &$banner) {
+                    $banner['rank'] = $banner['pivot']['rank'];
+                }
+            }
+        }
+    }
+    ############ Mount :: End ############
+
+    ############ Render :: Start ############
     public function render()
     {
         return view('livewire.admin.homepage.sections.section-form');
     }
+    ############ Render :: End ############
 
+    ############ Realtime Validation :: Start ############
     public function updated($field)
     {
         $this->validateOnly($field);
     }
+    ############ Realtime Validation :: End ############
 
+    ############ Reset variables on type change :: Start ############
     public function updatedType()
     {
-        $this->selected_products = null;
+        $this->selected_products = [];
         $this->selected_offer = null;
-        $this->selected_banners = null;
+        $this->selected_banners = [];
 
         $this->validateOnly('selected_products');
         $this->validateOnly('selected_offer');
         $this->validateOnly('selected_banners');
     }
+    ############ Reset variables on type change :: End ############
 
+    ############ Get Data from Subcomponents :: Start ############
     public function listUpdated($request)
     {
         if (array_key_exists('selected_offer', $request)) {
@@ -76,7 +120,9 @@ class SectionForm extends Component
             $this->validateOnly('selected_banners');
         };
     }
+    ############ Get Data from Subcomponents :: End ############
 
+    ############ Save :: Start ############
     public function save($new = false)
     {
         $this->validate();
@@ -121,4 +167,53 @@ class SectionForm extends Component
             redirect()->route('admin.homepage');
         }
     }
+    ############ Save :: End ############
+
+    ############ Update :: Start ############
+    public function update()
+    {
+        $this->validate();
+        // dd('dsa');
+
+        DB::beginTransaction();
+
+        try {
+            $this->section->update([
+                "title" => [
+                    'ar' => $this->title['ar'],
+                    'en' => $this->title['en']
+                ],
+                "type" => $this->type,
+                "active" => $this->active ? 1 : 0,
+            ]);
+
+            $this->section->offers()->detach();
+            $this->section->products()->detach();
+            $this->section->banners()->detach();
+
+            if ($this->selected_offer != null) {
+                $this->section->offers()->attach($this->selected_offer);
+            } elseif ($this->selected_products != null) {
+                foreach ($this->selected_products as $product) {
+                    $this->section->products()->attach($product['id'], ['rank' => $product['rank']]);
+                }
+            } elseif ($this->selected_banners != null) {
+                foreach ($this->selected_banners as $banner) {
+                    $this->section->banners()->attach($banner['id'], ['rank' => $banner['rank']]);
+                }
+            }
+
+            DB::commit();
+
+            Session::flash('success', __('admin/sitePages.Section updated successfully'));
+            redirect()->route('admin.homepage');
+        } catch (\Throwable $th) {
+            DB::rollback();
+
+            Session::flash('error', __("admin/sitePages.Section hasn't been updated"));
+            redirect()->route('admin.homepage');
+        }
+    }
+    ############ Update :: End ############
+
 }

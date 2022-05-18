@@ -107,5 +107,15 @@ return [
     "End Date"                                                              =>      "تاريخ الإنتهاء",
     "Add Banners to Section"                                                =>      "إضافة بنرات إلى القسم",
     "Enter Banner's Description"                                            =>      "ادخل وصف البنر",
+    "Section'sType"                                                         =>      "نوع القسم",
+    "Section has been activated"                                            =>      "تم تفعيل القسم",
+    "Section has been deactivated"                                          =>      "تم إلغاء تفعيل القسم",
+    "Section hasn't been activated"                                         =>      "لم يتم تفعيل القسم",
+    "Section hasn't been deactivated"                                       =>      "لم يتم إلغاء تفعيل القسم",
+    "Are you sure, you want to delete this section ?"                       =>      "هل أنت متأكد من حذف القسم ؟",
+    "Section has been deleted successfully"                                 =>      "تم حذف القسم بنجاح",
+    "Section hasn't been deleted"                                           =>      "لم يتم حذف القسم",
+    "Section updated successfully"                                          =>      "تم تحديث بيانات القسم بنجاح",
+    "Section hasn't been updated"                                           =>      "لم يتم تحديث بيانات القسم",
 
 ];

@@ -18,7 +18,7 @@ class ProductsListForm extends Component
 
     public $product_id;
     public $products_list, $searchProduct = '', $showResult = 1;
-    public $products;
+    public $products = [];
 
     public $search = "";
 
@@ -28,8 +28,6 @@ class ProductsListForm extends Component
     public function mount()
     {
         $this->perPage = Config::get('constants.constants.PAGINATION');
-
-        $this->products = [];
     }
     ######## Fires once in the beginning : End ########
 

@@ -44,11 +44,11 @@
                             </div>
                         </div>
 
-                        {{-- Card Body --}}
+                        {{-- Card Body :: Start --}}
                         <div class="card-body overflow-hidden">
 
                             {{-- Static Part : Start --}}
-                            <div class="grid grid-cols-12 gap-4 justify-between items-center">
+                            <div class="grid grid-cols-12 gap-4 justify-between items-center mb-3">
 
                                 {{-- Slider : Start --}}
                                 <a href="{{ route('admin.site.banners.index') }}"
@@ -99,7 +99,14 @@
                                 {{-- Today Deal : End --}}
                             </div>
                             {{-- Static Part : End --}}
+
+                            {{-- Sections List :: Start --}}
+                            <div>
+                                @livewire('admin.homepage.sections-list')
+                            </div>
+                            {{-- Sections List :: End --}}
                         </div>
+                        {{-- Card Body :: End --}}
                     </div>
                 </div>
             </section>
@@ -131,7 +138,7 @@
                 focusDeny: true,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit(e.detail.func, e.detail.offer_id);
+                    Livewire.emit(e.detail.func, e.detail.section_id);
                 }
             });
         });
@@ -148,5 +155,19 @@
             })
         });
         // #### Offer Sweetalert ####
+
+        // #### Section Activation / Deactivation ####
+        window.addEventListener('swalSectionActivated', function(e) {
+            Swal.fire({
+                text: e.detail.text,
+                icon: e.detail.icon,
+                position: 'top-right',
+                showConfirmButton: false,
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+            })
+        });
+        // #### Section Activation / Deactivation ####
     </script>
 @endpush
