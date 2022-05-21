@@ -10,6 +10,8 @@ use Livewire\Component;
 
 class MainSlider extends Component
 {
+    public $todayDeals;
+
     public function mount()
     {
         $this->banners = Banner::where('rank', '<=', 10)->orderBy('rank')->get();
@@ -24,12 +26,5 @@ class MainSlider extends Component
         ])->where('top', '>', 0)->orderBy('top')->get();
 
         $this->topSubcategories = Subcategory::select('id', 'name', 'image_name', 'top')->where('top', '>', 0)->orderBy('top')->get();
-
-        $this->todayDeals = Product::select(['id', 'name', 'base_price', 'final_price', 'free_shipping', 'today_deal', 'free_shipping', 'points'])
-            ->with(['thumbnail'])
-            ->where('today_deal', '>', 0)
-            ->where('under_reviewing', '=', 0)
-            ->orderBy('today_deal')
-            ->get();;
     }
 }

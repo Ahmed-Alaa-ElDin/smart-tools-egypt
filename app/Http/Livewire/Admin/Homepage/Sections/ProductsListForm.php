@@ -3,17 +3,10 @@
 namespace App\Http\Livewire\Admin\Homepage\Sections;
 
 use App\Models\Product;
-use App\Models\Section;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class ProductsListForm extends Component
 {
-    use WithPagination;
-
     public $addProduct = 0;
 
     public $product_id;
@@ -23,13 +16,6 @@ class ProductsListForm extends Component
     public $search = "";
 
     protected $listeners = ['showResults'];
-
-    ######## Fires once in the beginning : Start ########
-    public function mount()
-    {
-        $this->perPage = Config::get('constants.constants.PAGINATION');
-    }
-    ######## Fires once in the beginning : End ########
 
     ######## Fires with each update : Start ########
     public function render()
@@ -56,13 +42,6 @@ class ProductsListForm extends Component
         return view('livewire.admin.homepage.sections.products-list-form', compact('products'));
     }
     ######## Fires with each update : Start ########
-
-    ######## reset pagination after new search : Start ########
-    public function updatingSearch()
-    {
-        $this->resetPage();
-    }
-    ######## reset pagination after new search : End ########
 
     ######## Check Rank : Start ########
     public function checkRank($rank, $old_rank)

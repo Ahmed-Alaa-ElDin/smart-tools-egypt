@@ -34,7 +34,6 @@ return new class extends Migration
             $table->tinyInteger('publish')->default(1)->comment('0 -> No , 1 -> Yes');
             $table->tinyInteger('under_reviewing')->default(0)->comment('0 -> No , 1 -> Yes');
             $table->unsignedBigInteger('brand_id')->nullable();
-            $table->tinyInteger('today_deal')->default(0)->comment('0 -> No , 1 -> Yes');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -4,20 +4,7 @@
     {{-- Loader : End --}}
 
     {{-- Search Box & Pagination & Add Product Button : Start --}}
-    <div class="flex justify-between gap-3 items-center">
-
-        {{-- Search Box --}}
-        <div class="mt-1 flex rounded-md shadow-sm">
-            <span
-                class="inline-flex items-center px-3 ltr:rounded-l-md rtl:rounded-r-md border border-r-0 border-gray-300 bg-gray-50 text-center text-gray-500 text-sm">
-                <span class="material-icons">
-                    search
-                </span>
-            </span>
-            <input type="text" name="company-website" id="company-website" wire:model='search'
-                class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
-                placeholder="{{ __('admin/sitePages.Search ...') }}">
-        </div>
+    <div class="flex justify-center gap-3 items-center">
 
         {{-- Add Product to list :: Start --}}
         <button wire:click.stop.prevent="$set('addProduct',1)"
@@ -29,56 +16,44 @@
         </button>
         {{-- Add Product to list :: End --}}
 
-        {{-- Pagination Number --}}
-        <div class="form-inline justify-end my-2">
-            {{ __('pagination.Show') }} &nbsp;
-            <select wire:model='perPage' class="form-control w-auto px-3 cursor-pointer">
-                <option>5</option>
-                <option>10</option>
-                <option>25</option>
-                <option>50</option>
-                <option>100</option>
-            </select>
-            &nbsp; {{ __('pagination.results') }}
-        </div>
     </div>
     {{-- Search Box & Pagination & Add Product Button : End --}}
 
     {{-- List :: Start --}}
     @foreach ($products as $key => $product)
         <div class="flex flex-wrap gap-2 w-100 justify-center items-center @if ($key % 2 == 0) bg-red-100 @else bg-gray-100 @endif rounded-xl"
-            wire:key='product-{{ $key }}-{{ $product->id }}'>
+            wire:key='product-{{ $key }}-{{ $product['id'] }}'>
 
             {{-- Rank --}}
             <div class="p-2 text-center">
                 <div class="text-sm text-gray-900">
-                    @if ($product->today_deal && $product->today_deal != 0 && $product->today_deal <= 11)
+                    @if ($product['rank'] && $product['rank'] != 0 && $product['rank'] <= 11)
                         <div class="flex gap-2 items-center min-w-max">
 
                             <div>
                                 {{-- down : Start --}}
                                 <span
-                                    class="material-icons rounded text-white text-lg @if ($product->today_deal < 12) @if ($key % 2 == 0) bg-primary @else bg-secondary @endif cursor-pointer
+                                    class="material-icons rounded text-white text-lg @if ($product['rank'] < 12) @if ($key % 2 == 0) bg-primary @else bg-secondary @endif cursor-pointer
 @else
 bg-gray-200 @endif select-none"
-                                    wire:click="rankDown({{ $product->id }})">
+                                    wire:click="rankDown({{ $product['id'] }})">
                                     expand_more
                                 </span>
                                 {{-- down : End --}}
 
                                 {{-- up : Start --}}
                                 <span
-                                    class="material-icons rounded text-white text-lg @if ($product->today_deal > 1) @if ($key % 2 == 0) bg-primary @else bg-secondary @endif cursor-pointer
+                                    class="material-icons rounded text-white text-lg @if ($product['rank'] > 1) @if ($key % 2 == 0) bg-primary @else bg-secondary @endif cursor-pointer
 @else
 bg-gray-200 @endif select-none"
-                                    wire:click="rankUp({{ $product->id }})">
+                                    wire:click="rankUp({{ $product['id'] }})">
                                     expand_less
                                 </span>
                                 {{-- up : Start --}}
                             </div>
 
                             <span class="font-bold">
-                                {{ $product->today_deal }}
+                                {{ $product['rank'] }}
                             </span>
                         </div>
                     @else
@@ -87,20 +62,20 @@ bg-gray-200 @endif select-none"
                             <div>
                                 {{-- down : Start --}}
                                 <span
-                                    class="material-icons rounded text-white text-lg @if ($product->today_deal < 11) @if ($key % 2 == 0) bg-primary @else bg-secondary @endif cursor-pointer
+                                    class="material-icons rounded text-white text-lg @if ($product['rank'] < 11) @if ($key % 2 == 0) bg-primary @else bg-secondary @endif cursor-pointer
 @else
 bg-gray-200 @endif select-none"
-                                    wire:click="rankDown({{ $product->id }})">
+                                    wire:click="rankDown({{ $product['id'] }})">
                                     expand_more
                                 </span>
                                 {{-- down : End --}}
 
                                 {{-- up : Start --}}
                                 <span
-                                    class="material-icons rounded text-white text-lg @if ($product->today_deal > 1) @if ($key % 2 == 0) bg-primary @else bg-secondary @endif cursor-pointer
+                                    class="material-icons rounded text-white text-lg @if ($product['rank'] > 1) @if ($key % 2 == 0) bg-primary @else bg-secondary @endif cursor-pointer
 @else
 bg-gray-200 @endif select-none"
-                                    wire:click="rankUp({{ $product->id }})">
+                                    wire:click="rankUp({{ $product['id'] }})">
                                     expand_less
                                 </span>
                                 {{-- up : Start --}}
@@ -115,12 +90,12 @@ bg-gray-200 @endif select-none"
             </div>
 
             {{-- Image & Name --}}
-            <div class="grow p-2 text-center flex items-center gap-2">
+            <div class="grow p-2 text-center flex items-center gap-2 w-50">
                 <div class="flex-shrink-0 h-10 w-10">
-                    @if ($product->thumbnail)
+                    @if ($product['thumbnail'])
                         <img class="h-10 w-10 rounded-full"
-                            src="{{ asset('storage/images/products/cropped100/' . $product->thumbnail->file_name) }}"
-                            alt="{{ $product->name . 'image' }}">
+                            src="{{ asset('storage/images/products/cropped100/' . $product['thumbnail']['file_name']) }}"
+                            alt="{{ $product['name'][session('locale')] . 'image' }}">
                     @else
                         <div
                             class="h-10 w-10 rounded-full text-white @if ($key % 2 == 0) bg-primary @else bg-secondary @endif flex justify-center items-center">
@@ -130,8 +105,8 @@ bg-gray-200 @endif select-none"
                         </div>
                     @endif
                 </div>
-                <span>
-                    {{ $product->name }}
+                <span class="truncate">
+                    {{ $product['name'][session('locale')] }}
                 </span>
             </div>
 
@@ -139,18 +114,18 @@ bg-gray-200 @endif select-none"
             {{-- Price : Start --}}
             <div class="p-2 text-center">
                 <div class="text-sm flex gap-2 ">
-                    @if ($product->under_reviewing)
+                    @if ($product['under_reviewing'])
                         <span class="bg-yellow-600 px-2 p-1 rounded text-white text-xs">
                             {{ __('admin/sitePages.Under Reviewing') }}
                         </span>
-                    @elseif ($product->final_price == $product->base_price)
+                    @elseif ($product['final_price'] == $product['base_price'])
                         <div
                             class="flex flex-col items-center content-center justify-center bg-green-600 p-1 rounded shadow">
                             <span class="font-bold text-xs mb-1 text-white">
                                 {{ __('admin/sitePages.Final Price') }}
                             </span>
                             <div class="text-sm font-medium text-gray-900 bg-white p-1 w-100 rounded shadow">
-                                {{ $product->final_price ?? 0 }}
+                                {{ $product['final_price'] ?? 0 }}
                                 <span class="text-xs">
                                     {{ __('admin/sitePages. EGP') }}
                                 </span>
@@ -164,7 +139,7 @@ bg-gray-200 @endif select-none"
                             </span>
                             <div
                                 class="line-through text-sm font-medium text-gray-900 bg-white p-1 w-100 rounded shadow">
-                                {{ $product->base_price ?? 0 }}
+                                {{ $product['base_price'] ?? 0 }}
                                 <span class="text-xs">
                                     {{ __('admin/sitePages. EGP') }}
                                 </span>
@@ -176,7 +151,7 @@ bg-gray-200 @endif select-none"
                                 {{ __('admin/sitePages.Final Price') }}
                             </span>
                             <div class="text-sm font-medium text-gray-900 bg-white p-1 w-100 rounded shadow">
-                                {{ $product->final_price ?? 0 }}
+                                {{ $product['final_price'] ?? 0 }}
                                 <span class="text-xs">
                                     {{ __('admin/sitePages. EGP') }}
                                 </span>
@@ -195,7 +170,7 @@ bg-gray-200 @endif select-none"
                         {{ __('admin/sitePages.Points') }}
                     </span>
                     <div class="text-sm font-medium text-gray-900 bg-white p-1 w-100 rounded shadow">
-                        {{ $product->points ?? 0 }}
+                        {{ $product['points'] ?? 0 }}
                     </div>
                 </div>
             </div>
@@ -205,7 +180,7 @@ bg-gray-200 @endif select-none"
             <div class="p-2 text-center text-sm font-medium flex gap-2">
 
                 {{-- Edit Button --}}
-                <a href="{{ route('admin.products.edit', [$product->id]) }}" target="_blank"
+                <a href="{{ route('admin.products.edit', [$product['id']]) }}" target="_blank"
                     data-title="{{ __('admin/sitePages.Edit') }}" data-toggle="tooltip" data-placement="top"
                     class="m-0">
                     <span class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
@@ -215,7 +190,7 @@ bg-gray-200 @endif select-none"
 
                 {{-- Delete Button --}}
                 <a href="#" data-title="{{ __('admin/sitePages.Remove from list') }}" data-toggle="tooltip"
-                    data-placement="top" wire:click.prevent="removeProduct({{ $product->id }})"
+                    data-placement="top" wire:click.prevent="removeProduct({{ $product['id'] }})"
                     class="m-0">
                     <span
                         class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded-circle">
@@ -231,7 +206,7 @@ bg-gray-200 @endif select-none"
 
     {{-- Pagination :: Start --}}
     <div class="mt-4">
-        {{ $products->links() }}
+        {{-- {{ $products->links() }} --}}
     </div>
     {{-- Pagination :: End --}}
 
@@ -263,8 +238,8 @@ bg-gray-200 @endif select-none"
                                 <ul
                                     class="bg-white w-100 z-10 rounded-b-xl overflow-auto border-x border-b border-primary px-1 max-h-48 scrollbar scrollbar-hidden-y">
                                     @forelse ($products_list as $key => $product)
-                                        <li wire:click.stop.prevent="productSelected({{ $product->id }},'{{ $product->name }}')"
-                                            wire:key="add-product-{{ $key }}-{{ $product->id }}"
+                                        <li wire:click.stop.prevent="productSelected({{ $product['id'] }},'{{ $product->name }}')"
+                                            wire:key="add-product-{{ $key }}-{{ $product['id'] }}"
                                             class="btn bg-white border-b py-3 flex flex-wrap justify-center items-center gap-3 rounded-xl">
 
                                             {{-- Product's Name --}}
@@ -336,6 +311,17 @@ bg-gray-200 @endif select-none"
             {{-- Buttons Section End --}}
         </div>
     </div>
-    {{-- Add Product Modal : Start --}}
+    {{-- Add Product Modal : End --}}
+
+    {{-- Buttons Section Start --}}
+    <div class="col-span-12 w-full flex flex-wrap justify-around">
+        {{-- Save and Back --}}
+        <button type="button" wire:click.prevent="save" wire:loading.attr="disabled"
+            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Save') }}</button>
+        {{-- Back --}}
+        <a href="{{ route('admin.homepage') }}"
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Back') }}</a>
+    </div>
+    {{-- Buttons Section End --}}
 
 </div>

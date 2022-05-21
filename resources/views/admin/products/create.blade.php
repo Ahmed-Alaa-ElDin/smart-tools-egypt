@@ -75,7 +75,6 @@ __('admin/productsPages.Add Product')])
                 'directionality',
                 'table',
                 'autoresize',
-                // 'fullscreen'
             ],
             toolbar: 'ltr rtl | ' +
                 'bold italic backcolor fontsizeselect| alignleft aligncenter ' +

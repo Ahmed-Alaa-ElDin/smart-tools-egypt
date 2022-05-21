@@ -282,7 +282,7 @@ class CouponForm extends Component
             $coupon = Coupon::create([
                 'code' => $this->code,
                 'expire_at' => $this->expire_at,
-                'number'  => $this->number ?? null,
+                'number'  => !is_null($this->number) ? $this->number : null,
                 'type' => $this->type ?? 0,
                 'value' => $this->value ?? 0,
                 'free_shipping' => $this->free_shipping ? 1 : 0
@@ -362,7 +362,7 @@ class CouponForm extends Component
             $this->coupon->update([
                 'code' => $this->code,
                 'expire_at' => $this->expire_at,
-                'number'  => $this->number ?? null,
+                'number'  =>!is_null($this->number) ? $this->number : null,
                 'type' => $this->type ?? 0,
                 'value' => $this->value ?? 0,
                 'free_shipping' => $this->free_shipping ? 1 : 0

@@ -6,9 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Translatable\HasTranslations;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
+use Znck\Eloquent\Traits\BelongsToThrough;
 
 class Product extends Model
 {
+    use HasRelationships;
+    use BelongsToThrough;
     use HasFactory;
     use HasTranslations;
     use SoftDeletes;
@@ -68,6 +72,12 @@ class Product extends Model
         return $this->belongsToThrough(Category::class, Subcategory::class);
     }
 
+    // Many to many through relationship  Categories --> Products
+    public function supercategory()
+    {
+        return $this->belongsToThrough(Supercategory::class, [Category::class, Subcategory::class]);
+    }
+
     // One to many relationship Product --> Image
     public function images()
     {
@@ -89,12 +99,50 @@ class Product extends Model
     // many to many relationship (polymorphic)  Product --> Offers
     public function offers()
     {
-        return $this->morphToMany(Offer::class, 'offerable');
+        return $this->morphToMany(Offer::class, 'offerable')->withPivot([
+            'value',
+            'type',
+            'number'
+        ]);
     }
 
     // Many to many relationship  Sections --> Products
     public function sections()
     {
         return $this->belongsToMany(Section::class);
+    }
+
+    public function scopePublishedProduct($query)
+    {
+        $query->select(
+            [
+                'products.id',
+                'name',
+                'slug',
+                'quantity',
+                'base_price',
+                'final_price',
+                'points',
+                'description',
+                'model',
+                'free_shipping',
+                'publish',
+                'under_reviewing',
+                'brand_id',
+                'final_price'
+            ]
+        )
+            ->with(
+                [
+                    'thumbnail',
+                    'offers',
+                    'brand' => fn ($q) => $q->with('offers'),
+                    'subcategories' => fn ($q) => $q->with([
+                        'offers',
+                        'category' => fn ($q) => $q->with(['offers', 'supercategory' => fn ($q) => $q->with(['offers'])]),
+                    ])
+                ]
+            )
+            ->where('publish', 1);
     }
 }

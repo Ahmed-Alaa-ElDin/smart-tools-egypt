@@ -23,6 +23,7 @@
     <!-- Main css -->
     <link rel="stylesheet" href="{{ mix('assets/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/auth/css/style.css') }}">
+
     @if (LaravelLocalization::getCurrentLocale() == 'ar')
         <link href="{{ asset('assets/admin/css/material-dashboard-rtl.css') }}" rel="stylesheet" />
     @endif

@@ -49,6 +49,11 @@ class Category extends Model
     // many to many relationship (polymorphic)  Category --> Offers
     public function offers()
     {
-        return $this->morphToMany(Offer::class, 'offerable');
+        return $this->morphToMany(Offer::class, 'offerable')->withPivot([
+            'offerable_type',
+            'value',
+            'type',
+            'number'
+        ]);
     }
 }

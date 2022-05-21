@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->tinyInteger('type')->default(0)->comment('0 -> Products, 1 -> Offers, 2 -> Flash Sale , 3 -> Banners');
             $table->tinyInteger('active')->default(0)->comment('0 -> No , 1 -> Yes');
+            $table->tinyInteger('today_deals')->default(0)->comment('0 -> No , 1 -> Yes');
             $table->tinyInteger('rank')->default(127);
             $table->timestamps();
         });

@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Translatable\HasTranslations;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class Supercategory extends Model
 {
+    use HasRelationships;
     use HasFactory;
     use HasTranslations;
     use SoftDeletes;
@@ -44,12 +46,23 @@ class Supercategory extends Model
     // many to many relationship (polymorphic)  Super-Category --> Coupons
     public function coupons()
     {
-        return $this->morphToMany(Coupon::class,'couponable');
+        return $this->morphToMany(Coupon::class, 'couponable');
     }
 
     // many to many relationship (polymorphic)  Super-Category --> Offers
     public function offers()
     {
-        return $this->morphToMany(Offer::class,'offerable');
+        return $this->morphToMany(Offer::class, 'offerable')->withPivot([
+            'offerable_type',
+            'value',
+            'type',
+            'number'
+        ]);
+    }
+
+    // many to many Deep relationship   Super-Category --> Products
+    public function products()
+    {
+        return $this->hasManyDeep(Product::class, [Category::class, Subcategory::class, 'product_subcategory']);
     }
 }

@@ -106,7 +106,7 @@ bg-gray-200 @endif select-none"
             {{-- Rank :: End --}}
 
             {{-- Title :: Start --}}
-            <div class="p-2 grow text-center text-black truncate">
+            <div class="p-2 grow text-center text-black truncate w-50">
                 {{ $section->title }}
             </div>
             {{-- Title :: End --}}

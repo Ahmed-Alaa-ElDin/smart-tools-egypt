@@ -40,6 +40,11 @@ class Brand extends Model
     // many to many relationship (polymorphic)  Brand --> Offers
     public function offers()
     {
-        return $this->morphToMany(Offer::class, 'offerable');
+        return $this->morphToMany(Offer::class, 'offerable')->withPivot([
+            'offerable_type',
+            'value',
+            'type',
+            'number'
+        ]);
     }
 }

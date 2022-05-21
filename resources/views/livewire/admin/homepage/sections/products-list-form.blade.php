@@ -22,7 +22,7 @@
 
     {{-- List :: Start --}}
     @foreach ($products as $key => $product)
-        <div class="flex flex-wrap gap-2 w-100 justify-center items-center @if ($key % 2 == 0) bg-red-100 @else bg-gray-100 @endif rounded-xl"
+        <div class="flex flex-wrap gap-2 w-100 justify-between items-center @if ($key % 2 == 0) bg-red-100 @else bg-gray-100 @endif rounded-xl"
             wire:key='product-{{ $key }}-{{ $product['id'] }}'>
 
             {{-- Rank --}}
@@ -91,7 +91,7 @@ bg-gray-200 @endif select-none"
             </div>
 
             {{-- Image & Name --}}
-            <div class="grow p-2 text-center flex items-center gap-2">
+            <div class="grow p-2 text-center flex items-center gap-2 w-50">
                 <div class="flex-shrink-0 h-10 w-10">
                     @if ($product['thumbnail'])
                         <img class="h-10 w-10 rounded-full"
@@ -106,7 +106,7 @@ bg-gray-200 @endif select-none"
                         </div>
                     @endif
                 </div>
-                <span>
+                <span class="truncate">
                     {{ $product['name'][session('locale')] }}
                 </span>
             </div>

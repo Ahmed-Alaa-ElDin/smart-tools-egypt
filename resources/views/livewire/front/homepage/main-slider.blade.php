@@ -122,7 +122,7 @@
             <div>
 
                 <ul class="grid grid-cols-3 lg:grid-cols-1 gap-2 ">
-                    @foreach ($todayDeals as $key => $product)
+                    @foreach ($todayDeals->products as $key => $product)
                         {{-- Product : Start --}}
                         <li
                             class="product overflow-hidden bg-white border border-light rounded hover:shadow-md hover:scale-105 transition cursor-pointer">
@@ -138,7 +138,7 @@
                                                     {{ __('front/homePage.OFF') }}
                                                 </span>
                                                 <span class="flex items-center bg-primary text-white rounded-full p-1">
-                                                    {{ round((($product->base_price - $product->final_price) / $product->base_price) * 100, 2) }}%
+                                                    {{ round((($product->base_price - $product->final_price) / $product->base_price) * 100) }}%
                                                 </span>
                                             </span>
                                         @endif
@@ -163,11 +163,13 @@
                                         {{-- Product Image : End --}}
 
                                         {{-- Extra Discount : Start --}}
-                                        {{-- todo --}}
-                                        <span
-                                            class="absolute bottom-2 rtl:right-0 ltr:left-0 text-xs font-bold text-white px-2 py-1 bg-primary">
-                                            {{ __('front/homePage.Extra Discount') }} 20%
-                                        </span>
+                                        @if (round((($product->final_price - $product->best_price) * 100) / $product->final_price))
+                                            <span
+                                                class="absolute bottom-2 rtl:right-0 ltr:left-0 text-xs font-bold text-white px-2 py-1 bg-primary">
+                                                {{ __('front/homePage.Extra Discount') }}
+                                                {{ round((($product->final_price - $product->best_price) * 100) / $product->final_price) }}%
+                                            </span>
+                                        @endif
                                         {{-- Extra Discount : End --}}
 
                                         {{-- Add Product : Start --}}
@@ -282,8 +284,8 @@
                                         {{-- Reviews : End --}}
 
                                         {{-- Product Name : Start --}}
-                                        <h3 class="mb-0 rtl:text-right">
-                                            <span class="block text-gray-800">
+                                        <h3 class="mb-0 text-center">
+                                            <span class="block text-gray-800 truncate">
                                                 {{ $product->name }}
                                             </span>
                                         </h3>

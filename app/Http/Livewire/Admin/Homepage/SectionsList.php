@@ -25,8 +25,10 @@ class SectionsList extends Component
 
     public function render()
     {
-        $sections = Section::where('title->en', 'like', "%" . $this->search . "%")
-            ->orWhere('title->ar', 'like', "%" . $this->search . "%")
+        $sections = Section::where('title->en', '!=', "Today's Deal")
+            ->where(fn ($q) => $q
+                ->where('title->en', 'like', "%" . $this->search . "%")
+                ->orWhere('title->ar', 'like', "%" . $this->search . "%"))
             ->orderBy('rank', $this->sortDirection)
             ->paginate($this->perPage);
 

@@ -15,7 +15,8 @@ class Section extends Model
         "title",
         "type",
         "active",
-        "rank"
+        "rank",
+        "today_deals"
     ];
 
     public $translatable = ['title'];
