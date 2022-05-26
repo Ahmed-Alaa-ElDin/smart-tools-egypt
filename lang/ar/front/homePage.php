@@ -45,6 +45,8 @@ return [
     "Power tools"               =>      "عدد كهربائية",
     "Hand tools"                =>      "عدد يدوية",
     "Contact us"                =>      "اتصل بنا",
+    "Under Reviewing"           =>      "قيد المراجعة",
+    "Expired"                   =>      "منتهي الصلاحية",
 
 
 ];

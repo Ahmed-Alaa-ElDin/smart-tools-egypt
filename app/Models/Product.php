@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -135,11 +136,53 @@ class Product extends Model
             ->with(
                 [
                     'thumbnail',
-                    'offers',
-                    'brand' => fn ($q) => $q->with('offers'),
+                    'offers' => fn ($q) => $q
+                        ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                        ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                        ->where(
+                            fn ($q) => $q
+                                ->where('offerables.number', '>', 0)
+                                ->orWhereNull('offerables.number')
+                        ),
+                    'brand' => fn ($q) => $q->with([
+                        'offers' => fn ($q) => $q
+                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                            ->where(
+                                fn ($q) => $q
+                                    ->where('offerables.number', '>', 0)
+                                    ->orWhereNull('offerables.number')
+                            )
+                    ]),
                     'subcategories' => fn ($q) => $q->with([
-                        'offers',
-                        'category' => fn ($q) => $q->with(['offers', 'supercategory' => fn ($q) => $q->with(['offers'])]),
+                        'offers' => fn ($q) => $q
+                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                            ->where(
+                                fn ($q) => $q
+                                    ->where('offerables.number', '>', 0)
+                                    ->orWhereNull('offerables.number')
+                            ),
+                        'category' => fn ($q) => $q->with([
+                            'offers' => fn ($q) => $q
+                                ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                                ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                                ->where(
+                                    fn ($q) => $q
+                                        ->where('offerables.number', '>', 0)
+                                        ->orWhereNull('offerables.number')
+                                ),
+                            'supercategory' => fn ($q) => $q->with([
+                                'offers' => fn ($q) => $q
+                                    ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                                    ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                                    ->where(
+                                        fn ($q) => $q
+                                            ->where('offerables.number', '>', 0)
+                                            ->orWhereNull('offerables.number')
+                                    )
+                            ])
+                        ]),
                     ])
                 ]
             )

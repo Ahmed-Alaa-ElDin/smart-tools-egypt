@@ -292,11 +292,11 @@
                                         {{-- Product Name : End --}}
 
                                         {{-- Points : Start --}}
-                                        @if ($product->points)
+                                        @if ($product->points || $product->best_points)
                                             <div
                                                 class="rounded px-2 mt-2 bg-gray-200 border-gray-800 text-black text-sm border flex justify-between items-center">
                                                 <span>{{ __('front/homePage.Points') }}</span>
-                                                <span>{{ $product->points }}</span>
+                                                <span>{{ $product->best_points > $product->points ? round($product->best_points) : $product->points }}</span>
                                             </div>
                                         @endif
                                         {{-- Points : End --}}

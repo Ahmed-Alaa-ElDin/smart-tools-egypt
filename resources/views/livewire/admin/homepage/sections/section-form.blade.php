@@ -113,9 +113,9 @@
                 </div>
             @enderror
             {{-- Products List : Start --}}
-            @livewire('admin.homepage.sections.products-list-form', ['products'=>$selected_products??[]])
+            @livewire('admin.homepage.sections.products-list-form', ['products' => $selected_products ?? []])
             {{-- Products List : End --}}
-        @elseif ($type == 1 || $type == 2)
+        @elseif ($type == 1)
             @error('selected_offer')
                 <div class="flex items-center justify-center" wire:key="selected_offer">
                     <div
@@ -125,7 +125,19 @@
                 </div>
             @enderror
             {{-- Offers List : Start --}}
-            @livewire('admin.homepage.sections.offers-list-form', ['selected_offer'=>$selected_offer])
+            @livewire('admin.homepage.sections.offers-list-form', ['selected_offer' => $selected_offer])
+            {{-- Offers List : End --}}
+        @elseif ($type == 2)
+            @error('selected_offer')
+                <div class="flex items-center justify-center" wire:key="selected_offer">
+                    <div
+                        class="inline-block max-w-max m-auto col-span-12 bg-red-700 rounded text-white shadow px-3 py-1 w-full mb-2 text-center">
+                        {{ $message }}
+                    </div>
+                </div>
+            @enderror
+            {{-- Offers List : Start --}}
+            @livewire('admin.homepage.sections.offers-list-form', ['selected_offer' => $selected_offer])
             {{-- Offers List : End --}}
         @elseif ($type == 3)
             @error('selected_banners')
@@ -137,7 +149,7 @@
                 </div>
             @enderror
             {{-- Offers List : Start --}}
-            @livewire('admin.homepage.sections.banners-list-form', ['banners'=>$selected_banners??[]])
+            @livewire('admin.homepage.sections.banners-list-form', ['banners' => $selected_banners ?? []])
             {{-- Offers List : End --}}
         @endif
     </div>

@@ -61,7 +61,7 @@ class SectionForm extends Component
             $this->active = $this->section->active;
 
             $this->type = $this->section->type;
-            // dd($this->section);
+
             if ($this->type == 0) {
                 $this->selected_products = $this->section->products->toArray();
                 foreach ($this->selected_products as &$product) {

@@ -1,5 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Offers', 'activePage' => 'Add Offer', 'titlePage' =>
-__('admin/offersPages.Add Offer')])
+@extends('layouts.admin.admin', ['activeSection' => 'Offers', 'activePage' => 'Add Offer', 'titlePage' => __('admin/offersPages.Add Offer')])
 
 @section('content')
     <div class="content">
@@ -79,11 +78,7 @@ __('admin/offersPages.Add Offer')])
                     format: 'YYYY-MM-DD hh:mm A',
                 }
             }, function(start, end, label) {
-                Livewire.emit('daterangeUpdated', start.format('YYYY-MM-DD hh:mm:ss'), end.format(
-                    'YYYY-MM-DD hh:mm:ss'));
-                console.log('New date range selected: ' + start.format('YYYY-MM-DD HH:mm') + ' to ' + end
-                    .format(
-                        'YYYY-MM-DD HH:mm') + ' (predefined range: ' + label + ')');
+                Livewire.emit('daterangeUpdated', start.format('YYYY-MM-DD H:mm'), end.format('YYYY-MM-DD H:mm'));
             });
         });
     </script>

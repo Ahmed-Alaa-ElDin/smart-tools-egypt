@@ -17,14 +17,14 @@ class OffersDatatable extends Component
 
     public $search = "";
 
-    protected $listeners = ['softDeleteOffer'];
+    protected $listeners = ['deleteOffer'];
 
     // Render Once
     public function mount()
     {
         $this->perPage = Config::get('constants.constants.PAGINATION');
 
-        $this->sortBy = 'title->'.session('locale');
+        $this->sortBy = 'title->' . session('locale');
     }
 
     // Render With each update
@@ -75,16 +75,17 @@ class OffersDatatable extends Component
             'confirmButtonText' => __('admin/offersPages.Delete'),
             'denyButtonText' => __('admin/offersPages.Cancel'),
             'confirmButtonColor' => 'red',
-            'func' => 'softDeleteOffer',
+            'func' => 'deleteOffer',
             'offer_id' => $offer_id,
         ]);
     }
 
-    public function softDeleteOffer($offer_id)
+    public function deleteOffer($offer_id)
     {
         try {
-            $user = Offer::findOrFail($offer_id);
-            $user->delete();
+            $offer = Offer::with('sections')->findOrFail($offer_id);
+            $offer->sections()->delete();
+            $offer->delete();
 
             $this->dispatchBrowserEvent('swalOfferDeleted', [
                 "text" => __('admin/offersPages.Offer has been deleted successfully'),
