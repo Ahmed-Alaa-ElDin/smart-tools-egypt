@@ -18,9 +18,10 @@
             </div>
 
             {{-- preview --}}
-            @if ($temp_path)
-                <div class="col-span-12 text-center w-1/2 md:w-1/4 my-2">
-                    <img src="{{ $temp_path }}" class="rounded-xl">
+            @if ($temp_path || $oldImage)
+                <div class="col-span-12 text-center w-full my-2">
+                    <img src="{{ $temp_path ?? asset('storage/images/profiles/original/' . $oldImage) }}"
+                        class="rounded-xl w-1/2 md:w-1/4 m-auto">
                 </div>
                 <div class="col-span-12 text-center">
                     <button class="btn btn-danger btn-sm text-bold"
@@ -393,18 +394,24 @@
                 class="col-span-12 text-black font-bold m-0 text-center">{{ __('admin/usersPages.Password Notification') }}</label>
         </div>
 
-        {{-- Buttons --}}
-        <div class="flex flex-wrap gap-3 justify-around mt-4">
-            {{-- Save and Back --}}
-            <button type="button" wire:click.prevent="save"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Save') }}</button>
-            {{-- Save and New --}}
-            <button type="button" wire:click.prevent="save('true')"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Save and Add New User') }}</button>
+        {{-- Buttons Section Start --}}
+        <div class="col-span-12 w-full flex mt-2 justify-around">
+            @if ($user_id != null)
+                <button type="button" wire:click.prevent="update"
+                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Update') }}</button>
+            @else
+                {{-- Save and Back --}}
+                <button type="button" wire:click.prevent="save"
+                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Save') }}</button>
+                {{-- Save and New --}}
+                <button type="button" wire:click.prevent="save('true')"
+                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Save and Add New User') }}</button>
+            @endif
             {{-- Back --}}
             <a href="{{ route('admin.users.index') }}"
                 class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Back') }}</a>
         </div>
+        {{-- Buttons Section End --}}
 
     </form>
 </div>

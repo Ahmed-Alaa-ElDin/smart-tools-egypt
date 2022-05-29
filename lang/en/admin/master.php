@@ -43,5 +43,14 @@ return [
     "Loading ..."               =>      "Loading ...",
     'Website Control'           =>      'Website Control',
     'HomePage'                  =>      'HomePage',
+    'Customers'                 =>      'Customers',
+    'All Customers'             =>      'All Customers',
+    'Add Customer'              =>      'Add Customer',
+    'Deleted Customers'         =>      'Deleted Customers',
     'Categories'                =>      'Categories',
+    'Categories'                =>      'Categories',
+    'Categories'                =>      'Categories',
+    'Categories'                =>      'Categories',
+    'Categories'                =>      'Categories',
+
 ];

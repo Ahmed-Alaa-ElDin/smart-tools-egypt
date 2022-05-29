@@ -17,7 +17,7 @@ class DeletedUsersDatatable extends Component
 
     public $search = "";
 
-    protected $listeners = ['forceDeleteUser', 'restoreUser','forceDeleteAllUsers','restoreAllUsers'];
+    protected $listeners = ['forceDeleteUser', 'restoreUser', 'forceDeleteAllUsers', 'restoreAllUsers'];
 
     // Render Once
     public function mount()
@@ -30,7 +30,10 @@ class DeletedUsersDatatable extends Component
     // Render With each update
     public function render()
     {
-        $users = User::onlyTrashed()->with('phones','roles')
+        $users = User::onlyTrashed()->with('phones', 'roles')
+            ->whereHas("roles", function ($q) {
+                $q->where("id", "!=", 1);
+            })
             ->where(function ($query) {
                 $query
                     ->where('f_name->en', 'like', '%' . $this->search . '%')
@@ -164,7 +167,9 @@ class DeletedUsersDatatable extends Component
     public function forceDeleteAllUsers($user_id)
     {
         try {
-            User::onlyTrashed()->forceDelete();
+            User::with('roles')
+                ->whereHas('roles', fn ($q) => $q->where('id', '!=', 1))
+                ->onlyTrashed()->forceDelete();
 
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('admin/usersPages.All users have been deleted successfully'),
@@ -196,10 +201,13 @@ class DeletedUsersDatatable extends Component
         ]);
     }
 
-    public function restoreAllUsers($user_id)
+    public function restoreAllUsers()
     {
         try {
-            $user = User::onlyTrashed()->restore();
+            User::with('roles')
+                ->whereHas('roles', fn ($q) => $q->where('id', '!=', 1))
+                ->onlyTrashed()
+                ->restore();
 
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('admin/usersPages.All users have been restored successfully'),

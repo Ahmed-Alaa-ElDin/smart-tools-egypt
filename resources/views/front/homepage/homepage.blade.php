@@ -7,18 +7,23 @@
 
     @foreach ($homepage_sections as $section)
         @if ($section->type == 0)
+            {{-- Product List : Start --}}
             @livewire('front.homepage.products-list', ['section' => $section])
+            {{-- Product List : End --}}
         @elseif ($section->type == 1)
+            {{-- Offer : Start --}}
             @livewire('front.homepage.offers-products-list', ['section' => $section, 'flash_sale' => false])
+            {{-- Offer : End --}}
         @elseif ($section->type == 2)
+            {{-- Flash Sale : Start --}}
             @livewire('front.homepage.offers-products-list', ['section' => $section, 'flash_sale' => true])
+            {{-- Flash Sale : End --}}
         @elseif ($section->type == 3)
-            Banner
+            {{-- Offer Bar : Start --}}
+            @livewire('front.homepage.banners-list', ['section' => $section])
+            {{-- Offer Bar : End --}}
         @endif
     @endforeach
-    {{-- Offer Bar : Start --}}
-    @include('layouts.front.includes.offer_bar')
-    {{-- Offer Bar : End --}}
 
     {{-- Top Categories & Brands : Start --}}
     @include('layouts.front.includes.top_categories_brands')
@@ -101,6 +106,8 @@
                     // If the count down is finished, write some text
                     if (distance < 0) {
                         clearInterval(x);
+                        $('.timer').addClass('hidden');
+                        $('.expired').removeClass('hidden');
                     }
                 }, 1000);
             });

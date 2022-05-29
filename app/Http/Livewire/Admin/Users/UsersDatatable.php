@@ -32,18 +32,24 @@ class UsersDatatable extends Component
     // Render With each update
     public function render()
     {
-        $users = User::with('phones','roles')
-            ->where('f_name->en', 'like', '%' . $this->search . '%')
-            ->orWhere('f_name->ar', 'like', '%' . $this->search . '%')
-            ->orWhere('l_name->en', 'like', '%' . $this->search . '%')
-            ->orWhere('l_name->ar', 'like', '%' . $this->search . '%')
-            ->orWhere('email', 'like', '%' . $this->search . '%')
-            ->orWhereHas('phones', function ($query) {
-                $query->where('phone', 'like', '%' . $this->search . '%');
+        $users = User::with('phones', 'roles')
+            ->whereHas("roles", function ($q) {
+                $q->where("id", "!=", 1);
             })
-            ->orWhereHas('roles', function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%');
-            })
+            ->where(
+                fn ($q) => $q
+                    ->where('f_name->en', 'like', '%' . $this->search . '%')
+                    ->orWhere('f_name->ar', 'like', '%' . $this->search . '%')
+                    ->orWhere('l_name->en', 'like', '%' . $this->search . '%')
+                    ->orWhere('l_name->ar', 'like', '%' . $this->search . '%')
+                    ->orWhere('email', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('phones', function ($query) {
+                        $query->where('phone', 'like', '%' . $this->search . '%');
+                    })
+                    ->orWhereHas('roles', function ($query) {
+                        $query->where('name', 'like', '%' . $this->search . '%');
+                    })
+            )
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 

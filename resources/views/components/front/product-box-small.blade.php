@@ -91,7 +91,7 @@
                         <div class="flex rtl:flex-row-reverse gap-1">
                             <span class="font-bold text-primary text-sm">{{ __('front/homePage.EGP') }}</span>
                             <span
-                                class="font-bold text-primary text-2xl">{{ explode('.', $product->final_price)[0] }}</span>
+                                class="font-bold text-primary text-xl">{{ explode('.', $product->final_price)[0] }}</span>
                             <span
                                 class="font-bold text-primary text-sm">{{ explode('.', $product->final_price)[1] }}</span>
                         </div>
@@ -102,9 +102,11 @@
                             <span>
                                 {{ __('front/homePage.EGP') }}
                             </span>
-                            <span>
-                                {{ $product->base_price }}
-                            </span>
+                            <span
+                                class="font-bold text-3xl">{{ explode('.', $product->base_price)[0] }}</span>
+                            <span
+                                class="font-bold">{{ explode('.', $product->base_price)[1] }}</span>
+
                         </del>
                         {{-- Base Price : End --}}
                     @endif

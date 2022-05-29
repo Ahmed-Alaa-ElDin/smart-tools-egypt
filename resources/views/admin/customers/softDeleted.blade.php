@@ -1,0 +1,122 @@
+@extends('layouts.admin.admin', ['activeSection' => 'Customers', 'activePage' => 'Deleted Customers', 'titlePage' =>
+__('admin/usersPages.Deleted Customers')])
+
+@section('content')
+    <div class="content">
+        <div class="container-fluid">
+            {{-- Breadcrumb --}}
+            <nav aria-label="breadcrumb" role="navigation">
+                <ol class="breadcrumb text-sm">
+                    <li class="breadcrumb-item hover:text-primary"><a
+                            href="{{ route('admin.dashboard') }}">{{ __('admin/usersPages.Dashboard') }}</a></li>
+                    <li class="breadcrumb-item hover:text-primary"><a
+                            href="{{ route('admin.customers.index') }}">{{ __('admin/usersPages.All Customers') }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/usersPages.Deleted Customers') }}</li>
+                </ol>
+            </nav>
+
+            <section class="row">
+                <div class="col-md-12">
+
+                    {{-- Card --}}
+                    <div class="card">
+
+                        {{-- Card Head --}}
+                        <div class="card-header card-header-primary">
+                            <div class="row">
+                                <div class="col-12 ltr:text-left rtl:text-right font-bold self-center text-gray-100">
+                                    <p class="">
+                                        {{ __('admin/usersPages.Here you can Restore / Permanently delete customers') }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Card Body --}}
+                        <div class="card-body overflow-hidden">
+
+                            {{-- Datatable Start --}}
+                            @livewire('admin.customers.deleted-customers-datatable')
+                            {{-- Datatable End --}}
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+@endsection
+
+{{-- Extra Styles --}}
+@push('css')
+    @livewireStyles
+@endpush
+
+{{-- Extra Scripts --}}
+@push('js')
+    @livewireScripts
+
+    <script>
+        // #### User Force Delete ####
+        window.addEventListener('swalConfirm', function(e) {
+            Swal.fire({
+                icon: e.detail.icon,
+                text: e.detail.text,
+                confirmButtonText: e.detail.confirmButtonText,
+                denyButtonText: e.detail.denyButtonText,
+                denyButtonColor: e.detail.denyButtonColor,
+                confirmButtonColor: e.detail.confirmButtonColor,
+                focusDeny: e.detail.focusDeny,
+                showDenyButton: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.emit(e.detail.method, e.detail.user_id);
+                }
+            });
+        });
+
+        window.addEventListener('swalDone', function(e) {
+            Swal.fire({
+                text: e.detail.text,
+                icon: e.detail.icon,
+                position: 'top-right',
+                showConfirmButton: false,
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+            })
+        });
+        // #### User Force Delete ####
+
+
+        // #### Restore ####
+        window.addEventListener('swalRestore', function(e) {
+            Swal.fire({
+                icon: 'warning',
+                text: e.detail.text,
+                showDenyButton: true,
+                confirmButtonText: e.detail.confirmButtonText,
+                denyButtonText: e.detail.denyButtonText,
+                denyButtonColor: 'gray',
+                confirmButtonColor: 'green',
+                focusDeny: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.emit('restoreUser', e.detail.user_id);
+                }
+            });
+        });
+
+        window.addEventListener('swalUserRestored', function(e) {
+            Swal.fire({
+                text: e.detail.text,
+                icon: e.detail.icon,
+                position: 'top-right',
+                showConfirmButton: false,
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+            })
+        });
+        // #### Restore ####
+    </script>
+@endpush

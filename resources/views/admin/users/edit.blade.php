@@ -35,7 +35,7 @@ __('admin/usersPages.Edit User')])
                         <div class="card-body overflow-hidden">
 
                             {{-- Form Start --}}
-                            @livewire('admin.users.edit-user-form', ['user_id' => $id])
+                            @livewire('admin.users.user-form', ['user_id' => $id])
                             {{-- content --}}
 
                         </div>

@@ -3,8 +3,11 @@
 use App\Http\Controllers\Admin\Homepage\BannerController;
 use App\Http\Controllers\Admin\Homepage\HomepageController;
 use App\Http\Controllers\Admin\Homepage\TodayDealsController;
-use App\Http\Controllers\Admin\Homepage\TopCategories;
-use App\Http\Controllers\Admin\Homepage\TopSuperCategories;
+use App\Http\Controllers\Admin\Homepage\TopBannerController;
+use App\Http\Controllers\Admin\Homepage\TopBrandsController;
+use App\Http\Controllers\Admin\Homepage\TopCategoriesController;
+use App\Http\Controllers\Admin\Homepage\TopSubcategoriesController;
+use App\Http\Controllers\Admin\Homepage\TopSuperCategoriesController;
 use Illuminate\Support\Facades\Route;
 
 // HomePage : Start
@@ -15,16 +18,28 @@ Route::get('/site/homepage/edit/{section_id}', [HomepageController::class, 'edit
 
 Route::group(['prefix' => '/site', 'as' => 'site.'], function () {
     // Slider : Start
-    Route::resource('/homepage/banners', BannerController::class);
+    Route::get('/homepage/top-banner', [TopBannerController::class,'index'])->name('topbanner.index');
+    // Slider : End
+
     // Slider : Start
+    Route::resource('/homepage/banners', BannerController::class);
+    // Slider : End
 
     // Top Super Categories : Start
-    Route::get('/homepage/topsupercategories', [TopSuperCategories::class, 'index'])->name('topsupercategories.index');
+    Route::get('/homepage/topsupercategories', [TopSuperCategoriesController::class, 'index'])->name('topsupercategories.index');
     // Top Super Categories : End
 
-    // Top Super Categories : Start
-    Route::get('/homepage/topcategories', [TopCategories::class, 'index'])->name('topcategories.index');
-    // Top Super Categories : End
+    // Top Categories : Start
+    Route::get('/homepage/topcategories', [TopCategoriesController::class, 'index'])->name('topcategories.index');
+    // Top Categories : End
+
+    // Top Sub Categories : Start
+    Route::get('/homepage/topsubcategories', [TopSubcategoriesController::class, 'index'])->name('topsubcategories.index');
+    // Top Sub Categories : End
+
+    // Top Brands : Start
+    Route::get('/homepage/topbrands', [TopBrandsController::class, 'index'])->name('topbrands.index');
+    // Top Brands : End
 
     // Today's Deals : Start
     Route::get('/homepage/today-deals', [TodayDealsController::class, 'index'])->name('today-deals.index');

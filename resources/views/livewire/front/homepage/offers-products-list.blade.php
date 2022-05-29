@@ -1,8 +1,8 @@
 <section class="offer-bar mb-3">
 
     @php
-        $date = Carbon\Carbon::parse($section->offers->first()->expire_at);
-        $now = Carbon\Carbon::now();
+        $date = Carbon\Carbon::parse($section->offers->first()->expire_at,"Africa/Cairo");
+        $now = Carbon\Carbon::now("Africa/Cairo");
 
         $diff = $now->diffInSeconds($date, false);
         $diffDays = floor($diff / (60 * 60 * 24));
@@ -67,12 +67,12 @@
                             {{-- Second : End --}}
                         </div>
                     @else
-                        <div class="countdown-item bg-primary flex justify-center items-center p-1 rounded shadow ">
+                        <div class="expired bg-primary flex justify-center items-center p-1 rounded shadow m-auto">
                             <span
                                 class="inline-block text-white text-center font-bold px-1">{{ __('front/homePage.Expired') }}</span>
                         </div>
                     @endif
-                    <div class="countdown-item bg-primary flex justify-center items-center p-1 rounded shadow hidden">
+                    <div class="expired bg-primary flex justify-center items-center p-1 rounded shadow hidden m-auto">
                         <span
                             class="inline-block text-white text-center font-bold px-1">{{ __('front/homePage.Expired') }}</span>
                     </div>

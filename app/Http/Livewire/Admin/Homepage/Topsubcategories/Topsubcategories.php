@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Homepage\Topcategories;
+namespace App\Http\Livewire\Admin\Homepage\Topsubcategories;
 
 use App\Models\Category;
 use App\Models\Subcategory;
@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 
-class TopCategories extends Component
+class Topsubcategories extends Component
 {
     public $items;
 
@@ -39,7 +39,9 @@ class TopCategories extends Component
             'supercategory' => function ($q) {
                 $q->select('supercategories.id', 'supercategories.name');
             }
-        ])->get();
+        ])
+            ->whereBetween('top', [1, 5])
+            ->get();
 
         $oldSubcategories = [
             0 => $this->subcategories->where('top', '1')->first(),
@@ -96,7 +98,7 @@ class TopCategories extends Component
 
     public function render()
     {
-        return view('livewire.admin.homepage.topcategories.top-categories');
+        return view('livewire.admin.homepage.topsubcategories.topsubcategories');
     }
 
     ######################## Updated Supercategory : End ############################

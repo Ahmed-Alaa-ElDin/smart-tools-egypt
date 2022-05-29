@@ -1,5 +1,5 @@
 @extends('layouts.admin.admin', ['activeSection' => 'Site Control', 'activePage' => '', 'titlePage'
-=> __("admin/sitePages.Homepage's Top Subcategories")])
+=> __("admin/sitePages.Homepage's Top Categories")])
 
 @section('content')
     <div class="content">
@@ -20,7 +20,7 @@
                     </li>
 
                     <li class="breadcrumb-item active" aria-current="page">
-                        {{ __("admin/sitePages.Homepage's Top Subcategories") }}
+                        {{ __("admin/sitePages.Homepage's Top Categories") }}
                     </li>
                 </ol>
             </nav>
@@ -39,14 +39,14 @@
                                         {{ __("admin/sitePages.Here you can manage homepage's top categories") }}</p>
                                 </div>
 
-                                {{-- Add New Subcategories Button --}}
+                                {{-- Add New Categories Button --}}
                                 <div class="ltr:text-right rtl:text-left">
-                                    <a href="{{ route('admin.subcategories.create') }}"
+                                    <a href="{{ route('admin.categories.create') }}"
                                         class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">
                                         <span class="material-icons rtl:ml-1 ltr:mr-1">
                                             add
                                         </span>
-                                        {{ __('admin/sitePages.Add Subcategory') }}</a>
+                                        {{ __('admin/sitePages.Add Category') }}</a>
                                 </div>
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                         <div class="card-body overflow-hidden">
 
                             {{-- Datatable Start --}}
-                            @livewire('admin.homepage.topcategories.top-categories')
+                            @livewire('admin.homepage.topcategories.topcategories')
                             {{-- Datatable End --}}
 
                         </div>

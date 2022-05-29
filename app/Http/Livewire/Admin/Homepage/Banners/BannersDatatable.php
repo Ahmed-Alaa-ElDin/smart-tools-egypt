@@ -38,7 +38,7 @@ class BannersDatatable extends Component
                 ->where('description->ar', 'like', '%' . $this->search . '%')
                 ->orWhere('description->en', 'like', '%' . $this->search . '%')
                 ->orWhere('link', 'like', '%' . $this->search . '%');
-        })
+        })->where("top_banner", 0)
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 

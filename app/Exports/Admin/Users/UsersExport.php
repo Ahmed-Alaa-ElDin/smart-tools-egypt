@@ -26,7 +26,7 @@ class UsersExport implements FromCollection, WithHeadings, WithStyles, WithMappi
      */
     public function collection()
     {
-        $users = User::with('roles','phones','addresses')->get();
+        $users = User::with('roles', 'phones', 'addresses')->whereHas('roles', fn ($q) => $q->where('id', '!=', 1))->get();
         $this->count = $users->count();
 
         return $users;
@@ -66,12 +66,12 @@ class UsersExport implements FromCollection, WithHeadings, WithStyles, WithMappi
             $user->getTranslation('f_name', 'ar'),
             $user->getTranslation('l_name', 'ar'),
             $user->email,
-            $user->phones->first() ? $user->phones->where('default',1)->first()->phone : __('N/A'),
+            $user->phones->first() ? $user->phones->where('default', 1)->first()->phone : __('N/A'),
             $user->gender == 0 ? __('Male') : __('Female'),
             $user->balance == 0 ? "0" . ' ' . __('admin/usersPages.LE') : $user->balance . ' ' . __('admin/usersPages.LE'),
             $user->points == 0 ? "0" : $user->points,
-            $user->addresses->first() && $user->addresses->first()->governorate ? $user->addresses->first()->governorate->getTranslation('name','en') : __('N/A'),
-            $user->addresses->first() && $user->addresses->first()->governorate ? $user->addresses->first()->governorate->getTranslation('name','ar') : __('N/A'),
+            $user->addresses->first() && $user->addresses->first()->governorate ? $user->addresses->first()->governorate->getTranslation('name', 'en') : __('N/A'),
+            $user->addresses->first() && $user->addresses->first()->governorate ? $user->addresses->first()->governorate->getTranslation('name', 'ar') : __('N/A'),
             $user->getRoleNames()->first(),
             $user->visit_num ?: "0",
             $user->last_visit_at ? Carbon::createFromTimeStamp(strtotime($user->last_visit_at))->diffForHumans() : __('N/A'),

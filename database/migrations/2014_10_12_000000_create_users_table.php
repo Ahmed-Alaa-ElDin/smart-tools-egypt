@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('email',50)->unique()->nullable();
             $table->string('password');
             $table->tinyInteger('gender')->default(0)->comment('0 -> Male , 1 -> Female');
+            $table->tinyInteger('banned')->default(0)->comment('0 -> No , 1 -> Yes');
             $table->date('birth_date')->default(Carbon::now());
             $table->string('profile_photo_path')->nullable();
             $table->decimal('balance')->default(0);

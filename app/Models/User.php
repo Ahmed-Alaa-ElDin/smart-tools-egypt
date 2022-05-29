@@ -35,6 +35,7 @@ class User extends Authenticatable
         'password',
         'gender',
         'visit_num',
+        'banned',
         'last_visit_at',
         'profile_photo_path',
         'email_verified_at',

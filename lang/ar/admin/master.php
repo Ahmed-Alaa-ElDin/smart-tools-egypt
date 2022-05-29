@@ -43,5 +43,9 @@ return [
     "Loading ..."               =>      "جاري التحميل ...",
     'Website Control'           =>      'التحكم بالموقع',
     'HomePage'                  =>      'الصفحة الرئيسية',
+    'Customers'                 =>      'العملاء',
+    'All Customers'             =>      'جميع العملاء',
+    'Add Customer'              =>      'إضافة عميل',
+    'Deleted Customers'         =>      'العملاء المحذوفين مؤقتاً',
 
 ];

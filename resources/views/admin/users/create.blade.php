@@ -35,7 +35,7 @@ __('admin/usersPages.Add User')])
                         <div class="card-body overflow-hidden">
 
                             {{-- Form Start --}}
-                            @livewire('admin.users.add-user-form')
+                            @livewire('admin.users.user-form')
                             {{-- content --}}
 
                         </div>

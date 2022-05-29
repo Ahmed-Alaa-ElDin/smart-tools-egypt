@@ -7,18 +7,26 @@ use App\Models\Supercategory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class CategoryForm extends Component
 {
+    use WithFileUploads;
+
     public $category_id;
     public $name = ['ar' => '', 'en' => ''], $supercategory_id;
     public $title, $description_seo;
+
+    public $image;
+    public $image_name;
+    public $deletedImages = [];
 
     protected $listeners = ["descriptionSeo"];
 
     public function rules()
     {
         return [
+            'image'             =>      'nullable|mimes:jpg,jpeg,png|max:2048',
             'name.ar'           =>        'required|string|max:100|min:3',
             'name.en'           =>        'required|string|max:100|min:3',
             'supercategory_id'  =>        'required|exists:supercategories,id',
@@ -30,7 +38,7 @@ class CategoryForm extends Component
     public function mount()
     {
         // get all supercategories
-        $this->supercategories = Supercategory::select('id','name')->get();
+        $this->supercategories = Supercategory::select('id', 'name')->get();
 
         if ($this->category_id) {
 
@@ -47,6 +55,7 @@ class CategoryForm extends Component
             $this->supercategory_id = $category->supercategory_id;
             $this->title = $category->meta_title;
             $this->description_seo = $category->meta_description;
+            $this->image_name = $category->image_name;
         }
     }
 
@@ -63,6 +72,26 @@ class CategoryForm extends Component
     }
     ######################## Real Time Validation : End ############################
 
+    ######################## Image : Start ############################
+    // validate and upload photo
+    public function updatedImage($image)
+    {
+        // Crop and resize photo
+        try {
+            $this->image_name = singleImageUpload($image, 'category-', 'categories');
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function deleteImage()
+    {
+        $this->deletedImages[] = $this->image_name;
+
+        $this->image = null;
+        $this->image_name = null;
+    }
+    ######################## Image : Start ############################
 
     ######################## Updated SEO description : Start ############################
     public function descriptionSeo($value)
@@ -82,12 +111,17 @@ class CategoryForm extends Component
         try {
             Category::create([
                 'name' => ['ar' => $this->name['ar'], 'en' => $this->name['en']],
+                'image_name' => $this->image_name,
                 'supercategory_id' => $this->supercategory_id,
                 'meta_title' => $this->title,
                 'meta_description' => $this->description_seo,
             ]);
 
             DB::commit();
+
+            foreach ($this->deletedImages as $deletedImage) {
+                imageDelete($deletedImage, 'banners');
+            }
 
             if ($new) {
                 Session::flash('success', __('admin/productsPages.Category added successfully'));
@@ -98,7 +132,7 @@ class CategoryForm extends Component
             }
         } catch (\Throwable $th) {
             DB::rollBack();
-            // throw $th;
+
             Session::flash('error', __("admin/productsPages.Category hasn't been added"));
             redirect()->route('admin.categories.index');
         }
@@ -118,6 +152,7 @@ class CategoryForm extends Component
                 'supercategory_id' => $this->supercategory_id,
                 'meta_title' => $this->title,
                 'meta_description' => $this->description_seo,
+                'image_name' => $this->image_name
             ]);
 
             DB::commit();

@@ -25,6 +25,6 @@ class MainSlider extends Component
             }
         ])->where('top', '>', 0)->orderBy('top')->get();
 
-        $this->topSubcategories = Subcategory::select('id', 'name', 'image_name', 'top')->where('top', '>', 0)->orderBy('top')->get();
+        $this->topSubcategories = Subcategory::select('id', 'name', 'image_name', 'top')->where('top', '>', 0)->orderBy('top')->take(5)->get();
     }
 }

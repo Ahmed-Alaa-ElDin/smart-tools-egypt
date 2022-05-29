@@ -13,19 +13,20 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
-use Intervention\Image\ImageManager;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Spatie\Permission\Models\Role;
-use Throwable;
 
-class AddUserForm extends Component
+class UserForm extends Component
 {
     use WithFileUploads;
 
+    public $user_id;
+    public $user;
     public $roles;
     public $photo;
     public $temp_path;
+    public $oldImage;
     public $image_name;
 
     public $defaultPhone = 0;
@@ -44,8 +45,8 @@ class AddUserForm extends Component
             'f_name.en'                     => 'nullable|string|max:20|min:3',
             'l_name.ar'                     => 'nullable|string|max:20|min:3',
             'l_name.en'                     => 'nullable|string|max:20|min:3',
-            'email'                         => 'nullable|required_if:role,2|required_without:phones.' . $this->defaultPhone . '.phone|email|max:50|min:3|unique:users,email',
-            'phones.*.phone'                => 'nullable|required_without:email|digits_between:8,11|' . Rule::unique('phones'),
+            'email'                         => 'required|email|max:50|min:3|unique:users,email,' . $this->user_id,
+            'phones.*.phone'                => 'nullable|digits_between:8,11|' . Rule::unique('phones')->ignore($this->user_id, 'user_id'),
             'gender'                        => 'in:0,1',
             'role'                          => 'exists:roles,id',
             'birth_date'                    => 'date|before:today',
@@ -63,7 +64,6 @@ class AddUserForm extends Component
     {
         return [
             'phones.*.phone.digits_between' => __('validation.The phone numbers must contain digits between 8 & 11'),
-            'email.required_if' => __('validation.The Email Address is required when role is admin.'),
         ];
     }
 
@@ -71,7 +71,7 @@ class AddUserForm extends Component
     public function mount()
     {
         // Get all roles
-        $this->roles = Role::get();
+        $this->roles = Role::where('id', '!=', 1)->get();
 
         // Select first role in database (customer)
         $this->role = $this->roles->first()->id;
@@ -95,19 +95,90 @@ class AddUserForm extends Component
         ]];
 
         // get all countries
-        $this->countries = Country::orderBy('name->'.session('locale'))->get();
+        $this->countries = Country::orderBy('name->' . session('locale'))->get();
 
         if ($this->countries->count()) {
             // User Has Addresses
             $this->governorates[0] = Governorate::where('country_id', $this->addresses[0]['country_id'])->orderBy('name->' . session('locale'))->get()->toArray();
             $this->cities[0] = City::where('governorate_id', $this->addresses[0]['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray();
         }
+
+        if ($this->user_id) {
+            // get User Data
+            $this->user = User::with('phones', 'addresses')->findOrFail($this->user_id);
+
+            // get old image
+            $this->oldImage = $this->user->profile_photo_path;
+
+            // First name
+            $this->f_name = [
+                'ar' => $this->user->getTranslation('f_name', 'ar'),
+                'en' => $this->user->getTranslation('f_name', 'en')
+            ];
+
+            // Last name
+            $this->l_name = [
+                'ar' => $this->user->getTranslation('l_name', 'ar') ?? '',
+                'en' => $this->user->getTranslation('l_name', 'en') ?? ''
+            ];
+
+            // Email
+            $this->email = $this->user->email ?? '';
+
+            // Phones
+            $this->phones = count($this->user->phones->toArray()) ? $this->user->phones->toArray() : [
+                '0' => [
+                    'user_id' => $this->user_id,
+                    'phone' => null,
+                    'default' => 1
+                ]
+            ];
+
+            // set default phone number
+            $this->defaultPhone = key(array_filter($this->phones, function ($phone) {
+                return $phone['default'] == 1;
+            }));
+
+            // Gender
+            $this->gender = $this->user->gender ?? 0;
+
+            // Role
+            $this->role = $this->user->roles->first()->id ?? '';
+
+            // Birth date
+            $this->birth_date = $this->user->birth_date ?? '';
+
+            // get user addresses if present
+            $this->addresses = count($this->user->addresses->toArray()) ? $this->user->addresses->toArray() : ["0" => [
+                'user_id' => $this->user_id,
+                'country_id' => 1,
+                'governorate_id' => 1,
+                'city_id' => 1,
+                'details' => '',
+                'special_marque' => '',
+                'default' => 1
+            ]];
+
+            // all Addresses
+            $this->countries = Country::orderBy('name->' . session('locale'))->get();
+
+            if ($this->countries->count()) {
+                // User Has Addresses
+                foreach ($this->addresses as $index => $address) {
+                    $this->governorates[$index] = Governorate::where('country_id', $address['country_id'])->get()->toArray();
+                    $this->cities[$index] = City::where('governorate_id', $address['governorate_id'])->get()->toArray();
+                }
+                $this->defaultAddress = key(array_filter($this->addresses, function ($address) {
+                    return $address['default'] == 1;
+                }));
+            }
+        }
     }
 
     // Called with every update
     public function render()
     {
-        return view('livewire.admin.users.add-user-form');
+        return view('livewire.admin.users.user-form');
     }
 
     // Real Time Validation
@@ -205,7 +276,6 @@ class AddUserForm extends Component
         $this->temp_path = $imageUpload["temporaryUrl"];
 
         $this->image_name = $imageUpload["image_name"];
-
     }
 
     // remove image
@@ -213,6 +283,7 @@ class AddUserForm extends Component
     {
         $this->image_name = Null;
         $this->temp_path = Null;
+        $this->oldImage = Null;
     }
     ######################## Profile Image : End ############################
 
@@ -299,11 +370,103 @@ class AddUserForm extends Component
                 Session::flash('success', __('admin/usersPages.User added successfully'));
                 redirect()->route('admin.users.index');
             }
-        } catch (Throwable $th) {
+        } catch (\Throwable $th) {
             DB::rollback();
 
             Session::flash('error', __("admin/usersPages.User hasn't been added"));
             redirect()->route('admin.users.index');
         }
     }
+
+    ################ Update #####################
+    public function update()
+    {
+
+        // Final Validate
+        $this->validate();
+
+        DB::beginTransaction();
+
+        try {
+            ### Basic Data ###
+            $this->user->update([
+                'f_name' => [
+                    'ar' => $this->f_name['ar'],
+                    'en' => $this->f_name['en'],
+                ],
+                'l_name' => [
+                    'ar' => $this->l_name['ar'],
+                    'en' => $this->l_name['en'],
+                ],
+
+                'gender' => $this->gender,
+
+                'email' => $this->email,
+
+                'profile_photo_path'    =>  $this->oldImage ?? $this->image_name,
+
+                'birth_date' => $this->birth_date
+            ]);
+            ### Basic Data ###
+
+            ### Role ###
+            if (isset($this->role)) {
+                $this->user->syncRoles($this->role);
+            }
+            ### Role ###
+
+            ### Add Phones ###
+            $this->user->phones()->delete();
+
+            $newPhones = [];
+
+            foreach ($this->phones as $index => $phone) {
+                if ($phone['phone']) {
+                    $newPhone = new Phone([
+                        'phone' => $phone['phone'],
+                        'default' => $index == $this->defaultPhone ? 1 : 0
+                    ]);
+                    array_push($newPhones, $newPhone);
+                }
+            }
+
+            $this->user->phones()->saveMany($newPhones);
+            ### Add Phones ###
+
+
+            ### Add Addresses ###
+            $this->user->addresses()->delete();
+
+            $newAddresses = [];
+
+            foreach ($this->addresses as $index => $address) {
+                if ($address['country_id'] && $address['governorate_id'] && $address['city_id']) {
+                    $newAddress = new Address([
+                        'country_id' => $address['country_id'],
+                        'governorate_id' => $address['governorate_id'],
+                        'city_id' => $address['city_id'],
+                        'details' => $address['details'],
+                        'special_marque' => $address['special_marque'],
+                        'default' => $index == $this->defaultAddress ? 1 : 0,
+                    ]);
+                    array_push($newAddresses, $newAddress);
+                }
+            }
+
+            $this->user->addresses()->saveMany($newAddresses);
+            ### Add Addresses ###
+
+            // Save and End Transaction
+            DB::commit();
+
+            Session::flash('success', __('admin/usersPages.User updated successfully'));
+            redirect()->route('admin.users.index');
+        } catch (\Throwable $th) {
+            DB::rollback();
+
+            Session::flash('error', __("admin/usersPages.User hasn't been updated"));
+            redirect()->route('admin.users.index');
+        }
+    }
+    ################ Update #####################
 }

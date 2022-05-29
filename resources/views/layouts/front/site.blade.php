@@ -43,6 +43,10 @@
 <body class="{{ $class ?? '' }}">
     <div class="wrapper pb-12 lg:pb-0">
 
+        {{-- Top Banner :: Start --}}
+        @livewire('front.homepage.top-banner')
+        {{-- Top Banner :: End --}}
+
         {{-- Top Bar : Start --}}
         @include('layouts.front.includes.top_nav')
         {{-- Top Bar : End --}}
@@ -124,24 +128,31 @@
     <script>
         @if (Session::has('success'))
             Swal.fire({
-            text:'{{ Session::get('success') }}',
-            icon: 'success',
-            timer: 3000,
-            timerProgressBar: true,
-            showConfirmButton: false,
+                text: '{{ Session::get('success') }}',
+                icon: 'success',
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
             })
         @elseif (Session::has('error'))
             Swal.fire({
-            text:'{{ Session::get('error') }}',
-            icon: 'error',
-            timer: 3000,
-            timerProgressBar: true,
-            showConfirmButton: false,
+                text: '{{ Session::get('error') }}',
+                icon: 'error',
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
             })
         @endif
 
         // Initation of Popover
         $('[data-toggle="tooltip"]').tooltip()
+
+        $(function() {
+            $('.remove_banner_button').on('click', function(e) {
+                e.stopPropagation();
+                $(this).parent().fadeOut();
+            })
+        })
     </script>
 
     {{-- Custom Js Files --}}

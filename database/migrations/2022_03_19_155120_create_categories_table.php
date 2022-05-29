@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('supercategory_id');
+            $table->tinyInteger('top')->default(0)->comment('0 -> No , >0 -> Yes');
+            $table->string('image_name')->nullable();
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
             $table->timestamps();

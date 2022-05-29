@@ -59,7 +59,6 @@ class SubcategoryForm extends Component
             $this->category_id = $subcategory->category->id;
             $this->title = $subcategory->meta_title;
             $this->description_seo = $subcategory->meta_description;
-
             $this->image_name = $subcategory->image_name;
         }
     }
