@@ -30,7 +30,7 @@
                                 class="material-icons absolute rounded-circle bg-red-500 w-6 h-6 text-white left-2 top-2 text-sm font-bold cursor-pointer flex items-center justify-center select-none"
                                 wire:click="deleteBanner"
                                 title="{{ __('admin/sitePages.Delete Image') }}">clear</span>
-                            <img src="{{ asset('storage/images/banners/original/' . $banner_name) }}"
+                            <img src="{{ asset('storage/images/banners/original/' . $banner_name) }}" alt="{{ $banner_name }}"
                                 class="rounded-xl m-auto">
                         </div>
                     </div>

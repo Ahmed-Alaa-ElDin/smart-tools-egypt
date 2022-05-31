@@ -36,7 +36,10 @@ class Topbanner extends Component
     // Called Once at the beginning
     public function mount()
     {
-        $banner = Banner::where('top_banner', 1)->get()->first();
+        $banner = Banner::where('top_banner', 1)->firstOrCreate([
+            'top_banner' => 1,
+            'banner_name' => 'Top Banner',
+        ]);
 
         if ($banner) {
             $this->banner_model = $banner;

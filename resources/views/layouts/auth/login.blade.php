@@ -22,7 +22,7 @@
 
     <!-- Main css -->
     <link rel="stylesheet" href="{{ mix('assets/css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/auth/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 
     @if (LaravelLocalization::getCurrentLocale() == 'ar')
         <link href="{{ asset('assets/admin/css/material-dashboard-rtl.css') }}" rel="stylesheet" />
@@ -39,9 +39,9 @@
     </div>
 
     <!-- JS -->
-    <script src="{{ asset('assets/auth/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/auth/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/auth/js/main.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/main.js') }}"></script>
     <script scr="{{ mix('assets/js/app.js') }}"></script>
 
 

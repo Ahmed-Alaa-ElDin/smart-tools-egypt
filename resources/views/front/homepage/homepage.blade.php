@@ -26,7 +26,10 @@
     @endforeach
 
     {{-- Top Categories & Brands : Start --}}
-    @include('layouts.front.includes.top_categories_brands')
+    <section class="top-categories-brands container mb-3 relative overflow-hidden grid grid-cols-12 gap-3 lg:gap-4">
+        @livewire('front.homepage.top-categories', ['categories' => $categories])
+        @livewire('front.homepage.top-brands', ['brands' => $brands])
+    </section>
     {{-- Top Categories & Brands : End --}}
 @endsection
 

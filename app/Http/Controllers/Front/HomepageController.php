@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
-use App\Models\Offer;
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Section;
-use App\Models\Supercategory;
-use Carbon\Carbon;
-
 class HomepageController extends Controller
 {
     public function index()
@@ -66,8 +64,6 @@ class HomepageController extends Controller
 
         ############ Get Best Offer for all products :: Start ############
         $products = Product::whereIn('id', $all_products)->publishedproduct()->get();
-
-        // dd($products->where('id', 4)->toArray());
 
         $products->map(function ($product) {
             // Get All Product's Prices -- Start with Product's Final Price
@@ -225,9 +221,22 @@ class HomepageController extends Controller
         }
         ############ Return Products' Details to Sections :: End ############
 
+        ############ Get All Sections :: Start ############
         $homepage_sections = $sections->where("today_deals", 0);
-        $today_deals_sections = $sections->where("today_deals", 1)->first();
+        ############ Get All Sections :: End ############
 
-        return view('front.homepage.homepage', compact('homepage_sections', 'today_deals_sections'));
+        ############ Get Today Deals Section :: Start ############
+        $today_deals_sections = $sections->where("today_deals", 1)->first();
+        ############ Get Today Deals Section :: End ############
+
+        ############ Get Top Categories :: Start ############
+        $categories = Category::where("top",'>', 0)->orderBy("top")->get();
+        ############ Get Top Categories :: End ############
+
+        ############ Get Top Brands :: Start ############
+        $brands = Brand::where("top",'>', 0)->orderBy("top")->get();
+        ############ Get Top Brands :: End ############
+
+        return view('front.homepage.homepage', compact('homepage_sections', 'today_deals_sections', 'categories', 'brands'));
     }
 }
