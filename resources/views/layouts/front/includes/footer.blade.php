@@ -9,8 +9,8 @@
             <div class="col-span-12 lg:col-span-4">
                 <ul class="list-inline flex justify-center items-center gap-3">
                     <li class="list-inline-item m-0">
-                        <a href="#" target="_blank"
-                            class="facebook flex bg-facebook w-9 h-9 text-xl rounded-circle items-center justify-center transition-all hover:bg-white hover:text-facebook">
+                        <a href="https://www.facebook.com/SmartToolsEgypt" target="_blank"
+                            class="facebook flex bg-facebook w-9 h-9 text-xl rounded-circle items-center justify-center transition-all hover:bg-white hover:text-facebook focus:text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
                                 height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
                                 <path fill="currentColor"
@@ -20,7 +20,7 @@
                     </li>
                     <li class="list-inline-item m-0">
                         <a href="#" target="_blank"
-                            class="youtube text-xl flex bg-youtube w-9 h-9 rounded-circle items-center justify-center transition-all hover:bg-white hover:text-youtube">
+                            class="youtube text-xl flex bg-youtube w-9 h-9 rounded-circle items-center justify-center transition-all hover:bg-white hover:text-youtube focus:text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
                                 height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
                                 <g fill="none">
@@ -37,8 +37,8 @@
                             </svg> </a>
                     </li>
                     <li class="list-inline-item m-0">
-                        <a href="#" target="_blank"
-                            class="whats-app text-xl flex bg-whatsapp w-9 h-9 rounded-circle items-center justify-center transition-all hover:bg-white hover:text-whatsapp">
+                        <a href="https://wa.me/+201010097248" target="_blank"
+                            class="whats-app text-xl flex bg-whatsapp w-9 h-9 rounded-circle items-center justify-center transition-all hover:bg-white hover:text-whatsapp focus:text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
                                 height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024">
                                 <path fill="currentColor"

@@ -5,18 +5,18 @@
     @livewire('front.homepage.main-slider', ['todayDeals' => $today_deals_sections])
     {{-- Main Slider : End --}}
 
-    @foreach ($homepage_sections as $section)
+    @foreach ($homepage_sections as $key => $section)
         @if ($section->type == 0)
             {{-- Product List : Start --}}
-            @livewire('front.homepage.products-list', ['section' => $section])
+            @livewire('front.homepage.products-list', ['section' => $section, 'key' => $key])
             {{-- Product List : End --}}
         @elseif ($section->type == 1)
             {{-- Offer : Start --}}
-            @livewire('front.homepage.offers-products-list', ['section' => $section, 'flash_sale' => false])
+            @livewire('front.homepage.offers-products-list', ['section' => $section, 'flash_sale' => false, 'key' => $key])
             {{-- Offer : End --}}
         @elseif ($section->type == 2)
             {{-- Flash Sale : Start --}}
-            @livewire('front.homepage.offers-products-list', ['section' => $section, 'flash_sale' => true])
+            @livewire('front.homepage.offers-products-list', ['section' => $section, 'flash_sale' => true, 'key' => $key])
             {{-- Flash Sale : End --}}
         @elseif ($section->type == 3)
             {{-- Offer Bar : Start --}}
@@ -33,7 +33,15 @@
     {{-- Top Categories & Brands : End --}}
 @endsection
 
+{{-- Extra Styles --}}
+@push('css')
+    @livewireStyles
+@endpush
+
+{{-- Extra Scripts --}}
 @push('js')
+    @livewireScripts
+
     <script>
         $(document).ready(function() {
             // ####### Main Slider :: Start #######
@@ -85,8 +93,13 @@
             }
             // ####### Products Slider :: End #######
 
-            // ####### Timer :: Start #######
+            // ####### Reinitialize the sliders of product added to cart :: Start #######
+            Livewire.on('product_added_to_cart', (data) => {
+                new Splide('#product_list_' + data.key, splide_options).mount();
+            });
+            // ####### Reinitialize the sliders of product added to cart :: End #######
 
+            // ####### Timer :: Start #######
             $('.timer').each(function() {
                 var countDownDate = new Date($(this).data('date')).getTime();
 

@@ -47,8 +47,8 @@ return [
     "Contact us"                =>      "Contact us",
     "Under Reviewing"           =>      "Under Reviewing",
     "Expired"                   =>      "Expired",
-    "Cart"                      =>      "Cart",
-    "Cart"                      =>      "Cart",
+    "Shopping Cart is Empty"    =>      "Shopping Cart is Empty",
+    "Subtotal :"                =>      "Subtotal :",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",
 ];

@@ -1,5 +1,5 @@
 {{-- Product : Start --}}
-<li class="splide__slide ">
+<li class="splide__slide">
     <div class="carousel-box w-full inline-block">
         <div class="group border border-light rounded hover:shadow-md hover:scale-105 mt-1 mb-2 transition">
             <div class="relative overflow-hidden">
@@ -46,8 +46,9 @@
                     class="absolute top-2 ltr:-right-10 rtl:-left-10 transition-all ease-in-out duration-500 ltr:group-hover:right-2 rtl:group-hover:left-2 flex flex-col gap-1">
                     {{-- todo --}}
                     {{-- Add to wishlist : Start --}}
-                    <a href="javascript:void(0)" onclick="addToWishList(104)" data-toggle="tooltip"
-                        data-title="{{ __('front/homePage.Add to wishlist') }}" data-placement="left">
+                    <a href="javascript:void(0)" onclick="addToWishList(104)" {{-- data-toggle="tooltip" --}}
+                        data-title="{{ __('front/homePage.Add to wishlist') }}"
+                        title="{{ __('front/homePage.Add to wishlist') }}" data-placement="left">
                         <span
                             class="material-icons bg-white text-lg p-1 rounded-full border border-light w-9 h-9 text-center shadow-sm">
                             favorite_border
@@ -56,8 +57,9 @@
                     {{-- Add to wishlist : End --}}
 
                     {{-- Add to compare : Start --}}
-                    <a href="javascript:void(0)" onclick="addToCompare(104)" data-toggle="tooltip"
-                        data-title="{{ __('front/homePage.Add to compare') }}" data-placement="left">
+                    <a href="javascript:void(0)" onclick="addToCompare(104)" {{-- data-toggle="tooltip" --}}
+                        data-title="{{ __('front/homePage.Add to compare') }}"
+                        title="{{ __('front/homePage.Add to compare') }}" data-placement="left">
                         <span
                             class="material-icons bg-white text-lg p-1 rounded-full border border-light w-9 h-9 text-center shadow-sm">
                             compare_arrows
@@ -66,13 +68,14 @@
                     {{-- Add to compare : End --}}
 
                     {{-- Add to cart : Start --}}
-                    <a href="javascript:void(0)" onclick="showAddToCartModal(104)" data-toggle="tooltip"
-                        data-title="{{ __('front/homePage.Add to cart') }}" data-placement="left">
+                    <button wire:click="addToCart({{ $product->id }})" {{-- data-toggle="tooltip" --}}
+                        data-title="{{ __('front/homePage.Add to cart') }}"
+                        title="{{ __('front/homePage.Add to cart') }}" data-placement="left">
                         <span
                             class="material-icons text-lg p-1 rounded-full border border-light w-9 h-9 animate-pulse text-center shadow-sm bg-primary text-white hover:bg-secondary">
                             shopping_cart
                         </span>
-                    </a>
+                    </button>
                     {{-- Add to cart : End --}}
                 </div>
                 {{-- Add Product : End --}}
@@ -102,10 +105,8 @@
                             <span>
                                 {{ __('front/homePage.EGP') }}
                             </span>
-                            <span
-                                class="font-bold text-3xl">{{ explode('.', $product->base_price)[0] }}</span>
-                            <span
-                                class="font-bold">{{ explode('.', $product->base_price)[1] }}</span>
+                            <span class="font-bold text-3xl">{{ explode('.', $product->base_price)[0] }}</span>
+                            <span class="font-bold">{{ explode('.', $product->base_price)[1] }}</span>
 
                         </del>
                         {{-- Base Price : End --}}
@@ -175,6 +176,54 @@
                     </div>
                 @endif
                 {{-- Points : End --}}
+
+                {{-- Cart Amount : Start --}}
+                @php
+                    $cartProduct = Cart::instance('cart')
+                        ->search(function ($cartItem, $rowId) use ($product) {
+                            return $cartItem->id === $product->id;
+                        })
+                        ->first();
+                    $cartAmount = $cartProduct ? $cartProduct->qty : 0;
+                @endphp
+
+                @if ($cartAmount)
+                    <div class="flex justify-center items-center gap-3 w-full">
+                        {{-- Add :: Start --}}
+                        <button class="w-8 h-8 rounded-circle bg-secondary text-white"
+                            wire:click="AddOneToCart('{{ $cartProduct->rowId }}',{{ $cartAmount + 1 }})">
+                            <span class="material-icons text-lg">
+                                add
+                            </span>
+                        </button>
+                        {{-- Add :: End --}}
+
+                        {{-- Amount :: Start --}}
+                        <input type="text"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+                            class="focus:ring-primary focus:border-primary flex-1 block w-full rounded sm:text-sm border-gray-300 text-center text-gray-700"
+                            value="{{ $cartAmount }}"
+                            wire:change="CartUpdated('{{ $cartProduct->rowId }}',$event.target.value)">
+                        {{-- Amount :: End --}}
+
+                        {{-- Remove :: Start --}}
+                        <button class="w-8 h-8 rounded-circle bg-secondary text-white"
+                            wire:click="RemoveOneFromCart('{{ $cartProduct->rowId }}',{{ $cartAmount - 1 }})">
+                            <span class="material-icons text-lg">
+                                remove
+                            </span>
+                        </button>
+                        {{-- Remove :: End --}}
+
+                        {{-- Delete :: Start --}}
+                        <button class="w-8 h-8 rounded-circle bg-primary text-white"
+                            wire:click="RemoveFromCart('{{ $cartProduct->rowId }}')">
+                            <span class="material-icons text-lg">
+                                delete
+                            </span>
+                    </div>
+                @endif
+                {{-- Cart Amount : End --}}
 
             </div>
         </div>

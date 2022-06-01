@@ -96,7 +96,6 @@
                         @foreach ($section->offers->first()->finalProducts as $product)
                             {{-- Product : Start --}}
                             <x-front.product-box-small :product="$product" />
-
                             {{-- Product : End --}}
                         @endforeach
                     </ul>

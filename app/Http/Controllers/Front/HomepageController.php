@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Section;
+
 class HomepageController extends Controller
 {
     public function index()
@@ -63,7 +64,7 @@ class HomepageController extends Controller
         ############ Extract of products From Sections :: End ############
 
         ############ Get Best Offer for all products :: Start ############
-        $products = Product::whereIn('id', $all_products)->publishedproduct()->get();
+        $products = Product::whereIn('id', $all_products)->with(['sections' => fn ($q) => $q->withPivot('rank')])->publishedproduct()->get();
 
         $products->map(function ($product) {
             // Get All Product's Prices -- Start with Product's Final Price
@@ -80,6 +81,7 @@ class HomepageController extends Controller
 
             // Get All Categories
             $categories = $subcategories ? $product->subcategories->map(fn ($subcategory) => $subcategory->category) : [];
+
             // Get All Supercategories
             $supercategories = $categories ? $categories->map(fn ($category) => $category->supercategory) : [];
 
@@ -207,7 +209,9 @@ class HomepageController extends Controller
             if ($section->products->count()) {
                 $products_id = $section->products->pluck('id');
 
-                $section->products = $products->whereIn('id', $products_id);
+                $section->products = $products->whereIn('id', $products_id)->sortBy(function ($product) use ($products_id) {
+                    return array_search($product->id, $products_id->toArray());
+                });
             }
 
             // Section Type is Offer
@@ -230,11 +234,11 @@ class HomepageController extends Controller
         ############ Get Today Deals Section :: End ############
 
         ############ Get Top Categories :: Start ############
-        $categories = Category::where("top",'>', 0)->orderBy("top")->get();
+        $categories = Category::where("top", '>', 0)->orderBy("top")->get();
         ############ Get Top Categories :: End ############
 
         ############ Get Top Brands :: Start ############
-        $brands = Brand::where("top",'>', 0)->orderBy("top")->get();
+        $brands = Brand::where("top", '>', 0)->orderBy("top")->get();
         ############ Get Top Brands :: End ############
 
         return view('front.homepage.homepage', compact('homepage_sections', 'today_deals_sections', 'categories', 'brands'));

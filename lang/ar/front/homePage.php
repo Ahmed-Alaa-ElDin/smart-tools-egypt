@@ -47,6 +47,8 @@ return [
     "Contact us"                =>      "اتصل بنا",
     "Under Reviewing"           =>      "قيد المراجعة",
     "Expired"                   =>      "منتهي الصلاحية",
+    "Shopping Cart is Empty"    =>      "سلة التسوق فارغة",
+    "Subtotal :"                =>      "المجموع :",
 
 
 ];

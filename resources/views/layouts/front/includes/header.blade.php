@@ -1,4 +1,4 @@
-<header class="sticky top-0 bg-white shadow border-b z-40 overflow-hidden">
+<header class="sticky top-0 bg-white shadow border-b z-40">
 
     {{-- Middle Bar : Start --}}
     <div class="relative logo-bar-area py-3">
@@ -90,33 +90,9 @@
                 </div>
                 {{-- Wishlist : End --}}
 
-                {{-- Cart : End --}}
-                <div class="hidden lg:block align-self-stretch ml-3 mr-0" data-hover="dropdown">
-                    <div class="nav-cart-box dropdown h-100" id="cart_items">
-                        <a href="javascript:void(0)" class="flex items-center gap-2 text-reset h-100"
-                            data-toggle="dropdown" data-display="static">
-                            <span class="material-icons">
-                                shopping_cart
-                            </span>
-                            <span class="grow ml-1 text-center">
-                                <span
-                                    class="badge bg-red-600 mb-1 text-white badge-inline badge-pill cart-count">0</span>
-                                <span class="nav-box-text text-xs hidden xl:block opacity-70">
-                                    {{ __('front/homePage.Cart') }}
-                                </span>
-                            </span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-auto dropdown-menu-lg p-0 stop-propagation">
-
-                            <div class="text-center p-3">
-                                <i class="las la-frown la-3x opacity-60 mb-3"></i>
-                                <h3 class="h6 fw-700">عربة التسوق فارغة</h3>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                {{-- Cart : End --}}
+                {{-- Cart :: Start --}}
+                @livewire('front.general.cart')
+                {{-- Cart :: End --}}
 
             </div>
         </div>
@@ -130,43 +106,43 @@
                 <li class="min-w-max">
                     <a href="{{ route('front.homepage') }}"
                         class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
-                        {{ __("front/homePage.Home") }}
+                        {{ __('front/homePage.Home') }}
                     </a>
                 </li>
                 <li class="min-w-max">
                     <a href="#"
                         class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
-                        {{ __("front/homePage.Offers") }}
+                        {{ __('front/homePage.Offers') }}
                     </a>
                 </li>
                 <li class="min-w-max">
                     <a href="#"
                         class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
-                        {{ __("front/homePage.Power tools") }}
+                        {{ __('front/homePage.Power tools') }}
                     </a>
                 </li>
                 <li class="min-w-max">
                     <a href="#"
                         class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
-                        {{ __("front/homePage.Hand tools") }}
+                        {{ __('front/homePage.Hand tools') }}
                     </a>
                 </li>
                 <li class="min-w-max">
                     <a href="#"
                         class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
-                        {{ __("front/homePage.All Brands") }}
+                        {{ __('front/homePage.All Brands') }}
                     </a>
                 </li>
                 <li class="min-w-max">
                     <a href="#"
                         class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
-                        {{ __("front/homePage.All Categories") }}
+                        {{ __('front/homePage.All Categories') }}
                     </a>
                 </li>
                 <li class="min-w-max">
                     <a href="#"
                         class="opacity-60 text-xs md:text-sm font-bold px-3 py-2 inline-block fw-600 hover:opacity-100 hover:text-gray-900 text-reset">
-                        {{ __("front/homePage.Contact us") }}
+                        {{ __('front/homePage.Contact us') }}
                     </a>
                 </li>
             </ul>
