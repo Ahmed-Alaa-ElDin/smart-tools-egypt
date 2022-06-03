@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Product;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
@@ -60,8 +61,11 @@ function imageDelete($image_f_name, $folder_name)
     Storage::disk($folder_name)->delete('cropped100/' . $image_f_name);
 }
 
-function getBestOffer($product)
+function getBestOffer($product_id)
 {
+    $product = Product::publishedproduct()->findOrFail($product_id);
+
+    ############ Get Best Offer for all products :: Start ############
     // Get All Product's Prices -- Start with Product's Final Price
     $all_prices = [$product->final_price];
 
@@ -76,6 +80,7 @@ function getBestOffer($product)
 
     // Get All Categories
     $categories = $subcategories ? $product->subcategories->map(fn ($subcategory) => $subcategory->category) : [];
+
     // Get All Supercategories
     $supercategories = $categories ? $categories->map(fn ($category) => $category->supercategory) : [];
 
@@ -186,12 +191,13 @@ function getBestOffer($product)
     }
 
     // Get the Best Price
-    $best_price = min($all_prices);
+    $product->best_price = min($all_prices);
 
     // Get the Best Points
-    $best_points = max($all_points);
+    $product->best_points = max($all_points);
 
-    $product->offer = ['best_price' => $best_price, 'best_points' => $best_points, 'free_shipping' => $free_shipping];
+    $product->free_shipping = $free_shipping;
+    ############ Get Best Offer for all products :: End ############
 
     return $product;
 }

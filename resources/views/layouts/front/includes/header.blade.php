@@ -73,25 +73,11 @@
                 {{-- Compare : End --}}
 
                 {{-- Wishlist : Start --}}
-                <div class="hidden lg:block ml-3 mr-0">
-                    <div class="" id="wishlist">
-                        <a href="#" class="flex items-center gap-2 text-reset">
-                            <span class="material-icons">
-                                favorite
-                            </span>
-                            <span class="grow ml-1 text-center">
-                                <span class="badge bg-red-600 mb-1 text-white badge-inline badge-pill">0</span>
-                                <span class="nav-box-text text-xs hidden xl:block opacity-70">
-                                    {{ __('front/homePage.Wishlist') }}
-                                </span>
-                            </span>
-                        </a>
-                    </div>
-                </div>
+                @livewire('front.general.wishlist.wishlist')
                 {{-- Wishlist : End --}}
 
                 {{-- Cart :: Start --}}
-                @livewire('front.general.cart')
+                @livewire('front.general.cart.cart')
                 {{-- Cart :: End --}}
 
             </div>

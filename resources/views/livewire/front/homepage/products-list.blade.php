@@ -20,14 +20,15 @@
             {{-- Header : End --}}
 
             {{-- Slider : Start --}}
-            <div id="product_list_{{ $key }}" class="product_list splide h-full w-full row-span-2 rounded overflow-hidden">
+            <div id="product_list_{{ $key }}"
+                class="product_list splide h-full w-full row-span-2 rounded overflow-hidden" wire:ignore>
                 <div class="splide__track">
                     {{-- List of Products : Start --}}
-                    <ul class="splide__list">
+                    <ul class="splide__list" >
 
                         @foreach ($products as $product)
                             {{-- Product : Start --}}
-                            <x-front.product-box-small :product="$product"/>
+                            <x-front.product-box-small :product="$product" :key="$key" />
                             {{-- Product : End --}}
                         @endforeach
 

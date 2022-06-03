@@ -33,15 +33,8 @@
     {{-- Top Categories & Brands : End --}}
 @endsection
 
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
 {{-- Extra Scripts --}}
 @push('js')
-    @livewireScripts
-
     <script>
         $(document).ready(function() {
             // ####### Main Slider :: Start #######
@@ -60,6 +53,7 @@
             });
             main_slider.mount();
             // ####### Main Slider :: End #######
+
             // ####### Products Slider :: Start #######
             var splide_options = {
                 @if (LaravelLocalization::getCurrentLocale() == 'ar')
@@ -94,9 +88,19 @@
             // ####### Products Slider :: End #######
 
             // ####### Reinitialize the sliders of product added to cart :: Start #######
-            Livewire.on('product_added_to_cart', (data) => {
-                new Splide('#product_list_' + data.key, splide_options).mount();
-            });
+            // Livewire.on('cart_updated', (data) => {
+            //     if (data) {
+            //         new Splide('#product_list_' + data.key, splide_options).mount();
+            //     }
+            // });
+            // ####### Reinitialize the sliders of product added to cart :: End #######
+
+            // ####### Reinitialize the sliders of product added to cart :: Start #######
+            // Livewire.on('product_added_to_wishlist', (data) => {
+            //     if (data) {
+            //         new Splide('#product_list_' + data.key, splide_options).mount();
+            //     }
+            // });
             // ####### Reinitialize the sliders of product added to cart :: End #######
 
             // ####### Timer :: Start #######

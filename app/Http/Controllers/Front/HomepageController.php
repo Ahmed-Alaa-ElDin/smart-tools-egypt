@@ -209,7 +209,7 @@ class HomepageController extends Controller
             if ($section->products->count()) {
                 $products_id = $section->products->pluck('id');
 
-                $section->products = $products->whereIn('id', $products_id)->sortBy(function ($product) use ($products_id) {
+                $section->finalProducts = $products->whereIn('id', $products_id)->sortBy(function ($product) use ($products_id) {
                     return array_search($product->id, $products_id->toArray());
                 });
             }

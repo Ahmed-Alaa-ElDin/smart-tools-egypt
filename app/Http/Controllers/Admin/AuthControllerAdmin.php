@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequestAdmin;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,10 +36,16 @@ class AuthControllerAdmin extends Controller
 
         try {
             $user = auth()->user();
+
+            ############ Edit Last Visit Date & Visit Count :: Start ############
             $user->last_visit_at = now();
             $user->visit_num += 1;
             $user->save();
+            ############ Edit Last Visit Date & Visit Count :: End ############
 
+            ############ Restore Cart Data :: Start ############
+            $this->cart = Cart::instance('cart')->restore(Auth::user()->id);
+            ############ Restore Cart Data :: End ############
         } catch (\Throwable $th) {
         }
 

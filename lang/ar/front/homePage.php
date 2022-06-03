@@ -49,6 +49,15 @@ return [
     "Expired"                   =>      "منتهي الصلاحية",
     "Shopping Cart is Empty"    =>      "سلة التسوق فارغة",
     "Subtotal :"                =>      "المجموع :",
+    "Remove from Wishlist"      =>      "إزالة من المفضلة",
+    "Wishlist is Empty"         =>      "المفضلة فارغة",
+    "Add to Wishlist"           =>      "إضافة إلى المفضلة",
+    "Remove from Cart"          =>      "إزالة من السلة",
+    "Increase"                  =>      "زيادة",
+    "Decrease"                  =>      "تقليل",
+    "Go To Checkout"            =>      "تأكيد الطلب",
+    "View & Edit Cart"          =>      "عرض وتعديل السلة",
+    "Clear Cart"                =>      "مسح السلة",
 
 
 ];

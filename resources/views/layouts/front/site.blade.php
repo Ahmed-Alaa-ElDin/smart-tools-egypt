@@ -36,7 +36,13 @@
     {{-- Slick --}}
     <link href="{{ asset('assets/front/css/splide.min.css') }}" rel="stylesheet" />
 
+    {{-- Livewire Styles :: Start --}}
+    @livewireStyles
+    {{-- Livewire Styles :: End --}}
+
+    {{-- Custom CSS :: Start --}}
     @stack('css')
+    {{-- Custom CSS :: End --}}
 
 </head>
 
@@ -74,6 +80,7 @@
         {{-- Mobile Header : End --}}
 
     </div>
+
 
     <!--   Core JS Files   -->
     <script src="{{ asset('assets/front/js/core/jquery.min.js') }}"></script>
@@ -144,9 +151,6 @@
             })
         @endif
 
-        // Initation of Popover
-        $('[data-toggle="tooltip"]').tooltip()
-
         $(function() {
             $('.remove_banner_button').on('click', function(e) {
                 e.stopPropagation();
@@ -155,11 +159,15 @@
         })
     </script>
 
-    {{-- Custom Js Files --}}
-    @stack('js')
+{{-- Custom Js Files --}}
+@stack('js')
 
-    {{-- Custom Js Files for livewire blade --}}
-    @stack('livewire-js')
+{{-- Custom Js Files for livewire blade --}}
+@stack('livewire-js')
+
+<!--  Plugin for the Livewire -->
+@livewireScripts
+
 </body>
 
 </html>
