@@ -47,14 +47,10 @@ class ProductsList extends Component
         if (Auth::check()) {
             Cart::instance('cart')->store(Auth::user()->id);
         }
-
-        // todo
-        // Cart::destroy();
-
         ############ Add Product to Wishlist :: End ############
 
         ############ Emit event to reinitialize the slider :: Start ############
-        $this->emit('cart_updated');
+        $this->emit('cartUpdated');
         ############ Emit event to reinitialize the slider :: End ############
     }
     ############## Add TO Cart :: End ##############
@@ -82,7 +78,7 @@ class ProductsList extends Component
         ############ Add Product to Wishlist :: End ############
 
         ############ Emit event to reinitialize the slider :: Start ############
-        $this->emit('product_added_to_wishlist');
+        $this->emit('cartUpdated');
         ############ Emit event to reinitialize the slider :: End ############
     }
 }

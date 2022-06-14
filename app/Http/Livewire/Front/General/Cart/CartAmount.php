@@ -8,14 +8,19 @@ use Livewire\Component;
 
 class CartAmount extends Component
 {
-    public $product_id;
+    public $product_id, $unique;
 
-    protected $listeners = [
-        'cart_updated' => 'render',
-    ];
+    protected function getListeners()
+    {
+        return [
+            'cartUpdated:' . $this->unique => 'render',
+            'cartCleared' => 'render',
+        ];
+    }
 
     public function render()
     {
+
         $cartProduct = Cart::instance('cart')
             ->search(function ($cartItem, $rowId) {
                 return $cartItem->id === $this->product_id;
@@ -36,7 +41,8 @@ class CartAmount extends Component
         }
 
         ############ Emit event to reinitialize the slider :: Start ############
-        $this->emit('cart_updated');
+        $this->emit('cartUpdated');
+        $this->emit('cartUpdated:' . $this->unique);
         ############ Emit event to reinitialize the slider :: End ############
     }
     ############## Add One Item To Cart :: End ##############
@@ -51,7 +57,7 @@ class CartAmount extends Component
         }
 
         ############ Emit event to reinitialize the slider :: Start ############
-        $this->emit('cart_updated');
+        $this->emit('cartUpdated');
         ############ Emit event to reinitialize the slider :: End ############
     }
     ############## Remove From Cart :: End ##############
@@ -66,13 +72,13 @@ class CartAmount extends Component
         }
 
         ############ Emit event to reinitialize the slider :: Start ############
-        $this->emit('cart_updated');
+        $this->emit('cartUpdated');
         ############ Emit event to reinitialize the slider :: End ############
     }
     ############## Update Cart :: End ##############
 
     ############## Remove From Cart :: Start ##############
-    public function removeFromCart($rowId)
+    public function removeFromCart($rowId, $product_id)
     {
         Cart::instance('cart')->remove($rowId);
 
@@ -81,7 +87,8 @@ class CartAmount extends Component
         }
 
         ############ Emit event to reinitialize the slider :: Start ############
-        $this->emit('cart_updated');
+        $this->emit('cartUpdated');
+        $this->emit('cartUpdated:' . "product-" . $product_id);
         ############ Emit event to reinitialize the slider :: End ############
     }
     ############## Remove From Cart :: End ##############

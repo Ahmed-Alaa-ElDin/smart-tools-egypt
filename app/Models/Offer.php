@@ -124,6 +124,6 @@ class Offer extends Model
     // Many to many relationship  Sections --> Offers
     public function sections()
     {
-        return $this->belongsToMany(Section::class);
+        return $this->hasMany(Section::class);
     }
 }

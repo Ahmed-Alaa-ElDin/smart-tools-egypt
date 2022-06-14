@@ -36,7 +36,7 @@
         <div>
             <ul class="flex flex-wrap justify-center gap-3">
                 @forelse ($offers as $key=>$offer)
-                    <li class="flex flex-col gap-2 rounded-xl p-3 @if ($selected_offer == $offer->id) bg-green-100 border-4 border-green-400
+                    <li class="self-center flex flex-col gap-2 rounded-xl p-3 @if ($selected_offer == $offer->id) bg-green-100 border-4 border-green-400
                     @else
                     bg-red-100 @endif cursor-pointer shadow"
                         wire:click="selectOffer({{ $offer->id }})">

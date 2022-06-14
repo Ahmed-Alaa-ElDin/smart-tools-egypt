@@ -1,8 +1,8 @@
-<section class="offer-bar mb-3">
+<section class="offer-bar mb-3" >
 
     @php
-        $date = Carbon\Carbon::parse($section->offers->first()->expire_at,"Africa/Cairo");
-        $now = Carbon\Carbon::now("Africa/Cairo");
+        $date = Carbon\Carbon::parse($section->offer->expire_at, 'Africa/Cairo');
+        $now = Carbon\Carbon::now('Africa/Cairo');
 
         $diff = $now->diffInSeconds($date, false);
         $diffDays = floor($diff / (60 * 60 * 24));
@@ -12,7 +12,7 @@
     @endphp
 
     <div class="container">
-        <div class="px-2 py-4 md:px-4 md:py-3 bg-white shadow rounded">
+        <div class="px-2 py-4 md:px-4 md:py-3 bg-white shadow rounded" wire:ignore>
 
             {{-- Header : Start --}}
             <div class="flex flex-wrap mb-3 gap-2 justify-between items-baseline border-b text-center">
@@ -26,7 +26,7 @@
                 @if ($flash_sale)
                     @if ($diff > 0)
                         <div class="timer flex items-center justify-center content-end gap-2 mt-2 w-full md:w-auto"
-                            data-date="{{ $section->offers->first()->expire_at }}">
+                            data-date="{{ $section->offer->expire_at }}">
                             {{-- Day : Start --}}
                             <div class="countdown-item bg-primary flex justify-center items-center p-1 rounded shadow ">
                                 <span
@@ -67,9 +67,9 @@
                             {{-- Second : End --}}
                         </div>
                     @else
-                        <div class="expired bg-primary flex justify-center items-center p-1 rounded shadow m-auto">
+                        <div class="expired bg-primary flex justify-center items-center mb-2 rounded shadow mx-auto">
                             <span
-                                class="inline-block text-white text-center font-bold px-1">{{ __('front/homePage.Expired') }}</span>
+                                class="inline-block text-white text-center text-xs font-bold py-2 px-3">{{ __('front/homePage.Expired') }}</span>
                         </div>
                     @endif
                     <div class="expired bg-primary flex justify-center items-center p-1 rounded shadow hidden m-auto">
@@ -78,6 +78,7 @@
                     </div>
                 @endif
                 {{-- Timer : End --}}
+
                 {{-- View More Button : Start --}}
                 <div class="w-full md:w-auto">
                     <a href="{{ $section->id }}" {{-- todo --}}
@@ -88,14 +89,14 @@
             {{-- Header : End --}}
 
             {{-- Slider : Start --}}
-            <div class="product_list splide h-full w-full row-span-2 rounded overflow-hidden">
+            <div class="product_list splide h-full w-full row-span-2 rounded overflow-hidden" >
                 <div class="splide__track">
                     {{-- List of Products : Start --}}
                     <ul class="splide__list">
 
-                        @foreach ($section->offers->first()->finalProducts as $product)
+                        @foreach ($products as $product)
                             {{-- Product : Start --}}
-                            <x-front.product-box-small :product="$product" />
+                            <x-front.product-box-small :product="$product" wire:key="product-{{ rand() }}"/>
                             {{-- Product : End --}}
                         @endforeach
                     </ul>

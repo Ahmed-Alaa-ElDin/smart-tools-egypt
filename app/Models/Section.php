@@ -16,7 +16,8 @@ class Section extends Model
         "type",
         "active",
         "rank",
-        "today_deals"
+        "today_deals",
+        "offer_id",
     ];
 
     public $translatable = ['title'];
@@ -39,8 +40,8 @@ class Section extends Model
     }
 
     // Many to many relationship  Sections --> Offers
-    public function offers()
+    public function offer()
     {
-        return $this->belongsToMany(Offer::class);
+        return $this->belongsTo(Offer::class);
     }
 }

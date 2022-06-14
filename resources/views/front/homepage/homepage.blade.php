@@ -5,18 +5,18 @@
     @livewire('front.homepage.main-slider', ['todayDeals' => $today_deals_sections])
     {{-- Main Slider : End --}}
 
-    @foreach ($homepage_sections as $key => $section)
+    @foreach ($homepage_sections as $section)
         @if ($section->type == 0)
             {{-- Product List : Start --}}
-            @livewire('front.homepage.products-list', ['section' => $section, 'key' => $key])
+            @livewire('front.homepage.products-list', ['section' => $section])
             {{-- Product List : End --}}
         @elseif ($section->type == 1)
             {{-- Offer : Start --}}
-            @livewire('front.homepage.offers-products-list', ['section' => $section, 'flash_sale' => false, 'key' => $key])
+            @livewire('front.homepage.offers-products-list', ['section' => $section, 'flash_sale' => false])
             {{-- Offer : End --}}
         @elseif ($section->type == 2)
             {{-- Flash Sale : Start --}}
-            @livewire('front.homepage.offers-products-list', ['section' => $section, 'flash_sale' => true, 'key' => $key])
+            @livewire('front.homepage.offers-products-list', ['section' => $section, 'flash_sale' => true])
             {{-- Flash Sale : End --}}
         @elseif ($section->type == 3)
             {{-- Offer Bar : Start --}}
@@ -88,7 +88,7 @@
             // ####### Products Slider :: End #######
 
             // ####### Reinitialize the sliders of product added to cart :: Start #######
-            // Livewire.on('cart_updated', (data) => {
+            // Livewire.on('cartUpdated', (data) => {
             //     if (data) {
             //         new Splide('#product_list_' + data.key, splide_options).mount();
             //     }

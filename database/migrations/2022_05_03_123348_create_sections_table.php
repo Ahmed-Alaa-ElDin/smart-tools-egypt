@@ -20,7 +20,10 @@ return new class extends Migration
             $table->tinyInteger('active')->default(0)->comment('0 -> No , 1 -> Yes');
             $table->tinyInteger('today_deals')->default(0)->comment('0 -> No , 1 -> Yes');
             $table->tinyInteger('rank')->default(127);
+            $table->unsignedBigInteger('offer_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('offer_id')->references('id')->on('offers')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

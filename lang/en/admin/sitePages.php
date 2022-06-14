@@ -27,7 +27,7 @@ return [
     "Banner Image"                                                          =>      "Banner Image",
     "Uploading ..."                                                         =>      "Uploading ...",
     "Delete Image"                                                          =>      "Delete Image",
-    "Use 700x250 sizes image"                                               =>      "Use 700x250 sizes image",
+    "Use 800x250 sizes image"                                               =>      "Use 800x250 sizes image",
     "Banner's Information"                                                  =>      "Banner's Information",
     "Banner's Description"                                                  =>      "Banner's Description",
     "in Arabic"                                                             =>      "in Arabic",

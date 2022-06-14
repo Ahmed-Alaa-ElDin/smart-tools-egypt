@@ -8,11 +8,12 @@ use Livewire\Component;
 
 class Wishlist extends Component
 {
-    protected $listeners = ['cart_updated' => 'render'];
+    protected $listeners = ['cartUpdated' => 'render'];
 
     public function render()
     {
         $this->wishlist = Cart::instance('wishlist')->content();
+        $this->wishlist_count = Cart::instance('wishlist')->count();
 
         return view('livewire.front.general.wishlist.wishlist');
     }
@@ -48,22 +49,39 @@ class Wishlist extends Component
         }
 
         ############ Emit event to reinitialize the slider :: Start ############
-        $this->emit('cart_updated');
+        $this->emit('cartUpdated');
+        $this->emit('cartUpdated:' . "product-" . $product->id);
         ############ Emit event to reinitialize the slider :: End ############
     }
 
-    ############## Remove From Cart :: Start ##############
+    ############## Remove From Wishlist :: Start ##############
     public function removeFromWishlist($rowId)
     {
         Cart::instance('wishlist')->remove($rowId);
+
         if (Auth::check()) {
             Cart::instance('wishlist')->store(Auth::user()->id);
         }
 
         ############ Emit event to reinitialize the slider :: Start ############
-        $this->emit('cart_updated');
+        $this->emit('cartUpdated');
         ############ Emit event to reinitialize the slider :: End ############
     }
-    //     moveToCart
-    // removeFromWishlist
+    ############## Remove From Wishlist :: End ##############
+
+    ############## Clear Wishlist :: Start ##############
+    public function clearWishlist()
+    {
+        Cart::instance('wishlist')->destroy();
+
+        if (Auth::check()) {
+            Cart::instance('wishlist')->store(Auth::user()->id);
+        }
+
+        ############ Emit event to reinitialize the slider :: Start ############
+        $this->emit('cartUpdated');
+        ############ Emit event to reinitialize the slider :: End ############
+    }
+    ############## Clear Wishlist :: End ##############
+
 }

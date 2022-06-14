@@ -17,7 +17,7 @@ class HomepageController extends Controller
         ############## Get All Active Sections with Relations :: Start ##############
         $sections = Section::with([
             'products' => fn ($q) => $q->publishedproduct()->withPivot('rank')->orderBy('rank'),
-            'offers' => fn ($q) => $q->with([
+            'offer' => fn ($q) => $q->with([
                 'directProducts' => fn ($q) => $q->where('publish', 1),
                 'supercategoryProducts' => fn ($q) => $q->where('publish', 1),
                 'categoryProducts' => fn ($q) => $q->where('publish', 1),
@@ -36,29 +36,20 @@ class HomepageController extends Controller
                 array_push($all_products, ...$products_id);
             }
             // Section Type is Offer
-            elseif ($section->offers->count()) {
+            elseif ($section->offer) {
+                $section->offer->directProducts->push(...$section->offer->supercategoryProducts, ...$section->offer->categoryProducts, ...$section->offer->subcategoryProducts, ...$section->offer->brandProducts);
 
-                $section->offers->map(function ($offer) use (&$all_products) {
-                    $offer->directProducts->push(...$offer->supercategoryProducts, ...$offer->categoryProducts, ...$offer->subcategoryProducts, ...$offer->brandProducts);
+                $section->offer->uniqueProducts = $section->offer->directProducts->unique('id');
 
+                if ($section->offer->uniqueProducts->count() > 11) {
+                    $section->offer->uniqueProducts = $section->offer->uniqueProducts->random(11)->shuffle();
+                } else {
+                    $section->offer->uniqueProducts = $section->offer->uniqueProducts->shuffle();
+                }
 
-                    $offer->uniqueProducts = $offer->directProducts->unique('id');
+                $products_id = $section->offer->uniqueProducts->pluck('id');
 
-
-                    if ($offer->uniqueProducts->count() > 11) {
-                        $offer->uniqueProducts = $offer->uniqueProducts->random(11)->shuffle();
-                    } else {
-                        $offer->uniqueProducts = $offer->uniqueProducts->shuffle();
-                    }
-
-                    $products_id = $offer->uniqueProducts->pluck('id');
-
-
-                    array_push($all_products, ...$products_id);
-
-
-                    return $offer;
-                });
+                array_push($all_products, ...$products_id);
             }
         }
         ############ Extract of products From Sections :: End ############
@@ -215,12 +206,8 @@ class HomepageController extends Controller
             }
 
             // Section Type is Offer
-            elseif ($section->offers->count()) {
-                $section->offers->map(function ($offer) use ($products) {
-                    $offer->finalProducts = $products->whereIn('id', $offer->uniqueProducts->pluck('id'));
-
-                    return $offer;
-                });
+            elseif ($section->offer) {
+                $section->offer->finalProducts = $products->whereIn('id', $section->offer->uniqueProducts->pluck('id'));
             }
         }
         ############ Return Products' Details to Sections :: End ############

@@ -30,7 +30,7 @@
     <link href="{{ asset('assets/front/css/material-dashboard.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ mix('assets/css/app.css') }}">
     @if (LaravelLocalization::getCurrentLocale() == 'ar')
-        {{-- <link href="{{ asset('assets/front/css/material-dashboard-rtl.css') }}" rel="stylesheet" /> --}}
+        <link href="{{ asset('assets/front/css/material-dashboard-rtl.css') }}" rel="stylesheet" />
     @endif
 
     {{-- Slick --}}
@@ -150,6 +150,18 @@
                 showConfirmButton: false,
             })
         @endif
+
+        window.addEventListener('swalDone', function(e) {
+            Swal.fire({
+                text: e.detail.text,
+                icon: e.detail.icon,
+                position: 'top-right',
+                showConfirmButton: false,
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+            })
+        });
 
         $(function() {
             $('.remove_banner_button').on('click', function(e) {

@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class Cart extends Component
 {
-    protected $listeners = ['cart_updated' => 'render'];
+    protected $listeners = ['cartUpdated' => 'render'];
 
     public function render()
     {
@@ -19,15 +19,17 @@ class Cart extends Component
 
 
     ############## Remove From Cart :: Start ##############
-    public function removeFromCart($rowId)
+    public function removeFromCart($rowId, $product_id)
     {
         FacadesCart::instance('cart')->remove($rowId);
+
         if (Auth::check()) {
             FacadesCart::instance('cart')->store(Auth::user()->id);
         }
 
         ############ Emit event to reinitialize the slider :: Start ############
-        $this->emit('cart_updated');
+        $this->emit('cartUpdated');
+        $this->emit('cartUpdated:' . "product-" . $product_id);
         ############ Emit event to reinitialize the slider :: End ############
     }
     ############## Remove From Cart :: End ##############
@@ -66,7 +68,8 @@ class Cart extends Component
         }
 
         ############ Emit event to reinitialize the slider :: Start ############
-        $this->emit('cart_updated');
+        $this->emit('cartUpdated');
+        $this->emit('cartUpdated:' . "product-" . $product->id);
         ############ Emit event to reinitialize the slider :: End ############
     }
     ############## Move To Wishlist :: End ##############
@@ -81,7 +84,9 @@ class Cart extends Component
         }
 
         ############ Emit event to reinitialize the slider :: Start ############
-        $this->emit('cart_updated');
+        $this->emit('cartUpdated');
+        $this->emit('cartCleared');
         ############ Emit event to reinitialize the slider :: End ############
     }
+    ############## Clear Cart :: End ##############
 }

@@ -45,37 +45,16 @@
                 <div
                     class="absolute top-2 ltr:-right-10 rtl:-left-10 transition-all ease-in-out duration-500 ltr:group-hover:right-2 rtl:group-hover:left-2 flex flex-col gap-1">
                     {{-- todo --}}
-                    {{-- Add to wishlist : Start --}}
-                    <button wire:click="addToWishlist({{ $product['id'] }})"
-                        data-title="{{ __('front/homePage.Add to wishlist') }}"
-                        title="{{ __('front/homePage.Add to wishlist') }}" data-placement="left">
-                        <span
-                            class="material-icons bg-white text-lg p-1 rounded-full border border-light w-9 h-9 text-center shadow-sm">
-                            favorite_border
-                        </span>
-                    </button>
-                    {{-- Add to wishlist : End --}}
-
                     {{-- Add to compare : Start --}}
-                    <button  onclick="addToCompare(104)"
-                        data-title="{{ __('front/homePage.Add to compare') }}"
-                        title="{{ __('front/homePage.Add to compare') }}" data-placement="left">
-                        <span
-                            class="material-icons bg-white text-lg p-1 rounded-full border border-light w-9 h-9 text-center shadow-sm">
-                            compare_arrows
-                        </span>
-                    </button>
+                    @livewire('front.general.compare.add-to-compare-button', ['product_id' => $product['id']], key('add-compare-button-' . Str::random(10)))
                     {{-- Add to compare : End --}}
 
+                    {{-- Add to wishlist : Start --}}
+                    @livewire('front.general.wishlist.add-to-wishlist-button', ['product_id' => $product['id']], key('add-wishlist-button-' . Str::random(10)))
+                    {{-- Add to wishlist : End --}}
+
                     {{-- Add to cart : Start --}}
-                    <button wire:click="addToCart({{ $product['id'] }})"
-                        data-title="{{ __('front/homePage.Add to cart') }}"
-                        title="{{ __('front/homePage.Add to cart') }}" data-placement="left">
-                        <span
-                            class="material-icons text-lg p-1 rounded-full border border-light w-9 h-9 animate-pulse text-center shadow-sm bg-primary text-white hover:bg-secondary">
-                            shopping_cart
-                        </span>
-                    </button>
+                    @livewire('front.general.cart.add-to-cart-button', ['product_id' => $product['id']], key('add-cart-button-' . Str::random(10)))
                     {{-- Add to cart : End --}}
                 </div>
                 {{-- Add Product : End --}}
@@ -94,9 +73,9 @@
                         <div class="flex rtl:flex-row-reverse gap-1">
                             <span class="font-bold text-primary text-sm">{{ __('front/homePage.EGP') }}</span>
                             <span
-                                class="font-bold text-primary text-xl">{{ explode('.', $product['final_price'])[0] }}</span>
+                                class="font-bold text-primary text-2xl">{{ explode('.', $product['final_price'])[0] }}</span>
                             <span
-                                class="font-bold text-primary text-sm">{{ explode('.', $product['final_price'])[1] }}</span>
+                                class="font-bold text-primary text-xs">{{ explode('.', $product['final_price'])[1] }}</span>
                         </div>
                         {{-- Final Price : End --}}
 
@@ -106,7 +85,7 @@
                                 {{ __('front/homePage.EGP') }}
                             </span>
                             <span class="font-bold text-3xl">{{ explode('.', $product['base_price'])[0] }}</span>
-                            <span class="font-bold">{{ explode('.', $product['base_price'])[1] }}</span>
+                            {{-- <span class="font-bold">{{ explode('.', $product['base_price'])[1] }}</span> --}}
 
                         </del>
                         {{-- Base Price : End --}}
@@ -178,7 +157,7 @@
                 {{-- Points : End --}}
 
                 {{-- Cart Amount : Start --}}
-                @livewire('front.general.cart.cart-amount', ['product_id' => $product['id']], key($product['name'][session('locale')] . '-' . rand()))
+                @livewire('front.general.cart.cart-amount', ['product_id' => $product['id'], 'unique' => 'product-' . $product['id']], key($product['name'][session('locale')] . '-' . rand()))
                 {{-- Cart Amount : End --}}
 
             </div>

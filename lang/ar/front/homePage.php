@@ -58,6 +58,14 @@ return [
     "Go To Checkout"            =>      "تأكيد الطلب",
     "View & Edit Cart"          =>      "عرض وتعديل السلة",
     "Clear Cart"                =>      "مسح السلة",
-
-
+    "Remove from the Comparison" =>     "إزالة من المقارنة",
+    "Comparison is Empty"       =>      "المقارنة فارغة",
+    "View the Comparison"       =>      "عرض المقارنة",
+    "Clear Comparison"          =>      "مسح المقارنة",
+    "View Wishlist"             =>      "عرض المفضلة",
+    "Clear Wishlist"            =>      "مسح المفضلة",
+    "Comparison Limit Reached"  =>      "تم الوصول إلى الحد الأقصى من المنتجات في قائمة المقارنة",
+    "Product Added to Cart Successfully"                 =>      "تمت إضافة المنتج إلى السلة بنجاح",
+    "Product Added to the Comparison Successfully"       =>      "تمت إضافة المنتج إلى المقارنة بنجاح",
+    "Product Added to Wishlist Successfully"             =>      "تمت إضافة المنتج إلى المفضلة بنجاح",
 ];

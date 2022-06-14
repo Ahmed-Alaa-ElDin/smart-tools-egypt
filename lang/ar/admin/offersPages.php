@@ -70,7 +70,7 @@ return [
     "Offer's Banner"                                        =>      "بانر العرض",
     "Uploading ..."                                         =>      "جاري التحميل",
     "Delete Image"                                          =>      "مسح الصورة",
-    "Use 700x250 sizes image"                               =>      "استخدم صورة ابعادها 700×250",
+    "Use 800x250 sizes image"                               =>      "استخدم صورة ابعادها 700×250",
     "Offer's Information"                                   =>      "معلومات العرض",
     "offer's Title"                                         =>      "عنوان العرض",
     "in Arabic"                                             =>      "بالعربية",

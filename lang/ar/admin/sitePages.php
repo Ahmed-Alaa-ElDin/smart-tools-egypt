@@ -28,7 +28,7 @@ return [
     "Banner Image"                                                          =>      "صورة البنر",
     "Uploading ..."                                                         =>      "جاري التحميل ...",
     "Delete Image"                                                          =>      "حذف الصورة",
-    "Use 700x250 sizes image"                                               =>      "استخدم صورة أبعادها 700x250",
+    "Use 800x250 sizes image"                                               =>      "استخدم صورة أبعادها 800x250",
     "Banner's Information"                                                  =>      "معلومات البنر",
     "Banner's Description"                                                  =>      "وصف البنر",
     "in Arabic"                                                             =>      "بالعربية",

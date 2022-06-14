@@ -1,16 +1,13 @@
 <section class="top-slider container mt-4 mb-3 relative overflow-hidden grid grid-cols-12 gap-3 lg:gap-4">
 
     {{-- All Categories : Start --}}
-    <aside class="col-span-3 hidden lg:block z-10 ">
+    <aside class="col-span-2 hidden lg:block z-10 ">
         <div class="flex justify-around items-center px-3 py-5 bg-red-100 rounded-t shadow">
             <span class="font-bold text-sm">
                 {{ __('front/homePage.Main Categories') }}
             </span>
-            <a href="#" class="font-bold text-xs">
-                {{ __('front/homePage.Show All') }}
-            </a>
-
         </div>
+
         <ul class="bg-white rounded-b">
             @foreach ($topSupercategories as $topSupercategory)
                 <li class="group" data-id="1">
@@ -26,7 +23,7 @@
                     </div>
 
                     <div
-                        class="group-hover:block hidden hover:block absolute max-w-75 bg-white h-full top-0 rtl:right-1/4 ltr:left-1/4 rounded shadow-lg p-2 loaded overflow-y-scroll scrollbar scrollbar-thin scrollbar-thumb-gray-100 scrollbar-track-white">
+                        class="group-hover:block hidden hover:block absolute max-w-75 bg-white h-full top-0 rtl:right-[16.5%] ltr:left-[16.5%] rounded shadow-lg p-2 loaded overflow-y-scroll scrollbar scrollbar-thin scrollbar-thumb-gray-100 scrollbar-track-white">
                         <div class="card-columns">
                             @foreach ($topSupercategory->categories as $category)
                                 <div class="card shadow-none border-0 m-0">
@@ -62,7 +59,7 @@
     {{-- All Categories : End --}}
 
     {{-- Main Slider & top categories : Start --}}
-    <div class="col-span-12 lg:col-span-7 overflow-hidden grid grid-rows-3 gap-3 h-72 md:h-80 lg:h-96">
+    <div class="col-span-12 lg:col-span-8 overflow-hidden grid grid-rows-3 gap-3 h-72 md:h-80 lg:h-96">
         {{-- Main Slider : Start --}}
         <div id="main-slider" class="splide h-full w-full row-span-2 rounded overflow-hidden">
             <div class="splide__track">
@@ -80,7 +77,7 @@
         </div>
         {{-- Main Slider : End --}}
 
-        {{-- Top Categories : Start --}}
+        {{-- Top Subcategories : Start --}}
         <div class="row-span-1 grid grid-cols-5 gap-3 justify-between items-center">
             @foreach ($topSubcategories as $topSubcategory)
                 <a href="#" class="shadow rounded overflow-hidden bg-white p-1 text-center">
@@ -103,7 +100,7 @@
                 </a>
             @endforeach
         </div>
-        {{-- Top Categories : End --}}
+        {{-- Top Subcategories : End --}}
 
     </div>
     {{-- Main Slider & top categories : End --}}
@@ -122,7 +119,7 @@
             <div>
 
                 <ul class="grid grid-cols-3 lg:grid-cols-1 gap-2 ">
-                    @foreach ($todayDeals->products as $key => $product)
+                    @foreach ($products as $product)
                         {{-- Product : Start --}}
                         <li
                             class="product overflow-hidden bg-white border border-light rounded hover:shadow-md hover:scale-105 transition cursor-pointer">
@@ -131,25 +128,25 @@
                                     <div class="relative overflow-hidden h-40 flex items-center justify-center">
 
                                         {{-- Base Discount : Start --}}
-                                        @if (!$product->under_reviewing && $product->final_price != $product->base_price)
+                                        @if (!$product['under_reviewing'] && $product['final_price'] != $product['base_price'])
                                             <span
                                                 class="absolute bg-white flex gap-1 top-2 ltr:left-0 rtl:right-0 flex justify-center items-center shadow p-1 ltr:rounded-r-full rtl:rounded-l-full text-primary text-sm font-bold">
                                                 <span>
                                                     {{ __('front/homePage.OFF') }}
                                                 </span>
                                                 <span class="flex items-center bg-primary text-white rounded-full p-1">
-                                                    {{ round((($product->base_price - $product->final_price) / $product->base_price) * 100) }}%
+                                                    {{ round((($product['base_price'] - $product['final_price']) / $product['base_price']) * 100) }}%
                                                 </span>
                                             </span>
                                         @endif
                                         {{-- Base Discount : End --}}
 
                                         {{-- Product Image : Start --}}
-                                        @if ($product->thumbnail)
+                                        @if ($product['thumbnail'])
                                             <div class="w-full h-full flex justify-center items-center">
                                                 <img class="img-fit mx-auto lazyloaded"
-                                                    src="{{ asset('storage/images/products/cropped100/' . $product->thumbnail->file_name) }}"
-                                                    alt="{{ $product->name . 'image' }}">
+                                                    src="{{ asset('storage/images/products/cropped100/' . $product['thumbnail']['file_name']) }}"
+                                                    alt="{{ $product['name'][session('locale')] . 'image' }}">
                                             </div>
                                         @else
                                             <div class="w-full h-full flex justify-center items-center bg-gray-200">
@@ -163,11 +160,11 @@
                                         {{-- Product Image : End --}}
 
                                         {{-- Extra Discount : Start --}}
-                                        @if (round((($product->final_price - $product->best_price) * 100) / $product->final_price))
+                                        @if (round((($product['final_price'] - $product['best_price']) * 100) / $product['final_price']))
                                             <span
                                                 class="absolute bottom-2 rtl:right-0 ltr:left-0 text-xs font-bold text-white px-2 py-1 bg-primary">
                                                 {{ __('front/homePage.Extra Discount') }}
-                                                {{ round((($product->final_price - $product->best_price) * 100) / $product->final_price) }}%
+                                                {{ round((($product['final_price'] - $product['best_price']) * 100) / $product['final_price']) }}%
                                             </span>
                                         @endif
                                         {{-- Extra Discount : End --}}
@@ -176,40 +173,16 @@
                                         <div
                                             class="absolute top-2 ltr:-right-10 rtl:-left-10 transition-all ease-in-out duration-500 ltr:group-hover:right-2 rtl:group-hover:left-2 flex flex-col gap-1">
 
-                                            {{-- Add to wishlist : Start --}}
-                                            {{-- todo --}}
-                                            <a href="javascript:void(0)" data-toggle="tooltip"
-                                                data-title="{{ __('front/homePage.Add to wishlist') }}"
-                                                data-placement="left">
-                                                <span
-                                                    class="material-icons bg-white text-lg p-1 rounded-full border border-light w-9 h-9 text-center shadow-sm">
-                                                    favorite_border
-                                                </span>
-                                            </a>
-                                            {{-- Add to wishlist : End --}}
-
                                             {{-- Add to compare : Start --}}
-                                            {{-- todo --}}
-                                            <a href="javascript:void(0)" data-toggle="tooltip"
-                                                data-title="{{ __('front/homePage.Add to compare') }}"
-                                                data-placement="left">
-                                                <span
-                                                    class="material-icons bg-white text-lg p-1 rounded-full border border-light w-9 h-9 text-center shadow-sm">
-                                                    compare_arrows
-                                                </span>
-                                            </a>
+                                            @livewire('front.general.compare.add-to-compare-button', ['product_id' => $product['id']], key('add-compare-button-' . Str::random(10)))
                                             {{-- Add to compare : End --}}
 
+                                            {{-- Add to wishlist : Start --}}
+                                            @livewire('front.general.wishlist.add-to-wishlist-button', ['product_id' => $product['id']], key('add-wishlist-button-' . Str::random(10)))
+                                            {{-- Add to wishlist : End --}}
+
                                             {{-- Add to cart : Start --}}
-                                            {{-- todo --}}
-                                            <a href="javascript:void(0)" data-toggle="tooltip"
-                                                data-title="{{ __('front/homePage.Add to cart') }}"
-                                                data-placement="left">
-                                                <span
-                                                    class="material-icons text-lg p-1 rounded-full border border-light w-9 h-9 animate-pulse text-center shadow-sm bg-primary text-white hover:bg-secondary">
-                                                    shopping_cart
-                                                </span>
-                                            </a>
+                                            @livewire('front.general.cart.add-to-cart-button', ['product_id' => $product['id']], key('add-cart-button-' . Str::random(10)))
                                             {{-- Add to cart : End --}}
                                         </div>
                                         {{-- Add Product : End --}}
@@ -225,9 +198,9 @@
                                                 <span
                                                     class="font-bold text-primary text-xs">{{ __('front/homePage.EGP') }}</span>
                                                 <span
-                                                    class="font-bold text-primary text-lg">{{ explode('.', $product->final_price)[0] }}</span>
+                                                    class="font-bold text-primary text-xl">{{ explode('.', $product['final_price'])[0] }}</span>
                                                 <span
-                                                    class="font-bold text-primary text-xs">{{ explode('.', $product->final_price)[1] }}</span>
+                                                    class="font-bold text-primary text-xs">{{ explode('.', $product['final_price'])[1] }}</span>
                                             </div>
                                             {{-- Final Price : End --}}
 
@@ -237,9 +210,8 @@
                                                 <span class="text-xs">
                                                     {{ __('front/homePage.EGP') }}
                                                 </span>
-                                                <span>
-                                                    {{ $product->base_price }}
-                                                </span>
+                                                <span
+                                                    class="font-bold text-2xl">{{ explode('.', $product['base_price'])[0] }}</span>
                                             </del>
                                             {{-- Base Price : End --}}
 
@@ -247,7 +219,7 @@
                                         {{-- Price : End --}}
 
                                         {{-- Free Shipping : Start --}}
-                                        @if ($product->free_shipping)
+                                        @if ($product['free_shipping'])
                                             <div class="text-center text-green-600 font-bold text-sm">
                                                 {{ __('front/homePage.Free Shipping') }}
                                             </div>
@@ -284,22 +256,26 @@
                                         {{-- Reviews : End --}}
 
                                         {{-- Product Name : Start --}}
-                                        <h3 class="mb-0 text-center">
+                                        <h3 class="mb-2 text-center">
                                             <span class="block text-gray-800 truncate">
-                                                {{ $product->name }}
+                                                {{ $product['name'][session('locale')] }}
                                             </span>
                                         </h3>
                                         {{-- Product Name : End --}}
 
                                         {{-- Points : Start --}}
-                                        @if ($product->points || $product->best_points)
+                                        @if ($product['points'] || $product['best_points'])
                                             <div
-                                                class="rounded px-2 mt-2 bg-gray-200 border-gray-800 text-black text-sm border flex justify-between items-center">
+                                                class="rounded px-2 my-2 bg-gray-200 border-gray-800 text-black text-sm border flex justify-between items-center">
                                                 <span>{{ __('front/homePage.Points') }}</span>
-                                                <span>{{ $product->best_points > $product->points ? round($product->best_points) : $product->points }}</span>
+                                                <span>{{ $product['best_points'] > $product['points'] ? round($product['best_points']) : $product['points'] }}</span>
                                             </div>
                                         @endif
                                         {{-- Points : End --}}
+
+                                        {{-- Cart Amount : Start --}}
+                                        @livewire('front.general.cart.cart-amount', ['product_id' => $product['id'], 'unique' => 'product-' . $product['id']], key($product['name'][session('locale')] . '-' . rand()))
+                                        {{-- Cart Amount : End --}}
 
                                     </div>
                                 </div>

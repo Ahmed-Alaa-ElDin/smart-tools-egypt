@@ -49,7 +49,7 @@ class SectionForm extends Component
             $this->section = Section::with([
                 'products' =>
                 fn ($q) => $q->select(['products.id', 'name', 'base_price', 'final_price', 'points', 'under_reviewing'])->with(['thumbnail'])->withPivot('rank'),
-                'offers',
+                'offer',
                 'banners' => fn ($q) => $q->select(['banners.id', 'banner_name', 'description', 'link'])->withPivot('rank')
             ])->findOrFail($this->section_id);
 
@@ -68,7 +68,7 @@ class SectionForm extends Component
                     $product['rank'] = $product['pivot']['rank'];
                 }
             } elseif ($this->type == 1 || $this->type == 2) {
-                $this->selected_offer = $this->section->offers->count() ? $this->section->offers->first()->id : '';
+                $this->selected_offer = $this->section->offer ? $this->section->offer->id : '';
             } elseif ($this->type == 3) {
                 $this->selected_banners = $this->section->banners->toArray();
                 foreach ($this->selected_banners as &$banner) {
@@ -137,11 +137,10 @@ class SectionForm extends Component
                 ],
                 "type" => $this->type,
                 "active" => $this->active ? 1 : 0,
+                "offer_id" => $this->selected_offer ?? null,
             ]);
 
-            if ($this->selected_offer != null) {
-                $section->offers()->attach($this->selected_offer);
-            } elseif ($this->selected_products != null) {
+            if ($this->selected_products != null) {
                 foreach ($this->selected_products as $product) {
                     $section->products()->attach($product['id'], ['rank' => $product['rank']]);
                 }
@@ -173,7 +172,6 @@ class SectionForm extends Component
     public function update()
     {
         $this->validate();
-        // dd('dsa');
 
         DB::beginTransaction();
 
@@ -185,15 +183,13 @@ class SectionForm extends Component
                 ],
                 "type" => $this->type,
                 "active" => $this->active ? 1 : 0,
+                "offer_id" => $this->selected_offer ?? null,
             ]);
 
-            $this->section->offers()->detach();
             $this->section->products()->detach();
             $this->section->banners()->detach();
 
-            if ($this->selected_offer != null) {
-                $this->section->offers()->attach($this->selected_offer);
-            } elseif ($this->selected_products != null) {
+            if ($this->selected_products != null) {
                 foreach ($this->selected_products as $product) {
                     $this->section->products()->attach($product['id'], ['rank' => $product['rank']]);
                 }

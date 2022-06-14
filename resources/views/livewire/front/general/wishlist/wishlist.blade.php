@@ -18,7 +18,7 @@
 
             <div
                 class="text-center p-2 overflow-y-auto overflow-x-hidden scrollbar scrollbar-thin scrollbar-thumb-red-200 max-h-[50vh]">
-                {{-- Cart Items :: Start --}}
+                {{-- WishlistItems :: Start --}}
                 <ul>
                     @forelse ($wishlist as $wishlist_item)
                         <li>
@@ -48,7 +48,7 @@
                                             <span
                                                 class="font-bold text-green-700">{{ explode('.', $wishlist_item->price)[0] }}</span>
                                             <span
-                                                class="font-bold text-green-700 text-xs">{{ explode('.', $wishlist_item->price)[1] }}</span>
+                                                class="font-bold text-green-700 text-xs">{{ explode('.', $wishlist_item->price)[1] ?? 00 }}</span>
                                         </div>
                                     </div>
                                     {{-- Product Amount & Price :: End --}}
@@ -60,8 +60,7 @@
                                     <button title="{{ __('front/homePage.Add to cart') }}"
                                         class="w-8 h-8 rounded-circle bg-secondary border border-secondary text-white transition ease-in-out hover:bg-primary hover:text-white  animate-pulse text-center shadow-sm"
                                         wire:click="moveToCart('{{ $wishlist_item->rowId }}')">
-                                        <span
-                                            class="material-icons text-lg rounded-circle">
+                                        <span class="material-icons text-lg rounded-circle">
                                             shopping_cart
                                         </span>
                                     </button>
@@ -89,9 +88,37 @@
                         </li>
                     @endforelse
                 </ul>
-                {{-- Cart Items :: End --}}
+                {{-- WishlistItems :: End --}}
             </div>
-        </div>
 
+            @if ($wishlist_count > 0)
+                {{-- WishlistButtons :: Start --}}
+                <div class="flex flex-col justify-center items-center gap-1 m-1 px-2">
+                    <div class="flex justify-center items-center gap-3 w-full">
+                        {{-- View & Edit Wishlist:: Start --}}
+                        <a href="#" class="grow btn bg-primary btn-sm text-white font-bold">
+                            <span class="material-icons">
+                                visibility
+                            </span>
+                            &nbsp;
+                            {{ __('front/homePage.View Wishlist') }}
+                        </a>
+                        {{-- View & Edit Wishlist:: End --}}
+
+                        {{-- Clear Wishlist:: Start --}}
+                        <button wire:click="clearWishlist"
+                            class="btn bg-white border border-primary btn-sm text-primary font-bold rounded-full"
+                            title="{{ __('front/homePage.Clear Wishlist') }}">
+                            <span class="material-icons">
+                                delete
+                            </span>
+                        </button>
+                        {{-- Clear Wishlist:: End --}}
+                    </div>
+                </div>
+                {{-- WishlistButtons :: End --}}
+            @endif
+
+        </div>
     </div>
 </div>

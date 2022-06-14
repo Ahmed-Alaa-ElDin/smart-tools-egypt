@@ -51,7 +51,7 @@
                                             <span
                                                 class="font-bold text-green-700">{{ explode('.', $cart_item->price)[0] }}</span>
                                             <span
-                                                class="font-bold text-green-700 text-xs">{{ explode('.', $cart_item->price)[1] }}</span>
+                                                class="font-bold text-green-700 text-xs">{{ explode('.', $cart_item->price)[1] ?? 00 }}</span>
                                         </div>
                                     </div>
                                     {{-- Product Amount & Price :: End --}}
@@ -72,7 +72,7 @@
                                     {{-- Delete :: Start --}}
                                     <button title="{{ __('front/homePage.Remove from Cart') }}"
                                         class="w-8 h-8 rounded-circle bg-white border border-primary text-primary transition ease-in-out hover:bg-primary hover:text-white"
-                                        wire:click="removeFromCart('{{ $cart_item->rowId }}')">
+                                        wire:click="removeFromCart('{{ $cart_item->rowId }}','{{ $cart_item->id }}')">
                                         <span class="material-icons text-lg">
                                             delete
                                         </span>

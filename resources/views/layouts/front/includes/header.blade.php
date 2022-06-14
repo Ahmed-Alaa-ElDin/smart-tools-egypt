@@ -54,22 +54,8 @@
                 {{-- Search : End --}}
 
                 {{-- Compare : Start --}}
-                <div class="hidden lg:block ml-3 mr-0">
-                    <div class="" id="compare">
-                        <a href="#" class="flex gap-2 items-center text-reset">
-                            {{-- <i class="la la-refresh la-2x opacity-80"></i> --}}
-                            <span class="material-icons">
-                                compare_arrows
-                            </span>
-                            <span class="grow ml-1 text-center">
-                                <span class="badge bg-red-600 mb-1 text-white badge-inline badge-pill">0</span>
-                                <span class="nav-box-text text-xs hidden xl:block opacity-70">
-                                    {{ __('front/homePage.Compare') }}
-                                </span>
-                            </span>
-                        </a>
-                    </div>
-                </div>
+                @livewire('front.general.compare.compare')
+
                 {{-- Compare : End --}}
 
                 {{-- Wishlist : Start --}}
