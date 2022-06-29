@@ -48,7 +48,7 @@
                                             <span
                                                 class="font-bold text-green-700">{{ explode('.', $wishlist_item->price)[0] }}</span>
                                             <span
-                                                class="font-bold text-green-700 text-xs">{{ explode('.', $wishlist_item->price)[1] ?? 00 }}</span>
+                                                class="font-bold text-green-700 text-xs">{{ explode('.', $wishlist_item->price)[1] ?? "00" }}</span>
                                         </div>
                                     </div>
                                     {{-- Product Amount & Price :: End --}}

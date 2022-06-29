@@ -37,7 +37,7 @@ class AddToCompareButton extends Component
 
             ############ Emit Sweet Alert :: Start ############
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('front/homePage.Product Added to the Comparison Successfully'),
+                "text" => __('front/homePage.Product Has Been Added To The Comparison Successfully'),
                 'icon' => 'success'
             ]);
             ############ Emit Sweet Alert :: End ############

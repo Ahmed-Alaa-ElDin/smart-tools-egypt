@@ -10,12 +10,12 @@
                 class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">{{ __('admin/deliveriesPages.Company Name') }}</label>
             {{-- Name Ar --}}
             <div class="col-span-6 md:col-span-5">
-                <input class="py-1 w-full rounded text-center border-gray-300 text-gray-500" type="text"
+                <input class="py-1 w-full rounded text-center border-gray-300 text-gray-500 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300" type="text"
                     wire:model.lazy="name.ar" disabled>
             </div>
             {{-- Name En --}}
             <div class="col-span-6 md:col-span-5 ">
-                <input class="py-1 w-full rounded text-center border-gray-300 text-gray-500" type="text"
+                <input class="py-1 w-full rounded text-center border-gray-300 text-gray-500 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300" type="text"
                     wire:model.lazy="name.en" disabled>
             </div>
         </div>

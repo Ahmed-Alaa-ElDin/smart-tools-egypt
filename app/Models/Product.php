@@ -121,6 +121,7 @@ class Product extends Model
                 'name',
                 'slug',
                 'quantity',
+                'weight',
                 'base_price',
                 'final_price',
                 'points',

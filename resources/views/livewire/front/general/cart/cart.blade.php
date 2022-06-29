@@ -51,7 +51,7 @@
                                             <span
                                                 class="font-bold text-green-700">{{ explode('.', $cart_item->price)[0] }}</span>
                                             <span
-                                                class="font-bold text-green-700 text-xs">{{ explode('.', $cart_item->price)[1] ?? 00 }}</span>
+                                                class="font-bold text-green-700 text-xs">{{ explode('.', $cart_item->price)[1] ?? "00" }}</span>
                                         </div>
                                     </div>
                                     {{-- Product Amount & Price :: End --}}
@@ -125,7 +125,7 @@
 
                     <div class="flex justify-center items-center gap-3 w-full">
                         {{-- View & Edit Cart :: Start --}}
-                        <a href="#" class="grow btn bg-primary btn-sm text-white font-bold">
+                        <a href="{{ route('front.cart') }}" class="grow btn bg-primary btn-sm text-white font-bold">
                             <span class="material-icons">
                                 edit
                             </span>

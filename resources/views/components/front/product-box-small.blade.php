@@ -44,7 +44,6 @@
                 {{-- Add Product : Start --}}
                 <div
                     class="absolute top-2 ltr:-right-10 rtl:-left-10 transition-all ease-in-out duration-500 ltr:group-hover:right-2 rtl:group-hover:left-2 flex flex-col gap-1">
-                    {{-- todo --}}
                     {{-- Add to compare : Start --}}
                     @livewire('front.general.compare.add-to-compare-button', ['product_id' => $product['id']], key('add-compare-button-' . Str::random(10)))
                     {{-- Add to compare : End --}}
@@ -144,6 +143,26 @@
                         {{ $product['model'] }}
                     </h4>
                     {{-- Product Model : End --}}
+
+                    {{-- Availablility :: Start --}}
+                    @if ($product['quantity'] <= 0)
+                        <h5 class="font-bold text-sm text-red-600 text-center">
+                            {{ __('front/homePage.Currently Not Available') }}
+                        </h5>
+                    @elseif ($product['quantity'] == 1)
+                        <h5 class="font-bold text-sm text-yellow-600 text-center">
+                            {{ __('front/homePage.Last Piece') }}
+                        </h5>
+                    @elseif ($product['quantity'] == 2)
+                        <h5 class="font-bold text-sm text-yellow-600 text-center">
+                            {{ __('front/homePage.Only 2 Pieces Remaining') }}
+                        </h5>
+                    @elseif ($product['quantity'] == 3)
+                        <h5 class="font-bold text-sm text-green-600 text-center">
+                            {{ __('front/homePage.Only 3 Pieces Remaining') }}
+                        </h5>
+                    @endif
+                    {{-- Availablility :: End --}}
                 </div>
 
                 {{-- Points : Start --}}
@@ -157,7 +176,9 @@
                 {{-- Points : End --}}
 
                 {{-- Cart Amount : Start --}}
-                @livewire('front.general.cart.cart-amount', ['product_id' => $product['id'], 'unique' => 'product-' . $product['id']], key($product['name'][session('locale')] . '-' . rand()))
+                <div class="mt-4">
+                    @livewire('front.general.cart.cart-amount', ['product_id' => $product['id'], 'unique' => 'product-' . $product['id']], key($product['name'][session('locale')] . '-' . rand()))
+                </div>
                 {{-- Cart Amount : End --}}
 
             </div>

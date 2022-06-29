@@ -27,13 +27,15 @@
             {{-- Remove :: End --}}
 
             {{-- Delete :: Start --}}
-            <button title="{{ __('front/homePage.Remove from Cart') }}"
-                class="w-8 h-8 rounded-circle bg-white border border-primary text-primary transition ease-in-out hover:bg-primary hover:text-white"
-                wire:click="removeFromCart('{{ $cartProduct->rowId }}','{{ $product_id }}')">
-                <span class="material-icons text-lg">
-                    delete
-                </span>
-            </button>
+            @if ($remove)
+                <button title="{{ __('front/homePage.Remove from Cart') }}"
+                    class="w-8 h-8 rounded-circle bg-white border border-primary text-primary transition ease-in-out hover:bg-primary hover:text-white"
+                    wire:click="removeFromCart('{{ $cartProduct->rowId }}','{{ $product_id }}')">
+                    <span class="material-icons text-lg">
+                        delete
+                    </span>
+                </button>
+            @endif
             {{-- Delete :: End --}}
         </div>
     @endif

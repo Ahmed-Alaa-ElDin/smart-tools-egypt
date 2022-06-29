@@ -67,7 +67,7 @@ return [
     "Points"                                                =>      "Points",
     "Free Shipping"                                         =>      "Free Shipping",
     "Orders"                                                =>      "Orders",
-    "Points value"                                          =>      "{0} No Points|{1} Point|[2,*] Points",
+    // "Points value"                                          =>      "{0} No Points|{1} Point|[2,*] Points",
     "Offer's Banner"                                        =>      "Offer's Banner",
     "Uploading ..."                                         =>      "Uploading ...",
     "Delete Image"                                          =>      "Delete Image",

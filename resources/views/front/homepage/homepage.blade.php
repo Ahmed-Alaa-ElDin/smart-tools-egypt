@@ -87,22 +87,6 @@
             }
             // ####### Products Slider :: End #######
 
-            // ####### Reinitialize the sliders of product added to cart :: Start #######
-            // Livewire.on('cartUpdated', (data) => {
-            //     if (data) {
-            //         new Splide('#product_list_' + data.key, splide_options).mount();
-            //     }
-            // });
-            // ####### Reinitialize the sliders of product added to cart :: End #######
-
-            // ####### Reinitialize the sliders of product added to cart :: Start #######
-            // Livewire.on('product_added_to_wishlist', (data) => {
-            //     if (data) {
-            //         new Splide('#product_list_' + data.key, splide_options).mount();
-            //     }
-            // });
-            // ####### Reinitialize the sliders of product added to cart :: End #######
-
             // ####### Timer :: Start #######
             $('.timer').each(function() {
                 var countDownDate = new Date($(this).data('date')).getTime();

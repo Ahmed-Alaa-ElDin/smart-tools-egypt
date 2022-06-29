@@ -8,17 +8,30 @@ use Livewire\Component;
 
 class AddToWishlistButton extends Component
 {
-    public $product_id;
+    public $product_id, $text = false, $remove = false;
 
     public function render()
     {
-        // dd($this->key());
         return view('livewire.front.general.wishlist.add-to-wishlist-button');
     }
 
     ############## Add To Wishlist :: Start ##############
     public function addToWishlist($product_id)
     {
+        ############ Remove Product from Cart :: Start ############
+        if ($this->remove) {
+            Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product_id) {
+                return $cartItem->id === $product_id;
+            })->each(function ($cartItem, $rowId) {
+                Cart::instance('cart')->remove($rowId);
+            });
+
+            if (Auth::check()) {
+                Cart::instance('cart')->store(Auth::user()->id);
+            }
+        }
+        ############ Remove Product from Cart :: End ############
+
         $product = getBestOffer($product_id);
 
         ############ Add Product to Wishlist :: Start ############
@@ -38,7 +51,7 @@ class AddToWishlistButton extends Component
 
             ############ Emit Sweet Alert :: Start ############
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('front/homePage.Product Added to Wishlist Successfully'),
+                "text" => __('front/homePage.Product Has Been Added To The Wishlist Successfully'),
                 'icon' => 'success'
             ]);
             ############ Emit Sweet Alert :: End ############

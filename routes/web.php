@@ -16,11 +16,6 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 Route::group(['prefix' => LaravelLocalization::setLocale(),'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]], function()
 {
-    Route::get('/', function()
-	{
-		return view('welcome');
-	});
-
     require_once __DIR__ . "/admin/auth.php";
     require_once __DIR__ . "/front/front.php";
     require_once __DIR__ . "/admin/admin.php";
