@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Str;
 
 class ProductForm extends Component
 {
@@ -21,7 +22,13 @@ class ProductForm extends Component
     public $gallery_images = [], $gallery_images_name = [], $featured = 0, $deletedImages = [];
     public $thumbnail_image,  $thumbnail_image_name;
     public $video;
-    public $name = ["ar" => "", "en" => ""], $brand_id, $model, $barcode, $weight, $description = ['ar' => '', 'en' => ''], $publish = true, $refundable = true;
+    public $specs = [
+        [
+            "ar" => ["title" => null, "value" => null],
+            "en" => ["title" => null, "value" => null]
+        ]
+    ];
+    public $name = ["ar" => null, "en" => null], $brand_id, $model, $barcode, $weight, $description = ['ar' => null, 'en' => null], $publish = true, $refundable = true;
     public $base_price, $discount, $final_price, $points, $free_shipping = false, $reviewing = false, $quantity, $low_stock;
     public $title, $description_seo;
     public $parentCategories;
@@ -71,13 +78,14 @@ class ProductForm extends Component
         ];
     }
 
-    // Called Once at the beginning
+    ######################## Mount :: Start ############################
     public function mount()
     {
 
         $this->brands = Brand::get();
         $this->supercategories = Supercategory::select('id', 'name')->get()->toArray();
 
+        // If editing product
         if ($this->product_id) {
 
             // Get Old Product's data
@@ -153,6 +161,11 @@ class ProductForm extends Component
             $this->publish = $product->publish;
             $this->refundable = $product->refundable;
 
+            // dd($product->specs);
+            if ($product->specs != null) {
+                $this->specs = json_decode($product->specs);
+            }
+
             // Old Stock and Price
             $this->base_price = $product->base_price;
             $this->final_price = $product->final_price;
@@ -166,7 +179,9 @@ class ProductForm extends Component
             // SEO
             $this->title = $product->meta_title;
             $this->description_seo = $product->meta_description;
-        } else {
+        }
+        // If new product
+        else {
             $this->parentCategories = [
                 [
                     'supercategory_id' => 0,
@@ -179,45 +194,49 @@ class ProductForm extends Component
             ];
         }
     }
+    ######################## Mount :: End ############################
 
+
+    ######################## Render :: Start ############################
     public function render()
     {
         return view('livewire.admin.products.product-form');
     }
+    ######################## Render :: End ############################
 
-    ######################## Publish Toggle : Start ############################
+    ######################## Publish Toggle :: Start ############################
     public function publish()
     {
         $this->publish = !$this->publish;
     }
-    ######################## Publish Toggle : End ############################
+    ######################## Publish Toggle :: End ############################
 
 
-    ######################## Refundable Toggle : Start ############################
+    ######################## Refundable Toggle :: Start ############################
     public function refund()
     {
         $this->refundable = !$this->refundable;
     }
-    ######################## Refundable Toggle : End ############################
+    ######################## Refundable Toggle :: End ############################
 
 
-    ######################## Free Shipping Toggle : Start ############################
+    ######################## Free Shipping Toggle :: Start ############################
     public function free_shipping()
     {
         $this->free_shipping = !$this->free_shipping;
     }
-    ######################## Free Shipping Toggle : End ############################
+    ######################## Free Shipping Toggle :: End ############################
 
 
-    ######################## Reviewing Toggle : Start ############################
+    ######################## Reviewing Toggle :: Start ############################
     public function reviewing()
     {
         $this->reviewing = !$this->reviewing;
     }
-    ######################## Reviewing Toggle : End ############################
+    ######################## Reviewing Toggle :: End ############################
 
 
-    ######################## Gallery Images : Start ############################
+    ######################## Gallery Images :: Start ############################
     // validate and upload photo
     public function updatedGalleryImages($gallery_images)
     {
@@ -270,9 +289,9 @@ class ProductForm extends Component
         $this->gallery_images_name = [];
         $this->gallery_images = [];
     }
-    ######################## Gallery Images : End ############################
+    ######################## Gallery Images :: End ############################
 
-    ######################## Thumbnail Image : Start ############################
+    ######################## Thumbnail Image :: Start ############################
     // validate and upload photo
     public function updatedThumbnailImage($thumbnail_image)
     {
@@ -293,10 +312,10 @@ class ProductForm extends Component
         $this->thumbnail_image = null;
         $this->thumbnail_image_name = null;
     }
-    ######################## Thumbnail Image : Start ############################
+    ######################## Thumbnail Image :: Start ############################
 
 
-    ######################## Real Time Validation : Start ############################
+    ######################## Real Time Validation :: Start ############################
     public function updated($field)
     {
         $this->validateOnly($field);
@@ -318,10 +337,10 @@ class ProductForm extends Component
             $this->discount = round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2);
         }
     }
-    ######################## Real Time Validation : End ############################
+    ######################## Real Time Validation :: End ############################
 
 
-    ######################## Updated Supercategory : End ############################
+    ######################## Updated Supercategory :: End ############################
     public function supercategoryUpdated($key)
     {
         if ($this->parentCategories[$key]['supercategory_id'] != 0) {
@@ -336,10 +355,10 @@ class ProductForm extends Component
             $this->parentCategories[$key]['subcategory_id'] = 0;
         }
     }
-    ######################## Updated Supercategory : End ############################
+    ######################## Updated Supercategory :: End ############################
 
 
-    ######################## Updated Supercategory : End ############################
+    ######################## Updated Supercategory :: End ############################
     public function categoryUpdated($key)
     {
         if ($this->parentCategories[$key]['category_id'] != 0) {
@@ -350,17 +369,17 @@ class ProductForm extends Component
             $this->parentCategories[$key]['subcategory_id'] = 0;
         }
     }
-    ######################## Updated Supercategory : End ############################
+    ######################## Updated Supercategory :: End ############################
 
 
-    ######################## Delete Subcategory : End ############################
+    ######################## Delete Subcategory :: End ############################
     public function deleteSubcategory($index)
     {
         unset($this->parentCategories[$index]);
     }
-    ######################## Delete Subcategory : End ############################
+    ######################## Delete Subcategory :: End ############################
 
-    ######################## Add Subcategory : End ############################
+    ######################## Add Subcategory :: End ############################
     public function addSubcategory()
     {
         $this->parentCategories[] = [
@@ -372,37 +391,52 @@ class ProductForm extends Component
             'subcategories' => null,
         ];
     }
-    ######################## Add Subcategory : End ############################
+    ######################## Add Subcategory :: End ############################
 
 
-    ######################## Updated Arabic description : Start ############################
+    ######################## Updated Arabic description :: Start ############################
     public function descriptionAr($value)
     {
         $this->description['ar'] = $value;
     }
-    ######################## Updated Arabic description : End ############################
+    ######################## Updated Arabic description :: End ############################
 
 
-    ######################## Updated English description : Start ############################
+    ######################## Updated English description :: Start ############################
     public function descriptionEn($value)
     {
         $this->description['en'] = $value;
     }
-    ######################## Updated English description : End ############################
+    ######################## Updated English description :: End ############################
 
 
-    ######################## Updated SEO description : Start ############################
+    ######################## Updated SEO description :: Start ############################
     public function descriptionSeo($value)
     {
         $this->description_seo = $value;
     }
-    ######################## Updated SEO description : End ############################
+    ######################## Updated SEO description :: End ############################
 
+    ######################## Delete Specification :: Start ############################
+    public function deleteSpec($index)
+    {
+        unset($this->specs[$index]);
+    }
+    ######################## Delete Specification :: End ############################
 
-    ######################## Save New Product : Start ############################
+    ######################## Add Specification :: Start ############################
+    public function addSpec()
+    {
+        $this->specs[] = [
+            'name' => null,
+            'value' => null,
+        ];
+    }
+    ######################## Add Specification :: End ############################
+
+    ######################## Save New Product :: Start ############################
     public function save($new = false)
     {
-        // dd(array_map(fn ($value) => $value['subcategory_id'], $this->parentCategories));
         $this->validate();
 
         DB::beginTransaction();
@@ -413,7 +447,7 @@ class ProductForm extends Component
                     'ar' => $this->name['ar'],
                     'en' => $this->name['en'] ?? $this->name['ar']
                 ],
-                'slug' => $this->name['en'] ? strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $this->name['en']))) : '',
+                'slug' => Str::slug($this->name['en'], '-'),
                 'barcode' => $this->barcode,
                 'weight' => $this->weight ?? 0,
                 'quantity' => $this->quantity ?? 0,
@@ -425,6 +459,7 @@ class ProductForm extends Component
                     'ar' => $this->description['ar'] ?? $this->description['en'],
                     'en' => $this->description['en'] ?? $this->description['ar']
                 ],
+                'specs' => json_encode(array_values($this->specs)),
                 'model' => $this->model,
                 'refundable' => $this->refundable ? 1 : 0,
                 'video' => $this->video,
@@ -481,9 +516,9 @@ class ProductForm extends Component
             redirect()->route('admin.products.index');
         }
     }
-    ######################## Save New Product : End ############################
+    ######################## Save New Product :: End ############################
 
-    ######################## Save Updated Product : Start ############################
+    ######################## Save Updated Product :: Start ############################
     public function update()
     {
         $this->validate();
@@ -496,7 +531,7 @@ class ProductForm extends Component
                     'ar' => $this->name['ar'],
                     'en' => $this->name['en'] ?? $this->name['ar']
                 ],
-                'slug' => $this->name['en'] ? strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $this->name['en']))) : '',
+                'slug' => Str::slug($this->name['en'], '-'),
                 'barcode' => $this->barcode,
                 'weight' => $this->weight ?? 0,
                 'quantity' => $this->quantity ?? 0,
@@ -508,6 +543,7 @@ class ProductForm extends Component
                     'ar' => $this->description['ar'] ?? $this->description['en'],
                     'en' => $this->description['en'] ?? $this->description['ar']
                 ],
+                'specs' => json_encode(array_values($this->specs)),
                 'model' => $this->model,
                 'refundable' => $this->refundable ? 1 : 0,
                 'video' => $this->video,
@@ -560,6 +596,6 @@ class ProductForm extends Component
             redirect()->route('admin.products.index');
         }
     }
-    ######################## Save Updated Product : End ############################
+    ######################## Save Updated Product :: End ############################
 
 }

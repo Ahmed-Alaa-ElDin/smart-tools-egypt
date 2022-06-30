@@ -39,6 +39,7 @@ class Product extends Model
         'free_shipping',
         'publish',
         'under_reviewing',
+        'specs',
         'created_by',
         'brand_id',
         'today_deal',

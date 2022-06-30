@@ -26,6 +26,7 @@ return new class extends Migration
             $table->integer('points')->nullable();
             $table->text('description')->nullable();
             $table->string('model')->nullable();
+            $table->json('specs')->nullable();
             $table->string('video')->nullable();
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
