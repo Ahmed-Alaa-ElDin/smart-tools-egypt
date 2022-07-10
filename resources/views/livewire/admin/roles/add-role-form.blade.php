@@ -118,10 +118,10 @@
         <div class="flex flex-wrap gap-3 justify-around mt-4">
             {{-- Save and Back --}}
             <button type="button" wire:click.prevent="save"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Save') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Save') }}</button>
             {{-- Save and New --}}
             <button type="button" wire:click.prevent="save('true')"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Save and Add New Role') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Save and Add New Role') }}</button>
             {{-- Back --}}
             <a href="{{ route('admin.roles.index') }}"
                 class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Back') }}</a>

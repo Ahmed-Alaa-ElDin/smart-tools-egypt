@@ -40,7 +40,7 @@
             @else
                 {{-- Upload New Image --}}
                 <input
-                    class="col-span-12 md:col-span-6 md:col-start-4 form-control block w-full px-2 py-1 text-sm font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
+                    class="col-span-12 md:col-span-6 md:col-start-4 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
                     id="banner" type="file" type="image" wire:model.lazy="banner">
                 <span class="col-span-12 text-xs text-gray-400">
                     {{ __('admin/offersPages.Use 800x250 sizes image') }}</span>
@@ -107,13 +107,12 @@
         </div>
         {{-- Date Range End --}}
 
-
         {{-- Free Shipping Start --}}
         <div class="col-span-6 col-start-4 md:col-span-3 grid grid-cols-2 gap-y-2 gap-x-2 items-center w-full">
             <label wire:click="freeShipping"
                 class="col-span-1 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Free Shipping') }}</label>
             <div class="col-span-1">
-                {!! $free_shipping ? '<span class="block cursor-pointer material-icons text-green-600 select-none" wire:click="freeShipping">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="freeShipping">toggle_off</span>' !!}
+                {!! $free_shipping ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="freeShipping">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="freeShipping">toggle_off</span>' !!}
 
                 @error('free_shipping')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -178,8 +177,9 @@
                     <div class="text-gray-900 bg-white p-1 m-0 shadow rounded cursor-pointer btn @if (empty($items[$item_key]['products'])) hidden @endif "
                         wire:click="selectAll({{ $item_key }})"
                         title="{{ __('admin/offersPages.Select All') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
-                            preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" class="inline-block w-6 h-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
+                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"
+                            class="inline-block w-6 h-6">
                             <path fill="currentColor"
                                 d="M20.496 5.627A2.25 2.25 0 0 1 22 7.75v10A4.25 4.25 0 0 1 17.75 22h-10a2.25 2.25 0 0 1-2.123-1.504l2.097.004H17.75a2.75 2.75 0 0 0 2.75-2.75v-10l-.004-.051V5.627ZM17.246 2a2.25 2.25 0 0 1 2.25 2.25v12.997a2.25 2.25 0 0 1-2.25 2.25H4.25A2.25 2.25 0 0 1 2 17.247V4.25A2.25 2.25 0 0 1 4.25 2h12.997Zm0 1.5H4.25a.75.75 0 0 0-.75.75v12.997c0 .414.336.75.75.75h12.997a.75.75 0 0 0 .75-.75V4.25a.75.75 0 0 0-.75-.75Zm-7.665 7.858L13.47 7.47a.75.75 0 0 1 1.133.976l-.073.084l-4.5 4.5a.75.75 0 0 1-1.056.004L8.9 12.95l-1.5-2a.75.75 0 0 1 1.127-.984l.073.084l.981 1.308L13.47 7.47l-3.89 3.888Z" />
                         </svg>
@@ -192,8 +192,9 @@
                     "
                         wire:click="deselectAll({{ $item_key }})"
                         title="{{ __('admin/offersPages.Deselect All') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
-                            preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" class="inline-block w-6 h-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
+                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"
+                            class="inline-block w-6 h-6">
                             <path fill="currentColor"
                                 d="M20.496 5.627A2.25 2.25 0 0 1 22 7.75v10A4.25 4.25 0 0 1 17.75 22h-10a2.25 2.25 0 0 1-2.123-1.504l2.097.004H17.75a2.75 2.75 0 0 0 2.75-2.75v-10l-.004-.051V5.627ZM17.246 2a2.25 2.25 0 0 1 2.25 2.25v12.997a2.25 2.25 0 0 1-2.25 2.25H4.25A2.25 2.25 0 0 1 2 17.247V4.25A2.25 2.25 0 0 1 4.25 2h12.997Zm0 1.5H4.25a.75.75 0 0 0-.75.75v12.997c0 .414.336.75.75.75h12.997a.75.75 0 0 0 .75-.75V4.25a.75.75 0 0 0-.75-.75Z" />
                         </svg>
@@ -267,7 +268,8 @@
                             <div class="col-span-3">
                                 <input id="brand-{{ $item_key }}-offer_number"
                                     class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.offer_number') border-red-900 border-2 @enderror"
-                                    type="number" min="0" wire:model.lazy="items.{{ $item_key }}.offer_number"
+                                    type="number" min="0"
+                                    wire:model.lazy="items.{{ $item_key }}.offer_number"
                                     placeholder="{{ __('admin/offersPages.Unlimited') }}">
 
                                 @error('items.' . $item_key . '.offer_number')
@@ -282,7 +284,8 @@
                         {{-- Brands Start --}}
                         <div class="col-span-12 grid grid-cols-12 gap-x-4 gap-y-2 items-center w-full"
                             wire:key="brand-{{ $item_key }}-block">
-                            <label for="item-{{ $item_key }}-brand_id" wire:key="brand-{{ $item_key }}-label"
+                            <label for="item-{{ $item_key }}-brand_id"
+                                wire:key="brand-{{ $item_key }}-label"
                                 class="col-span-12 sm:col-span-6 sm:col-start-4 lg:col-span-4 lg:col-start-5 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">
                                 {{ __('admin/offersPages.Brand') }}
                             </label>
@@ -290,7 +293,8 @@
                             <div class="col-span-12 sm:col-span-6 sm:col-start-4 lg:col-span-4 lg:col-start-5">
                                 <select wire:model="items.{{ $item_key }}.brand_id"
                                     wire:change="brandUpdated({{ $item_key }})"
-                                    wire:key="brand-{{ $item_key }}-select" id="item-{{ $item_key }}-brand_id"
+                                    wire:key="brand-{{ $item_key }}-select"
+                                    id="item-{{ $item_key }}-brand_id"
                                     class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.brand_id') border-red-900 border-2 @enderror">
                                     <option value="all">
                                         {{ __('admin/offersPages.All Products in Website') }}
@@ -328,7 +332,7 @@
                                     @foreach ($items[$item_key]['products'] as $product_key => $product)
                                         <label for="item-{{ $item_key }}-product-{{ $product_key }}"
                                             wire:key="item-{{ $item_key }}-product-{{ $product_key }}-label"
-                                            class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($product['id'], $items[$item_key]['products_id'])) bg-green-200 @endif select-none">
+                                            class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($product['id'], $items[$item_key]['products_id'])) bg-green-300 @endif select-none">
                                             {{ $product['name'][session('locale')] }}
                                             <input type="checkbox" wire:model="items.{{ $item_key }}.products_id"
                                                 wire:key="item-{{ $item_key }}-product-{{ $product_key }}-input"
@@ -348,7 +352,8 @@
                         {{-- Products : End --}}
                     </div>
                 @elseif ($items[$item_key]['item_type'] == 'category')
-                    <div class="col-span-12 grid grid-cols-12 gap-x-4 gap-y-4" wire:key="category-{{ $item_key }}">
+                    <div class="col-span-12 grid grid-cols-12 gap-x-4 gap-y-4"
+                        wire:key="category-{{ $item_key }}">
 
                         {{-- Type Start --}}
                         <div class="col-span-6 md:col-span-4 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full"
@@ -402,7 +407,8 @@
                             <div class="col-span-3">
                                 <input id="category-{{ $item_key }}-offer_number"
                                     class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.offer_number') border-red-900 border-2 @enderror"
-                                    type="number" min="0" wire:model.lazy="items.{{ $item_key }}.offer_number"
+                                    type="number" min="0"
+                                    wire:model.lazy="items.{{ $item_key }}.offer_number"
                                     placeholder="{{ __('admin/offersPages.Unlimited') }}">
 
                                 @error('items.' . $item_key . '.offer_number')
@@ -525,9 +531,10 @@
                                     @foreach ($items[$item_key]['products'] as $product_key => $product)
                                         <label for="item-{{ $item_key }}-product-{{ $product_key }}"
                                             wire:key="item-{{ $item_key }}-product-{{ $product_key }}-label"
-                                            class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($product['id'], $items[$item_key]['products_id'])) bg-green-200 @endif select-none">
+                                            class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($product['id'], $items[$item_key]['products_id'])) bg-green-300 @endif select-none">
                                             {{ $product['name'][session('locale')] }}
-                                            <input type="checkbox" wire:model="items.{{ $item_key }}.products_id"
+                                            <input type="checkbox"
+                                                wire:model="items.{{ $item_key }}.products_id"
                                                 wire:key="item-{{ $item_key }}-product-{{ $product_key }}-input"
                                                 id="item-{{ $item_key }}-product-{{ $product_key }}"
                                                 value="{{ $product['id'] }}" class="hidden">
@@ -659,14 +666,14 @@
                                         @foreach ($oldSupercategories as $supercategory_key => $supercategory)
                                             <label for="old-supercategory-{{ $supercategory_key }}"
                                                 wire:key="old-supercategory-{{ $supercategory_key }}"
-                                                class=" px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($supercategory['id'], $deleteSupercategories_id)) bg-red-200 @else bg-green-200 @endif select-none m-0">
+                                                class=" px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($supercategory['id'], $deleteSupercategories_id)) bg-red-200 @else bg-green-300 @endif select-none m-0">
                                                 <span>
                                                     {{ $supercategory['name'][session('locale')] }}
                                                 </span>
                                                 <br>
                                                 <span>
                                                     {{ $supercategory['pivot']['value'] }}
-                                                    {{ $supercategory['pivot']['type'] == 0? '%': ($supercategory['pivot']['type'] == 1? __('admin/offersPages.EPG'): ($supercategory['pivot']['type'] == 2? trans_choice('admin/offersPages.Points value', $supercategory['pivot']['value'], ['points' => $supercategory['pivot']['value']]): __('admin/offersPages.Free Shipping'))) }}
+                                                    {{ $supercategory['pivot']['type'] == 0 ? '%' : ($supercategory['pivot']['type'] == 1 ? __('admin/offersPages.EPG') : ($supercategory['pivot']['type'] == 2 ? trans_choice('admin/offersPages.Points value', $supercategory['pivot']['value'], ['points' => $supercategory['pivot']['value']]) : __('admin/offersPages.Free Shipping'))) }}
                                                 </span>
                                                 <br>
                                                 <span>
@@ -692,14 +699,14 @@
                                         @foreach ($oldCategories as $category_key => $category)
                                             <label for="old-category-{{ $category_key }}"
                                                 wire:key="old-category-{{ $category_key }}"
-                                                class=" px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($category['id'], $deleteCategories_id)) bg-red-200 @else bg-green-200 @endif select-none m-0">
+                                                class=" px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($category['id'], $deleteCategories_id)) bg-red-200 @else bg-green-300 @endif select-none m-0">
                                                 <span>
                                                     {{ $category['name'][session('locale')] }}
                                                 </span>
                                                 <br>
                                                 <span>
                                                     {{ $category['pivot']['value'] }}
-                                                    {{ $category['pivot']['type'] == 0? '%': ($category['pivot']['type'] == 1? __('admin/offersPages.EPG'): ($category['pivot']['type'] == 2? trans_choice('admin/offersPages.Points value', $category['pivot']['value'], ['points' => $category['pivot']['value']]): __('admin/offersPages.Free Shipping'))) }}
+                                                    {{ $category['pivot']['type'] == 0 ? '%' : ($category['pivot']['type'] == 1 ? __('admin/offersPages.EPG') : ($category['pivot']['type'] == 2 ? trans_choice('admin/offersPages.Points value', $category['pivot']['value'], ['points' => $category['pivot']['value']]) : __('admin/offersPages.Free Shipping'))) }}
                                                 </span>
                                                 <br>
                                                 <span>
@@ -725,14 +732,14 @@
                                         @foreach ($oldSubcategories as $subcategory_key => $subcategory)
                                             <label for="old-subcategory-{{ $subcategory_key }}"
                                                 wire:key="old-subcategory-{{ $subcategory_key }}"
-                                                class=" px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($subcategory['id'], $deleteSubcategories_id)) bg-red-200 @else bg-green-200 @endif select-none m-0">
+                                                class=" px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($subcategory['id'], $deleteSubcategories_id)) bg-red-200 @else bg-green-300 @endif select-none m-0">
                                                 <span>
                                                     {{ $subcategory['name'][session('locale')] }}
                                                 </span>
                                                 <br>
                                                 <span>
                                                     {{ $subcategory['pivot']['value'] }}
-                                                    {{ $subcategory['pivot']['type'] == 0? '%': ($subcategory['pivot']['type'] == 1? __('admin/offersPages.EPG'): ($subcategory['pivot']['type'] == 2? trans_choice('admin/offersPages.Points value', $subcategory['pivot']['value'], ['points' => $subcategory['pivot']['value']]): __('admin/offersPages.Free Shipping'))) }}
+                                                    {{ $subcategory['pivot']['type'] == 0 ? '%' : ($subcategory['pivot']['type'] == 1 ? __('admin/offersPages.EPG') : ($subcategory['pivot']['type'] == 2 ? trans_choice('admin/offersPages.Points value', $subcategory['pivot']['value'], ['points' => $subcategory['pivot']['value']]) : __('admin/offersPages.Free Shipping'))) }}
                                                 </span>
                                                 <br>
                                                 <span>
@@ -757,14 +764,14 @@
                                         @foreach ($oldBrands as $brand_key => $brand)
                                             <label for="old-brand-{{ $brand_key }}"
                                                 wire:key="old-brand-{{ $brand_key }}"
-                                                class="px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($brand['id'], $deleteBrands_id)) bg-red-200 @else bg-green-200 @endif select-none m-0">
+                                                class="px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($brand['id'], $deleteBrands_id)) bg-red-200 @else bg-green-300 @endif select-none m-0">
                                                 <span>
                                                     {{ $brand['name'] }}
                                                 </span>
                                                 <br>
                                                 <span>
                                                     {{ $brand['pivot']['value'] }}
-                                                    {{ $brand['pivot']['type'] == 0? '%': ($brand['pivot']['type'] == 1? __('admin/offersPages.EPG'): ($brand['pivot']['type'] == 2? trans_choice('admin/offersPages.Points value', $brand['pivot']['value'], ['points' => $brand['pivot']['value']]): __('admin/offersPages.Free Shipping'))) }}
+                                                    {{ $brand['pivot']['type'] == 0 ? '%' : ($brand['pivot']['type'] == 1 ? __('admin/offersPages.EPG') : ($brand['pivot']['type'] == 2 ? trans_choice('admin/offersPages.Points value', $brand['pivot']['value'], ['points' => $brand['pivot']['value']]) : __('admin/offersPages.Free Shipping'))) }}
                                                 </span>
                                                 <br>
                                                 <span>
@@ -772,8 +779,8 @@
                                                 </span>
 
                                                 <input type="checkbox" wire:model="deleteBrands_id"
-                                                    id="old-brand-{{ $brand_key }}" value="{{ $brand['id'] }}"
-                                                    class="hidden">
+                                                    id="old-brand-{{ $brand_key }}"
+                                                    value="{{ $brand['id'] }}" class="hidden">
                                             </label>
                                         @endforeach
                                     </div>
@@ -789,14 +796,14 @@
                                         @foreach ($oldProducts as $product_key => $product)
                                             <label for="old-product-{{ $product_key }}"
                                                 wire:key="old-product-{{ $product_key }}"
-                                                class=" px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($product['id'], $deleteProducts_id)) bg-red-200 @else bg-green-200 @endif select-none m-0">
+                                                class=" px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($product['id'], $deleteProducts_id)) bg-red-200 @else bg-green-300 @endif select-none m-0">
                                                 <span>
                                                     {{ $product['name'][session('locale')] }}
                                                 </span>
                                                 <br>
                                                 <span>
                                                     {{ $product['pivot']['value'] }}
-                                                    {{ $product['pivot']['type'] == 0? '%': ($product['pivot']['type'] == 1? __('admin/offersPages.EPG'): ($product['pivot']['type'] == 2? trans_choice('admin/offersPages.Points value', $product['pivot']['value'], ['points' => $product['pivot']['value']]): __('admin/offersPages.Free Shipping'))) }}
+                                                    {{ $product['pivot']['type'] == 0 ? '%' : ($product['pivot']['type'] == 1 ? __('admin/offersPages.EPG') : ($product['pivot']['type'] == 2 ? trans_choice('admin/offersPages.Points value', $product['pivot']['value'], ['points' => $product['pivot']['value']]) : __('admin/offersPages.Free Shipping'))) }}
                                                 </span>
                                                 <br>
                                                 <span>
@@ -840,14 +847,14 @@
     <div class="col-span-12 w-full flex flex-wrap mt-2 justify-around">
         @if ($offer_id != null)
             <button type="button" wire:click.prevent="update"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/offersPages.Update') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/offersPages.Update') }}</button>
         @else
             {{-- Save and Back --}}
             <button type="button" wire:click.prevent="save"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/offersPages.Save') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/offersPages.Save') }}</button>
             {{-- Save and New --}}
             <button type="button" wire:click.prevent="save('true')"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/offersPages.Save and Add New Offer') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/offersPages.Save and Add New Offer') }}</button>
         @endif
         {{-- Back --}}
         <a href="{{ route('admin.offers.index') }}"
@@ -879,7 +886,8 @@
                             format: 'YYYY-MM-DD hh:mm A',
                         }
                     }, function(start, end, label) {
-                        Livewire.emit('daterangeUpdated', start.format('YYYY-MM-DD H:mm'), end.format('YYYY-MM-DD H:mm'));
+                        Livewire.emit('daterangeUpdated', start.format('YYYY-MM-DD H:mm'), end.format(
+                            'YYYY-MM-DD H:mm'));
                     });
                 });
             </script>

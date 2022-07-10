@@ -33,7 +33,7 @@
                 <label for="photo" class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">
                     {{ __('admin/usersPages.Profile Image') }} </label>
                 <input
-                    class="form-control block w-full md:w-50 px-2 py-1 text-sm font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none col-span-12 md:col-span-10 py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
+                    class="col-span-12 md:col-span-10 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
                     id="photo" type="file" type="image" wire:model.lazy="photo">
 
                 @error('photo')
@@ -112,8 +112,8 @@
             <div class="col-span-12 sm:col-span-8 sm:col-start-3 md:col-span-5">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('email') border-red-900 border-2 @enderror"
-                    type="email" wire:model.lazy="email" placeholder="{{ __('admin/usersPages.Email') }}" dir="ltr"
-                    tabindex="5">
+                    type="email" wire:model.lazy="email" placeholder="{{ __('admin/usersPages.Email') }}"
+                    dir="ltr" tabindex="5">
                 @error('email')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                         {{ $message }}</div>
@@ -266,7 +266,8 @@
                                 @forelse ($countries as $country)
                                     <option value="{{ $country->id }}">{{ $country->name }}</option>
                                 @empty
-                                    <option value="">{{ __('admin/usersPages.No Countries in Database') }}</option>
+                                    <option value="">{{ __('admin/usersPages.No Countries in Database') }}
+                                    </option>
                                 @endforelse
                             </select>
                         </div>
@@ -286,10 +287,12 @@
                                         {{ $governorate['name'][session('locale')] }}</option>
                                 @empty
                                     @if ($country == null)
-                                        <option value="">{{ __('admin/usersPages.Please Choose Country First') }}
+                                        <option value="">
+                                            {{ __('admin/usersPages.Please Choose Country First') }}
                                         </option>
                                     @else
-                                        <option value="">{{ __('admin/usersPages.No Governorates in Database') }}
+                                        <option value="">
+                                            {{ __('admin/usersPages.No Governorates in Database') }}
                                         </option>
                                     @endif
                                 @endforelse
@@ -310,10 +313,12 @@
                                     </option>
                                 @empty
                                     @if ($addresses[$index]['governorate_id'] == null)
-                                        <option value="">{{ __('admin/usersPages.Please Choose Governorate First') }}
+                                        <option value="">
+                                            {{ __('admin/usersPages.Please Choose Governorate First') }}
                                         </option>
                                     @else
-                                        <option value="">{{ __('admin/usersPages.No Cities in Database') }}</option>
+                                        <option value="">{{ __('admin/usersPages.No Cities in Database') }}
+                                        </option>
                                     @endif
                                 @endforelse
                             </select>
@@ -324,7 +329,8 @@
                             <label
                                 class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                 for="details{{ $index }}">{{ __('admin/usersPages.Address Details') }}</label>
-                            <textarea id="details{{ $index }}" rows="2" wire:model.lazy="addresses.{{ $index }}.details" dir="rtl"
+                            <textarea id="details{{ $index }}" rows="2" wire:model.lazy="addresses.{{ $index }}.details"
+                                dir="rtl"
                                 placeholder="{{ __('admin/usersPages.Please mention the details of the address such as street name, building number, ... etc.') }}"
                                 class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 overflow-hidden"></textarea>
                         </div>
@@ -375,14 +381,14 @@
         <div class="col-span-12 w-full flex mt-2 justify-around">
             @if ($customer_id != null)
                 <button type="button" wire:click.prevent="update"
-                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Update') }}</button>
+                    class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Update') }}</button>
             @else
                 {{-- Save and Back --}}
                 <button type="button" wire:click.prevent="save"
-                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Save') }}</button>
+                    class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Save') }}</button>
                 {{-- Save and New --}}
                 <button type="button" wire:click.prevent="save('true')"
-                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Save and Add New Customer') }}</button>
+                    class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Save and Add New Customer') }}</button>
             @endif
             {{-- Back --}}
             <a href="{{ route('admin.customers.index') }}"

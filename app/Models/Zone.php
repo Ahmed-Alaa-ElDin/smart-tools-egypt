@@ -22,7 +22,7 @@ class Zone extends Model
     protected $fillable = [
         'name',
         'delivery_id',
-        'min_size',
+        'min_weight',
         'min_charge',
         'kg_charge',
         'is_active',

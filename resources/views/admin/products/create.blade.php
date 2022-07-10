@@ -1,5 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Products', 'activePage' => 'Add Product', 'titlePage' =>
-__('admin/productsPages.Add Product')])
+@extends('layouts.admin.admin', ['activeSection' => 'Products', 'activePage' => 'Add Product', 'titlePage' => __('admin/productsPages.Add Product')])
 
 @section('content')
     <div class="content">
@@ -82,8 +81,15 @@ __('admin/productsPages.Add Product')])
                 'removeformat',
             statusbar: false,
             menubar: false,
-            content_style: '.mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before { text-align: center ; width: 100% }'
-
+            content_style: `
+                .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {
+                    text-align: center ; width: 100%
+                    }
+                    .mce-content-body ul {
+                        padding: 0 10px;
+                        list-style-type: disc;
+                    }
+                `
         }
 
         // tinymce for Description
@@ -106,18 +112,6 @@ __('admin/productsPages.Add Product')])
             setup: function(editor) {
                 editor.on('blur', function(e) {
                     window.livewire.emit('descriptionEn', tinymce.get(e.target.id).getContent())
-                });
-            }
-        });
-
-        // tinymce for SEO Description
-        tinymce.init({
-            ...options,
-            directionality: 'rtl',
-            selector: '#seo_description',
-            setup: function(editor) {
-                editor.on('blur', function(e) {
-                    window.livewire.emit('descriptionSeo', tinymce.get(e.target.id).getContent())
                 });
             }
         });

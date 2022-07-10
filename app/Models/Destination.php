@@ -22,4 +22,10 @@ class Destination extends Model
     {
         return $this->belongsTo(Zone::class);
     }
+
+    // One to many relationship (reverse) Delivery --> Destinations
+    public function delivery()
+    {
+        return $this->belongsTo(Delivery::class);
+    }
 }

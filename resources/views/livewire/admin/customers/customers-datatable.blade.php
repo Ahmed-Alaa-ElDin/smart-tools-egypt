@@ -33,7 +33,7 @@
                             &nbsp;</button>
                         <div class="dropdown-menu">
                             <a href="{{ route('admin.customers.exportExcel') }}"
-                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600">
+                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-success focus:bg-success">
                                 <span class="material-icons">
                                     file_present
                                 </span> &nbsp;&nbsp;
@@ -190,7 +190,7 @@
                                     {{-- Ban Body --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
                                         <div class="text-sm text-gray-900">
-                                            {!! $user->banned ? '<span class="block cursor-pointer material-icons text-green-600" wire:click="banning(' . $user->id . ')">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600" wire:click="banning(' . $user->id . ')">toggle_off</span>' !!}
+                                            {!! $user->banned ? '<span class="block cursor-pointer material-icons text-success" wire:click="banning(' . $user->id . ')">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600" wire:click="banning(' . $user->id . ')">toggle_off</span>' !!}
                                         </div>
                                     </td>
 
@@ -222,7 +222,7 @@
                                         <a href="#" wire:click.prevent="addPointsForm({{ $user->id }})"
                                             title="{{ __('admin/usersPages.Add Points') }}" class="m-0">
                                             <span
-                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-green-600 hover:bg-green-800 rounded">
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-success hover:bg-green-800 rounded">
                                                 <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
                                                     class="inline-block font-bold" width="1em" height="1em"
                                                     preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">

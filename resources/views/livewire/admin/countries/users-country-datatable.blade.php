@@ -32,7 +32,7 @@
                             &nbsp;</button>
                         <div class="dropdown-menu">
                             <a href="{{ route('admin.users.exportExcel') }}"
-                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600">
+                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-success focus:bg-success">
                                 <span class="material-icons">
                                     file_present
                                 </span> &nbsp;&nbsp;

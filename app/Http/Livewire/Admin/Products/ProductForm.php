@@ -30,10 +30,15 @@ class ProductForm extends Component
     ];
     public $name = ["ar" => null, "en" => null], $brand_id, $model, $barcode, $weight, $description = ['ar' => null, 'en' => null], $publish = true, $refundable = true;
     public $base_price, $discount, $final_price, $points, $free_shipping = false, $reviewing = false, $quantity, $low_stock;
-    public $title, $description_seo;
+    // public $title, $description_seo;
+    public $seo_keywords;
     public $parentCategories;
 
-    protected $listeners = ["descriptionAr", "descriptionEn", "descriptionSeo", "supercategoryUpdated", "categoryUpdated"];
+    protected $listeners = [
+        "descriptionAr", "descriptionEn",
+        // "descriptionSeo",
+        "supercategoryUpdated", "categoryUpdated"
+    ];
 
     public function rules()
     {
@@ -63,9 +68,6 @@ class ProductForm extends Component
             'reviewing'           =>        'boolean',
             'quantity'            =>        'nullable|numeric|min:0',
             'low_stock'           =>        'nullable|numeric|min:0',
-
-            'title'               =>        'nullable|string|max:100|min:3',
-
         ];
     }
 
@@ -161,7 +163,6 @@ class ProductForm extends Component
             $this->publish = $product->publish;
             $this->refundable = $product->refundable;
 
-            // dd($product->specs);
             if ($product->specs != null) {
                 $this->specs = json_decode($product->specs);
             }
@@ -177,8 +178,8 @@ class ProductForm extends Component
             $this->low_stock = $product->low_stock;
 
             // SEO
-            $this->title = $product->meta_title;
-            $this->description_seo = $product->meta_description;
+            $this->seo_keywords = $product->meta_keywords;
+            // $this->description_seo = $product->meta_description;
         }
         // If new product
         else {
@@ -410,13 +411,6 @@ class ProductForm extends Component
     ######################## Updated English description :: End ############################
 
 
-    ######################## Updated SEO description :: Start ############################
-    public function descriptionSeo($value)
-    {
-        $this->description_seo = $value;
-    }
-    ######################## Updated SEO description :: End ############################
-
     ######################## Delete Specification :: Start ############################
     public function deleteSpec($index)
     {
@@ -428,8 +422,14 @@ class ProductForm extends Component
     public function addSpec()
     {
         $this->specs[] = [
-            'name' => null,
-            'value' => null,
+            'ar' => [
+                'title' => null,
+                'value' => null,
+            ],
+            'en' => [
+                'title' => null,
+                'value' => null,
+            ]
         ];
     }
     ######################## Add Specification :: End ############################
@@ -447,7 +447,10 @@ class ProductForm extends Component
                     'ar' => $this->name['ar'],
                     'en' => $this->name['en'] ?? $this->name['ar']
                 ],
-                'slug' => Str::slug($this->name['en'], '-'),
+                'slug' => [
+                    'ar' => Str::slug($this->name['ar'], '-',Null),
+                    'en' => Str::slug($this->name['en'], '-'),
+                ],
                 'barcode' => $this->barcode,
                 'weight' => $this->weight ?? 0,
                 'quantity' => $this->quantity ?? 0,
@@ -463,8 +466,9 @@ class ProductForm extends Component
                 'model' => $this->model,
                 'refundable' => $this->refundable ? 1 : 0,
                 'video' => $this->video,
-                'meta_title' => $this->title,
-                'meta_description' => $this->description_seo,
+                // 'meta_title' => $this->title,
+                // 'meta_description' => $this->description_seo,
+                'meta_keywords' => $this->seo_keywords,
                 'free_shipping' => $this->free_shipping ? 1 : 0,
                 'publish' => $this->publish ? 1 : 0,
                 'under_reviewing' => $this->reviewing ? 1 : 0,
@@ -531,7 +535,10 @@ class ProductForm extends Component
                     'ar' => $this->name['ar'],
                     'en' => $this->name['en'] ?? $this->name['ar']
                 ],
-                'slug' => Str::slug($this->name['en'], '-'),
+                'slug' => [
+                    'ar' => Str::slug($this->name['ar'], '-',Null),
+                    'en' => Str::slug($this->name['en'], '-'),
+                ],
                 'barcode' => $this->barcode,
                 'weight' => $this->weight ?? 0,
                 'quantity' => $this->quantity ?? 0,
@@ -547,8 +554,9 @@ class ProductForm extends Component
                 'model' => $this->model,
                 'refundable' => $this->refundable ? 1 : 0,
                 'video' => $this->video,
-                'meta_title' => $this->title,
-                'meta_description' => $this->description_seo,
+                // 'meta_title' => $this->title,
+                // 'meta_description' => $this->description_seo,
+                'meta_keywords' => $this->seo_keywords,
                 'free_shipping' => $this->free_shipping ? 1 : 0,
                 'publish' => $this->publish ? 1 : 0,
                 'under_reviewing' => $this->reviewing ? 1 : 0,

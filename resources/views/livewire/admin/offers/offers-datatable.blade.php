@@ -141,7 +141,7 @@
                                         <div class="flex items-center content-center justify-center">
                                             <div class="text-sm font-medium text-gray-900">
                                                 @if ($offer->free_shipping)
-                                                    <span class="material-icons text-green-500">
+                                                    <span class="material-icons text-success">
                                                         done
                                                     </span>
                                                 @else

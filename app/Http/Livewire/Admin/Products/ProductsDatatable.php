@@ -38,6 +38,7 @@ class ProductsDatatable extends Component
                 'products.id',
                 'products.name',
                 'brand_id',
+                'slug',
                 'quantity',
                 'low_stock',
                 'base_price',

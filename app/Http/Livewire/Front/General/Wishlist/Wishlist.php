@@ -24,7 +24,7 @@ class Wishlist extends Component
         $product = Cart::instance('wishlist')->get($rowId);
 
         // Get the product's all data from database with best price
-        $product = getBestOffer($product->id);
+        $product = getBestOfferForProduct($product->id);
 
         if ($product->quantity > 0 && $product->under_reviewing != 1) {
             Cart::instance('wishlist')->remove($rowId);

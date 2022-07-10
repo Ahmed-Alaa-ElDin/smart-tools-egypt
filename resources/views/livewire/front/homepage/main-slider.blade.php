@@ -118,7 +118,7 @@
             class="overflow-auto scrollbar scrollbar-thumb-secondary scrollbar-track-primary scrollbar-thin lg:h-80 p-2 bg-primary rounded-b">
             <div>
 
-                <ul class="grid grid-cols-3 lg:grid-cols-1 gap-2 ">
+                <ul class="grid grid-cols-2 lg:grid-cols-1 gap-2 ">
                     @foreach ($products as $product)
                         {{-- Product : Start --}}
                         <li
@@ -197,8 +197,8 @@
                                             <div class="flex rtl:flex-row-reverse gap-1">
                                                 <span
                                                     class="font-bold text-primary text-xs">{{ __('front/homePage.EGP') }}</span>
-                                                <span
-                                                    class="font-bold text-primary text-xl">{{ explode('.', $product['final_price'])[0] }}</span>
+                                                <span class="font-bold text-primary text-xl"
+                                                    dir="ltr">{{ number_format(explode('.', $product['final_price'])[0], 0, '.', '\'') }}</span>
                                                 <span
                                                     class="font-bold text-primary text-xs">{{ explode('.', $product['final_price'])[1] }}</span>
                                             </div>
@@ -210,8 +210,8 @@
                                                 <span class="text-xs">
                                                     {{ __('front/homePage.EGP') }}
                                                 </span>
-                                                <span
-                                                    class="font-bold text-2xl">{{ explode('.', $product['base_price'])[0] }}</span>
+                                                <span class="font-bold text-2xl"
+                                                    dir="ltr">{{ number_format(explode('.', $product['base_price'])[0], 0, '.', '\'') }}</span>
                                             </del>
                                             {{-- Base Price : End --}}
 
@@ -220,38 +220,25 @@
 
                                         {{-- Free Shipping : Start --}}
                                         @if ($product['free_shipping'])
-                                            <div class="text-center text-green-600 font-bold text-sm">
+                                            <div class="text-center text-success font-bold text-sm">
                                                 {{ __('front/homePage.Free Shipping') }}
                                             </div>
                                         @endif
                                         {{-- Free Shipping : End --}}
 
                                         {{-- Reviews : Start --}}
-                                        <div class="my-1 text-center flex justify-center items-center gap-1">
-                                            {{-- todo --}}
+                                        <div class="my-1 text-center flex justify-center items-center gap-2">
                                             <div class="rating flex">
-                                                <span class="material-icons text-yellow-500 text-xl">
-                                                    star
-                                                </span>
-
-                                                <span class="material-icons text-yellow-500 text-xl">
-                                                    star
-                                                </span>
-
-                                                <span class="material-icons text-yellow-500 text-xl">
-                                                    star
-                                                </span>
-
-                                                <span class="material-icons text-yellow-500 text-xl">
-                                                    star_border
-                                                </span>
-
-                                                <span class="material-icons text-yellow-500 text-xl">
-                                                    star_border
-                                                </span>
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <span
+                                                        class="material-icons text-lg  inline-block @if ($i <= ceil($product['avg_rating'])) text-yellow-300 @else text-gray-400 @endif">
+                                                        star
+                                                    </span>
+                                                @endfor
                                             </div>
 
-                                            <span class="text-xs text-gray-600">(100)</span>
+                                            <span
+                                                class="text-xs text-gray-600">({{ $product['reviews_count'] }})</span>
                                         </div>
                                         {{-- Reviews : End --}}
 
@@ -274,7 +261,7 @@
                                         {{-- Points : End --}}
 
                                         {{-- Cart Amount : Start --}}
-                                        @livewire('front.general.cart.cart-amount', ['product_id' => $product['id'], 'unique' => 'product-' . $product['id']], key($product['name'][session('locale')] . '-' . rand()))
+                                        @livewire('front.general.cart.cart-amount', ['product_id' => $product['id'], 'unique' => 'product-' . $product['id'],'small'=>true], key($product['name'][session('locale')] . '-' . rand()))
                                         {{-- Cart Amount : End --}}
 
                                     </div>

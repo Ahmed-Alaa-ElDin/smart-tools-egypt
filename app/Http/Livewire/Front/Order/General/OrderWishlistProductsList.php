@@ -24,11 +24,9 @@ class OrderWishlistProductsList extends Component
     {
         $products_id = Cart::instance('wishlist')->content()->pluck('id');
 
-        $products = [];
+        $products = collect([]);
 
-        foreach ($products_id as $product_id) {
-            $products[] = getBestOffer($product_id)->toArray();
-        }
+        $products = getBestOfferForProducts($products_id);
 
         $this->products = $products;
     }
@@ -71,7 +69,7 @@ class OrderWishlistProductsList extends Component
         $product_id = $product->rowId;
 
         // Get the product's all data from database with best price
-        $product = getBestOffer($product->id);
+        $product = getBestOfferForProduct($product->id);
 
         if ($product->quantity > 0 && $product->under_reviewing != 1) {
             Cart::instance('wishlist')->remove($product_id);

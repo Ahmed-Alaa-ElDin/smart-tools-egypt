@@ -57,7 +57,7 @@
                         {{-- Start Date & End Date : Start --}}
                         <div class="flex flex-wrap gap-2 justify-center items-center select-none">
                             <div
-                                class="flex flex-col items-center content-center justify-center bg-green-600 p-1 rounded shadow">
+                                class="flex flex-col items-center content-center justify-center bg-success p-1 rounded shadow">
                                 <span class="font-bold text-xs mb-1 text-white">
                                     {{ __('admin/sitePages.Start Date') }}
                                 </span>

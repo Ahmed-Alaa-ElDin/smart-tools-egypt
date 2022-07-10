@@ -49,7 +49,7 @@
                                         &nbsp; x &nbsp;
                                         <div class="flex gap-1" dir="ltr">
                                             <span
-                                                class="font-bold text-green-700">{{ explode('.', $cart_item->price)[0] }}</span>
+                                                class="font-bold text-green-700">{{ number_format(explode('.', $cart_item->price)[0],0,'.','\'') }}</span>
                                             <span
                                                 class="font-bold text-green-700 text-xs">{{ explode('.', $cart_item->price)[1] ?? "00" }}</span>
                                         </div>

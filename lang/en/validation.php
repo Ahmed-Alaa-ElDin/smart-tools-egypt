@@ -171,7 +171,7 @@ return [
         'zones.*.name.ar'       => 'Name in Arabic',
         'zones.*.name.en'       => 'Name in English',
         'zones.*.min_charge'    => 'Minimum Fees',
-        'zones.*.min_size'      => 'Minimum Size',
+        'zones.*.min_weight'      => 'Minimum Size',
         'zones.*.kg_charge'     => 'Fees/Kg',
         'zones.*.destinations.*.country_id'     => 'Country',
         'zones.*.destinations.*.governorate_id' => 'Governorate',

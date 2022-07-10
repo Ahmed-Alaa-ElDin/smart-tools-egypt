@@ -46,7 +46,7 @@
                                 wire:click="activate({{ $zone_index }})">
                                 <span
                                     class="inline-block rtl:ml-2 ltr:mr-2 font-bold text-xs">{{ __('admin/deliveriesPages.Activate') }}</span>
-                                {!! $zone['is_active'] ? '<span class="inline-block cursor-pointer material-icons text-green-600 text-3xl">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 text-3xl">toggle_off</span>' !!}
+                                {!! $zone['is_active'] ? '<span class="inline-block cursor-pointer material-icons text-success text-3xl">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 text-3xl">toggle_off</span>' !!}
                             </div>
 
 
@@ -140,9 +140,9 @@
                                 <div class="col-span-6 sm:col-span-4 md:col-span-3">
                                     <input
                                         class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                                        type="text" wire:model.lazy="zones.{{ $zone_index }}.min_size"
+                                        type="text" wire:model.lazy="zones.{{ $zone_index }}.min_weight"
                                         placeholder="{{ __('admin/deliveriesPages.Base Weight (Kg)') }}">
-                                    @error('zones.*.min_size')
+                                    @error('zones.*.min_weight')
                                         <div
                                             class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                                             {{ $message }}</div>
@@ -281,7 +281,7 @@
                                                 @foreach ($zones[$zone_index]['destinations'][$des_index]['allCities'] as $city_index => $city)
                                                     <label
                                                         for="zone_{{ $zone_index }}_destination_{{ $des_index }}_city_{{ $city_index }}"
-                                                        class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($city['id'], $zones[$zone_index]['destinations'][$des_index]['cities'])) bg-green-200 @endif select-none">
+                                                        class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($city['id'], $zones[$zone_index]['destinations'][$des_index]['cities'])) bg-green-300 @endif select-none">
                                                         {{ $city['name'][session('locale')] }}
                                                         <input type="checkbox"
                                                             wire:model="zones.{{ $zone_index }}.destinations.{{ $des_index }}.cities"
@@ -329,7 +329,7 @@
         <div class="flex flex-wrap gap-3 justify-around mt-4">
             {{-- Save and Back --}}
             <button type="button" wire:click.prevent="save"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/deliveriesPages.Save') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/deliveriesPages.Save') }}</button>
             {{-- Back --}}
             <a href="{{ route('admin.deliveries.index') }}"
                 class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/deliveriesPages.Back to Companies') }}</a>

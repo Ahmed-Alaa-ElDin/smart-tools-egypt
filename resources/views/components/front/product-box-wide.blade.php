@@ -1,12 +1,12 @@
 {{-- Product : Start --}}
-<div class="p-4">
+<div class="p-4 scrollbar scrollbar-thin">
     <div class="flex gap-5 justify-between items-center">
         {{-- Thumnail :: Start --}}
-        <div>
+        <a href="{{ route('front.product.show', ['id' => $product['id'], 'slug' => $product->slug]) }}" class="block hover:text-current ">
             @if ($product['thumbnail'])
                 <img class="w-full h-full flex justify-center items-center bg-gray-200"
                     src="{{ asset('storage/images/products/cropped100/' . $product['thumbnail']['file_name']) }}"
-                    alt="{{ $product['name'][session('locale')] . 'image' }}">
+                    alt="{{ $product['name'] . 'image' }}">
             @else
                 <div class="w-full h-full flex justify-center items-center bg-gray-200 rounded">
                     <span class="block material-icons text-8xl">
@@ -14,54 +14,40 @@
                     </span>
                 </div>
             @endif
-        </div>
+        </a>
         {{-- Thumnail :: End --}}
 
         {{-- Product Info : Start --}}
-        <div class="grow flex flex-col justify-start gap-2">
+        <div class="grow flex flex-col justify-start gap-2 max-w-[50%]">
             {{-- Product's Brand :: Start --}}
+            {{-- todo :: brand link --}}
             <div class="flex items-center">
-                <span class="text-sm font-bold text-gray-400">
+                <a href="#" class="text-sm font-bold text-gray-400 hover:text-current">
                     {{ $product['brand']['name'] }}
-                </span>
+                </a>
             </div>
             {{-- Product's Brand :: End --}}
 
             {{-- Product Name : Start --}}
             <div class="flex items-center">
-                {{-- todo : Small Screen --}}
-                <span class="text-lg font-bold truncate">
-                    {{ $product['name'][session('locale')] }}
-                </span>
+                <a href="{{ route('front.product.show', ['id' => $product['id'], 'slug' => $product->slug]) }}" class="text-lg font-bold truncate  hover:text-current">
+                    {{ $product->name }}
+                </a>
             </div>
             {{-- Product Name : End --}}
 
             {{-- Reviews : Start --}}
-            {{-- todo --}}
-            <div class="text-center flex justify-start items-center gap-2">
+            <div class="my-1 flex justify-start items-center gap-2">
                 <div class="rating flex">
-                    <span class="material-icons text-yellow-500 text-sm">
-                        star
-                    </span>
-
-                    <span class="material-icons text-yellow-500 text-sm">
-                        star
-                    </span>
-
-                    <span class="material-icons text-yellow-500 text-sm">
-                        star
-                    </span>
-
-                    <span class="material-icons text-yellow-500 text-sm">
-                        star_border
-                    </span>
-
-                    <span class="material-icons text-yellow-500 text-sm">
-                        star_border
-                    </span>
+                    @for ($i = 1; $i <= 5; $i++)
+                        <span
+                            class="material-icons inline-block @if ($i <= ceil($product['avg_rating'])) text-yellow-300 @else text-gray-400 @endif">
+                            star
+                        </span>
+                    @endfor
                 </div>
 
-                <span class="text-xs text-gray-600">(100)</span>
+                <span class="text-sm text-gray-600">({{ $product['reviews_count'] }})</span>
             </div>
             {{-- Reviews : End --}}
 
@@ -86,8 +72,7 @@
                     {{-- Add To Cart :: Start --}}
                     <button title="{{ __('front/homePage.Add to cart') }}"
                         class="h-8 p-2 flex justify-between items-center gap-2 rounded-full bg-secondary border border-secondary text-white transition ease-in-out hover:bg-primary hover:text-white hover:animate-none	hover:border-primary animate-pulse text-center shadow-sm"
-                        wire:click="moveToCart({{ $product['id'] }})"
-                        >
+                        wire:click="moveToCart({{ $product['id'] }})">
                         <span class="material-icons text-lg rounded-circle">
                             shopping_cart
                         </span>
@@ -123,15 +108,16 @@
                         <span class="text-xs">
                             {{ __('front/homePage.EGP') }}
                         </span>
-                        <span class="font-bold text-2xl">{{ explode('.', $product['base_price'])[0] }}</span>
+                        <span class="font-bold text-2xl"
+                            dir="ltr">{{ number_format(explode('.', $product['base_price'])[0], 0, '.', '\'') }}</span>
                     </del>
                     {{-- Base Price : End --}}
 
                     {{-- Final Price : Start --}}
                     <div class="flex rtl:flex-row-reverse gap-1">
                         <span class="font-bold text-primary text-xs">{{ __('front/homePage.EGP') }}</span>
-                        <span
-                            class="font-bold text-primary text-lg">{{ explode('.', $product['final_price'])[0] }}</span>
+                        <span class="font-bold text-primary text-lg"
+                            dir="ltr">{{ number_format(explode('.', $product['final_price'])[0], 0, '.', '\'') }}</span>
                         <span
                             class="text-primary text-xs">{{ explode('.', $product['final_price'])[1] ?? '00' }}</span>
                     </div>
@@ -141,7 +127,7 @@
 
             {{-- Free Shipping :: Start --}}
             @if ($product['free_shipping'])
-                <span class="text-xs font-bold text-green-600 text-right rtl:text-left w-full">
+                <span class="text-xs font-bold text-success text-right rtl:text-left w-full">
                     {{ __('front/homePage.Free Shipping') }}
                 </span>
             @endif
@@ -149,8 +135,8 @@
 
             @if ($type == 'cart')
                 {{-- Product Amount :: Start --}}
-                <div class="max-w-[150px] my-2">
-                    @livewire('front.general.cart.cart-amount', ['product_id' => $product['id'], 'unique' => 'product-' . $product['id'], 'remove' => false], key($product['name'][session('locale')] . '-' . rand()))
+                <div class="min-w-[120px] max-w-[150px] md:min-w-0 my-2">
+                    @livewire('front.general.cart.cart-amount', ['product_id' => $product['id'], 'unique' => 'product-' . $product['id'], 'remove' => false], key($product['name'] . '-' . rand()))
                 </div>
                 {{-- Product Amount :: End --}}
             @endif

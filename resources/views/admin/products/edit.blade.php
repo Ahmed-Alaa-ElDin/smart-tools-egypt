@@ -1,5 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Products', 'activePage' => '', 'titlePage' =>
-__('admin/productsPages.Edit Product')])
+@extends('layouts.admin.admin', ['activeSection' => 'Products', 'activePage' => '', 'titlePage' => __('admin/productsPages.Edit Product')])
 
 @section('content')
     <div class="content">
@@ -83,8 +82,16 @@ __('admin/productsPages.Edit Product')])
                 'removeformat',
             statusbar: false,
             menubar: false,
-            content_style: '.mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before { text-align: center ; width: 100% }'
-
+            content_style: `
+                .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {
+                    text-align: center;
+                    width: 100%;
+                }
+                ul {
+                    padding: 0 10px;
+                    list-style-type: disc;
+                }
+                `
         }
 
         // tinymce for Description
@@ -92,6 +99,14 @@ __('admin/productsPages.Edit Product')])
             ...options,
             directionality: 'rtl',
             selector: '#description_ar',
+            // content_style: `
+            //         ul {
+            //             text-align: right;
+            //         }
+            //         p {
+            //             text-align: right;
+            //         }
+            //     `,
             setup: function(editor) {
                 editor.on('blur', function(e) {
                     window.livewire.emit('descriptionAr', tinymce.get(e.target.id).getContent())
@@ -104,6 +119,14 @@ __('admin/productsPages.Edit Product')])
             ...options,
             directionality: 'ltr',
             selector: '#description_en',
+            // content_style: `
+            //         ul {
+            //             text-align: left;
+            //         }
+            //         p {
+            //             text-align: left;
+            //         }
+            //     `,
             setup: function(editor) {
                 editor.on('blur', function(e) {
                     window.livewire.emit('descriptionEn', tinymce.get(e.target.id).getContent())
@@ -112,15 +135,15 @@ __('admin/productsPages.Edit Product')])
         });
 
         // tinymce for SEO Description
-        tinymce.init({
-            ...options,
-            directionality: 'rtl',
-            selector: '#seo_description',
-            setup: function(editor) {
-                editor.on('blur', function(e) {
-                    window.livewire.emit('descriptionSeo', tinymce.get(e.target.id).getContent())
-                });
-            }
-        });
+        // tinymce.init({
+        //     ...options,
+        //     directionality: 'rtl',
+        //     selector: '#seo_description',
+        //     setup: function(editor) {
+        //         editor.on('blur', function(e) {
+        //             window.livewire.emit('descriptionSeo', tinymce.get(e.target.id).getContent())
+        //         });
+        //     }
+        // });
     </script>
 @endpush

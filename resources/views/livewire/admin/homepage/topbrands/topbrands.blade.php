@@ -62,7 +62,7 @@
     <div class="flex flex-wrap gap-3 justify-around mt-4">
         {{-- Save --}}
         <button wire:click.prevent="save"
-            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Update') }}</button>
+            class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Update') }}</button>
         {{-- Back --}}
         <a href="{{ route('admin.homepage') }}"
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Back') }}</a>

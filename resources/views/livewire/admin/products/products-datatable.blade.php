@@ -32,7 +32,7 @@
                                 {{ __('admin/productsPages.Delete All') }}
                             </a>
                             <a wire:click.prevent="publishAllConfirm"
-                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600 hover:text-white focus:text-white cursor-pointer">
+                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-success focus:bg-success hover:text-white focus:text-white cursor-pointer">
                                 <span class="material-icons">
                                     publish
                                 </span> &nbsp;&nbsp;
@@ -81,7 +81,7 @@
                             &nbsp;</button>
                         <div class="dropdown-menu">
                             <a href="{{ route('admin.products.exportExcel') }}"
-                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600">
+                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-success focus:bg-success">
                                 <span class="material-icons">
                                     file_present
                                 </span> &nbsp;&nbsp;
@@ -268,7 +268,7 @@
                                                     {{ __('admin/productsPages.Under Reviewing') }}
                                                 </span>
                                             @elseif ($product->final_price == $product->base_price)
-                                                <span class="bg-green-600 px-2 py-1 rounded text-white">
+                                                <span class="bg-success px-2 py-1 rounded text-white">
                                                     {{ $product->final_price }}
                                                     <span class="text-xs">
                                                         {{ __('admin/productsPages. EGP') }}
@@ -283,7 +283,7 @@
                                                     </span>
                                                 </span>
                                                 <span
-                                                    class="bg-green-600 px-2 py-1 rounded text-white ltr:ml-1 rtl:mr-1">
+                                                    class="bg-success px-2 py-1 rounded text-white ltr:ml-1 rtl:mr-1">
                                                     {{ $product->final_price }}
                                                     <span class="text-xs">
                                                         {{ __('admin/productsPages. EGP') }}
@@ -296,7 +296,7 @@
                                     {{-- Quantity Body --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
                                         <div
-                                            class="text-sm  @if ($product->quantity > $product->low_stock + 2) text-green-600
+                                            class="text-sm  @if ($product->quantity > $product->low_stock + 2) text-success
                                             @elseif ($product->quantity > $product->low_stock)
                                             text-yellow-600
                                         @else
@@ -308,7 +308,7 @@
                                     {{-- Publish Body --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
                                         <div class="text-sm text-gray-900">
-                                            {!! $product->publish ? '<span class="block cursor-pointer material-icons text-green-600" wire:click="publish(' . $product->id . ')">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600" wire:click="publish(' . $product->id . ')">toggle_off</span>' !!}
+                                            {!! $product->publish ? '<span class="block cursor-pointer material-icons text-success" wire:click="publish(' . $product->id . ')">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600" wire:click="publish(' . $product->id . ')">toggle_off</span>' !!}
                                         </div>
                                     </td>
 
@@ -317,7 +317,7 @@
 
                                         {{-- User Details --}}
                                         @can("See User's Details")
-                                            <a href="{{ route('admin.products.show', ['product' => $product->id]) }}"
+                                            <a href="{{ route('front.product.show', ['id' => $product->id, 'slug' => $product->slug]) }}"
                                                 title="{{ __('admin/productsPages.View') }}" class="m-0">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
@@ -340,8 +340,7 @@
                                         {{-- Deleted Button --}}
                                         @can('Deleted User')
                                             <a href="#" title="{{ __('admin/productsPages.Delete') }}"
-                                                wire:click.prevent="deleteConfirm({{ $product->id }})"
-                                                class="m-0">
+                                                wire:click.prevent="deleteConfirm({{ $product->id }})" class="m-0">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
                                                     delete
@@ -353,7 +352,7 @@
                             @empty
                                 <tr>
                                     <td class="text-center py-2 font-bold" colspan="6">
-                                        {{ $search == ''? __('admin/productsPages.No data in this table'): __('admin/productsPages.No data available according to your search') }}
+                                        {{ $search == '' ? __('admin/productsPages.No data in this table') : __('admin/productsPages.No data available according to your search') }}
                                     </td>
                                 </tr>
                             @endforelse

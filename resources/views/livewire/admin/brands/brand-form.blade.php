@@ -179,14 +179,14 @@
     <div class="col-span-12 w-full flex mt-2 justify-around">
         @if ($brand_id != null)
             <button type="button" wire:click.prevent="update"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Update') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Update') }}</button>
         @else
             {{-- Save and Back --}}
             <button type="button" wire:click.prevent="save"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save') }}</button>
             {{-- Save and New --}}
             <button type="button" wire:click.prevent="save('true')"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save and Add New Brand') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save and Add New Brand') }}</button>
         @endif
         {{-- Back --}}
         <a href="{{ route('admin.brands.index') }}"

@@ -18,7 +18,7 @@ class AddToCompareButton extends Component
     ############## Add To Compare :: Start ##############
     public function addToCompare($product_id)
     {
-        $product = getBestOffer($product_id);
+        $product = getBestOfferForProduct($product_id);
 
         ############ Add Product to Compare :: Start ############
         $in_compare = Cart::instance('compare')->search(function ($cartItem, $rowId) use ($product) {

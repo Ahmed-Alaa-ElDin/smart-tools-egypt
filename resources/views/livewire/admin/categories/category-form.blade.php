@@ -43,7 +43,7 @@
                 @else
                     {{-- Upload New Image --}}
                     <input
-                        class="col-span-12 md:col-span-6 md:col-start-4 form-control block w-full px-2 py-1 text-sm font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
+                        class="col-span-12 md:col-span-6 md:col-start-4 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
                         id="image" type="file" type="image" wire:model.lazy="image">
                     <span class="col-span-12 text-xs text-gray-400">
                         {{ __('admin/productsPages.Use 300x300 sizes image') }}</span>
@@ -59,7 +59,8 @@
         {{-- ######################################################### --}}
         {{-- ######################################################### --}}
         {{-- Category Information Start --}}
-        <div class="col-span-12 grid grid-cols-12 gap-y-3 gap-x-4 items-center bg-red-100 p-4 text-center  rounded shadow">
+        <div
+            class="col-span-12 grid grid-cols-12 gap-y-3 gap-x-4 items-center bg-red-100 p-4 text-center rounded shadow">
 
             <div class="col-span-12 font-bold text-black mb-2">
                 {{ __('admin/productsPages.Category Information') }}
@@ -188,14 +189,14 @@
     <div class="col-span-12 w-full flex flex-wrap mt-2 justify-around">
         @if ($category_id != null)
             <button type="button" wire:click.prevent="update"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Update') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Update') }}</button>
         @else
             {{-- Save and Back --}}
             <button type="button" wire:click.prevent="save"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save') }}</button>
             {{-- Save and New --}}
             <button type="button" wire:click.prevent="save('true')"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save and Add New Category') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save and Add New Category') }}</button>
         @endif
         {{-- Back --}}
         <a href="{{ route('admin.categories.index') }}"

@@ -39,38 +39,44 @@
             </div>
             <div class="flex rtl:flex-row-reverse gap-1 text-primary">
                 <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
-                <span class="font-bold text-xl">{{ explode('.', $products_final_prices)[0] }}</span>
+                <span class="font-bold text-xl"
+                    dir="ltr">{{ number_format(explode('.', $products_final_prices)[0], 0, '.', '\'') }}</span>
                 <span class="font-bold text-xs">{{ explode('.', $products_final_prices)[1] ?? '00' }}</span>
             </div>
         </div>
         {{-- ############## Subtotal :: End ############## --}}
 
         {{-- ############## Extra Discount :: Start ############## --}}
-        <div class="w-100 flex justify-between items-center">
-            <div class="h6 font-bold m-0">
-                {{ __('front/homePage.Extra Discount :') }}
+        @if ($discount)
+            <div class="w-100 flex justify-between items-center">
+                <div class="h6 font-bold m-0">
+                    {{ __('front/homePage.Extra Discount :') }}
+                </div>
+                <div class="flex gap-2">
+                    <span class="flex rtl:flex-row-reverse gap-1 text-success">
+                        -
+                        <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
+                        <span class="font-bold text-xl"
+                            dir="ltr">{{ number_format(explode('.', $discount)[0], 0, '.', '\'') }}</span>
+                        <span
+                            class="font-bold text-xs">{{ explode('.', number_format($discount), 2)[1] ?? '00' }}</span>
+                    </span>
+                    <span class="text-success">
+                        ({{ $discount_percent }} %) -
+                    </span>
+                </div>
             </div>
-            <div class="flex gap-2">
-                <span class="flex rtl:flex-row-reverse gap-1 text-green-600">
-                    -
-                    <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
-                    <span class="font-bold text-xl">{{ explode('.', $discount)[0] }}</span>
-                    <span class="font-bold text-xs">{{ explode('.', $discount)[1] ?? '00' }}</span>
-                </span>
-                <span class="text-green-600">
-                    ({{ $discount_percent }} %) -
-                </span>
-            </div>
-        </div>
+        @endif
         {{-- ############## Extra Discount :: End ############## --}}
 
         {{-- ############## Shipping :: Start ############## --}}
+        {{-- todo : get actual value --}}
         <div class="w-100 flex justify-between items-center">
             <div class="h6 font-bold m-0">
                 {{ __('front/homePage.Shipping :') }}
             </div>
             <div class="">
-                <span class="text-green-600">
+                <span class="text-success">
                     {{ __('front/homePage.Free Shipping') }}
                 </span>
             </div>
@@ -86,10 +92,12 @@
             <div class="h6 font-bold m-0">
                 {{ __('front/homePage.Total :') }}
             </div>
-            <div class="flex rtl:flex-row-reverse gap-1 text-green-600">
+            <div class="flex rtl:flex-row-reverse gap-1 text-success">
                 <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
-                <span class="font-bold text-2xl">{{ explode('.', $products_best_prices)[0] }}</span>
-                <span class="font-bold text-xs">{{ explode('.', $products_best_prices)[1] ?? '00' }}</span>
+                <span class="font-bold text-2xl"
+                    dir="ltr">{{ number_format(explode('.', $products_best_prices)[0], 0, '.', '\'') }}</span>
+                <span
+                    class="font-bold text-xs">{{ number_format(explode('.', $products_best_prices)[1] ?? '00', 0) ?? '00' }}</span>
             </div>
         </div>
         {{-- ############## Total :: End ############## --}}

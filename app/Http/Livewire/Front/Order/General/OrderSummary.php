@@ -21,26 +21,26 @@ class OrderSummary extends Component
     {
         if (Cart::instance('cart')->count() > 0) {
             // get final prices
-            $this->products_final_prices = array_sum(array_map(function ($product) {
-                if (!$product['under_reviewing']) {
+            $this->products_final_prices = $this->products->map(function ($product) {
+                if (!$product->under_reviewing) {
                     $product_qty = Cart::search(function ($cartItem, $rowId) use ($product) {
-                        return $cartItem->id === $product['id'];
+                        return $cartItem->id === $product->id;
                     })->first()->qty;
 
-                    return $product['final_price'] * $product_qty;
+                    return $product->final_price * $product_qty;
                 }
-            }, $this->products));
+            })->sum();
 
             // get best prices
-            $this->products_best_prices = array_sum(array_map(function ($product) {
-                if (!$product['under_reviewing']) {
+            $this->products_best_prices = $this->products->map(function ($product) {
+                if (!$product->under_reviewing) {
                     $product_qty = Cart::search(function ($cartItem, $rowId) use ($product) {
-                        return $cartItem->id === $product['id'];
+                        return $cartItem->id === $product->id;
                     })->first()->qty;
 
-                    return $product['best_price'] * $product_qty;
+                    return $product->best_price * $product_qty;
                 }
-            }, $this->products));
+            })->sum();
 
             // get discount
             $this->discount = $this->products_final_prices - $this->products_best_prices;
@@ -56,7 +56,6 @@ class OrderSummary extends Component
             $this->discount = "0.00";
             $this->discount_percent = "0";
         }
-        // dd($this->products, $this->products_final_prices, $this->products_best_prices, $this->discount, $this->discount_percent, explode('.', $this->discount));
 
         return view('livewire.front.order.general.order-summary');
     }
@@ -66,11 +65,9 @@ class OrderSummary extends Component
     {
         $products_id = Cart::instance('cart')->content()->pluck('id');
 
-        $products = [];
+        $products = collect([]);
 
-        foreach ($products_id as $product_id) {
-            $products[] = getBestOffer($product_id)->toArray();
-        }
+        $products = getBestOfferForProducts($products_id);
 
         $this->products = $products;
     }

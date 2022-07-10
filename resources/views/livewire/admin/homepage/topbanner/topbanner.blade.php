@@ -39,7 +39,7 @@
             @else
                 {{-- Upload New Image --}}
                 <input
-                    class="col-span-12 md:col-span-6 md:col-start-4 form-control block w-full px-2 py-1 text-sm font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
+                    class="col-span-12 md:col-span-6 md:col-start-4 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
                     id="banner" type="file" type="image" wire:model.lazy="banner">
                 <span class="col-span-12 text-xs text-gray-400">
                     {{ __('admin/sitePages.Use 1300x50 sizes image') }}</span>
@@ -84,8 +84,8 @@
             <div class="col-span-12 md:col-span-5 ">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('description.en') border-red-900 border-2 @enderror"
-                    type="text" wire:model.lazy="description.en" placeholder="{{ __('admin/sitePages.in English') }}"
-                    maxlength="100" dir="ltr">
+                    type="text" wire:model.lazy="description.en"
+                    placeholder="{{ __('admin/sitePages.in English') }}" maxlength="100" dir="ltr">
                 @error('description.en')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                         {{ $message }}</div>
@@ -103,8 +103,8 @@
             <div class="col-span-12 md:col-span-9">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('link') border-red-900 border-2 @enderror"
-                    type="url" wire:model.lazy="link" id="link" placeholder="{{ __('admin/sitePages.Link') }}"
-                    dir="ltr">
+                    type="url" wire:model.lazy="link" id="link"
+                    placeholder="{{ __('admin/sitePages.Link') }}" dir="ltr">
                 @error('link')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                         {{ $message }}</div>
@@ -121,7 +121,7 @@
     {{-- Buttons Section Start --}}
     <div class="col-span-12 w-full flex flex-wrap mt-2 justify-around">
         <button type="button" wire:click.prevent="update"
-            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Update') }}</button>
+            class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Update') }}</button>
         {{-- Back --}}
         <a href="{{ route('admin.homepage') }}"
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Back') }}</a>

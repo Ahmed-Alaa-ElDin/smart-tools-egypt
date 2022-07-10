@@ -41,7 +41,7 @@ class Cart extends Component
         $product = FacadesCart::instance('cart')->get($rowId);
 
         // Get the product's all data from database with best price
-        $product = getBestOffer($product->id);
+        $product = getBestOfferForProduct($product->id);
 
         // Remove product from cart
         FacadesCart::instance('cart')->remove($rowId);

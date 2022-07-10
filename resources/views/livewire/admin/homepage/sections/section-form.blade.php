@@ -146,14 +146,14 @@
     <div class="col-span-12 w-full flex flex-wrap justify-around">
         @if ($section_id != null)
             <button type="button" wire:click.prevent="update" wire:loading.attr="disabled"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Update') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Update') }}</button>
         @else
             {{-- Save and Back --}}
             <button type="button" wire:click.prevent="save" wire:loading.attr="disabled"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Save') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Save') }}</button>
             {{-- Save and New --}}
             <button type="button" wire:click.prevent="save('true')" wire:loading.attr="disabled"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Save and Add New Section') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Save and Add New Section') }}</button>
         @endif
         {{-- Back --}}
         <a href="{{ route('admin.homepage') }}"

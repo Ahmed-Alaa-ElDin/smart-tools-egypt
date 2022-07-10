@@ -9,7 +9,7 @@ use Livewire\Component;
 
 class CartAmount extends Component
 {
-    public $product_id, $unique, $remove = true;
+    public $product_id, $unique, $remove = true, $title = false, $small = false;
 
     protected function getListeners()
     {
@@ -82,6 +82,7 @@ class CartAmount extends Component
 
         ############ Emit event to reinitialize the slider :: Start ############
         $this->emit('cartUpdated');
+        $this->emit('cartUpdated:' . $this->unique);
         ############ Emit event to reinitialize the slider :: End ############
     }
     ############## Remove From Cart :: End ##############

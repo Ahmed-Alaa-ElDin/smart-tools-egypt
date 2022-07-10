@@ -26,7 +26,7 @@
                             &nbsp;</button>
                         <div class="dropdown-menu text-black ">
                             <a wire:click.prevent="restoreAllConfirm"
-                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600 hover:text-white focus:text-white cursor-pointer">
+                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-success focus:bg-success hover:text-white focus:text-white cursor-pointer">
                                 <span class="material-icons">
                                     restore
                                 </span> &nbsp;&nbsp;
@@ -40,7 +40,7 @@
                                 {{ __('admin/productsPages.Delete All') }}
                             </a>
                             <a wire:click.prevent="publishAllConfirm"
-                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600 hover:text-white focus:text-white cursor-pointer">
+                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-success focus:bg-success hover:text-white focus:text-white cursor-pointer">
                                 <span class="material-icons">
                                     publish
                                 </span> &nbsp;&nbsp;
@@ -250,7 +250,7 @@
                                                     {{ __('admin/productsPages.Under Reviewing') }}
                                                 </span>
                                             @elseif ($product->final_price == $product->base_price)
-                                                <span class="bg-green-600 px-2 py-1 rounded text-white">
+                                                <span class="bg-success px-2 py-1 rounded text-white">
                                                     {{ $product->final_price }}
                                                     <span class="text-xs">
                                                         {{ __('admin/productsPages. EGP') }}
@@ -265,7 +265,7 @@
                                                     </span>
                                                 </span>
                                                 <span
-                                                    class="bg-green-600 px-2 py-1 rounded text-white ltr:ml-1 rtl:mr-1">
+                                                    class="bg-success px-2 py-1 rounded text-white ltr:ml-1 rtl:mr-1">
                                                     {{ $product->final_price }}
                                                     <span class="text-xs">
                                                         {{ __('admin/productsPages. EGP') }}
@@ -278,7 +278,7 @@
                                     {{-- Quantity Body --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
                                         <div
-                                            class="text-sm  @if ($product->quantity > $product->low_stock + 2) text-green-600
+                                            class="text-sm  @if ($product->quantity > $product->low_stock + 2) text-success
                                             @elseif ($product->quantity > $product->low_stock)
                                             text-yellow-600
                                         @else
@@ -290,7 +290,7 @@
                                     {{-- Publish Body --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
                                         <div class="text-sm text-gray-900">
-                                            {!! $product->publish ? '<span class="block cursor-pointer material-icons text-green-600" wire:click="publish(' . $product->id . ')">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600" wire:click="publish(' . $product->id . ')">toggle_off</span>' !!}
+                                            {!! $product->publish ? '<span class="block cursor-pointer material-icons text-success" wire:click="publish(' . $product->id . ')">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600" wire:click="publish(' . $product->id . ')">toggle_off</span>' !!}
                                         </div>
                                     </td>
 
@@ -314,7 +314,7 @@
                                                 wire:click.prevent="restoreConfirm({{ $product->id }})"
                                                 class="m-0">
                                                 <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-green-500 hover:bg-green-700 rounded">
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-success hover:bg-green-700 rounded">
                                                     restore
                                                 </span>
                                             </a>

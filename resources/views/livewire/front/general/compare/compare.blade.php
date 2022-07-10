@@ -42,11 +42,11 @@
                                     </h3>
                                     {{-- Product Name :: End --}}
 
-                                    {{-- Product Amount & Price :: Start --}}
+                                    {{-- Product Price :: Start --}}
                                     <div class="flex flex-nowrap" dir="ltr">
                                         <div class="flex gap-1" dir="ltr">
                                             <span
-                                                class="font-bold text-green-700">{{ explode('.', $compare_item->price)[0] }}</span>
+                                            class="font-bold text-green-700">{{ number_format(explode('.', $compare_item->price)[0],0,'.','\'') }}</span>
                                             <span
                                                 class="font-bold text-green-700 text-xs">{{ explode('.', $compare_item->price)[1] ?? "00" }}</span>
                                         </div>

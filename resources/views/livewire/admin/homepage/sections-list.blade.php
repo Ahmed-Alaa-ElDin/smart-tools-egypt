@@ -127,8 +127,8 @@ bg-gray-200 @endif select-none"
 
             {{-- Active :: Start --}}
             <div class="px-6 py-2 text-center">
-                <div class="text-sm text-gray-900">{!! $section->active ? '<span class="text-green-600">' . __('admin/deliveriesPages.Active') . '</span>' : '<span class="text-red-600">' . __('admin/deliveriesPages.Inactive') . '</span>' !!}
-                    {!! $section->active ? '<span class="block cursor-pointer material-icons text-green-600" wire:click="activate(' . $section->id . ')">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600" wire:click="activate(' . $section->id . ')">toggle_off</span>' !!}
+                <div class="text-sm text-gray-900">{!! $section->active ? '<span class="text-success">' . __('admin/deliveriesPages.Active') . '</span>' : '<span class="text-red-600">' . __('admin/deliveriesPages.Inactive') . '</span>' !!}
+                    {!! $section->active ? '<span class="block cursor-pointer material-icons text-success" wire:click="activate(' . $section->id . ')">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600" wire:click="activate(' . $section->id . ')">toggle_off</span>' !!}
                 </div>
             </div>
             {{-- Active :: End --}}

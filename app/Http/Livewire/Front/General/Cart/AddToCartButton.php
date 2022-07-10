@@ -8,17 +8,17 @@ use Livewire\Component;
 
 class AddToCartButton extends Component
 {
-    public $product_id;
+    public $product_id, $text= false;
 
     public function render()
     {
         return view('livewire.front.general.cart.add-to-cart-button');
     }
 
-    ############## Add TO Cart :: Start ##############
+    ############## Add To Cart :: Start ##############
     public function addToCart($product_id)
     {
-        $product = getBestOffer($product_id);
+        $product = getBestOfferForProduct($product_id);
 
         $cart_product = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product) {
             return $cartItem->id === $product->id;

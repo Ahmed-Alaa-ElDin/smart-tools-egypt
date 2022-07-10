@@ -92,4 +92,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Country::class, 'addresses');
     }
+
+    // One to many relationship  User --> Reviews
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

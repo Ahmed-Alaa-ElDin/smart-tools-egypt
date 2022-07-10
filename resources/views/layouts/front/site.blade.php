@@ -17,6 +17,15 @@
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
         name='viewport' />
 
+    {{-- todo : facebook meta tags --}}
+    <meta property="og:url"
+        content="http://www.nytimes.com/2015/02/19/arts/international/when-great-minds-dont-think-alike.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="When Great Minds Don’t Think Alike" />
+    <meta property="og:description" content="How much does culture influence creative thinking?" />
+    <meta property="og:image"
+        content="http://static01.nyt.com/images/2015/02/19/arts/international/19iht-btnumbers19A/19iht-btnumbers19A-facebookJumbo-v2.jpg" />
+
     {{-- Fonts --}}
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -33,7 +42,7 @@
         <link href="{{ asset('assets/front/css/material-dashboard-rtl.css') }}" rel="stylesheet" />
     @endif
 
-    {{-- Slick --}}
+    {{-- Splide --}}
     <link href="{{ asset('assets/front/css/splide.min.css') }}" rel="stylesheet" />
 
     {{-- Livewire Styles :: Start --}}
@@ -100,7 +109,7 @@
     <!-- Plugin for the momentJs  -->
     <script src="{{ asset('assets/front/js/plugins/moment.min.js') }}"></script>
 
-    <!-- Plugin for the Slick  -->
+    <!-- Plugin for the Splide  -->
     <script src="{{ asset('assets/front/js/plugins/splide.min.js') }}"></script>
 
     {{-- <!-- Forms Validations Plugin -->
@@ -171,14 +180,14 @@
         })
     </script>
 
-{{-- Custom Js Files --}}
-@stack('js')
+    {{-- Custom Js Files --}}
+    @stack('js')
 
-{{-- Custom Js Files for livewire blade --}}
-@stack('livewire-js')
+    {{-- Custom Js Files for livewire blade --}}
+    @stack('livewire-js')
 
-<!--  Plugin for the Livewire -->
-@livewireScripts
+    <!--  Plugin for the Livewire -->
+    @livewireScripts
 
 </body>
 

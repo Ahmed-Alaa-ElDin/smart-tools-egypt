@@ -42,7 +42,7 @@
                                         title="{{ __('admin/productsPages.Delete Image') }}">clear</span>
                                     <span
                                         class="material-icons absolute rounded-circle w-6 h-6 select-none
-                                        @if ($featured == $key) border-0 border-green-500 text-white bg-green-500
+                                        @if ($featured == $key) border-0 border-success text-white bg-success
                                         @else
                                         border-2 border-gray-500 text-gray-500 @endif
                                         right-2 top-2 text-sm font-bold cursor-pointer flex items-center justify-center"
@@ -57,8 +57,9 @@
                         {{-- Upload More Image --}}
                         <label for="gallery_images" class="col-span-1 mt-2 text-xs text-gray-700 font-bold text-center">
                             {{ __('admin/productsPages.Add more images') }} </label>
+
                         <input
-                            class="col-span-1 form-control block w-full px-2 py-1 text-sm font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
+                            class="col-span-1 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
                             id="gallery_images" type="file" type="image" wire:model.lazy="gallery_images" multiple>
                         <span class="col-span-1 text-xs text-gray-400">
                             {{ __('admin/productsPages.Use 600x600 sizes images') }}</span>
@@ -75,7 +76,7 @@
                 @else
                     {{-- Upload New Image --}}
                     <input
-                        class="col-span-12 form-control block w-full px-2 py-1 text-sm font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
+                        class="col-span-12 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
                         id="gallery_images" type="file" type="image" wire:model.lazy="gallery_images" multiple>
                     <span class="col-span-12 text-xs text-gray-400">
                         {{ __('admin/productsPages.Use 600x600 sizes images') }}</span>
@@ -125,7 +126,7 @@
                 @else
                     {{-- Upload New Image --}}
                     <input
-                        class="col-span-12 form-control block w-full px-2 py-1 text-sm font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
+                        class="col-span-12 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
                         id="thumbnail_image" type="file" type="image" wire:model.lazy="thumbnail_image">
                     <span class="col-span-12 text-xs text-gray-400">
                         {{ __('admin/productsPages.Use 300x300 sizes image') }}</span>
@@ -180,7 +181,7 @@
                 <div class="col-span-6 md:col-span-5">
                     <input
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('name.ar') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="name.ar" id="name"
+                        type="text" wire:model.lazy="name.ar" id="name" dir="rtl"
                         placeholder="{{ __('admin/productsPages.in Arabic') }}" maxlength="100" required>
                     @error('name.ar')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -191,7 +192,7 @@
                 <div class="col-span-6 md:col-span-5 ">
                     <input
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('name.en') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="name.en"
+                        type="text" wire:model.lazy="name.en" dir="ltr"
                         placeholder="{{ __('admin/productsPages.in English') }}" maxlength="100">
                     @error('name.en')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -376,7 +377,7 @@
                 {{-- Add New Subcategory --}}
                 <div class="text-center col-span-6">
                     <a href="#" wire:click.prevent="addSubcategory"
-                        class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">
+                        class="btn btn-sm bg-success hover:bg-green-700 focus:bg-success active:bg-success font-bold">
                         <span class="material-icons rtl:ml-1 ltr:mr-1">
                             add
                         </span>
@@ -429,7 +430,7 @@
                 <label wire:click="publish"
                     class="col-span-1 lg:col-span-2 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/productsPages.Publish') }}</label>
                 <div class="col-span-1 lg:col-span-2">
-                    {!! $publish ? '<span class="block cursor-pointer material-icons text-green-600 select-none" wire:click="publish">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="publish">toggle_off</span>' !!}
+                    {!! $publish ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="publish">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="publish">toggle_off</span>' !!}
 
                     @error('publish')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -445,7 +446,7 @@
                 <label wire:click="refund"
                     class="col-span-1 lg:col-span-2 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/productsPages.Refundable') }}</label>
                 <div class="col-span-1 lg:col-span-2">
-                    {!! $refundable ? '<span class="block cursor-pointer material-icons text-green-600 select-none" wire:click="refund">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="refund">toggle_off</span>' !!}
+                    {!! $refundable ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="refund">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="refund">toggle_off</span>' !!}
 
                     @error('refundable')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -464,10 +465,16 @@
                     {{-- Description Ar --}}
                     <div class="col-span-6 md:col-span-5">
                         <div wire:ignore
-                            class="py-1 w-full px-6 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 cursor-text @error('description.ar') border-red-900 border-2 @enderror"
+                            class="py-1 w-full px-6 rounded text-right border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 cursor-text @error('description.ar') border-red-900 border-2 @enderror"
                             type="text" id="description_ar" wire:model="description.ar"
                             placeholder="{{ __('admin/productsPages.in Arabic') }}">
-                            {!! $description[session('locale')] !!}
+                            @if ($description['ar'])
+                                {!! $description['ar'] !!}
+                            @else
+                                <ul class="list-disc">
+                                    <li></li>
+                                </ul>
+                            @endif
                         </div>
 
                         @error('description.ar')
@@ -479,10 +486,16 @@
 
                     {{-- Description En --}}
                     <div wire:ignore class="col-span-6 md:col-span-5 ">
-                        <div class="py-1 w-full px-6 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 cursor-text @error('description.en') border-red-900 border-2 @enderror"
+                        <div class="py-1 w-full px-6 rounded text-left border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 cursor-text @error('description.en') border-red-900 border-2 @enderror"
                             type="text" id="description_en"
                             placeholder="{{ __('admin/productsPages.in English') }}">
-                            {!! $description['en'] !!}
+                            @if ($description['en'])
+                                {!! $description['en'] !!}
+                            @else
+                                <ul class="list-disc">
+                                    <li></li>
+                                </ul>
+                            @endif
                         </div>
                     </div>
 
@@ -498,8 +511,7 @@
             {{-- Specifications :: Start --}}
             <div class="col-span-12 bg-red-200 w-full rounded-xl p-2 flex flex-col justify-center items-center gap-2">
                 @foreach ($specs as $key => $spec)
-                    <div class="grid grid-cols-12 gap-2 bg-red-300 rounded-xl p-2"
-                        wire:key="{{ 'spec-' . $key }}">
+                    <div class="grid grid-cols-12 gap-2 bg-red-300 rounded-xl p-2" wire:key="{{ 'spec-' . $key }}">
                         <div class="col-span-11 flex flex-col gap-1">
                             <div class="grid grid-cols-6 justify-center items-center gap-1">
                                 <input wire:model.lazy="specs.{{ $key }}.ar.title"
@@ -512,9 +524,11 @@
                             <div class="grid grid-cols-6 justify-center items-center gap-1">
                                 <input wire:model.lazy="specs.{{ $key }}.en.title"
                                     placeholder="{{ __('admin/productsPages.Title (en)') }}" type="text"
+                                    dir="ltr"
                                     class="col-span-2 py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('') border-red-900 border-2 @enderror">
                                 <input wire:model.lazy="specs.{{ $key }}.en.value"
                                     placeholder="{{ __('admin/productsPages.Value (en)') }}" type="text"
+                                    dir="ltr"
                                     class="col-span-4 py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('') border-red-900 border-2 @enderror">
                             </div>
                         </div>
@@ -532,7 +546,7 @@
                 {{-- Add New Specification --}}
                 <div class="text-center col-span-6">
                     <a href="#" wire:click.prevent="addSpec"
-                        class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">
+                        class="btn btn-sm bg-success hover:bg-green-700 focus:bg-success active:bg-success font-bold">
                         <span class="material-icons rtl:ml-1 ltr:mr-1">
                             add
                         </span>
@@ -642,7 +656,7 @@
 
                 <div class="col-span-3">
                     <div class="col-span-2 md:col-span-1">
-                        {!! $free_shipping ? '<span class="block cursor-pointer material-icons text-green-600 select-none" wire:click="free_shipping">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="free_shipping">toggle_off</span>' !!}
+                        {!! $free_shipping ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="free_shipping">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="free_shipping">toggle_off</span>' !!}
 
                         @error('free_shipping')
                             <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -661,7 +675,7 @@
 
                 <div class="col-span-3">
                     <div class="col-span-2 md:col-span-1">
-                        {!! $reviewing ? '<span class="block cursor-pointer material-icons text-green-600 select-none" wire:click="reviewing">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="reviewing">toggle_off</span>' !!}
+                        {!! $reviewing ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="reviewing">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="reviewing">toggle_off</span>' !!}
 
                         @error('reviewing')
                             <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -719,7 +733,7 @@
             <div class="col-span-3 font-bold text-black mb-2">{{ __('admin/productsPages.SEO') }}</div>
 
             {{-- SEO Title Start --}}
-            <div class="col-span-3 w-full grid grid-cols-12 gap-x-4 gap-y-2 items-center    rounded text-center">
+            {{-- <div class="col-span-3 w-full grid grid-cols-12 gap-x-4 gap-y-2 items-center    rounded text-center">
                 <label for="title"
                     class="col-span-12 sm:col-span-2 md:col-start-3 lg:col-span-12 lg:col-start-1 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer">{{ __('admin/productsPages.Title') }}</label>
                 <div class="col-span-12 sm:col-span-10 md:col-span-6 lg:col-span-12">
@@ -731,18 +745,19 @@
                             {{ $message }}</div>
                     @enderror
                 </div>
-            </div>
+            </div> --}}
             {{-- SEO Title End --}}
 
             {{-- SEO Description Start --}}
-            <div class="col-span-3 w-full grid grid-cols-12 gap-x-4 gap-y-2 items-center    rounded text-center">
+            {{-- <div class="col-span-3 w-full grid grid-cols-12 gap-x-4 gap-y-2 items-center    rounded text-center">
                 <label for="seo_description"
                     class="col-span-12 sm:col-span-2 md:col-start-3 lg:col-span-12 lg:col-start-1 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer">{{ __('admin/productsPages.Description') }}</label>
 
                 <div class="col-span-12 sm:col-span-10 md:col-span-6 lg:col-span-12">
                     <div wire:ignore
                         class="py-1 w-full px-6 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 cursor-text @error('seo_description') border-red-900 border-2 @enderror"
-                        type="text" id="seo_description">{!! $description_seo !!}
+                        type="text" id="seo_description">
+                        {!! $description_seo !!}
                     </div>
 
                     @error('seo_description')
@@ -751,8 +766,30 @@
                         </div>
                     @enderror
                 </div>
-            </div>
+            </div> --}}
             {{-- SEO Description End --}}
+
+            {{-- SEO Keywords :: Start --}}
+            <div class="col-span-3 w-full grid grid-cols-12 gap-x-4 gap-y-2 items-center    rounded text-center">
+                <label for="seo_keywords"
+                    class="col-span-12 sm:col-span-2 md:col-start-3 lg:col-span-12 lg:col-start-1 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer">
+                    {{ __('admin/productsPages.Keywords') }}
+                </label>
+
+                <div class="col-span-12 sm:col-span-10 md:col-span-6 lg:col-span-12">
+                    <textarea wire:model="seo_keywords" placeholder="{{ __('admin/productsPages.Keywords ("Comma Separated")') }}"
+                        class="py-1 w-full px-6 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 cursor-text @error('seo_keywords') border-red-900 border-2 @enderror"
+                        type="text" id="seo_keywords">
+                    </textarea>
+
+                    @error('seo_keywords')
+                        <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+            </div>
+            {{-- SEO Keywords :: End --}}
         </div>
         {{-- SEO End --}}
     </div>
@@ -762,14 +799,14 @@
     <div class="col-span-12 w-full flex mt-2 justify-around">
         @if ($product_id != null)
             <button type="button" wire:click.prevent="update"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Update') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Update') }}</button>
         @else
             {{-- Save and Back --}}
             <button type="button" wire:click.prevent="save"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save') }}</button>
             {{-- Save and New --}}
             <button type="button" wire:click.prevent="save('true')"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save and Add New Product') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save and Add New Product') }}</button>
         @endif
         {{-- Back --}}
         <a href="{{ route('admin.products.index') }}"

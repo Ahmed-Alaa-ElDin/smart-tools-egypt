@@ -35,7 +35,7 @@
 
                             @can('Restore Country')
                                 <a href="#" wire:click.prevent="restoreAllConfirm"
-                                    class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-green-600 focus:bg-green-600">
+                                    class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-success focus:bg-success">
                                     <span class="material-icons">
                                         restore
                                     </span>
@@ -215,7 +215,7 @@
                                                 wire:click.prevent="restoreConfirm({{ $supercategory->id }})"
                                                 class="m-0">
                                                 <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-green-500 hover:bg-green-700 rounded">
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-success hover:bg-green-700 rounded">
                                                     restore
                                                 </span>
                                             </a>

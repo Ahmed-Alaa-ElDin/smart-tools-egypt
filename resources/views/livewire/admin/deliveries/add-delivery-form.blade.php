@@ -30,7 +30,7 @@
                 <label for="photo" class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">
                     {{ __('admin/deliveriesPages.Logo') }} </label>
                 <input
-                    class="form-control block w-full md:w-50 px-2 py-1 text-sm font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none col-span-12 md:col-span-10 py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
+                    class="col-span-12 md:col-span-10 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
                     id="photo" type="file" type="image" wire:model="photo">
 
                 @error('photo')
@@ -59,7 +59,8 @@
             <div class="col-span-6 md:col-span-5 ">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('name.en') border-red-900 border-2 @enderror"
-                    type="text" wire:model.lazy="name.en" placeholder="{{ __('admin/deliveriesPages.in English') }}">
+                    type="text" wire:model.lazy="name.en"
+                    placeholder="{{ __('admin/deliveriesPages.in English') }}">
                 @error('name.en')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                         {{ $message }}</div>
@@ -169,10 +170,10 @@
         <div class="flex flex-wrap gap-3 justify-around mt-4">
             {{-- Save and Back --}}
             <button type="button" wire:click.prevent="save"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/deliveriesPages.Save') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/deliveriesPages.Save') }}</button>
             {{-- Save and New --}}
             <button type="button" wire:click.prevent="save(true)"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/deliveriesPages.Save and Add New Company') }}</button>
+                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/deliveriesPages.Save and Add New Company') }}</button>
             {{-- Back --}}
             <a href="{{ route('admin.deliveries.index') }}"
                 class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/deliveriesPages.Back') }}</a>

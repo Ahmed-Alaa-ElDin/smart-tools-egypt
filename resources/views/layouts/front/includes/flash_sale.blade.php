@@ -172,7 +172,7 @@
                                         {{-- Price : End --}}
 
                                         {{-- Free Shipping : Start --}}
-                                        <div class="text-center text-green-600 font-bold text-sm">
+                                        <div class="text-center text-success font-bold text-sm">
                                             {{ __('front/homePage.Free Shipping') }}
                                         </div>
                                         {{-- Free Shipping : End --}}

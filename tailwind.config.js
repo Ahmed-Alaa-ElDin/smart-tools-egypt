@@ -8,6 +8,7 @@ module.exports = {
         "./vendor/laravel/jetstream/**/*.blade.php",
         "./storage/framework/views/*.php",
         "./resources/views/**/*.blade.php",
+        "./node_modules/flowbite/**/*.js"
     ],
 
     theme: {
@@ -28,6 +29,7 @@ module.exports = {
                 deleteHover: "#c0392b",
                 role: '#1abc9c',
                 roleHover: '#16a085',
+                success: '#4caf50',
             },
             fontFamily: {
                 sans: ["Nunito", ...defaultTheme.fontFamily.sans],
@@ -39,5 +41,6 @@ module.exports = {
         require("@tailwindcss/forms"),
         require("@tailwindcss/typography"),
         require('tailwind-scrollbar'),
+        require('flowbite/plugin')
     ],
 };

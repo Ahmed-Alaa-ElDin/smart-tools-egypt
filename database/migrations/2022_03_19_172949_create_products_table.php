@@ -28,8 +28,7 @@ return new class extends Migration
             $table->string('model')->nullable();
             $table->json('specs')->nullable();
             $table->string('video')->nullable();
-            $table->string('meta_title')->nullable();
-            $table->text('meta_description')->nullable();
+            $table->text('meta_keywords')->nullable();
             $table->tinyInteger('refundable')->default(1)->comment('0 -> No , 1 -> Yes');
             $table->tinyInteger('free_shipping')->default(0)->comment('0 -> No , 1 -> Yes');
             $table->tinyInteger('publish')->default(1)->comment('0 -> No , 1 -> Yes');

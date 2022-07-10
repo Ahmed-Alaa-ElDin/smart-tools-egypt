@@ -133,8 +133,8 @@
                                     {{-- Active --}}
                                     @can('Activate Delivery')
                                         <td class="px-6 py-2 text-center whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{!! $delivery->is_active ? '<span class="text-green-600">' . __('admin/deliveriesPages.Active') . '</span>' : '<span class="text-red-600">' . __('admin/deliveriesPages.Inactive') . '</span>' !!}
-                                                {!! $delivery->is_active ? '<span class="block cursor-pointer material-icons text-green-600" wire:click="activate(' . $delivery->id . ')">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600" wire:click="activate(' . $delivery->id . ')">toggle_off</span>' !!}
+                                            <div class="text-sm text-gray-900">{!! $delivery->is_active ? '<span class="text-success">' . __('admin/deliveriesPages.Active') . '</span>' : '<span class="text-red-600">' . __('admin/deliveriesPages.Inactive') . '</span>' !!}
+                                                {!! $delivery->is_active ? '<span class="block cursor-pointer material-icons text-success" wire:click="activate(' . $delivery->id . ')">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600" wire:click="activate(' . $delivery->id . ')">toggle_off</span>' !!}
                                             </div>
                                         </td>
                                     @endcan

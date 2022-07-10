@@ -194,7 +194,7 @@ return [
         'zones.*.name.ar' => 'الاسم بالعربية',
         'zones.*.name.en' => 'الاسم بالإنجليزية',
         'zones.*.min_charge' => 'المصاريف الأساسية',
-        'zones.*.min_size' => 'الوزن الأساسي',
+        'zones.*.min_weight' => 'الوزن الأساسي',
         'zones.*.kg_charge' => 'المصاريف لكل كجم زائد',
         'zones.*.destinations.*.country_id'     => 'البلد',
         'zones.*.destinations.*.governorate_id' => 'المحافظة',

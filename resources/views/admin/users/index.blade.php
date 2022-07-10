@@ -30,7 +30,7 @@ __('admin/usersPages.All Users')])
                                 @can('Add User')
                                     <div class="ltr:text-right rtl:text-left">
                                         <a href="{{ route('admin.users.create') }}"
-                                            class="btn btn-sm bg-green-600 hover:bg-green-700 focus:bg-green-600 active:bg-green-600 font-bold">
+                                            class="btn btn-sm bg-success hover:bg-green-700 focus:bg-success active:bg-success font-bold">
                                             <span class="material-icons rtl:ml-1 ltr:mr-1">
                                                 add
                                             </span>

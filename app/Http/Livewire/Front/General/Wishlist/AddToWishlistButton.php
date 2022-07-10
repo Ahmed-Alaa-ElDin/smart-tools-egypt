@@ -32,7 +32,7 @@ class AddToWishlistButton extends Component
         }
         ############ Remove Product from Cart :: End ############
 
-        $product = getBestOffer($product_id);
+        $product = getBestOfferForProduct($product_id);
 
         ############ Add Product to Wishlist :: Start ############
         $in_wishlist = Cart::instance('wishlist')->search(function ($cartItem, $rowId) use ($product) {

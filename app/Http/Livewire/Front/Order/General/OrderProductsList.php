@@ -14,16 +14,8 @@ class OrderProductsList extends Component
         'cartUpdated' => 'getProducts',
     ];
 
-    ############## Mount :: Start ##############
-    public function mount()
-    {
-        // $this->getProducts();
-    }
-    ############## Mount :: End ##############
-
     public function render()
     {
-        // dd($this->products);
         return view('livewire.front.order.general.order-products-list');
     }
 
@@ -34,9 +26,7 @@ class OrderProductsList extends Component
 
         $products = [];
 
-        foreach ($products_id as $product_id) {
-            $products[] = getBestOffer($product_id)->toArray();
-        }
+        $products = getBestOfferForProducts($products_id);
 
         $this->products = $products;
     }
