@@ -6,7 +6,7 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class Compare extends Component
+class CompareDropDown extends Component
 {
     protected $listeners = ['cartUpdated' => 'render'];
 
@@ -15,7 +15,7 @@ class Compare extends Component
         $this->compare = Cart::instance('compare')->content();
         $this->compare_count = Cart::instance('compare')->count();
 
-        return view('livewire.front.general.compare.compare');
+        return view('livewire.front.general.compare.compare-drop-down');
     }
 
     public function moveToCart($rowId)
@@ -44,6 +44,7 @@ class Compare extends Component
                     [
                         'thumbnail' => $product->thumbnail ?? null,
                         "weight" => $product->weight ?? 0,
+                        "slug" => $product->slug ?? ""
                     ]
                 )->associate(Product::class);
 

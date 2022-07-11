@@ -88,6 +88,7 @@ class OrderWishlistProductsList extends Component
                     [
                         'thumbnail' => $product->thumbnail ?? null,
                         "weight" => $product->weight ?? 0,
+                        "slug" => $product->slug ?? ""
                     ]
                 )->associate(Product::class);
 

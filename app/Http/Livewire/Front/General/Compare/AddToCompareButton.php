@@ -26,10 +26,19 @@ class AddToCompareButton extends Component
         })->count();
 
         if (!$in_compare && Cart::instance('compare')->count() < 3) {
-            Cart::instance('compare')->add($product->id, [
-                'en' => $product->getTranslation('name', 'en'),
-                'ar' => $product->getTranslation('name', 'ar'),
-            ], 1, $product->best_price, ['thumbnail' => $product->thumbnail ?? null])->associate(Product::class);
+            Cart::instance('compare')->add(
+                $product->id,
+                [
+                    'en' => $product->getTranslation('name', 'en'),
+                    'ar' => $product->getTranslation('name', 'ar'),
+                ],
+                1,
+                $product->best_price,
+                [
+                    'thumbnail' => $product->thumbnail ?? null,
+                    "slug" => $product->slug ?? ""
+                ]
+            )->associate(Product::class);
 
             if (Auth::check()) {
                 Cart::instance('compare')->store(Auth::user()->id);

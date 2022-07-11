@@ -29,9 +29,9 @@ class ProductDelivery extends Component
             if (auth()->check()) {
                 $address = auth()->user()->addresses()->where('default', 1)->first();
 
-                $this->selected_country_id = $address->country_id;
-                $this->selected_governorate_id = $address->governorate_id;
-                $this->selected_city_id = $address->city_id;
+                $this->selected_country_id = $address->country_id ?? 1;
+                $this->selected_governorate_id = $address->governorate_id ?? 1;
+                $this->selected_city_id = $address->city_id ?? 1;
 
                 $this->countries = Country::all();
                 $this->governorates = Governorate::where('country_id', $this->selected_country_id)->get();

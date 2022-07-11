@@ -40,10 +40,19 @@ class AddToWishlistButton extends Component
         })->count();
 
         if (!$in_wishlist) {
-            Cart::instance('wishlist')->add($product->id, [
-                'en' => $product->getTranslation('name', 'en'),
-                'ar' => $product->getTranslation('name', 'ar'),
-            ], 1, $product->best_price, ['thumbnail' => $product->thumbnail ?? null])->associate(Product::class);
+            Cart::instance('wishlist')->add(
+                $product->id,
+                [
+                    'en' => $product->getTranslation('name', 'en'),
+                    'ar' => $product->getTranslation('name', 'ar'),
+                ],
+                1,
+                $product->best_price,
+                [
+                    'thumbnail' => $product->thumbnail ?? null,
+                    "slug" => $product->slug ?? ""
+                ]
+            )->associate(Product::class);
 
             if (Auth::check()) {
                 Cart::instance('wishlist')->store(Auth::user()->id);

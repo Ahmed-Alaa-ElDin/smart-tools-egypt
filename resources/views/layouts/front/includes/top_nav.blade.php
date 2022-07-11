@@ -12,8 +12,9 @@
                             aria-expanded="false">
                             @if (LaravelLocalization::getCurrentLocale() == 'ar')
                                 <span class="inline-block p-1 bg-white rounded-xl">
-                                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                        height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 64 64">
+                                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
+                                        width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
+                                        viewBox="0 0 64 64">
                                         <path fill="#e6e7e8" d="M0 25h64v14H0z" />
                                         <path fill="#ec1c24"
                                             d="M54 10H10C3.373 10 0 14.925 0 21v4h64v-4c0-6.075-3.373-11-10-11" />
@@ -69,8 +70,9 @@
                                 </span>
                             @elseif(LaravelLocalization::getCurrentLocale() == 'en')
                                 <span class="inline-block p-1 bg-white rounded-xl">
-                                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                        height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 64 64">
+                                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
+                                        width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
+                                        viewBox="0 0 64 64">
                                         <path fill="#ec1c24"
                                             d="M26 17.76v3.38h37.965c-.053-1.09-.167-2.468-.575-3.38" />
                                         <path fill="#e6e7e8"
@@ -110,19 +112,64 @@
                     </li>
                     {{-- Lang. DropDown : End --}}
                 </ul>
-
             </div>
 
             {{-- Invisible in mobile view --}}
             <div class="col-5 hidden lg:block">
                 <ul class="list-inline mb-0 h-100 flex justify-end items-center text-sm">
-                    <li
-                        class="list-inline-item text-xs font-bold ltr:mr-3 rtl:ml-3 ltr:border-r ltr:border-l-0 rtl:border-l rtl:border-r-0 ltr:pr-3 ltr:pl-0 rtl:pl-3 rtl:pr-0">
-                        <a href="#" class="text-reset d-inline-block opacity-60 py-2">{{ __('front/homePage.Login') }}</a>
-                    </li>
-                    <li class="list-inline-item text-xs font-bold">
-                        <a href="#" class="text-reset d-inline-block opacity-60 py-2">{{ __('front/homePage.Register') }}</a>
-                    </li>
+                    @if (auth()->check())
+                        <li class="nav-item dropdown min-w-max cursor-pointer">
+                            <a class="nav-link flex flex-row flex-nowrap items-center gap-x-2 py-1"
+                                id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                @if (auth()->user()->profile_photo_path)
+                                    <img class="h-8 w-8 rounded-full"
+                                        src="{{ asset('storage/images/profiles/cropped100/' . auth()->user()->profile_photo_path) }}"
+                                        alt="{{ auth()->user()->f_name . ' ' . auth()->user()->l_name . 'profile image' }}">
+                                @else
+                                    <span class="material-icons">
+                                        person
+                                    </span>
+                                @endif
+                                <span class="font-bold">{{ auth()->user()->f_name }}</span>
+                                <p class="d-lg-none d-md-block">
+                                    {{ __('front/homePage.Account') }}
+                                </p>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
+                                <a class="dropdown-item" href="#">
+                                    {{ __('front/homePage.Profile') }}
+                                </a>
+
+                                <div class="dropdown-divider"></div>
+
+                                <div class="px-1">
+                                    <form action="{{ route('logout') }}" method="POST" class="p-0 m-0 dropdown-item">
+                                        @csrf
+                                        <button type="submit" class="py-2 w-full">
+                                            {{ __('front/homePage.Logout') }}
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+                    @else
+                        <li
+                            class="list-inline-item ltr:mr-3 rtl:ml-3 ltr:border-r ltr:border-l-0 rtl:border-l rtl:border-r-0 ltr:pr-3 ltr:pl-0 rtl:pl-3 rtl:pr-0">
+                            <a href="{{ route('login') }}"
+                                class="text-xs font-bold d-inline-block opacity-80 py-2 hover:text-primary">
+                                {{ __('front/homePage.Login') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('register') }}"
+                                class="text-xs font-bold d-inline-block opacity-80 py-2 hover:text-primary">
+                                {{ __('front/homePage.Register') }}
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>

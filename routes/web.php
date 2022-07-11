@@ -14,11 +14,16 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 |
 */
 
-Route::group(['prefix' => LaravelLocalization::setLocale(),'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]], function()
-{
+Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']], function () {
+    // Admin Authentication
     require_once __DIR__ . "/admin/auth.php";
-    require_once __DIR__ . "/front/front.php";
+    // Other Admin Routes
     require_once __DIR__ . "/admin/admin.php";
+
+    // Users Authentications
+    require_once __DIR__ . "/front/auth.php";
+    // Other Users Routes
+    require_once __DIR__ . "/front/front.php";
 });
 
 // require __DIR__.'/auth.php';

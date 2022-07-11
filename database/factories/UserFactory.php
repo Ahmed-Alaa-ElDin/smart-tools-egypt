@@ -26,11 +26,17 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'f_name' => $this->faker->name(),
-            'l_name' => $this->faker->name(),
+            'f_name' => [
+                'ar' => $this->faker->name(),
+                'en' => $this->faker->name(),
+            ],
+            'l_name' => [
+                'ar' => $this->faker->name(),
+                'en' => $this->faker->name(),
+            ],
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => Hash::make('123456789') , // password
+            'password' => Hash::make('123456789'), // password
             'remember_token' => Str::random(10),
         ];
     }
@@ -56,14 +62,14 @@ class UserFactory extends Factory
      */
     public function withPersonalTeam()
     {
-        if (! Features::hasTeamFeatures()) {
+        if (!Features::hasTeamFeatures()) {
             return $this->state([]);
         }
 
         return $this->has(
             Team::factory()
                 ->state(function (array $attributes, User $user) {
-                    return ['name' => $user->name.'\'s Team', 'user_id' => $user->id, 'personal_team' => true];
+                    return ['name' => $user->name . '\'s Team', 'user_id' => $user->id, 'personal_team' => true];
                 }),
             'ownedTeams'
         );

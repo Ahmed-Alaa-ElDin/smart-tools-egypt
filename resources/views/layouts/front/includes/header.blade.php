@@ -54,16 +54,16 @@
                 {{-- Search : End --}}
 
                 {{-- Compare : Start --}}
-                @livewire('front.general.compare.compare')
+                @livewire('front.general.compare.compare-drop-down')
 
                 {{-- Compare : End --}}
 
                 {{-- Wishlist : Start --}}
-                @livewire('front.general.wishlist.wishlist')
+                @livewire('front.general.wishlist.wishlist-drop-down')
                 {{-- Wishlist : End --}}
 
                 {{-- Cart :: Start --}}
-                @livewire('front.general.cart.cart')
+                @livewire('front.general.cart.cart-drop-down')
                 {{-- Cart :: End --}}
 
             </div>

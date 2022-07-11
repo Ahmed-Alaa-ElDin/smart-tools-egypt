@@ -208,7 +208,7 @@
                         {{ __('front/homePage.You Should Login First to be able to add a new review') }}
                     </p>
                     {{-- todo :: login route name --}}
-                    <a href="#" class="btn bg-yellow-500 font-bold">{{ __('front/homePage.Login') }}</a>
+                    <a href="{{ route('login') }}" class="btn bg-yellow-500 font-bold">{{ __('front/homePage.Login') }}</a>
                 </div>
             @endif
             {{-- New Review :: End --}}

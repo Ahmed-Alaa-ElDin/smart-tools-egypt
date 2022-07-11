@@ -22,38 +22,44 @@
                 <ul>
                     @forelse ($wishlist as $wishlist_item)
                         <li>
-                            <div class="flex flex-nowrap gap-4 justify-between items-center px-3">
+                            <div
+                                class="flex flex-nowrap gap-4 justify-between items-center transition-all ease-in-out hover:bg-white hover:text-black rounded hover:shadow-xl px-2">
+                                <a href="{{ route('front.product.show', ['id' => $wishlist_item->id, 'slug' => $wishlist_item->options->slug]) }}"
+                                    class="flex flex-nowrap gap-4 justify-between items-center hover:bg-white hover:text-current hover:shadow-none w-full py-2">
 
-                                {{-- Thumbnail :: Start --}}
-                                @if ($wishlist_item->options->thumbnail)
-                                    <img src="{{ asset('storage/images/products/cropped100/' . $wishlist_item->options->thumbnail->file_name) }}"
-                                        class="w-14 h-14 rounded" alt="{{ $wishlist_item->name[session('locale')] }}">
-                                @else
-                                    <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}"
-                                        class="w-14 h-14 rounded" alt="{{ $wishlist_item->name[session('locale')] }}">
-                                @endif
-                                {{-- Thumbnail :: End --}}
+                                    {{-- Thumbnail :: Start --}}
+                                    @if ($wishlist_item->options->thumbnail)
+                                        <img src="{{ asset('storage/images/products/cropped100/' . $wishlist_item->options->thumbnail->file_name) }}"
+                                            class="w-14 h-14 rounded"
+                                            alt="{{ $wishlist_item->name[session('locale')] }}">
+                                    @else
+                                        <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}"
+                                            class="w-14 h-14 rounded"
+                                            alt="{{ $wishlist_item->name[session('locale')] }}">
+                                    @endif
+                                    {{-- Thumbnail :: End --}}
 
-                                <div class="flex flex-col">
+                                    <div class="flex flex-col">
 
-                                    {{-- Product Name :: Start --}}
-                                    <h3 class="h5 m-0 font-bold truncate">
-                                        {{ $wishlist_item->name[session('locale')] }}
-                                    </h3>
-                                    {{-- Product Name :: End --}}
+                                        {{-- Product Name :: Start --}}
+                                        <h3 class="h5 m-0 font-bold truncate">
+                                            {{ $wishlist_item->name[session('locale')] }}
+                                        </h3>
+                                        {{-- Product Name :: End --}}
 
-                                    {{-- Product Amount & Price :: Start --}}
-                                    <div class="flex flex-nowrap" dir="ltr">
-                                        <div class="flex gap-1" dir="ltr">
-                                            <span
-                                                class="font-bold text-green-700">{{ number_format(explode('.', $wishlist_item->price)[0],0,'.','\'') }}</span>
-                                            <span
-                                                class="font-bold text-green-700 text-xs">{{ explode('.', $wishlist_item->price)[1] ?? "00" }}</span>
+                                        {{-- Product Amount & Price :: Start --}}
+                                        <div class="flex flex-nowrap" dir="ltr">
+                                            <div class="flex gap-1" dir="ltr">
+                                                <span
+                                                    class="font-bold text-green-700">{{ number_format(explode('.', $wishlist_item->price)[0], 0, '.', '\'') }}</span>
+                                                <span
+                                                    class="font-bold text-green-700 text-xs">{{ explode('.', $wishlist_item->price)[1] ?? '00' }}</span>
+                                            </div>
                                         </div>
+                                        {{-- Product Amount & Price :: End --}}
                                     </div>
-                                    {{-- Product Amount & Price :: End --}}
-                                </div>
 
+                                </a>
                                 {{-- Buttons :: Start --}}
                                 <div class="flex gap-2">
                                     {{-- Add To Cart :: Start --}}

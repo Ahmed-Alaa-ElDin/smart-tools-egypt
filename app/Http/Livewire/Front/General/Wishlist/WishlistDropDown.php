@@ -6,7 +6,7 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class Wishlist extends Component
+class WishlistDropDown extends Component
 {
     protected $listeners = ['cartUpdated' => 'render'];
 
@@ -15,7 +15,7 @@ class Wishlist extends Component
         $this->wishlist = Cart::instance('wishlist')->content();
         $this->wishlist_count = Cart::instance('wishlist')->count();
 
-        return view('livewire.front.general.wishlist.wishlist');
+        return view('livewire.front.general.wishlist.wishlist-drop-down');
     }
 
     public function moveToCart($rowId)
@@ -43,6 +43,7 @@ class Wishlist extends Component
                     [
                         'thumbnail' => $product->thumbnail ?? null,
                         "weight" => $product->weight ?? 0,
+                        "slug" => $product->slug ?? ""
                     ]
                 )->associate(Product::class);
 

@@ -13870,7 +13870,8 @@ h2.title {
 }
 
 .dropdown-menu .dropdown-item,
-.dropdown-menu li>a {
+.dropdown-menu li>a,
+.dropdown-menu li button {
     position: relative;
     width: auto;
     display: flex;
@@ -13895,7 +13896,8 @@ h2.title {
 @media (min-width:768px) {
 
     .dropdown-menu .dropdown-item,
-    .dropdown-menu li>a {
+    .dropdown-menu li>a,
+    .dropdown-menu li button {
         padding-right: 1.5rem;
         padding-left: 1.5rem
     }
@@ -14800,7 +14802,9 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 }
 
 .fixed-plugin .dropdown-menu li>a:focus,
-.fixed-plugin .dropdown-menu li>a:hover {
+.fixed-plugin .dropdown-menu li>a:hover,
+.fixed-plugin .dropdown-menu li button:focus,
+.fixed-plugin .dropdown-menu li button:hover {
     box-shadow: none
 }
 

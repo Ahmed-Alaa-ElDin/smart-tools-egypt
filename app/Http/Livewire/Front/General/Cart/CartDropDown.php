@@ -6,7 +6,7 @@ use Gloudemans\Shoppingcart\Facades\Cart as FacadesCart;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class Cart extends Component
+class CartDropDown extends Component
 {
     protected $listeners = ['cartUpdated' => 'render'];
 
@@ -14,7 +14,7 @@ class Cart extends Component
     {
         $this->cart = FacadesCart::instance('cart')->content();
 
-        return view('livewire.front.general.cart.cart');
+        return view('livewire.front.general.cart.cart-drop-down');
     }
 
 
@@ -58,7 +58,10 @@ class Cart extends Component
                 ],
                 1,
                 $product->best_price,
-                ['thumbnail' => $product->thumbnail ?? null]
+                [
+                    'thumbnail' => $product->thumbnail ?? null,
+                    "slug" => $product->slug ?? ""
+                ]
             )->associate(Product::class);
 
             if (Auth::check()) {

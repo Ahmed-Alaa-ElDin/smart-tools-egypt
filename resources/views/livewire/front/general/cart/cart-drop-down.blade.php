@@ -22,43 +22,46 @@
                 <ul>
                     @forelse ($cart as $cart_item)
                         <li>
-                            <div class="flex flex-nowrap gap-4 justify-between items-center px-3">
+                            <div class="flex flex-nowrap gap-4 justify-between items-center transition-all ease-in-out hover:bg-white hover:text-black rounded hover:shadow-xl px-2">
+                                <a href="{{ route('front.product.show', ['id' => $cart_item->id, 'slug' => $cart_item->options->slug]) }}" class="flex flex-nowrap gap-4 justify-between items-center hover:bg-white hover:text-current hover:shadow-none w-full py-2">
 
-                                {{-- Thumbnail :: Start --}}
-                                @if ($cart_item->options->thumbnail)
-                                    <img src="{{ asset('storage/images/products/cropped100/' . $cart_item->options->thumbnail->file_name) }}"
-                                        class="w-14 h-14 rounded" alt="{{ $cart_item->name[session('locale')] }}">
-                                @else
-                                    <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}"
-                                        class="w-14 h-14 rounded" alt="{{ $cart_item->name[session('locale')] }}">
-                                @endif
-                                {{-- Thumbnail :: End --}}
+                                    {{-- Thumbnail :: Start --}}
+                                    @if ($cart_item->options->thumbnail)
+                                        <img src="{{ asset('storage/images/products/cropped100/' . $cart_item->options->thumbnail->file_name) }}"
+                                            class="w-14 h-14 rounded" alt="{{ $cart_item->name[session('locale')] }}">
+                                    @else
+                                        <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}"
+                                            class="w-14 h-14 rounded" alt="{{ $cart_item->name[session('locale')] }}">
+                                    @endif
+                                    {{-- Thumbnail :: End --}}
 
-                                <div class="flex flex-col">
+                                    <div class="flex flex-col">
 
-                                    {{-- Product Name :: Start --}}
-                                    <h3 class="h5 m-0 font-bold truncate">{{ $cart_item->name[session('locale')] }}
-                                    </h3>
-                                    {{-- Product Name :: End --}}
+                                        {{-- Product Name :: Start --}}
+                                        <h3 class="h5 m-0 font-bold truncate max-w-[150px]">
+                                            {{ $cart_item->name[session('locale')] }}
+                                        </h3>
+                                        {{-- Product Name :: End --}}
 
-                                    {{-- Product Amount & Price :: Start --}}
-                                    <div class="flex flex-nowrap" dir="ltr">
-                                        <span class="font-bold">
-                                            {{ $cart_item->qty }}
-                                        </span>
-                                        &nbsp; x &nbsp;
-                                        <div class="flex gap-1" dir="ltr">
-                                            <span
-                                                class="font-bold text-green-700">{{ number_format(explode('.', $cart_item->price)[0],0,'.','\'') }}</span>
-                                            <span
-                                                class="font-bold text-green-700 text-xs">{{ explode('.', $cart_item->price)[1] ?? "00" }}</span>
+                                        {{-- Product Amount & Price :: Start --}}
+                                        <div class="flex flex-nowrap" dir="ltr">
+                                            <span class="font-bold">
+                                                {{ $cart_item->qty }}
+                                            </span>
+                                            &nbsp; x &nbsp;
+                                            <div class="flex gap-1" dir="ltr">
+                                                <span
+                                                    class="font-bold text-green-700">{{ number_format(explode('.', $cart_item->price)[0], 0, '.', '\'') }}</span>
+                                                <span
+                                                    class="font-bold text-green-700 text-xs">{{ explode('.', $cart_item->price)[1] ?? '00' }}</span>
+                                            </div>
                                         </div>
+                                        {{-- Product Amount & Price :: End --}}
                                     </div>
-                                    {{-- Product Amount & Price :: End --}}
-                                </div>
 
+                                </a>
                                 {{-- Buttons :: Start --}}
-                                <div class="flex gap-2">
+                                <div class="flex gap-1">
                                     {{-- Add To Wishlist :: Start --}}
                                     <button title="{{ __('front/homePage.Add to Wishlist') }}"
                                         class="w-8 h-8 rounded-circle bg-white border border-secondary text-secondary transition ease-in-out hover:bg-secondary hover:text-white"
@@ -101,8 +104,7 @@
                         {{ __('front/homePage.Subtotal :') }}
                     </div>
                     <div class="flex gap-1" dir="ltr">
-                        <span
-                            class="font-bold text-green-700">{{ __('front/homePage.EGP') }}</span>
+                        <span class="font-bold text-green-700">{{ __('front/homePage.EGP') }}</span>
                         <span
                             class="font-bold text-green-700">{{ explode('.', Cart::instance('cart')->subtotal())[0] }}</span>
                         <span
