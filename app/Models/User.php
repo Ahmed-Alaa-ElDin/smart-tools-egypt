@@ -39,7 +39,9 @@ class User extends Authenticatable
         'last_visit_at',
         'profile_photo_path',
         'email_verified_at',
-        'birth_date'
+        'birth_date',
+        'auth_id',
+        'auth_type',
     ];
 
     /**
@@ -69,6 +71,11 @@ class User extends Authenticatable
         return json_encode($value, JSON_UNESCAPED_UNICODE);
     }
 
+    // get default phone
+    public function getPhoneAttribute($value)
+    {
+        return Phone::where('user_id', $this->id)->where('phone', $value)->where('default', 1)->first()->phone;
+    }
     // One to many relationship  User --> Addresses
     public function addresses()
     {
@@ -84,7 +91,7 @@ class User extends Authenticatable
     // One to many relationship  User --> Products
     public function products()
     {
-        return $this->hasMany(Product::class,'created_by');
+        return $this->hasMany(Product::class, 'created_by');
     }
 
     // One to many through relationship  User --> Countries

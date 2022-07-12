@@ -48,6 +48,7 @@ class AuthControllerAdmin extends Controller
             $this->cart = Cart::instance('wishlist')->restore(Auth::user()->id);
             $this->cart = Cart::instance('compare')->restore(Auth::user()->id);
             ############ Restore Cart Data :: End ############
+
         } catch (\Throwable $th) {
         }
 

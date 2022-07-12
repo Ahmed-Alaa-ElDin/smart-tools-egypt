@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{  'Login | '. env('APP_NAME') }}</title>
+    <title>{{ $title . ' | ' . env('APP_NAME') }}</title>
 
     {{-- FavIcons --}}
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}">
@@ -16,8 +16,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;400;700;900&display=swap" rel="stylesheet">
 
     <!-- Main css -->
+    <link href="{{ asset('assets/front/css/material-dashboard.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ mix('assets/css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}"> --}}
 
     @if (LaravelLocalization::getCurrentLocale() == 'ar')
         <link href="{{ asset('assets/admin/css/material-dashboard-rtl.css') }}" rel="stylesheet" />

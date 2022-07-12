@@ -10,7 +10,8 @@ Route::group(['prefix' => '/admin', 'as' => 'admin.'], function () {
         ->name('login');
 
     Route::post('/login', [AuthControllerAdmin::class, 'store'])
-        ->middleware('guest');
+        ->middleware('guest')
+        ->name('login.store');
 
     Route::post('/logout', [AuthControllerAdmin::class, 'destroy'])
         ->middleware('auth')

@@ -19,8 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('country_id')->nullable()->unsigned();
             $table->unsignedBigInteger('governorate_id')->nullable()->unsigned();
             $table->unsignedBigInteger('city_id')->nullable()->unsigned();
-            $table->text('details');
-            $table->text('special_marque');
+            $table->text('details')->nullable();
+            $table->text('special_marque')->nullable();
             $table->tinyInteger('default')->default(0)->comment('0 --> Not default , 1 --> Default');
             $table->timestamps();
 

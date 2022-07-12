@@ -88,7 +88,7 @@ function getBestOfferForProduct($product_id)
     // Get All Supercategories
     $supercategories = $categories ? $categories->map(fn ($category) => $category->supercategory) : [];
 
-    // Get Final Prices From Direct Offers
+    // Get Final Prices Fromi Direct Offers
     $direct_offers = $product->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type, 'number' => $offer->pivot->number]);
     foreach ($direct_offers as $offer) {
         if ($offer['free_shipping']) {

@@ -36,6 +36,10 @@ class ProductDelivery extends Component
                 $this->countries = Country::all();
                 $this->governorates = Governorate::where('country_id', $this->selected_country_id)->get();
                 $this->cities = City::where('governorate_id', $this->selected_governorate_id)->get();
+
+                $this->selected_country = $this->countries->where('id', $this->selected_country_id)->first();
+                $this->selected_governorate = $this->governorates->where('id', $this->selected_governorate_id)->first();
+                $this->selected_city = $this->cities->where('id', $this->selected_city_id)->first();
             } else {
                 // Get All Countries
                 $this->countries = Country::select(['id', 'name'])->with([
@@ -136,5 +140,15 @@ class ProductDelivery extends Component
         })->min();
 
         $this->delivery_cost = $delivery_cost ?? 'no delivery';
+
+        // if user hasn't set his address yet, make this address as default
+        if (auth()->check() && auth()->user()->addresses()->count() == 0) {
+            auth()->user()->addresses()->create([
+                'country_id' => $this->selected_country_id,
+                'governorate_id' => $this->selected_governorate_id,
+                'city_id' => $this->selected_city_id,
+                'default' => 1,
+            ]);
+        }
     }
 }

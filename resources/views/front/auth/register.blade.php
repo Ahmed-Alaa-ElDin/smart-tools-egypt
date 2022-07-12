@@ -1,10 +1,10 @@
-@extends('layouts.auth.auth', ['title' => __('auth/authentication.Login')])
+@extends('layouts.auth.auth', ['title' => __('auth/authentication.Register')])
 
 @section('content')
-    {{-- Login  Form --}}
+    {{-- Register  Form --}}
     <section class="w-full bg-gray-900 min-h-screen flex justify-center items-center">
-        <div class="p-4 md:px-24 md:py-8">
-            <div class="grid grid-cols-2 p-4 md:p-8 bg-white rounded-xl shadow-xl">
+        <div class="p-4 md:px-24 md:py-8 w-full">
+            <div class="grid grid-cols-3 p-4 md:p-8 bg-white rounded-xl shadow-xl">
 
                 {{-- Logo :: Start --}}
                 <div class="hidden md:flex justify-center items-center col-span-1">
@@ -15,17 +15,51 @@
                 </div>
                 {{-- Logo :: End --}}
 
-                {{-- Login Form :: Start --}}
-                <div class="col-span-2 md:col-span-1">
+                {{-- Register Form :: Start --}}
+                <div class="col-span-3 md:col-span-2">
 
                     {{-- Header :: Start --}}
-                    <h1 class="h3 font-bold text-center mb-8">{{ __('auth/authentication.Login') }}</h1>
+                    <h1 class="h3 font-bold text-center mb-8">{{ __('auth/authentication.Register') }}</h1>
                     {{-- Header :: End --}}
 
                     {{-- Form :: Start --}}
-                    <form method="POST" action="{{ route('login.store') }}">
+                    <form method="POST" action="{{ route('register.store') }}">
                         @csrf
                         <div class="grid grid-cols-12 justify-center items-center gap-4">
+                            {{-- First Name :: Start --}}
+                            <div class="col-span-12 md:col-span-6 w-full group grid grid-cols-12">
+                                <label for="f_name" class="col-span-12 block text-sm font-bold text-gray-900">
+                                    <span>
+                                        {{ __('auth/authentication.First Name') }}
+                                    </span>
+                                    <span class="text-red-600">*</span>
+                                </label>
+                                <input type="text" id="f_name" name="f_name" value="{{ old('f_name') }}"
+                                    class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('f_name') border-red-500 @enderror"
+                                    placeholder="{{ __('auth/authentication.Enter Your First Name') }}" required>
+
+                                @error('f_name')
+                                    <div class="col-span-12 my-1 text-red-600 text-center">{{ __($message) }}</div>
+                                @enderror
+                            </div>
+                            {{-- First Name :: End --}}
+
+                            {{-- Last Name :: Start --}}
+                            <div class="col-span-12 md:col-span-6 w-full  group grid grid-cols-12">
+                                <label for="l_name" class="col-span-12 block text-sm font-bold text-gray-900">
+                                    <span>
+                                        {{ __('auth/authentication.Last Name') }}
+                                    </span>
+                                </label>
+                                <input type="text" id="l_name" name="l_name" value="{{ old('l_name') }}"
+                                    class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('l_name') border-red-500 @enderror"
+                                    placeholder="{{ __('auth/authentication.Enter Your Last Name') }}">
+
+                                @error('l_name')
+                                    <div class="col-span-12 my-1 text-red-600 text-center">{{ __($message) }}</div>
+                                @enderror
+                            </div>
+                            {{-- Last Name :: End --}}
 
                             {{-- Phone :: Start --}}
                             <div class="col-span-12 md:col-span-6 w-full  group grid grid-cols-12">
@@ -33,16 +67,34 @@
                                     <span>
                                         {{ __('auth/authentication.Phone') }}
                                     </span>
+                                    <span class="text-red-600">*</span>
                                 </label>
                                 <input type="text" id="phone" name="phone" value="{{ old('phone') }}"
                                     class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('phone') border-red-500 @enderror"
                                     placeholder="{{ __('auth/authentication.Enter Your Phone Number') }}" required>
 
                                 @error('phone')
-                                    <div class="col-span-12 my-1 text-red-600 text-center text-sm font-bold">{{ __($message) }}</div>
+                                    <div class="col-span-12 my-1 text-red-600 text-center">{{ __($message) }}</div>
                                 @enderror
                             </div>
                             {{-- Phone :: End --}}
+
+                            {{-- Email :: Start --}}
+                            <div class="col-span-12 md:col-span-6 w-full  group grid grid-cols-12">
+                                <label for="email" class="col-span-12 block text-sm font-bold text-gray-900">
+                                    <span>
+                                        {{ __('auth/authentication.Email') }}
+                                    </span>
+                                </label>
+                                <input type="email" id="email" name="email" value="{{ old('email') }}"
+                                    class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('email') border-red-500 @enderror"
+                                    placeholder="{{ __('auth/authentication.Enter Your Email') }}">
+
+                                @error('email')
+                                    <div class="col-span-12 my-1 text-red-600 text-center">{{ __($message) }}</div>
+                                @enderror
+                            </div>
+                            {{-- Email :: End --}}
 
                             {{-- Password :: Start --}}
                             <div class="col-span-12 md:col-span-6 w-full  group grid grid-cols-12">
@@ -50,22 +102,31 @@
                                     <span>
                                         {{ __('auth/authentication.Password') }}
                                     </span>
+                                    <span class="text-red-600">*</span>
                                 </label>
                                 <input type="password" id="password" name="password"
                                     class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('password') border-red-500 @enderror"
                                     placeholder="{{ __('auth/authentication.Enter Your Password') }}" required>
 
                                 @error('password')
-                                    <div class="col-span-12 my-1 text-red-600 text-center text-sm font-bold">{{ __($message) }}</div>
+                                    <div class="col-span-12 my-1 text-red-600 text-center">{{ __($message) }}</div>
                                 @enderror
                             </div>
                             {{-- Password :: End --}}
 
-                            {{-- Auth Error Message :: Start --}}
-                            @error('auth')
-                                <div class="col-span-12 text-red-600 text-center text-sm font-bold">{{ __($message) }}</div>
-                            @enderror
-                            {{-- Auth Error Message :: End --}}
+                            {{-- Confirm Password :: Start --}}
+                            <div class="col-span-12 md:col-span-6 w-full  group grid grid-cols-12">
+                                <label for="password_confirmation"
+                                    class="col-span-12 block text-sm font-bold text-gray-900">
+                                    <span>
+                                        {{ __('auth/authentication.Confirm Password') }}
+                                    </span>
+                                    <span class="text-red-600">*</span>
+                                </label>
+                                <input type="password" id="password_confirmation" name="password_confirmation"
+                                    class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('password_confirmation') border-red-500 @enderror"
+                                    placeholder="{{ __('auth/authentication.Enter Your Password Again') }}" required>
+                            </div>
 
                             {{-- Remeber Me :: Start --}}
                             <div class="col-span-12 w-full group grid grid-cols-12 select-none">
@@ -86,7 +147,7 @@
                             <div class="col-span-12 w-full group grid grid-cols-12">
                                 <button type="submit"
                                     class="col-span-12 bg-primary hover:bg-primaryDark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                    {{ __('auth/authentication.Login') }}
+                                    {{ __('auth/authentication.Register') }}
                                 </button>
                             </div>
                             {{-- Submit :: End --}}
@@ -96,7 +157,7 @@
 
                     {{-- Social Media :: Start --}}
                     <div class="flex items-center justify-center w-full gap-3 mb-3">
-                        <span class="font-bold">{{ __('auth/authentication.Or login with') }}</span>
+                        <span class="font-bold">{{ __('auth/authentication.Or register with') }}</span>
 
                         <ul class="flex items-center gap-1">
                             <li>
@@ -136,17 +197,17 @@
                     </div>
                     {{-- Social Media :: End --}}
 
-                    {{-- Or Register :: Start --}}
+                    {{-- Or Login :: Start --}}
                     <div class="flex items-center justify-center w-full gap-3">
-                        <span class="font-bold">{{ __("auth/authentication.If you don't have an account") }}</span>
+                        <span class="font-bold">{{ __('auth/authentication.If you already have an account') }}</span>
 
-                        <a href="{{ route('register') }}"
-                            class="btn btn-sm bg-secondary font-bold rounded-full">{{ __('auth/authentication.Register') }}</a>
+                        <a href="{{ route('login') }}"
+                            class="btn btn-sm bg-secondary font-bold rounded-full">{{ __('auth/authentication.Login') }}</a>
                     </div>
-                    {{-- Or Register :: End --}}
+                    {{-- Or Login :: End --}}
 
                 </div>
-                {{-- Login Form :: End --}}
+                {{-- Register Form :: End --}}
             </div>
 
         </div>

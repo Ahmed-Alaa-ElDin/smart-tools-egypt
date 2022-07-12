@@ -6,6 +6,8 @@ use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use League\OAuth1\Client\Server\Server;
 
 class RedirectIfAuthenticated
 {
@@ -23,7 +25,11 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::ADMIN_HOME);
+                if (Auth::guard($guard)->user()->getRoleNames()->contains('Customer')) {
+                    return redirect(RouteServiceProvider::HOME);
+                } else {
+                    return redirect(RouteServiceProvider::ADMIN_HOME);
+                }
             }
         }
 

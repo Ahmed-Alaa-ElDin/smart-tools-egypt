@@ -41,10 +41,10 @@ class UserForm extends Component
     public function rules()
     {
         return [
-            'f_name.ar'                     => 'required|string|max:20|min:3',
-            'f_name.en'                     => 'nullable|string|max:20|min:3',
-            'l_name.ar'                     => 'nullable|string|max:20|min:3',
-            'l_name.en'                     => 'nullable|string|max:20|min:3',
+            'f_name.ar'                     => 'required|string|max:40|min:3',
+            'f_name.en'                     => 'nullable|string|max:40|min:3',
+            'l_name.ar'                     => 'nullable|string|max:40|min:3',
+            'l_name.en'                     => 'nullable|string|max:40|min:3',
             'email'                         => 'required|email|max:50|min:3|unique:users,email,' . $this->user_id,
             'phones.*.phone'                => 'nullable|digits_between:8,11|' . Rule::unique('phones')->ignore($this->user_id, 'user_id'),
             'gender'                        => 'in:0,1',

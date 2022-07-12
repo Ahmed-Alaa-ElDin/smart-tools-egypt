@@ -21,16 +21,21 @@
                 {{-- Cart Items :: Start --}}
                 <ul>
                     @forelse ($compare as $compare_item)
-                        <li>
-                            <div class="flex flex-nowrap gap-4 justify-between items-center px-3">
+                    <li>
+                        <div
+                            class="flex flex-nowrap gap-4 justify-between items-center transition-all ease-in-out hover:bg-white hover:text-black rounded hover:shadow-xl px-2">
+                            <a href="{{ route('front.product.show', ['id' => $compare_item->id, 'slug' => $compare_item->options->slug]) }}"
+                                class="flex flex-nowrap gap-4 justify-between items-center hover:bg-white hover:text-current hover:shadow-none w-full py-2">
 
                                 {{-- Thumbnail :: Start --}}
                                 @if ($compare_item->options->thumbnail)
                                     <img src="{{ asset('storage/images/products/cropped100/' . $compare_item->options->thumbnail->file_name) }}"
-                                        class="w-14 h-14 rounded" alt="{{ $compare_item->name[session('locale')] }}">
+                                        class="w-14 h-14 rounded"
+                                        alt="{{ $compare_item->name[session('locale')] }}">
                                 @else
                                     <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}"
-                                        class="w-14 h-14 rounded" alt="{{ $compare_item->name[session('locale')] }}">
+                                        class="w-14 h-14 rounded"
+                                        alt="{{ $compare_item->name[session('locale')] }}">
                                 @endif
                                 {{-- Thumbnail :: End --}}
 
@@ -42,43 +47,45 @@
                                     </h3>
                                     {{-- Product Name :: End --}}
 
-                                    {{-- Product Price :: Start --}}
+                                    {{-- Product Amount & Price :: Start --}}
                                     <div class="flex flex-nowrap" dir="ltr">
                                         <div class="flex gap-1" dir="ltr">
                                             <span
-                                            class="font-bold text-green-700">{{ number_format(explode('.', $compare_item->price)[0],0,'.','\'') }}</span>
+                                                class="font-bold text-green-700">{{ number_format(explode('.', $compare_item->price)[0], 0, '.', '\'') }}</span>
                                             <span
-                                                class="font-bold text-green-700 text-xs">{{ explode('.', $compare_item->price)[1] ?? "00" }}</span>
+                                                class="font-bold text-green-700 text-xs">{{ explode('.', $compare_item->price)[1] ?? '00' }}</span>
                                         </div>
                                     </div>
                                     {{-- Product Amount & Price :: End --}}
                                 </div>
 
-                                {{-- Buttons :: Start --}}
-                                <div class="flex gap-2">
-                                    {{-- Add To Cart :: Start --}}
-                                    <button title="{{ __('front/homePage.Add to cart') }}"
-                                        class="w-8 h-8 rounded-circle bg-secondary border border-secondary text-white transition ease-in-out hover:bg-primary hover:text-white  animate-pulse text-center shadow-sm"
-                                        wire:click="moveToCart('{{ $compare_item->rowId }}')">
-                                        <span class="material-icons text-lg rounded-circle">
-                                            shopping_cart
-                                        </span>
-                                    </button>
-                                    {{-- Add To Cart :: End --}}
+                            </a>
+                            {{-- Buttons :: Start --}}
+                            <div class="flex gap-2">
+                                {{-- Add To Cart :: Start --}}
+                                <button title="{{ __('front/homePage.Add to cart') }}"
+                                    class="w-8 h-8 rounded-circle bg-secondary border border-secondary text-white transition ease-in-out hover:bg-primary hover:text-white  animate-pulse text-center shadow-sm"
+                                    wire:click="moveToCart('{{ $compare_item->rowId }}')">
+                                    <span class="material-icons text-lg rounded-circle">
+                                        shopping_cart
+                                    </span>
+                                </button>
+                                {{-- Add To Cart :: End --}}
 
-                                    {{-- Delete :: Start --}}
-                                    <button title="{{ __('front/homePage.Remove from the Comparison') }}"
-                                        class="w-8 h-8 rounded-circle bg-white border border-primary text-primary transition ease-in-out hover:bg-primary hover:text-white"
-                                        wire:click="removeFromCompare('{{ $compare_item->rowId }}')">
-                                        <span class="material-icons text-lg">
-                                            delete
-                                        </span>
-                                    </button>
-                                    {{-- Delete :: End --}}
-                                </div>
-                                {{-- Buttons :: End --}}
+                                {{-- Delete :: Start --}}
+                                <button title="{{ __('front/homePage.Remove from Wishlist') }}"
+                                    class="w-8 h-8 rounded-circle bg-white border border-primary text-primary transition ease-in-out hover:bg-primary hover:text-white"
+                                    wire:click="removeFromWishlist('{{ $compare_item->rowId }}')">
+                                    <span class="material-icons text-lg">
+                                        delete
+                                    </span>
+                                </button>
+                                {{-- Delete :: End --}}
                             </div>
-                        </li>
+                            {{-- Buttons :: End --}}
+                        </div>
+                    </li>
+
                         @if (!$loop->last)
                             <hr class="my-2">
                         @endif
