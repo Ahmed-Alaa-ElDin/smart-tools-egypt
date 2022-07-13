@@ -91,8 +91,14 @@ class AuthenticatedSessionController extends Controller
                 'email' => $user->email,
                 'auth_type' => 'facebook',
                 'profile_photo_path' => singleImageUpload($user->avatar_original, 'profile-', 'profiles'),
+                'last_visit_at' => now(),
+                'email_verified_at' => now(),
             ]
         );
+
+        $createdUser->update([
+            'visit_num' => $createdUser->visit_num + 1,
+        ]);
 
         $createdUser->assignRole('Customer');
 
@@ -136,8 +142,65 @@ class AuthenticatedSessionController extends Controller
                 'email' => $user->email,
                 'auth_type' => 'google',
                 'profile_photo_path' => singleImageUpload($user->avatar_original, 'profile-', 'profiles'),
+                'last_visit_at' => now(),
+                'email_verified_at' => now(),
             ]
         );
+
+        $createdUser->update([
+            'visit_num' => $createdUser->visit_num + 1,
+        ]);
+
+        $createdUser->assignRole('Customer');
+
+        Auth::login($createdUser, true);
+
+        return redirect()->intended(RouteServiceProvider::HOME);
+    }
+
+        /**
+     * Redirect the user to the Google authentication page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function twitterRedirect()
+    {
+        return Socialite::driver('twitter')->redirect();
+    }
+
+    /**
+     * Obtain the user information from Google.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function twitterCallback()
+    {
+        $user = Socialite::driver('twitter')->user();
+
+        dd($user);
+
+        $createdUser = User::updateOrCreate(
+            ['auth_id' => $user->id],
+            [
+                'f_name' => [
+                    'ar' => explode(' ', $user->name, 2)[0],
+                    'en' => explode(' ', $user->name, 2)[0]
+                ],
+                'l_name' => [
+                    'ar' => explode(' ', $user->name, 2)[1],
+                    'en' => explode(' ', $user->name, 2)[1]
+                ],
+                'email' => $user->email,
+                'auth_type' => 'twitter',
+                'profile_photo_path' => singleImageUpload($user->avatar_original, 'profile-', 'profiles'),
+                'last_visit_at' => now(),
+                'email_verified_at' => now(),
+            ]
+        );
+
+        $createdUser->update([
+            'visit_num' => $createdUser->visit_num + 1,
+        ]);
 
         $createdUser->assignRole('Customer');
 

@@ -94,6 +94,7 @@
     <!--   Core JS Files   -->
     <script src="{{ asset('assets/front/js/core/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/front/js/core/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/flowbite/flowbite.js') }}"></script>
     <script src="{{ asset('assets/front/js/core/bootstrap-material-design.min.js') }}"></script>
     {{-- <script src="{{ asset('assets/front/js/plugins/perfect-scrollbar.jquery.min.js') }}"></script> --}}
 
@@ -150,7 +151,7 @@
                 timerProgressBar: true,
                 showConfirmButton: false,
             })
-        @elseif (Session::has('error'))
+        @elseif(Session::has('error'))
             Swal.fire({
                 text: '{{ Session::get('error') }}',
                 icon: 'error',

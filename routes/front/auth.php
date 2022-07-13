@@ -33,4 +33,9 @@ Route::group(['prefix' => '/'], function () {
     // Google Register / Login
     Route::get('/auth/google/redirect', [AuthenticatedSessionController::class, 'googleRedirect'])->name('google.redirect');
     Route::get('/auth/google/callback', [AuthenticatedSessionController::class, 'googleCallback']);
+
+    // Twitter Register / Login
+    Route::get('/auth/twitter/redirect', [AuthenticatedSessionController::class, 'twitterRedirect'])->name('twitter.redirect');
+    Route::get('/auth/twitter/callback', [AuthenticatedSessionController::class, 'twitterCallback']);
+
 });

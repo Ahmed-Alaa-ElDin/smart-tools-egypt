@@ -1,7 +1,7 @@
 <div class="mobile-bottom-header fixed lg:hidden bottom-0 bg-white shadow-lg border-top rounded-top w-full">
     <div class="flex justify-between items-center">
         <div class="col">
-            <a href="#" class="block text-center pb-2 pt-3">
+            <a href="{{ route('front.homepage') }}" class="block text-center pb-2 pt-3">
                 <span class="material-icons opacity-60 text-xl">
                     home
                 </span>
@@ -17,7 +17,7 @@
             </a>
         </div>
         <div class="col">
-            <a href="#" class="relative flex justify-center text-center pb-2 pt-3 min-w-max">
+            <a href="{{ route('front.cart') }}" class="relative flex justify-center text-center pb-2 pt-3 min-w-max">
                 <span
                     class="flex justify-center items-center bg-primary h-12 w-12 border border-white border-4 rounded-circle absolute -mt-12">
                     <span class="material-icons text-white">
@@ -26,7 +26,7 @@
                 </span>
                 <span class="flex justify-center items-center mt-1 font-bold opacity-60">
                     {{ __('front/homePage.Cart') }}
-                    (<span class="cart-count">0</span>)
+                    (<span class="cart-count">{{ Cart::instance('cart')->count() }}</span>)
                 </span>
             </a>
         </div>
@@ -41,11 +41,17 @@
             </a>
         </div>
         <div class="col">
-            <a href="#" class="block text-center pb-2 pt-3">
+            <a href="{{ route('front.profile.index') }}" class="block text-center pb-2 pt-3">
                 <span class="block mx-auto">
-                    <span class="material-icons opacity-60 text-xl">
-                        account_circle
-                    </span>
+                    @if (auth()->user()->profile_photo_path)
+                        <img class="h-8 w-8 rounded-full m-auto"
+                            src="{{ asset('storage/images/profiles/cropped100/' . auth()->user()->profile_photo_path) }}"
+                            alt="{{ auth()->user()->f_name . ' ' . auth()->user()->l_name . 'profile image' }}">
+                    @else
+                        <span class="material-icons text-xl">
+                            account_circle
+                        </span>
+                    @endif
                 </span>
                 <span class="block font-bold opacity-60">{{ __('front/homePage.Account') }}</span>
             </a>

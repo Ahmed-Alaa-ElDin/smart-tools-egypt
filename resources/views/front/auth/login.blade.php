@@ -111,7 +111,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="{{ route('twitter.redirect') }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
                                         class="w-8 h-8 p-2 text-white rounded-full shadow bg-twitter transition-all ease-in-out hover:scale-110"
                                         width="1em" height="1em" preserveAspectRatio="xMidYMid meet"

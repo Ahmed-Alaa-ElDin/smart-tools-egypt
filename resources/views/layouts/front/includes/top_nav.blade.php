@@ -138,16 +138,50 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-                                <a class="dropdown-item" href="#">
+                                {{-- User's Balance :: Start --}}
+                                <a class="dropdown-item flex flex-col gap-1 items-center justify-center hover:text-white group"
+                                    href="{{ route('front.profile.index') }}">
+                                    <div class="flex gap-1 items-center justify-center text-xs text-secondary transition-all ease-in-out group-hover:text-white">
+                                        <span class="material-icons">
+                                            account_balance_wallet
+                                        </span>
+                                        <span class="font-bold">
+                                            {{ __('front/homePage.Balance') }}
+                                        </span>
+                                    </div>
+                                    <div class="flex rtl:flex-row-reverse gap-1 justify-center items-center transition-all ease-in-out text-success group-hover:text-white">
+                                        <span class="font-bold text-sm">
+                                            {{ __('front/homePage.EGP') }}
+                                        </span>
+                                        <span class="font-bold text-sm">
+                                            {{ auth()->user()->balance }}
+                                        </span>
+                                    </div>
+                                    <div class="flex gap-1 justify-center items-center transition-all ease-in-out text-warning group-hover:text-white">
+                                        <span class="font-bold text-sm">
+                                            {{ __('front/homePage.Points') }}
+                                        </span>
+                                        <span class="font-bold text-sm">
+                                            {{ auth()->user()->points }}
+                                        </span>
+                                    </div>
+                                </a>
+                                {{-- User's Balance :: End --}}
+
+                                <div class="dropdown-divider"></div>
+
+                                {{-- User's Profile :: Start --}}
+                                <a class="dropdown-item font-bold" href="{{ route('front.profile.index') }}">
                                     {{ __('front/homePage.Profile') }}
                                 </a>
 
                                 <div class="dropdown-divider"></div>
 
                                 <div class="px-1">
-                                    <form action="{{ route('logout') }}" method="POST" class="p-0 m-0 dropdown-item">
+                                    <form action="{{ route('logout') }}" method="POST"
+                                        class="px-0 py-1 m-0 dropdown-item">
                                         @csrf
-                                        <button type="submit" class="py-2 w-full">
+                                        <button type="submit" class="py-2 w-full font-bold">
                                             {{ __('front/homePage.Logout') }}
                                         </button>
                                     </form>

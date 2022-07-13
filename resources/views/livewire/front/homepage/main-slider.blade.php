@@ -124,8 +124,26 @@
                         <li
                             class="product overflow-hidden bg-white border border-light rounded hover:shadow-md hover:scale-105 transition cursor-pointer">
                             <div class="carousel-box inline-block w-100">
-                                <div class="group mb-2">
-                                    <div class="relative overflow-hidden h-40 flex items-center justify-center">
+                                <div class="group mb-2 relative">
+                                    {{-- Add Product : Start --}}
+                                    <div
+                                        class="absolute z-10 top-2 ltr:-right-10 rtl:-left-10 transition-all ease-in-out duration-500 ltr:group-hover:right-2 rtl:group-hover:left-2 flex flex-col gap-1">
+
+                                        {{-- Add to compare : Start --}}
+                                        @livewire('front.general.compare.add-to-compare-button', ['product_id' => $product['id']], key('add-compare-button-' . Str::random(10)))
+                                        {{-- Add to compare : End --}}
+
+                                        {{-- Add to wishlist : Start --}}
+                                        @livewire('front.general.wishlist.add-to-wishlist-button', ['product_id' => $product['id']], key('add-wishlist-button-' . Str::random(10)))
+                                        {{-- Add to wishlist : End --}}
+
+                                        {{-- Add to cart : Start --}}
+                                        @livewire('front.general.cart.add-to-cart-button', ['product_id' => $product['id']], key('add-cart-button-' . Str::random(10)))
+                                        {{-- Add to cart : End --}}
+                                    </div>
+                                    {{-- Add Product : End --}}
+                                    <a class="relative block overflow-hidden h-40 flex items-center justify-center hover:text-current"
+                                        href="{{ route('front.product.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) }}">
 
                                         {{-- Base Discount : Start --}}
                                         @if (!$product['under_reviewing'] && $product['final_price'] != $product['base_price'])
@@ -168,27 +186,10 @@
                                             </span>
                                         @endif
                                         {{-- Extra Discount : End --}}
+                                    </a>
 
-                                        {{-- Add Product : Start --}}
-                                        <div
-                                            class="absolute top-2 ltr:-right-10 rtl:-left-10 transition-all ease-in-out duration-500 ltr:group-hover:right-2 rtl:group-hover:left-2 flex flex-col gap-1">
-
-                                            {{-- Add to compare : Start --}}
-                                            @livewire('front.general.compare.add-to-compare-button', ['product_id' => $product['id']], key('add-compare-button-' . Str::random(10)))
-                                            {{-- Add to compare : End --}}
-
-                                            {{-- Add to wishlist : Start --}}
-                                            @livewire('front.general.wishlist.add-to-wishlist-button', ['product_id' => $product['id']], key('add-wishlist-button-' . Str::random(10)))
-                                            {{-- Add to wishlist : End --}}
-
-                                            {{-- Add to cart : Start --}}
-                                            @livewire('front.general.cart.add-to-cart-button', ['product_id' => $product['id']], key('add-cart-button-' . Str::random(10)))
-                                            {{-- Add to cart : End --}}
-                                        </div>
-                                        {{-- Add Product : End --}}
-
-                                    </div>
-                                    <div class="md:p-3 p-2 text-left">
+                                    <a class="block md:p-3 p-2 text-left"
+                                        href="{{ route('front.product.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) }}">
 
                                         {{-- Price : Start --}}
                                         <div class="flex flex-wrap justify-center items-center gap-2">
@@ -259,12 +260,13 @@
                                             </div>
                                         @endif
                                         {{-- Points : End --}}
+                                    </a>
 
-                                        {{-- Cart Amount : Start --}}
-                                        @livewire('front.general.cart.cart-amount', ['product_id' => $product['id'], 'unique' => 'product-' . $product['id'],'small'=>true], key($product['name'][session('locale')] . '-' . rand()))
-                                        {{-- Cart Amount : End --}}
-
+                                    {{-- Cart Amount : Start --}}
+                                    <div class="md:px-3 px-2">
+                                        @livewire('front.general.cart.cart-amount', ['product_id' => $product['id'], 'unique' => 'product-' . $product['id'], 'small' => true], key($product['name'][session('locale')] . '-' . rand()))
                                     </div>
+                                    {{-- Cart Amount : End --}}
                                 </div>
                             </div>
                         </li>

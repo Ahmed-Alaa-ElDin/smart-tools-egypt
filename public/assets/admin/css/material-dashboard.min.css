@@ -8837,11 +8837,6 @@ button.close {
     color: var(--primary-color) !important
 }
 
-a.text-primary:focus,
-a.text-primary:hover {
-    color: #0c7cd5 !important
-}
-
 .text-secondary {
     color: #6c757d !important
 }
