@@ -214,7 +214,7 @@
                                                 wire:click.prevent="restoreConfirm({{ $city->id }})"
                                                 class="m-0">
                                                 <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-success hover:bg-green-700 rounded">
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-success hover:bg-successDark rounded">
                                                     restore
                                                 </span>
                                             </a>

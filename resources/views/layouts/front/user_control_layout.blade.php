@@ -19,7 +19,7 @@
 
         <div class="grid grid-cols-12 items-start justify-center gap-4">
             {{-- Mobile Only Nav :: Start --}}
-            <nav class="col-span-12 flex flex-wrap items-center justify-center md:hidden gap-x-3 gap-y-2">
+            <nav class="col-span-12 flex flex-wrap items-center justify-center lg:hidden gap-x-3 gap-y-2">
                 {{-- Dashboard --}}
                 <a href="{{ route('front.profile.index') }}"
                     class="btn btn-sm m-0 flex justify-center items-center py-2 px-3 text-sm font-bold gap-1 rounded-xl @if ($page == 'dashbaord') bg-primary text-white @else bg-white text-gray-700  @endif">
@@ -91,7 +91,7 @@
 
             {{-- Large Screen Sidebar :: Start --}}
             <aside
-                class="col-span-2 bg-white border-gray-200 rounded-xl hidden md:flex flex-col justify-center items-start gap-2 p-2">
+                class="col-span-2 bg-white border-gray-200 rounded-xl hidden lg:flex flex-col justify-center items-start gap-2 p-2">
                 {{-- Dashboard --}}
                 <a href="{{ route('front.profile.index') }}"
                     class="flex justify-center items-center p-3 font-bold gap-3 @if ($page == 'dashbaord') border-b-2 border-primary text-primary hover:text-primary @else text-gray-700  @endif">
@@ -157,11 +157,22 @@
                         {{ __('front/homePage.My Comparison') }}
                     </span>
                 </a>
+
+                {{-- todo :: Ordered Products --}}
+                <a href="{{ route('front.profile.index') }}"
+                    class="flex justify-center items-center p-3 font-bold gap-3 @if ($page == 'ordered') border-b-2 border-primary text-primary hover:text-primary @else text-gray-700  @endif">
+                    <span class="material-icons">
+                        shopping_basket
+                    </span>
+                    <span class="">
+                        {{ __('front/homePage.Ordered Products') }}
+                    </span>
+                </a>
             </aside>
             {{-- Large Screen Sidebar :: End --}}
 
             {{-- User :: Start --}}
-            <section class="col-span-12 md:col-span-10 grid grid-cols-12 justify-between items-start gap-4">
+            <section class="col-span-12 lg:col-span-10 grid grid-cols-12 justify-between items-start gap-4">
 
                 @yield('sub-content')
 

@@ -121,7 +121,7 @@
     {{-- Buttons Section Start --}}
     <div class="col-span-12 w-full flex flex-wrap mt-2 justify-around">
         <button type="button" wire:click.prevent="update"
-            class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Update') }}</button>
+            class="bg-success hover:bg-successDark text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Update') }}</button>
         {{-- Back --}}
         <a href="{{ route('admin.homepage') }}"
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Back') }}</a>

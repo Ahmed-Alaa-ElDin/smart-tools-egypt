@@ -36,7 +36,7 @@
                                 @can('Add User')
                                     <div class="ltr:text-right rtl:text-left">
                                         <a href="{{ route('admin.users.create') }}"
-                                            class="btn btn-sm bg-success hover:bg-green-700 focus:bg-success active:bg-success font-bold">
+                                            class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
                                             <span class="material-icons rtl:ml-1 ltr:mr-1">
                                                 add
                                             </span>

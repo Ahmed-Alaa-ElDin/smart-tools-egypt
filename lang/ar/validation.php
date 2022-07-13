@@ -100,6 +100,7 @@ return [
     "The offer is required." => "العرض مطلوب.",
     "Products are required." => "المنتجات مطلوبة.",
     "Banners are required." => "البنرات مطلوبة.",
+    'The phone number field is required' => 'حقل رقم الهاتف مطلوب',
 
     /*
     |--------------------------------------------------------------------------

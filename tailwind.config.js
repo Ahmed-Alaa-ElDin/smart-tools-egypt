@@ -39,7 +39,13 @@ module.exports = {
                 deleteHover: "#c0392b",
                 role: "#1abc9c",
                 roleHover: "#16a085",
+
+                successLighter: "#94cf96",
+                successLight: "#70bf73",
                 success: "#4caf50",
+                successDark: "#3d8c40",
+                successDarker: "#2e6930",
+
                 male: "#4cb2c9",
                 female: "#e85591",
             },

@@ -43,7 +43,7 @@
         <div class="col">
             <a href="{{ route('front.profile.index') }}" class="block text-center pb-2 pt-3">
                 <span class="block mx-auto">
-                    @if (auth()->user()->profile_photo_path)
+                    @if (auth()->user() && auth()->user()->profile_photo_path)
                         <img class="h-8 w-8 rounded-full m-auto"
                             src="{{ asset('storage/images/profiles/cropped100/' . auth()->user()->profile_photo_path) }}"
                             alt="{{ auth()->user()->f_name . ' ' . auth()->user()->l_name . 'profile image' }}">

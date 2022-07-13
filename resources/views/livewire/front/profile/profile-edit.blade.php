@@ -5,11 +5,11 @@
 
     <form enctype="multipart/form-data">
 
-        <div class="grid grid-cols-12 gap-3 justify-center items-start">
+        <div class="grid grid-cols-12 grid-flow-row  gap-3 justify-center items-start">
 
             {{-- Image :: Start --}}
-            <div class="col-span-12 md:col-span-6 bg-white rounded-xl p-4 text-center">
-                <label for="photo" class="col-span-12 md:col-span-2 text-gray-800 font-bold m-0 text-lg mb-2">
+            <div class="col-span-12 md:col-span-4 bg-white rounded-xl p-4 text-center">
+                <label for="image" class="text-gray-800 font-bold m-0 text-lg mb-2">
                     {{ __('front/homePage.Profile Image') }}
                 </label>
 
@@ -25,10 +25,10 @@
                 </div>
 
                 {{-- preview --}}
-                @if ($temp_path || $oldImage)
+                @if ($image_name || $oldImage)
                     <div class="col-span-12 text-center w-full my-2">
-                        <img src="{{ $temp_path ?? asset('storage/images/profiles/original/' . $oldImage) }}"
-                            class="rounded-xl w-1/2 md:w-1/4 m-auto">
+                        <img src="{{ $image_name ? asset('storage/images/profiles/original/' . $image_name) : asset('storage/images/profiles/original/' . $oldImage) }}"
+                            class="rounded-xl w-1/2 m-auto">
                     </div>
                     <div class="col-span-12 text-center">
                         <button class="btn btn-danger btn-sm text-bold"
@@ -47,13 +47,13 @@
             {{-- Image :: End --}}
 
             {{-- Basic Info :: Start --}}
-            <div class="col-span-12 md:col-span-6 bg-white rounded-xl p-4 text-center">
+            <div class="col-span-12 md:col-span-8 bg-white rounded-xl p-4 text-center">
                 {{-- Title --}}
                 <label for="basic-info" class="col-span-12 md:col-span-2 text-gray-800 font-bold m-0 text-lg mb-2">
                     {{ __('front/homePage.Basic Information') }}
                 </label>
 
-                {{-- First Name --}}
+                {{-- Name --}}
                 <div class="grid grid-cols-12 gap-x-6 gap-y-2 items-center bg-gray-100 p-2 rounded text-center my-2">
                     <label
                         class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">{{ __('front/homePage.First Name') }}</label>
@@ -112,10 +112,10 @@
                 {{-- Contacts --}}
                 <div class="grid grid-cols-12 gap-x-6 gap-y-2 items-center bg-red-100 p-2 rounded text-center my-2">
                     <label
-                        class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">{{ __('front/homePage.Contacts') }}</label>
+                        class="col-span-12 text-black font-bold m-0 text-center">{{ __('front/homePage.Contacts') }}</label>
 
                     {{-- Email --}}
-                    <div class="col-span-12 sm:col-span-8 sm:col-start-3 md:col-span-5">
+                    <div class="col-span-12 sm:col-span-8 sm:col-start-3 md:col-span-10 lg:col-span-6">
                         <input
                             class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('email') border-red-900 border-2 @enderror"
                             type="email" wire:model.lazy="email" dir="ltr"
@@ -127,7 +127,7 @@
                     </div>
 
                     {{-- Phone --}}
-                    <div class="col-span-12 md:col-span-5 grid grid-cols-6 gap-y-2">
+                    <div class="col-span-12 lg:col-span-6 grid grid-cols-6 gap-y-2">
                         @foreach ($phones as $index => $phone)
                             {{-- Add remove button if their are more than one phone number --}}
                             @if (count($phones) > 1)
@@ -173,61 +173,57 @@
 
                         {{-- Add New Phone Button --}}
                         <button
-                            class="col-start-3 col-span-2 bg-rose-500 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm text-center text-xs"
+                            class="col-start-3 col-span-2 bg-primary hover:bg-primaryDark text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm text-center text-xs"
                             wire:click.prevent="addPhone" title="{{ __('front/homePage.Add') }}">
                             <span class="material-icons rtl:ml-1 ltr:mr-1">
                                 add
                             </span>
-                            {{ __('front/homePage.Add') }}</button>
+                            {{ __('front/homePage.Add') }}
+                        </button>
                     </div>
                 </div>
             </div>
             {{-- Basic Info :: End --}}
 
             {{-- Other Info :: Start --}}
-            <div class="col-span-12 md:col-span-6 bg-white rounded-xl p-4 text-center">
+            <div class="col-span-12 md:col-span-4  bg-white rounded-xl p-4 text-center">
                 {{-- Title --}}
-                <label for="basic-info" class="col-span-12 text-gray-800 font-bold m-0 text-lg mb-2">
+                <label for="basic-info" class="text-gray-800 font-bold m-0 text-lg mb-2">
                     {{ __('front/homePage.Other Information') }}
                 </label>
 
-                <div class="grid grid-cols-12 gap-x-6 gap-y-2 items-center bg-gray-100 p-2 rounded text-center">
-                    <div class="col-span-12 grid grid-cols-12 gap-x-4 gap-y-2 items-center">
-                        {{-- Gender --}}
-                        <div class="col-span-6 py-1 grid grid-cols-3 gap-x-4 gap-y-2 items-center">
-                            <label for="gender"
-                                class="col-span-1 select-none cursor-pointer text-black font-medium m-0">{{ __('front/homePage.Gender') }}</label>
+                <div class="grid grid-cols-6 gap-x-6 gap-y-2 items-center bg-gray-100 p-2 rounded text-center">
+                    {{-- Gender --}}
+                    <div class="col-span-3 md:col-span-6 py-1 grid grid-cols-3 gap-x-4 gap-y-2 items-center">
+                        <label for="gender"
+                            class="col-span-1 md:col-span-3 select-none cursor-pointer text-black font-medium m-0">{{ __('front/homePage.Gender') }}</label>
 
-                            <div class="col-span-2">
-                                <select
-                                    class="col-span-2 rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('gender') border-red-900 border-2 @enderror"
-                                    wire:model.lazy="gender" id="gender" tabindex="7">
-                                    <option value="0">{{ __('front/homePage.Male') }}</option>
-                                    <option value="1">{{ __('front/homePage.Female') }}</option>
-                                </select>
-                                @error('gender')
-                                    <div
-                                        class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                                        {{ $message }}</div>
-                                @enderror
-                            </div>
+                        <div class="col-span-2 md:col-span-3">
+                            <select
+                                class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('gender') border-red-900 border-2 @enderror"
+                                wire:model.lazy="gender" id="gender" tabindex="7">
+                                <option value="0">{{ __('front/homePage.Male') }}</option>
+                                <option value="1">{{ __('front/homePage.Female') }}</option>
+                            </select>
+                            @error('gender')
+                                <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
+                                    {{ $message }}</div>
+                            @enderror
                         </div>
+                    </div>
 
-                        {{-- Birth Date --}}
-                        <div class="col-span-6 py-1 grid grid-cols-3 gap-x-4 gap-y-2 items-center">
-                            <label for="birth_date"
-                                class="col-span-1 select-none cursor-pointer text-black font-medium m-0">{{ __('front/homePage.Birth Date') }}</label>
-                            <div class="col-span-2">
-                                <input
-                                    class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('birth_date') border-red-900 border-2 @enderror"
-                                    type="date" wire:model.lazy="birth_date" id="birth_date" tabindex="9"
-                                    required>
-                                @error('birth_date')
-                                    <div
-                                        class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                                        {{ $message }}</div>
-                                @enderror
-                            </div>
+                    {{-- Birth Date --}}
+                    <div class="col-span-3 md:col-span-6 py-1 grid grid-cols-3 gap-x-4 gap-y-2 items-center">
+                        <label for="birth_date"
+                            class="col-span-1 md:col-span-3 select-none cursor-pointer text-black font-medium m-0">{{ __('front/homePage.Birth Date') }}</label>
+                        <div class="col-span-2 md:col-span-3">
+                            <input
+                                class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('birth_date') border-red-900 border-2 @enderror"
+                                type="date" wire:model.lazy="birth_date" id="birth_date" tabindex="9" required>
+                            @error('birth_date')
+                                <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
+                                    {{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -235,7 +231,7 @@
             {{-- Other Info :: End --}}
 
             {{-- Addresses :: Start --}}
-            <div class="col-span-12 md:col-span-6 bg-white rounded-xl p-4 text-center">
+            <div class="col-span-12 md:col-span-8 bg-white rounded-xl p-4 text-center">
                 {{-- Title --}}
                 <label for="basic-info" class="col-span-12 text-gray-800 font-bold m-0 text-lg mb-2">
                     {{ __('front/homePage.Addresses') }}
@@ -277,10 +273,10 @@
                                 {{-- Country --}}
                                 <div class="col-span-3 lg:col-span-1 grid grid-cols-3 items-center">
                                     <label
-                                        class="col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
+                                        class="col-span-1 lg:col-span-3 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                         for="country{{ $index }}">{{ __('front/homePage.Country') }}</label>
                                     <select
-                                        class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
+                                        class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
                                         wire:model='addresses.{{ $index }}.country_id'
                                         wire:change='$emit("countryUpdated",{{ $index }})'
                                         id="country{{ $index }}">
@@ -297,10 +293,10 @@
                                 {{-- Governorate --}}
                                 <div class="col-span-3 lg:col-span-1 grid grid-cols-3 items-center">
                                     <label
-                                        class="col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
+                                        class="col-span-1 lg:col-span-3 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                         for="governorate{{ $index }}">{{ __('front/homePage.Governorate') }}</label>
                                     <select
-                                        class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
+                                        class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
                                         wire:model='addresses.{{ $index }}.governorate_id'
                                         id="governorate{{ $index }}"
                                         wire:change='$emit("governorateUpdated",{{ $index }})'>
@@ -324,11 +320,11 @@
                                 {{-- City --}}
                                 <div class="col-span-3 lg:col-span-1 grid grid-cols-3 items-center">
                                     <label
-                                        class="col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
+                                        class="col-span-1 lg:col-span-3 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                         for="city{{ $index }}">{{ __('front/homePage.City') }}</label>
 
                                     <select
-                                        class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
+                                        class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
                                         wire:model='addresses.{{ $index }}.city_id'
                                         id="city{{ $index }}"
                                         wire:change='$emit("cityUpdated",{{ $index }})'>
@@ -388,7 +384,7 @@
 
                         {{-- Add New Address Button --}}
                         <button
-                            class="col-start-2 col-span-1 bg-rose-500 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm text-center text-xs"
+                            class="col-start-2 col-span-1 bg-primary hover:bg-primaryDark text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm text-center text-xs"
                             wire:click.prevent="addAddress" title="{{ __('front/homePage.Add') }}"> <span
                                 class="material-icons rtl:ml-1 ltr:mr-1">
                                 add
@@ -404,7 +400,7 @@
         {{-- Buttons Section Start --}}
         <div class="col-span-12 w-full flex mt-2 justify-around">
             <button type="button" wire:click.prevent="update"
-                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('front/homePage.Update') }}</button>
+                class="bg-success hover:bg-successDark text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('front/homePage.Update') }}</button>
 
             {{-- Back --}}
             <a href="{{ route('front.profile.index') }}"

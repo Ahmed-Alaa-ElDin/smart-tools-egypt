@@ -2,23 +2,23 @@
 
 @section('sub-content')
     {{-- User :: Left :: Start --}}
-    <div class="col-span-12 md:col-span-4 flex flex-col gap-4">
+    <div class="col-span-12 lg:col-span-4 flex flex-col gap-4">
         {{-- User Image, Name & Contacts : Start --}}
-        <div class="flex flex-col gap-4 bg-white rounded-xl shadow-lg p-8">
+        <div class="flex flex-col gap-4 bg-white rounded-xl shadow-lg p-8 overflow-hidden">
             {{-- User Image :: Start --}}
             @if ($user->profile_photo_path)
                 <div class="relative flex justify-center items-center max-w-max mx-auto mb-4">
                     <img src="{{ asset('storage/images/profiles/original/' . $user->profile_photo_path) }}"
-                        alt="{{ $user->f_name . ' ' . $user->l_name }}" class="w-72 h-72 m-auto rounded-circle shadow">
+                        alt="{{ $user->f_name . ' ' . $user->l_name }}" class="w-56 h-56 m-auto rounded-circle shadow">
                     <a href="{{ route('front.profile.edit', $user->id) }}"
-                        class="absolute block bottom-4 right-4 w-12 h-12 rounded-circle bg-primary flex justify-center items-center">
+                        class="absolute block bottom-2 right-2 w-12 h-12 rounded-circle bg-primary flex justify-center items-center">
                         <span class="material-icons text-white font-bold">
                             edit
                         </span>
                     </a>
                     @if ($user->email_verified_at)
                         <div
-                            class="absolute top-4 right-4 w-12 h-12 rounded-circle shadow bg-white flex justify-center items-center">
+                            class="absolute top-2 right-2 w-12 h-12 rounded-circle shadow bg-white flex justify-center items-center">
                             <span class="material-icons text-5xl text-success font-bold">
                                 verified
                             </span>
@@ -27,19 +27,19 @@
                 </div>
             @else
                 <div
-                    class="relative flex justify-center items-center bg-gray-100 w-72 h-72 max-w-max mx-auto mb-4 rounded-circle">
-                    <span class="block material-icons text-[300px] ">
+                    class="relative flex justify-center items-center bg-gray-100 w-56 h-56 max-w-max mx-auto mb-4 rounded-circle">
+                    <span class="block material-icons text-[200px] ">
                         person
                     </span>
                     <a href="{{ route('front.profile.edit', $user->id) }}"
-                        class="absolute block bottom-4 right-4 w-12 h-12 rounded-circle bg-primary flex justify-center items-center">
+                        class="absolute block bottom-2 right-2 w-12 h-12 rounded-circle bg-primary flex justify-center items-center">
                         <span class="material-icons text-white font-bold">
                             add
                         </span>
                     </a>
                     @if ($user->email_verified_at)
                         <div
-                            class="absolute top-4 right-4 w-12 h-12 rounded-circle shadow bg-white flex justify-center items-center">
+                            class="absolute top-2 right-2 w-12 h-12 rounded-circle shadow bg-white flex justify-center items-center">
                             <span class="material-icons text-5xl text-success font-bold">
                                 verified
                             </span>
@@ -85,7 +85,7 @@
             {{-- User Email :: End --}}
 
             {{-- User Phone :: Start --}}
-            <div class="flex justify-center items-center max-w-max m-auto">
+            <div class="flex flex-col justify-center items-center max-w-max m-auto">
                 @forelse ($user->phones as $phone)
                     <p class="text-lg font-bold text-center text-gray-700 flex items-center">
                         <span>
@@ -122,7 +122,7 @@
     {{-- User :: Left :: End --}}
 
     {{-- User :: Right :: Start --}}
-    <div class="col-span-12 md:col-span-8 grid grid-cols-12 gap-4">
+    <div class="col-span-12 lg:col-span-8 grid grid-cols-12 gap-4">
         {{-- User Addresses :: Start --}}
         <div class="col-span-12 md:order-2 flex flex-col gap-4 bg-white rounded-xl shadow-lg p-8">
             {{-- User Addresses :: Start --}}

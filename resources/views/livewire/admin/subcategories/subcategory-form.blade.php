@@ -227,14 +227,14 @@
     <div class="col-span-12 w-full flex flex-wrap mt-2 justify-around">
         @if ($subcategory_id != null)
             <button type="button" wire:click.prevent="update"
-                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Update') }}</button>
+                class="bg-success hover:bg-successDark text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Update') }}</button>
         @else
             {{-- Save and Back --}}
             <button type="button" wire:click.prevent="save"
-                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save') }}</button>
+                class="bg-success hover:bg-successDark text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save') }}</button>
             {{-- Save and New --}}
             <button type="button" wire:click.prevent="save('true')"
-                class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save and Add New Subcategory') }}</button>
+                class="bg-success hover:bg-successDark text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Save and Add New Subcategory') }}</button>
         @endif
         {{-- Back --}}
         <a href="{{ route('admin.subcategories.index') }}"

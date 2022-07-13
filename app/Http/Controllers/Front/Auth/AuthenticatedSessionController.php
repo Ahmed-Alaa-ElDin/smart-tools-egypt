@@ -90,15 +90,22 @@ class AuthenticatedSessionController extends Controller
                 ],
                 'email' => $user->email,
                 'auth_type' => 'facebook',
-                'profile_photo_path' => singleImageUpload($user->avatar_original, 'profile-', 'profiles'),
                 'last_visit_at' => now(),
                 'email_verified_at' => now(),
             ]
         );
 
-        $createdUser->update([
-            'visit_num' => $createdUser->visit_num + 1,
-        ]);
+        if ($createdUser->profile_photo_path == null) {
+            $createdUser->update([
+                'visit_num' => $createdUser->visit_num + 1,
+                'profile_photo_path' => singleImageUpload($user->avatar_original, 'profile-', 'profiles'),
+            ]);
+        } else {
+            $createdUser->update([
+                'visit_num' => $createdUser->visit_num + 1,
+            ]);
+        }
+
 
         $createdUser->assignRole('Customer');
 
@@ -158,7 +165,7 @@ class AuthenticatedSessionController extends Controller
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
-        /**
+    /**
      * Redirect the user to the Google authentication page.
      *
      * @return \Illuminate\Http\Response

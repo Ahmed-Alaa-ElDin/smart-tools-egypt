@@ -34,7 +34,7 @@
     <div class="flex flex-wrap gap-3 justify-around mt-4">
         {{-- Save --}}
         <button wire:click.prevent="save"
-            class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/deliveriesPages.Update') }}</button>
+            class="bg-success hover:bg-successDark text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/deliveriesPages.Update') }}</button>
         {{-- Back --}}
         <a href="{{ route('admin.countries.index') }}"
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/deliveriesPages.Back') }}</a>

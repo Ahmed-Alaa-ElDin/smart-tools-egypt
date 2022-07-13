@@ -136,6 +136,7 @@ return [
     "The offer is required." => "The offer is required",
     "Products are required." => "Products are required.",
     "Banners are required." => "Banners are required.",
+    'The phone number field is required' => 'The phone number field is required',
 
     /*
     |--------------------------------------------------------------------------
@@ -218,7 +219,7 @@ return [
         'banner_name'           => 'Banner',
         'selected_offer'        => 'Offer',
         'selected_banners'      => 'Banners',
-        'banner'                => 'Banner',
+        'auth_id'               => 'Social Media ID',
         'banner'                => 'Banner',
         'banner'                => 'Banner',
         'banner'                => 'Banner',

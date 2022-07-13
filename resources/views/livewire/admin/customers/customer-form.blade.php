@@ -381,14 +381,14 @@
         <div class="col-span-12 w-full flex mt-2 justify-around">
             @if ($customer_id != null)
                 <button type="button" wire:click.prevent="update"
-                    class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Update') }}</button>
+                    class="bg-success hover:bg-successDark text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Update') }}</button>
             @else
                 {{-- Save and Back --}}
                 <button type="button" wire:click.prevent="save"
-                    class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Save') }}</button>
+                    class="bg-success hover:bg-successDark text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Save') }}</button>
                 {{-- Save and New --}}
                 <button type="button" wire:click.prevent="save('true')"
-                    class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Save and Add New Customer') }}</button>
+                    class="bg-success hover:bg-successDark text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Save and Add New Customer') }}</button>
             @endif
             {{-- Back --}}
             <a href="{{ route('admin.customers.index') }}"
