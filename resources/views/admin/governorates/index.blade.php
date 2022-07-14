@@ -1,5 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => 'Governorates', 'titlePage'
-=> __('admin/deliveriesPages.All Governorates')])
+@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => 'Governorates', 'titlePage' => __('admin/deliveriesPages.All Governorates')])
 
 @section('content')
     <div class="content">
@@ -9,7 +8,8 @@
                 <ol class="breadcrumb text-sm">
                     <li class="breadcrumb-item hover:text-primary"><a
                             href="{{ route('admin.dashboard') }}">{{ __('admin/deliveriesPages.Dashboard') }}</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/deliveriesPages.All Governorates') }}
+                    <li class="breadcrumb-item active" aria-current="page">
+                        {{ __('admin/deliveriesPages.All Governorates') }}
                     </li>
                 </ol>
             </nav>
@@ -22,22 +22,30 @@
 
                         {{-- Card Head --}}
                         <div class="card-header card-header-primary">
-                            <div class="flex justify-between">
+                            <div class="flex flex-wrap justify-between gap-2">
                                 <div class=" ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
                                         {{ __('admin/deliveriesPages.Here you can manage governorates') }}</p>
                                 </div>
 
+                                {{-- Import Governorates From Bosta --}}
+                                {{-- {{ route('admin.governorates.importFromBosta') }} --}}
+                                <a href="" class="btn btn-sm bg-secondary font-bold hover:bg-secondayDark">
+                                    <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                        cloud_download
+                                    </span>
+                                    {{ __('admin/deliveriesPages.Import From Bosta') }}
+                                </a>
+
                                 {{-- Add New Governorate Button --}}
                                 @can('Add Governorate')
-                                    <div class="ltr:text-right rtl:text-left">
-                                        <a href="{{ route('admin.governorates.create') }}"
-                                            class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
-                                            <span class="material-icons rtl:ml-1 ltr:mr-1">
-                                                add
-                                            </span>
-                                            {{ __('admin/deliveriesPages.Add Governorate') }}</a>
-                                    </div>
+                                    <a href="{{ route('admin.governorates.create') }}"
+                                        class="btn btn-sm bg-success font-bold hover:bg-successDark">
+                                        <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                            add
+                                        </span>
+                                        {{ __('admin/deliveriesPages.Add Governorate') }}
+                                    </a>
                                 @endcan
                             </div>
                         </div>

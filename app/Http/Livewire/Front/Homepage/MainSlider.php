@@ -27,6 +27,6 @@ class MainSlider extends Component
 
         $this->topSubcategories = Subcategory::select('id', 'name', 'image_name', 'top')->where('top', '>', 0)->orderBy('top')->take(5)->get();
 
-        $this->products = $this->todayDeals->finalProducts->toArray();
+        $this->products = $this->todayDeals && $this->todayDeals->finalProducts ? $this->todayDeals->finalProducts->toArray() : [];
     }
 }

@@ -205,9 +205,9 @@ return [
     "Here you can manage city's delivery companies" => "Here you can manage city's delivery companies",
     "Edit City" => "Edit City",
     "Through this form you can edit the city" => "Through this form you can edit the city",
+    "Import From Bosta" => "Import From Bosta",
 
 
-    "Cities" => "Cities",
     "Cities" => "Cities",
     "Cities" => "Cities",
     "Cities" => "Cities",
