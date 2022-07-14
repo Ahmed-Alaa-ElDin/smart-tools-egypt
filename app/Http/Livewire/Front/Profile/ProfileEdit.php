@@ -97,7 +97,7 @@ class ProfileEdit extends Component
         }
 
         // get User Data
-        $this->user = User::with('phones', 'addresses')->findOrFail($this->user_id);
+        $this->user = User::with(['phones', 'addresses' => fn ($q) => $q->with(['country', 'governorate', 'city'])])->findOrFail($this->user_id);
 
         // get old image
         $this->oldImage = $this->user->profile_photo_path;

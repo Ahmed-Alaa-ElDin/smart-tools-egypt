@@ -1,15 +1,14 @@
 <div>
     {{-- Loader : Start --}}
-    <x-admin.waiting/>
+    <x-admin.waiting />
     {{-- Loader : End --}}
 
     <div class="flex flex-col">
         <div class="py-3 bg-white space-y-6">
-            <div class="flex justify-between gap-6 items-center">
-
+            <div class="flex flex-wrap justify-around md:justify-between gap-6 items-center my-2">
 
                 {{-- Search Box --}}
-                <div class="mt-1 flex rounded-md shadow-sm">
+                <div class="flex rounded-md shadow-sm">
                     <span
                         class="inline-flex items-center px-3 ltr:rounded-l-md rtl:rounded-r-md border border-r-0 border-gray-300 bg-gray-50 text-center text-gray-500 text-sm">
                         <span class="material-icons">
@@ -21,19 +20,17 @@
                 </div>
 
                 {{-- Deleted Countries --}}
-                @can('Force Delete Governorate')
-                    <div class="ltr:text-right rtl:text-left">
-                        <a href="{{ route('admin.governorates.softDeletedGovernorates') }}"
-                            class="btn btn-sm bg-red-600 hover:bg-red-700 focus:bg-red-600 active:bg-red-600 font-bold">
-                            <span class="material-icons rtl:ml-2 ltr:mr-2">
-                                delete_forever
-                            </span>
-                            {{ __('admin/deliveriesPages.Deleted Governorates') }}</a>
-                    </div>
-                @endcan
+                <div class="ltr:text-right rtl:text-left">
+                    <a href="{{ route('admin.governorates.softDeletedGovernorates') }}"
+                        class="btn btn-sm bg-red-600 hover:bg-red-700 focus:bg-red-600 active:bg-red-600 font-bold">
+                        <span class="material-icons rtl:ml-2 ltr:mr-2">
+                            delete_forever
+                        </span>
+                        {{ __('admin/deliveriesPages.Deleted Governorates') }}</a>
+                </div>
 
                 {{-- Pagination Number --}}
-                <div class="form-inline justify-end my-2">
+                <div class="form-inline justify-end">
                     {{ __('pagination.Show') }} &nbsp;
                     <select wire:model='perPage' class="form-control w-auto px-3 cursor-pointer">
                         <option>5</option>
@@ -227,7 +224,7 @@
                             @empty
                                 <tr>
                                     <td class="text-center py-2 font-bold" colspan="6">
-                                        {{ $search == ''? __('admin/deliveriesPages.No data in this table'): __('admin/deliveriesPages.No data available according to your search') }}
+                                        {{ $search == '' ? __('admin/deliveriesPages.No data in this table') : __('admin/deliveriesPages.No data available according to your search') }}
                                     </td>
                                 </tr>
                             @endforelse

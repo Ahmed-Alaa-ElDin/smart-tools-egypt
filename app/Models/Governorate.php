@@ -18,6 +18,7 @@ class Governorate extends Model
     protected $fillable = [
         'name',
         'country_id',
+        'bosta_id'
     ];
 
     protected function asJson($value)

@@ -177,6 +177,14 @@ return [
     "Special Marque"            =>      "علامة خاصة",
     "Please mention any special marque such as mosque, grocery, ... etc."                           =>      "يرجى ذكر أي علامة خاصة مثل مسجد، محل ... إلخ.",
     "Update"                    =>      "تحديث",
-    "Back"                      =>      "العودة",   
-
+    "Back"                      =>      "العودة",
+    "Order Discount :"          =>      "خصم على الطلب :",
+    "Will be determined in the next steps"        =>      "سيتم تحديده في الخطوات القادمة",
+    "Order Shipping Details"    =>      "تفاصيل شحن الطلب",
+    "Shipping info."            =>      "معلومات الشحن",
+    "Ordered Products"          =>      "منتجات تم طلبها",
+    "Add New Address"           =>      "إضافة عنوان جديد",
+    "Save"                      =>      "إضافة",
+    "Cancel"                    =>      "إلغاء",
+    "Remove Address"            =>      "حذف العنوان",
 ];

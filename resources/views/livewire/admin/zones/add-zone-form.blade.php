@@ -281,7 +281,7 @@
                                                 @foreach ($zones[$zone_index]['destinations'][$des_index]['allCities'] as $city_index => $city)
                                                     <label
                                                         for="zone_{{ $zone_index }}_destination_{{ $des_index }}_city_{{ $city_index }}"
-                                                        class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($city['id'], $zones[$zone_index]['destinations'][$des_index]['cities'])) bg-green-300 @endif select-none">
+                                                        class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($city['id'], $zones[$zone_index]['destinations'][$des_index]['cities'])) bg-successLight @endif select-none">
                                                         {{ $city['name'][session('locale')] }}
                                                         <input type="checkbox"
                                                             wire:model="zones.{{ $zone_index }}.destinations.{{ $des_index }}.cities"

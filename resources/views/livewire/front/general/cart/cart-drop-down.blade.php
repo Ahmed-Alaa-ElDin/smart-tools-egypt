@@ -116,7 +116,7 @@
                 {{-- Cart Buttons :: Start --}}
                 <div class="flex flex-col justify-center items-center gap-1 m-1 px-2">
                     {{-- Checkout :: Start --}}
-                    <a href="#" class="block w-full btn bg-secondary text-white font-bold">
+                    <a href="{{ route('front.order.shipping') }}" class="block w-full btn bg-secondary text-white font-bold">
                         <span class="material-icons">
                             local_shipping
                         </span>

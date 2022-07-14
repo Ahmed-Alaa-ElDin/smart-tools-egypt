@@ -132,12 +132,12 @@
                 </h3>
             </div>
             <div class="flex justify-center items-center m-auto w-full">
-                <div class="flex flex-col gap-4 w-full">
+                <div class="grid grid-cols-2 gap-4 w-full">
                     @forelse ($user->addresses as $address)
                         <div
-                            class="shadow-inner hover:shadow @if ($address->default) bg-green-100 @else bg-gray-100 @endif rounded-xl flex flex-col items-center justify-center gap-2 w-full p-2">
+                            class="col-span-2 lg:col-span-1 self-center shadow-inner hover:shadow @if ($address->default) bg-green-100 @else bg-gray-100 @endif rounded-xl flex flex-col items-center justify-center gap-2 w-full p-2">
                             @if ($address->default)
-                                <span class="text-xs font-bold text-success">
+                                <span class="text-xs font-bold text-successDark">
                                     {{ __('front/homePage.Default Shipping Address') }}
                                 </span>
                             @endif

@@ -54,5 +54,6 @@ return [
     "Login"                         =>      "تسجيل دخول",
     "Admins Login"                  =>      "تسجيل دخول المديرين",
     "If you don't have an account"  =>      "إذا كنت لا تمتلك حساب",
-
+    "Shipping info."                =>      "معلومات الشحن",
+    "Submit"                        =>      "تأكيد",
 ];

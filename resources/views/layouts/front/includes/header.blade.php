@@ -6,9 +6,9 @@
             <div class="flex items-center justify-between gap-4">
 
                 {{-- Logo : Start --}}
-                <div class="col-auto xl:col-3 pl-0 pr-3 flex items-center flex-col">
+                <div class="col-auto xl:col-3 pl-0 pr-3 flex items-center flex-col ">
                     <a href="{{ route('front.homepage') }}"
-                        class="flex items-center gap-2 simple-text logo-normal uppercase font-bold">
+                        class="flex items-center gap-2 simple-text logo-normal uppercase font-bold hover:text-current">
                         <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}"
                             alt="Smart Tools Egypt Logo">
                         <span class="hidden md:block">

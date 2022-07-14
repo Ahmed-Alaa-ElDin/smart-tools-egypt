@@ -8,13 +8,13 @@
         @if ($loop->last)
             {{-- ############## Buttons :: Start ############## --}}
             <div class="p-2 flex justify-center items-center">
-                <button class="btn bg-primary font-bold self-stretch" wire:click="">
+                <a class="btn bg-primary font-bold self-stretch" href="{{ route('front.order.shipping') }}">
                     {{ __('front/homePage.Proceed to Shipping Info.') }}
                     &nbsp;
                     <span class="material-icons">
                         local_shipping
                     </span>
-                </button>
+                </a>
             </div>
             {{-- ############## Buttons :: End ############## --}}
         @endif

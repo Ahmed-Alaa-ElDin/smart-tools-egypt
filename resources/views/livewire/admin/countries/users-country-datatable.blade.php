@@ -5,7 +5,7 @@
 
     <div class="flex flex-col">
         <div class="py-3 bg-white space-y-6">
-            <div class="flex justify-between gap-6 items-center">
+            <div class="flex flex-wrap justify-around md:justify-between gap-6 items-center">
 
                 {{-- Search Box --}}
                 <div class="col-span-1">
@@ -14,39 +14,14 @@
                             class="inline-flex items-center px-3 ltr:rounded-l-md rtl:rounded-r-md border border-r-0 border-gray-300 bg-gray-50 text-center text-gray-500 text-sm">
                             <span class="material-icons">
                                 search
-                            </span> </span>
+                            </span>
+                        </span>
                         <input type="text" name="company-website" id="company-website" wire:model='search'
                             class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                             placeholder="{{ __('admin/usersPages.Search ...') }}">
                     </div>
                 </div>
 
-                {{-- Download --}}
-                {{-- <div class="form-inline col-span-1 justify-center">
-                    <div class="flex justify-center">
-                        <button class="btn btn-success dropdown-toggle btn-round btn-sm text-white font-bold "
-                            type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="material-icons">
-                                file_download
-                            </span> &nbsp; {{ __('admin/usersPages.Export Users') }}
-                            &nbsp;</button>
-                        <div class="dropdown-menu">
-                            <a href="{{ route('admin.users.exportExcel') }}"
-                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-success focus:bg-success">
-                                <span class="material-icons">
-                                    file_present
-                                </span> &nbsp;&nbsp;
-                                {{ __('admin/usersPages.download all excel') }}</a>
-                            <a href="{{ route('admin.users.exportPDF') }}"
-                                class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600">
-                                <span class="material-icons">
-                                    picture_as_pdf
-                                </span>
-                                &nbsp;&nbsp;
-                                {{ __('admin/usersPages.download all pdf') }}</a>
-                        </div>
-                    </div>
-                </div> --}}
                 {{-- Pagination Number --}}
                 <div class="form-inline col-span-1 justify-end my-2">
                     {{ __('pagination.Show') }} &nbsp;
@@ -194,8 +169,7 @@
                                         {{-- Edit Role Button --}}
                                         @can("Edit User's Role")
                                             <a href="#" title="{{ __('admin/usersPages.Role') }}"
-                                                wire:click.prevent="editRolesSelect({{ $user->id }})"
-                                                class="m-0">
+                                                wire:click.prevent="editRolesSelect({{ $user->id }})" class="m-0">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-role hover:bg-roleHover rounded">
                                                     key
@@ -207,8 +181,7 @@
                                         {{-- Deleted Button --}}
                                         @can('Deleted User')
                                             <a href="#" title="{{ __('admin/usersPages.Delete') }}"
-                                                wire:click.prevent="deleteConfirm({{ $user->id }})"
-                                                class="m-0">
+                                                wire:click.prevent="deleteConfirm({{ $user->id }})" class="m-0">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
                                                     delete
@@ -220,7 +193,7 @@
                             @empty
                                 <tr>
                                     <td class="text-center py-2 font-bold" colspan="6">
-                                        {{ $search == ''? __('admin/usersPages.No data in this table'): __('admin/usersPages.No data available according to your search') }}
+                                        {{ $search == '' ? __('admin/usersPages.No data in this table') : __('admin/usersPages.No data available according to your search') }}
                                     </td>
                                 </tr>
                             @endforelse

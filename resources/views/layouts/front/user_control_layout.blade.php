@@ -86,6 +86,17 @@
                     </span>
                 </a>
 
+                {{-- todo :: Ordered Products --}}
+                <a href="{{ route('front.profile.index') }}"
+                    class="btn btn-sm m-0 flex justify-center items-center py-2 px-3 text-sm font-bold gap-1 rounded-xl @if ($page == 'ordered') bg-primary text-white @else bg-white text-gray-700  @endif">
+                    <span class="material-icons text-sm">
+                        shopping_basket
+                    </span>
+                    <span class="text-xs">
+                        {{ __('front/homePage.Ordered Products') }}
+                    </span>
+                </a>
+
             </nav>
             {{-- Mobile Only Nav :: End --}}
 

@@ -37,12 +37,22 @@
             <div class="h6 font-bold m-0">
                 {{ __('front/homePage.Subtotal :') }}
             </div>
-            <div class="flex rtl:flex-row-reverse gap-1 text-primary">
-                <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
-                <span class="font-bold text-xl"
-                    dir="ltr">{{ number_format(explode('.', $products_final_prices)[0], 0, '.', '\'') }}</span>
-                <span class="font-bold text-xs">{{ explode('.', $products_final_prices)[1] ?? '00' }}</span>
-            </div>
+            @if ($discount || $order_discount)
+                <del class="flex rtl:flex-row-reverse gap-1 text-primary">
+                    <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
+                    <span class="font-bold text-xl"
+                        dir="ltr">{{ number_format(explode('.', $products_final_prices)[0], 0, '.', '\'') }}</span>
+                    <span class="font-bold text-xs">{{ explode('.', $products_final_prices)[1] ?? '00' }}</span>
+                </del>
+            @else
+                <div class="flex rtl:flex-row-reverse gap-1 text-primary">
+                    <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
+                    <span class="font-bold text-xl"
+                        dir="ltr">{{ number_format(explode('.', $products_final_prices)[0], 0, '.', '\'') }}</span>
+                    <span class="font-bold text-xs">{{ explode('.', $products_final_prices)[1] ?? '00' }}</span>
+                </div>
+            @endif
+
         </div>
         {{-- ############## Subtotal :: End ############## --}}
 
@@ -52,35 +62,67 @@
                 <div class="h6 font-bold m-0">
                     {{ __('front/homePage.Extra Discount :') }}
                 </div>
-                <div class="flex gap-2">
-                    <span class="flex rtl:flex-row-reverse gap-1 text-success">
-                        -
-                        <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
+                <div class="flex gap-2 text-successDark">
+                    <span class="flex rtl:flex-row-reverse gap-1">
+                        <span class="font-bold text-sm">
+                            {{ __('front/homePage.EGP') }}
+                        </span>
                         <span class="font-bold text-xl"
                             dir="ltr">{{ number_format(explode('.', $discount)[0], 0, '.', '\'') }}</span>
                         <span
-                            class="font-bold text-xs">{{ explode('.', number_format($discount), 2)[1] ?? '00' }}</span>
+                            class="font-bold text-xs">{{ explode('.', number_format($discount, 2))[1] ?? '00' }}</span>
                     </span>
-                    <span class="text-success">
-                        ({{ $discount_percent }} %) -
+                    <span>
+                        ({{ $discount_percent }} %)
                     </span>
                 </div>
             </div>
         @endif
         {{-- ############## Extra Discount :: End ############## --}}
 
+        {{-- ############## Order Discount :: Start ############## --}}
+        @if ($order_discount)
+            <div class="w-100 flex justify-between items-center">
+                <div class="h6 font-bold m-0">
+                    {{ __('front/homePage.Order Discount :') }}
+                </div>
+                <div class="flex gap-2 text-successDark">
+                    <span class="flex rtl:flex-row-reverse gap-1">
+                        <span class="font-bold text-sm">
+                            {{ __('front/homePage.EGP') }}
+                        </span>
+                        <span class="font-bold text-xl"
+                            dir="ltr">{{ number_format(explode('.', $order_discount)[0], 0, '.', '\'') }}</span>
+                        <span
+                            class="font-bold text-xs">{{ explode('.', number_format($order_discount, 2))[1] ?? '00' }}</span>
+                    </span>
+                    <span>
+                        ({{ $order_discount_percent }} %)
+                    </span>
+                </div>
+            </div>
+        @endif
+        {{-- ############## Order Discount :: End ############## --}}
+
         {{-- ############## Shipping :: Start ############## --}}
-        {{-- todo : get actual value --}}
-        <div class="w-100 flex justify-between items-center">
-            <div class="h6 font-bold m-0">
-                {{ __('front/homePage.Shipping :') }}
+        @if ($products->count())
+            <div class="w-100 flex justify-between items-center">
+                <div class="h6 font-bold m-0">
+                    {{ __('front/homePage.Shipping :') }}
+                </div>
+                <div>
+                    @if ($free_shipping)
+                        <span class="text-successDark">
+                            {{ __('front/homePage.Free Shipping') }}
+                        </span>
+                    @else
+                        <span class="text-sm text-successDark">
+                            {{ __('front/homePage.Will be determined in the next steps') }}
+                        </span>
+                    @endif
+                </div>
             </div>
-            <div class="">
-                <span class="text-success">
-                    {{ __('front/homePage.Free Shipping') }}
-                </span>
-            </div>
-        </div>
+        @endif
         {{-- ############## Shipping :: End ############## --}}
     </div>
 
@@ -92,12 +134,12 @@
             <div class="h6 font-bold m-0">
                 {{ __('front/homePage.Total :') }}
             </div>
-            <div class="flex rtl:flex-row-reverse gap-1 text-success">
+            <div class="flex rtl:flex-row-reverse gap-1 text-primary">
                 <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
                 <span class="font-bold text-2xl"
                     dir="ltr">{{ number_format(explode('.', $products_best_prices)[0], 0, '.', '\'') }}</span>
                 <span
-                    class="font-bold text-xs">{{ number_format(explode('.', $products_best_prices)[1] ?? '00', 0) ?? '00' }}</span>
+                    class="font-bold text-xs">{{ explode('.', number_format($products_best_prices, 2))[1] ?? '00' }}</span>
             </div>
         </div>
         {{-- ############## Total :: End ############## --}}
@@ -108,13 +150,13 @@
     {{-- ############## Buttons :: Start ############## --}}
     @if (Gloudemans\Shoppingcart\Facades\Cart::instance('cart')->count() > 0)
         <div class="p-2 flex justify-center items-center">
-            <button class="btn bg-primary font-bold self-stretch" wire:click="">
+            <a class="btn bg-primary font-bold self-stretch" href="{{ route('front.order.shipping') }}">
                 {{ __('front/homePage.Proceed to Shipping Info.') }}
                 &nbsp;
                 <span class="material-icons">
                     local_shipping
                 </span>
-            </button>
+            </a>
         </div>
     @else
         <div class="text-center p-3">

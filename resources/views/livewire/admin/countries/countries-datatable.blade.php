@@ -5,8 +5,7 @@
 
     <div class="flex flex-col">
         <div class="py-3 bg-white space-y-6">
-            <div class="flex justify-between gap-6 items-center">
-
+            <div class="flex flex-wrap justify-around md:justify-between gap-6 items-center">
 
                 {{-- Search Box --}}
                 <div class="mt-1 flex rounded-md shadow-sm">
@@ -21,16 +20,14 @@
                 </div>
 
                 {{-- Deleted Countries --}}
-                @can('Force Delete Country')
-                    <div class="ltr:text-right rtl:text-left">
-                        <a href="{{ route('admin.countries.softDeletedCountries') }}"
-                            class="btn btn-sm bg-red-600 hover:bg-red-700 focus:bg-red-600 active:bg-red-600 font-bold">
-                            <span class="material-icons rtl:ml-2 ltr:mr-2">
-                                delete_forever
-                            </span>
-                            {{ __('admin/deliveriesPages.Deleted Countries') }}</a>
-                    </div>
-                @endcan
+                <div class="ltr:text-right rtl:text-left">
+                    <a href="{{ route('admin.countries.softDeletedCountries') }}"
+                        class="btn btn-sm bg-red-600 hover:bg-red-700 focus:bg-red-600 active:bg-red-600 font-bold">
+                        <span class="material-icons rtl:ml-2 ltr:mr-2">
+                            delete_forever
+                        </span>
+                        {{ __('admin/deliveriesPages.Deleted Countries') }}</a>
+                </div>
 
                 {{-- Pagination Number --}}
                 <div class="form-inline justify-end my-2">
@@ -227,8 +224,7 @@
                                         {{-- Delete Button --}}
                                         @can('Deleted Country')
                                             <a href="#" title="{{ __('admin/deliveriesPages.Delete') }}"
-                                                wire:click.prevent="deleteConfirm({{ $country->id }})"
-                                                class="m-0">
+                                                wire:click.prevent="deleteConfirm({{ $country->id }})" class="m-0">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
                                                     delete
@@ -240,7 +236,7 @@
                             @empty
                                 <tr>
                                     <td class="text-center py-2 font-bold" colspan="6">
-                                        {{ $search == ''? __('admin/deliveriesPages.No data in this table'): __('admin/deliveriesPages.No data available according to your search') }}
+                                        {{ $search == '' ? __('admin/deliveriesPages.No data in this table') : __('admin/deliveriesPages.No data available according to your search') }}
                                     </td>
                                 </tr>
                             @endforelse

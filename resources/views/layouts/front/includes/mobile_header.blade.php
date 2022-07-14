@@ -1,7 +1,7 @@
 <div class="mobile-bottom-header fixed lg:hidden bottom-0 bg-white shadow-lg border-top rounded-top w-full">
     <div class="flex justify-between items-center">
         <div class="col">
-            <a href="{{ route('front.homepage') }}" class="block text-center pb-2 pt-3">
+            <a href="{{ route('front.homepage') }}" class="block text-center pb-2 pt-3 text-xs">
                 <span class="material-icons opacity-60 text-xl">
                     home
                 </span>
@@ -9,7 +9,7 @@
             </a>
         </div>
         <div class="col">
-            <a href="#" class="block text-center pb-2 pt-3">
+            <a href="#" class="block text-center pb-2 pt-3 text-xs">
                 <span class="material-icons opacity-60 text-xl">
                     category
                 </span>
@@ -17,7 +17,7 @@
             </a>
         </div>
         <div class="col">
-            <a href="{{ route('front.cart') }}" class="relative flex justify-center text-center pb-2 pt-3 min-w-max">
+            <a href="{{ route('front.cart') }}" class="relative flex justify-center text-center pb-2 pt-3 min-w-max text-xs">
                 <span
                     class="flex justify-center items-center bg-primary h-12 w-12 border border-white border-4 rounded-circle absolute -mt-12">
                     <span class="material-icons text-white">
@@ -31,7 +31,7 @@
             </a>
         </div>
         <div class="col">
-            <a href="#" class="block text-center pb-2 pt-3">
+            <a href="#" class="block text-center pb-2 pt-3 text-xs">
                 <span class="inline-block relative px-2">
                     <span class="material-icons opacity-60 text-xl">
                         notifications
@@ -41,7 +41,7 @@
             </a>
         </div>
         <div class="col">
-            <a href="{{ route('front.profile.index') }}" class="block text-center pb-2 pt-3">
+            <a href="{{ route('front.profile.index') }}" class="block text-center pb-2 pt-3 text-xs">
                 <span class="block mx-auto">
                     @if (auth()->user() && auth()->user()->profile_photo_path)
                         <img class="h-8 w-8 rounded-full m-auto"

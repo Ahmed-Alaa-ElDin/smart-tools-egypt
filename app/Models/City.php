@@ -18,6 +18,7 @@ class City extends Model
     protected $fillable = [
         'name',
         'governorate_id',
+        'bosta_id'
     ];
 
     protected function asJson($value)
