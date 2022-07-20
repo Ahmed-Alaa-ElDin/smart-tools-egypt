@@ -209,5 +209,7 @@ return [
     "Here you can manage city's delivery companies" => "من خلال هذه الصفحة يمكنك التحكم بالشركات التي تقوم بالشحن إلى منطقة معين",
     "Edit City" => "تعديل المنطقة",
     "Through this form you can edit the city" => "من خلال هذه الصفحة يمكنك تحديث بيانات المنطقة",
-    "Import From Bosta" => "استيراد من بوستا",
+    "Import From Bosta" => "استيراد من بوسطة",
+    "Governorates Imported successfully" => "تم استيراد المحافظات بنجاح",
+    "Governorates haven't been Imported" => "لم يتم استيراد المحافظات",
 ];

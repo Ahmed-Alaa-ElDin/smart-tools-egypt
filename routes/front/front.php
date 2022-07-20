@@ -24,7 +24,8 @@ Route::group([
 
     ################ Cart & Order Controller :: Start ##############
     Route::get('/cart', [CartController::class, 'index'])->name('cart');
-    
+
     Route::get('/order/shipping', [OrderController::class, 'shipping'])->name('order.shipping');
+    Route::get('/order/billing', [OrderController::class, 'billing'])->name('order.billing')->middleware('auth');
     ################ Cart & Order Controller :: End ##############
 });

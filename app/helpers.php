@@ -198,7 +198,7 @@ function getBestOfferForProduct($product_id)
     $product->best_price = min($all_prices);
 
     // Get the Best Points
-    $product->best_points = max($all_points);
+    $product->best_points = array_sum($all_points);
 
     $product->free_shipping = $free_shipping;
     ############ Get Best Offer for all products :: End ############
@@ -346,7 +346,7 @@ function getBestOfferForProducts($products_id)
         $product->best_price = min($all_prices);
 
         // Get the Best Points
-        $product->best_points = max($all_points);
+        $product->best_points = array_sum($all_points);
 
         // Get the Free Shipping
         $product->free_shipping = $free_shipping;

@@ -9,6 +9,7 @@ use Livewire\Component;
 class OrderProductsList extends Component
 {
     public $products;
+    public $step;
 
     protected $listeners = [
         'cartUpdated' => 'getProducts',

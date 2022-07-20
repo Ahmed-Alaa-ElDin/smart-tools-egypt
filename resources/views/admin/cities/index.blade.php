@@ -1,5 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => 'Cities', 'titlePage'
-=> __('admin/deliveriesPages.All Cities')])
+@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => 'Cities', 'titlePage' => __('admin/deliveriesPages.All Cities')])
 
 @section('content')
     <div class="content">
@@ -28,16 +27,24 @@
                                         {{ __('admin/deliveriesPages.Here you can manage cities') }}</p>
                                 </div>
 
+                                <a href="{{ route('admin.cities.importFromBosta') }}"
+                                    class="btn btn-sm bg-secondary hover:bg-secondaryDark focus:bg-secondary active:bg-secondary font-bold">
+                                    <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                        cloud_download
+                                    </span>
+                                    {{ __('admin/deliveriesPages.Import From Bosta') }}
+                                </a>
+
+
                                 {{-- Add New City Button --}}
                                 @can('Add City')
-                                    <div class="ltr:text-right rtl:text-left">
-                                        <a href="{{ route('admin.cities.create') }}"
-                                            class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
-                                            <span class="material-icons rtl:ml-1 ltr:mr-1">
-                                                add
-                                            </span>
-                                            {{ __('admin/deliveriesPages.Add City') }}</a>
-                                    </div>
+                                    <a href="{{ route('admin.cities.create') }}"
+                                        class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
+                                        <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                            add
+                                        </span>
+                                        {{ __('admin/deliveriesPages.Add City') }}
+                                    </a>
                                 @endcan
                             </div>
                         </div>

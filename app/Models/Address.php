@@ -16,7 +16,7 @@ class Address extends Model
         'city_id',
         'details',
         'default',
-        'special_marque'
+        'landmarks'
     ];
 
     // One to many relationship (Inverse)  Country --> Addresses

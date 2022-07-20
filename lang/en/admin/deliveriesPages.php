@@ -206,10 +206,8 @@ return [
     "Edit City" => "Edit City",
     "Through this form you can edit the city" => "Through this form you can edit the city",
     "Import From Bosta" => "Import From Bosta",
-
-
-    "Cities" => "Cities",
-    "Cities" => "Cities",
+    "Governorates Imported successfully" => "Governorates Imported successfully",
+    "Governorates haven't been Imported" => "Governorates haven't been Imported",
     "Cities" => "Cities",
 
 

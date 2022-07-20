@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Governorate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
+use Throwable;
 
 class GovernorateController extends Controller
 {
@@ -58,7 +62,7 @@ class GovernorateController extends Controller
      */
     public function edit($governorate)
     {
-        return view('admin.governorates.edit',compact('governorate'));
+        return view('admin.governorates.edit', compact('governorate'));
     }
 
     /**
@@ -93,22 +97,54 @@ class GovernorateController extends Controller
     {
         $governorate = Governorate::withTrashed()->findOrFail($governorate);
 
-        return view('admin.governorates.cities',compact('governorate'));
+        return view('admin.governorates.cities', compact('governorate'));
     }
 
     public function usersGovernorate($governorate)
     {
         $governorate = Governorate::withTrashed()->findOrFail($governorate);
 
-        return view('admin.governorates.users',compact('governorate'));
+        return view('admin.governorates.users', compact('governorate'));
     }
 
     public function deliveriesGovernorate($governorate)
     {
         $governorate = Governorate::withTrashed()->findOrFail($governorate);
 
-        return view('admin.governorates.deliveries',compact('governorate'));
+        return view('admin.governorates.deliveries', compact('governorate'));
     }
 
+    public function getBostaGovernorate()
+    {
+        DB::beginTransaction();
 
+        try {
+            $encoded_api_governorates = Http::acceptJson()->get('https://app.bosta.co/api/v0/cities')->body();
+            $decoded_api_governorates = json_decode($encoded_api_governorates);
+
+            foreach ($decoded_api_governorates as $governorate) {
+                Governorate::updateOrCreate(
+                    ['bosta_id' => $governorate->_id],
+                    [
+                        'name' => [
+                            'en' => $governorate->name,
+                            'ar' => $governorate->nameAr,
+                        ],
+                        'country_id' => 1,
+                    ]
+                );
+            }
+
+            DB::commit();
+
+            Session::flash('success', __('admin/deliveriesPages.Governorates Imported successfully'));
+
+            return redirect()->route('admin.governorates.index');
+        } catch (Throwable $th) {
+            DB::rollBack();
+
+            Session::flash('error', __("admin/deliveriesPages.Governorates haven't been Imported"));
+            return redirect()->route('admin.governorates.index');
+        }
+    }
 }

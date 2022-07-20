@@ -83,7 +83,7 @@ class ProfileEdit extends Component
             'governorate_id' => 1,
             'city_id' => 1,
             'details' => '',
-            'special_marque' => '',
+            'landmarks' => '',
             'default' => 1
         ]];
 
@@ -147,7 +147,7 @@ class ProfileEdit extends Component
             'governorate_id' => 1,
             'city_id' => 1,
             'details' => '',
-            'special_marque' => '',
+            'landmarks' => '',
             'default' => 1
         ]];
 
@@ -228,7 +228,7 @@ class ProfileEdit extends Component
             'governorate_id' => 1,
             'city_id' => 1,
             'details' => '',
-            'special_marque' => '',
+            'landmarks' => '',
             'default' => 0
         ];
 
@@ -331,7 +331,7 @@ class ProfileEdit extends Component
                         'governorate_id' => $address['governorate_id'],
                         'city_id' => $address['city_id'],
                         'details' => $address['details'],
-                        'special_marque' => $address['special_marque'],
+                        'landmarks' => $address['landmarks'],
                         'default' => $index == $this->defaultAddress ? 1 : 0,
                     ]);
                     array_push($newAddresses, $newAddress);

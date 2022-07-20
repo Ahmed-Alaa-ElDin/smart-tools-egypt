@@ -127,7 +127,7 @@
 
             {{-- Free Shipping :: Start --}}
             @if ($product['free_shipping'])
-                <span class="text-xs font-bold text-success text-right rtl:text-left w-full">
+                <span class="text-xs font-bold text-success text-center w-full">
                     {{ __('front/homePage.Free Shipping') }}
                 </span>
             @endif

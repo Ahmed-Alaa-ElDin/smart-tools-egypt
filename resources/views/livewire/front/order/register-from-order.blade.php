@@ -203,14 +203,14 @@
                                                 class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 overflow-hidden"></textarea>
                                         </div>
 
-                                        {{-- Special Marque --}}
+                                        {{-- Landmarks --}}
                                         <div
-                                            class="special_marque col-span-3 grid grid-cols-6 justify-between items-center">
+                                            class="landmarks col-span-3 grid grid-cols-6 justify-between items-center">
                                             <label
                                                 class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
-                                                for="special_marque">{{ __('front/homePage.Special Marque') }}</label>
-                                            <textarea id="special_marque" rows="2" wire:model.lazy="address.special_marque" dir="rtl"
-                                                placeholder="{{ __('front/homePage.Please mention any special marque such as mosque, grocery, ... etc.') }}"
+                                                for="landmarks">{{ __('front/homePage.Landmarks') }}</label>
+                                            <textarea id="landmarks" rows="2" wire:model.lazy="address.landmarks" dir="rtl"
+                                                placeholder="{{ __('front/homePage.Please mention any landmarks such as mosque, grocery, ... etc.') }}"
                                                 class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"></textarea>
                                         </div>
                                     </div>
@@ -225,11 +225,20 @@
                             </div>
 
                             {{-- Submit :: Start --}}
-                            <div class="col-span-12 w-full group grid grid-cols-12">
+                            <div class="col-span-12 w-full group flex justify-around items-center">
                                 <button wire:click.prevent="submit" type="button"
-                                    class="col-span-4 col-start-5 md:col-span-2 md:col-start-6 bg-primary hover:bg-primaryDark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                    class="btn bg-success hover:bg-successDark text-white font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
                                     {{ __('auth/authentication.Submit') }}
                                 </button>
+
+                                <a href="{{ route('front.cart') }}"
+                                    class="btn bg-primary hover:bg-primaryDark text-white font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
+                                    <span class="material-icons">
+                                        shopping_cart
+                                    </span>
+                                    &nbsp;
+                                    {{ __('auth/authentication.Back to Cart') }}
+                                </a>
                             </div>
                             {{-- Submit :: End --}}
                         </div>

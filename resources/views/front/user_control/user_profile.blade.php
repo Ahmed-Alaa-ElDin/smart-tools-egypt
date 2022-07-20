@@ -170,7 +170,7 @@
                             @endif
                         </div>
                     @empty
-                        <span class="font-bold text-center text-danger">
+                        <span class="col-span-2 font-bold text-center text-danger">
                             {{ __('front/homePage.No Addresses Available') }}
                         </span>
                     @endforelse

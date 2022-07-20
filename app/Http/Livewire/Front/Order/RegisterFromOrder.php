@@ -19,11 +19,11 @@ class RegisterFromOrder extends Component
 {
     public $f_name, $l_name, $phone, $email, $password, $password_confirmation,
         $address = [
-            'country_id' => 1,
-            'governorate_id' => 1,
-            'city_id' => 1,
+            'country_id' => null,
+            'governorate_id' => null,
+            'city_id' => null,
             'details' => null,
-            'special_marque' => null,
+            'landmarks' => null,
         ];
 
     public $countries = [], $governorates = [], $cities = [];
@@ -119,7 +119,7 @@ class RegisterFromOrder extends Component
             'governorate_id' => $this->address['governorate_id'],
             'city_id' => $this->address['city_id'],
             'details' => $this->address['details'],
-            'special_marque' => $this->address['special_marque'],
+            'landmarks' => $this->address['landmarks'],
             'default' => 1,
         ]);
 

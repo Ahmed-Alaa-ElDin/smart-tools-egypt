@@ -335,14 +335,14 @@
                                 class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 overflow-hidden"></textarea>
                         </div>
 
-                        {{-- Special Marque --}}
-                        <div class="special_marque col-span-3 grid grid-cols-6 justify-between items-center">
+                        {{-- Landmarks --}}
+                        <div class="landmarks col-span-3 grid grid-cols-6 justify-between items-center">
                             <label
                                 class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
-                                for="special_marque{{ $index }}">{{ __('admin/usersPages.Special Marque') }}</label>
-                            <textarea id="special_marque{{ $index }}" rows="2"
-                                wire:model.lazy="addresses.{{ $index }}.special_marque" dir="rtl"
-                                placeholder="{{ __('admin/usersPages.Please mention any special marque such as mosque, grocery, ... etc.') }}"
+                                for="landmarks{{ $index }}">{{ __('admin/usersPages.Landmarks') }}</label>
+                            <textarea id="landmarks{{ $index }}" rows="2"
+                                wire:model.lazy="addresses.{{ $index }}.landmarks" dir="rtl"
+                                placeholder="{{ __('admin/usersPages.Please mention any landmarks such as mosque, grocery, ... etc.') }}"
                                 class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"></textarea>
                         </div>
                     </div>

@@ -66,16 +66,19 @@ class User extends Authenticatable
         'last_visit_at' => 'datetime'
     ];
 
+    protected $with = ['addresses', 'phones'];
+
     protected function asJson($value)
     {
         return json_encode($value, JSON_UNESCAPED_UNICODE);
     }
 
     // get default phone
-    public function getPhoneAttribute($value)
-    {
-        return Phone::where('user_id', $this->id)->where('phone', $value)->where('default', 1)->first()->phone;
-    }
+    // public function getAddressesAttribute()
+    // {
+    //     return $this->with(['addresses'=>fn($q)=>$q->where('default',1)])->addresses();
+    // }
+
     // One to many relationship  User --> Addresses
     public function addresses()
     {

@@ -10,13 +10,15 @@
                 class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">{{ __('admin/deliveriesPages.Company Name') }}</label>
             {{-- Name Ar --}}
             <div class="col-span-6 md:col-span-5">
-                <input class="py-1 w-full rounded text-center border-gray-300 text-gray-500 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300" type="text"
-                    wire:model.lazy="name.ar" disabled>
+                <input
+                    class="py-1 w-full rounded text-center border-gray-300 text-gray-500 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
+                    type="text" wire:model.lazy="name.ar" disabled>
             </div>
             {{-- Name En --}}
             <div class="col-span-6 md:col-span-5 ">
-                <input class="py-1 w-full rounded text-center border-gray-300 text-gray-500 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300" type="text"
-                    wire:model.lazy="name.en" disabled>
+                <input
+                    class="py-1 w-full rounded text-center border-gray-300 text-gray-500 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
+                    type="text" wire:model.lazy="name.en" disabled>
             </div>
         </div>
 
@@ -46,7 +48,9 @@
                                 wire:click="activate({{ $zone_index }})">
                                 <span
                                     class="inline-block rtl:ml-2 ltr:mr-2 font-bold text-xs">{{ __('admin/deliveriesPages.Activate') }}</span>
-                                {!! $zone['is_active'] ? '<span class="inline-block cursor-pointer material-icons text-success text-3xl">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 text-3xl">toggle_off</span>' !!}
+                                {!! $zone['is_active']
+                                    ? '<span class="inline-block cursor-pointer material-icons text-success text-3xl">toggle_on</span>'
+                                    : '<span class="block cursor-pointer material-icons text-red-600 text-3xl">toggle_off</span>' !!}
                             </div>
 
 
@@ -180,9 +184,10 @@
                                             <div class="text-gray-900 bg-white p-1 m-0 shadow rounded cursor-pointer btn @if (empty($zones[$zone_index]['destinations'][$des_index]['allCities'])) hidden @endif"
                                                 wire:click="selectAll({{ $zone_index }},{{ $des_index }})"
                                                 title="{{ __('admin/deliveriesPages.Select All') }}">
-                                                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
-                                                    width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
-                                                    viewBox="0 0 24 24" class="inline-block w-6 h-6">
+                                                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+                                                    role="img" width="1em" height="1em"
+                                                    preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"
+                                                    class="inline-block w-6 h-6">
                                                     <path fill="currentColor"
                                                         d="M20.496 5.627A2.25 2.25 0 0 1 22 7.75v10A4.25 4.25 0 0 1 17.75 22h-10a2.25 2.25 0 0 1-2.123-1.504l2.097.004H17.75a2.75 2.75 0 0 0 2.75-2.75v-10l-.004-.051V5.627ZM17.246 2a2.25 2.25 0 0 1 2.25 2.25v12.997a2.25 2.25 0 0 1-2.25 2.25H4.25A2.25 2.25 0 0 1 2 17.247V4.25A2.25 2.25 0 0 1 4.25 2h12.997Zm0 1.5H4.25a.75.75 0 0 0-.75.75v12.997c0 .414.336.75.75.75h12.997a.75.75 0 0 0 .75-.75V4.25a.75.75 0 0 0-.75-.75Zm-7.665 7.858L13.47 7.47a.75.75 0 0 1 1.133.976l-.073.084l-4.5 4.5a.75.75 0 0 1-1.056.004L8.9 12.95l-1.5-2a.75.75 0 0 1 1.127-.984l.073.084l.981 1.308L13.47 7.47l-3.89 3.888Z" />
                                                 </svg>
@@ -192,9 +197,10 @@
                                             <div class="text-gray-900 bg-white p-1 m-0 shadow rounded cursor-pointer btn @if (empty($zones[$zone_index]['destinations'][$des_index]['allCities'])) hidden @endif"
                                                 wire:click="deselectAll({{ $zone_index }},{{ $des_index }})"
                                                 title="{{ __('admin/deliveriesPages.Deselect All') }}">
-                                                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
-                                                    width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
-                                                    viewBox="0 0 24 24" class="inline-block w-6 h-6">
+                                                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+                                                    role="img" width="1em" height="1em"
+                                                    preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"
+                                                    class="inline-block w-6 h-6">
                                                     <path fill="currentColor"
                                                         d="M20.496 5.627A2.25 2.25 0 0 1 22 7.75v10A4.25 4.25 0 0 1 17.75 22h-10a2.25 2.25 0 0 1-2.123-1.504l2.097.004H17.75a2.75 2.75 0 0 0 2.75-2.75v-10l-.004-.051V5.627ZM17.246 2a2.25 2.25 0 0 1 2.25 2.25v12.997a2.25 2.25 0 0 1-2.25 2.25H4.25A2.25 2.25 0 0 1 2 17.247V4.25A2.25 2.25 0 0 1 4.25 2h12.997Zm0 1.5H4.25a.75.75 0 0 0-.75.75v12.997c0 .414.336.75.75.75h12.997a.75.75 0 0 0 .75-.75V4.25a.75.75 0 0 0-.75-.75Z" />
                                                 </svg>
@@ -228,14 +234,16 @@
                                                 wire:model='zones.{{ $zone_index }}.destinations.{{ $des_index }}.country_id'
                                                 id="destination_{{ $zone_index }}_country_{{ $des_index }}"
                                                 wire:change='countryUpdated({{ $zone_index }},{{ $des_index }})'>
-                                                <option value="">{{ __('admin/deliveriesPages.Select Country') }}
+                                                <option value="">
+                                                    {{ __('admin/deliveriesPages.Select Country') }}
                                                 </option>
                                                 @foreach ($countries as $country)
                                                     <option value="{{ $country['id'] }}">
                                                         {{ $country['name'][session('locale')] }}</option>
                                                 @endforeach
                                             </select>
-                                            @error('zones.*.destinations.*.country_id')
+                                            @error('zones.' . $zone_index . '.destinations.' . $zone_index .
+                                                '.country_id')
                                                 <div
                                                     class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                                                     {{ $message }}</div>
@@ -260,7 +268,7 @@
                                                             {{ $governorate['name'][session('locale')] }}</option>
                                                     @endforeach
                                                 </select>
-                                                @error('zones.*.destinations.*.governorate_id')
+                                                @error('zones.'.$zone_index.'.destinations.'.$zone_index.'.governorate_id')
                                                     <div
                                                         class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                                                         {{ $message }}</div>
@@ -281,7 +289,7 @@
                                                 @foreach ($zones[$zone_index]['destinations'][$des_index]['allCities'] as $city_index => $city)
                                                     <label
                                                         for="zone_{{ $zone_index }}_destination_{{ $des_index }}_city_{{ $city_index }}"
-                                                        class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($city['id'], $zones[$zone_index]['destinations'][$des_index]['cities'])) bg-successLight @endif select-none">
+                                                        class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($city['id'], $zones[$zone_index]['destinations'][$des_index]['cities'])) bg-successLighter @endif select-none">
                                                         {{ $city['name'][session('locale')] }}
                                                         <input type="checkbox"
                                                             wire:model="zones.{{ $zone_index }}.destinations.{{ $des_index }}.cities"

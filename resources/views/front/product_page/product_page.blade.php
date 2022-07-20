@@ -98,7 +98,8 @@
                                 <span>
                                     {{ __('front/homePage.EGP') }}
                                 </span>
-                                <span class="font-bold text-3xl" dir="ltr">{{ number_format(explode('.', $product->base_price)[0],0,'.','\'') }}</span>
+                                <span class="font-bold text-3xl"
+                                    dir="ltr">{{ number_format(explode('.', $product->base_price)[0], 0, '.', '\'') }}</span>
                             </del>
                         </div>
                         {{-- Base Price :: End --}}
@@ -112,7 +113,8 @@
                                 <span>
                                     {{ __('front/homePage.EGP') }}
                                 </span>
-                                <span class="font-bold text-2xl" dir="ltr">{{ number_format(explode('.', $product->final_price)[0],0,'.','\'') }}</span>
+                                <span class="font-bold text-2xl"
+                                    dir="ltr">{{ number_format(explode('.', $product->final_price)[0], 0, '.', '\'') }}</span>
                                 <span
                                     class="font-bold text-xs">{{ explode('.', $product->final_price)[1] ?? '00' }}</span>
                             </span>
@@ -129,8 +131,8 @@
                                     class="font-bold text-xl">(%{{ number_format((($product->base_price - $product->final_price) * 100) / $product->base_price, 2) ?? '%0' }})</span>
                                 &nbsp;
                                 <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
-                                <span
-                                    class="font-bold text-xl" dir="ltr">{{ number_format(explode('.', $product->base_price - $product->final_price)[0],0,'.','\'') }}</span>
+                                <span class="font-bold text-xl"
+                                    dir="ltr">{{ number_format(explode('.', $product->base_price - $product->final_price)[0], 0, '.', '\'') }}</span>
                                 <span
                                     class="font-bold text-xs">{{ explode('.', $product->base_price - $product->final_price)[1] ?? '00' }}</span>
                             </span>
@@ -242,7 +244,7 @@
                 {{-- Delivery Details :: Start --}}
                 <div class="col-span-12 md:col-span-4">
                     {{-- todo : delivery details --}}
-                    @livewire('front.product.delivery.product-delivery',['free_shipping'=>$product_offer->free_shipping,'product_weight'=>$product->weight])
+                    @livewire('front.product.delivery.product-delivery', ['free_shipping' => $product_offer->free_shipping, 'product_weight' => $product->weight])
                 </div>
                 {{-- Delivery Details :: End --}}
 
@@ -398,8 +400,105 @@
                     {{-- FAQ Body :: Start --}}
                     <div class="hidden p-4 rounded-lg flex items-center justify-center" id="faq" role="tabpanel"
                         aria-labelledby="faq-tab">
-                        {{-- todo : FAQ System --}}
-                        FAQ
+                        <div id="accordion-collapse" data-accordion="collapse" class="w-full md:w-1/2">
+                            <h2 id="how-to-buy-heading">
+                                <button type="button"
+                                    class="flex items-center justify-between w-full p-5 font-medium text-left border border-gray-200 rounded-t-xl focus:ring-2 focus:ring-gray-200 hover:bg-gray-100 bg-gray-100 text-gray-900"
+                                    data-accordion-target="#how-to-buy-body" aria-expanded="true"
+                                    aria-controls="how-to-buy-body">
+                                    <span>{!! __('front/homePage.How to buy Q', ['product_name' => $product->name]) !!}</span>
+                                    <svg data-accordion-icon="" class="w-6 h-6 rotate-180 shrink-0" fill="currentColor"
+                                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                </button>
+                            </h2>
+                            <div id="how-to-buy-body" class="" aria-labelledby="how-to-buy-heading">
+                                <div class="p-5 font-light border border-gray-200">
+                                    <p class="mb-2 text-gray-500 dark:text-gray-400">
+                                        {!! __('front/homePage.How to buy A', [
+                                            'product_name' => $product->name,
+                                            'icon' =>
+                                                '<a href="https://wa.me/+201010097248" target="_blank" class="inline-flex text-whatsapp"> <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024"> <path fill="currentColor" d="M713.5 599.9c-10.9-5.6-65.2-32.2-75.3-35.8c-10.1-3.8-17.5-5.6-24.8 5.6c-7.4 11.1-28.4 35.8-35 43.3c-6.4 7.4-12.9 8.3-23.8 2.8c-64.8-32.4-107.3-57.8-150-131.1c-11.3-19.5 11.3-18.1 32.4-60.2c3.6-7.4 1.8-13.7-1-19.3c-2.8-5.6-24.8-59.8-34-81.9c-8.9-21.5-18.1-18.5-24.8-18.9c-6.4-.4-13.7-.4-21.1-.4c-7.4 0-19.3 2.8-29.4 13.7c-10.1 11.1-38.6 37.8-38.6 92s39.5 106.7 44.9 114.1c5.6 7.4 77.7 118.6 188.4 166.5c70 30.2 97.4 32.8 132.4 27.6c21.3-3.2 65.2-26.6 74.3-52.5c9.1-25.8 9.1-47.9 6.4-52.5c-2.7-4.9-10.1-7.7-21-13z" /> <path fill="currentColor" d="M925.2 338.4c-22.6-53.7-55-101.9-96.3-143.3c-41.3-41.3-89.5-73.8-143.3-96.3C630.6 75.7 572.2 64 512 64h-2c-60.6.3-119.3 12.3-174.5 35.9c-53.3 22.8-101.1 55.2-142 96.5c-40.9 41.3-73 89.3-95.2 142.8c-23 55.4-34.6 114.3-34.3 174.9c.3 69.4 16.9 138.3 48 199.9v152c0 25.4 20.6 46 46 46h152.1c61.6 31.1 130.5 47.7 199.9 48h2.1c59.9 0 118-11.6 172.7-34.3c53.5-22.3 101.6-54.3 142.8-95.2c41.3-40.9 73.8-88.7 96.5-142c23.6-55.2 35.6-113.9 35.9-174.5c.3-60.9-11.5-120-34.8-175.6zm-151.1 438C704 845.8 611 884 512 884h-1.7c-60.3-.3-120.2-15.3-173.1-43.5l-8.4-4.5H188V695.2l-4.5-8.4C155.3 633.9 140.3 574 140 513.7c-.4-99.7 37.7-193.3 107.6-263.8c69.8-70.5 163.1-109.5 262.8-109.9h1.7c50 0 98.5 9.7 144.2 28.9c44.6 18.7 84.6 45.6 119 80c34.3 34.3 61.3 74.4 80 119c19.4 46.2 29.1 95.2 28.9 145.8c-.6 99.6-39.7 192.9-110.1 262.7z" /> </svg> </a>',
+                                        ]) !!}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <h2 id="how-much-heading">
+                                <button type="button"
+                                    class="flex items-center justify-between w-full p-5 font-medium text-left border border-gray-200 focus:ring-2 focus:ring-gray-200 hover:bg-gray-100 bg-gray-100 text-gray-900"
+                                    data-accordion-target="#how-much-body" aria-expanded="true"
+                                    aria-controls="how-much-body">
+                                    <span>{!! __('front/homePage.How much Q', ['product_name' => $product->name]) !!}</span>
+                                    <svg data-accordion-icon="" class="w-6 h-6 rotate-180 shrink-0" fill="currentColor"
+                                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                </button>
+                            </h2>
+                            <div id="how-much-body" class="" aria-labelledby="how-much-heading">
+                                <div class="p-5 font-light border border-gray-200">
+                                    <p class="mb-2 text-gray-500 dark:text-gray-400">
+                                        {!! __('front/homePage.How much A', ['product_name' => $product->name]) !!}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <h2 id="warranty-heading">
+                                <button type="button"
+                                    class="flex items-center justify-between w-full p-5 font-medium text-left border border-gray-200 focus:ring-2 focus:ring-gray-200 hover:bg-gray-100 bg-gray-100 text-gray-900"
+                                    data-accordion-target="#warranty-body" aria-expanded="false"
+                                    aria-controls="warranty-body">
+                                    <span>{!! __('front/homePage.warranty Q', ['product_name' => $product->name]) !!}</span>
+                                    <svg data-accordion-icon="" class="w-6 h-6 rotate-180 shrink-0" fill="currentColor"
+                                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                </button>
+                            </h2>
+                            <div id="warranty-body" class="" aria-labelledby="warranty-heading">
+                                <div class="p-5 font-light border border-gray-200">
+                                    <p class="mb-2 text-gray-500 dark:text-gray-400">
+                                        {!! __('front/homePage.warranty A', ['product_name' => $product->name]) !!}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <h2 id="payment-heading">
+                                <button type="button"
+                                    class="flex items-center justify-between w-full p-5 font-medium text-left border border-gray-200 focus:ring-2 focus:ring-gray-200 hover:bg-gray-100 bg-gray-100 text-gray-900"
+                                    data-accordion-target="#payment-body" aria-expanded="false"
+                                    aria-controls="payment-body">
+                                    <span>{!! __('front/homePage.payment Q', ['product_name' => $product->name]) !!}</span>
+                                    <svg data-accordion-icon="" class="w-6 h-6 rotate-180 shrink-0" fill="currentColor"
+                                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                </button>
+                            </h2>
+                            <div id="payment-body" class="" aria-labelledby="payment-heading">
+                                <div class="p-5 font-light border border-gray-200 rounded-b-xl">
+                                    <p class="mb-2 text-gray-500 dark:text-gray-400">
+                                        {!! __('front/homePage.payment A', [
+                                            'product_name' => $product->name,
+                                            'icon' =>
+                                                '<a href="https://wa.me/+201010097248" target="_blank" class="inline-flex text-whatsapp"> <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024"> <path fill="currentColor" d="M713.5 599.9c-10.9-5.6-65.2-32.2-75.3-35.8c-10.1-3.8-17.5-5.6-24.8 5.6c-7.4 11.1-28.4 35.8-35 43.3c-6.4 7.4-12.9 8.3-23.8 2.8c-64.8-32.4-107.3-57.8-150-131.1c-11.3-19.5 11.3-18.1 32.4-60.2c3.6-7.4 1.8-13.7-1-19.3c-2.8-5.6-24.8-59.8-34-81.9c-8.9-21.5-18.1-18.5-24.8-18.9c-6.4-.4-13.7-.4-21.1-.4c-7.4 0-19.3 2.8-29.4 13.7c-10.1 11.1-38.6 37.8-38.6 92s39.5 106.7 44.9 114.1c5.6 7.4 77.7 118.6 188.4 166.5c70 30.2 97.4 32.8 132.4 27.6c21.3-3.2 65.2-26.6 74.3-52.5c9.1-25.8 9.1-47.9 6.4-52.5c-2.7-4.9-10.1-7.7-21-13z" /> <path fill="currentColor" d="M925.2 338.4c-22.6-53.7-55-101.9-96.3-143.3c-41.3-41.3-89.5-73.8-143.3-96.3C630.6 75.7 572.2 64 512 64h-2c-60.6.3-119.3 12.3-174.5 35.9c-53.3 22.8-101.1 55.2-142 96.5c-40.9 41.3-73 89.3-95.2 142.8c-23 55.4-34.6 114.3-34.3 174.9c.3 69.4 16.9 138.3 48 199.9v152c0 25.4 20.6 46 46 46h152.1c61.6 31.1 130.5 47.7 199.9 48h2.1c59.9 0 118-11.6 172.7-34.3c53.5-22.3 101.6-54.3 142.8-95.2c41.3-40.9 73.8-88.7 96.5-142c23.6-55.2 35.6-113.9 35.9-174.5c.3-60.9-11.5-120-34.8-175.6zm-151.1 438C704 845.8 611 884 512 884h-1.7c-60.3-.3-120.2-15.3-173.1-43.5l-8.4-4.5H188V695.2l-4.5-8.4C155.3 633.9 140.3 574 140 513.7c-.4-99.7 37.7-193.3 107.6-263.8c69.8-70.5 163.1-109.5 262.8-109.9h1.7c50 0 98.5 9.7 144.2 28.9c44.6 18.7 84.6 45.6 119 80c34.3 34.3 61.3 74.4 80 119c19.4 46.2 29.1 95.2 28.9 145.8c-.6 99.6-39.7 192.9-110.1 262.7z" /> </svg> </a>',
+                                        ]) !!}
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+
                     </div>
                     {{-- FAQ Body :: End --}}
                 </div>

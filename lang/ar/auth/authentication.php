@@ -56,4 +56,5 @@ return [
     "If you don't have an account"  =>      "إذا كنت لا تمتلك حساب",
     "Shipping info."                =>      "معلومات الشحن",
     "Submit"                        =>      "تأكيد",
+    "Back to Cart"                  =>      "العودة إلى السلة",
 ];
