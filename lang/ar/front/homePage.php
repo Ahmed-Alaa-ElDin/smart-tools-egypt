@@ -211,4 +211,10 @@ return [
     "Order Billing Details"     =>      "تفاصيل الدفع",
     "Please select a shipping address & contact phone & ensure that we can deliver to your address"         =>      "يرجى تحديد عنوان الشحن ورقم الهاتف الافتراضيين وتأكد من أنه يمكن توصيل الطلب إلى عنوانك",
     "You will get:"             =>      "سوف تحصل على:",
+    "Add Coupon"                =>      "إضافة كوبون",
+    "Checkout"                  =>      "الدفع",
+    "Coupon applied successfully"   =>      "تم تطبيق كوبون  \":coupon\" بنجاح",
+    "Remove Coupon"             =>      "إزالة الكوبون",
+    "Coupon removed successfully"   =>      "تم إزالة الكوبون بنجاح",
+    "Invalid coupon code or expired"    =>      "رمز الكوبون غير صحيح أو منتهي الصلاحية",
 ];

@@ -195,6 +195,7 @@ class Product extends Model
                     ])
                 ]
             )
+            ->where('under_reviewing', 0)
             ->where('publish', 1);
     }
 
@@ -270,10 +271,12 @@ class Product extends Model
                             ])
                         ]),
                     ]),
-                    'reviews' => fn($q) => $q->where('status',1)
+                    'reviews' => fn($q) => $q->where('status',1),
+                    'coupons'
                 ]
             )
             ->whereIn('id', $products_id)
+            ->where('under_reviewing', 0)
             ->where('publish', 1);
     }
 }

@@ -2,8 +2,6 @@
 
 namespace App\Http\Livewire\Front\Order\General;
 
-use App\Models\Destination;
-use App\Models\Order;
 use App\Models\Zone;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Livewire\Component;
@@ -22,44 +20,47 @@ class OrderSummary extends Component
     public $delivery_price;
     public $best_zone_id;
     public $points;
+    public $coupon, $coupon_price, $coupon_points, $coupon_shipping;
 
 
     protected $listeners = [
         'cartUpdated' => 'getProducts',
         'AddressUpdated' => 'getDeliveryPrice',
+        'couponApplied',
     ];
 
     ############# Mount :: Start #############
     public function mount()
     {
-        $this->getDeliveryPrice();
     }
     ############# Mount :: End #############
 
     ############# Render :: Start #############
     public function render()
     {
-        if (Cart::instance('cart')->count() > 0) {
+        if ($this->step == 3) {
+            $this->getProducts();
+        }
+
+        $this->getDeliveryPrice();
+
+        if (Cart::instance('cart')->count()) {
             // get final prices
             $this->products_final_prices = $this->products->map(function ($product) {
-                if (!$product->under_reviewing) {
-                    $product_qty = Cart::search(function ($cartItem, $rowId) use ($product) {
-                        return $cartItem->id === $product->id;
-                    })->first()->qty;
+                $product_qty = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product) {
+                    return $cartItem->id === $product->id;
+                })->first()->qty;
 
-                    return $product->final_price * $product_qty;
-                }
+                return $product->final_price * $product_qty;
             })->sum();
 
             // get best prices
             $this->products_best_prices = $this->products->map(function ($product) {
-                if (!$product->under_reviewing) {
-                    $product_qty = Cart::search(function ($cartItem, $rowId) use ($product) {
-                        return $cartItem->id === $product->id;
-                    })->first()->qty;
+                $product_qty = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product) {
+                    return $cartItem->id === $product->id;
+                })->first()->qty;
 
-                    return $product->best_price * $product_qty;
-                }
+                return $product->best_price * $product_qty;
             })->sum();
 
             // get discount
@@ -72,27 +73,23 @@ class OrderSummary extends Component
 
             // get products points
             $this->points = $this->products->map(function ($product) {
-                if (!$product->under_reviewing) {
-                    $product_qty = Cart::search(function ($cartItem, $rowId) use ($product) {
-                        return $cartItem->id === $product->id;
-                    })->first()->qty;
+                $product_qty = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product) {
+                    return $cartItem->id === $product->id;
+                })->first()->qty;
 
-                    return $product->best_points * $product_qty;
-                }
+                return $product->best_points * $product_qty;
             })->sum();
 
             // get Extra discount for total order
             $discount_orders = $this->products->map(function ($product) {
-                if (!$product->under_reviewing) {
-                    return $product->offers->map(function ($offer) {
-                        if ($offer->on_orders && ($offer->number || $offer->number == null)) {
-                            return [
-                                'type' => $offer->type,
-                                'value' => $offer->value,
-                            ];
-                        }
-                    });
-                }
+                return $product->offers->map(function ($offer) {
+                    if ($offer->on_orders && ($offer->number || $offer->number == null)) {
+                        return [
+                            'type' => $offer->type,
+                            'value' => $offer->value,
+                        ];
+                    }
+                });
             })->flatten(1)->whereNotNull()->toArray();
 
             // get discount for total order after extra discount from order's offers
@@ -132,32 +129,21 @@ class OrderSummary extends Component
             $this->best_price_from_orders = $best_price_from_orders;
 
             $this->order_discount = $order_discount ? max($order_discount) : 0;
+
             $this->order_discount_percent = $this->products_final_prices ? number_format(($this->order_discount / $this->products_final_prices) * 100) : 0;
 
             $this->products_best_prices -= $this->order_discount;
 
-            $this->order_points = number_format(max($orders_points), 0);
+            $this->order_points = count($orders_points) ? number_format(max($orders_points), 0) : 0;
 
             $this->total_points = $this->points + $this->order_points;
 
             // get free shipping from products
             $free_shipping_products = !$this->products->map(function ($product) {
-                if (!$product->under_reviewing) {
-                    return $product->free_shipping;
-                }
+                return $product->free_shipping;
             })->contains(0);
 
-            // get free shipping from offers
-            $free_shipping_offers = $this->products->map(function ($product) {
-                if (!$product->under_reviewing) {
-                    return $product->offers->map(function ($offer) {
-                        return $offer->free_shipping;
-                    });
-                }
-            })->flatten()->contains(1);
-
-            // get free shipping
-            $this->free_shipping = $free_shipping_products || $free_shipping_offers;
+            $this->free_shipping = $free_shipping_products;
 
             $this->products_best_prices = is_numeric($this->delivery_price) && !$this->free_shipping ? $this->products_best_prices + $this->delivery_price : $this->products_best_prices;
         } else {
@@ -203,9 +189,13 @@ class OrderSummary extends Component
                     ->get();
 
                 // get products weights
-                $products_weights = $this->products->map(function ($product) {
-                    if (!$product->under_reviewing) {
-                        return $product->weight;
+                $products_weights = (int)$this->products->map(function ($product) {
+                    if (!$product->free_shipping) {
+                        $product_qty = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product) {
+                            return $cartItem->id === $product->id;
+                        })->first()->qty;
+
+                        return $product->weight * $product_qty;
                     }
                 })->sum();
 
@@ -251,5 +241,13 @@ class OrderSummary extends Component
     }
     ############## Get Delivery Price :: End ##############
 
-
+    ############## Get Coupon Data :: Start ##############
+    public function couponApplied($coupon_price, $coupon_points, $coupon_shipping)
+    {
+        $this->coupon_price = $coupon_shipping ? $coupon_price - $this->delivery_price : $coupon_price;
+        $this->coupon_points = $coupon_points;
+        $this->coupon_shipping = $coupon_shipping;
+        $this->getProducts();
+        $this->getDeliveryPrice();
+    }
 }

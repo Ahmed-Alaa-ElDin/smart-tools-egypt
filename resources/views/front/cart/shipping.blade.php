@@ -1,5 +1,11 @@
 @extends('layouts.front.site', ['titlePage' => __('front/homePage.Order Shipping Details')])
 
+@section('cart-wishlist-compare')
+    <div class="grow text-center font-bold text-primary">
+        {{ __('front/homePage.Checkout') }}
+    </div>
+@endsection
+
 @section('content')
     {{-- Unauthourized customers --}}
     @guest
@@ -35,41 +41,6 @@
                     </div>
                     {{-- ############## Order Shipping Details :: End ############## --}}
                 @endauth
-
-                {{-- ############## Cart :: Start ############## --}}
-                <div class="bg-white rounded overflow-hidden">
-                    {{-- ############## Title :: Start ############## --}}
-                    <div class="flex justify-between items-center">
-                        <h3 class="h5 text-center font-bold p-4 m-0">
-                            {{ __('front/homePage.Shopping Cart') }}
-                        </h3>
-                    </div>
-                    {{-- ############## Title :: End ############## --}}
-                    <hr>
-
-                    {{-- ############## Cart Products' List :: Start ############## --}}
-                    @livewire('front.order.general.order-products-list', ['products' => $cart_products, 'step' => 2])
-                    {{-- ############## Cart Products' List :: End ############## --}}
-                </div>
-                {{-- ############## Cart :: End ############## --}}
-
-                {{-- ############## Wishlist :: Start ############## --}}
-                <div class="bg-white rounded overflow-hidden">
-                    {{-- ############## Title :: Start ############## --}}
-                    <div class="flex justify-between items-center">
-                        <h3 class="h5 text-center font-bold p-4 m-0">
-                            {{ __('front/homePage.Wishlist') }}
-                        </h3>
-                    </div>
-                    {{-- ############## Title :: End ############## --}}
-                    <hr>
-
-                    {{-- ############## Wishlist Products' List :: Start ############## --}}
-                    @livewire('front.order.general.order-wishlist-products-list', ['products' => $wishlist_products])
-                    {{-- ############## Wishlist Products' List :: End ############## --}}
-                </div>
-                {{-- ############## Wishlist :: End ############## --}}
-
             </div>
 
             {{-- ############## Order Summary :: Start ############## --}}

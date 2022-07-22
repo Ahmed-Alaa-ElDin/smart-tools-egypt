@@ -7,6 +7,27 @@
                 style="text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff">{{ __('admin/master.Loading ...') }}</span>
         </div>
     </div>
+    {{-- ############## Coupon :: Start ############## --}}
+    @if ($step == 3)
+        <div>
+            <div class="flex justify-between items-center p-4">
+                <h3 class="h5 text-center font-bold m-0">
+                    {{ __('front/homePage.Add Coupon') }}
+                </h3>
+            </div>
+            <hr>
+            <div class="p-3">
+                @livewire('front.order.coupon-block', [
+                    'products' => $products,
+                    'products_best_prices' => $products_best_prices,
+                    'total_points' => $total_points,
+                    'free_shipping' => $free_shipping,
+                ])
+            </div>
+        </div>
+        <hr>
+    @endif
+    {{-- ############## Coupon :: End ############## --}}
 
     {{-- ############## Title :: Start ############## --}}
     <div class="flex justify-between items-center p-4">
@@ -130,15 +151,27 @@
                                     ]) !!}
                                 </span>
                             @else
-                                <span class="flex rtl:flex-row-reverse gap-1 text-primary">
-                                    <span class="font-bold text-sm">
-                                        {{ __('front/homePage.EGP') }}
+                                @if ($coupon_shipping)
+                                    <del class="flex rtl:flex-row-reverse gap-1 text-primary">
+                                        <span class="font-bold text-sm">
+                                            {{ __('front/homePage.EGP') }}
+                                        </span>
+                                        <span class="font-bold text-xl"
+                                            dir="ltr">{{ number_format(explode('.', $delivery_price)[0], 0, '.', '\'') }}</span>
+                                        <span
+                                            class="font-bold text-xs">{{ explode('.', number_format($delivery_price, 2))[1] ?? '00' }}</span>
+                                    </del>
+                                @else
+                                    <span class="flex rtl:flex-row-reverse gap-1 text-primary">
+                                        <span class="font-bold text-sm">
+                                            {{ __('front/homePage.EGP') }}
+                                        </span>
+                                        <span class="font-bold text-xl"
+                                            dir="ltr">{{ number_format(explode('.', $delivery_price)[0], 0, '.', '\'') }}</span>
+                                        <span
+                                            class="font-bold text-xs">{{ explode('.', number_format($delivery_price, 2))[1] ?? '00' }}</span>
                                     </span>
-                                    <span class="font-bold text-xl"
-                                        dir="ltr">{{ number_format(explode('.', $delivery_price)[0], 0, '.', '\'') }}</span>
-                                    <span
-                                        class="font-bold text-xs">{{ explode('.', number_format($delivery_price, 2))[1] ?? '00' }}</span>
-                                </span>
+                                @endif
                             @endif
                         @endif
 
@@ -147,18 +180,6 @@
             </div>
         @endif
         {{-- ############## Shipping :: End ############## --}}
-
-        {{-- ############## Coupon :: Start ############## --}}
-        @if ($step == 3)
-            <div class="w-full flex items-center justify-center gap-3">
-                <input
-                    class="grow-1 rounded text-center border-red-300 text-red-500 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                    type="text" placeholder="{{ __('front/homePage.Coupon Code') }}">
-                <button class="btn bg-primary font-bold self-stretch">{{ __('front/homePage.Apply') }}</button>
-            </div>
-        @endif
-        {{-- ############## Coupon :: End ############## --}}
-
     </div>
 
     <hr>
@@ -169,16 +190,86 @@
             <div class="h6 font-bold m-0">
                 {{ __('front/homePage.Total :') }}
             </div>
-            <div class="flex rtl:flex-row-reverse gap-1 text-primary">
-                <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
-                <span class="font-bold text-2xl"
-                    dir="ltr">{{ number_format(explode('.', $products_best_prices)[0], 0, '.', '\'') }}</span>
-                <span
-                    class="font-bold text-xs">{{ explode('.', number_format($products_best_prices, 2))[1] ?? '00' }}</span>
-            </div>
+            @if ($coupon_price && $coupon_price != $products_best_prices)
+                <del class="flex rtl:flex-row-reverse gap-1 text-primary">
+                    <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
+                    <span class="font-bold text-2xl"
+                        dir="ltr">{{ number_format(explode('.', $products_best_prices)[0], 0, '.', '\'') }}</span>
+                    <span
+                        class="font-bold text-xs">{{ explode('.', number_format($products_best_prices, 2))[1] ?? '00' }}</span>
+                </del>
+            @else
+                <div class="flex rtl:flex-row-reverse gap-1 text-primary">
+                    <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
+                    <span class="font-bold text-2xl"
+                        dir="ltr">{{ number_format(explode('.', $products_best_prices)[0], 0, '.', '\'') }}</span>
+                    <span
+                        class="font-bold text-xs">{{ explode('.', number_format($products_best_prices, 2))[1] ?? '00' }}</span>
+                </div>
+            @endif
+
         </div>
         {{-- ############## Total :: End ############## --}}
     </div>
+
+    @if ($coupon_price && $coupon_price != $products_best_prices)
+        <hr>
+        <div class="p-4 flex flex-col gap-3 justify-center items-center">
+            {{-- ############## Coupon Discount :: Start ############## --}}
+            <div class="w-full flex justify-between items-center">
+                <div class="h6 font-bold m-0">
+                    {{ __('front/homePage.Coupon Discount :') }}
+                </div>
+                <div class="flex gap-2 text-successDark">
+                    <span class="flex rtl:flex-row-reverse gap-1">
+                        <span class="font-bold text-sm">
+                            {{ __('front/homePage.EGP') }}
+                        </span>
+                        <span class="font-bold text-xl"
+                            dir="ltr">{{ number_format(explode('.', $products_best_prices - $coupon_price)[0], 0, '.', '\'') }}</span>
+                        <span
+                            class="font-bold text-xs">{{ explode('.', number_format($products_best_prices - $coupon_price, 2))[1] ?? '00' }}</span>
+                    </span>
+                    <span class="font-bold">
+                        ({{ number_format((($products_best_prices - $coupon_price) * 100) / $products_best_prices, 0) }}
+                        %)
+                    </span>
+                </div>
+            </div>
+            {{-- ############## Coupon Discount :: End ############## --}}
+
+            {{-- ############## Coupon Shipping :: Start ############## --}}
+            @if (!$free_shipping && $coupon_shipping)
+                <div class="w-full flex justify-between items-center">
+                    <div class="h6 font-bold m-0 grow min-w-max">
+                        {{ __('front/homePage.Shipping :') }}
+                    </div>
+                    <span class="text-successDark font-bold">
+                        {{ __('front/homePage.Free Shipping') }}
+                    </span>
+                </div>
+            @endif
+            {{-- ############## Coupon Shipping :: End ############## --}}
+
+            {{-- ############## Coupon Total :: Start ############## --}}
+            @if ($coupon_price && $coupon_price != $products_best_prices)
+                <div class="w-full flex justify-between items-center">
+                    <div class="h6 font-bold m-0">
+                        {{ __('front/homePage.Total :') }}
+                    </div>
+                    <div class="flex rtl:flex-row-reverse gap-1 text-primary">
+                        <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
+                        <span class="font-bold text-2xl"
+                            dir="ltr">{{ number_format(explode('.', $coupon_price)[0], 0, '.', '\'') }}</span>
+                        <span
+                            class="font-bold text-xs">{{ explode('.', number_format($coupon_price, 2))[1] ?? '00' }}</span>
+                    </div>
+                </div>
+            @endif
+
+            {{-- ############## Coupon Total :: End ############## --}}
+        </div>
+    @endif
 
 
     {{-- ############## Buttons :: Start ############## --}}
@@ -212,11 +303,26 @@
             <div class="h6 font-bold m-0">
                 {{ __('front/homePage.You will get:') }}
             </div>
-            <div class="flex rtl:flex-row-reverse gap-1 text-successDark">
-                <span class="font-bold text-sm">{{ trans_choice('front/homePage.Point/Points',['points'=>$total_points]) }}</span>
-                <span class="font-bold text-2xl"
-                    dir="ltr">{{ $total_points }}</span>
-            </div>
+            @if ($coupon_points && $coupon_points != $total_points)
+                <div class="flex flex-col gap-2">
+                    <del class="flex rtl:flex-row-reverse gap-1 text-successDark">
+                        <span
+                            class="font-bold text-sm">{{ trans_choice('front/homePage.Point/Points', $total_points, ['points' => $total_points]) }}</span>
+                        <span class="font-bold text-2xl" dir="ltr">{{ $total_points }}</span>
+                    </del>
+                    <div class="flex rtl:flex-row-reverse gap-1 text-successDark">
+                        <span
+                            class="font-bold text-sm">{{ trans_choice('front/homePage.Point/Points', $coupon_points, ['points' => $coupon_points]) }}</span>
+                        <span class="font-bold text-2xl" dir="ltr">{{ $coupon_points }}</span>
+                    </div>
+                </div>
+            @else
+                <div class="flex rtl:flex-row-reverse gap-1 text-successDark">
+                    <span
+                        class="font-bold text-sm">{{ trans_choice('front/homePage.Point/Points', $total_points, ['points' => $total_points]) }}</span>
+                    <span class="font-bold text-2xl" dir="ltr">{{ $total_points }}</span>
+                </div>
+            @endif
         </div>
     @endif
 </div>

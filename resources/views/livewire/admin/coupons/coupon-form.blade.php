@@ -21,7 +21,7 @@
                 <input id="code"
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('code') border-red-900 border-2 @enderror"
                     type="text" wire:model.lazy="code" placeholder="{{ __('admin/offersPages.Enter Code') }}"
-                    maxlength="100">
+                    maxlength="100" dir="ltr">
 
                 @error('code')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -264,7 +264,7 @@
                                     @foreach ($items[$item_key]['products'] as $product_key => $product)
                                         <label for="item-{{ $item_key }}-product-{{ $product_key }}"
                                             wire:key="item-{{ $item_key }}-product-{{ $product_key }}-label"
-                                            class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($product['id'], $items[$item_key]['products_id'])) bg-successLight @endif select-none">
+                                            class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($product['id'], $items[$item_key]['products_id'])) bg-successLighter @endif select-none">
                                             {{ $product['name'][session('locale')] }}
                                             <input type="checkbox" wire:model="items.{{ $item_key }}.products_id"
                                                 wire:key="item-{{ $item_key }}-product-{{ $product_key }}-input"
@@ -440,7 +440,7 @@
                                     @foreach ($items[$item_key]['products'] as $product_key => $product)
                                         <label for="item-{{ $item_key }}-product-{{ $product_key }}"
                                             wire:key="item-{{ $item_key }}-product-{{ $product_key }}-label"
-                                            class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($product['id'], $items[$item_key]['products_id'])) bg-successLight @endif select-none">
+                                            class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($product['id'], $items[$item_key]['products_id'])) bg-successLighter @endif select-none">
                                             {{ $product['name'][session('locale')] }}
                                             <input type="checkbox" wire:model="items.{{ $item_key }}.products_id"
                                                 wire:key="item-{{ $item_key }}-product-{{ $product_key }}-input"

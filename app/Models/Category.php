@@ -58,4 +58,12 @@ class Category extends Model
             'number'
         ]);
     }
+
+    // hasmany through relationship  Category --> Products
+    public function products()
+    {
+        return $this->hasManyThrough(Product::class, Subcategory::class);
+    }
+
+
 }
