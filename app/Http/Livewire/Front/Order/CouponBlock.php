@@ -10,6 +10,7 @@ use Livewire\Component;
 class CouponBlock extends Component
 {
     public $coupon,
+        $coupon_id,
         $products,
         $products_best_prices,
         $total_points,
@@ -56,6 +57,8 @@ class CouponBlock extends Component
             ->first();
 
         if ($coupon) {
+            $this->coupon_id = $coupon->id;
+
             // get discount on order
             if ($coupon->on_orders) {
                 // percentage discount
@@ -109,8 +112,6 @@ class CouponBlock extends Component
                         }
                     }
                 });
-                // dd($this->coupon_price);
-
             }
 
             // get discount on subcategories
@@ -241,7 +242,7 @@ class CouponBlock extends Component
             ]);
             $this->error_message = null;
 
-            $this->emit('couponApplied', $this->coupon_price, $this->coupon_points, $this->coupon_shipping);
+            $this->emit('couponApplied', $this->coupon_id, $this->coupon_price, $this->coupon_points, $this->coupon_shipping);
         } else {
             $this->coupon_applied = false;
             $this->success_message = null;
@@ -263,6 +264,6 @@ class CouponBlock extends Component
         ]);
         $this->error_message = null;
 
-        $this->emit('couponApplied', 0, 0, 0);
+        $this->emit('couponApplied', null, null, null, null);
     }
 }

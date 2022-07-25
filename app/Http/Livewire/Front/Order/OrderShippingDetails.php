@@ -2,11 +2,13 @@
 
 namespace App\Http\Livewire\Front\Order;
 
+use App\Models\Address;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Destination;
 use App\Models\Governorate;
 use App\Models\Order;
+use App\Models\Phone;
 use App\Models\User;
 use App\Models\Zone;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -17,6 +19,7 @@ use Livewire\Component;
 
 class OrderShippingDetails extends Component
 {
+    public $user;
     public $addresses;
     public $changeAddress;
 
@@ -120,13 +123,14 @@ class OrderShippingDetails extends Component
             'address.city_id'           => 'required|exists:cities,id',
         ]);
 
-        $this->user->addresses->create([
-            'country_id' => $this->address['country_id'],
-            'governorate_id' => $this->address['governorate_id'],
-            'city_id' => $this->address['city_id'],
-            'details' => $this->address['details'],
-            'landmarks' => $this->address['landmarks'],
-            'default' => $default,
+        Address::create([
+            'user_id'           => $this->user->id,
+            'country_id'        => $this->address['country_id'],
+            'governorate_id'    => $this->address['governorate_id'],
+            'city_id'           => $this->address['city_id'],
+            'details'           => $this->address['details'],
+            'landmarks'         => $this->address['landmarks'],
+            'default'           => $default
         ]);
 
         $this->changeAddress = false;
@@ -206,9 +210,10 @@ class OrderShippingDetails extends Component
             'phone' => 'required|digits_between:8,11|' . Rule::unique('phones')->ignore($this->user->id, 'user_id'),
         ]);
 
-        $this->user->phones->create([
-            'phone' => $this->phone,
-            'default' => $default,
+        Phone::create([
+            'user_id'       => $this->user->id,
+            'phone'         => $this->phone,
+            'default'       => $default
         ]);
 
         $this->changePhone = false;

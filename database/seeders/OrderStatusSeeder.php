@@ -21,26 +21,30 @@ class OrderStatusSeeder extends Seeder
         ]);
         OrderStatus::create([
             'id' => 2,
-            'name' => 'created',
+            'name' => 'pending',
         ]);
         OrderStatus::create([
             'id' => 3,
-            'name' => 'preparing',
+            'name' => 'created',
         ]);
         OrderStatus::create([
             'id' => 4,
-            'name' => 'under_reviewing',
+            'name' => 'preparing',
         ]);
         OrderStatus::create([
             'id' => 5,
-            'name' => 'shipped',
+            'name' => 'under_reviewing',
         ]);
         OrderStatus::create([
             'id' => 6,
-            'name' => 'delivered',
+            'name' => 'shipped',
         ]);
         OrderStatus::create([
             'id' => 7,
+            'name' => 'delivered',
+        ]);
+        OrderStatus::create([
+            'id' => 8,
             'name' => 'cancelled',
         ]);
     }

@@ -37,8 +37,8 @@
                             </svg> </a>
                     </li>
                     <li class="list-inline-item m-0">
-                        <a href="https://wa.me/+201010097248" target="_blank"
-                            class="whats-app text-xl flex bg-whatsapp w-9 h-9 rounded-circle items-center justify-center transition-all hover:bg-white hover:text-whatsapp focus:text-white">
+                        <a href="https://wa.me/+2{{ config('constants.constants.WHATSAPP_NUMBER') }}" target="_blank"
+                            class="whats-app text-xl flex bg-whatsapp w-9 h-9 rounded-circle items-center justify-center transition-all hover:bg-white hover:text-[#25d366] focus:text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
                                 height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024">
                                 <path fill="currentColor"

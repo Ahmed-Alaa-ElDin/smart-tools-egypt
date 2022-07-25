@@ -34,8 +34,6 @@ class Product extends Model
         'model',
         'refundable',
         'video',
-        // 'meta_title',
-        // 'meta_description',
         'meta_keywords',
         'free_shipping',
         'publish',
@@ -120,6 +118,13 @@ class Product extends Model
     {
         return $this->hasMany(Review::class);
     }
+
+    // many to many relationship Product --> Orders
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class)->withPivot('quantity');
+    }
+
 
     public function scopePublishedProduct($query)
     {
@@ -271,7 +276,7 @@ class Product extends Model
                             ])
                         ]),
                     ]),
-                    'reviews' => fn($q) => $q->where('status',1),
+                    'reviews' => fn ($q) => $q->where('status', 1),
                     'coupons'
                 ]
             )

@@ -23,10 +23,16 @@ class Order extends Model
         'status_id',
         'subtotal_base',
         'subtotal_final',
+        'used_points',
+        'used_balance',
+        'gift_points',
         'delivery_fees',
         'total_weight',
-        'payment_method_id',
+        'payment_method',
+        'payment_details',
         'payment_status',
+        'tracking_number',
+        'order_delivery_id',
         'notes',
     ];
 
@@ -40,11 +46,6 @@ class Order extends Model
         return $this->belongsTo(Address::class);
     }
 
-    public function destination()
-    {
-        return $this->belongsTo(Destination::class);
-    }
-
     public function coupon()
     {
         return $this->belongsTo(Coupon::class);
@@ -53,5 +54,15 @@ class Order extends Model
     public function status()
     {
         return $this->belongsTo(OrderStatus::class);
+    }
+
+    public function zone()
+    {
+        return $this->belongsTo(Zone::class);
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class)->withPivot('quantity');
     }
 }

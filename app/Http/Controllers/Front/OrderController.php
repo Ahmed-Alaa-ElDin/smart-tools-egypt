@@ -40,4 +40,9 @@ class OrderController extends Controller
     {
         return view('front.cart.billing');
     }
+
+    public function done()
+    {
+        return view('front.cart.done');
+    }
 }

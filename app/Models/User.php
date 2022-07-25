@@ -42,6 +42,8 @@ class User extends Authenticatable
         'birth_date',
         'auth_id',
         'auth_type',
+        'balance',
+        'points'
     ];
 
     /**
@@ -72,12 +74,6 @@ class User extends Authenticatable
     {
         return json_encode($value, JSON_UNESCAPED_UNICODE);
     }
-
-    // get default phone
-    // public function getAddressesAttribute()
-    // {
-    //     return $this->with(['addresses'=>fn($q)=>$q->where('default',1)])->addresses();
-    // }
 
     // One to many relationship  User --> Addresses
     public function addresses()

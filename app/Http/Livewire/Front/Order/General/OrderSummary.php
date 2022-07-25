@@ -8,25 +8,27 @@ use Livewire\Component;
 
 class OrderSummary extends Component
 {
-    public $products_final_prices = "0.00";
-    public $products_best_prices = "0.00";
-    public $discount = "0.00";
-    public $discount_percent = "0";
-    public $order_discount = "0.00";
-    public $order_points = "0";
+    public $products_final_prices = 0.00;
+    public $products_best_prices = 0.00;
+    public $discount = 0.00;
+    public $discount_percent = 0;
+    public $order_discount = 0.00;
+    public $order_points = 0;
     public $free_shipping = false;
     public $products;
+    public $products_weights;
     public $step;
     public $delivery_price;
     public $best_zone_id;
-    public $points;
-    public $coupon, $coupon_price, $coupon_points, $coupon_shipping;
+    public $points = 0, $total_points = 0;
+    public $coupon_id, $coupon_price, $coupon_points, $coupon_shipping;
 
 
     protected $listeners = [
         'cartUpdated' => 'getProducts',
         'AddressUpdated' => 'getDeliveryPrice',
         'couponApplied',
+        'getOrderFinalPrice',
     ];
 
     ############# Mount :: Start #############
@@ -199,6 +201,8 @@ class OrderSummary extends Component
                     }
                 })->sum();
 
+                $this->products_weights = $products_weights;
+
                 // Get the best Delivery Cost
                 $prices = $zones->map(function ($zone) use ($products_weights) {
                     $min_charge = $zone->min_charge;
@@ -242,12 +246,35 @@ class OrderSummary extends Component
     ############## Get Delivery Price :: End ##############
 
     ############## Get Coupon Data :: Start ##############
-    public function couponApplied($coupon_price, $coupon_points, $coupon_shipping)
+    public function couponApplied($coupon_id, $coupon_price, $coupon_points, $coupon_shipping)
     {
+        $this->coupon_id = $coupon_id;
         $this->coupon_price = $coupon_shipping ? $coupon_price - $this->delivery_price : $coupon_price;
         $this->coupon_points = $coupon_points;
         $this->coupon_shipping = $coupon_shipping;
         $this->getProducts();
         $this->getDeliveryPrice();
+    }
+    ############## Get Coupon Data :: End ##############
+
+    ############## Get Order Final Price :: Start ##############
+    public function getOrderFinalPrice()
+    {
+        $this->getProducts();
+        $this->getDeliveryPrice();
+
+        $this->emit(
+            'setOrderFinalPrice',
+            [
+                'products' => $this->products,
+                'subtotal_base' => $this->products_final_prices ?? 0,
+                'subtotal_final' => $this->coupon_price && $this->coupon_shipping ? $this->coupon_price : ($this->coupon_price && !$this->coupon_shipping ? $this->coupon_price - $this->delivery_price : ($this->products_best_prices - $this->delivery_price ?? 0)),
+                'delivery_fees' => $this->coupon_shipping == true ? 0 : ($this->free_shipping == true ? 0 : ($this->delivery_price ?? 0)),
+                'coupon_id' => $this->coupon_id ?? null,
+                'zone_id' => $this->best_zone_id ?? null,
+                'weight' => $this->products_weights ?? 1,
+                'gift_points' => $this->coupon_points ?? ($this->total_points ?? 0),
+            ]
+        );
     }
 }
