@@ -25,7 +25,7 @@ class CouponForm extends Component
     {
         return [
             "code"                              =>      "required|string",
-            "type"                              =>      "required|in:0,1,2,3",
+            "type"                              =>      "required|in:0,1,2",
             "value"                             =>      ["required", "numeric", new Maxif($this->type), "min:0"],
             'expire_at'                         =>      "date",
             'number'                            =>      "nullable|numeric|min:0",
@@ -282,7 +282,7 @@ class CouponForm extends Component
             $coupon = Coupon::create([
                 'code' => $this->code,
                 'expire_at' => $this->expire_at,
-                'number'  => !is_null($this->number) ? $this->number : null,
+                'number'  => $this->number ? $this->number : null,
                 'type' => $this->type ?? 0,
                 'value' => $this->value ?? 0,
                 'free_shipping' => $this->free_shipping ? 1 : 0
