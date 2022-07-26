@@ -236,4 +236,5 @@ return [
     "Order Creation Status"     =>      "حالة إنشاء الطلب",
     "Your order has been successfully created. We will contact you shortly."        =>      "تم إنشاء الطلب بنجاح. سوف نتواصل معك قريبا.",
     "Track Your Order"          =>      "تتبع طلبك",
+    "Payment Failed, Please Try Again"              =>      "فشلت عملية الدفع، يرجى المحاولة مرة أخرى",
 ];

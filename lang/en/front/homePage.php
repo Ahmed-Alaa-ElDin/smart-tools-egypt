@@ -236,7 +236,7 @@ return [
     "Order Creation Status"     =>      "Order Creation Status",
     "Your order has been successfully created. We will contact you shortly."        =>      "Your order has been successfully created. We will contact you shortly.",
     "Track Your Order"          =>      "Track Your Order",
-    "Cart"                      =>      "Cart",
+    "Payment Failed, Please Try Again"              =>      "Payment Failed, Please Try Again",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",

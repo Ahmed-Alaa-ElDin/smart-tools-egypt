@@ -123,7 +123,7 @@
                 </div>
                 <div>
                     {{-- Free Shipping --}}
-                    @if ($free_shipping && $delivery_price != 'no delivery')
+                    @if (($free_shipping && $delivery_price != 'no delivery') || $delivery_price == 0)
                         <span class="text-successDark">
                             {{ __('front/homePage.Free Shipping') }}
                         </span>

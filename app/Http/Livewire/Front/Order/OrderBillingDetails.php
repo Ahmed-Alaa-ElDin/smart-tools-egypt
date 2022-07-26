@@ -220,46 +220,50 @@ class OrderBillingDetails extends Component
             "api_key" => env('PAYMOB_TOKEN')
         ])->json();
 
-        $auth_token = $first_step['token'];
+        if ($first_step != null) {
+            $auth_token = $first_step['token'];
 
-        $second_step = Http::acceptJson()->post('https://accept.paymob.com/api/ecommerce/orders', [
-            "auth_token" =>  $auth_token,
-            "delivery_needed" => "false",
-            "amount_cents" => number_format(($order->subtotal_final + $order->delivery_fees) * 100, 0),
-            "currency" => "EGP",
-            "items" => []
-        ])->json();
+            $second_step = Http::acceptJson()->post('https://accept.paymob.com/api/ecommerce/orders', [
+                "auth_token" =>  $auth_token,
+                "delivery_needed" => "false",
+                "amount_cents" => number_format(($order->subtotal_final + $order->delivery_fees) * 100, 0),
+                "currency" => "EGP",
+                "items" => []
+            ])->json();
 
-        $order_id = $second_step['id'];
+            $order_id = $second_step['id'];
 
-        $third_step = Http::acceptJson()->post('https://accept.paymob.com/api/acceptance/payment_keys', [
-            "auth_token" => $auth_token,
-            "amount_cents" => number_format(($order->subtotal_final + $order->delivery_fees) * 100, 0),
-            "expiration" => 3600,
-            "order_id" => $order_id,
-            "billing_data" => [
-                "apartment" => "NA",
-                "email" => $order->user->email ?? 'test@smarttoolsegypt.com',
-                "floor" => "NA",
-                "first_name" => $order->user->f_name,
-                "street" => "NA",
-                "building" => "NA",
-                "phone_number" => $order->phone1,
-                "shipping_method" => "NA",
-                "postal_code" => "NA",
-                "city" => "NA",
-                "country" => "NA",
-                "last_name" => $order->user->l_name ?? $order->user->f_name,
-                "state" => "NA"
-            ],
-            "currency" => "EGP",
-            "integration_id" => env('PAYMOB_CLIENT_ID'),
-        ])->json();
+            $third_step = Http::acceptJson()->post('https://accept.paymob.com/api/acceptance/payment_keys', [
+                "auth_token" => $auth_token,
+                "amount_cents" => number_format(($order->subtotal_final + $order->delivery_fees) * 100, 0),
+                "expiration" => 3600,
+                "order_id" => $order_id,
+                "billing_data" => [
+                    "apartment" => "NA",
+                    "email" => $order->user->email ?? 'test@smarttoolsegypt.com',
+                    "floor" => "NA",
+                    "first_name" => $order->user->f_name,
+                    "street" => "NA",
+                    "building" => "NA",
+                    "phone_number" => $order->phone1,
+                    "shipping_method" => "NA",
+                    "postal_code" => "NA",
+                    "city" => "NA",
+                    "country" => "NA",
+                    "last_name" => $order->user->l_name ?? $order->user->f_name,
+                    "state" => "NA"
+                ],
+                "currency" => "EGP",
+                "integration_id" => env('PAYMOB_CLIENT_ID'),
+            ])->json();
 
-        $payment_key = $third_step['token'];
+            $payment_key = $third_step['token'];
 
-        if ($payment_key) {
-            redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . env('PAYMOB_IFRAM_ID') . "?payment_token=$payment_key");
+            if ($payment_key) {
+                redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . env('PAYMOB_IFRAM_ID') . "?payment_token=$payment_key");
+            }
+        } else {
+            redirect()->route('front.order.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
         }
     }
 }
