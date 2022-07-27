@@ -20,12 +20,15 @@ Route::get('/countries/{country}/deliveries-country', [CountryController::class,
 Route::get('/countries/deleted-countries', [CountryController::class, 'softDeletedCountries'])->name('countries.softDeletedCountries');
 Route::resource('/countries', CountryController::class);
 
+Route::get('/governorates/import-from-bosta', [GovernorateController::class, 'getBostaGovernorate'])->name('governorates.importFromBosta');
 Route::get('/governorates/{governorate}/cities-governorate', [GovernorateController::class, 'citiesGovernorate'])->name('governorates.citiesGovernorate');
 Route::get('/governorates/{governorate}/users-governorate', [GovernorateController::class, 'usersGovernorate'])->name('governorates.usersGovernorate');
 Route::get('/governorates/{governorate}/deliveries-governorate', [GovernorateController::class, 'deliveriesGovernorate'])->name('governorates.deliveriesGovernorate');
 Route::get('/governorates/deleted-governorates', [GovernorateController::class, 'softDeletedGovernorates'])->name('governorates.softDeletedGovernorates');
 Route::resource('/governorates', GovernorateController::class);
 
+
+Route::get('/cities/import-from-bosta', [CityController::class, 'getBostaCities'])->name('cities.importFromBosta');
 Route::get('/cities/{city}/users-city', [CityController::class, 'usersCity'])->name('cities.usersCity');
 Route::get('/cities/{city}/deliveries-city', [CityController::class, 'deliveriesCity'])->name('cities.deliveriesCity');
 Route::get('/cities/deleted-cities', [CityController::class, 'softDeletedCities'])->name('cities.softDeletedCities');

@@ -18167,7 +18167,7 @@ screen and (-ms-high-contrast:active) {
 }
 
 .details .tox-tinymce,
-.special_marque .tox-tinymce {
+.landmarks .tox-tinymce {
     --tw-border-opacity: 1 !important;
     border-color: rgb(252 165 165 / var(--tw-border-opacity)) !important;
     border-radius: 0.25rem !important;
@@ -18185,7 +18185,7 @@ screen and (-ms-high-contrast:active) {
 }
 
 .details .tox-tinymce:focus,
-.special_marque .tox-tinymce:focus {
+.landmarks .tox-tinymce:focus {
 
     --tw-ring-opacity: 1 !important;
     --tw-ring-color: rgb(252 165 165 / var(--tw-ring-opacity)) !important;

@@ -17,7 +17,7 @@ class CouponForm extends Component
 {
     public $coupon_id;
 
-    public $code, $type = 0, $value = 0, $expire_at, $number, $on_orders = 0, $free_shipping =0;
+    public $code, $type = 0, $value = 0, $expire_at, $number, $on_orders = 0, $free_shipping = 0;
 
     protected $listeners = ["brandUpdated", "supercategoryUpdated", "categoryUpdated", "subcategoryUpdated"];
 
@@ -25,7 +25,7 @@ class CouponForm extends Component
     {
         return [
             "code"                              =>      "required|string",
-            "type"                              =>      "required|in:0,1,2,3",
+            "type"                              =>      "required|in:0,1,2",
             "value"                             =>      ["required", "numeric", new Maxif($this->type), "min:0"],
             'expire_at'                         =>      "date",
             'number'                            =>      "nullable|numeric|min:0",
@@ -282,7 +282,7 @@ class CouponForm extends Component
             $coupon = Coupon::create([
                 'code' => $this->code,
                 'expire_at' => $this->expire_at,
-                'number'  => !is_null($this->number) ? $this->number : null,
+                'number'  => $this->number ? $this->number : null,
                 'type' => $this->type ?? 0,
                 'value' => $this->value ?? 0,
                 'free_shipping' => $this->free_shipping ? 1 : 0
@@ -362,10 +362,11 @@ class CouponForm extends Component
             $this->coupon->update([
                 'code' => $this->code,
                 'expire_at' => $this->expire_at,
-                'number'  =>!is_null($this->number) ? $this->number : null,
+                'number'  => !is_null($this->number) ? $this->number : null,
                 'type' => $this->type ?? 0,
                 'value' => $this->value ?? 0,
-                'free_shipping' => $this->free_shipping ? 1 : 0
+                'free_shipping' => $this->free_shipping ? 1 : 0,
+                'on_orders' => $this->on_orders ?? 0,
             ]);
 
             if (isset($this->deleteSupercategories_id)) {

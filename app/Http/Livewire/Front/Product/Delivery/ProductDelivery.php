@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Front\Product\Delivery;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Governorate;
+use App\Models\User;
 use App\Models\Zone;
 use Livewire\Component;
 
@@ -15,6 +16,7 @@ class ProductDelivery extends Component
     public $governorates, $selected_governorate, $selected_governorate_id;
     public $cities, $selected_city, $selected_city_id;
     public $delivery_cost;
+    public $user;
 
     protected $rules = [
         'selected_country_id' => 'required',
@@ -25,9 +27,15 @@ class ProductDelivery extends Component
     ###### Mount :: START ######
     public function mount()
     {
+
         if (!$this->free_shipping) {
             if (auth()->check()) {
-                $address = auth()->user()->addresses()->where('default', 1)->first();
+                $this->user = User::with([
+                    'phones',
+                    'addresses' => fn ($q) => $q->with(['country', 'governorate', 'city'])
+                ])->findOrFail(auth()->user()->id);
+
+                $address = $this->user->addresses->where('default', 1)->first();
 
                 $this->selected_country_id = $address->country_id ?? 1;
                 $this->selected_governorate_id = $address->governorate_id ?? 1;
@@ -142,8 +150,8 @@ class ProductDelivery extends Component
         $this->delivery_cost = $delivery_cost ?? 'no delivery';
 
         // if user hasn't set his address yet, make this address as default
-        if (auth()->check() && auth()->user()->addresses()->count() == 0) {
-            auth()->user()->addresses()->create([
+        if (auth()->check() && $this->user->addresses->count() == 0) {
+            $this->user->addresses->create([
                 'country_id' => $this->selected_country_id,
                 'governorate_id' => $this->selected_governorate_id,
                 'city_id' => $this->selected_city_id,

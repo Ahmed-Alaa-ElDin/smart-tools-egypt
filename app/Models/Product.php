@@ -34,8 +34,6 @@ class Product extends Model
         'model',
         'refundable',
         'video',
-        // 'meta_title',
-        // 'meta_description',
         'meta_keywords',
         'free_shipping',
         'publish',
@@ -121,6 +119,13 @@ class Product extends Model
         return $this->hasMany(Review::class);
     }
 
+    // many to many relationship Product --> Orders
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class)->withPivot('quantity');
+    }
+
+
     public function scopePublishedProduct($query)
     {
         $query->select(
@@ -195,6 +200,7 @@ class Product extends Model
                     ])
                 ]
             )
+            ->where('under_reviewing', 0)
             ->where('publish', 1);
     }
 
@@ -270,10 +276,12 @@ class Product extends Model
                             ])
                         ]),
                     ]),
-                    'reviews' => fn($q) => $q->where('status',1)
+                    'reviews' => fn ($q) => $q->where('status', 1),
+                    'coupons'
                 ]
             )
             ->whereIn('id', $products_id)
+            ->where('under_reviewing', 0)
             ->where('publish', 1);
     }
 }

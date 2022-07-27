@@ -20,14 +20,14 @@ return new class extends Migration
             $table->unsignedBigInteger('governorate_id')->nullable()->unsigned();
             $table->unsignedBigInteger('city_id')->nullable()->unsigned();
             $table->text('details')->nullable();
-            $table->text('special_marque')->nullable();
+            $table->text('landmarks')->nullable();
             $table->tinyInteger('default')->default(0)->comment('0 --> Not default , 1 --> Default');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->nullOnDelete()->onUpdate('cascade');
-            $table->foreign('country_id')->references('id')->on('countries')->nullOnDelete()->onUpdate('cascade');
-            $table->foreign('governorate_id')->references('id')->on('governorates')->nullOnDelete()->onUpdate('cascade');
-            $table->foreign('city_id')->references('id')->on('cities')->nullOnDelete()->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('governorate_id')->references('id')->on('governorates')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
 
         });
     }

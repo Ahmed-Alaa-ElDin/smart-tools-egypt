@@ -9,8 +9,7 @@
                 <div class="col-auto xl:col-3 pl-0 pr-3 flex items-center flex-col ">
                     <a href="{{ route('front.homepage') }}"
                         class="flex items-center gap-2 simple-text logo-normal uppercase font-bold hover:text-current">
-                        <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}"
-                            alt="Smart Tools Egypt Logo">
+                        <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}" alt="Smart Tools Egypt Logo">
                         <span class="hidden md:block">
                             {{ __('front/homePage.Smart Tools Egypt') }}
                         </span>
@@ -53,18 +52,20 @@
                 </div>
                 {{-- Search : End --}}
 
-                {{-- Compare : Start --}}
-                @livewire('front.general.compare.compare-drop-down')
+                @section('cart-wishlist-compare')
+                    {{-- Compare : Start --}}
+                    @livewire('front.general.compare.compare-drop-down')
 
-                {{-- Compare : End --}}
+                    {{-- Compare : End --}}
 
-                {{-- Wishlist : Start --}}
-                @livewire('front.general.wishlist.wishlist-drop-down')
-                {{-- Wishlist : End --}}
+                    {{-- Wishlist : Start --}}
+                    @livewire('front.general.wishlist.wishlist-drop-down')
+                    {{-- Wishlist : End --}}
 
-                {{-- Cart :: Start --}}
-                @livewire('front.general.cart.cart-drop-down')
-                {{-- Cart :: End --}}
+                    {{-- Cart :: Start --}}
+                    @livewire('front.general.cart.cart-drop-down')
+                    {{-- Cart :: End --}}
+                @show
 
             </div>
         </div>

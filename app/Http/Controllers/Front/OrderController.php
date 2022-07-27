@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    
+
     public function shipping()
     {
         $products_id = [];
@@ -33,6 +33,22 @@ class OrderController extends Controller
         // put products data in wishlist_products variable
         $wishlist_products = $products->whereIn('id', $wishlist_products_id);
 
-        return view('front.cart.order', compact('cart_products', 'wishlist_products'));
+        return view('front.cart.shipping', compact('cart_products', 'wishlist_products'));
     }
+
+    public function billing()
+    {
+        return view('front.cart.billing');
+    }
+
+    public function billingCheck(Request $request)
+    {
+        dd($request->all());
+    }
+
+    public function done()
+    {
+        return view('front.cart.done');
+    }
+
 }

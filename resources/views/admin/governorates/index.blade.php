@@ -22,16 +22,15 @@
 
                         {{-- Card Head --}}
                         <div class="card-header card-header-primary">
-                            <div class="flex flex-wrap justify-between gap-2">
+                            <div class="flex flex-wrap justify-around md:justify-between gap-2">
                                 <div class=" ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
                                         {{ __('admin/deliveriesPages.Here you can manage governorates') }}</p>
                                 </div>
 
                                 {{-- Import Governorates From Bosta --}}
-                                {{-- {{ route('admin.governorates.importFromBosta') }} --}}
-                                <a href="" class="btn btn-sm bg-secondary font-bold hover:bg-secondayDark">
-                                    <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                <a href="{{ route('admin.governorates.importFromBosta') }}" class="btn btn-sm bg-secondary font-bold hover:bg-secondayDark">
+                                    <span class="material-icons text-sm rtl:ml-1 ltr:mr-1">
                                         cloud_download
                                     </span>
                                     {{ __('admin/deliveriesPages.Import From Bosta') }}
@@ -41,7 +40,7 @@
                                 @can('Add Governorate')
                                     <a href="{{ route('admin.governorates.create') }}"
                                         class="btn btn-sm bg-success font-bold hover:bg-successDark">
-                                        <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                        <span class="material-icons text-sm rtl:ml-1 ltr:mr-1">
                                             add
                                         </span>
                                         {{ __('admin/deliveriesPages.Add Governorate') }}

@@ -82,18 +82,28 @@ class CustomerForm extends Component
             'governorate_id' => 1,
             'city_id' => 1,
             'details' => '',
-            'special_marque' => '',
+            'landmarks' => '',
             'default' => 1
         ]];
 
-        // get all countries
-        $this->countries = Country::orderBy('name->' . session('locale'))->get();
+        // // get all countries
+        // $this->countries = Country::orderBy('name->' . session('locale'))->get();
 
-        if ($this->countries->count()) {
-            // User Has Addresses
-            $this->governorates[0] = Governorate::where('country_id', $this->addresses[0]['country_id'])->orderBy('name->' . session('locale'))->get()->toArray();
-            $this->cities[0] = City::where('governorate_id', $this->addresses[0]['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray();
-        }
+        // if ($this->countries->count()) {
+        //     // User Has Addresses
+        //     $this->governorates[0] = Governorate::where('country_id', $this->addresses[0]['country_id'])->orderBy('name->' . session('locale'))->get()->toArray();
+        //     $this->cities[0] = City::where('governorate_id', $this->addresses[0]['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray();
+        // }
+
+        $this->countries = Country::get()->toArray();
+        $this->address["0"]['country_id'] = count($this->countries) ? $this->countries[0]['id'] : null;
+
+        $this->governorates = $this->address["0"]['country_id'] ? Governorate::where('country_id', $this->address["0"]['country_id'])->orderBy('name->' . session('locale'))->get()->toArray() : [];
+        $this->address["0"]['governorate_id'] = count($this->governorates) ? $this->governorates[0]['id'] : null;
+
+        $this->cities = $this->address["0"]['governorate_id'] ? City::where('governorate_id', $this->address["0"]['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray() : [];
+        $this->address["0"]['city_id'] = count($this->cities) ? $this->cities[0]['id'] : null;
+
 
         if ($this->customer_id) {
             // get User Data
@@ -147,7 +157,7 @@ class CustomerForm extends Component
                 'governorate_id' => 1,
                 'city_id' => 1,
                 'details' => '',
-                'special_marque' => '',
+                'landmarks' => '',
                 'default' => 1
             ]];
 
@@ -222,7 +232,7 @@ class CustomerForm extends Component
             'governorate_id' => 1,
             'city_id' => 1,
             'details' => '',
-            'special_marque' => '',
+            'landmarks' => '',
             'default' => 0
         ];
 
@@ -355,7 +365,7 @@ class CustomerForm extends Component
                         'governorate_id' => $address['governorate_id'],
                         'city_id' => $address['city_id'],
                         'details' => $address['details'],
-                        'special_marque' => $address['special_marque'],
+                        'landmarks' => $address['landmarks'],
                         'default' => $index == $this->defaultAddress ? 1 : 0,
                     ]);
                     array_push($newAddresses, $newAddress);
@@ -452,7 +462,7 @@ class CustomerForm extends Component
                         'governorate_id' => $address['governorate_id'],
                         'city_id' => $address['city_id'],
                         'details' => $address['details'],
-                        'special_marque' => $address['special_marque'],
+                        'landmarks' => $address['landmarks'],
                         'default' => $index == $this->defaultAddress ? 1 : 0,
                     ]);
                     array_push($newAddresses, $newAddress);

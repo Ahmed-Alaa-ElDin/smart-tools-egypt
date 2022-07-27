@@ -187,7 +187,7 @@ return [
         'addresses.*.governorate_id'    =>  'المحافظ',
         'addresses.*.city_id'           =>  'المدينة',
         'addresses.*.details'           =>  'تفاصيل العنوان',
-        'addresses.*.special_marque'    =>  'العلامة المميزة',
+        'addresses.*.landmarks'    =>  'العلامة المميزة',
         'selectedPermissions' => 'الصلاحيات',
         'phones.*.phone' => 'الهاتف',
         'name.ar' => "الاسم بالعربية",
@@ -246,6 +246,10 @@ return [
         'selected_offer'        => 'العرض',
         'selected_banners'      => 'البنرات',
         'selected_products'     => 'المنتجات',
+        'address.country_id'    => 'الدولة',
+        'address.governorate_id'=> 'المحافظة',
+        'address.city_id'       => 'المدينة',
+
 
     ],
 

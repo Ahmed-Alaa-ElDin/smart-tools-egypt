@@ -71,5 +71,7 @@ class Kernel extends HttpKernel
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'getCart' => \App\Http\Middleware\GetCart::class,
+        'can_deliver' => \App\Http\Middleware\CanDeliver::class,
+        'cart_not_empty' => \App\Http\Middleware\CartNotEmpty::class,
     ];
 }

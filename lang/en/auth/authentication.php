@@ -41,6 +41,7 @@ return [
     "Or login with"                 =>      "Or login with",
     "Shipping info."                =>      "Shipping info.",
     "Submit"                        =>      "Submit",
+    "Back to Cart"                  =>      "Back to Cart",
     "Login"                         => "Login",
     "Login"                         => "Login",
     "Login"                         => "Login",

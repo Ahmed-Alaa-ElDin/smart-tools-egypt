@@ -20,10 +20,11 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             RoleSeeder::class,
             CountrySeeder::class,
-            GovernorateSeeder::class,
-            CitySeeder::class,
+            // GovernorateSeeder::class,
+            // CitySeeder::class,
             UserSeeder::class,
             SectionSeeder::class,
+            OrderStatusSeeder::class,
         ]);
     }
 }

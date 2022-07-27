@@ -1,53 +1,51 @@
-@extends('layouts.front.site', ['titlePage' => __('front/homePage.Shopping Cart')])
+@extends('layouts.front.site', ['titlePage' => __('front/homePage.Order Shipping Details')])
+
+@section('cart-wishlist-compare')
+    <div class="grow text-center font-bold text-primary">
+        {{ __('front/homePage.Checkout') }}
+    </div>
+@endsection
 
 @section('content')
+    {{-- Unauthourized customers --}}
+    @guest
+        <div class="fixed top-0 left-0 w-screen h-screen backdrop-blur-sm z-50">
+            @livewire('front.order.register-from-order')
+        </div>
+    @endguest
+
     <div class="container p-4">
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-12 order-2 md:col-span-8 md:order-none flex flex-col gap-5 self-start">
 
                 {{-- ############## Order Steps :: Start ############## --}}
-                @livewire('front.order.general.order-steps', ['step' => 1])
+                @livewire('front.order.general.order-steps', ['step' => 2])
                 {{-- ############## Order Steps :: End ############## --}}
 
-                {{-- ############## Cart :: Start ############## --}}
-                <div class="bg-white rounded overflow-hidden">
-                    {{-- ############## Title :: Start ############## --}}
-                    <div class="flex justify-between items-center">
-                        <h3 class="h5 text-center font-bold p-4 m-0">
-                            {{ __('front/homePage.Shopping Cart') }}
-                        </h3>
+                @auth()
+                    {{-- ############## Order Shipping Details :: Start ############## --}}
+                    <div class="bg-white rounded overflow-hidden">
+                        {{-- ############## Title :: Start ############## --}}
+                        <div class="flex justify-between items-center">
+                            <h3 class="h5 text-center font-bold p-4 m-0">
+                                {{ __('front/homePage.Order Shipping Details') }}
+                            </h3>
+                        </div>
+                        {{-- ############## Title :: End ############## --}}
+
+                        <hr>
+
+                        {{-- ############## Order Shipping Details :: Start ############## --}}
+                        @livewire('front.order.order-shipping-details')
+                        {{-- ############## Order Shipping Details :: End ############## --}}
                     </div>
-                    {{-- ############## Title :: End ############## --}}
-                    <hr>
-
-                    {{-- ############## Cart Products' List :: Start ############## --}}
-                    @livewire('front.order.general.order-products-list', ['products' => $cart_products, 'step' => 1])
-                    {{-- ############## Cart Products' List :: End ############## --}}
-                </div>
-                {{-- ############## Cart :: End ############## --}}
-
-                {{-- ############## Wishlist :: Start ############## --}}
-                <div class="bg-white rounded overflow-hidden">
-                    {{-- ############## Title :: Start ############## --}}
-                    <div class="flex justify-between items-center">
-                        <h3 class="h5 text-center font-bold p-4 m-0">
-                            {{ __('front/homePage.Wishlist') }}
-                        </h3>
-                    </div>
-                    {{-- ############## Title :: End ############## --}}
-                    <hr>
-
-                    {{-- ############## Wishlist Products' List :: Start ############## --}}
-                    @livewire('front.order.general.order-wishlist-products-list', ['products' => $wishlist_products])
-                    {{-- ############## Wishlist Products' List :: End ############## --}}
-                </div>
-                {{-- ############## Wishlist :: End ############## --}}
-
+                    {{-- ############## Order Shipping Details :: End ############## --}}
+                @endauth
             </div>
 
             {{-- ############## Order Summary :: Start ############## --}}
             <div class="col-span-12 md:col-span-4 md:order-none bg-white rounded overflow-hidden self-start">
-                @livewire('front.order.general.order-summary', ['products' => $cart_products, 'step' => 1])
+                @livewire('front.order.general.order-summary', ['products' => $cart_products, 'step' => 2])
             </div>
             {{-- ############## Order Summary :: End ############## --}}
         </div>

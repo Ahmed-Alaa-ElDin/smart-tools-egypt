@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->unsignedBigInteger('delivery_id');
             $table->integer('min_weight')->default(5)->comment('in KG');
-            $table->decimal('min_charge',7,2)->default(0);
-            $table->decimal('kg_charge',7,2)->default(0);
+            $table->decimal('min_charge',8,2)->default(0);
+            $table->decimal('kg_charge',8,2)->default(0);
             $table->tinyInteger('is_active')->default(0)->comment('0 -> Inactive , 1 -> Active');
             $table->timestamps();
 
