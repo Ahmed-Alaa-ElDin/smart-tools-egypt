@@ -17,35 +17,35 @@ class OrderStatusSeeder extends Seeder
     {
         OrderStatus::create([
             'id' => 1,
-            'name' => 'under_processing',
+            'name' => 'Under Processing',
         ]);
         OrderStatus::create([
             'id' => 2,
-            'name' => 'pending',
+            'name' => 'Pending',
         ]);
         OrderStatus::create([
             'id' => 3,
-            'name' => 'created',
+            'name' => 'Created',
         ]);
         OrderStatus::create([
             'id' => 4,
-            'name' => 'preparing',
+            'name' => 'Preparing',
         ]);
         OrderStatus::create([
             'id' => 5,
-            'name' => 'under_reviewing',
+            'name' => 'Under Reviewing',
         ]);
         OrderStatus::create([
             'id' => 6,
-            'name' => 'shipped',
+            'name' => 'Shipped',
         ]);
         OrderStatus::create([
             'id' => 7,
-            'name' => 'delivered',
+            'name' => 'Delivered',
         ]);
         OrderStatus::create([
             'id' => 8,
-            'name' => 'cancelled',
+            'name' => 'Cancelled',
         ]);
     }
 }

@@ -191,8 +191,7 @@ bg-gray-200 @endif select-none"
 
                 {{-- Delete Button --}}
                 <a href="#" data-title="{{ __('admin/sitePages.Remove from list') }}" data-toggle="tooltip"
-                    data-placement="top" wire:click.prevent="removeProduct({{ $product['id'] }})"
-                    class="m-0">
+                    data-placement="top" wire:click.prevent="removeProduct({{ $product['id'] }})" class="m-0">
                     <span
                         class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded-circle">
                         close
@@ -224,9 +223,10 @@ bg-gray-200 @endif select-none"
                 <div class="col-span-12 md:col-span-9">
                     <input
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                        type="text" wire:model.debounce.300ms="searchProduct" onfocus="Livewire.emit('showResults',1);"
-                        id="product_name" placeholder="{{ __("admin/sitePages.Enter Product's Name") }}"
-                        maxlength="100" autocomplete="off" required>
+                        type="text" wire:model.debounce.300ms="searchProduct"
+                        onfocus="Livewire.emit('showResults',1);" id="product_name"
+                        placeholder="{{ __("admin/sitePages.Enter Product's Name") }}" maxlength="100"
+                        autocomplete="off" required>
                     @if ($searchProduct != '' && $showResult)
                         <div class="relative h-0" wire:key="add-product-321231">
                             <div class="absolute top-0 w-full flex flex-col justify-center items-center">
@@ -242,7 +242,7 @@ bg-gray-200 @endif select-none"
                                                 class="flex flex-col justify-start ltr:text-left rtl:text-right gap-2 grow">
                                                 <span class="font-bold text-black">{{ $product->name }}</span>
                                                 <span
-                                                    class="text-xs font-bold text-gray-500">{{ $product->brand->name }}</span>
+                                                    class="text-xs font-bold text-gray-500">{{ $product->brand ? $product->brand->name : '' }}</span>
                                             </div>
 
                                             {{-- Price --}}

@@ -174,6 +174,13 @@
                                 <a class="dropdown-item font-bold" href="{{ route('front.profile.index') }}">
                                     {{ __('front/homePage.Profile') }}
                                 </a>
+                                {{-- User's Profile :: End --}}
+
+                                {{-- User's Orders :: Start --}}
+                                <a class="dropdown-item font-bold" href="{{ route('front.orders.index') }}">
+                                    {{ __('front/homePage.My Orders') }}
+                                </a>
+                                {{-- User's Orders :: End --}}
 
                                 <div class="dropdown-divider"></div>
 

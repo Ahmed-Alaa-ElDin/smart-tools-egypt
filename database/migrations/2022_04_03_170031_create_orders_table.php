@@ -25,6 +25,7 @@ return new class extends Migration
             $table->tinyInteger('allow_opening')->default(1)->comment('0 -> No , 1 -> Yes')->nullable();
             $table->unsignedBigInteger('zone_id')->nullable();
             $table->unsignedBigInteger('coupon_id')->nullable();
+            $table->decimal('coupon_discount', 8, 2)->default(0.00);
             $table->unsignedBigInteger('status_id')->nullable();
             $table->decimal('subtotal_base', 8, 2)->default(0.00);
             $table->decimal('subtotal_final', 8, 2)->default(0.00);

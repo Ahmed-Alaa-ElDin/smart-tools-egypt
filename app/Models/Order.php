@@ -20,6 +20,7 @@ class Order extends Model
         'allow_opening',
         'zone_id',
         'coupon_id',
+        'coupon_discount',
         'status_id',
         'subtotal_base',
         'subtotal_final',
@@ -35,6 +36,8 @@ class Order extends Model
         'order_delivery_id',
         'notes',
     ];
+
+    protected $appends = ['can_returned'];
 
     public function user()
     {
@@ -63,6 +66,11 @@ class Order extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class)->withPivot('quantity');
+        return $this->belongsToMany(Product::class)->withPivot('quantity', 'price');
+    }
+
+    public function getCanReturnedAttribute()
+    {
+        return $this->status_id == 7 && $this->created_at->diffInDays() <= config('constants.constants.RETURN_PERIOD');
     }
 }

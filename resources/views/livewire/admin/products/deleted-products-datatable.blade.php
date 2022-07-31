@@ -222,7 +222,7 @@
                                     {{-- Brand Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
                                         <div class="flex items-center content-center justify-center">
-                                            {{ $product->brand->name }}
+                                            {{ $product->brand ? $product->brand->name : '' }}
                                         </div>
                                     </td>
 
@@ -290,7 +290,13 @@
                                     {{-- Publish Body --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
                                         <div class="text-sm text-gray-900">
-                                            {!! $product->publish ? '<span class="block cursor-pointer material-icons text-success" wire:click="publish(' . $product->id . ')">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600" wire:click="publish(' . $product->id . ')">toggle_off</span>' !!}
+                                            {!! $product->publish
+                                                ? '<span class="block cursor-pointer material-icons text-success" wire:click="publish(' .
+                                                    $product->id .
+                                                    ')">toggle_on</span>'
+                                                : '<span class="block cursor-pointer material-icons text-red-600" wire:click="publish(' .
+                                                    $product->id .
+                                                    ')">toggle_off</span>' !!}
                                         </div>
                                     </td>
 
@@ -311,8 +317,7 @@
                                         {{-- Restore Button --}}
                                         @can('Deleted User')
                                             <a href="#" title="{{ __('admin/productsPages.Restore') }}"
-                                                wire:click.prevent="restoreConfirm({{ $product->id }})"
-                                                class="m-0">
+                                                wire:click.prevent="restoreConfirm({{ $product->id }})" class="m-0">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-success hover:bg-successDark rounded">
                                                     restore
@@ -323,8 +328,7 @@
                                         {{-- Force Delete Button --}}
                                         @can('Deleted User')
                                             <a href="#" title="{{ __('admin/productsPages.Delete') }}"
-                                                wire:click.prevent="deleteConfirm({{ $product->id }})"
-                                                class="m-0">
+                                                wire:click.prevent="deleteConfirm({{ $product->id }})" class="m-0">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
                                                     delete
@@ -336,7 +340,7 @@
                             @empty
                                 <tr>
                                     <td class="text-center py-2 font-bold" colspan="6">
-                                        {{ $search == ''? __('admin/productsPages.No data in this table'): __('admin/productsPages.No data available according to your search') }}
+                                        {{ $search == '' ? __('admin/productsPages.No data in this table') : __('admin/productsPages.No data available according to your search') }}
                                     </td>
                                 </tr>
                             @endforelse

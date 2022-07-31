@@ -33,7 +33,7 @@ class CartController extends Controller
         // put products data in wishlist_products variable
         $wishlist_products = $products->whereIn('id', $wishlist_products_id);
 
-        return view('front.cart.cart', compact('cart_products', 'wishlist_products'));
+        return view('front.cart.index', compact('cart_products', 'wishlist_products'));
     }
     ############### Cart View :: End ##############
 }

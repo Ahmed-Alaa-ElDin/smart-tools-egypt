@@ -3,11 +3,46 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+
+    public function index()
+    {
+        $orders = Order::with([
+            'products' => function ($query) {
+                $query->with([
+                    'reviews',
+                    'thumbnail',
+                    'brand',
+                    'subcategories' => function ($query) {
+                        $query->with([
+                            'category' => function ($query) {
+                                $query->with('supercategory');
+                            }
+                        ]);
+                    },
+                ]);
+            },
+            'status'
+        ])
+            ->where('user_id', auth()->user()->id)
+            ->orderBy('id', 'desc')
+            ->paginate(5);
+
+        $order_products_id = $orders->map(function ($order) {
+            return $order->products->map(function ($product) {
+                return $product->id;
+            });
+        })->flatten()->unique()->toArray();
+
+        $best_products = getBestOfferForProducts($order_products_id);
+
+        return view('front.orders.index', compact('orders', 'best_products'));
+    }
 
     public function shipping()
     {
@@ -33,22 +68,87 @@ class OrderController extends Controller
         // put products data in wishlist_products variable
         $wishlist_products = $products->whereIn('id', $wishlist_products_id);
 
-        return view('front.cart.shipping', compact('cart_products', 'wishlist_products'));
+        return view('front.orders.shipping', compact('cart_products', 'wishlist_products'));
     }
 
     public function billing()
     {
-        return view('front.cart.billing');
+        return view('front.orders.billing');
     }
 
     public function billingCheck(Request $request)
     {
-        dd($request->all());
+        $data = $request->all();
+
+        ksort($data);
+
+        $hmac = $data['hmac'];
+
+        $array = [
+            'amount_cents',
+            'created_at',
+            'currency',
+            'error_occured',
+            'has_parent_transaction',
+            'id',
+            'integration_id',
+            'is_3d_secure',
+            'is_auth',
+            'is_capture',
+            'is_refunded',
+            'is_standalone_payment',
+            'is_voided',
+            'order',
+            'owner',
+            'pending',
+            'source_data_pan',
+            'source_data_sub_type',
+            'source_data_type',
+            'success'
+        ];
+
+        $concat_data = '';
+
+        foreach ($data as $key => $element) {
+            if (in_array($key, $array)) {
+                $concat_data .= $element;
+            }
+        }
+
+        $secret = env('PAYMOB_HMAC');
+
+        $generated_hmac = hash_hmac('SHA512', $concat_data, $secret);
+
+        if ($generated_hmac == $hmac && $data['success'] == 'true') {
+            // update the database with the order data
+            $order = Order::with([
+                'address' => fn ($q) => $q->with('governorate', 'city'),
+                'user',
+                'products' => fn ($q) => $q->select('products.id', 'products.quantity', 'product_id'),
+            ])->updateOrCreate([
+                'user_id'       =>  auth()->user()->id,
+                'status_id'     =>  1
+            ], [
+                'payment_status' => 1,
+                'payment_details' => [
+                    'amount_cents' => $data['amount_cents'],
+                    'order_id' => $data['order'],
+                    'transaction_id' => $data['id'],
+                    'source_data_sub_type' => $data['source_data_sub_type'],
+                ]
+            ]);
+
+            // create order
+            createBostaOrder($order);
+
+            return redirect()->route('front.order.done');
+        } else {
+            return redirect()->route('front.order.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
+        }
     }
 
     public function done()
     {
-        return view('front.cart.done');
+        return view('front.orders.done');
     }
-
 }

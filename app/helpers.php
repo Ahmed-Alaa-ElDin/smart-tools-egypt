@@ -1,8 +1,13 @@
 <?php
 
+use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\Review;
+use App\Models\User;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 
@@ -374,4 +379,90 @@ function get_product_rating($product_id)
         ->approved()->get();
 
     return $all_product_reviews;
+}
+
+// create bosta Order
+function createBostaOrder($order)
+{
+    $order_data = [
+        "specs" => [
+            "packageDetails"    =>      [
+                "itemsCount"    => $order->num_of_items,
+                "description"   => $order->package_desc,
+            ],
+            "size"              =>      "SMALL",
+            "weight"            =>      $order->total_weight,
+        ],
+        "dropOffAddress" => [
+            "city"          =>      $order->address->governorate->getTranslation('name', 'en'),
+            "district"      =>      $order->address->city->getTranslation('name', 'en'),
+            "firstLine"     =>      $order->address->details ?? $order->address->city->getTranslation('name', 'en'),
+            "secondLine"    =>      $order->address->landmarks ?? '',
+        ],
+        "receiver" => [
+            "phone"         =>      $order->user->phones->where('default', 1)->first()->phone,
+            "firstName"     =>      $order->user->f_name,
+            "lastName"      =>      $order->user->l_name ?? '',
+            "email"         =>      $order->user->email ?? '',
+        ],
+        "businessReference" => "$order->id",
+        "type"      =>      10,
+        "notes"     =>      $order->notes ?? '',
+        "cod"       =>      $order->payment_method == 1 ? $order->subtotal_final + $order->delivery_fees : 0.00,
+        "allowToOpenPackage" => true,
+    ];
+
+    // create bosta order
+    $bosta_response = Http::withHeaders([
+        'Authorization'     =>  env('BOSTA_API_KEY'),
+        'Content-Type'      =>  'application/json',
+        'Accept'            =>  'application/json'
+    ])->post('https://app.bosta.co/api/v0/deliveries', $order_data);
+
+    $decoded_bosta_response = $bosta_response->json();
+
+    if ($bosta_response->successful()) {
+        // update order in database
+        $order->update([
+            'tracking_number' => $decoded_bosta_response['trackingNumber'],
+            'order_delivery_id' => $decoded_bosta_response['_id'],
+            'status_id' => 3,
+        ]);
+
+        // update user's balance
+        $user = User::find(auth()->user()->id);
+
+        $user->update([
+            'points' => $user->points - $order->used_points + $order->gift_points ?? 0,
+            'balance' => $user->balance - $order->used_balance ?? 0,
+        ]);
+
+        // update coupon usage
+        if ($order->coupon_id != null) {
+            $coupon = Coupon::find($order->coupon_id);
+
+            $coupon->update([
+                'number' => $coupon->number != null && $coupon->number > 0 ? $coupon->number - 1 : $coupon->number,
+            ]);
+        }
+
+        // todo :: edit offer usage
+
+        // clear cart
+        Cart::instance('cart')->destroy();
+
+        // edit products database
+        foreach ($order->products as $product) {
+            $product->update([
+                'quantity' => $product->quantity - $product->pivot->quantity >= 0  ? $product->quantity - $product->pivot->quantity : 0,
+            ]);
+        }
+
+        // redirect to done page
+        Session::flash('success', __('front/homePage.Order Created Successfully'));
+        redirect()->route('front.order.done')->with('order_id', $order->id);
+    } else {
+        Session::flash('error', __('front/homePage.Order Creation Failed, Please Try Again'));
+        redirect()->route('front.order.billing');
+    }
 }

@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Front\Order;
 use App\Models\Address;
 use App\Models\City;
 use App\Models\Country;
-use App\Models\Destination;
 use App\Models\Governorate;
 use App\Models\Order;
 use App\Models\Phone;
@@ -207,7 +206,7 @@ class OrderShippingDetails extends Component
     public function savePhone($default)
     {
         $this->validate([
-            'phone' => 'required|digits_between:8,11|' . Rule::unique('phones')->ignore($this->user->id, 'user_id'),
+            'phone' => 'required|digits:11|regex:/^01[0-2]\d{1,8}$/|' . Rule::unique('phones')->ignore($this->user->id, 'user_id'),
         ]);
 
         Phone::create([

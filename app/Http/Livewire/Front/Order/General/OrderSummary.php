@@ -21,7 +21,7 @@ class OrderSummary extends Component
     public $delivery_price;
     public $best_zone_id;
     public $points = 0, $total_points = 0;
-    public $coupon_id, $coupon_price, $coupon_points, $coupon_shipping;
+    public $coupon_id, $coupon_price, $coupon_points, $coupon_shipping, $coupon_discount;
 
 
     protected $listeners = [
@@ -252,6 +252,7 @@ class OrderSummary extends Component
         $this->coupon_price = $coupon_shipping ? $coupon_price - $this->delivery_price : $coupon_price;
         $this->coupon_points = $coupon_points;
         $this->coupon_shipping = $coupon_shipping;
+        $this->coupon_discount = $this->products_best_prices - $this->coupon_price;
         $this->getProducts();
         $this->getDeliveryPrice();
     }
@@ -271,6 +272,7 @@ class OrderSummary extends Component
                 'subtotal_final' => $this->coupon_price && $this->coupon_shipping ? $this->coupon_price : ($this->coupon_price && !$this->coupon_shipping ? $this->coupon_price - $this->delivery_price : ($this->products_best_prices - $this->delivery_price ?? 0)),
                 'delivery_fees' => $this->coupon_shipping == true ? 0 : ($this->free_shipping == true ? 0 : ($this->delivery_price ?? 0)),
                 'coupon_id' => $this->coupon_id ?? null,
+                'coupon_discount' => $this->coupon_discount ?? null,
                 'zone_id' => $this->best_zone_id ?? null,
                 'weight' => $this->products_weights ?? 1,
                 'gift_points' => $this->coupon_points ?? ($this->total_points ?? 0),

@@ -23,7 +23,7 @@
             {{-- todo :: brand link --}}
             <div class="flex items-center">
                 <a href="#" class="text-sm font-bold text-gray-400 hover:text-current">
-                    {{ $product['brand']['name'] }}
+                    {{ $product['brand'] ? $product['brand']['name'] : "" }}
                 </a>
             </div>
             {{-- Product's Brand :: End --}}

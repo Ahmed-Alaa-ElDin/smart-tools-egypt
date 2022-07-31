@@ -25,6 +25,7 @@ Route::group([
     ################ Cart & Order Controller :: Start ##############
     Route::get('/cart', [CartController::class, 'index'])->name('cart')->middleware(['cart_not_empty']);
 
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/order/shipping', [OrderController::class, 'shipping'])->name('order.shipping')->middleware(['cart_not_empty']);
     Route::get('/order/billing', [OrderController::class, 'billing'])->name('order.billing')->middleware(['auth','can_deliver','cart_not_empty']);
     Route::get('/order/billing/check', [OrderController::class, 'billingCheck'])->name('order.billing.check');

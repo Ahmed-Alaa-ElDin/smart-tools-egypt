@@ -1,5 +1,5 @@
 <div class="relative">
-    <div wire:loading.delay.longer class="absolute fixed w-full h-full backdrop-blur-sm">
+    <div wire:loading.delay.longer class="absolute fixed w-full h-full backdrop-blur-sm z-40">
         <hr>
         <div class=" w-full flex gap-2 justify-center items-center p-4">
             <span class="text-primary text-xs font-bold">

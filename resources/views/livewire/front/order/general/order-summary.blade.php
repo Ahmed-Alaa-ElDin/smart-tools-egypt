@@ -226,12 +226,12 @@
                             {{ __('front/homePage.EGP') }}
                         </span>
                         <span class="font-bold text-xl"
-                            dir="ltr">{{ number_format(explode('.', $products_best_prices - $coupon_price)[0], 0, '.', '\'') }}</span>
+                            dir="ltr">{{ number_format(explode('.', $coupon_discount)[0], 0, '.', '\'') }}</span>
                         <span
-                            class="font-bold text-xs">{{ explode('.', number_format($products_best_prices - $coupon_price, 2))[1] ?? '00' }}</span>
+                            class="font-bold text-xs">{{ explode('.', number_format($coupon_discount, 2))[1] ?? '00' }}</span>
                     </span>
                     <span class="font-bold">
-                        ({{ number_format((($products_best_prices - $coupon_price) * 100) / $products_best_prices, 0) }}
+                        ({{ number_format((($coupon_discount) * 100) / $products_best_prices, 0) }}
                         %)
                     </span>
                 </div>

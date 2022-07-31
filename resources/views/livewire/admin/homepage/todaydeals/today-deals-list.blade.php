@@ -247,7 +247,7 @@ bg-gray-200 @endif select-none"
                                                 class="flex flex-col justify-start ltr:text-left rtl:text-right gap-2 grow">
                                                 <span class="font-bold text-black">{{ $product->name }}</span>
                                                 <span
-                                                    class="text-xs font-bold text-gray-500">{{ $product->brand->name }}</span>
+                                                    class="text-xs font-bold text-gray-500">{{ $product->brand ? $product->brand->name : "" }}</span>
                                             </div>
 
                                             {{-- Price --}}

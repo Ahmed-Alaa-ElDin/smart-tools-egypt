@@ -249,6 +249,7 @@ return [
         'address.country_id'    => 'الدولة',
         'address.governorate_id'=> 'المحافظة',
         'address.city_id'       => 'المدينة',
+        'balance'               => 'الرصيد',
 
 
     ],

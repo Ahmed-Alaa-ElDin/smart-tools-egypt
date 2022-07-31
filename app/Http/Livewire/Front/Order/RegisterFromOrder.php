@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
-use Mpdf\Tag\Dd;
 
 class RegisterFromOrder extends Component
 {
@@ -35,7 +34,7 @@ class RegisterFromOrder extends Component
         return [
             'f_name'                    => 'required|string|max:40|min:3',
             'l_name'                    => 'nullable|string|max:40|min:3',
-            'phone'                     => 'required|digits_between:8,11|' . Rule::unique('phones'),
+            'phone'                     => 'required|digits:11|regex:/^01[0-2]\d{1,8}$/|' . Rule::unique('phones'),
             'email'                     => 'nullable|email|max:50|min:3',
             'password'                  => 'nullable|string|confirmed|max:50|min:8',
             'address.country_id'        => 'required|exists:countries,id',

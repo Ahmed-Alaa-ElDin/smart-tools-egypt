@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,6 +24,8 @@ class Category extends Model
         'meta_title',
         'meta_description',
     ];
+
+    protected $with = ['validOffers'];
 
     protected function asJson($value)
     {
@@ -57,6 +60,22 @@ class Category extends Model
             'type',
             'number'
         ]);
+    }
+
+    public function validOffers()
+    {
+        return $this->morphToMany(Offer::class, 'offerable')
+            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+            ->where(
+                fn ($q) => $q
+                    ->where('offerables.number', '>', 0)
+                    ->orWhereNull('offerables.number')
+            )->withPivot([
+                'value',
+                'type',
+                'number'
+            ]);
     }
 
     // hasmany through relationship  Category --> Products

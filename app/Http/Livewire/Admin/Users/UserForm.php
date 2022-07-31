@@ -46,7 +46,7 @@ class UserForm extends Component
             'l_name.ar'                     => 'nullable|string|max:40|min:3',
             'l_name.en'                     => 'nullable|string|max:40|min:3',
             'email'                         => 'required|email|max:50|min:3|unique:users,email,' . $this->user_id,
-            'phones.*.phone'                => 'nullable|digits_between:8,11|' . Rule::unique('phones')->ignore($this->user_id, 'user_id'),
+            'phones.*.phone'                => 'nullable|digits:11|regex:/^01[0-2]\d{1,8}$/|' . Rule::unique('phones')->ignore($this->user_id, 'user_id'),
             'gender'                        => 'in:0,1',
             'role'                          => 'exists:roles,id',
             'birth_date'                    => 'date|before:today',

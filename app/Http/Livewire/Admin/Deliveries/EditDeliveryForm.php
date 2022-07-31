@@ -33,7 +33,7 @@ class EditDeliveryForm extends Component
             'name.ar'                       => 'required|string|max:30|min:3',
             'name.en'                       => 'nullable|string|max:30|min:3',
             'email'                         => 'nullable|required_without:phones.' . $this->defaultPhone . '.phone|email|max:50|min:3|unique:deliveries,email,' . $this->delivery_id,
-            'phones.*.phone'                => 'nullable|required_without:email|digits_between:8,11|' . Rule::unique('phones')->ignore($this->delivery_id, 'user_id'),
+            'phones.*.phone'                => 'nullable|required_without:email|digits:11|regex:/^01[0-2]\d{1,8}$/|' . Rule::unique('phones')->ignore($this->delivery_id, 'user_id'),
             'photo'                         => 'nullable|mimes:jpg,jpeg,png|max:2048',
             'defaultPhone'                  => 'required',
             'active'                        => 'required',

@@ -363,7 +363,7 @@
                         </div>
                     </div>
                 @else
-                    <div class="col-span-4">
+                    <div class="col-span-4 md:col-span-2 md:col-start-2">
                         {{-- Phone Form :: Start --}}
                         <div
                             class="grid grid-cols-6 gap-x-4 gap-y-2 items-center bg-red-100 p-2 rounded text-center my-2">
@@ -398,7 +398,7 @@
             @endif
 
         @empty
-            <div class="col-span-2">
+            <div class="col-span-4 md:col-span-2 md:col-start-2">
                 {{-- Phone Form :: Start --}}
                 <div class="grid grid-cols-6 gap-x-4 gap-y-2 items-center bg-red-100 p-2 rounded text-center my-2">
                     <label class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
@@ -406,6 +406,12 @@
                     <input id="phone" type="text" wire:model.lazy="phone" dir="ltr"
                         placeholder="{{ __('front/homePage.Please enter your phone number') }}"
                         class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300">
+
+                    @error('phone')
+                        <div class="inline-block mt-2 col-span-6 bg-red-700 rounded text-white shadow px-3 py-1">
+                            {{ $message }}
+                        </div>
+                    @enderror
 
                     <div class="col-span-6 flex flex-wrap justify-around items-center">
                         <button
@@ -417,7 +423,6 @@
                 </div>
                 {{-- Phone Form :: End --}}
             </div>
-
         @endforelse
     </div>
     {{-- Phone :: End --}}
@@ -451,9 +456,9 @@
             </button>
         </div>
         {{-- Submit :: End --}}
-        @else
+    @else
         <div class="text-primary text-center p-4 font-bold">
-            <span >
+            <span>
                 {{ __('front/homePage.Please select a shipping address & contact phone & ensure that we can deliver to your address') }}
             </span>
         </div>
