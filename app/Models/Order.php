@@ -73,4 +73,9 @@ class Order extends Model
     {
         return $this->status_id == 7 && $this->created_at->diffInDays() <= config('constants.constants.RETURN_PERIOD');
     }
+
+    public function invoiceRequests()
+    {
+        return $this->hasMany(InvoiceRequest::class);
+    }
 }

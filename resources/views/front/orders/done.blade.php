@@ -32,12 +32,18 @@
                             <span class="material-icons text-9xl text-success">
                                 done_all
                             </span>
-                            <div class="text-xl font-bold">
-                                {{ __('front/homePage.Order Created Successfully') }}
-                            </div>
-                            <div class="text-sm">
-                                {{ __('front/homePage.Your order has been successfully created. We will contact you shortly.') }}
-                            </div>
+                            @if (session('cancel'))
+                                <div class="text-xl font-bold">
+                                    {!! session('cancel') !!}
+                                </div>
+                            @else
+                                <div class="text-xl font-bold">
+                                    {{ __('front/homePage.Order Created Successfully') }}
+                                </div>
+                                <div class="text-sm">
+                                    {{ __('front/homePage.Your order has been successfully created. We will contact you shortly.') }}
+                                </div>
+                            @endif
 
                             @if (session('order_id'))
                                 {{-- todo :: add tracking link --}}

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Offer;
 use App\Models\Order;
+use App\Models\Zone;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -33,15 +36,175 @@ class OrderController extends Controller
             ->orderBy('id', 'desc')
             ->paginate(5);
 
-        $order_products_id = $orders->map(function ($order) {
-            return $order->products->map(function ($product) {
-                return $product->id;
-            });
-        })->flatten()->unique()->toArray();
+        return view('front.orders.index', compact('orders'));
+    }
 
-        $best_products = getBestOfferForProducts($order_products_id);
+    public function edit($order_id)
+    {
+        $order = Order::with([
+            'products' => function ($query) {
+                $query->select([
+                    'products.id',
+                    'name',
+                    'slug',
+                    'products.quantity',
+                    'base_price',
+                    'final_price',
+                    'products.points',
+                    'free_shipping',
+                    'under_reviewing',
+                    'brand_id',
+                ])
+                    ->with([
+                        'thumbnail',
+                    ]);
+            },
+        ])
+            ->findOrFail($order_id);
 
-        return view('front.orders.index', compact('orders', 'best_products'));
+        return view('front.orders.edit', compact('order'));
+    }
+
+    public function update(Request $request, $order_id)
+    {
+        // products ids
+        $products_ids = $request->products_ids;
+
+        // Get Order data
+        $order = Order::findOrFail($order_id);
+
+        // Get Zone data
+        $zone = $order->zone;
+
+        // Get Order Products ids and quantities from request
+        $products_quantities = array_combine($request->products_ids, $request->quantities);
+        $products_total_quantities = array_sum($products_quantities);
+
+        // Get Order Products ids and quantities from Order DB
+        $old_products = $order->products;
+
+        // Get best offer for each product
+        $best_products = getBestOfferForProducts($request->products_ids);
+
+        // Get Order Products ids and weights from database
+        $products_weights = $best_products->where('free_shipping', 0)->pluck('weight', 'id');
+
+        // Get Order Products total weight
+        $total_weight = 0;
+
+        foreach ($products_weights as $id => $weight) {
+            if (isset($products_quantities[$id])) {
+                $total_weight += $weight * $products_quantities[$id];
+            }
+        }
+
+        // Get summation of products base prices
+        $products_base_prices = $best_products->sum(function ($product) use ($products_quantities) {
+            return $product->base_price * $products_quantities[$product->id];
+        });
+
+        // Get summation of products final prices
+        $products_final_prices = $best_products->sum(function ($product) use ($products_quantities) {
+            return $product->final_price * $products_quantities[$product->id];
+        });
+
+        // Get summation of products best prices
+        $products_best_prices = $best_products->sum(function ($product) use ($products_quantities) {
+            return $product->best_price * $products_quantities[$product->id];
+        });
+
+        // Get summation of products best points
+        $products_best_points = $best_products->sum(function ($product) use ($products_quantities) {
+            return $product->best_points * $products_quantities[$product->id];
+        });
+
+        // Get products discounts value
+        $products_discounts = $products_base_prices - $products_final_prices;
+
+        // Get products discounts percentage
+        $products_discounts_percentage = round(($products_discounts / $products_base_prices) * 100, 0);
+
+        // Get offers discounts value
+        $offers_discounts = $products_final_prices - $products_best_prices;
+
+        // Get offers discounts percentage
+        $offers_discounts_percentage = round(($offers_discounts / $products_final_prices) * 100, 0);
+
+        // Get shipping cost
+        $delivery_fees = $total_weight < $zone->min_weight ? $zone->min_charge : $zone->min_charge + ($total_weight - $zone->min_weight) * $zone->kg_charge;
+
+        // Get orders discounts value
+        $order_offer = Offer::orderOffers()->first();
+
+        if ($order_offer) {
+            // Percent Discount
+            if ($order_offer->type == 0 && $order_offer->value <= 100) {
+                $order_discount = $products_best_prices * ($order_offer->value / 100);
+                $best_price_from_orders = $products_best_prices - $order_discount;
+                $order_discount_percent = round($order_offer->value);
+            }
+            // Fixed Discount
+            elseif ($order_offer->type == 1) {
+                $best_price_from_orders = $products_best_prices - $order_offer->value > 0 ? $products_best_prices - $order_offer->value : 0.00;
+                $order_discount = $order_offer->value;
+                $order_discount_percent = round(($order_discount * 100) / $products_best_prices);
+            }
+            // Points
+            elseif ($order_offer->type == 2) {
+                $order_points = $order_offer->value;
+            }
+            // Shipping
+            $delivery_fees = $order_offer->free_shipping ? 0 : $delivery_fees;
+        }
+
+        // Get Total Points
+        $total_points = isset($order_points) ? $products_best_points + $order_points : $products_best_points;
+
+        //  get coupon data
+        if ($order->coupon_id) {
+            $coupon = $order->coupon;
+
+            $coupon_data = getCoupon($coupon, $products_ids, $products_quantities, $products_best_prices);
+        }
+        $coupon_discount = $order->coupon_id ? $coupon_data['coupon_discount'] : 0;
+        $coupon_discount_percentage = $order->coupon_id ? $coupon_data['coupon_discount_percentage'] : 0;
+        $coupon_points = $order->coupon_id ? $coupon_data['coupon_points'] : 0;
+        $coupon_shipping = $coupon_data['coupon_shipping'];
+
+        // Get Used Balance
+        $used_balance = $order->used_balance;
+
+        // Get Used Points
+        $used_points = $order->used_points;
+        $used_points_egp = $used_points * config('constants.constants.POINT_RATE');
+
+        $delivery_fees = $order->coupon_id && $coupon_shipping === 0 ? 0.00 : $delivery_fees;
+
+        $order_data = [
+            'order_id' => $order->id,
+            'products_base_prices' => $products_base_prices,
+            'products_final_prices' => $products_final_prices,
+            'products_best_prices' => $products_best_prices,
+            'products_discounts' => $products_discounts,
+            'products_discounts_percentage' => $products_discounts_percentage,
+            'offers_discounts' => $offers_discounts,
+            'offers_discounts_percentage' => $offers_discounts_percentage,
+            'total_points' => $total_points,
+            'coupon_discount' => $coupon_discount,
+            'coupon_discount_percentage' => $coupon_discount_percentage,
+            'coupon_points' => $coupon_points,
+            'delivery_fees' => $delivery_fees,
+            'used_balance' => $used_balance,
+            'used_points' => $used_points,
+            'used_points_egp' => $used_points_egp,
+            'products_total_quantities' => $products_total_quantities,
+            'order_total' => round($products_best_prices + $delivery_fees - $used_balance - $used_points_egp - $coupon_discount, 2),
+        ];
+
+        // dd($order_new_data);
+
+        return view('front.orders.edit_preview', compact('order_data'));
+        return redirect()->route('orders.index')->with('success', 'Order updated successfully');
     }
 
     public function shipping()
@@ -150,5 +313,56 @@ class OrderController extends Controller
     public function done()
     {
         return view('front.orders.done');
+    }
+
+    public function cancel($order_id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $order = Order::findOrFail($order_id);
+
+            if ($order->payment_method == 1) {
+                // update the database
+                returnTotalOrder($order);
+                // Cancel Bosta Order
+                cancelBostaOrder($order);
+            } elseif (($order->payment_method == 2 || $order->payment_method == 3) && $order->payment_status == 1) {
+                $refund = $order->subtotal_final + $order->delivery_fees;
+
+                if ($order->created_at->diffInDays() < 1) {
+                    if (voidRequestPaymob(json_decode($order->payment_details)->transaction_id)) {
+                        // update the database
+                        returnTotalOrder($order);
+                        // Cancel Bosta Order
+                        cancelBostaOrder($order);
+                    }
+                } else {
+                    if (refundRequestPaymob(json_decode($order->payment_details)->transaction_id, $refund)) {
+                        // update the database
+                        returnTotalOrder($order);
+                        // Cancel Bosta Order
+                        cancelBostaOrder($order);
+                    }
+                }
+            } elseif ($order->payment_method == 4) {
+                if ($order->bosta_id != null) {
+                    // update the database
+                    returnTotalOrder($order);
+                    // Cancel Bosta Order
+                    cancelBostaOrder($order);
+                } else {
+                    // update the database
+                    returnTotalOrder($order);
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->route('front.orders.index')->with('success', __('front/homePage.Order Canceled Successfully'));
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+        }
     }
 }

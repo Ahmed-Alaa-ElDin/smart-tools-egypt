@@ -126,4 +126,12 @@ class Offer extends Model
     {
         return $this->hasMany(Section::class);
     }
+
+    // Scope order's offers
+    public function scopeOrderOffers($query)
+    {
+        return $query->where('on_orders', 1)->where(function ($query) {
+            $query->whereNull('number')->orWhere('number', '>', 0);
+        })->where('start_at', '<=', now())->where('expire_at', '>=', now());
+    }
 }

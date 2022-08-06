@@ -45,7 +45,12 @@ class OrderStatusSeeder extends Seeder
         ]);
         OrderStatus::create([
             'id' => 8,
+            'name' => 'Cancellation Requested',
+        ]);
+        OrderStatus::create([
+            'id' => 9,
             'name' => 'Cancelled',
         ]);
+
     }
 }

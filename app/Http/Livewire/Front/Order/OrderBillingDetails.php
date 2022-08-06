@@ -70,10 +70,10 @@ class OrderBillingDetails extends Component
 
     public function setOrderFinalPrice($array_data)
     {
-        $this->balance = $array_data['subtotal_final'] > $this->balance ? $this->balance : $array_data['subtotal_final'];
+        $this->balance = ($array_data['subtotal_final'] + $array_data['delivery_fees']) > $this->balance ? $this->balance : ($array_data['subtotal_final'] + $array_data['delivery_fees']);
 
-        $this->points_egp = ($array_data['subtotal_final'] - $this->balance) > $this->points_egp ? $this->points_egp : ($array_data['subtotal_final'] - $this->balance);
-        $this->points = $this->points_egp / config('constants.constants.POINT_RATE');
+        $this->points_egp = (($array_data['subtotal_final'] + $array_data['delivery_fees']) - $this->balance) > $this->points_egp ? $this->points_egp : (($array_data['subtotal_final'] + $array_data['delivery_fees']) - $this->balance);
+        $this->points = floor($this->points_egp / config('constants.constants.POINT_RATE'));
 
         // get order's products
         $products = Cart::instance('cart')->content()->keyBy("id")->map(function ($item) use($array_data) {
