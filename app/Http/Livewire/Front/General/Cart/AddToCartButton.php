@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class AddToCartButton extends Component
 {
-    public $product_id, $text = false;
+    public $product_id, $text = false, $add_buy = 'add';
 
     public function render()
     {

@@ -79,9 +79,7 @@ class CouponBlock extends Component
             }
 
             // get free shipping
-            if ($coupon->free_shipping) {
-                $this->coupon_shipping = true;
-            }
+            $this->coupon_shipping = $coupon->free_shipping ? true : false;
 
             // get discount on brands
             if ($coupon->brands->count()) {

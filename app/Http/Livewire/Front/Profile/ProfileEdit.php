@@ -45,7 +45,7 @@ class ProfileEdit extends Component
             'l_name.ar'                     => 'nullable|string|max:40|min:3',
             'l_name.en'                     => 'nullable|string|max:40|min:3',
             'email'                         => 'nullable|email|max:50|min:3',
-            'phones.*.phone'                => 'required_if:auth_id,Null|nullable|digits_between:8,11|' . Rule::unique('phones')->ignore($this->user_id, 'user_id'),
+            'phones.*.phone'                => 'required_if:auth_id,Null|nullable|digits:11|regex:/^01[0-2]\d{1,8}$/|' . Rule::unique('phones')->ignore($this->user_id, 'user_id'),
             'gender'                        => 'in:0,1',
             'birth_date'                    => 'date|before:today',
             'photo'                         => 'nullable|mimes:jpg,jpeg,png|max:2048',

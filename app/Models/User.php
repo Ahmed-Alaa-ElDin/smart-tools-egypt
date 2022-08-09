@@ -104,4 +104,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(Review::class);
     }
+
+    // One to many relationship  User --> Orders
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    // One to many relationship  User --> Invoice Request
+    public function invoiceRequests()
+    {
+        return $this->hasMany(InvoiceRequest::class);
+    }
 }

@@ -2,9 +2,8 @@
 
 namespace App\Http\Livewire\Front\Order;
 
-use App\Models\Coupon;
 use App\Models\Order;
-use App\Models\User;
+use App\Models\Payment;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
@@ -26,7 +25,7 @@ class OrderBillingDetails extends Component
     {
         return [
             'points' => 'numeric|min:0|integer|max:' . auth()->user()->points,
-            'balance' => 'numeric|min:0|max:' . auth()->user()->points,
+            'balance' => 'numeric|min:0|max:' . auth()->user()->balance,
         ];
     }
 
@@ -70,25 +69,23 @@ class OrderBillingDetails extends Component
 
     public function setOrderFinalPrice($array_data)
     {
-        $this->points_egp = $array_data['subtotal_final'] > $this->points_egp ? $this->points_egp : $array_data['subtotal_final'];
+        $this->balance = ($array_data['subtotal_final'] + $array_data['delivery_fees']) > $this->balance ? $this->balance : ($array_data['subtotal_final'] + $array_data['delivery_fees']);
 
-        $this->points = $this->points_egp / config('constants.constants.POINT_RATE');
-
-        $this->balance = $array_data['subtotal_final'] > $this->balance ? $this->balance : $array_data['subtotal_final'];
+        $this->points_egp = (($array_data['subtotal_final'] + $array_data['delivery_fees']) - $this->balance) > $this->points_egp ? $this->points_egp : (($array_data['subtotal_final'] + $array_data['delivery_fees']) - $this->balance);
+        $this->points = floor($this->points_egp / config('constants.constants.POINT_RATE'));
 
         // get order's products
-        $products = Cart::instance('cart')->content()->map(function ($item) {
+        $products = Cart::instance('cart')->content()->keyBy("id")->map(function ($item) use ($array_data) {
             return [
-                'product_id'    => $item->id,
-                'quantity'      => $item->qty,
+                'quantity' => $item->qty,
+                'price' => collect($array_data['products'])->where('id', $item->id)->first()['best_price'],
             ];
         })->toArray();
 
         // update order in database
         $order = Order::with([
-            'address' => fn ($q) => $q->with('governorate', 'city'),
-            'user',
-            'products' => fn ($q) => $q->select('products.id', 'products.quantity', 'product_id'),
+            'status',
+            'payments'
         ])->updateOrCreate(
             [
                 'user_id'       =>  auth()->user()->id,
@@ -98,144 +95,77 @@ class OrderBillingDetails extends Component
                 'num_of_items'      =>      Cart::instance('cart')->count(),
                 'zone_id'           =>      $array_data['zone_id'],
                 'coupon_id'         =>      $array_data['coupon_id'],
+                'coupon_discount'   =>      $array_data['coupon_discount'] ?? 0.00,
                 'subtotal_base'     =>      $array_data['subtotal_base'],
                 'subtotal_final'    =>      $array_data['subtotal_final'] - $this->points_egp - $this->balance,
                 'delivery_fees'     =>      $array_data['delivery_fees'],
+                'total'             =>      $array_data['subtotal_final'] - $this->points_egp - $this->balance + $array_data['delivery_fees'],
+                'should_pay'        =>      $array_data['subtotal_final'] - $this->points_egp - $this->balance + $array_data['delivery_fees'],
+                'should_get'        =>      0.00,
                 'used_points'       =>      $this->points ?? 0,
                 'gift_points'       =>      $array_data['gift_points'] ?? 0,
                 'used_balance'      =>      $this->balance ?? 0,
                 'total_weight'      =>      $array_data['weight'],
                 'payment_method'    =>      $this->payment_method,
-                'payment_status'    =>      0,
                 'status_id'         =>      $this->payment_method == 4 ? 2 : 1,
             ]
         );
+
+        $payment = Payment::create([
+            'order_id' => $order->id,
+            'user_id' => $order->user_id,
+            'payment_amount' => $order->should_pay,
+            'payment_status' => 1,
+            'payment_method' => $order->payment_method,
+        ]);
 
         // update order's products
         $order->products()->sync(
             $products
         );
 
-        if ($this->payment_method == 1) {
-            $this->createOrder($order, $array_data);
-        } elseif ($this->payment_method == 2) {
-            $this->payByPaymob($order);
-        } elseif ($this->payment_method == 3) {
-            $this->payByPaymob($order);
-        } elseif ($this->payment_method == 4) {
-            // redirect to done page
-            Session::flash('success', __('front/homePage.Order Created Successfully'));
-            redirect()->route('front.order.done')->with('order_id', $order->id);
-        }
-    }
-
-    public function createOrder($order, $array_data)
-    {
-        $order_data = [
-            "specs" => [
-                "packageDetails"    =>      [
-                    "itemsCount" => $order->num_of_items,
-                    "description" => $order->package_desc,
-                ],
-                "size"              =>      "SMALL",
-                "weight"            =>      $order->total_weight,
-            ],
-            "dropOffAddress" => [
-                "city"          =>      $order->address->governorate->getTranslation('name', 'en'),
-                "district"      =>      $order->address->city->getTranslation('name', 'en'),
-                "firstLine"     =>      $order->address->details ?? $order->address->city->getTranslation('name', 'en'),
-                "secondLine"    =>      $order->address->landmarks ?? '',
-            ],
-            "receiver" => [
-                "phone"         =>      $order->user->phones->where('default', 1)->first()->phone,
-                "firstName"     =>      $order->user->f_name,
-                "lastName"      =>      $order->user->l_name ?? '',
-                "email"         =>      $order->user->email ?? '',
-            ],
-            "businessReference" => "$order->id",
-            "type"      =>      10,
-            "notes"     =>      $order->notes ?? '',
-            "cod"       =>      $order->payment_method == 1 ? $order->subtotal_final + $order->delivery_fees : 0.00,
-            "allowToOpenPackage" => true,
-        ];
-
-        // create bosta order
-        $bosta_response = Http::withHeaders([
-            'Authorization'     =>  env('BOSTA_API_KEY'),
-            'Content-Type'      =>  'application/json',
-            'Accept'            =>  'application/json'
-        ])->post('https://app.bosta.co/api/v0/deliveries', $order_data);
-
-        $decoded_bosta_response = $bosta_response->json();
-
-        if ($bosta_response->successful()) {
-            // update order in database
-            $order->update([
-                'tracking_number' => $decoded_bosta_response['trackingNumber'],
-                'order_delivery_id' => $decoded_bosta_response['_id'],
-                'status_id' => 3,
-            ]);
-
-            // update user's balance
-            $user = User::find(auth()->user()->id);
-
-            $user->update([
-                'points' => $user->points - $this->points + $order->gift_points ?? 0,
-                'balance' => $user->balance - $this->balance ?? 0,
-            ]);
-
-            // update coupon usage
-            if ($order->coupon_id != null) {
-                $coupon = Coupon::find($order->coupon_id);
-
-                $coupon->update([
-                    'number' => $coupon->number != null && $coupon->number > 0 ? $coupon->number - 1 : $coupon->number,
-                ]);
-            }
-
-            // todo :: edit offer usage
-
-            // clear cart
+        if ($order->payment_method == 1) {
+            createBostaOrder($order);
+        } elseif ($order->payment_method == 2) {
+            dd($order);
+            $order->payByPaymob($order);
+        } elseif ($order->payment_method == 3) {
+            $order->payByPaymob($order);
+        } elseif ($order->payment_method == 4) {
+            // empty cart
             Cart::instance('cart')->destroy();
 
-            // edit products database
-            foreach ($order->products as $product) {
-                $product->update([
-                    'quantity' => $product->quantity - $product->pivot->quantity >= 0  ? $product->quantity - $product->pivot->quantity : 0,
-                ]);
-            }
-
             // redirect to done page
             Session::flash('success', __('front/homePage.Order Created Successfully'));
             redirect()->route('front.order.done')->with('order_id', $order->id);
-        } else {
-            Session::flash('error', __('front/homePage.Order Creation Failed, Please Try Again'));
-            redirect()->route('front.order.billing');
         }
     }
 
     public function payByPaymob($order)
     {
         try {
+            // create paymob auth token
             $first_step = Http::acceptJson()->post('https://accept.paymob.com/api/auth/tokens', [
                 "api_key" => env('PAYMOB_TOKEN')
             ])->json();
 
             $auth_token = $first_step['token'];
 
+            // create paymob order
             $second_step = Http::acceptJson()->post('https://accept.paymob.com/api/ecommerce/orders', [
                 "auth_token" =>  $auth_token,
                 "delivery_needed" => "false",
-                "amount_cents" => number_format(($order->subtotal_final + $order->delivery_fees) * 100, 0, '', ''),
+                "amount_cents" => number_format(($order->should_pay) * 100, 0, '', ''),
                 "currency" => "EGP",
                 "items" => []
             ])->json();
 
             $order_id = $second_step['id'];
 
+            // create paymob transaction
             $third_step = Http::acceptJson()->post('https://accept.paymob.com/api/acceptance/payment_keys', [
                 "auth_token" => $auth_token,
-                "amount_cents" => number_format(($order->subtotal_final + $order->delivery_fees) * 100, 0, '', ''),
+                "amount_cents" => number_format(($order->should_pay) * 100, 0, '', ''),
                 "expiration" => 3600,
                 "order_id" => $order_id,
                 "billing_data" => [
@@ -259,9 +189,9 @@ class OrderBillingDetails extends Component
 
             $payment_key = $third_step['token'];
 
-            redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . env('PAYMOB_IFRAM_ID') . "?payment_token=$payment_key");
+            // redirect to paymob payment page
+            redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($this->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD')) . "?payment_token=$payment_key");
         } catch (\Throwable $th) {
-            // throw $th;
             redirect()->route('front.order.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
         }
     }

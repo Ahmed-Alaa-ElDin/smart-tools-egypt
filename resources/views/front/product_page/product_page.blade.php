@@ -13,7 +13,7 @@
                 <li class="breadcrumb-item hover:text-primary">
                     {{-- todo :: brand page --}}
                     <a href="{{ route('admin.users.index') }}">
-                        {{ $product->brand->name }}
+                        {{ $product->brand ? $product->brand->name : "" }}
                     </a>
                 </li>
                 <li class="breadcrumb-item text-gray-700 font-bold" aria-current="page">
@@ -77,7 +77,7 @@
                     <div class="flex justify-start items-center gap-3">
                         {{-- todo : Add Brand Link --}}
                         <h2 class="text-gray-800 font-bold">
-                            {{ $product->brand->name }}
+                            {{ $product->brand ? $product->brand->name : "" }}
                         </h2>
                         <h3 class="text-gray-500 font-bold">
                             {{ $product->model }}
@@ -201,7 +201,7 @@
                             {{-- Add to wishlist : End --}}
 
                             {{-- Add to cart : Start --}}
-                            @livewire('front.general.cart.add-to-cart-button', ['product_id' => $product['id'], 'text' => true], key('add-cart-button-' . Str::random(10)))
+                            @livewire('front.general.cart.add-to-cart-button', ['product_id' => $product['id'], 'text' => true, 'add_buy' => 'add'], key('add-cart-button-' . Str::random(10)))
                             {{-- Add to cart : End --}}
                         </div>
                         {{-- Add Product : End --}}
@@ -243,7 +243,6 @@
 
                 {{-- Delivery Details :: Start --}}
                 <div class="col-span-12 md:col-span-4">
-                    {{-- todo : delivery details --}}
                     @livewire('front.product.delivery.product-delivery', ['free_shipping' => $product_offer->free_shipping, 'product_weight' => $product->weight])
                 </div>
                 {{-- Delivery Details :: End --}}

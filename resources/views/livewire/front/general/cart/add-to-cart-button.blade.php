@@ -9,7 +9,11 @@
     </span>
     @if ($text)
         <span class="text-xs font-bold">
-            {{ __('front/homePage.Add to cart') }}
+            @if ($add_buy == 'add')
+                {{ __('front/homePage.Add to cart') }}
+            @elseif ($add_buy == 'buy')
+                {{ __('front/homePage.Buy Again') }}
+            @endif
         </span>
     @endif
 </button>
