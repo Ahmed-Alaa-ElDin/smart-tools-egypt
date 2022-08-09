@@ -12,6 +12,7 @@
 @endsection
 
 @section('sub-content')
+{{-- @dd(Session::all()) --}}
     <div class="container col-span-12">
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-12 flex flex-col gap-5 self-start">
@@ -31,7 +32,7 @@
                     <div class="p-7 flex flex-col justify-center items-center gap-3">
                         {{-- Order List :: Start --}}
                         @forelse ($orders as $order)
-                            @if ($order->status_id != 1)
+                            @if ($order->status_id != 1 && $order->status_id != 10)
                                 {{-- Order :: Start --}}
                                 <div class="rounded overflow-hidden shadow-lg border border-gray-200 w-full">
                                     {{-- Order Header --}}
@@ -43,7 +44,6 @@
                                                 <span class="text-xs font-bold"> {{ __('front/homePage.Order Placed') }}
                                                 </span>
                                                 <span class="text-sm">
-                                                    {{-- 12/08/2020 --}}
                                                     {{ $order->created_at->format('d/m/Y') }}
                                                 </span>
                                             </div>
@@ -54,7 +54,7 @@
                                                 <div class="flex rtl:flex-row-reverse gap-1 text-sm">
                                                     <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
                                                     <span class=""
-                                                        dir="ltr">{{ number_format($order->subtotal_final + $order->delivery_fees, 2, '.', '\'') }}</span>
+                                                        dir="ltr">{{ number_format($order->total, 2, '.', '\'') }}</span>
                                                 </div>
                                             </div>
 
@@ -95,7 +95,7 @@
                                         <div>
                                             {{-- todo :: Order Actions --}}
                                             <div class="flex flex-wrap justify-around items-center gap-1">
-                                                @if ($order->status_id > 2 && $order->status_id != 8)
+                                                @if ($order->status_id > 2 && $order->status_id != 9)
                                                     <a href="#" class="btn btn-sm bg-secondary font-bold">
                                                         {{ __('front/homePage.Track Your Order') }}
                                                     </a>

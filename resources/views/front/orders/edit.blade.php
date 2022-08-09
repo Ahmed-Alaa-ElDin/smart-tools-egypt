@@ -161,28 +161,33 @@
                                             {{ __('front/homePage.Under Reviewing') }}
                                         </span>
                                     @else
-                                        <div class="flex flex-col md:flex-row-reverse items-center gap-3">
-                                            {{-- Base Price :: Start --}}
-                                            <del class="flex rtl:flex-row-reverse gap-1 font-bold text-gray-400">
-                                                <span class="text-xs">
-                                                    {{ __('front/homePage.EGP') }}
-                                                </span>
-                                                <span class="font-bold text-2xl"
-                                                    dir="ltr">{{ number_format(explode('.', $product->base_price)[0], 0, '.', '\'') ?? '00' }}</span>
-                                            </del>
-                                            {{-- Base Price :: End --}}
+                                        <div class="flex flex-col gap-1 justify-center items-center">
+                                            <h4 class="text-xs font-bold">
+                                                {{ __('front/homePage.Piece Price') }}
+                                            </h4>
+                                            <div class="flex flex-col md:flex-row-reverse items-center gap-3">
+                                                {{-- Base Price :: Start --}}
+                                                <del class="flex rtl:flex-row-reverse gap-1 font-bold text-gray-400">
+                                                    <span class="text-xs">
+                                                        {{ __('front/homePage.EGP') }}
+                                                    </span>
+                                                    <span class="font-bold text-2xl"
+                                                        dir="ltr">{{ number_format(explode('.', $product->base_price)[0], 0, '.', '\'') ?? '00' }}</span>
+                                                </del>
+                                                {{-- Base Price :: End --}}
 
-                                            {{-- Final Price :: Start --}}
-                                            <div class="flex rtl:flex-row-reverse gap-1">
-                                                <span
-                                                    class="font-bold text-primary text-xs">{{ __('front/homePage.EGP') }}</span>
-                                                <span class="font-bold text-primary text-lg"
-                                                    dir="ltr">{{ number_format(explode('.', $product->pivot->price)[0], 0, '.', '\'') ?? '00' }}</span>
-                                                <span
-                                                    class="text-primary text-xs">{{ explode('.', $product->pivot->price)[1] ?? '00' }}</span>
+                                                {{-- Final Price :: Start --}}
+                                                <div class="flex rtl:flex-row-reverse gap-1">
+                                                    <span
+                                                        class="font-bold text-primary text-xs">{{ __('front/homePage.EGP') }}</span>
+                                                    <span class="font-bold text-primary text-lg"
+                                                        dir="ltr">{{ number_format(explode('.', $product->pivot->price)[0], 0, '.', '\'') ?? '00' }}</span>
+                                                    <span
+                                                        class="text-primary text-xs">{{ explode('.', $product->pivot->price)[1] ?? '00' }}</span>
+                                                </div>
+                                                {{-- Final Price :: End --}}
+
                                             </div>
-                                            {{-- Final Price :: End --}}
-
                                         </div>
                                     @endif
 
@@ -226,12 +231,8 @@
                         {{-- Buttons :: Start --}}
                         <div class="p-2 flex justify-around items-center gap-2">
                             @if (count($order->products) > 0)
-                                <button type="submit" name="type" value="submit" class="btn bg-successDark font-bold">
-                                    {{ __('front/homePage.Save Edits') }}
-                                </button>
-
                                 <button type="submit" name="type" value="preview"
-                                    class="btn bg-white text-secondary border border-secondary font-bold">
+                                    class="btn bg-white text-successDark border border-successDark font-bold transition-all ease-in-out hover:text-white hover:bg-successDark hover:border-white">
                                     {{ __('front/homePage.Preview Order Summary After Edits') }}
                                 </button>
                             @endif

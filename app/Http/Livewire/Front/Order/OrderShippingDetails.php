@@ -277,7 +277,6 @@ class OrderShippingDetails extends Component
                     'package_desc' => 'قابل للكسر',
                     'num_of_items' => Cart::instance('cart')->count(),
                     'allow_opening' => 1,
-                    'payment_status' => 0,
                     'notes' => $this->notes,
                 ]);
 

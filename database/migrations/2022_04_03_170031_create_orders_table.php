@@ -30,13 +30,16 @@ return new class extends Migration
             $table->decimal('subtotal_base', 8, 2)->default(0.00);
             $table->decimal('subtotal_final', 8, 2)->default(0.00);
             $table->decimal('delivery_fees', 8, 2)->default(0.00);
+            $table->decimal('total', 8, 2)->default(0.00);
+            $table->decimal('should_pay', 8, 2)->default(0.00);
+            $table->decimal('should_get', 8, 2)->default(0.00);
             $table->integer('used_points')->default(0);
             $table->integer('gift_points')->default(0);
             $table->decimal('used_balance', 8, 2)->default(0.00);
             $table->decimal('total_weight', 8, 2)->default(1)->comment('on Kg');
             $table->string('payment_method')->nullable();
-            $table->text('payment_details')->nullable();
-            $table->tinyInteger('payment_status')->default(0)->comment('0 -> No , 1 -> Yes');
+            // $table->text('payment_details')->nullable();
+            // $table->tinyInteger('payment_status')->default(0)->comment('0 -> No , 1 -> Yes');
             $table->string('tracking_number')->nullable();
             $table->string('order_delivery_id')->nullable();
             $table->text('notes')->nullable();

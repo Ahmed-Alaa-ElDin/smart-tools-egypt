@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Coupon;
-use App\Models\Order;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\User;
@@ -11,7 +10,6 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
-use PHPUnit\Framework\ComparisonMethodDoesNotDeclareBoolReturnTypeException;
 
 // todo :: compare between this function and lower one
 // Upload single photo and get link
@@ -405,13 +403,13 @@ function createBostaOrder($order)
         "receiver" => [
             "phone"         =>      $order->user->phones->where('default', 1)->first()->phone,
             "firstName"     =>      $order->user->f_name,
-            "lastName"      =>      $order->user->l_name ?? '',
+            "lastName"      =>      $order->user->l_name ? $order->user->l_name . ($order->user->phones->where('default', 0)->count() ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : "") : ($order->user->phones->where('default', 0)->count() ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : ""),
             "email"         =>      $order->user->email ?? '',
         ],
         "businessReference" => "$order->id",
         "type"      =>      10,
         "notes"     =>      $order->notes ?? '',
-        "cod"       =>      $order->payment_method == 1 ? $order->subtotal_final + $order->delivery_fees : 0.00,
+        "cod"       =>      $order->payment_method == 1 ? $order->should_pay : 0.00,
         "allowToOpenPackage" => true,
     ];
 
@@ -470,6 +468,53 @@ function createBostaOrder($order)
     }
 }
 
+// edit bosta Order
+function editBostaOrder($order)
+{
+    $order_data = [
+        "specs" => [
+            "packageDetails"    =>      [
+                "itemsCount"    => $order->num_of_items,
+                "description"   => $order->package_desc,
+            ],
+            "size"              =>      "SMALL",
+            "weight"            =>      $order->total_weight,
+        ],
+        "dropOffAddress" => [
+            "city"          =>      $order->address->governorate->getTranslation('name', 'en'),
+            "district"      =>      $order->address->city->getTranslation('name', 'en'),
+            "firstLine"     =>      $order->address->details ?? $order->address->city->getTranslation('name', 'en'),
+            "secondLine"    =>      $order->address->landmarks ?? '',
+        ],
+        "receiver" => [
+            "phone"         =>      $order->user->phones->where('default', 1)->first()->phone,
+            "firstName"     =>      $order->user->f_name,
+            "lastName"      =>      $order->user->l_name ? $order->user->l_name . ($order->user->phones->where('default', 0)->count() ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : "") : ($order->user->phones->where('default', 0)->count() ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : ""),
+            "email"         =>      $order->user->email ?? '',
+        ],
+        "businessReference" => "$order->id",
+        "notes"     =>      $order->notes ?? '',
+        "cod"       =>      $order->payment_method == 1 ? $order->subtotal_final + $order->delivery_fees : 0.00,
+        "allowToOpenPackage" => true,
+    ];
+
+    // create bosta order
+    $bosta_response = Http::withHeaders([
+        'Authorization'     =>  env('BOSTA_API_KEY'),
+        'Content-Type'      =>  'application/json',
+        'Accept'            =>  'application/json'
+    ])->patch('https://app.bosta.co/api/v0/deliveries/'.$order->order_delivery_id, $order_data);
+
+    $decoded_bosta_response = $bosta_response->json();
+
+    if ($bosta_response->successful()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
 // cancel bosta order
 function cancelBostaOrder($order)
 {
@@ -494,6 +539,58 @@ function cancelBostaOrder($order)
 
 
 ################ PAYMOB :: START ##################
+// create transaction in paymob
+function payByPaymob($order)
+{
+    try {
+        $first_step = Http::acceptJson()->post('https://accept.paymob.com/api/auth/tokens', [
+            "api_key" => env('PAYMOB_TOKEN')
+        ])->json();
+
+        $auth_token = $first_step['token'];
+
+        $second_step = Http::acceptJson()->post('https://accept.paymob.com/api/ecommerce/orders', [
+            "auth_token" =>  $auth_token,
+            "delivery_needed" => "false",
+            "amount_cents" => number_format(($order->should_pay) * 100, 0, '', ''),
+            "currency" => "EGP",
+            "items" => []
+        ])->json();
+
+        $order_id = $second_step['id'];
+
+        $third_step = Http::acceptJson()->post('https://accept.paymob.com/api/acceptance/payment_keys', [
+            "auth_token" => $auth_token,
+            "amount_cents" => number_format(($order->should_pay) * 100, 0, '', ''),
+            "expiration" => 3600,
+            "order_id" => $order_id,
+            "billing_data" => [
+                "apartment" => "NA",
+                "email" => $order->user->email ?? 'test@smarttoolsegypt.com',
+                "floor" => "NA",
+                "first_name" => $order->user->f_name,
+                "street" => "NA",
+                "building" => "NA",
+                "phone_number" => $order->phone1,
+                "shipping_method" => "NA",
+                "postal_code" => "NA",
+                "city" => "NA",
+                "country" => "NA",
+                "last_name" => $order->user->l_name ?? $order->user->f_name,
+                "state" => "NA"
+            ],
+            "currency" => "EGP",
+            "integration_id" => $order->payment_method == 3 ? env('PAYMOB_CLIENT_ID_INSTALLMENTS') : env('PAYMOB_CLIENT_ID_CARD'),
+        ])->json();
+
+        $payment_key = $third_step['token'];
+
+        redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($order->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD')) . "?payment_token=$payment_key");
+    } catch (\Throwable $th) {
+        redirect()->route('front.order.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
+    }
+}
+
 // void transaction in paymob
 function voidRequestPaymob($transaction_id)
 {
@@ -576,40 +673,6 @@ function returnTotalOrder($order)
         ['quantity' => 0]
     );
 }
-
-function returnSomeProducts($order, $new_products)
-{
-    $user = $order->user;
-
-    $products = $order->products;
-
-    $user->update([
-        'points' => $user->points - $order->gift_points + $order->used_points,
-        'balance' => $user->balance + $order->used_balance,
-    ]);
-
-    if ($order->bosta_id != null) {
-        foreach ($products as $product) {
-            $product->update([
-                'quantity' => $product->quantity + $product->pivot->quantity,
-            ]);
-        }
-    }
-
-    $order->update([
-        'num_of_items' => 0,
-        'status_id' => 8,
-        'gift_points' => 0,
-        'used_points' => 0,
-        'used_balance' => 0.00,
-    ]);
-
-    $order->products()->syncWithPivotValues(
-        $products,
-        ['quantity' => 0]
-    );
-}
-
 ################ ORDER :: END ##################
 
 
@@ -766,7 +829,7 @@ function getCoupon($coupon, $products_ids, $products_quantities, $products_best_
 
         return [
             'coupon_discount' => $coupon_discount,
-            'coupon_discount_percentage' => round($coupon_discount * 100 / $products_best_prices),
+            'coupon_discount_percentage' => $products_best_prices > 0 ? round($coupon_discount * 100 / $products_best_prices) : 0,
             'coupon_points' => $coupon_points,
             'coupon_shipping' => $coupon_shipping
         ];

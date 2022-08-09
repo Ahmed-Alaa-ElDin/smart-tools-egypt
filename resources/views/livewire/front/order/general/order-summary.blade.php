@@ -123,7 +123,7 @@
                 </div>
                 <div>
                     {{-- Free Shipping --}}
-                    @if (($free_shipping && $delivery_price != 'no delivery') || $delivery_price === 0)
+                    @if (($free_shipping && $delivery_price != 'no delivery') || $delivery_price == 0)
                         <span class="text-successDark">
                             {{ __('front/homePage.Free Shipping') }}
                         </span>
@@ -142,7 +142,7 @@
                                 <span class="text-xs text-danger">
                                     {{ __('front/homePage.No delivery available') }}
                                 </span>
-                            @elseif ($delivery_price == 'no delivery')
+                            @elseif ($delivery_price === 'no delivery')
                                 <span class="text-xs text-danger text-center">
                                     {!! __('front/homePage.No Deliveries', [
                                         'city' => $city_name,

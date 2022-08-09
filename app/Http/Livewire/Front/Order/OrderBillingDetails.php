@@ -2,9 +2,8 @@
 
 namespace App\Http\Livewire\Front\Order;
 
-use App\Models\Coupon;
 use App\Models\Order;
-use App\Models\User;
+use App\Models\Payment;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
@@ -76,7 +75,7 @@ class OrderBillingDetails extends Component
         $this->points = floor($this->points_egp / config('constants.constants.POINT_RATE'));
 
         // get order's products
-        $products = Cart::instance('cart')->content()->keyBy("id")->map(function ($item) use($array_data) {
+        $products = Cart::instance('cart')->content()->keyBy("id")->map(function ($item) use ($array_data) {
             return [
                 'quantity' => $item->qty,
                 'price' => collect($array_data['products'])->where('id', $item->id)->first()['best_price'],
@@ -84,7 +83,10 @@ class OrderBillingDetails extends Component
         })->toArray();
 
         // update order in database
-        $order = Order::updateOrCreate(
+        $order = Order::with([
+            'status',
+            'payments'
+        ])->updateOrCreate(
             [
                 'user_id'       =>  auth()->user()->id,
                 'status_id'     =>  1
@@ -93,32 +95,43 @@ class OrderBillingDetails extends Component
                 'num_of_items'      =>      Cart::instance('cart')->count(),
                 'zone_id'           =>      $array_data['zone_id'],
                 'coupon_id'         =>      $array_data['coupon_id'],
-                'coupon_discount'   =>      $array_data['coupon_discount'],
+                'coupon_discount'   =>      $array_data['coupon_discount'] ?? 0.00,
                 'subtotal_base'     =>      $array_data['subtotal_base'],
                 'subtotal_final'    =>      $array_data['subtotal_final'] - $this->points_egp - $this->balance,
                 'delivery_fees'     =>      $array_data['delivery_fees'],
+                'total'             =>      $array_data['subtotal_final'] - $this->points_egp - $this->balance + $array_data['delivery_fees'],
+                'should_pay'        =>      $array_data['subtotal_final'] - $this->points_egp - $this->balance + $array_data['delivery_fees'],
+                'should_get'        =>      0.00,
                 'used_points'       =>      $this->points ?? 0,
                 'gift_points'       =>      $array_data['gift_points'] ?? 0,
                 'used_balance'      =>      $this->balance ?? 0,
                 'total_weight'      =>      $array_data['weight'],
                 'payment_method'    =>      $this->payment_method,
-                'payment_status'    =>      0,
                 'status_id'         =>      $this->payment_method == 4 ? 2 : 1,
             ]
         );
+
+        $payment = Payment::create([
+            'order_id' => $order->id,
+            'user_id' => $order->user_id,
+            'payment_amount' => $order->should_pay,
+            'payment_status' => 1,
+            'payment_method' => $order->payment_method,
+        ]);
 
         // update order's products
         $order->products()->sync(
             $products
         );
 
-        if ($this->payment_method == 1) {
+        if ($order->payment_method == 1) {
             createBostaOrder($order);
-        } elseif ($this->payment_method == 2) {
-            $this->payByPaymob($order);
-        } elseif ($this->payment_method == 3) {
-            $this->payByPaymob($order);
-        } elseif ($this->payment_method == 4) {
+        } elseif ($order->payment_method == 2) {
+            dd($order);
+            $order->payByPaymob($order);
+        } elseif ($order->payment_method == 3) {
+            $order->payByPaymob($order);
+        } elseif ($order->payment_method == 4) {
             // empty cart
             Cart::instance('cart')->destroy();
 
@@ -131,25 +144,28 @@ class OrderBillingDetails extends Component
     public function payByPaymob($order)
     {
         try {
+            // create paymob auth token
             $first_step = Http::acceptJson()->post('https://accept.paymob.com/api/auth/tokens', [
                 "api_key" => env('PAYMOB_TOKEN')
             ])->json();
 
             $auth_token = $first_step['token'];
 
+            // create paymob order
             $second_step = Http::acceptJson()->post('https://accept.paymob.com/api/ecommerce/orders', [
                 "auth_token" =>  $auth_token,
                 "delivery_needed" => "false",
-                "amount_cents" => number_format(($order->subtotal_final + $order->delivery_fees) * 100, 0, '', ''),
+                "amount_cents" => number_format(($order->should_pay) * 100, 0, '', ''),
                 "currency" => "EGP",
                 "items" => []
             ])->json();
 
             $order_id = $second_step['id'];
 
+            // create paymob transaction
             $third_step = Http::acceptJson()->post('https://accept.paymob.com/api/acceptance/payment_keys', [
                 "auth_token" => $auth_token,
-                "amount_cents" => number_format(($order->subtotal_final + $order->delivery_fees) * 100, 0, '', ''),
+                "amount_cents" => number_format(($order->should_pay) * 100, 0, '', ''),
                 "expiration" => 3600,
                 "order_id" => $order_id,
                 "billing_data" => [
@@ -173,6 +189,7 @@ class OrderBillingDetails extends Component
 
             $payment_key = $third_step['token'];
 
+            // redirect to paymob payment page
             redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($this->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD')) . "?payment_token=$payment_key");
         } catch (\Throwable $th) {
             redirect()->route('front.order.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));

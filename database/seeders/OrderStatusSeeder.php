@@ -15,42 +15,57 @@ class OrderStatusSeeder extends Seeder
      */
     public function run()
     {
-        OrderStatus::create([
+        OrderStatus::updateOrCreate([
             'id' => 1,
             'name' => 'Under Processing',
         ]);
-        OrderStatus::create([
+        OrderStatus::updateOrCreate([
             'id' => 2,
             'name' => 'Pending',
         ]);
-        OrderStatus::create([
+        OrderStatus::updateOrCreate([
             'id' => 3,
             'name' => 'Created',
         ]);
-        OrderStatus::create([
+        OrderStatus::updateOrCreate([
             'id' => 4,
             'name' => 'Preparing',
         ]);
-        OrderStatus::create([
+        OrderStatus::updateOrCreate([
             'id' => 5,
             'name' => 'Under Reviewing',
         ]);
-        OrderStatus::create([
+        OrderStatus::updateOrCreate([
             'id' => 6,
             'name' => 'Shipped',
         ]);
-        OrderStatus::create([
+        OrderStatus::updateOrCreate([
             'id' => 7,
             'name' => 'Delivered',
         ]);
-        OrderStatus::create([
+        OrderStatus::updateOrCreate([
             'id' => 8,
             'name' => 'Cancellation Requested',
         ]);
-        OrderStatus::create([
+        OrderStatus::updateOrCreate([
             'id' => 9,
             'name' => 'Cancelled',
         ]);
-
+        OrderStatus::updateOrCreate([
+            'id' => 10,
+            'name' => 'Under Editing',
+        ]);
+        OrderStatus::updateOrCreate([
+            'id' => 11,
+            'name' => 'Edit Requested',
+        ]);
+        OrderStatus::updateOrCreate([
+            'id' => 12,
+            'name' => 'Edit Approved',
+        ]);
+        OrderStatus::updateOrCreate([
+            'id' => 13,
+            'name' => 'Edit Rejected',
+        ]);
     }
 }

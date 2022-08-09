@@ -24,14 +24,16 @@ class Order extends Model
         'status_id',
         'subtotal_base',
         'subtotal_final',
+        'should_pay',
+        'should_get',
+        'total',
         'used_points',
         'used_balance',
         'gift_points',
         'delivery_fees',
         'total_weight',
         'payment_method',
-        'payment_details',
-        'payment_status',
+        // 'payment_details',
         'tracking_number',
         'order_delivery_id',
         'notes',
@@ -69,13 +71,18 @@ class Order extends Model
         return $this->belongsToMany(Product::class)->withPivot('quantity', 'price');
     }
 
-    public function getCanReturnedAttribute()
-    {
-        return $this->status_id == 7 && $this->created_at->diffInDays() <= config('constants.constants.RETURN_PERIOD');
-    }
-
     public function invoiceRequests()
     {
         return $this->hasMany(InvoiceRequest::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function getCanReturnedAttribute()
+    {
+        return $this->status_id == 7 && $this->created_at->diffInDays() <= config('constants.constants.RETURN_PERIOD');
     }
 }
