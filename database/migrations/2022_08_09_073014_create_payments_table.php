@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('order_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('order_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->decimal('payment_amount')->default(0.00);
             $table->tinyInteger('payment_method')->unsigned()->comment('1 => cash, 2 => card, 3 => installments, 4 => vodafone cash');
             $table->tinyInteger('payment_status')->unsigned()->comment('1 => pending, 2 => paid, 3 => failed');
