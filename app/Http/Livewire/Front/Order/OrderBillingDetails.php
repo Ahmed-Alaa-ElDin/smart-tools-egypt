@@ -111,11 +111,12 @@ class OrderBillingDetails extends Component
             ]
         );
 
-        $payment = Payment::create([
+        $payment = Payment::updateOrCreate([
             'order_id' => $order->id,
             'user_id' => $order->user_id,
-            'payment_amount' => $order->should_pay,
             'payment_status' => 1,
+        ],[
+            'payment_amount' => $order->should_pay,
             'payment_method' => $order->payment_method,
         ]);
 
@@ -127,9 +128,9 @@ class OrderBillingDetails extends Component
         if ($order->payment_method == 1) {
             createBostaOrder($order);
         } elseif ($order->payment_method == 2) {
-            $this->payByPaymob($order);
+            $this->payByPaymob($order, $payment);
         } elseif ($order->payment_method == 3) {
-            $this->payByPaymob($order);
+            $this->payByPaymob($order, $payment);
         } elseif ($order->payment_method == 4) {
             // empty cart
             Cart::instance('cart')->destroy();
@@ -140,15 +141,15 @@ class OrderBillingDetails extends Component
         }
     }
 
-    public function payByPaymob($order)
+    public function payByPaymob($order,$payment)
     {
         try {
             // create paymob auth token
             $first_step = Http::acceptJson()->post('https://accept.paymob.com/api/auth/tokens', [
                 "api_key" => env('PAYMOB_TOKEN')
-            ])->json();
+                ])->json();
 
-            $auth_token = $first_step['token'];
+                $auth_token = $first_step['token'];
 
             // create paymob order
             $second_step = Http::acceptJson()->post('https://accept.paymob.com/api/ecommerce/orders', [
@@ -160,6 +161,10 @@ class OrderBillingDetails extends Component
             ])->json();
 
             $order_id = $second_step['id'];
+
+            $payment->update([
+                'paymob_order_id' => $order_id,
+            ]);
 
             // create paymob transaction
             $third_step = Http::acceptJson()->post('https://accept.paymob.com/api/acceptance/payment_keys', [
@@ -183,13 +188,13 @@ class OrderBillingDetails extends Component
                     "state" => "NA"
                 ],
                 "currency" => "EGP",
-                "integration_id" => $this->payment_method == 3 ? env('PAYMOB_CLIENT_ID_INSTALLMENTS') : env('PAYMOB_CLIENT_ID_CARD'),
+                "integration_id" => $order->payment_method == 3 ? env('PAYMOB_CLIENT_ID_INSTALLMENTS') : env('PAYMOB_CLIENT_ID_CARD_TEST'),
             ])->json();
 
             $payment_key = $third_step['token'];
 
             // redirect to paymob payment page
-            redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($this->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD')) . "?payment_token=$payment_key");
+            redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($order->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
         } catch (\Throwable $th) {
             redirect()->route('front.order.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
         }

@@ -15,6 +15,7 @@ class Payment extends Model
         'payment_amount',
         'payment_method',
         'payment_status',
+        'paymob_order_id',
         'payment_details',
     ];
 

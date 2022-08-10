@@ -638,6 +638,8 @@ class OrderController extends Controller
 
         ksort($data);
 
+        dd($data);
+
         $hmac = $data['hmac'];
 
         $array = [
@@ -683,16 +685,13 @@ class OrderController extends Controller
                 $payment = Payment::with(['order' => function ($query) {
                     $query->with(['user', 'products', 'address']);
                 }])
-                    ->where('user_id', auth()->user()->id)
-                    ->where('payment_amount', $data['amount_cents'] / 100)
-                    ->where('payment_status', 1)
+                    ->where('paymob_order_id', $data['order'])
                     ->first();
 
                 $payment->update([
                     'payment_status' => 2,
                     'payment_details' => [
                         'amount_cents' => $data['amount_cents'],
-                        'order_id' => $data['order'],
                         'transaction_id' => $data['id'],
                         'source_data_sub_type' => $data['source_data_sub_type'],
                     ]
@@ -704,157 +703,50 @@ class OrderController extends Controller
 
                 $order = $payment->order;
 
-                // create order
-                // createBostaOrder($order);
-
                 DB::commit();
 
-                return redirect()->route('front.order.billing.checked', $payment->order->id);
+                return redirect()->route('front.order.billing.checked')->with('payment', $payment);
             } catch (\Throwable $th) {
                 DB::rollBack();
 
                 $payment = Payment::with(['order' => function ($query) {
                     $query->with(['user', 'products', 'address']);
                 }])
-                    ->where('user_id', auth()->user()->id)
-                    ->where('payment_amount', $data['amount_cents'] / 100)
-                    ->where('payment_status', 1)
+                    ->where('paymob_order_id', $data['order'])
                     ->first();
 
                 $payment->update([
                     'payment_status' => 3,
                 ]);
 
-                return redirect()->route('front.order.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
+                return redirect()->route('front.order.billing.checked')->with([
+                    'payment' => $payment,
+                    'error' => __('front/homePage.Payment Failed, Please Try Again')
+                ]);
             }
         } else {
             $payment = Payment::with(['order' => function ($query) {
                 $query->with(['user', 'products', 'address']);
             }])
-                ->where('user_id', auth()->user()->id)
-                ->where('payment_amount', $data['amount_cents'] / 100)
-                ->where('payment_status', 1)
+                ->where('paymob_order_id', $data['order'])
                 ->first();
 
             $payment->update([
                 'payment_status' => 3,
             ]);
 
-            return redirect()->route('front.order.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
-        }
+            return redirect()->route('front.order.billing.checked')->with([
+                'payment' => $payment,
+                'error' => __('front/homePage.Payment Failed, Please Try Again')
+            ]);
+    }
     }
 
-    public function billingChecked(Request $request)
+    public function billingChecked()
     {
-        dd($request->all());
-        $data = $request->all();
+        $payment = session('payment');
 
-        ksort($data);
-
-        $hmac = $data['hmac'];
-
-        $array = [
-            'amount_cents',
-            'created_at',
-            'currency',
-            'error_occured',
-            'has_parent_transaction',
-            'id',
-            'integration_id',
-            'is_3d_secure',
-            'is_auth',
-            'is_capture',
-            'is_refunded',
-            'is_standalone_payment',
-            'is_voided',
-            'order',
-            'owner',
-            'pending',
-            'source_data_pan',
-            'source_data_sub_type',
-            'source_data_type',
-            'success'
-        ];
-
-        $concat_data = '';
-
-        foreach ($data as $key => $element) {
-            if (in_array($key, $array)) {
-                $concat_data .= $element;
-            }
-        }
-
-        $secret = env('PAYMOB_HMAC');
-
-        $generated_hmac = hash_hmac('SHA512', $concat_data, $secret);
-
-        if ($generated_hmac == $hmac && $data['success'] == 'true') {
-            DB::beginTransaction();
-
-            try {
-                // update the database with the order data
-                $payment = Payment::with(['order' => function ($query) {
-                    $query->with(['user', 'products', 'address']);
-                }])
-                    ->where('user_id', auth()->user()->id)
-                    ->where('payment_amount', $data['amount_cents'] / 100)
-                    ->where('payment_status', 1)
-                    ->first();
-
-                $payment->update([
-                    'payment_status' => 2,
-                    'payment_details' => [
-                        'amount_cents' => $data['amount_cents'],
-                        'order_id' => $data['order'],
-                        'transaction_id' => $data['id'],
-                        'source_data_sub_type' => $data['source_data_sub_type'],
-                    ]
-                ]);
-
-                $payment->order->update([
-                    'should_pay' => 0.00,
-                ]);
-
-                $order = $payment->order;
-
-                // create order
-                // createBostaOrder($order);
-
-                DB::commit();
-
-                return redirect()->route('front.order.billing.checked', $payment->order->id);
-            } catch (\Throwable $th) {
-                DB::rollBack();
-
-                $payment = Payment::with(['order' => function ($query) {
-                    $query->with(['user', 'products', 'address']);
-                }])
-                    ->where('user_id', auth()->user()->id)
-                    ->where('payment_amount', $data['amount_cents'] / 100)
-                    ->where('payment_status', 1)
-                    ->first();
-
-                $payment->update([
-                    'payment_status' => 3,
-                ]);
-
-                return redirect()->route('front.order.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
-            }
-        } else {
-            $payment = Payment::with(['order' => function ($query) {
-                $query->with(['user', 'products', 'address']);
-            }])
-                ->where('user_id', auth()->user()->id)
-                ->where('payment_amount', $data['amount_cents'] / 100)
-                ->where('payment_status', 1)
-                ->first();
-
-            $payment->update([
-                'payment_status' => 3,
-            ]);
-
-            return redirect()->route('front.order.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
-        }
+        dd($payment);
     }
 
 

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('payment_amount')->default(0.00);
             $table->tinyInteger('payment_method')->unsigned()->comment('1 => cash, 2 => card, 3 => installments, 4 => vodafone cash');
             $table->tinyInteger('payment_status')->unsigned()->comment('1 => pending, 2 => paid, 3 => failed');
+            $table->string('paymob_order_id',20)->nullable();
             $table->text('payment_details')->nullable();
             $table->timestamps();
 

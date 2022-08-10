@@ -402,13 +402,14 @@ function createBostaOrder($order)
         ],
         "receiver" => [
             "phone"         =>      $order->user->phones->where('default', 1)->first()->phone,
+            "secondPhone"   =>      $order->user->phones->where('default', 0)->count() ? $order->user->phones->where('default', 0)->first()->phone : '',
             "firstName"     =>      $order->user->f_name,
-            "lastName"      =>      $order->user->l_name ? $order->user->l_name . ($order->user->phones->where('default', 0)->count() ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : "") : ($order->user->phones->where('default', 0)->count() ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : ""),
+            "lastName"      =>      $order->user->l_name ? $order->user->l_name : $order->user->f_name,
             "email"         =>      $order->user->email ?? '',
         ],
         "businessReference" => "$order->id",
         "type"      =>      10,
-        "notes"     =>      $order->notes ?? '',
+        "notes"     =>      $order->notes ? $order->notes . ($order->user->phones->where('default', 0)->count() > 1 ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : '') : ($order->user->phones->where('default', 0)->count() > 1 ? implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : ''),
         "cod"       =>      $order->payment_method == 1 ? $order->should_pay : 0.00,
         "allowToOpenPackage" => true,
     ];
@@ -503,7 +504,7 @@ function editBostaOrder($order)
         'Authorization'     =>  env('BOSTA_API_KEY'),
         'Content-Type'      =>  'application/json',
         'Accept'            =>  'application/json'
-    ])->patch('https://app.bosta.co/api/v0/deliveries/'.$order->order_delivery_id, $order_data);
+    ])->patch('https://app.bosta.co/api/v0/deliveries/' . $order->order_delivery_id, $order_data);
 
     $decoded_bosta_response = $bosta_response->json();
 

@@ -33,7 +33,6 @@ class Order extends Model
         'delivery_fees',
         'total_weight',
         'payment_method',
-        // 'payment_details',
         'tracking_number',
         'order_delivery_id',
         'notes',
