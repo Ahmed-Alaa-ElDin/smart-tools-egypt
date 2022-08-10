@@ -127,10 +127,9 @@ class OrderBillingDetails extends Component
         if ($order->payment_method == 1) {
             createBostaOrder($order);
         } elseif ($order->payment_method == 2) {
-            dd($order);
-            $order->payByPaymob($order);
+            $this->payByPaymob($order);
         } elseif ($order->payment_method == 3) {
-            $order->payByPaymob($order);
+            $this->payByPaymob($order);
         } elseif ($order->payment_method == 4) {
             // empty cart
             Cart::instance('cart')->destroy();

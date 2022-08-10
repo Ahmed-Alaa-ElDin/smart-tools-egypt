@@ -314,5 +314,6 @@ return [
     "My Wallet"                 =>      "محفظتي",
     "Card"                      =>      "بطاقتي",
     "Payment Done Successfully" =>      "تمت عملية الدفع بنجاح",
+    "Order Discount:"           =>      "خصم إضافي على الطلب :",
 
 ];

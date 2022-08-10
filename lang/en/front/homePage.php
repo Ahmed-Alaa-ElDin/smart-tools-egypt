@@ -315,7 +315,7 @@ return [
     "My Wallet"                 =>      "My Wallet",
     "Card"                      =>      "My Card",
     "Payment Done Successfully" =>      "Payment Done Successfully",
-    "Cart"                      =>      "Cart",
+    "Order Discount:"           =>      "Order Discount:",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",
