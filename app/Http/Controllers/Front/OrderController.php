@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
 use App\Models\Offer;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Models\User;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -731,25 +733,77 @@ class OrderController extends Controller
                 'payment' => $payment,
                 'error' => __('front/homePage.Payment Failed, Please Try Again')
             ]);
-    }
+        }
     }
 
     public function billingChecked()
     {
         $payment = session('payment');
 
-        if ($payment->payment_status == 2) {
+        if ($payment && $payment->payment_status == 2) {
             $order = $payment->order;
 
             $order->update([
-                'payment_status' => 3,
+                'should_pay' => 0.00,
             ]);
+
+            $bosta_order = createBostaOrder($order);
+
+            if ($bosta_order['status']) {
+                // update order in database
+                $order->update([
+                    'tracking_number' => $bosta_order['data']['trackingNumber'],
+                    'order_delivery_id' => $bosta_order['data']['_id'],
+                    'status_id' => 3,
+                ]);
+
+                $order->statuses()->attach(3);
+
+                // update user's balance
+                $user = User::find(auth()->user()->id);
+
+                $user->update([
+                    'points' => $user->points - $order->used_points + $order->gift_points ?? 0,
+                    'balance' => $user->balance - $order->used_balance ?? 0,
+                ]);
+
+                // update coupon usage
+                if ($order->coupon_id != null) {
+                    $coupon = Coupon::find($order->coupon_id);
+
+                    $coupon->update([
+                        'number' => $coupon->number != null && $coupon->number > 0 ? $coupon->number - 1 : $coupon->number,
+                    ]);
+                }
+
+                // todo :: edit offer usage
+
+                // clear cart
+                Cart::instance('cart')->destroy();
+
+                // edit products database
+                foreach ($order->products as $product) {
+                    $product->update([
+                        'quantity' => $product->quantity - $product->pivot->quantity >= 0  ? $product->quantity - $product->pivot->quantity : 0,
+                    ]);
+                }
+
+                // redirect to done page
+                Session::flash('success', __('front/homePage.Order Created Successfully'));
+                redirect()->route('front.order.done')->with('order_id', $order->id);
+            } else {
+                Session::flash('error', __('front/homePage.Order Creation Failed, Please Try Again'));
+                redirect()->route('front.order.billing');
+            }
+
+            // Send Email To User
+
+            // Send SMS To User
+
+        } else {
+            return redirect()->route('front.orders')->with(['error' => __('front/homePage.Payment Failed, Please Try Again')]);
         }
-
-        dd($payment);
     }
-
-
 
     public function done()
     {

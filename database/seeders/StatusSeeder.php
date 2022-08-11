@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\OrderStatus;
+use App\Models\Status;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class OrderStatusSeeder extends Seeder
+class StatusSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,55 +15,55 @@ class OrderStatusSeeder extends Seeder
      */
     public function run()
     {
-        OrderStatus::updateOrCreate([
+        Status::updateOrCreate([
             'id' => 1,
             'name' => 'Under Processing',
         ]);
-        OrderStatus::updateOrCreate([
+        Status::updateOrCreate([
             'id' => 2,
-            'name' => 'Pending',
+            'name' => 'Waiting For Payment',
         ]);
-        OrderStatus::updateOrCreate([
+        Status::updateOrCreate([
             'id' => 3,
             'name' => 'Created',
         ]);
-        OrderStatus::updateOrCreate([
+        Status::updateOrCreate([
             'id' => 4,
             'name' => 'Preparing',
         ]);
-        OrderStatus::updateOrCreate([
+        Status::updateOrCreate([
             'id' => 5,
             'name' => 'Under Reviewing',
         ]);
-        OrderStatus::updateOrCreate([
+        Status::updateOrCreate([
             'id' => 6,
             'name' => 'Shipped',
         ]);
-        OrderStatus::updateOrCreate([
+        Status::updateOrCreate([
             'id' => 7,
             'name' => 'Delivered',
         ]);
-        OrderStatus::updateOrCreate([
+        Status::updateOrCreate([
             'id' => 8,
             'name' => 'Cancellation Requested',
         ]);
-        OrderStatus::updateOrCreate([
+        Status::updateOrCreate([
             'id' => 9,
             'name' => 'Cancelled',
         ]);
-        OrderStatus::updateOrCreate([
+        Status::updateOrCreate([
             'id' => 10,
             'name' => 'Under Editing',
         ]);
-        OrderStatus::updateOrCreate([
+        Status::updateOrCreate([
             'id' => 11,
             'name' => 'Edit Requested',
         ]);
-        OrderStatus::updateOrCreate([
+        Status::updateOrCreate([
             'id' => 12,
             'name' => 'Edit Approved',
         ]);
-        OrderStatus::updateOrCreate([
+        Status::updateOrCreate([
             'id' => 13,
             'name' => 'Edit Rejected',
         ]);

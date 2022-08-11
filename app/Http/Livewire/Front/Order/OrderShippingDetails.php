@@ -280,6 +280,8 @@ class OrderShippingDetails extends Component
                     'notes' => $this->notes,
                 ]);
 
+                $order->statuses()->attach(1);
+
                 DB::commit();
 
                 Session::flash('success', __('front/homePage.Shipping Details Saved Successfully'));

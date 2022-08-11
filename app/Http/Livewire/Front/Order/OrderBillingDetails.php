@@ -2,8 +2,10 @@
 
 namespace App\Http\Livewire\Front\Order;
 
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Models\User;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -113,6 +115,8 @@ class OrderBillingDetails extends Component
                     'status_id'         =>      2,
                 ]);
 
+                $order->statuses()->attach(2);
+
                 $payment = Payment::updateOrCreate([
                     'order_id' => $order->id,
                     'user_id' => $order->user_id,
@@ -133,7 +137,56 @@ class OrderBillingDetails extends Component
             }
 
             if ($order->payment_method == 1) {
-                createBostaOrder($order);
+
+                $bosta_order = createBostaOrder($order);
+
+                if ($bosta_order['status']) {
+                    // update order in database
+                    $order->update([
+                        'tracking_number' => $bosta_order['data']['trackingNumber'],
+                        'order_delivery_id' => $bosta_order['data']['_id'],
+                        'status_id' => 3,
+                    ]);
+
+                    $order->statuses()->attach(3);
+
+                    // update user's balance
+                    $user = User::find(auth()->user()->id);
+
+                    $user->update([
+                        'points' => $user->points - $order->used_points + $order->gift_points ?? 0,
+                        'balance' => $user->balance - $order->used_balance ?? 0,
+                    ]);
+
+                    // update coupon usage
+                    if ($order->coupon_id != null) {
+                        $coupon = Coupon::find($order->coupon_id);
+
+                        $coupon->update([
+                            'number' => $coupon->number != null && $coupon->number > 0 ? $coupon->number - 1 : $coupon->number,
+                        ]);
+                    }
+
+                    // todo :: edit offer usage
+
+                    // clear cart
+                    Cart::instance('cart')->destroy();
+
+                    // edit products database
+                    foreach ($order->products as $product) {
+                        $product->update([
+                            'quantity' => $product->quantity - $product->pivot->quantity >= 0  ? $product->quantity - $product->pivot->quantity : 0,
+                        ]);
+                    }
+
+
+                    // redirect to done page
+                    Session::flash('success', __('front/homePage.Order Created Successfully'));
+                    redirect()->route('front.order.done')->with('order_id', $order->id);
+                } else {
+                    Session::flash('error', __('front/homePage.Order Creation Failed, Please Try Again'));
+                    redirect()->route('front.order.billing');
+                }
             } elseif ($order->payment_method == 2) {
                 payByPaymob($order, $payment);
             } elseif ($order->payment_method == 3) {
@@ -150,63 +203,4 @@ class OrderBillingDetails extends Component
             DB::rollback();
         }
     }
-
-    // public function payByPaymob($order,$payment)
-    // {
-    //     try {
-    //         // create paymob auth token
-    //         $first_step = Http::acceptJson()->post('https://accept.paymob.com/api/auth/tokens', [
-    //             "api_key" => env('PAYMOB_TOKEN')
-    //             ])->json();
-
-    //             $auth_token = $first_step['token'];
-
-    //         // create paymob order
-    //         $second_step = Http::acceptJson()->post('https://accept.paymob.com/api/ecommerce/orders', [
-    //             "auth_token" =>  $auth_token,
-    //             "delivery_needed" => "false",
-    //             "amount_cents" => number_format(($order->should_pay) * 100, 0, '', ''),
-    //             "currency" => "EGP",
-    //             "items" => []
-    //         ])->json();
-
-    //         $order_id = $second_step['id'];
-
-    //         $payment->update([
-    //             'paymob_order_id' => $order_id,
-    //         ]);
-
-    //         // create paymob transaction
-    //         $third_step = Http::acceptJson()->post('https://accept.paymob.com/api/acceptance/payment_keys', [
-    //             "auth_token" => $auth_token,
-    //             "amount_cents" => number_format(($order->should_pay) * 100, 0, '', ''),
-    //             "expiration" => 3600,
-    //             "order_id" => $order_id,
-    //             "billing_data" => [
-    //                 "apartment" => "NA",
-    //                 "email" => $order->user->email ?? 'test@smarttoolsegypt.com',
-    //                 "floor" => "NA",
-    //                 "first_name" => $order->user->f_name,
-    //                 "street" => "NA",
-    //                 "building" => "NA",
-    //                 "phone_number" => $order->phone1,
-    //                 "shipping_method" => "NA",
-    //                 "postal_code" => "NA",
-    //                 "city" => "NA",
-    //                 "country" => "NA",
-    //                 "last_name" => $order->user->l_name ?? $order->user->f_name,
-    //                 "state" => "NA"
-    //             ],
-    //             "currency" => "EGP",
-    //             "integration_id" => $order->payment_method == 3 ? env('PAYMOB_CLIENT_ID_INSTALLMENTS') : env('PAYMOB_CLIENT_ID_CARD_TEST'),
-    //         ])->json();
-
-    //         $payment_key = $third_step['token'];
-
-    //         // redirect to paymob payment page
-    //         redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($order->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
-    //     } catch (\Throwable $th) {
-    //         redirect()->route('front.order.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
-    //     }
-    // }
 }

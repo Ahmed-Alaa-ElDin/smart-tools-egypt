@@ -245,7 +245,7 @@ return [
     "You didn't make any orders until now"      =>      "You didn't make any orders until now",
     "No products in this order" =>      "No products in this order",
     "Under Processing"          =>      "Under Processing",
-    "Pending"                   =>      "Pending",
+    "Waiting For Payment"       =>      "Waiting For Payment",
     "Created"                   =>      "Created",
     "Preparing"                 =>      "Preparing",
     "Under Reviewing"           =>      "Under Reviewing",

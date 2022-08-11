@@ -38,8 +38,6 @@ return new class extends Migration
             $table->decimal('used_balance', 8, 2)->default(0.00);
             $table->decimal('total_weight', 8, 2)->default(1)->comment('on Kg');
             $table->string('payment_method')->nullable();
-            // $table->text('payment_details')->nullable();
-            // $table->tinyInteger('payment_status')->default(0)->comment('0 -> No , 1 -> Yes');
             $table->string('tracking_number')->nullable();
             $table->string('order_delivery_id')->nullable();
             $table->text('notes')->nullable();
@@ -49,7 +47,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete()->onUpdate('cascade');
             $table->foreign('address_id')->references('id')->on('addresses')->nullOnDelete()->onUpdate('cascade');
             $table->foreign('zone_id')->references('id')->on('zones')->nullOnDelete()->onUpdate('cascade');
-            $table->foreign('status_id')->references('id')->on('order_statuses')->nullOnDelete()->onUpdate('cascade');
+            $table->foreign('status_id')->references('id')->on('statuses')->nullOnDelete()->onUpdate('cascade');
         });
     }
 

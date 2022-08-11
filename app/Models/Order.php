@@ -24,9 +24,9 @@ class Order extends Model
         'status_id',
         'subtotal_base',
         'subtotal_final',
+        'total',
         'should_pay',
         'should_get',
-        'total',
         'used_points',
         'used_balance',
         'gift_points',
@@ -57,7 +57,12 @@ class Order extends Model
 
     public function status()
     {
-        return $this->belongsTo(OrderStatus::class);
+        return $this->belongsTo(Status::class);
+    }
+
+    public function statuses()
+    {
+        return $this->belongsToMany(Status::class, 'order_status', 'order_id', 'status_id')->withTimestamps();
     }
 
     public function zone()

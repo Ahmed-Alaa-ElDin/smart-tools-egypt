@@ -424,49 +424,16 @@ function createBostaOrder($order)
     $decoded_bosta_response = $bosta_response->json();
 
     if ($bosta_response->successful()) {
-        // update order in database
-        $order->update([
-            'tracking_number' => $decoded_bosta_response['trackingNumber'],
-            'order_delivery_id' => $decoded_bosta_response['_id'],
-            'status_id' => 3,
-        ]);
+        return [
+            'status'    =>  true,
+            'data'      =>  $decoded_bosta_response,
+        ];
 
-        // update user's balance
-        $user = User::find(auth()->user()->id);
-
-        $user->update([
-            'points' => $user->points - $order->used_points + $order->gift_points ?? 0,
-            'balance' => $user->balance - $order->used_balance ?? 0,
-        ]);
-
-        // update coupon usage
-        if ($order->coupon_id != null) {
-            $coupon = Coupon::find($order->coupon_id);
-
-            $coupon->update([
-                'number' => $coupon->number != null && $coupon->number > 0 ? $coupon->number - 1 : $coupon->number,
-            ]);
-        }
-
-        // todo :: edit offer usage
-
-        // clear cart
-        Cart::instance('cart')->destroy();
-
-        // edit products database
-        foreach ($order->products as $product) {
-            $product->update([
-                'quantity' => $product->quantity - $product->pivot->quantity >= 0  ? $product->quantity - $product->pivot->quantity : 0,
-            ]);
-        }
-
-
-        // redirect to done page
-        Session::flash('success', __('front/homePage.Order Created Successfully'));
-        redirect()->route('front.order.done')->with('order_id', $order->id);
     } else {
-        Session::flash('error', __('front/homePage.Order Creation Failed, Please Try Again'));
-        redirect()->route('front.order.billing');
+        return [
+            'status'    =>  false,
+            'data'      =>  $decoded_bosta_response,
+        ];
     }
 }
 

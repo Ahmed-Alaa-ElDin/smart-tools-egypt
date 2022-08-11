@@ -245,7 +245,7 @@ return [
     "You didn't make any orders until now"      =>      "لم تقم بعمل أي طلبات حتى الآن",
     "No products in this order" =>      "لا توجد منتجات في هذا الطلب",
     "Under Processing"          =>      "جاري إنشاء الطلب",
-    "Pending"                   =>      "معلق",
+    "Waiting For Payment"       =>      "في انتظار الدفع",
     "Created"                   =>      "تم إنشاء الطلب",
     "Preparing"                 =>      "جاري التجهيز",
     "Under Reviewing"           =>      "جاري الفحص والمراجعة",

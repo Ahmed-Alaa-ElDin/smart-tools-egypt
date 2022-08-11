@@ -34,7 +34,7 @@ Route::group([
     Route::get('/order/done', [OrderController::class, 'done'])->name('order.done')->middleware('auth');
 
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index')->middleware('auth');
-    Route::delete('/order/cancel/{order_id}', [OrderController::class, 'cancel'])->name('order.cancel')->middleware('auth');
+    Route::delete('/orders/{order_id}/cancel', [OrderController::class, 'cancel'])->name('order.cancel')->middleware('auth');
     Route::get('/orders/{order_id}/edit', [OrderController::class, 'edit'])->name('orders.edit')->middleware('auth');
     Route::put('/orders/{order_id}', [OrderController::class, 'update'])->name('orders.update')->middleware('auth');
     Route::put('/orders/{old_order_id}/{new_older_id}', [OrderController::class, 'saveUpdates'])->name('orders.save-update')->middleware('auth');
