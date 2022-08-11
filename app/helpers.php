@@ -460,6 +460,7 @@ function createBostaOrder($order)
             ]);
         }
 
+
         // redirect to done page
         Session::flash('success', __('front/homePage.Order Created Successfully'));
         redirect()->route('front.order.done')->with('order_id', $order->id);
@@ -541,15 +542,17 @@ function cancelBostaOrder($order)
 
 ################ PAYMOB :: START ##################
 // create transaction in paymob
-function payByPaymob($order)
+function payByPaymob($order,$payment)
 {
     try {
+        // create paymob auth token
         $first_step = Http::acceptJson()->post('https://accept.paymob.com/api/auth/tokens', [
             "api_key" => env('PAYMOB_TOKEN')
-        ])->json();
+            ])->json();
 
-        $auth_token = $first_step['token'];
+            $auth_token = $first_step['token'];
 
+        // create paymob order
         $second_step = Http::acceptJson()->post('https://accept.paymob.com/api/ecommerce/orders', [
             "auth_token" =>  $auth_token,
             "delivery_needed" => "false",
@@ -560,6 +563,11 @@ function payByPaymob($order)
 
         $order_id = $second_step['id'];
 
+        $payment->update([
+            'paymob_order_id' => $order_id,
+        ]);
+
+        // create paymob transaction
         $third_step = Http::acceptJson()->post('https://accept.paymob.com/api/acceptance/payment_keys', [
             "auth_token" => $auth_token,
             "amount_cents" => number_format(($order->should_pay) * 100, 0, '', ''),
@@ -581,12 +589,13 @@ function payByPaymob($order)
                 "state" => "NA"
             ],
             "currency" => "EGP",
-            "integration_id" => $order->payment_method == 3 ? env('PAYMOB_CLIENT_ID_INSTALLMENTS') : env('PAYMOB_CLIENT_ID_CARD'),
+            "integration_id" => $order->payment_method == 3 ? env('PAYMOB_CLIENT_ID_INSTALLMENTS') : env('PAYMOB_CLIENT_ID_CARD_TEST'),
         ])->json();
 
         $payment_key = $third_step['token'];
 
-        redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($order->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD')) . "?payment_token=$payment_key");
+        // redirect to paymob payment page
+        redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($order->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
     } catch (\Throwable $th) {
         redirect()->route('front.order.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
     }

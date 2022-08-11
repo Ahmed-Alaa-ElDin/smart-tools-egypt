@@ -638,8 +638,6 @@ class OrderController extends Controller
 
         ksort($data);
 
-        dd($data);
-
         $hmac = $data['hmac'];
 
         $array = [
@@ -697,12 +695,6 @@ class OrderController extends Controller
                     ]
                 ]);
 
-                $payment->order->update([
-                    'should_pay' => 0.00,
-                ]);
-
-                $order = $payment->order;
-
                 DB::commit();
 
                 return redirect()->route('front.order.billing.checked')->with('payment', $payment);
@@ -745,6 +737,14 @@ class OrderController extends Controller
     public function billingChecked()
     {
         $payment = session('payment');
+
+        if ($payment->payment_status == 2) {
+            $order = $payment->order;
+
+            $order->update([
+                'payment_status' => 3,
+            ]);
+        }
 
         dd($payment);
     }
