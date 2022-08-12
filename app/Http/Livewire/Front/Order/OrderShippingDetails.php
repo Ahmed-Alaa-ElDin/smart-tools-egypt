@@ -285,7 +285,7 @@ class OrderShippingDetails extends Component
                 DB::commit();
 
                 Session::flash('success', __('front/homePage.Shipping Details Saved Successfully'));
-                redirect()->route('front.order.billing');
+                redirect()->route('front.orders.billing');
             } catch (\Throwable $th) {
                 DB::rollBack();
 

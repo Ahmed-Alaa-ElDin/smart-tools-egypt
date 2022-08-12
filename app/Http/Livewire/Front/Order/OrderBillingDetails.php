@@ -104,8 +104,8 @@ class OrderBillingDetails extends Component
                     'subtotal_base'     =>      $array_data['subtotal_base'],
                     'subtotal_final'    =>      $array_data['subtotal_final'] - $this->points_egp - $this->balance,
                     'delivery_fees'     =>      $array_data['delivery_fees'],
-                    'total'             =>      $array_data['subtotal_final'] - $this->points_egp - $this->balance + $array_data['delivery_fees'],
-                    'should_pay'        =>      $array_data['subtotal_final'] - $this->points_egp - $this->balance + $array_data['delivery_fees'],
+                    'total'             =>      $array_data['total'] - $this->points_egp - $this->balance,
+                    'should_pay'        =>      $array_data['total'] - $this->points_egp - $this->balance,
                     'should_get'        =>      0.00,
                     'used_points'       =>      $this->points ?? 0,
                     'gift_points'       =>      $array_data['gift_points'] ?? 0,
@@ -182,22 +182,34 @@ class OrderBillingDetails extends Component
 
                     // redirect to done page
                     Session::flash('success', __('front/homePage.Order Created Successfully'));
-                    redirect()->route('front.order.done')->with('order_id', $order->id);
+                    redirect()->route('front.orders.done')->with('order_id', $order->id);
                 } else {
                     Session::flash('error', __('front/homePage.Order Creation Failed, Please Try Again'));
-                    redirect()->route('front.order.billing');
+                    redirect()->route('front.orders.billing');
                 }
             } elseif ($order->payment_method == 2) {
-                payByPaymob($order, $payment);
+                $payment_key = payByPaymob($payment);
+
+                if ($payment_key) {
+                    return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($order->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
+                } else {
+                    return redirect()->route('front.orders.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
+                }
             } elseif ($order->payment_method == 3) {
-                payByPaymob($order, $payment);
+                $payment_key = payByPaymob($payment);
+
+                if ($payment_key) {
+                    return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($order->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
+                } else {
+                    return redirect()->route('front.orders.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
+                }
             } elseif ($order->payment_method == 4) {
                 // empty cart
                 Cart::instance('cart')->destroy();
 
                 // redirect to done page
                 Session::flash('success', __('front/homePage.Order Created Successfully'));
-                redirect()->route('front.order.done')->with('order_id', $order->id);
+                redirect()->route('front.orders.done')->with('order_id', $order->id);
             }
         } catch (\Throwable $th) {
             DB::rollback();

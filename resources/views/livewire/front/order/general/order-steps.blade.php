@@ -30,7 +30,7 @@
 
     <a
         class="block text-center @if ($step == 3) text-primary @elseif($step > 3) text-secondary @else text-gray-400 @endif"
-        @if ($step > 3) href="{{ route('front.order.billing') }}" @else href="javascript:void(0)" @endif>
+        @if ($step > 3) href="{{ route('front.orders.billing') }}" @else href="javascript:void(0)" @endif>
         <span class="material-icons text-4xl mb-2">
             payment
         </span>

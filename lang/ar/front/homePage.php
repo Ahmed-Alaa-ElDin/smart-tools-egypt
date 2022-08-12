@@ -251,6 +251,9 @@ return [
     "Under Reviewing"           =>      "جاري الفحص والمراجعة",
     "Shipped"                   =>      "تم التسليم لشركة الشحن",
     "Delivered"                 =>      "تم التوصيل",
+    "Edit Requested"            =>      "تم طلب التعديل",
+    "Edit Approved"             =>      "تمت الموافقة على التعديل",
+    "Edit Rejected"             =>      "تم رفض التعديل",
     "Cancellation Requested"    =>      "تم طلب الإلغاء",
     "Cancelled"                 =>      "تم الإلغاء",
     "Quantity"                  =>      "الكمية",
@@ -315,5 +318,7 @@ return [
     "Card"                      =>      "بطاقتي",
     "Payment Done Successfully" =>      "تمت عملية الدفع بنجاح",
     "Order Discount:"           =>      "خصم إضافي على الطلب :",
-
+    "Go to Payment"             =>      "التوجه إلى الدفع",
+    "Pay via vodafone-cash"     =>      "الدفع عن طريق فودافون كاش",
+    "Done"                      =>      "تم",
 ];

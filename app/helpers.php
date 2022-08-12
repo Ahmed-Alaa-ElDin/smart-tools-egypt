@@ -474,7 +474,7 @@ function editBostaOrder($order)
         'Accept'            =>  'application/json'
     ])->patch('https://app.bosta.co/api/v0/deliveries/' . $order->order_delivery_id, $order_data);
 
-    $decoded_bosta_response = $bosta_response->json();
+    // $decoded_bosta_response = $bosta_response->json();
 
     if ($bosta_response->successful()) {
         return true;
@@ -509,8 +509,10 @@ function cancelBostaOrder($order)
 
 ################ PAYMOB :: START ##################
 // create transaction in paymob
-function payByPaymob($order,$payment)
+function payByPaymob($payment)
 {
+    $order = $payment->order;
+
     try {
         // create paymob auth token
         $first_step = Http::acceptJson()->post('https://accept.paymob.com/api/auth/tokens', [
@@ -561,10 +563,12 @@ function payByPaymob($order,$payment)
 
         $payment_key = $third_step['token'];
 
+        return $payment_key;
         // redirect to paymob payment page
         redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($order->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
     } catch (\Throwable $th) {
-        redirect()->route('front.order.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
+        return false;
+        redirect()->route('front.orders.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
     }
 }
 
@@ -639,11 +643,13 @@ function returnTotalOrder($order)
 
     $order->update([
         'num_of_items' => 0,
-        'status_id' => 8,
+        'status_id' => 9,
         'gift_points' => 0,
         'used_points' => 0,
         'used_balance' => 0.00,
     ]);
+
+    $order->statuses()->attach(9);
 
     $order->products()->syncWithPivotValues(
         $products,

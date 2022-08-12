@@ -360,7 +360,21 @@
             {{-- Buttons :: Start --}}
             <div class="p-2 flex justify-around items-center gap-2">
 
-                @if ($order_data['payment_method'] == 1)
+                @if ($order_data['products_total_quantities'] == 0)
+                    <form method="POST"
+                        action="{{ route('front.orders.cancel', [
+                            'order_id' => $order_data['order_id'],
+                            'new_order_id' => $order_data['new_order_id'],
+                        ]) }}"
+                        class="m-0">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="btn text-red-600 bg-white font-bold focus:outline-none border-2 border-red-200 text-sm px-5 py-2.5 hover:text-red-800 focus:z-10">
+                            {{ __('front/homePage.Cancel Order') }}
+                        </button>
+                    </form>
+                @elseif ($order_data['payment_method'] == 1)
                     <form
                         action="{{ route('front.orders.save-update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
                         method="POST" class="m-0">

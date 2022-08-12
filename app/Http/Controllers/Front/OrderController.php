@@ -167,15 +167,21 @@ class OrderController extends Controller
         $total_points = isset($order_points) ? $products_best_points + $order_points : $products_best_points;
 
         //  get coupon data
+        $coupon_discount = 0;
+        $coupon_discount_percentage = 0;
+        $coupon_points = 0;
+        $coupon_shipping = null;
+
         if ($order->coupon_id) {
             $coupon = $order->coupon;
 
             $coupon_data = getCoupon($coupon, $products_ids, $products_quantities, $products_best_prices);
+
+            $coupon_discount = $coupon_data['coupon_discount'];
+            $coupon_discount_percentage = $coupon_data['coupon_discount_percentage'];
+            $coupon_points = $coupon_data['coupon_points'];
+            $coupon_shipping = $coupon_data['coupon_shipping'];
         }
-        $coupon_discount = $order->coupon_id ? $coupon_data['coupon_discount'] : 0;
-        $coupon_discount_percentage = $order->coupon_id ? $coupon_data['coupon_discount_percentage'] : 0;
-        $coupon_points = $order->coupon_id ? $coupon_data['coupon_points'] : 0;
-        $coupon_shipping = $order->coupon_id ? $coupon_data['coupon_shipping'] : null;
 
         // Get Used Balance
         $used_balance = $order->used_balance;
@@ -216,7 +222,7 @@ class OrderController extends Controller
         $payment_status = $order->should_pay == 0 ? 1 : 0;
         $old_price = $order->subtotal_final + $order->delivery_fees;
 
-        $difference = $payment_status ? $total_price - $old_price : $total_price;
+        $difference = $payment_status ? round($total_price - $old_price, 2) : $total_price;
 
         $new_order = Order::updateOrCreate([
             'user_id' => $order->user_id,
@@ -252,7 +258,7 @@ class OrderController extends Controller
         $order_products = [];
 
         foreach ($products_ids as $product_id) {
-            $order_products[$product_id] =                     [
+            $order_products[$product_id] = [
                 'quantity' => $products_quantities[$product_id],
                 'price' => $best_products->where('id', $product_id)->first()->best_price
             ];
@@ -300,13 +306,29 @@ class OrderController extends Controller
         $returned_points = $old_order->used_points - $new_order->used_points;
         $returned_gift_points = $new_order->gift_points - $old_order->gift_points;
 
+        $order_products = [];
+        $returned_products = [];
+
+        foreach ($new_order->products as $product) {
+            $order_products[$product->id] = [
+                'quantity' => $product->pivot->quantity,
+                'price' => $product->pivot->price
+            ];
+        }
+
+        foreach ($old_order->products as $product) {
+            $returned_products[$product->id] = [
+                'quantity' => $product->pivot->quantity,
+            ];
+        }
+
         DB::beginTransaction();
 
         if ($new_order->payment_method == 1) {
             if (editBostaOrder($new_order)) {
                 try {
                     $old_order->update([
-                        'status_id' => 11,
+                        'status_id' => 12,
                         'num_of_items' => $new_order->num_of_items,
                         'coupon_discount' => $new_order->coupon_discount,
                         'subtotal_base' => $new_order->subtotal_base,
@@ -320,6 +342,8 @@ class OrderController extends Controller
                         'gift_points' => $new_order->gift_points,
                         'total_weight' => $new_order->total_weight,
                     ]);
+
+                    $old_order->statuses()->attach([11, 12]);
 
                     $order_products = [];
                     $returned_products = [];
@@ -370,7 +394,7 @@ class OrderController extends Controller
                 if (editBostaOrder($new_order)) {
                     try {
                         $old_order->update([
-                            'status_id' => 11,
+                            'status_id' => 12,
                             'num_of_items' => $new_order->num_of_items,
                             'coupon_discount' => $new_order->coupon_discount,
                             'subtotal_base' => $new_order->subtotal_base,
@@ -385,21 +409,7 @@ class OrderController extends Controller
                             'total_weight' => $new_order->total_weight,
                         ]);
 
-                        $order_products = [];
-                        $returned_products = [];
-
-                        foreach ($new_order->products as $product) {
-                            $order_products[$product->id] = [
-                                'quantity' => $product->pivot->quantity,
-                                'price' => $product->pivot->price
-                            ];
-                        }
-
-                        foreach ($old_order->products as $product) {
-                            $returned_products[$product->id] = [
-                                'quantity' => $product->pivot->quantity,
-                            ];
-                        }
+                        $old_order->statuses()->attach([11, 12]);
 
                         $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
                             $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
@@ -442,12 +452,13 @@ class OrderController extends Controller
 
                 $new_order->payments()->updateOrCreate([
                     'order_id' => $payment['order_id'],
+                    'payment_status' => 1,
                 ], $payment);
 
                 if (refundRequestPaymob(json_decode($payment['payment_details'])->transaction_id, abs($payment['payment_amount'])) && editBostaOrder($new_order)) {
                     try {
                         $old_order->update([
-                            'status_id' => 11,
+                            'status_id' => 12,
                             'num_of_items' => $new_order->num_of_items,
                             'coupon_discount' => $new_order->coupon_discount,
                             'subtotal_base' => $new_order->subtotal_base,
@@ -462,25 +473,11 @@ class OrderController extends Controller
                             'total_weight' => $new_order->total_weight,
                         ]);
 
+                        $old_order->statuses()->attach([11, 12]);
+
                         $new_order->payments()->first()->update([
                             'payment_status' => 2,
                         ]);
-
-                        $order_products = [];
-                        $returned_products = [];
-
-                        foreach ($new_order->products as $product) {
-                            $order_products[$product->id] = [
-                                'quantity' => $product->pivot->quantity,
-                                'price' => $product->pivot->price
-                            ];
-                        }
-
-                        foreach ($old_order->products as $product) {
-                            $returned_products[$product->id] = [
-                                'quantity' => $product->pivot->quantity,
-                            ];
-                        }
 
                         $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
                             $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
@@ -501,7 +498,6 @@ class OrderController extends Controller
                         Session::flash('success', __('front/homePage.Order edit request sent successfully'));
                         return redirect()->route('front.orders.index');
                     } catch (\Throwable $th) {
-                        throw $th;
                         DB::rollBack();
 
                         $new_order->payments()->first()->update([
@@ -596,7 +592,7 @@ class OrderController extends Controller
                     'order_id' => $payment['order_id'],
                 ], $payment);
 
-                payByPaymob($new_order);
+                // payByPaymob($new_order);
             }
         }
         dd($old_order->toArray(), $new_order->toArray());
@@ -699,7 +695,7 @@ class OrderController extends Controller
 
                 DB::commit();
 
-                return redirect()->route('front.order.billing.checked')->with('payment', $payment);
+                return redirect()->route('front.orders.billing.checked')->with('payment', $payment);
             } catch (\Throwable $th) {
                 DB::rollBack();
 
@@ -713,7 +709,7 @@ class OrderController extends Controller
                     'payment_status' => 3,
                 ]);
 
-                return redirect()->route('front.order.billing.checked')->with([
+                return redirect()->route('front.orders.billing.checked')->with([
                     'payment' => $payment,
                     'error' => __('front/homePage.Payment Failed, Please Try Again')
                 ]);
@@ -729,7 +725,7 @@ class OrderController extends Controller
                 'payment_status' => 3,
             ]);
 
-            return redirect()->route('front.order.billing.checked')->with([
+            return redirect()->route('front.orders.billing.checked')->with([
                 'payment' => $payment,
                 'error' => __('front/homePage.Payment Failed, Please Try Again')
             ]);
@@ -790,10 +786,10 @@ class OrderController extends Controller
 
                 // redirect to done page
                 Session::flash('success', __('front/homePage.Order Created Successfully'));
-                redirect()->route('front.order.done')->with('order_id', $order->id);
+                return redirect()->route('front.orders.done')->with('order_id', $order->id);
             } else {
                 Session::flash('error', __('front/homePage.Order Creation Failed, Please Try Again'));
-                redirect()->route('front.order.billing');
+                return redirect()->route('front.orders.billing');
             }
 
             // Send Email To User
@@ -801,7 +797,7 @@ class OrderController extends Controller
             // Send SMS To User
 
         } else {
-            return redirect()->route('front.orders')->with(['error' => __('front/homePage.Payment Failed, Please Try Again')]);
+            return redirect()->route('front.orders.index')->with(['error' => __('front/homePage.Payment Failed, Please Try Again')]);
         }
     }
 
@@ -810,7 +806,7 @@ class OrderController extends Controller
         return view('front.orders.done');
     }
 
-    public function cancel($order_id)
+    public function cancel($order_id, $new_order_id = null)
     {
         DB::beginTransaction();
 
@@ -852,12 +848,40 @@ class OrderController extends Controller
                 }
             }
 
+            // delete the temp order
+            if ($new_order_id != null) {
+                $new_order = Order::findOrFail($new_order_id);
+
+                $new_order->products()->detach();
+
+                $new_order->delete();
+            }
+
             DB::commit();
 
             return redirect()->route('front.orders.index')->with('success', __('front/homePage.Order Canceled Successfully'));
         } catch (\Throwable $th) {
             throw $th;
             DB::rollBack();
+        }
+    }
+
+    public function goToPayment($order_id)
+    {
+        $order = Order::with(['user', 'products', 'address'])->findOrFail($order_id);
+
+        $payment = $order->payments()->where('payment_status', 1)->first();
+
+        if ($payment && ($order->payment_method == 2 || $order->payment_method == 3)) {
+            $payment_key = payByPaymob($payment);
+
+            if ($payment_key) {
+                return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($order->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
+            } else {
+                return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
+            }
+        } else {
+            return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
         }
     }
 }
