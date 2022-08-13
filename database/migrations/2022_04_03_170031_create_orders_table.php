@@ -19,14 +19,12 @@ return new class extends Migration
             $table->unsignedBigInteger('address_id')->nullable();
             $table->string('phone1', 11)->nullable();
             $table->string('phone2', 255)->nullable();
-            $table->string('package_type')->default('parcel')->nullable();
-            $table->text('package_desc')->nullable();
+            $table->unsignedBigInteger('status_id')->nullable();
             $table->integer('num_of_items')->default(1)->nullable();
             $table->tinyInteger('allow_opening')->default(1)->comment('0 -> No , 1 -> Yes')->nullable();
             $table->unsignedBigInteger('zone_id')->nullable();
             $table->unsignedBigInteger('coupon_id')->nullable();
             $table->decimal('coupon_discount', 8, 2)->default(0.00);
-            $table->unsignedBigInteger('status_id')->nullable();
             $table->decimal('subtotal_base', 8, 2)->default(0.00);
             $table->decimal('subtotal_final', 8, 2)->default(0.00);
             $table->decimal('delivery_fees', 8, 2)->default(0.00);
@@ -39,6 +37,8 @@ return new class extends Migration
             $table->decimal('total_weight', 8, 2)->default(1)->comment('on Kg');
             $table->string('payment_method')->nullable();
             $table->string('tracking_number')->nullable();
+            $table->string('package_type')->default('parcel')->nullable();
+            $table->text('package_desc')->nullable();
             $table->string('order_delivery_id')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();

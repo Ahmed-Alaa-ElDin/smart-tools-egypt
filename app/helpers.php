@@ -517,9 +517,9 @@ function payByPaymob($payment)
         // create paymob auth token
         $first_step = Http::acceptJson()->post('https://accept.paymob.com/api/auth/tokens', [
             "api_key" => env('PAYMOB_TOKEN')
-            ])->json();
+        ])->json();
 
-            $auth_token = $first_step['token'];
+        $auth_token = $first_step['token'];
 
         // create paymob order
         $second_step = Http::acceptJson()->post('https://accept.paymob.com/api/ecommerce/orders', [
@@ -564,11 +564,8 @@ function payByPaymob($payment)
         $payment_key = $third_step['token'];
 
         return $payment_key;
-        // redirect to paymob payment page
-        redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($order->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
     } catch (\Throwable $th) {
         return false;
-        redirect()->route('front.orders.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
     }
 }
 
@@ -818,4 +815,4 @@ function getCoupon($coupon, $products_ids, $products_quantities, $products_best_
         ];
     }
 }
-###
+################ COUPON :: START ##################

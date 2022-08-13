@@ -444,7 +444,7 @@ class OrderController extends Controller
                 $payment = [
                     'order_id' => $new_order->id,
                     'user_id' => $new_order->user_id,
-                    'payment_amount' => 0 - $new_order->should_get,
+                    'payment_amount' => -1 * $new_order->should_get,
                     'payment_method' => $new_order->payment_method,
                     'payment_status' => 1,
                     'payment_details' => $old_order->payments->where('payment_amount', '>=', $new_order->should_get)->first()->payment_details,
@@ -519,7 +519,7 @@ class OrderController extends Controller
                 if (editBostaOrder($new_order)) {
                     try {
                         $old_order->update([
-                            'status_id' => 11,
+                            'status_id' => 12,
                             'num_of_items' => $new_order->num_of_items,
                             'coupon_discount' => $new_order->coupon_discount,
                             'subtotal_base' => $new_order->subtotal_base,
@@ -533,6 +533,8 @@ class OrderController extends Controller
                             'gift_points' => $new_order->gift_points,
                             'total_weight' => $new_order->total_weight,
                         ]);
+
+                        $old_order->statuses()->attach([11, 12]);
 
                         $order_products = [];
                         $returned_products = [];
@@ -582,17 +584,25 @@ class OrderController extends Controller
                 $payment = [
                     'order_id' => $new_order->id,
                     'user_id' => $new_order->user_id,
-                    'payment_amount' => 0 - $new_order->should_get,
+                    'payment_amount' => $new_order->should_pay,
                     'payment_method' => $new_order->payment_method,
                     'payment_status' => 1,
-                    'payment_details' => $old_order->payments->where('payment_amount', '>=', $new_order->should_get)->first()->payment_details,
                 ];
 
-                $new_order->payments()->updateOrCreate([
+                $payment = $new_order->payments()->updateOrCreate([
                     'order_id' => $payment['order_id'],
+                    'payment_status' => 1,
                 ], $payment);
 
-                // payByPaymob($new_order);
+                DB::commit();
+
+                $payment_key = payByPaymob($payment);
+
+                if ($payment_key) {
+                    return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($new_order->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
+                } else {
+                    return redirect()->route('front.orders.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
+                }
             }
         }
         dd($old_order->toArray(), $new_order->toArray());
@@ -677,13 +687,14 @@ class OrderController extends Controller
             DB::beginTransaction();
 
             try {
-                // update the database with the order data
+                // get payment data
                 $payment = Payment::with(['order' => function ($query) {
                     $query->with(['user', 'products', 'address']);
                 }])
                     ->where('paymob_order_id', $data['order'])
                     ->first();
 
+                // update payment status
                 $payment->update([
                     'payment_status' => 2,
                     'payment_details' => [
@@ -693,111 +704,95 @@ class OrderController extends Controller
                     ]
                 ]);
 
-                DB::commit();
+                // get order from payment
+                $order = $payment->order;
 
-                return redirect()->route('front.orders.billing.checked')->with('payment', $payment);
+                // update the database with the order data
+                $order->update([
+                    'should_pay' => 0.00,
+                ]);
+
+                // Order ==> New Order
+                if ($order->status_id == 2) {
+                    $bosta_order = createBostaOrder($order);
+
+                    if ($bosta_order['status']) {
+                        // update order in database
+                        $order->update([
+                            'tracking_number' => $bosta_order['data']['trackingNumber'],
+                            'order_delivery_id' => $bosta_order['data']['_id'],
+                            'status_id' => 3,
+                        ]);
+
+                        $order->statuses()->attach(3);
+
+                        // update user's balance
+                        $user = User::find(auth()->user()->id);
+
+                        $user->update([
+                            'points' => $user->points - $order->used_points + $order->gift_points ?? 0,
+                            'balance' => $user->balance - $order->used_balance ?? 0,
+                        ]);
+
+                        // update coupon usage
+                        if ($order->coupon_id != null) {
+                            $coupon = Coupon::find($order->coupon_id);
+
+                            $coupon->update([
+                                'number' => $coupon->number != null && $coupon->number > 0 ? $coupon->number - 1 : $coupon->number,
+                            ]);
+                        }
+
+                        // todo :: edit offer usage
+
+                        // clear cart
+                        Cart::instance('cart')->destroy();
+
+                        // edit products database
+                        foreach ($order->products as $product) {
+                            $product->update([
+                                'quantity' => $product->quantity - $product->pivot->quantity >= 0  ? $product->quantity - $product->pivot->quantity : 0,
+                            ]);
+                        }
+
+                        DB::commit();
+
+                        // Send Email To User
+
+                        // Send SMS To User
+
+                        // redirect to done page
+                        Session::flash('success', __('front/homePage.Order Created Successfully'));
+                        return redirect()->route('front.orders.done')->with('order_id', $order->id);
+                    } else {
+                        Session::flash('error', __('front/homePage.Order Creation Failed, Please Try Again'));
+                        return redirect()->route('front.orders.billing');
+                    }
+                }
+                // Order ==> Add To Order Before Shipping
+                elseif ($order->status_id == 10) {
+                }
             } catch (\Throwable $th) {
                 DB::rollBack();
 
-                $payment = Payment::with(['order' => function ($query) {
-                    $query->with(['user', 'products', 'address']);
-                }])
-                    ->where('paymob_order_id', $data['order'])
+                $payment = Payment::where('paymob_order_id', $data['order'])
                     ->first();
 
                 $payment->update([
                     'payment_status' => 3,
                 ]);
 
-                return redirect()->route('front.orders.billing.checked')->with([
-                    'payment' => $payment,
-                    'error' => __('front/homePage.Payment Failed, Please Try Again')
-                ]);
+                return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
             }
         } else {
-            $payment = Payment::with(['order' => function ($query) {
-                $query->with(['user', 'products', 'address']);
-            }])
-                ->where('paymob_order_id', $data['order'])
+            $payment = Payment::where('paymob_order_id', $data['order'])
                 ->first();
 
             $payment->update([
                 'payment_status' => 3,
             ]);
 
-            return redirect()->route('front.orders.billing.checked')->with([
-                'payment' => $payment,
-                'error' => __('front/homePage.Payment Failed, Please Try Again')
-            ]);
-        }
-    }
-
-    public function billingChecked()
-    {
-        $payment = session('payment');
-
-        if ($payment && $payment->payment_status == 2) {
-            $order = $payment->order;
-
-            $order->update([
-                'should_pay' => 0.00,
-            ]);
-
-            $bosta_order = createBostaOrder($order);
-
-            if ($bosta_order['status']) {
-                // update order in database
-                $order->update([
-                    'tracking_number' => $bosta_order['data']['trackingNumber'],
-                    'order_delivery_id' => $bosta_order['data']['_id'],
-                    'status_id' => 3,
-                ]);
-
-                $order->statuses()->attach(3);
-
-                // update user's balance
-                $user = User::find(auth()->user()->id);
-
-                $user->update([
-                    'points' => $user->points - $order->used_points + $order->gift_points ?? 0,
-                    'balance' => $user->balance - $order->used_balance ?? 0,
-                ]);
-
-                // update coupon usage
-                if ($order->coupon_id != null) {
-                    $coupon = Coupon::find($order->coupon_id);
-
-                    $coupon->update([
-                        'number' => $coupon->number != null && $coupon->number > 0 ? $coupon->number - 1 : $coupon->number,
-                    ]);
-                }
-
-                // todo :: edit offer usage
-
-                // clear cart
-                Cart::instance('cart')->destroy();
-
-                // edit products database
-                foreach ($order->products as $product) {
-                    $product->update([
-                        'quantity' => $product->quantity - $product->pivot->quantity >= 0  ? $product->quantity - $product->pivot->quantity : 0,
-                    ]);
-                }
-
-                // redirect to done page
-                Session::flash('success', __('front/homePage.Order Created Successfully'));
-                return redirect()->route('front.orders.done')->with('order_id', $order->id);
-            } else {
-                Session::flash('error', __('front/homePage.Order Creation Failed, Please Try Again'));
-                return redirect()->route('front.orders.billing');
-            }
-
-            // Send Email To User
-
-            // Send SMS To User
-
-        } else {
-            return redirect()->route('front.orders.index')->with(['error' => __('front/homePage.Payment Failed, Please Try Again')]);
+            return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
         }
     }
 

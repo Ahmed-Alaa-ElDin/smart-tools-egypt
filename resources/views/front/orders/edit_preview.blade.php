@@ -402,7 +402,7 @@
                             </button>
                         </form>
                     @else
-                        {{ __('front/homePage.Save Edits and Pay Difference') }}
+                                {{ __('front/homePage.Save Edits and Pay Difference') }}
                     @endif
                 @endif
 
