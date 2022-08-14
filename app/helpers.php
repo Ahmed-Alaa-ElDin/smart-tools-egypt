@@ -412,7 +412,7 @@ function createBostaOrder($order)
         "notes"     =>      $order->notes ? $order->notes . ($order->user->phones->where('default', 0)->count() > 1 ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : '') : ($order->user->phones->where('default', 0)->count() > 1 ? implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : ''),
         "cod"       =>      $order->payment_method == 1 ? $order->should_pay : 0.00,
         "allowToOpenPackage" => true,
-        "webhookUrl" => "https://www.smarttoolsegypt.com/orders/update-status",
+        "webhookUrl" => "https://www.smarttoolsegypt.com/api/orders/update-status",
     ];
     // create bosta order
     $bosta_response = Http::withHeaders([

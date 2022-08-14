@@ -1196,10 +1196,15 @@ class OrderController extends Controller
 
     public function updateStatus(Request $request)
     {
-        $order = Order::findOrFail($request->businessReference);
+        $order = Order::findOrFail($request['businessReference']);
+
 
         $order->update([
-            'status_id' => $request->status,
+            'status_id' => $request['state'],
         ]);
+
+        $order->statuses()->attach($request['state']);
+
+        return response()->json(['success' => true]);
     }
 }
