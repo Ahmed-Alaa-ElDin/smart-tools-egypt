@@ -385,7 +385,9 @@
                             {{ __('front/homePage.Save Edits') }}
                         </button>
                     </form>
-                @elseif($order_data['payment_method'] == 2 || $order_data['payment_method'] == 3)
+                @elseif($order_data['payment_method'] == 2 ||
+                    $order_data['payment_method'] == 3 ||
+                    $order_data['payment_method'] == 4)
                     @if ($order_data['difference'] < 0)
                         <button type="button" data-modal-toggle="card-confirm" class="btn bg-successDark font-bold">
                             {{ __('front/homePage.Save Edits and Get Difference') }}
@@ -401,8 +403,17 @@
                                 {{ __('front/homePage.Save Edits') }}
                             </button>
                         </form>
-                    @else
+                    @elseif ($order_data['difference'] > 0)
+                        <form
+                            action="{{ route('front.orders.save-update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
+                            method="POST" class="m-0">
+                            @csrf
+                            @method('PUT')
+
+                            <button type="submit" name="type" value="pay" class="btn bg-successDark font-bold">
                                 {{ __('front/homePage.Save Edits and Pay Difference') }}
+                            </button>
+                        </form>
                     @endif
                 @endif
 
@@ -454,20 +465,33 @@
                         @method('PUT')
 
                         <button type="submit" name="type" value="wallet" class="btn bg-successDark font-bold">
-                            {{ __('front/homePage.My Wallet') }}
+                            {{ __('front/homePage.My Wallet on the Website') }}
                         </button>
                     </form>
 
-                    <form
-                        action="{{ route('front.orders.save-update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
-                        method="POST" class="m-0">
-                        @csrf
-                        @method('PUT')
+                    @if ($order_data['payment_method'] == 4)
+                        <form
+                            action="{{ route('front.orders.save-update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
+                            method="POST" class="m-0">
+                            @csrf
+                            @method('PUT')
 
-                        <button type="submit" name="type" value="card" class="btn bg-successDark font-bold">
-                            {{ __('front/homePage.Card') }}
-                        </button>
-                    </form>
+                            <button type="submit" name="type" value="vodafone" class="btn bg-successDark font-bold">
+                                {{ __('front/homePage.My Vodafone-cash Wallet') }}
+                            </button>
+                        </form>
+                    @else
+                        <form
+                            action="{{ route('front.orders.save-update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
+                            method="POST" class="m-0">
+                            @csrf
+                            @method('PUT')
+
+                            <button type="submit" name="type" value="card" class="btn bg-successDark font-bold">
+                                {{ __('front/homePage.Card') }}
+                            </button>
+                        </form>
+                    @endif
 
                     <button data-modal-toggle="card-confirm" type="button"
                         class="btn bg-primary focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">

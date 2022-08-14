@@ -412,16 +412,16 @@ function createBostaOrder($order)
         "notes"     =>      $order->notes ? $order->notes . ($order->user->phones->where('default', 0)->count() > 1 ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : '') : ($order->user->phones->where('default', 0)->count() > 1 ? implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : ''),
         "cod"       =>      $order->payment_method == 1 ? $order->should_pay : 0.00,
         "allowToOpenPackage" => true,
+        "webhookUrl" => "https://www.smarttoolsegypt.com/orders/update-status",
     ];
-
     // create bosta order
     $bosta_response = Http::withHeaders([
         'Authorization'     =>  env('BOSTA_API_KEY'),
         'Content-Type'      =>  'application/json',
         'Accept'            =>  'application/json'
-    ])->post('https://app.bosta.co/api/v0/deliveries', $order_data);
+        ])->post('https://app.bosta.co/api/v0/deliveries', $order_data);
 
-    $decoded_bosta_response = $bosta_response->json();
+        $decoded_bosta_response = $bosta_response->json();
 
     if ($bosta_response->successful()) {
         return [
@@ -438,7 +438,7 @@ function createBostaOrder($order)
 }
 
 // edit bosta Order
-function editBostaOrder($order)
+function editBostaOrder($order,$old_order_id)
 {
     $order_data = [
         "specs" => [
@@ -461,7 +461,7 @@ function editBostaOrder($order)
             "lastName"      =>      $order->user->l_name ? $order->user->l_name . ($order->user->phones->where('default', 0)->count() ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : "") : ($order->user->phones->where('default', 0)->count() ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : ""),
             "email"         =>      $order->user->email ?? '',
         ],
-        "businessReference" => "$order->id",
+        "businessReference" => "$old_order_id",
         "notes"     =>      $order->notes ?? '',
         "cod"       =>      $order->payment_method == 1 ? $order->subtotal_final + $order->delivery_fees : 0.00,
         "allowToOpenPackage" => true,
@@ -630,7 +630,7 @@ function returnTotalOrder($order)
         'balance' => $user->balance + $order->used_balance,
     ]);
 
-    if ($order->bosta_id != null) {
+    if ($order->order_delivery_id != null) {
         foreach ($products as $product) {
             $product->update([
                 'quantity' => $product->quantity + $product->pivot->quantity,

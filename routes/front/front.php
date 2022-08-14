@@ -44,6 +44,8 @@ Route::group([
 
         Route::get('/{order_id}/payment', 'goToPayment')->name('payment');
     });
+
+    Route::post('/orders/update-status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
     ################ Cart & Order Controller :: End ##############
 
     ################ Invoice Request Controller :: Start ##############

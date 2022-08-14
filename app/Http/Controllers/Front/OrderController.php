@@ -226,7 +226,7 @@ class OrderController extends Controller
 
         $new_order = Order::updateOrCreate([
             'user_id' => $order->user_id,
-            'status_id' => 10
+            'status_id' => 15
         ], [
             'address_id' => $order->address_id,
             'phone1' => $order->phone1,
@@ -253,6 +253,8 @@ class OrderController extends Controller
             'order_delivery_id' => $order->order_delivery_id,
             'notes' => $order->notes,
         ]);
+
+        $new_order->statuses()->attach(15);
 
         // Products data
         $order_products = [];
@@ -306,9 +308,9 @@ class OrderController extends Controller
         $returned_points = $old_order->used_points - $new_order->used_points;
         $returned_gift_points = $new_order->gift_points - $old_order->gift_points;
 
-        $order_products = [];
-        $returned_products = [];
 
+        // New Products Quantities
+        $order_products = [];
         foreach ($new_order->products as $product) {
             $order_products[$product->id] = [
                 'quantity' => $product->pivot->quantity,
@@ -316,6 +318,8 @@ class OrderController extends Controller
             ];
         }
 
+        // Old Products Quantities
+        $returned_products = [];
         foreach ($old_order->products as $product) {
             $returned_products[$product->id] = [
                 'quantity' => $product->pivot->quantity,
@@ -324,8 +328,9 @@ class OrderController extends Controller
 
         DB::beginTransaction();
 
+        // Cash On Delivery
         if ($new_order->payment_method == 1) {
-            if (editBostaOrder($new_order)) {
+            if (editBostaOrder($new_order, $old_order_id)) {
                 try {
                     $old_order->update([
                         'status_id' => 12,
@@ -343,23 +348,7 @@ class OrderController extends Controller
                         'total_weight' => $new_order->total_weight,
                     ]);
 
-                    $old_order->statuses()->attach([11, 12]);
-
-                    $order_products = [];
-                    $returned_products = [];
-
-                    foreach ($new_order->products as $product) {
-                        $order_products[$product->id] = [
-                            'quantity' => $product->pivot->quantity,
-                            'price' => $product->pivot->price
-                        ];
-                    }
-
-                    foreach ($old_order->products as $product) {
-                        $returned_products[$product->id] = [
-                            'quantity' => $product->pivot->quantity,
-                        ];
-                    }
+                    $old_order->statuses()->attach([16, 12]);
 
                     $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
                         $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
@@ -389,9 +378,12 @@ class OrderController extends Controller
                 Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
                 return redirect()->route('front.orders.index');
             }
-        } elseif ($new_order->payment_method == 2 || $new_order->payment_method == 3) {
+        }
+
+        // Card or installment
+        elseif ($new_order->payment_method == 2 || $new_order->payment_method == 3) {
             if ($new_order->should_get > 0 && $request->type == 'wallet') {
-                if (editBostaOrder($new_order)) {
+                if (editBostaOrder($new_order, $old_order_id)) {
                     try {
                         $old_order->update([
                             'status_id' => 12,
@@ -409,7 +401,7 @@ class OrderController extends Controller
                             'total_weight' => $new_order->total_weight,
                         ]);
 
-                        $old_order->statuses()->attach([11, 12]);
+                        $old_order->statuses()->attach([16, 12]);
 
                         $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
                             $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
@@ -455,7 +447,7 @@ class OrderController extends Controller
                     'payment_status' => 1,
                 ], $payment);
 
-                if (refundRequestPaymob(json_decode($payment['payment_details'])->transaction_id, abs($payment['payment_amount'])) && editBostaOrder($new_order)) {
+                if (refundRequestPaymob(json_decode($payment['payment_details'])->transaction_id, abs($payment['payment_amount'])) && editBostaOrder($new_order, $old_order_id)) {
                     try {
                         $old_order->update([
                             'status_id' => 12,
@@ -473,7 +465,7 @@ class OrderController extends Controller
                             'total_weight' => $new_order->total_weight,
                         ]);
 
-                        $old_order->statuses()->attach([11, 12]);
+                        $old_order->statuses()->attach([16, 12]);
 
                         $new_order->payments()->first()->update([
                             'payment_status' => 2,
@@ -516,7 +508,7 @@ class OrderController extends Controller
                     return redirect()->route('front.orders.index');
                 }
             } elseif ($new_order->should_pay == 0 && $new_order->should_get == 0 && $request->type == 'equal') {
-                if (editBostaOrder($new_order)) {
+                if (editBostaOrder($new_order, $old_order_id)) {
                     try {
                         $old_order->update([
                             'status_id' => 12,
@@ -534,7 +526,7 @@ class OrderController extends Controller
                             'total_weight' => $new_order->total_weight,
                         ]);
 
-                        $old_order->statuses()->attach([11, 12]);
+                        $old_order->statuses()->attach([16, 12]);
 
                         $order_products = [];
                         $returned_products = [];
@@ -583,6 +575,7 @@ class OrderController extends Controller
             } elseif ($new_order->should_pay > 0 && $request->type == 'pay') {
                 $payment = [
                     'order_id' => $new_order->id,
+                    'old_order_id' => $old_order->id,
                     'user_id' => $new_order->user_id,
                     'payment_amount' => $new_order->should_pay,
                     'payment_method' => $new_order->payment_method,
@@ -605,7 +598,221 @@ class OrderController extends Controller
                 }
             }
         }
-        dd($old_order->toArray(), $new_order->toArray());
+
+        // Vodafone Cash
+        elseif ($new_order->payment_method == 4) {
+            // Old Order Paid
+            if ($old_order->should_pay == 0) {
+                // Pay the Difference
+                if ($new_order->should_pay > 0 && $request->type == 'pay') {
+                    $payment = [
+                        'order_id' => $new_order->id,
+                        'old_order_id' => $old_order->id,
+                        'user_id' => $new_order->user_id,
+                        'payment_amount' => $new_order->should_pay,
+                        'payment_method' => 4,
+                        'payment_status' => 1,
+                    ];
+
+                    $payment = $new_order->payments()->updateOrCreate([
+                        'order_id' => $payment['order_id'],
+                        'payment_status' => 1,
+                    ], $payment);
+
+                    $old_order->update([
+                        'status_id' => 2,
+                        'should_pay' => $new_order->should_pay,
+                    ]);
+
+                    $old_order->statuses()->attach(2);
+
+                    DB::commit();
+
+                    return redirect()->route('front.orders.index')->with('success', __('front/homePage.Order edit request sent successfully'));
+                }
+                // Old Order Price Equal New Order Price
+                elseif ($new_order->should_pay == 0.00 && $request->type == 'equal') {
+                    if (editBostaOrder($new_order, $old_order_id)) {
+                        try {
+                            $old_order->update([
+                                'status_id' => 12,
+                                'num_of_items' => $new_order->num_of_items,
+                                'coupon_discount' => $new_order->coupon_discount,
+                                'subtotal_base' => $new_order->subtotal_base,
+                                'subtotal_final' => $new_order->subtotal_final,
+                                'total' => $new_order->total,
+                                'delivery_fees' => $new_order->delivery_fees,
+                                'should_pay' => $new_order->should_pay,
+                                'should_get' => $new_order->should_get,
+                                'used_points' => $new_order->used_points,
+                                'used_balance' => $new_order->used_balance,
+                                'gift_points' => $new_order->gift_points,
+                                'total_weight' => $new_order->total_weight,
+                            ]);
+
+                            $old_order->statuses()->attach([16, 12]);
+
+                            $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
+                                $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
+                                $product->save();
+                            });
+
+                            $old_order->products()->sync($order_products);
+
+                            $old_order->user()->update([
+                                'balance' => $old_order->user->balance + $returned_balance,
+                                'points' => $old_order->user->points + $returned_points + $returned_gift_points,
+                            ]);
+
+                            $new_order->delete();
+
+                            DB::commit();
+
+                            Session::flash('success', __('front/homePage.Order edit request sent successfully'));
+                            return redirect()->route('front.orders.index');
+                        } catch (\Throwable $th) {
+                            DB::rollBack();
+
+                            Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
+                            return redirect()->route('front.orders.index');
+                        }
+                    } else {
+                        Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
+                        return redirect()->route('front.orders.index');
+                    }
+                }
+                // Get the Difference
+                // To Vodafone Wallet
+                elseif ($new_order->should_get > 0 && $request->type == 'vodafone') {
+                    $payment = [
+                        'order_id' => $new_order->id,
+                        'old_order_id' => $old_order->id,
+                        'user_id' => $new_order->user_id,
+                        'payment_amount' => $new_order->should_get,
+                        'payment_method' => 4,
+                        'payment_status' => 1,
+                    ];
+
+                    $payment = $new_order->payments()->updateOrCreate([
+                        'order_id' => $payment['order_id'],
+                        'payment_status' => 1,
+                    ], $payment);
+
+                    $old_order->update([
+                        'status_id' => 14,
+                        'should_get' => $new_order->should_get,
+                    ]);
+
+                    $old_order->statuses()->attach([11, 12, 14]);
+
+                    DB::commit();
+
+                    return redirect()->route('front.orders.index')->with('success', __('front/homePage.Order edit request sent successfully'));
+                }
+                // To Balance
+                elseif ($new_order->should_get > 0 && $request->type == 'wallet') {
+                    if (editBostaOrder($new_order, $old_order_id)) {
+                        try {
+                            $old_order->update([
+                                'status_id' => 12,
+                                'num_of_items' => $new_order->num_of_items,
+                                'coupon_discount' => $new_order->coupon_discount,
+                                'subtotal_base' => $new_order->subtotal_base,
+                                'subtotal_final' => $new_order->subtotal_final,
+                                'total' => $new_order->total,
+                                'delivery_fees' => $new_order->delivery_fees,
+                                'should_pay' => $new_order->should_pay,
+                                'should_get' => 0.00,
+                                'used_points' => $new_order->used_points,
+                                'used_balance' => $new_order->used_balance,
+                                'gift_points' => $new_order->gift_points,
+                                'total_weight' => $new_order->total_weight,
+                            ]);
+
+                            $old_order->statuses()->attach([16, 12]);
+
+                            $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
+                                $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
+                                $product->save();
+                            });
+
+                            $old_order->products()->sync($order_products);
+
+                            $old_order->user()->update([
+                                'balance' => $old_order->user->balance + $returned_balance + $new_order->should_get,
+                                'points' => $old_order->user->points + $returned_points + $returned_gift_points,
+                            ]);
+
+                            $new_order->delete();
+
+                            DB::commit();
+
+                            Session::flash('success', __('front/homePage.Order edit request sent successfully'));
+                            return redirect()->route('front.orders.index');
+                        } catch (\Throwable $th) {
+                            throw $th;
+                            DB::rollBack();
+
+                            Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
+                            return redirect()->route('front.orders.index');
+                        }
+                    } else {
+                        Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
+                        return redirect()->route('front.orders.index');
+                    }
+                }
+            }
+            // Old Order Not Paid
+            elseif ($old_order->should_pay > 0) {
+                try {
+                    $old_order->update([
+                        'status_id' => 2,
+                        'num_of_items' => $new_order->num_of_items,
+                        'coupon_discount' => $new_order->coupon_discount,
+                        'subtotal_base' => $new_order->subtotal_base,
+                        'subtotal_final' => $new_order->subtotal_final,
+                        'total' => $new_order->total,
+                        'delivery_fees' => $new_order->delivery_fees,
+                        'should_pay' => $new_order->should_pay,
+                        'should_get' => $new_order->should_get,
+                        'used_points' => $new_order->used_points,
+                        'used_balance' => $new_order->used_balance,
+                        'gift_points' => $new_order->gift_points,
+                        'total_weight' => $new_order->total_weight,
+                    ]);
+
+                    $payment = $old_order->payments()->where('payment_status', 1)->first();
+
+                    if ($payment) {
+                        $payment->update([
+                            'payment_amount' => $old_order->should_pay,
+                        ]);
+                    }
+
+                    $old_order->statuses()->attach([16, 12, 2]);
+
+                    $old_order->products()->sync($order_products);
+
+                    $old_order->user()->update([
+                        'balance' => $old_order->user->balance + $returned_balance + $new_order->should_get,
+                        'points' => $old_order->user->points + $returned_points + $returned_gift_points,
+                    ]);
+
+                    $new_order->delete();
+
+                    DB::commit();
+
+                    Session::flash('success', __('front/homePage.Order edit request sent successfully'));
+                    return redirect()->route('front.orders.index');
+                } catch (\Throwable $th) {
+                    throw $th;
+                    DB::rollBack();
+
+                    Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
+                    return redirect()->route('front.orders.index');
+                }
+            }
+        }
     }
 
     public function shipping()
@@ -705,15 +912,98 @@ class OrderController extends Controller
                 ]);
 
                 // get order from payment
-                $order = $payment->order;
 
-                // update the database with the order data
-                $order->update([
-                    'should_pay' => 0.00,
-                ]);
+                // Old Orders
+                if ($payment->old_order_id != null) {
+                    $old_order = Order::with(['products', 'user', 'payments'])->findOrFail($payment->old_order_id);
+                    $new_order = Order::with(['products'])->findOrFail($payment->order_id);
 
-                // Order ==> New Order
-                if ($order->status_id == 2) {
+                    $returned_balance = $old_order->used_balance - $new_order->used_balance;
+                    $returned_points = $old_order->used_points - $new_order->used_points;
+                    $returned_gift_points = $new_order->gift_points - $old_order->gift_points;
+
+                    $new_order->update([
+                        'should_pay' => 0.00
+                    ]);
+
+                    $payment->update([
+                        'order_id' => $payment->old_order_id,
+                        'old_order_id' => null
+                    ]);
+
+                    $order_products = [];
+                    $returned_products = [];
+
+                    foreach ($new_order->products as $product) {
+                        $order_products[$product->id] = [
+                            'quantity' => $product->pivot->quantity,
+                            'price' => $product->pivot->price
+                        ];
+                    }
+
+                    foreach ($old_order->products as $product) {
+                        $returned_products[$product->id] = [
+                            'quantity' => $product->pivot->quantity,
+                        ];
+                    }
+
+                    if (editBostaOrder($new_order, $payment->old_order_id)) {
+                        try {
+                            $old_order->update([
+                                'status_id' => 12,
+                                'num_of_items' => $new_order->num_of_items,
+                                'coupon_discount' => $new_order->coupon_discount,
+                                'subtotal_base' => $new_order->subtotal_base,
+                                'subtotal_final' => $new_order->subtotal_final,
+                                'total' => $new_order->total,
+                                'delivery_fees' => $new_order->delivery_fees,
+                                'should_pay' => $new_order->should_pay,
+                                'should_get' => $new_order->should_get,
+                                'used_points' => $new_order->used_points,
+                                'used_balance' => $new_order->used_balance,
+                                'gift_points' => $new_order->gift_points,
+                                'total_weight' => $new_order->total_weight,
+                            ]);
+
+                            $old_order->statuses()->attach([16, 12]);
+
+                            $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
+                                $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
+                                $product->save();
+                            });
+
+                            $old_order->products()->sync($order_products);
+
+                            $old_order->user()->update([
+                                'balance' => $old_order->user->balance + $returned_balance + $new_order->should_get,
+                                'points' => $old_order->user->points + $returned_points + $returned_gift_points,
+                            ]);
+
+                            $new_order->delete();
+
+                            DB::commit();
+
+                            Session::flash('success', __('front/homePage.Order edit request sent successfully'));
+                            return redirect()->route('front.orders.index');
+                        } catch (\Throwable $th) {
+                            throw $th;
+                            DB::rollBack();
+
+                            Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
+                            return redirect()->route('front.orders.index');
+                        }
+                    }
+                }
+                // New Orders
+                else {
+                    $order = $payment->order;
+
+                    // update the database with the order data
+                    $order->update([
+                        'should_pay' => 0.00,
+                    ]);
+
+                    // Order ==> New Order
                     $bosta_order = createBostaOrder($order);
 
                     if ($bosta_order['status']) {
@@ -769,9 +1059,6 @@ class OrderController extends Controller
                         return redirect()->route('front.orders.billing');
                     }
                 }
-                // Order ==> Add To Order Before Shipping
-                elseif ($order->status_id == 10) {
-                }
             } catch (\Throwable $th) {
                 DB::rollBack();
 
@@ -806,7 +1093,9 @@ class OrderController extends Controller
         DB::beginTransaction();
 
         try {
-            $order = Order::findOrFail($order_id);
+            $order = Order::with('payments')->findOrFail($order_id);
+
+            $payments = $order->payments();
 
             if ($order->payment_method == 1) {
                 // update the database
@@ -814,27 +1103,52 @@ class OrderController extends Controller
                 // Cancel Bosta Order
                 cancelBostaOrder($order);
             } elseif (($order->payment_method == 2 || $order->payment_method == 3) && $order->should_pay == 0) {
-                $refund = $order->subtotal_final + $order->delivery_fees;
-
                 if ($order->created_at->diffInDays() < 1) {
-                    if (voidRequestPaymob(json_decode($order->payments()->where('payment_amount', '>=', $order->total)->first()->payment_details)->transaction_id)) {
-                        // update the database
-                        returnTotalOrder($order);
-                        // Cancel Bosta Order
-                        cancelBostaOrder($order);
+                    foreach ($payments->get() as $payment) {
+                        $refund_success = [];
+                        $refund_success[] = voidRequestPaymob(json_decode($payment->payment_details)->transaction_id);
+                        if (!array_search(false, $refund_success)) {
+                            // update the database
+                            returnTotalOrder($order);
+                            // Cancel Bosta Order
+                            cancelBostaOrder($order);
+                        }
                     }
                 } else {
-                    if (refundRequestPaymob(json_decode($order->payments()->where('payment_amount', '>=', $order->total)->first()->payment_details)->transaction_id, $refund)) {
-                        // update the database
-                        returnTotalOrder($order);
-                        // Cancel Bosta Order
-                        cancelBostaOrder($order);
+                    foreach ($payments->get() as $payment) {
+                        $refund_success = [];
+                        $refund_success[] = refundRequestPaymob(json_decode($payment->payment_details)->transaction_id, json_decode($payment->payment_details)->amount_cents);
+                        if (!array_search(false, $refund_success)) {
+                            // update the database
+                            returnTotalOrder($order);
+                            // Cancel Bosta Order
+                            cancelBostaOrder($order);
+                        }
                     }
                 }
             } elseif ($order->payment_method == 4) {
-                if ($order->bosta_id != null) {
+                if ($order->order_delivery_id != null) {
+                    // Make Refund Request
+                    $payment = [
+                        'order_id' => $order->id,
+                        'user_id' => $order->user->id,
+                        'payment_amount' => $order->total,
+                        'payment_method' => 4,
+                        'payment_status' => 4,
+                    ];
+
+                    $order->payments()->create($payment);
+
                     // update the database
                     returnTotalOrder($order);
+
+                    $order->update([
+                        'status_id' => 14,
+                        'should_get' => $order->total,
+                    ]);
+
+                    $order->statuses()->attach(14);
+
                     // Cancel Bosta Order
                     cancelBostaOrder($order);
                 } else {
@@ -878,5 +1192,14 @@ class OrderController extends Controller
         } else {
             return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
         }
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $order = Order::findOrFail($request->businessReference);
+
+        $order->update([
+            'status_id' => $request->status,
+        ]);
     }
 }

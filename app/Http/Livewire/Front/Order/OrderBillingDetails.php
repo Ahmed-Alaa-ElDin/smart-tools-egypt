@@ -204,6 +204,13 @@ class OrderBillingDetails extends Component
                     return redirect()->route('front.orders.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }
             } elseif ($order->payment_method == 4) {
+                $user = $order->user;
+
+                $user->update([
+                    'points' => $user->points - $order->used_points + $order->gift_points ?? 0,
+                    'balance' => $user->balance - $order->used_balance ?? 0,
+                ]);
+
                 // empty cart
                 Cart::instance('cart')->destroy();
 
