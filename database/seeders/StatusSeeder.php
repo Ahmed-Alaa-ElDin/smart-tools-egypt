@@ -39,10 +39,10 @@ class StatusSeeder extends Seeder
             'id' => 6,
             'name' => 'Shipped',
         ]);
-        Status::updateOrCreate([
-            'id' => 7,
-            'name' => 'Delivered',
-        ]);
+        // Status::updateOrCreate([
+        //     'id' => 7,
+        //     'name' => 'Delivered',
+        // ]);
         Status::updateOrCreate([
             'id' => 8,
             'name' => 'Cancellation Requested',

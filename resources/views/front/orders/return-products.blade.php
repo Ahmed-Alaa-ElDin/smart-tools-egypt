@@ -1,4 +1,4 @@
-@extends('layouts.front.user_control_layout', ['titlePage' => __('front/homePage.Edit Order'), 'page' => 'orders'])
+@extends('layouts.front.user_control_layout', ['titlePage' => __('front/homePage.Return Products'), 'page' => 'orders'])
 
 @section('breadcrumb')
     <li class="breadcrumb-item hover:text-primary">
@@ -12,7 +12,7 @@
         </a>
     </li>
     <li class="breadcrumb-item text-gray-700 font-bold" aria-current="page">
-        {{ __('front/homePage.Edit Order') }}
+        {{ __('front/homePage.Return Products') }}
     </li>
 @endsection
 
@@ -21,19 +21,19 @@
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-12 flex flex-col gap-5 self-start">
 
-                {{-- ############## Edit Order :: Start ############## --}}
+                {{-- ############## Return Products :: Start ############## --}}
                 <div class="bg-white rounded-xl overflow-hidden">
                     {{-- ############## Title :: Start ############## --}}
                     <div class="flex justify-between items-center">
                         <h3 class="h5 text-center font-bold p-4 m-0">
-                            {{ __('front/homePage.Edit Order') }}
+                            {{ __('front/homePage.Return Products') }}
                         </h3>
                     </div>
                     {{-- ############## Title :: End ############## --}}
 
                     <hr>
 
-                    <form class="m-0" action="{{ route('front.orders.update-calc', $order->id) }}" method="POST">
+                    <form class="m-0" action="{{ route('front.orders.return-calc', $order->id) }}" method="POST">
                         @csrf
 
                         {{-- ################# Order Summary :: Start ################# --}}
@@ -43,13 +43,22 @@
                                 <span class="font-bold"> {{ __('front/homePage.Order summary before edits') }} </span>
                             </div>
 
-                            <div class="flex flex-wrap justify-around items-center">
+                            <div class="flex flex-wrap gap-3 justify-around items-center">
                                 {{-- Creation Date --}}
                                 <div class="flex justify-center items-center gap-1">
                                     <span class="text-sm font-bold"> {{ __('front/homePage.Creation Date') }}:
                                     </span>
                                     <span class="">
                                         {{ $order->created_at->format('d/m/Y') }}
+                                    </span>
+                                </div>
+
+                                {{-- Order Delivered --}}
+                                <div class="flex justify-center items-center gap-1">
+                                    <span class="text-sm font-bold"> {{ __('front/homePage.Delivery date') }}:
+                                    </span>
+                                    <span class="">
+                                        {{ $order->delivered_at ? Carbon\Carbon::create($order->delivered_at)->format('d/m/Y') : '' }}
                                     </span>
                                 </div>
 
@@ -198,13 +207,13 @@
                                     <div>
                                         <div class="flex items-center justify-center gap-2">
                                             <span class="text-xs font-bold text-gray-600">
-                                                {{ __('front/homePage.Quantity') }}
+                                                {{ __('front/homePage.Returned Quantity') }}
                                             </span>
                                             <select name="quantities[]"
                                                 class="text-primary font-bold text-sm rounded-xl cursor-pointer border-0 shadow focus:outline-none active:outline-none focus:ring-0 active:ring-0">
-                                                @for ($i = 0; $i <= ($product->pivot->quantity + 5 <= $product->quantity ? $product->pivot->quantity + 5 : $product->pivot->quantity + $product->quantity); $i++)
-                                                    <option value="{{ $i }}"
-                                                        @if ($i == $product->pivot->quantity) selected @endif>
+                                                <option value="0" selected>0</option>
+                                                @for ($i = 1; $i <= $product->pivot->quantity; $i++)
+                                                    <option value="{{ $i }}">
                                                         {{ $i }}
                                                     </option>
                                                 @endfor
@@ -236,7 +245,7 @@
                             @if (count($order->products) > 0)
                                 <button type="submit" name="type" value="preview"
                                     class="btn bg-white text-successDark border border-successDark font-bold transition-all ease-in-out hover:text-white hover:bg-successDark hover:border-white">
-                                    {{ __('front/homePage.Preview Order Summary After Edits') }}
+                                    {{ __('front/homePage.Preview Order Summary After Returning') }}
                                 </button>
                             @endif
                             <a href="{{ route('front.orders.index') }}" class="btn bg-primary font-bold">
@@ -247,7 +256,7 @@
                     </form>
 
                 </div>
-                {{-- ############## Edit Order :: End ############## --}}
+                {{-- ############## Return Products :: End ############## --}}
             </div>
         </div>
     </div>

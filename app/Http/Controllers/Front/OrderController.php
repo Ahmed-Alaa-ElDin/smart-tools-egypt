@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Session;
 class OrderController extends Controller
 {
 
+    ##################### Orders List :: Start #####################
     public function index()
     {
         $orders = Order::with([
@@ -44,7 +45,9 @@ class OrderController extends Controller
 
         return view('front.orders.index', compact('orders'));
     }
+    ##################### Orders List :: End #####################
 
+    ##################### Edit Order Before Shipping :: Start #####################
     public function edit($order_id)
     {
         $order = Order::with([
@@ -70,8 +73,10 @@ class OrderController extends Controller
 
         return view('front.orders.edit', compact('order'));
     }
+    ##################### Edit Order Before Shipping :: End #####################
 
-    public function update(Request $request, $order_id)
+    ##################### Preview Order's Edits :: Start #####################
+    public function updateCalc(Request $request, $order_id)
     {
         // products ids
         $products_ids = $request->products_ids;
@@ -238,6 +243,7 @@ class OrderController extends Controller
             'zone_id'   => $order->zone_id,
             'coupon_id' => $order->coupon_id,
             'coupon_discount' => $coupon_discount,
+            'coupon_points' => $coupon_points,
             'subtotal_base' => $products_final_prices,
             'subtotal_final' => $coupon_discount ? $products_best_prices - $coupon_discount - $used_balance - $used_points_egp : $products_best_prices - $used_balance - $used_points_egp,
             'should_pay' => $difference > 0 ? $difference : 0,
@@ -260,9 +266,11 @@ class OrderController extends Controller
         $order_products = [];
 
         foreach ($products_ids as $product_id) {
+            $product = $best_products->where('id', $product_id)->first();
             $order_products[$product_id] = [
                 'quantity' => $products_quantities[$product_id],
-                'price' => $best_products->where('id', $product_id)->first()->best_price
+                'price' => $product->best_price,
+                'points' => $product->best_points
             ];
         }
 
@@ -298,8 +306,10 @@ class OrderController extends Controller
         // return order data;
         return view('front.orders.edit_preview', compact('order_data'));
     }
+    ##################### Preview Order's Edits :: End #####################
 
-    public function saveUpdates(Request $request, $old_order_id, $new_order_id)
+    ##################### Save Order's Edits :: Start #####################
+    public function update(Request $request, $old_order_id, $new_order_id)
     {
         $old_order = Order::with(['products', 'user', 'payments'])->findOrFail($old_order_id);
         $new_order = Order::with(['products'])->findOrFail($new_order_id);
@@ -314,7 +324,8 @@ class OrderController extends Controller
         foreach ($new_order->products as $product) {
             $order_products[$product->id] = [
                 'quantity' => $product->pivot->quantity,
-                'price' => $product->pivot->price
+                'price' => $product->pivot->price,
+                'points' => $product->pivot->points
             ];
         }
 
@@ -624,7 +635,9 @@ class OrderController extends Controller
                         'should_pay' => $new_order->should_pay,
                     ]);
 
-                    $old_order->statuses()->attach(2);
+                    if ($old_order->statuses()->latest()->first()->id != 2) {
+                        $old_order->statuses()->attach(2);
+                    }
 
                     DB::commit();
 
@@ -814,7 +827,131 @@ class OrderController extends Controller
             }
         }
     }
+    ##################### Save Order's Edits :: End #####################
 
+    ##################### Cancel Total Order :: Start #####################
+    public function cancel($order_id, $new_order_id = null)
+    {
+        DB::beginTransaction();
+
+        try {
+            $order = Order::with('payments')->findOrFail($order_id);
+
+            $payments = $order->payments();
+
+            if ($order->payment_method == 1) {
+                // update the database
+                returnTotalOrder($order);
+                // Cancel Bosta Order
+                cancelBostaOrder($order);
+            } elseif (($order->payment_method == 2 || $order->payment_method == 3) && $order->should_pay == 0) {
+                if ($order->created_at->diffInDays() < 1) {
+                    foreach ($payments->get() as $payment) {
+                        $refund_success = [];
+                        $refund_success[] = voidRequestPaymob(json_decode($payment->payment_details)->transaction_id);
+                        if (!array_search(false, $refund_success)) {
+                            // update the database
+                            returnTotalOrder($order);
+                            // Cancel Bosta Order
+                            cancelBostaOrder($order);
+                        }
+                    }
+                } else {
+                    foreach ($payments->get() as $payment) {
+                        $refund_success = [];
+                        $refund_success[] = refundRequestPaymob(json_decode($payment->payment_details)->transaction_id, json_decode($payment->payment_details)->amount_cents);
+                        if (!array_search(false, $refund_success)) {
+                            // update the database
+                            returnTotalOrder($order);
+                            // Cancel Bosta Order
+                            cancelBostaOrder($order);
+                        }
+                    }
+                }
+            } elseif ($order->payment_method == 4) {
+                if ($order->order_delivery_id != null) {
+                    // Make Refund Request
+                    $payment = [
+                        'order_id' => $order->id,
+                        'user_id' => $order->user->id,
+                        'payment_amount' => $order->total,
+                        'payment_method' => 4,
+                        'payment_status' => 4,
+                    ];
+
+                    $order->payments()->create($payment);
+
+                    // update the database
+                    returnTotalOrder($order);
+
+                    $order->update([
+                        'status_id' => 14,
+                        'should_get' => $order->total,
+                    ]);
+
+                    $order->statuses()->attach(14);
+
+                    // Cancel Bosta Order
+                    cancelBostaOrder($order);
+                } else {
+                    // update the database
+                    returnTotalOrder($order);
+                }
+            }
+
+            // delete the temp order
+            if ($new_order_id != null) {
+                $new_order = Order::findOrFail($new_order_id);
+
+                $new_order->products()->detach();
+
+                $new_order->delete();
+            }
+
+            DB::commit();
+
+            return redirect()->route('front.orders.index')->with('success', __('front/homePage.Order Canceled Successfully'));
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+        }
+    }
+    ##################### Cancel Total Order :: End #####################
+
+    ##################### Return Total Order :: Start #####################
+    public function return(Request $request, $order_id)
+    {
+        if ($request->method() == 'GET') {
+            $order = Order::with('products')->findOrFail($order_id);
+
+            return view('front.orders.return-products', compact('order'));
+        } else {
+            // todo: return all products
+        }
+    }
+    ##################### Return Total Order :: End #####################
+
+    ##################### Preview Returned Products :: Start #####################
+    public function returnCalc(Request $request, $order_id)
+    {
+        // products ids
+        $products_ids = $request->products_ids;
+
+        $order = Order::with('products')->findOrFail($order_id);
+
+        // Get Order Products ids and quantities from request
+        $products_quantities = array_combine($request->products_ids, $request->quantities);
+        $products_total_quantities = array_sum($products_quantities);
+
+        // Get Order Products ids and quantities from Order DB
+        $old_products = $order->products;
+
+        return view('front.orders.return_preview');
+    }
+    ##################### Preview Returned Products :: End #####################
+
+
+    ##################### Go To Shipping Details During Placing the Order :: Start #####################
     public function shipping()
     {
         $products_id = [];
@@ -841,12 +978,16 @@ class OrderController extends Controller
 
         return view('front.orders.shipping', compact('cart_products', 'wishlist_products'));
     }
+    ##################### Go To Shipping Details During Placing the Order :: End #####################
 
+    ##################### Go To Billing Details During Placing the Order :: Start #####################
     public function billing()
     {
         return view('front.orders.billing');
     }
+    ##################### Go To Billing Details During Placing the Order :: End #####################
 
+    ##################### Confirm the Paymob Billing :: Start #####################
     public function billingCheck(Request $request)
     {
         $data = $request->all();
@@ -1082,99 +1223,18 @@ class OrderController extends Controller
             return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
         }
     }
+    ##################### Confirm the Paymob Billing :: End #####################
 
+    ##################### Order Done :: Start #####################
     public function done()
     {
-        return view('front.orders.done');
+        $order_id = session('order_id', null);
+
+        return view('front.orders.done', compact('order_id'));
     }
+    ##################### Order Done :: End #####################
 
-    public function cancel($order_id, $new_order_id = null)
-    {
-        DB::beginTransaction();
-
-        try {
-            $order = Order::with('payments')->findOrFail($order_id);
-
-            $payments = $order->payments();
-
-            if ($order->payment_method == 1) {
-                // update the database
-                returnTotalOrder($order);
-                // Cancel Bosta Order
-                cancelBostaOrder($order);
-            } elseif (($order->payment_method == 2 || $order->payment_method == 3) && $order->should_pay == 0) {
-                if ($order->created_at->diffInDays() < 1) {
-                    foreach ($payments->get() as $payment) {
-                        $refund_success = [];
-                        $refund_success[] = voidRequestPaymob(json_decode($payment->payment_details)->transaction_id);
-                        if (!array_search(false, $refund_success)) {
-                            // update the database
-                            returnTotalOrder($order);
-                            // Cancel Bosta Order
-                            cancelBostaOrder($order);
-                        }
-                    }
-                } else {
-                    foreach ($payments->get() as $payment) {
-                        $refund_success = [];
-                        $refund_success[] = refundRequestPaymob(json_decode($payment->payment_details)->transaction_id, json_decode($payment->payment_details)->amount_cents);
-                        if (!array_search(false, $refund_success)) {
-                            // update the database
-                            returnTotalOrder($order);
-                            // Cancel Bosta Order
-                            cancelBostaOrder($order);
-                        }
-                    }
-                }
-            } elseif ($order->payment_method == 4) {
-                if ($order->order_delivery_id != null) {
-                    // Make Refund Request
-                    $payment = [
-                        'order_id' => $order->id,
-                        'user_id' => $order->user->id,
-                        'payment_amount' => $order->total,
-                        'payment_method' => 4,
-                        'payment_status' => 4,
-                    ];
-
-                    $order->payments()->create($payment);
-
-                    // update the database
-                    returnTotalOrder($order);
-
-                    $order->update([
-                        'status_id' => 14,
-                        'should_get' => $order->total,
-                    ]);
-
-                    $order->statuses()->attach(14);
-
-                    // Cancel Bosta Order
-                    cancelBostaOrder($order);
-                } else {
-                    // update the database
-                    returnTotalOrder($order);
-                }
-            }
-
-            // delete the temp order
-            if ($new_order_id != null) {
-                $new_order = Order::findOrFail($new_order_id);
-
-                $new_order->products()->detach();
-
-                $new_order->delete();
-            }
-
-            DB::commit();
-
-            return redirect()->route('front.orders.index')->with('success', __('front/homePage.Order Canceled Successfully'));
-        } catch (\Throwable $th) {
-            throw $th;
-            DB::rollBack();
-        }
-    }
-
+    ##################### Go To Paymob Iframe :: Start #####################
     public function goToPayment($order_id)
     {
         $order = Order::with(['user', 'products', 'address'])->findOrFail($order_id);
@@ -1193,7 +1253,9 @@ class OrderController extends Controller
             return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
         }
     }
+    ##################### Go To Paymob Iframe :: Start #####################
 
+    ##################### Update Order's Status By Bosta :: Start #####################
     public function updateStatus(Request $request)
     {
         $order = Order::findOrFail($request['businessReference']);
@@ -1203,8 +1265,24 @@ class OrderController extends Controller
             'status_id' => $request['state'],
         ]);
 
-        $order->statuses()->attach($request['state']);
+        $order->statuses()->attach($request['state'], ['notes' => $request['exceptionReason'] ?? null]);
 
         return response()->json(['success' => true]);
     }
+    ##################### Update Order's Status By Bosta :: Start #####################
+
+    ##################### Track the Order :: Start #####################
+    public function track(Request $request)
+    {
+        $order = Order::with('statuses')->find($request['order_id']);
+
+        if ($order) {
+            $statuses = $order->statuses()->orderBy('pivot_id', 'desc')->get();
+
+            return view('front.orders.track', compact('order', 'statuses'));
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+    ##################### Track the Order :: Start #####################
 }

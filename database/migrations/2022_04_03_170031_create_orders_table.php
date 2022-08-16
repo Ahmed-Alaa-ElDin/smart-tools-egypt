@@ -25,6 +25,7 @@ return new class extends Migration
             $table->unsignedBigInteger('zone_id')->nullable();
             $table->unsignedBigInteger('coupon_id')->nullable();
             $table->decimal('coupon_discount', 8, 2)->default(0.00);
+            $table->integer('coupon_points')->default(0);
             $table->decimal('subtotal_base', 8, 2)->default(0.00);
             $table->decimal('subtotal_final', 8, 2)->default(0.00);
             $table->decimal('delivery_fees', 8, 2)->default(0.00);
@@ -41,6 +42,7 @@ return new class extends Migration
             $table->text('package_desc')->nullable();
             $table->string('order_delivery_id')->nullable();
             $table->text('notes')->nullable();
+            $table->timestamp('delivered_at')->nullable();
             $table->timestamps();
 
             $table->foreign('coupon_id')->references('id')->on('coupons')->nullOnDelete()->onUpdate('cascade');

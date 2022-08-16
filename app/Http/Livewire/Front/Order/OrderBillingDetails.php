@@ -82,9 +82,11 @@ class OrderBillingDetails extends Component
 
             // get order's products
             $products = Cart::instance('cart')->content()->keyBy("id")->map(function ($item) use ($array_data) {
+                $product = collect($array_data['products'])->where('id', $item->id)->first();
                 return [
                     'quantity' => $item->qty,
-                    'price' => collect($array_data['products'])->where('id', $item->id)->first()['best_price'],
+                    'price' => $product['best_price'],
+                    'points' => $product['best_points'],
                 ];
             })->toArray();
 
@@ -101,6 +103,7 @@ class OrderBillingDetails extends Component
                     'zone_id'           =>      $array_data['zone_id'],
                     'coupon_id'         =>      $array_data['coupon_id'],
                     'coupon_discount'   =>      $array_data['coupon_discount'] ?? 0.00,
+                    'coupon_points'     =>      $array_data['coupon_points'] ?? 0.00,
                     'subtotal_base'     =>      $array_data['subtotal_base'],
                     'subtotal_final'    =>      $array_data['subtotal_final'] - $this->points_egp - $this->balance,
                     'delivery_fees'     =>      $array_data['delivery_fees'],
@@ -115,7 +118,9 @@ class OrderBillingDetails extends Component
                     'status_id'         =>      2,
                 ]);
 
-                $order->statuses()->attach(2);
+                if ($order->statuses()->latest()->first()->id != 2) {
+                    $order->statuses()->attach(2);
+                }
 
                 $payment = Payment::updateOrCreate([
                     'order_id' => $order->id,

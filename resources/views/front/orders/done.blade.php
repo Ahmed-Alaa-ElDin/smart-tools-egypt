@@ -45,9 +45,8 @@
                                 </div>
                             @endif
 
-                            @if (session('order_id'))
-                                {{-- todo :: add tracking link --}}
-                                <a href="#" class="btn bg-secondary font-bold">
+                            @if ($order_id)
+                                <a href="{{ route('front.orders.track', $order_id) }}" class="btn bg-secondary font-bold">
                                     {{ __('front/homePage.Track Your Order') }}
                                 </a>
                             @else

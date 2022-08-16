@@ -238,7 +238,7 @@ return [
     "Track Your Order"          =>      "تتبع طلبك",
     "Payment Failed, Please Try Again"              =>      "فشلت عملية الدفع، يرجى المحاولة مرة أخرى",
     "My Orders"                 =>      "طلباتي",
-    "Order Placed"              =>      "تاريخ الطلب",
+    "Creation Date"              =>      "تاريخ الطلب",
     "Total"                     =>      "المجموع",
     "Edit/Cancel Order"         =>      "تعديل/إلغاء الطلب",
     "Invoice Request"           =>      "طلب فاتورة",
@@ -351,5 +351,10 @@ return [
     "Awaiting your action"      =>      "في انتظار ردك",
     "Archived"                  =>      "مؤرشف",
     "On hold"                   =>      "معلق",
+    "Track My Order"            =>      "تتبع طلبي",
+    "Delivery date"             =>      "تاريخ التوصيل",
+    "Return Products"           =>      "استرجاع منتجات",
+    "Returned Quantity"         =>      "الكمية المرتجعة",
+    "Preview Order Summary After Returning"     =>      "ملخص الطلب بعد الاسترجاع",
 
 ];

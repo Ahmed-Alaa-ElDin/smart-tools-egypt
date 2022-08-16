@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -62,7 +63,7 @@ class Order extends Model
 
     public function statuses()
     {
-        return $this->belongsToMany(Status::class, 'order_status', 'order_id', 'status_id')->withTimestamps();
+        return $this->belongsToMany(Status::class)->withPivot('id', 'notes')->withTimestamps();
     }
 
     public function zone()
@@ -72,7 +73,7 @@ class Order extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class)->withPivot('quantity', 'price')->withTimestamps();
+        return $this->belongsToMany(Product::class)->withPivot('quantity', 'price', 'points')->withTimestamps();
     }
 
     public function invoiceRequests()
@@ -87,6 +88,9 @@ class Order extends Model
 
     public function getCanReturnedAttribute()
     {
-        return $this->status_id == 7 && $this->created_at->diffInDays() <= config('constants.constants.RETURN_PERIOD');
+        if ($this->delivered_at) {
+            return $this->status_id == 45 && Carbon::create($this->delivered_at)->diffInDays() <= config('constants.constants.RETURN_PERIOD');
+        }
+        return false;
     }
 }

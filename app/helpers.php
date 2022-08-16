@@ -414,6 +414,7 @@ function createBostaOrder($order)
         "allowToOpenPackage" => true,
         "webhookUrl" => "https://www.smarttoolsegypt.com/api/orders/update-status",
     ];
+
     // create bosta order
     $bosta_response = Http::withHeaders([
         'Authorization'     =>  env('BOSTA_API_KEY'),

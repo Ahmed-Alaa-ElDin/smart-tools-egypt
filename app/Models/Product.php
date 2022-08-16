@@ -145,7 +145,7 @@ class Product extends Model
     // many to many relationship Product --> Orders
     public function orders()
     {
-        return $this->belongsToMany(Order::class)->withPivot('quantity', 'price');
+        return $this->belongsToMany(Order::class)->withPivot('quantity', 'price','points');
     }
 
     ############# Appends :: Start #############
