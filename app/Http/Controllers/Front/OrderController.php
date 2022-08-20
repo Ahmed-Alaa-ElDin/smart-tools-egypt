@@ -38,7 +38,7 @@ class OrderController extends Controller
         ])
             ->where('user_id', auth()->user()->id)
             ->whereHas('status', function ($query) {
-                $query->whereNotIn('id', [1, 10]);
+                $query->whereNotIn('id', [1, 15]);
             })
             ->orderBy('id', 'desc')
             ->paginate(5);
@@ -141,7 +141,7 @@ class OrderController extends Controller
         // Get offers discounts percentage
         $offers_discounts_percentage = $products_final_prices ? round(($offers_discounts / $products_final_prices) * 100, 0) : 0.00;
 
-        // Get shipping cost
+        // Get shipping fees
         $delivery_fees = $total_weight < $zone->min_weight ? $zone->min_charge : $zone->min_charge + ($total_weight - $zone->min_weight) * $zone->kg_charge;
 
         // Get orders discounts value
@@ -168,9 +168,6 @@ class OrderController extends Controller
             $delivery_fees = $order_offer->free_shipping ? 0 : $delivery_fees;
         }
 
-        // Get Total Points
-        $total_points = isset($order_points) ? $products_best_points + $order_points : $products_best_points;
-
         //  get coupon data
         $coupon_discount = 0;
         $coupon_discount_percentage = 0;
@@ -187,6 +184,9 @@ class OrderController extends Controller
             $coupon_points = $coupon_data['coupon_points'];
             $coupon_shipping = $coupon_data['coupon_shipping'];
         }
+
+        // Get Total Points
+        $total_points = isset($order_points) ? $products_best_points + $order_points + $coupon_points : $products_best_points + $coupon_points;
 
         // Get Used Balance
         $used_balance = $order->used_balance;
@@ -922,7 +922,9 @@ class OrderController extends Controller
     public function return(Request $request, $order_id)
     {
         if ($request->method() == 'GET') {
-            $order = Order::with('products')->findOrFail($order_id);
+            $order = Order::with([
+                'products' => fn ($q) => $q->with('thumbnail')
+            ])->findOrFail($order_id);
 
             return view('front.orders.return-products', compact('order'));
         } else {
@@ -937,7 +939,11 @@ class OrderController extends Controller
         // products ids
         $products_ids = $request->products_ids;
 
-        $order = Order::with('products')->findOrFail($order_id);
+        // get old order data from db
+        $order = Order::with(['products', 'zone'])->findOrFail($order_id);
+
+        // Get zone data
+        $zone = $order->zone;
 
         // Get Order Products ids and quantities from request
         $products_quantities = array_combine($request->products_ids, $request->quantities);
@@ -945,8 +951,89 @@ class OrderController extends Controller
 
         // Get Order Products ids and quantities from Order DB
         $old_products = $order->products;
+        $old_products_total_quantities = $old_products->map(fn($q)=>$q->pivot->quantity)->sum();
 
-        return view('front.orders.return_preview');
+        // total price & points of returned products
+        $returned_products_data = $old_products->map(function ($product) use ($products_quantities) {
+            $returned_quantity = $products_quantities[$product->id];
+            $returned_price = $returned_quantity * $product->pivot->price;
+            $returned_points = $returned_quantity * $product->pivot->points;
+
+            return [
+                'returned_price' => $returned_price,
+                'returned_points' => $returned_points,
+            ];
+        });
+
+        $returned_price = $returned_products_data->sum('returned_price');
+
+        $returned_points = $returned_products_data->sum('returned_points');
+
+        $old_products_points = $old_products->map(function ($product) {
+            return $product->pivot->points * $product->pivot->quantity;
+        })->sum();
+
+        ############ Old Order Data ############
+        // subtotal final
+        $subtotal_final = $order->subtotal_final;
+        $old_total = $order->total;
+        $payment_method = $order->payment_method;
+        $coupon_discount = $order->coupon_discount;
+        $old_delivery_fees = $order->delivery_fees;
+        $used_balance = $order->used_balance;
+        $used_points = $order->used_points;
+        $used_points_egp = $used_points * config('constants.constants.POINT_RATE');
+
+        $gift_points = $order->gift_points;
+        $coupon_points = $order->coupon_points;
+
+
+        ############ Order Discounts and Points ############
+        // order discount
+        $order_discount = $subtotal_final + $old_delivery_fees - $old_total - $coupon_discount - $used_balance - $used_points_egp;
+        $order_discount_factor = $subtotal_final ? $order_discount / $subtotal_final : 0.00;
+        $returned_order_discount = round($returned_price * $order_discount_factor, 2);
+
+        // order points
+        $order_points = $gift_points - $old_products_points - $coupon_points;
+        $order_points_factor = $subtotal_final ? $order_points / $subtotal_final : 0;
+        $returned_order_points = round($returned_price * $order_points_factor);
+
+        ############ Coupon Discounts and Points ############
+        // coupon discount
+        $coupon_discount_factor = $subtotal_final ? $coupon_discount / $subtotal_final : 0.00;
+        $returned_coupon_discount = round($returned_price * $coupon_discount_factor, 2);
+
+        // coupon points
+        $coupon_points_factor = $subtotal_final ? $coupon_points / $subtotal_final : 0;
+        $returned_coupon_points = round($returned_price * $coupon_points_factor);
+
+        $returned_price = $returned_price - $returned_order_discount - $returned_coupon_discount;
+        $returned_points += $returned_order_points + $returned_coupon_points;
+
+        // Get Order Products ids and weights from database
+        $products_weights = $old_products->where('free_shipping', 0)->pluck('weight', 'id');
+
+        // Get Order Products total weight
+        $total_weight = $products_weights->map(function ($weight, $id) use ($products_quantities) {
+            if (isset($products_quantities[$id])) {
+                return $weight * $products_quantities[$id];
+            }
+        })->sum();
+
+        // delivery fees
+        $delivery_fees = $total_weight < $zone->min_weight ? $zone->min_charge : $zone->min_charge + ($total_weight - $zone->min_weight) * $zone->kg_charge;
+
+        $order_data = [
+            "order_id" => $order->id,
+            "old_order_total" => $old_total,
+            "old_products_total_quantities" => $old_products_total_quantities,
+            "old_product_gift_points" => $gift_points,
+            "payment_method" => $payment_method,
+            "returned_price" => $returned_price,
+        ];
+
+        return view('front.orders.return_preview', compact('order_data'));
     }
     ##################### Preview Returned Products :: End #####################
 
@@ -1178,6 +1265,7 @@ class OrderController extends Controller
 
                         // clear cart
                         Cart::instance('cart')->destroy();
+                        Cart::instance('cart')->store($user->id);
 
                         // edit products database
                         foreach ($order->products as $product) {

@@ -176,6 +176,7 @@ class OrderBillingDetails extends Component
 
                     // clear cart
                     Cart::instance('cart')->destroy();
+                    Cart::instance('cart')->store($user->id);
 
                     // edit products database
                     foreach ($order->products as $product) {
@@ -218,6 +219,7 @@ class OrderBillingDetails extends Component
 
                 // empty cart
                 Cart::instance('cart')->destroy();
+                Cart::instance('cart')->store($user->id);
 
                 // redirect to done page
                 Session::flash('success', __('front/homePage.Order Created Successfully'));

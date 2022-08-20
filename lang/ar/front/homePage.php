@@ -356,5 +356,8 @@ return [
     "Return Products"           =>      "استرجاع منتجات",
     "Returned Quantity"         =>      "الكمية المرتجعة",
     "Preview Order Summary After Returning"     =>      "ملخص الطلب بعد الاسترجاع",
-
+    "Old order cost:"           =>      "تكلفة الطلب قبل الاسترجاع :",
+    "Old order number of products:"     =>      "عدد منتجات الطلب قبل الاسترجاع :",
+    "Old order gift points:"    =>      "نقاط الهدايا قبل الاسترجاع :",
+    "Return Preview"            =>      "استعراض المرتجعات",
 ];
