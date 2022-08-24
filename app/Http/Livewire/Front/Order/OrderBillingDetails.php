@@ -222,9 +222,16 @@ class OrderBillingDetails extends Component
                     'balance' => $user->balance - $order->used_balance ?? 0,
                 ]);
 
-                // empty cart
+                // clear cart
                 Cart::instance('cart')->destroy();
                 Cart::instance('cart')->store($user->id);
+
+                // edit products database
+                foreach ($order->products as $product) {
+                    $product->update([
+                        'quantity' => $product->quantity - $product->pivot->quantity >= 0  ? $product->quantity - $product->pivot->quantity : 0,
+                    ]);
+                }
 
                 // redirect to done page
                 Session::flash('success', __('front/homePage.Order Created Successfully'));

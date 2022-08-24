@@ -202,7 +202,7 @@
                                             </span>
                                             <select name="quantities[]"
                                                 class="text-primary font-bold text-sm rounded-xl cursor-pointer border-0 shadow focus:outline-none active:outline-none focus:ring-0 active:ring-0">
-                                                @for ($i = 0; $i <= ($product->pivot->quantity + 5 <= $product->quantity ? $product->pivot->quantity + 5 : $product->quantity); $i++)
+                                                @for ($i = 0; $i <= ($product->pivot->quantity + 5 <= $product->quantity ? $product->pivot->quantity + 5 : $product->pivot->quantity + $product->quantity); $i++)
                                                     <option value="{{ $i }}"
                                                         @if ($i == $product->pivot->quantity) selected @endif>
                                                         {{ $i }}

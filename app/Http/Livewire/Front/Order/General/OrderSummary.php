@@ -123,7 +123,7 @@ class OrderSummary extends Component
             }
 
             // get total points
-            $this->total_points = $this->products_best_points + $this->order_points + $this->coupon_points;
+            $this->total_points = $this->products_best_points + $this->order_points;
 
             $this->total = !is_numeric($this->delivery_fees) || $this->delivery_fees == 0 || $this->coupon_free_shipping ? $this->products_best_prices - $this->order_discount - $this->coupon_discount : $this->products_best_prices - $this->order_discount - $this->coupon_discount + $this->delivery_fees;
         }

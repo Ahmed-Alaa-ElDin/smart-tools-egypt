@@ -41,7 +41,7 @@
                     <div class="flex justify-between items-center gap-1 px-4 py-1">
                         <span class="text-sm font-bold"> {{ __('front/homePage.Old order cost:') }} </span>
 
-                        <div class="flex rtl:flex-row-reverse gap-1 text-gray-900">
+                        <div class="flex rtl:flex-row-reverse gap-1 text-primary">
                             <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
                             <span class="font-bold text-xl"
                                 dir="ltr">{{ number_format(explode('.', $order_data['old_order_total'])[0], 0, '.', '\'') }}</span>
@@ -54,7 +54,7 @@
                     <div class="flex justify-between items-center gap-1 px-4 py-1">
                         <span class="text-sm font-bold"> {{ __('front/homePage.Old order number of products:') }} </span>
 
-                        <div class="flex rtl:flex-row-reverse gap-1 text-gray-900">
+                        <div class="flex rtl:flex-row-reverse gap-1 text-primary">
                             <span class="font-bold text">
                                 {{ trans_choice('front/homePage.Product', $order_data['old_products_total_quantities'], ['product' => $order_data['old_products_total_quantities']]) }}
                             </span>
@@ -65,7 +65,7 @@
                     <div class="flex justify-between items-center gap-1 px-4 py-1">
                         <span class="text-sm font-bold"> {{ __('front/homePage.Old order gift points:') }} </span>
 
-                        <div class="flex rtl:flex-row-reverse gap-1 text-gray-900">
+                        <div class="flex rtl:flex-row-reverse gap-1 text-primary">
                             <span class="font-bold text-xl">
                                 {{ $order_data['old_product_gift_points'] }}
                             </span>
@@ -76,7 +76,7 @@
                     <div class="font-bold flex gap-2 justify-between items-center px-4 py-1">
                         <span class="text-sm"> {{ __('front/homePage.Payment Method:') }} </span>
 
-                        <span class="text-gray-900">
+                        <span class="text-primary">
                             @if ($order_data['payment_method'] == 1)
                                 {{ __('front/homePage.Cash on delivery (COD)') }}
                             @elseif ($order_data['payment_method'] == 2)

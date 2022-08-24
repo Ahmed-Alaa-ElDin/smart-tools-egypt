@@ -492,13 +492,63 @@ class OrderController extends Controller
                     return redirect()->route('front.orders.index');
                 }
             } elseif ($new_order->should_get > 0 && $request->type == 'card') {
+                $old_payment = $old_order->payments()
+                    ->where('payment_amount', '>=', $new_order->should_get)
+                    ->whereIn('payment_status', [2, 4])
+                    ->first();
+
+                while (is_null($old_payment)) {
+                    $old_small_payment = $old_order
+                        ->payments()
+                        ->where('payment_status', 2)
+                        ->where('payment_amount', '>', 0)
+                        ->first();
+
+                    $payment = [
+                        'order_id' => $new_order->id,
+                        'user_id' => $new_order->user_id,
+                        'payment_amount' => -1 * $old_small_payment->payment_amount,
+                        'payment_method' => $new_order->payment_method,
+                        'payment_status' => 1,
+                        'payment_details' => $old_small_payment->payment_details,
+                        'old_order_id' => $old_order->id
+                    ];
+
+                    $new_payment = $new_order->payments()->updateOrCreate([
+                        'order_id' => $payment['order_id'],
+                        'payment_status' => 1,
+                    ], $payment);
+
+                    if (refundRequestPaymob(json_decode($new_payment->payment_details)->transaction_id, abs($new_payment->payment_amount))) {
+                        $new_order->payments()->first()->update([
+                            'order_id' => $old_order->id,
+                            'payment_status' => 2,
+                        ]);
+
+                        $old_small_payment->update([
+                            'payment_amount' => 0,
+                            'payment_status' => 4,
+                        ]);
+
+                        $new_order->update([
+                            'should_get' => $new_order->should_get - abs($new_payment->payment_amount)
+                        ]);
+                    }
+
+                    $old_payment = $old_order->payments()
+                        ->where('payment_amount', '>=', $new_order->should_get)
+                        ->whereIn('payment_status', [2, 4])
+                        ->first();
+                }
+
                 $payment = [
                     'order_id' => $new_order->id,
                     'user_id' => $new_order->user_id,
                     'payment_amount' => -1 * $new_order->should_get,
                     'payment_method' => $new_order->payment_method,
                     'payment_status' => 1,
-                    'payment_details' => $old_order->payments->where('payment_amount', '>=', $new_order->should_get)->first()->payment_details,
+                    'payment_details' => $old_payment->payment_details,
+                    'old_order_id' => $old_order->id
                 ];
 
                 $new_order->payments()->updateOrCreate([
@@ -530,7 +580,13 @@ class OrderController extends Controller
                         $old_order->statuses()->attach([16, 12]);
 
                         $new_order->payments()->first()->update([
+                            'order_id' => $old_order->id,
                             'payment_status' => 2,
+                        ]);
+
+                        $old_payment->update([
+                            'payment_amount' => $old_payment->payment_amount - $new_order->should_get,
+                            'payment_status' => 4
                         ]);
 
                         $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
@@ -692,6 +748,12 @@ class OrderController extends Controller
                         $old_order->statuses()->attach(2);
                     }
 
+                    // edit products database
+                    $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
+                        $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
+                        $product->save();
+                    });
+
                     DB::commit();
 
                     return redirect()->route('front.orders.index')->with('success', __('front/homePage.Order edit request sent successfully'));
@@ -732,6 +794,12 @@ class OrderController extends Controller
                                 'balance' => $old_order->user->balance + $returned_balance,
                                 'points' => $old_order->user->points + $returned_points + $returned_gift_points,
                             ]);
+
+                            // edit products database
+                            $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
+                                $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
+                                $product->save();
+                            });
 
                             $new_order->delete();
 
@@ -774,6 +842,12 @@ class OrderController extends Controller
 
                     $old_order->statuses()->attach([11, 12, 14]);
 
+                    // edit products database
+                    $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
+                        $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
+                        $product->save();
+                    });
+
                     DB::commit();
 
                     return redirect()->route('front.orders.index')->with('success', __('front/homePage.Order edit request sent successfully'));
@@ -814,6 +888,12 @@ class OrderController extends Controller
                                 'balance' => $old_order->user->balance + $returned_balance + $new_order->should_get,
                                 'points' => $old_order->user->points + $returned_points + $returned_gift_points,
                             ]);
+
+                            // edit products database
+                            $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
+                                $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
+                                $product->save();
+                            });
 
                             $new_order->delete();
 
@@ -873,6 +953,12 @@ class OrderController extends Controller
                         'points' => $old_order->user->points + $returned_points + $returned_gift_points,
                     ]);
 
+                    // edit products database
+                    $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
+                        $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
+                        $product->save();
+                    });
+
                     $new_order->delete();
 
                     DB::commit();
@@ -899,7 +985,7 @@ class OrderController extends Controller
         try {
             $order = Order::with('payments')->findOrFail($order_id);
 
-            $payments = $order->payments();
+            $payments = $order->payments()->where('payment_status', 2);
 
             if ($order->payment_method == 1) {
                 // update the database
@@ -908,26 +994,26 @@ class OrderController extends Controller
                 cancelBostaOrder($order);
             } elseif (($order->payment_method == 2 || $order->payment_method == 3) && $order->should_pay == 0) {
                 if ($order->created_at->diffInDays() < 1) {
+                    $refund_success = [];
                     foreach ($payments->get() as $payment) {
-                        $refund_success = [];
                         $refund_success[] = voidRequestPaymob(json_decode($payment->payment_details)->transaction_id);
-                        if (!array_search(false, $refund_success)) {
-                            // update the database
-                            returnTotalOrder($order);
-                            // Cancel Bosta Order
-                            cancelBostaOrder($order);
-                        }
+                    }
+                    if (!array_search(false, $refund_success)) {
+                        // update the database
+                        returnTotalOrder($order);
+                        // Cancel Bosta Order
+                        cancelBostaOrder($order);
                     }
                 } else {
+                    $refund_success = [];
                     foreach ($payments->get() as $payment) {
-                        $refund_success = [];
                         $refund_success[] = refundRequestPaymob(json_decode($payment->payment_details)->transaction_id, json_decode($payment->payment_details)->amount_cents);
-                        if (!array_search(false, $refund_success)) {
-                            // update the database
-                            returnTotalOrder($order);
-                            // Cancel Bosta Order
-                            cancelBostaOrder($order);
-                        }
+                    }
+                    if (!array_search(false, $refund_success)) {
+                        // update the database
+                        returnTotalOrder($order);
+                        // Cancel Bosta Order
+                        cancelBostaOrder($order);
                     }
                 }
             } elseif ($order->payment_method == 4) {
@@ -970,6 +1056,12 @@ class OrderController extends Controller
                 $new_order->delete();
             }
 
+            // edit products database
+            $order->products->each(function ($product) {
+                $product->quantity = $product->quantity + $product->pivot->quantity;
+                $product->save();
+            });
+
             DB::commit();
 
             return redirect()->route('front.orders.index')->with('success', __('front/homePage.Order Canceled Successfully'));
@@ -1002,7 +1094,10 @@ class OrderController extends Controller
         $products_ids = $request->products_ids;
 
         // get old order data from db
-        $order = Order::with(['products', 'zone'])->findOrFail($order_id);
+        $order = Order::with([
+            'products',
+            'zone'
+        ])->findOrFail($order_id);
 
         // Get zone data
         $zone = $order->zone;
@@ -1027,51 +1122,38 @@ class OrderController extends Controller
             ];
         });
 
+        //  Total Price of returned products
         $returned_price = $returned_products_data->sum('returned_price');
 
+        //  Total Points of returned products
         $returned_points = $returned_products_data->sum('returned_points');
 
+        // Total old Points
         $old_products_points = $old_products->map(function ($product) {
             return $product->pivot->points * $product->pivot->quantity;
         })->sum();
 
         ############ Old Order Data ############
         // subtotal final
-        $subtotal_final = $order->subtotal_final;
+        $old_subtotal_final = $order->subtotal_final;
         $old_total = $order->total;
         $payment_method = $order->payment_method;
-        $coupon_discount = $order->coupon_discount;
+        $old_coupon_discount = $order->coupon_products_discount + $order->coupon_order_discount;
         $old_delivery_fees = $order->delivery_fees;
-        $used_balance = $order->used_balance;
-        $used_points = $order->used_points;
-        $used_points_egp = $used_points * config('constants.constants.POINT_RATE');
+        $old_used_balance = $order->used_balance;
+        $old_used_points = $order->used_points;
+        $old_used_points_egp = $old_used_points * config('constants.constants.POINT_RATE');
 
-        $gift_points = $order->gift_points;
-        $coupon_points = $order->coupon_points;
+        $old_gift_points = $order->gift_points;
+        $old_coupon_points = $order->coupon_products_points + $order->coupon_order_points;
 
 
         ############ Order Discounts and Points ############
-        // order discount
-        $order_discount = $subtotal_final + $old_delivery_fees - $old_total - $coupon_discount - $used_balance - $used_points_egp;
-        $order_discount_factor = $subtotal_final ? $order_discount / $subtotal_final : 0.00;
-        $returned_order_discount = round($returned_price * $order_discount_factor, 2);
+        // Old order discount
+        $old_order_discount = $old_subtotal_final - $old_total + $old_delivery_fees;
 
-        // order points
-        $order_points = $gift_points - $old_products_points - $coupon_points;
-        $order_points_factor = $subtotal_final ? $order_points / $subtotal_final : 0;
-        $returned_order_points = round($returned_price * $order_points_factor);
-
-        ############ Coupon Discounts and Points ############
-        // coupon discount
-        $coupon_discount_factor = $subtotal_final ? $coupon_discount / $subtotal_final : 0.00;
-        $returned_coupon_discount = round($returned_price * $coupon_discount_factor, 2);
-
-        // coupon points
-        $coupon_points_factor = $subtotal_final ? $coupon_points / $subtotal_final : 0;
-        $returned_coupon_points = round($returned_price * $coupon_points_factor);
-
-        $returned_price = $returned_price - $returned_order_discount - $returned_coupon_discount;
-        $returned_points += $returned_order_points + $returned_coupon_points;
+        // Old order points
+        $old_order_points = $old_gift_points - $old_products_points - $order->coupon_order_discount;
 
         // Get Order Products ids and weights from database
         $products_weights = $old_products->where('free_shipping', 0)->pluck('weight', 'id');
@@ -1090,7 +1172,7 @@ class OrderController extends Controller
             "order_id" => $order->id,
             "old_order_total" => $old_total,
             "old_products_total_quantities" => $old_products_total_quantities,
-            "old_product_gift_points" => $gift_points,
+            "old_product_gift_points" => $old_gift_points,
             "payment_method" => $payment_method,
             "returned_price" => $returned_price,
         ];
@@ -1372,7 +1454,9 @@ class OrderController extends Controller
                 ]);
 
                 $payment->update([
+                    'order_id' => $payment->order_id,
                     'payment_status' => 3,
+                    'payment_details' => $data['data_message']
                 ]);
 
                 return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
@@ -1393,7 +1477,9 @@ class OrderController extends Controller
             ]);
 
             $payment->update([
+                'order_id' => $payment->order_id,
                 'payment_status' => 3,
+                'payment_details' => $data['data_message']
             ]);
 
             return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));

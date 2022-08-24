@@ -606,7 +606,7 @@ function refundRequestPaymob($transaction_id, $refund)
         $data = Http::acceptJson()->post('https://accept.paymob.com/api/acceptance/void_refund/refund', [
             "auth_token" => $auth_token,
             "transaction_id" => $transaction_id,
-            "amount_cents" => $refund * 100,
+            "amount_cents" => (int)($refund * 100),
         ])->json();
 
         if ($data['success'] == true) {
