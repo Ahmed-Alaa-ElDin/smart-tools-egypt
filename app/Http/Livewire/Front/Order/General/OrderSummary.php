@@ -33,6 +33,11 @@ class OrderSummary extends Component
     public $coupon_discount_percentage = 0;
     public $coupon_points = 0;
     public $coupon_free_shipping = false;
+    public $products_best_coupon = [];
+    public $order_best_coupon = [
+        'discount' => 0.00,
+        'points' => 0
+    ];
 
     protected $listeners = [
         'cartUpdated' => 'getProducts',
@@ -45,6 +50,7 @@ class OrderSummary extends Component
     public function render()
     {
         $products_quantities = Cart::instance('cart')->content()->pluck('qty', 'id')->toArray();
+
         $this->products_quantities = $products_quantities;
 
         if ($this->step == 3) {
@@ -149,10 +155,10 @@ class OrderSummary extends Component
 
                 // Get Destinations and Zones for the city
                 $zones = Zone::with(['destinations'])
-                ->where('is_active', 1)
-                ->whereHas('destinations', fn ($q) => $q->where('city_id', $city_id))
-                ->whereHas('delivery', fn ($q) => $q->where('is_active', 1))
-                ->get();
+                    ->where('is_active', 1)
+                    ->whereHas('destinations', fn ($q) => $q->where('city_id', $city_id))
+                    ->whereHas('delivery', fn ($q) => $q->where('is_active', 1))
+                    ->get();
 
                 // get products weights
                 $products_weights = $this->products->map(function ($product) use ($products_quantities) {
@@ -208,13 +214,16 @@ class OrderSummary extends Component
     ############## Get Delivery Price :: End ##############
 
     ############## Get Coupon Data :: Start ##############
-    public function couponApplied($coupon_id, $coupon_discount,$coupon_discount_percentage, $coupon_points, $coupon_free_shipping)
+    public function couponApplied($coupon_id, $coupon_discount, $coupon_discount_percentage, $coupon_points, $coupon_free_shipping, $products_best_coupon, $order_best_coupon)
     {
         $this->coupon_id = $coupon_id;
         $this->coupon_discount = $coupon_discount;
         $this->coupon_discount_percentage = $coupon_discount_percentage;
         $this->coupon_points = $coupon_points;
         $this->coupon_free_shipping = $coupon_free_shipping;
+        $this->products_best_coupon = $products_best_coupon;
+        $this->order_best_coupon = $order_best_coupon;
+
         $this->getProducts();
         $this->getDeliveryPrice();
     }
@@ -230,13 +239,15 @@ class OrderSummary extends Component
             'setOrderFinalPrice',
             [
                 'products' => $this->products,
-                'subtotal_base' => $this->products_final_prices ?? 0,
-                'subtotal_final' => $this->products_best_prices ?? 0,
+                'subtotal_base' => $this->products_final_prices ?? 0.00,
+                'subtotal_final' => $this->products_best_prices -  $this->coupon_discount ?? 0.00,
                 'total' => $this->total,
                 'delivery_fees' => $this->coupon_free_shipping ? 0.00 : $this->delivery_fees,
                 'coupon_id' => $this->coupon_id ?? null,
-                'coupon_discount' => $this->coupon_discount ?? 0.00,
-                'coupon_points' => $this->coupon_points ?? 0,
+                'coupon_discount' => $this->coupon_discount,
+                'coupon_points' => $this->coupon_points,
+                'products_best_coupon' => $this->products_best_coupon ?? [],
+                'order_best_coupon' => $this->order_best_coupon,
                 'zone_id' => $this->best_zone_id ?? null,
                 'weight' => $this->products_weights ?? 1,
                 'gift_points' => $this->coupon_points + $this->total_points,

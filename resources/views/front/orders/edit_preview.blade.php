@@ -196,7 +196,8 @@
                         <span class="font-bold">{{ __('front/homePage.EGP') }}</span>
                         <span class="font-bold text-2xl"
                             dir="ltr">{{ number_format(explode('.', $order_data['order_total'])[0], 0, '.', '\'') }}</span>
-                        <span class="font-bold text-sm">{{ explode('.', $order_data['order_total'])[1] ?? '00' }}</span>
+                        <span
+                            class="font-bold text-sm">{{ explode('.', number_format($order_data['order_total'], 2))[1] ?? '00' }}</span>
                     </div>
                 </div>
             </div>
@@ -317,7 +318,8 @@
                             <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
                             <span class="font-bold text-xl"
                                 dir="ltr">{{ number_format(explode('.', $order_data['old_price'])[0], 0, '.', '\'') }}</span>
-                            <span class="font-bold text-xs">{{ explode('.', $order_data['old_price'])[1] ?? '00' }}</span>
+                            <span
+                                class="font-bold text-xs">{{ explode('.', number_format($order_data['old_price'], 2))[1] ?? '00' }}</span>
                         </div>
                     </div>
 
@@ -330,7 +332,7 @@
                             <span class="font-bold text-xl"
                                 dir="ltr">{{ number_format(explode('.', $order_data['order_total'])[0], 0, '.', '\'') }}</span>
                             <span
-                                class="font-bold text-xs">{{ explode('.', $order_data['order_total'])[1] ?? '00' }}</span>
+                                class="font-bold text-xs">{{ explode('.', number_format($order_data['order_total'], 2))[1] ?? '00' }}</span>
                         </div>
                     </div>
 
@@ -352,7 +354,7 @@
                             <span class="font-bold text-2xl"
                                 dir="ltr">{{ number_format(explode('.', abs($order_data['difference']))[0], 0, '.', '\'') }}</span>
                             <span
-                                class="font-bold text-sm">{{ explode('.', abs($order_data['difference']))[1] ?? '00' }}</span>
+                                class="font-bold text-sm">{{ explode('.', number_format(abs($order_data['difference']), 2))[1] ?? '00' }}</span>
                         </div>
                     </div>
 

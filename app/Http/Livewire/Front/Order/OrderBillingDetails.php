@@ -83,10 +83,11 @@ class OrderBillingDetails extends Component
             // get order's products
             $products = Cart::instance('cart')->content()->keyBy("id")->map(function ($item) use ($array_data) {
                 $product = collect($array_data['products'])->where('id', $item->id)->first();
+
                 return [
                     'quantity' => $item->qty,
-                    'price' => $product['best_price'],
-                    'points' => $product['best_points'],
+                    'price' => isset($array_data['products_best_coupon'][$item->id]) ? $product['best_price'] - $array_data['products_best_coupon'][$item->id]['coupon_discount'] : $product['best_price'],
+                    'points' => isset($array_data['products_best_coupon'][$item->id]) ? $product['best_points'] + $array_data['products_best_coupon'][$item->id]['coupon_points'] : $product['best_points'],
                 ];
             })->toArray();
 
@@ -99,23 +100,27 @@ class OrderBillingDetails extends Component
 
             if ($order) {
                 $order->update([
-                    'num_of_items'      =>      Cart::instance('cart')->count(),
-                    'zone_id'           =>      $array_data['zone_id'],
-                    'coupon_id'         =>      $array_data['coupon_id'],
-                    'coupon_discount'   =>      $array_data['coupon_discount'] ?? 0.00,
-                    'coupon_points'     =>      $array_data['coupon_points'] ?? 0.00,
-                    'subtotal_base'     =>      $array_data['subtotal_base'],
-                    'subtotal_final'    =>      $array_data['subtotal_final'] - $this->points_egp - $this->balance,
-                    'delivery_fees'     =>      $array_data['delivery_fees'],
-                    'total'             =>      $array_data['total'] - $this->points_egp - $this->balance,
-                    'should_pay'        =>      $array_data['total'] - $this->points_egp - $this->balance,
-                    'should_get'        =>      0.00,
-                    'used_points'       =>      $this->points ?? 0,
-                    'gift_points'       =>      $array_data['gift_points'] ?? 0,
-                    'used_balance'      =>      $this->balance ?? 0,
-                    'total_weight'      =>      $array_data['weight'],
-                    'payment_method'    =>      $this->payment_method,
-                    'status_id'         =>      2,
+                    'num_of_items'              =>      Cart::instance('cart')->count(),
+                    'zone_id'                   =>      $array_data['zone_id'],
+                    'coupon_id'                 =>      $array_data['coupon_id'],
+                    'coupon_discount'           =>      $array_data['coupon_discount'] ?? 0.00,
+                    'coupon_points'             =>      $array_data['coupon_points'] ?? 0.00,
+                    'coupon_order_discount'     =>      $array_data['order_best_coupon']['discount'],
+                    'coupon_order_points'       =>      $array_data['order_best_coupon']['points'],
+                    'coupon_products_discount'  =>      $array_data['coupon_discount'] - $array_data['order_best_coupon']['discount'],
+                    'coupon_products_points'    =>      $array_data['coupon_points'] - $array_data['order_best_coupon']['points'],
+                    'subtotal_base'             =>      $array_data['subtotal_base'],
+                    'subtotal_final'            =>      $array_data['subtotal_final'] - $this->points_egp - $this->balance,
+                    'delivery_fees'             =>      $array_data['delivery_fees'],
+                    'total'                     =>      $array_data['total'] - $this->points_egp - $this->balance,
+                    'should_pay'                =>      $array_data['total'] - $this->points_egp - $this->balance,
+                    'should_get'                =>      0.00,
+                    'used_points'               =>      $this->points ?? 0,
+                    'gift_points'               =>      $array_data['gift_points'] ?? 0,
+                    'used_balance'              =>      $this->balance ?? 0,
+                    'total_weight'              =>      $array_data['weight'],
+                    'payment_method'            =>      $this->payment_method,
+                    'status_id'                 =>      2,
                 ]);
 
                 if ($order->statuses()->latest()->first()->id != 2) {
@@ -197,7 +202,7 @@ class OrderBillingDetails extends Component
                 $payment_key = payByPaymob($payment);
 
                 if ($payment_key) {
-                    return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($order->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
+                    return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . env('PAYMOB_IFRAM_ID_CARD_TEST') . "?payment_token=$payment_key");
                 } else {
                     return redirect()->route('front.orders.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }
@@ -205,7 +210,7 @@ class OrderBillingDetails extends Component
                 $payment_key = payByPaymob($payment);
 
                 if ($payment_key) {
-                    return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($order->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
+                    return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . env('PAYMOB_IFRAM_ID_INSTALLMENTS')  . "?payment_token=$payment_key");
                 } else {
                     return redirect()->route('front.orders.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }
@@ -227,6 +232,8 @@ class OrderBillingDetails extends Component
             }
         } catch (\Throwable $th) {
             DB::rollback();
+
+            dd($th);
         }
     }
 }

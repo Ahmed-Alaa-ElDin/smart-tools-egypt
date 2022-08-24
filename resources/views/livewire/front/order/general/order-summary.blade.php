@@ -9,7 +9,7 @@
     </div>
     {{-- ############## Coupon :: Start ############## --}}
     @if ($step == 3)
-        <div>
+        <div wire:ignore>
             <div class="flex justify-between items-center p-4">
                 <h3 class="h5 text-center font-bold m-0">
                     {{ __('front/homePage.Add Coupon') }}

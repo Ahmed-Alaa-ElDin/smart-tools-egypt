@@ -24,8 +24,10 @@ return new class extends Migration
             $table->tinyInteger('allow_opening')->default(1)->comment('0 -> No , 1 -> Yes')->nullable();
             $table->unsignedBigInteger('zone_id')->nullable();
             $table->unsignedBigInteger('coupon_id')->nullable();
-            $table->decimal('coupon_discount', 8, 2)->default(0.00);
-            $table->integer('coupon_points')->default(0);
+            $table->decimal('coupon_order_discount', 8, 2)->default(0.00);
+            $table->integer('coupon_order_points')->default(0);
+            $table->decimal('coupon_products_discount', 8, 2)->default(0.00);
+            $table->integer('coupon_products_points')->default(0);
             $table->decimal('subtotal_base', 8, 2)->default(0.00);
             $table->decimal('subtotal_final', 8, 2)->default(0.00);
             $table->decimal('delivery_fees', 8, 2)->default(0.00);

@@ -82,7 +82,23 @@ class OrderController extends Controller
         $products_ids = $request->products_ids;
 
         // Get Order data
-        $order = Order::findOrFail($order_id);
+        $order = Order::with([
+            'coupon' => fn ($q) => $q->with([
+                'supercategories' => function ($q) {
+                    $q->with(['products']);
+                },
+                'categories' => function ($q) {
+                    $q->with(['products']);
+                },
+                'subcategories' => function ($q) {
+                    $q->with(['products']);
+                },
+                'brands' => function ($q) {
+                    $q->with(['products']);
+                },
+                'products',
+            ])
+        ])->findOrFail($order_id);
 
         // Get Zone data
         $zone = $order->zone;
@@ -119,15 +135,21 @@ class OrderController extends Controller
             return $product->final_price * $products_quantities[$product->id];
         });
 
-        // Get summation of products best prices
-        $products_best_prices = $best_products->sum(function ($product) use ($products_quantities) {
-            return $product->best_price * $products_quantities[$product->id];
+        // Get summation of products selling prices
+        $products_total_prices = $old_products->sum(function ($product) use ($products_quantities) {
+            return $product->pivot->price * $products_quantities[$product->id];
         });
 
-        // Get summation of products best points
-        $products_best_points = $best_products->sum(function ($product) use ($products_quantities) {
-            return $product->best_points * $products_quantities[$product->id];
+        // Get summation of products selling prices
+        $products_total_points = $old_products->sum(function ($product) use ($products_quantities) {
+            return $product->pivot->points * $products_quantities[$product->id];
         });
+
+        // Get summation of products best prices
+        $products_best_prices = $products_total_prices + $order->coupon_products_discount;
+
+        // Get summation of products best points
+        $products_best_points = $products_total_points - $order->coupon_products_points;
 
         // Get products discounts value
         $products_discounts = $products_base_prices - $products_final_prices;
@@ -169,20 +191,33 @@ class OrderController extends Controller
         }
 
         //  get coupon data
-        $coupon_discount = 0;
+        $coupon_discount = 0.00;
         $coupon_discount_percentage = 0;
         $coupon_points = 0;
         $coupon_shipping = null;
+        $coupon_products_discount = 0.00;
+        $coupon_products_points = 0;
 
         if ($order->coupon_id) {
             $coupon = $order->coupon;
 
-            $coupon_data = getCoupon($coupon, $products_ids, $products_quantities, $products_best_prices);
+            // Coupon Free Shipping
+            $coupon_shipping = $coupon->free_shipping ? 0 : null;
 
-            $coupon_discount = $coupon_data['coupon_discount'];
-            $coupon_discount_percentage = $coupon_data['coupon_discount_percentage'];
-            $coupon_points = $coupon_data['coupon_points'];
-            $coupon_shipping = $coupon_data['coupon_shipping'];
+            // Coupon Products Discount
+            $coupon_products_discount = $products_best_prices - $products_total_prices;
+
+            // Coupon Total Discount
+            $coupon_discount = $coupon_products_discount + $order->coupon_order_discount;
+
+            // Coupon Total Discount Percentage
+            $coupon_discount_percentage = $products_best_prices > 0 ? round($coupon_discount * 100 / $products_best_prices) : 0;
+
+            // Coupon Products Points
+            $coupon_products_points = $products_total_points - $products_best_points;
+
+            // Coupon Total Points
+            $coupon_points =  $products_total_points - $products_best_points + $order->coupon_order_points;
         }
 
         // Get Total Points
@@ -225,7 +260,7 @@ class OrderController extends Controller
         // Get Paid Money
         $payment_method = $order->payment_method;
         $payment_status = $order->should_pay == 0 ? 1 : 0;
-        $old_price = $order->subtotal_final + $order->delivery_fees;
+        $old_price = $order->total;
 
         $difference = $payment_status ? round($total_price - $old_price, 2) : $total_price;
 
@@ -242,11 +277,15 @@ class OrderController extends Controller
             'allow_opening' => $order->allow_opening,
             'zone_id'   => $order->zone_id,
             'coupon_id' => $order->coupon_id,
+            'coupon_order_discount' => $order->coupon_order_discount,
+            'coupon_order_points' => $order->coupon_order_points,
+            'coupon_products_discount' => $coupon_products_discount,
+            'coupon_products_points' => $coupon_products_points,
             'coupon_discount' => $coupon_discount,
             'coupon_points' => $coupon_points,
             'subtotal_base' => $products_final_prices,
             'subtotal_final' => $coupon_discount ? $products_best_prices - $coupon_discount - $used_balance - $used_points_egp : $products_best_prices - $used_balance - $used_points_egp,
-            'should_pay' => $difference > 0 ? $difference : 0,
+            'should_pay' => $difference > 0 ? abs($difference) : 0,
             'should_get' => $difference < 0 ? abs($difference) : 0,
             'total' => $total_price,
             'used_points' => $used_points,
@@ -266,11 +305,10 @@ class OrderController extends Controller
         $order_products = [];
 
         foreach ($products_ids as $product_id) {
-            $product = $best_products->where('id', $product_id)->first();
             $order_products[$product_id] = [
                 'quantity' => $products_quantities[$product_id],
-                'price' => $product->best_price,
-                'points' => $product->best_points
+                'price' => $old_products->find($product_id)->pivot->price,
+                'points' => $old_products->find($product_id)->pivot->points
             ];
         }
 
@@ -346,7 +384,10 @@ class OrderController extends Controller
                     $old_order->update([
                         'status_id' => 12,
                         'num_of_items' => $new_order->num_of_items,
-                        'coupon_discount' => $new_order->coupon_discount,
+                        'coupon_order_discount' => $new_order->coupon_order_discount,
+                        'coupon_order_points' => $new_order->coupon_order_points,
+                        'coupon_products_discount' => $new_order->coupon_products_discount,
+                        'coupon_products_points' => $new_order->coupon_products_points,
                         'subtotal_base' => $new_order->subtotal_base,
                         'subtotal_final' => $new_order->subtotal_final,
                         'total' => $new_order->total,
@@ -371,6 +412,10 @@ class OrderController extends Controller
                     $old_order->user()->update([
                         'balance' => $old_order->user->balance + $returned_balance,
                         'points' => $old_order->user->points + $returned_points + $returned_gift_points,
+                    ]);
+
+                    $old_order->payments()->first()->update([
+                        'payment_amount' => $new_order->total
                     ]);
 
                     $new_order->delete();
@@ -399,7 +444,10 @@ class OrderController extends Controller
                         $old_order->update([
                             'status_id' => 12,
                             'num_of_items' => $new_order->num_of_items,
-                            'coupon_discount' => $new_order->coupon_discount,
+                            'coupon_order_discount' => $new_order->coupon_order_discount,
+                            'coupon_order_points' => $new_order->coupon_order_points,
+                            'coupon_products_discount' => $new_order->coupon_products_discount,
+                            'coupon_products_points' => $new_order->coupon_products_points,
                             'subtotal_base' => $new_order->subtotal_base,
                             'subtotal_final' => $new_order->subtotal_final,
                             'total' => $new_order->total,
@@ -463,7 +511,10 @@ class OrderController extends Controller
                         $old_order->update([
                             'status_id' => 12,
                             'num_of_items' => $new_order->num_of_items,
-                            'coupon_discount' => $new_order->coupon_discount,
+                            'coupon_order_discount' => $new_order->coupon_order_discount,
+                            'coupon_order_points' => $new_order->coupon_order_points,
+                            'coupon_products_discount' => $new_order->coupon_products_discount,
+                            'coupon_products_points' => $new_order->coupon_products_points,
                             'subtotal_base' => $new_order->subtotal_base,
                             'subtotal_final' => $new_order->subtotal_final,
                             'total' => $new_order->total,
@@ -524,7 +575,10 @@ class OrderController extends Controller
                         $old_order->update([
                             'status_id' => 12,
                             'num_of_items' => $new_order->num_of_items,
-                            'coupon_discount' => $new_order->coupon_discount,
+                            'coupon_order_discount' => $new_order->coupon_order_discount,
+                            'coupon_order_points' => $new_order->coupon_order_points,
+                            'coupon_products_discount' => $new_order->coupon_products_discount,
+                            'coupon_products_points' => $new_order->coupon_products_points,
                             'subtotal_base' => $new_order->subtotal_base,
                             'subtotal_final' => $new_order->subtotal_final,
                             'total' => $new_order->total,
@@ -545,7 +599,6 @@ class OrderController extends Controller
                         foreach ($new_order->products as $product) {
                             $order_products[$product->id] = [
                                 'quantity' => $product->pivot->quantity,
-                                'price' => $product->pivot->price
                             ];
                         }
 
@@ -650,7 +703,10 @@ class OrderController extends Controller
                             $old_order->update([
                                 'status_id' => 12,
                                 'num_of_items' => $new_order->num_of_items,
-                                'coupon_discount' => $new_order->coupon_discount,
+                                'coupon_order_discount' => $new_order->coupon_order_discount,
+                                'coupon_order_points' => $new_order->coupon_order_points,
+                                'coupon_products_discount' => $new_order->coupon_products_discount,
+                                'coupon_products_points' => $new_order->coupon_products_points,
                                 'subtotal_base' => $new_order->subtotal_base,
                                 'subtotal_final' => $new_order->subtotal_final,
                                 'total' => $new_order->total,
@@ -729,7 +785,10 @@ class OrderController extends Controller
                             $old_order->update([
                                 'status_id' => 12,
                                 'num_of_items' => $new_order->num_of_items,
-                                'coupon_discount' => $new_order->coupon_discount,
+                                'coupon_order_discount' => $new_order->coupon_order_discount,
+                                'coupon_order_points' => $new_order->coupon_order_points,
+                                'coupon_products_discount' => $new_order->coupon_products_discount,
+                                'coupon_products_points' => $new_order->coupon_products_points,
                                 'subtotal_base' => $new_order->subtotal_base,
                                 'subtotal_final' => $new_order->subtotal_final,
                                 'total' => $new_order->total,
@@ -781,7 +840,10 @@ class OrderController extends Controller
                     $old_order->update([
                         'status_id' => 2,
                         'num_of_items' => $new_order->num_of_items,
-                        'coupon_discount' => $new_order->coupon_discount,
+                        'coupon_order_discount' => $new_order->coupon_order_discount,
+                        'coupon_order_points' => $new_order->coupon_order_points,
+                        'coupon_products_discount' => $new_order->coupon_products_discount,
+                        'coupon_products_points' => $new_order->coupon_products_points,
                         'subtotal_base' => $new_order->subtotal_base,
                         'subtotal_final' => $new_order->subtotal_final,
                         'total' => $new_order->total,
@@ -951,7 +1013,7 @@ class OrderController extends Controller
 
         // Get Order Products ids and quantities from Order DB
         $old_products = $order->products;
-        $old_products_total_quantities = $old_products->map(fn($q)=>$q->pivot->quantity)->sum();
+        $old_products_total_quantities = $old_products->map(fn ($q) => $q->pivot->quantity)->sum();
 
         // total price & points of returned products
         $returned_products_data = $old_products->map(function ($product) use ($products_quantities) {
@@ -1165,7 +1227,8 @@ class OrderController extends Controller
                     foreach ($new_order->products as $product) {
                         $order_products[$product->id] = [
                             'quantity' => $product->pivot->quantity,
-                            'price' => $product->pivot->price
+                            'price' => $product->pivot->price,
+                            'points' => $product->pivot->points,
                         ];
                     }
 
@@ -1180,7 +1243,10 @@ class OrderController extends Controller
                             $old_order->update([
                                 'status_id' => 12,
                                 'num_of_items' => $new_order->num_of_items,
-                                'coupon_discount' => $new_order->coupon_discount,
+                                'coupon_order_discount' => $new_order->coupon_order_discount,
+                                'coupon_order_points' => $new_order->coupon_order_points,
+                                'coupon_products_discount' => $new_order->coupon_products_discount,
+                                'coupon_products_points' => $new_order->coupon_products_points,
                                 'subtotal_base' => $new_order->subtotal_base,
                                 'subtotal_final' => $new_order->subtotal_final,
                                 'total' => $new_order->total,
@@ -1294,6 +1360,17 @@ class OrderController extends Controller
                 $payment = Payment::where('paymob_order_id', $data['order'])
                     ->first();
 
+                $new_payment = Payment::create([
+                    'order_id' => $payment->order_id,
+                    'old_order_id' => $payment->old_order_id,
+                    'user_id' => $payment->user_id,
+                    'payment_amount' => $payment->payment_amount,
+                    'payment_method' => $payment->payment_method,
+                    'payment_status' => $payment->payment_status,
+                    'paymob_order_id' => $payment->paymob_order_id,
+                    'payment_details' => $payment->payment_details,
+                ]);
+
                 $payment->update([
                     'payment_status' => 3,
                 ]);
@@ -1303,6 +1380,17 @@ class OrderController extends Controller
         } else {
             $payment = Payment::where('paymob_order_id', $data['order'])
                 ->first();
+
+            $new_payment = Payment::create([
+                'order_id' => $payment->order_id,
+                'old_order_id' => $payment->old_order_id,
+                'user_id' => $payment->user_id,
+                'payment_amount' => $payment->payment_amount,
+                'payment_method' => $payment->payment_method,
+                'payment_status' => $payment->payment_status,
+                'paymob_order_id' => $payment->paymob_order_id,
+                'payment_details' => $payment->payment_details,
+            ]);
 
             $payment->update([
                 'payment_status' => 3,

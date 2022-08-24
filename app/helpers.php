@@ -658,31 +658,20 @@ function returnTotalOrder($order)
 
 
 ################ COUPON :: START ##################
+// todo: Need Update like in coupon block component (Has no use right now) --> May replace the coupon code checkCoupon function
 function getCoupon($coupon, $products_ids, $products_quantities, $products_best_prices)
 {
     $coupon_discount = 0;
     $coupon_points = 0;
     $coupon_shipping = null;
 
-    // get discount on order
-    if ($coupon->on_orders) {
-        // percentage discount
-        if ($coupon->type == 0 && $coupon->value < 100) {
-            $coupon_discount += $products_best_prices * $coupon->value / 100;
-        }
-        // fixed discount
-        elseif ($coupon->type == 1) {
-            $coupon_discount += $coupon->value;
-        }
-        // points
-        elseif ($coupon->type == 2) {
-            $coupon_points += $coupon->value;
-        }
-    }
-
     // get free shipping
     $coupon_shipping = $coupon->free_shipping ? 0 : null;
 
+    // Get Products best prices
+    $products = getBestOfferForProducts($products_ids);
+
+    dd($products);
     // get discount on brands
     if ($coupon->brands->count()) {
         $brands_product_from_coupon = $coupon->brands->map(function ($brand) use ($products_ids) {
@@ -807,13 +796,29 @@ function getCoupon($coupon, $products_ids, $products_quantities, $products_best_
                 $coupon_points += $product_qty * $product['value'];
             }
         });
-
-        return [
-            'coupon_discount' => $coupon_discount,
-            'coupon_discount_percentage' => $products_best_prices > 0 ? round($coupon_discount * 100 / $products_best_prices) : 0,
-            'coupon_points' => $coupon_points,
-            'coupon_shipping' => $coupon_shipping
-        ];
     }
+
+    // get discount on order
+    if ($coupon->on_orders) {
+        // percentage discount
+        if ($coupon->type == 0 && $coupon->value < 100) {
+            $coupon_discount += $products_best_prices * $coupon->value / 100;
+        }
+        // fixed discount
+        elseif ($coupon->type == 1) {
+            $coupon_discount += $coupon->value;
+        }
+        // points
+        elseif ($coupon->type == 2) {
+            $coupon_points += $coupon->value;
+        }
+    }
+
+    return [
+        'coupon_discount' => $coupon_discount,
+        'coupon_discount_percentage' => $products_best_prices > 0 ? round($coupon_discount * 100 / $products_best_prices) : 0,
+        'coupon_points' => $coupon_points,
+        'coupon_shipping' => $coupon_shipping
+    ];
 }
 ################ COUPON :: START ##################
