@@ -56,13 +56,16 @@ Route::group([
         Route::put('/{old_order_id}/{new_older_id}', 'update')->name('update');
 
         // return total order
-        Route::delete('/{order_id}/return', 'return')->name('return');
+        Route::delete('/{order_id}/return/{new_order_id?}', 'return')->name('return');
 
         // return products from the order
         Route::get('/{order_id}/return', 'return')->name('return');
 
         // preview the returned products
         Route::post('/{order_id}/return-calc', 'returnCalc')->name('return-calc');
+
+        // Confirm the Return order
+        Route::put('/{old_order_id}/{new_older_id}', 'returnConfirm')->name('return-confirm');
 
         // Go to Paymob Iframe
         Route::get('/{order_id}/payment', 'goToPayment')->name('payment');

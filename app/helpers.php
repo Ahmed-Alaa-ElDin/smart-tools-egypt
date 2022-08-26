@@ -420,16 +420,15 @@ function createBostaOrder($order)
         'Authorization'     =>  env('BOSTA_API_KEY'),
         'Content-Type'      =>  'application/json',
         'Accept'            =>  'application/json'
-        ])->post('https://app.bosta.co/api/v0/deliveries', $order_data);
+    ])->post('https://app.bosta.co/api/v0/deliveries', $order_data);
 
-        $decoded_bosta_response = $bosta_response->json();
+    $decoded_bosta_response = $bosta_response->json();
 
     if ($bosta_response->successful()) {
         return [
             'status'    =>  true,
             'data'      =>  $decoded_bosta_response,
         ];
-
     } else {
         return [
             'status'    =>  false,
@@ -439,7 +438,7 @@ function createBostaOrder($order)
 }
 
 // edit bosta Order
-function editBostaOrder($order,$old_order_id)
+function editBostaOrder($order, $old_order_id)
 {
     $order_data = [
         "specs" => [
@@ -659,40 +658,55 @@ function returnTotalOrder($order)
 
 ################ COUPON :: START ##################
 // todo: Need Update like in coupon block component (Has no use right now) --> May replace the coupon code checkCoupon function
-function getCoupon($coupon, $products_ids, $products_quantities, $products_best_prices)
+function getRemainingProductsCoupon($coupon_id, $products_ids, $products_quantities,$products)
 {
     $coupon_discount = 0;
     $coupon_points = 0;
-    $coupon_shipping = null;
+    $products_after_coupon = [];
+    $products_best_coupon = [];
 
-    // get free shipping
-    $coupon_shipping = $coupon->free_shipping ? 0 : null;
+    $coupon = Coupon::with([
+        'supercategories' => function ($q) {
+            $q->with(['products']);
+        },
+        'categories' => function ($q) {
+            $q->with(['products']);
+        },
+        'subcategories' => function ($q) {
+            $q->with(['products']);
+        },
+        'brands' => function ($q) {
+            $q->with(['products']);
+        },
+        'products',
+    ])
+        ->find($coupon_id);
 
-    // Get Products best prices
-    $products = getBestOfferForProducts($products_ids);
-
-    dd($products);
     // get discount on brands
     if ($coupon->brands->count()) {
-        $brands_product_from_coupon = $coupon->brands->map(function ($brand) use ($products_ids) {
+        $brands_product_from_coupon = $coupon->brands->map(function ($brand) use ($products) {
             return [
-                'products' => $brand->products->whereIn('id', $products_ids),
+                'products' => $products->whereIn('id', $brand->products->pluck('id')),
                 'type' => $brand->pivot->type,
                 'value' => $brand->pivot->value,
             ];
         });
 
-
-        $brands_product_from_coupon->map(function ($brand) use (&$coupon_discount, &$coupon_points, $products_quantities) {
+        $brands_product_from_coupon->map(function ($brand) use (&$products_after_coupon) {
             foreach ($brand['products'] as $product) {
-                $product_qty = $products_quantities[$product->id];
 
                 if ($brand['type'] == 0 && $brand['value'] < 100) {
-                    $coupon_discount += $product_qty * ($product->final_price * $brand['value'] / 100);
+                    $product->coupon_discount = $product->best_price * $brand['value'] / 100;
+                    $product->coupon_points = 0;
+                    $products_after_coupon[] = $product;
                 } elseif ($brand['type'] == 1) {
-                    $coupon_discount = $brand['value'] <= $product->final_price ? $coupon_discount + ($product_qty * $brand['value']) : ($product_qty * $product->final_price);
+                    $product->coupon_discount = $brand['value'] <= $product->best_price ? $brand['value'] : $product->best_price;
+                    $product->coupon_points = 0;
+                    $products_after_coupon[] = $product;
                 } elseif ($brand['type'] == 2) {
-                    $coupon_points += $product_qty * $brand['value'];
+                    $product->coupon_discount = 0.00;
+                    $product->coupon_points = $brand['value'];
+                    $products_after_coupon[] = $product;
                 }
             }
         });
@@ -700,24 +714,28 @@ function getCoupon($coupon, $products_ids, $products_quantities, $products_best_
 
     // get discount on subcategories
     if ($coupon->subcategories->count()) {
-        $subcategories_product_from_coupon = $coupon->subcategories->map(function ($subcategory) use ($products_ids) {
+        $subcategories_product_from_coupon = $coupon->subcategories->map(function ($subcategory) use ($products) {
             return [
-                'products' => $subcategory->products->whereIn('id', $products_ids),
+                'products' => $products->whereIn('id', $subcategory->products->pluck('id')),
                 'type' => $subcategory->pivot->type,
                 'value' => $subcategory->pivot->value,
             ];
         });
 
-        $subcategories_product_from_coupon->map(function ($subcategory) use (&$coupon_discount, &$coupon_points, $products_quantities) {
+        $subcategories_product_from_coupon->map(function ($subcategory) use (&$products_after_coupon) {
             foreach ($subcategory['products'] as $product) {
-                $product_qty = $products_quantities[$product->id];
-
                 if ($subcategory['type'] == 0 && $subcategory['value'] < 100) {
-                    $coupon_discount += $product_qty * ($product->final_price * $subcategory['value'] / 100);
+                    $product->coupon_discount = $product->best_price * $subcategory['value'] / 100;
+                    $product->coupon_points = 0;
+                    $products_after_coupon[] = $product;
                 } elseif ($subcategory['type'] == 1) {
-                    $coupon_discount = $subcategory['value'] <= $product->final_price ? $coupon_discount + ($product_qty * $subcategory['value']) : ($product_qty * $product->final_price);
+                    $product->coupon_discount = $subcategory['value'] <= $product->best_price ? $subcategory['value'] : $product->best_price;
+                    $product->coupon_points = 0;
+                    $products_after_coupon[] = $product;
                 } elseif ($subcategory['type'] == 2) {
-                    $coupon_points += $product_qty * $subcategory['value'];
+                    $product->coupon_discount = 0.00;
+                    $product->coupon_points = $subcategory['value'];
+                    $products_after_coupon[] = $product;
                 }
             }
         });
@@ -725,24 +743,28 @@ function getCoupon($coupon, $products_ids, $products_quantities, $products_best_
 
     // get discount on categories
     if ($coupon->categories->count()) {
-        $categories_product_from_coupon = $coupon->categories->map(function ($category) use ($products_ids) {
+        $categories_product_from_coupon = $coupon->categories->map(function ($category) use ($products) {
             return [
-                'products' => $category->products->whereIn('id', $products_ids),
+                'products' => $products->whereIn('id', $category->products->pluck('id')),
                 'type' => $category->pivot->type,
                 'value' => $category->pivot->value,
             ];
         });
 
-        $categories_product_from_coupon->map(function ($category) use (&$coupon_discount, &$coupon_points, $products_quantities) {
+        $categories_product_from_coupon->map(function ($category) use (&$products_after_coupon) {
             foreach ($category['products'] as $product) {
-                $product_qty = $products_quantities[$product->id];
-
                 if ($category['type'] == 0 && $category['value'] < 100) {
-                    $coupon_discount += $product_qty * ($product->final_price * $category['value'] / 100);
+                    $product->coupon_discount = $product->best_price * $category['value'] / 100;
+                    $product->coupon_points = 0;
+                    $products_after_coupon[] = $product;
                 } elseif ($category['type'] == 1) {
-                    $coupon_discount = $category['value'] <= $product->final_price ? $coupon_discount + ($product_qty * $category['value']) : ($product_qty * $product->final_price);
+                    $product->coupon_discount = $category['value'] <= $product->best_price ? $category['value'] : $product->best_price;
+                    $product->coupon_points = 0;
+                    $products_after_coupon[] = $product;
                 } elseif ($category['type'] == 2) {
-                    $coupon_points += $product_qty * $category['value'];
+                    $product->coupon_discount = 0.00;
+                    $product->coupon_points = $category['value'];
+                    $products_after_coupon[] = $product;
                 }
             }
         });
@@ -750,24 +772,29 @@ function getCoupon($coupon, $products_ids, $products_quantities, $products_best_
 
     // get discount on supercategories
     if ($coupon->supercategories->count()) {
-        $supercategories_product_from_coupon = $coupon->supercategories->map(function ($supercategory) use ($products_ids) {
+        $supercategories_product_from_coupon = $coupon->supercategories->map(function ($supercategory) use ($products) {
             return [
-                'products' => $supercategory->products->whereIn('id', $products_ids),
+                'products' => $products->whereIn('id', $supercategory->products->pluck('id')),
                 'type' => $supercategory->pivot->type,
                 'value' => $supercategory->pivot->value,
             ];
         });
 
-        $supercategories_product_from_coupon->map(function ($supercategory) use (&$coupon_discount, &$coupon_points, $products_quantities) {
+        $supercategories_product_from_coupon->map(function ($supercategory) use (&$products_after_coupon) {
             foreach ($supercategory['products'] as $product) {
-                $product_qty = $products_quantities[$product->id];
 
                 if ($supercategory['type'] == 0 && $supercategory['value'] < 100) {
-                    $coupon_discount += $product_qty * ($product->final_price * $supercategory['value'] / 100);
+                    $product->coupon_discount = $product->best_price * $supercategory['value'] / 100;
+                    $product->coupon_points = 0;
+                    $products_after_coupon[] = $product;
                 } elseif ($supercategory['type'] == 1) {
-                    $coupon_discount = $supercategory['value'] <= $product->final_price ? $coupon_discount + ($product_qty * $supercategory['value']) : ($product_qty * $product->final_price);
+                    $product->coupon_discount = $supercategory['value'] <= $product->best_price ? $supercategory['value'] : $product->best_price;
+                    $product->coupon_points = 0;
+                    $products_after_coupon[] = $product;
                 } elseif ($supercategory['type'] == 2) {
-                    $coupon_points += $product_qty * $supercategory['value'];
+                    $product->coupon_discount = 0.00;
+                    $product->coupon_points = $supercategory['value'];
+                    $products_after_coupon[] = $product;
                 }
             }
         });
@@ -775,50 +802,61 @@ function getCoupon($coupon, $products_ids, $products_quantities, $products_best_
 
     // get discount on products
     if ($coupon->products->count()) {
-        $products_product_from_coupon = $coupon->products->map(function ($product) use ($products_ids) {
+        $products_product_from_coupon = $coupon->products->map(function ($product) use ($products_ids, $products) {
             if (in_array($product->id, $products_ids)) {
                 return [
-                    'product' => $product,
+                    'product' => $products->find($product->id),
                     'type' => $product->pivot->type,
                     'value' => $product->pivot->value,
                 ];
             }
         })->whereNotNull();
 
-        $products_product_from_coupon->map(function ($product) use (&$coupon_discount, &$coupon_points, $products_quantities) {
-            $product_qty = $products_quantities[$product['product']->id];
+        $products_product_from_coupon->map(function ($product) use (&$products_after_coupon) {
 
             if ($product['type'] == 0 && $product['value'] < 100) {
-                $coupon_discount += $product_qty * ($product['product']->final_price * $product['value'] / 100);
+                $product['product']->coupon_discount = $product['product']->best_price * $product['value'] / 100;
+                $product['product']->coupon_points = 0;
+                $products_after_coupon[] = $product;
             } elseif ($product['type'] == 1) {
-                $coupon_discount = $product['value'] <= $product['product']->final_price ? $coupon_discount + ($product_qty * $product['value']) : ($product_qty * $product['product']->final_price);
+                $product['product']->coupon_discount = $product['value'] <= $product['product']->best_price ? $product['value'] : $product['product']->best_price;
+                $product['product']->coupon_points = 0;
+                $products_after_coupon[] = $product['product'];
             } elseif ($product['type'] == 2) {
-                $coupon_points += $product_qty * $product['value'];
+                $product['product']->coupon_discount = 0.00;
+                $product['product']->coupon_points = $product['value'];
+                $products_after_coupon[] = $product['product'];
             }
         });
     }
 
-    // get discount on order
-    if ($coupon->on_orders) {
-        // percentage discount
-        if ($coupon->type == 0 && $coupon->value < 100) {
-            $coupon_discount += $products_best_prices * $coupon->value / 100;
-        }
-        // fixed discount
-        elseif ($coupon->type == 1) {
-            $coupon_discount += $coupon->value;
-        }
-        // points
-        elseif ($coupon->type == 2) {
-            $coupon_points += $coupon->value;
-        }
-    }
+
+    // Final Products After Coupon Application
+    $products_best_coupon = collect($products_after_coupon)
+        ->groupBy('id')
+        ->map(function ($products) use ($products_quantities) {
+            $max_discount = $products->max('coupon_discount');
+            $max_points = $products->max('coupon_points');
+            $products_quantity = $products_quantities[$products->first()->id];
+            return [
+                'product' => $products->first()->id,
+                'qty' => $products_quantity,
+                'coupon_discount' => $max_discount,
+                'total_discount' =>  $products_quantity * $max_discount,
+                'coupon_points' => $max_points,
+                'total_points' => $products_quantity * $max_points,
+            ];
+        });
+
+    // Total Coupon Discount After Products
+    $coupon_discount = $products_best_coupon->sum('total_discount');
+
+    // Total Coupon Points After Products
+    $coupon_points = $products_best_coupon->sum('total_points');
 
     return [
         'coupon_discount' => $coupon_discount,
-        'coupon_discount_percentage' => $products_best_prices > 0 ? round($coupon_discount * 100 / $products_best_prices) : 0,
         'coupon_points' => $coupon_points,
-        'coupon_shipping' => $coupon_shipping
     ];
 }
 ################ COUPON :: START ##################

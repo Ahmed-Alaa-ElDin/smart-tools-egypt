@@ -86,8 +86,10 @@ class OrderBillingDetails extends Component
 
                 return [
                     'quantity' => $item->qty,
-                    'price' => isset($array_data['products_best_coupon'][$item->id]) ? $product['best_price'] - $array_data['products_best_coupon'][$item->id]['coupon_discount'] : $product['best_price'],
-                    'points' => isset($array_data['products_best_coupon'][$item->id]) ? $product['best_points'] + $array_data['products_best_coupon'][$item->id]['coupon_points'] : $product['best_points'],
+                    'price' => $product['best_price'],
+                    'points' => $product['best_points'],
+                    'coupon_discount' => isset($array_data['products_best_coupon'][$item->id]) ? $array_data['products_best_coupon'][$item->id]['coupon_discount'] : 0.00,
+                    'coupon_points' =>  isset($array_data['products_best_coupon'][$item->id]) ? $array_data['products_best_coupon'][$item->id]['coupon_points'] : 0,
                 ];
             })->toArray();
 

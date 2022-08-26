@@ -443,7 +443,7 @@
                 <!-- Modal header -->
                 <div class="flex justify-between items-start p-4 rounded-t border-b">
                     <h3 class="grow text-xl font-semibold text-gray-900 dark:text-white">
-                        {{ __('front/homePage.Return to Card or Wallet') }}
+                        {{ __('front/homePage.Return to Bank Account or Wallet') }}
                     </h3>
                     <button type="button"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
@@ -460,7 +460,7 @@
                 <!-- Modal body -->
                 <div class="p-6 space-y-6">
                     <p class="leading-relaxed text-gray-900 text-center">
-                        {{ __('front/homePage.Card or Wallet') }}
+                        {{ __('front/homePage.Bank Account or Wallet') }}
                     </p>
                 </div>
                 <!-- Modal footer -->
@@ -495,7 +495,7 @@
                             @method('PUT')
 
                             <button type="submit" name="type" value="card" class="btn bg-successDark font-bold">
-                                {{ __('front/homePage.Card') }}
+                                {{ __('front/homePage.Bank Account') }}
                             </button>
                         </form>
                     @endif

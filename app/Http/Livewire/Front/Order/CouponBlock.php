@@ -158,7 +158,6 @@ class CouponBlock extends Component
                 });
             }
 
-
             // get discount on supercategories
             if ($coupon->supercategories->count()) {
                 $supercategories_product_from_coupon = $coupon->supercategories->map(function ($supercategory) use ($products) {

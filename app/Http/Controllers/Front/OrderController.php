@@ -7,6 +7,7 @@ use App\Models\Coupon;
 use App\Models\Offer;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Models\Product;
 use App\Models\User;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
@@ -281,8 +282,6 @@ class OrderController extends Controller
             'coupon_order_points' => $order->coupon_order_points,
             'coupon_products_discount' => $coupon_products_discount,
             'coupon_products_points' => $coupon_products_points,
-            'coupon_discount' => $coupon_discount,
-            'coupon_points' => $coupon_points,
             'subtotal_base' => $products_final_prices,
             'subtotal_final' => $coupon_discount ? $products_best_prices - $coupon_discount - $used_balance - $used_points_egp : $products_best_prices - $used_balance - $used_points_egp,
             'should_pay' => $difference > 0 ? abs($difference) : 0,
@@ -308,7 +307,9 @@ class OrderController extends Controller
             $order_products[$product_id] = [
                 'quantity' => $products_quantities[$product_id],
                 'price' => $old_products->find($product_id)->pivot->price,
-                'points' => $old_products->find($product_id)->pivot->points
+                'points' => $old_products->find($product_id)->pivot->points,
+                'coupon_discount' => $old_products->find($product_id)->pivot->coupon_discount,
+                'coupon_points' => $old_products->find($product_id)->pivot->coupon_points,
             ];
         }
 
@@ -363,7 +364,9 @@ class OrderController extends Controller
             $order_products[$product->id] = [
                 'quantity' => $product->pivot->quantity,
                 'price' => $product->pivot->price,
-                'points' => $product->pivot->points
+                'points' => $product->pivot->points,
+                'coupon_discount' => $product->pivot->coupon_discount,
+                'coupon_points' => $product->pivot->coupon_points,
             ];
         }
 
@@ -1090,6 +1093,8 @@ class OrderController extends Controller
     ##################### Preview Returned Products :: Start #####################
     public function returnCalc(Request $request, $order_id)
     {
+        // todo::Need validation
+
         // products ids
         $products_ids = $request->products_ids;
 
@@ -1099,28 +1104,61 @@ class OrderController extends Controller
             'zone'
         ])->findOrFail($order_id);
 
-        // Get zone data
-        $zone = $order->zone;
+        // Get products
+        // $products = Product::whereIn('id', $request->products_ids)->get();
 
+        ############ Return Order Data :: Start ############
         // Get Order Products ids and quantities from request
-        $products_quantities = array_combine($request->products_ids, $request->quantities);
-        $products_total_quantities = array_sum($products_quantities);
+        $returned_products_quantities = array_combine($request->products_ids, $request->quantities);
+        $returned_products_total_quantities = array_sum($returned_products_quantities);
 
         // Get Order Products ids and quantities from Order DB
-        $old_products = $order->products;
-        $old_products_total_quantities = $old_products->map(fn ($q) => $q->pivot->quantity)->sum();
+        $products = $order->products;
+        $old_products_total_quantities = $products->map(fn ($q) => $q->pivot->quantity)->sum();
 
         // total price & points of returned products
-        $returned_products_data = $old_products->map(function ($product) use ($products_quantities) {
-            $returned_quantity = $products_quantities[$product->id];
-            $returned_price = $returned_quantity * $product->pivot->price;
-            $returned_points = $returned_quantity * $product->pivot->points;
+        $returned_products_data = $products->map(function ($product) use ($returned_products_quantities) {
+            $returned_quantity = $returned_products_quantities[$product->id];
+
+            // Best Prices
+            $returned_product_best_price = $returned_quantity * $product->pivot->price;
+            $returned_products_best_points = $returned_quantity * $product->pivot->points;
+
+            // Coupons
+            $returned_products_coupon_discount = $returned_quantity * $product->pivot->coupon_discount;
+            $returned_products_coupon_points = $returned_quantity * $product->pivot->coupon_points;
+
+            // Total
+            $returned_price = $returned_quantity * $product->pivot->price -  $returned_quantity * $product->pivot->coupon_discount;
+            $returned_points = $returned_quantity * $product->pivot->points + $returned_quantity * $product->pivot->coupon_points;
+
+            // Weight
+            $weight = $returned_quantity * $product->weight;
 
             return [
+                'id' => $product->id,
+                'returned_quantity' => $returned_quantity,
+                'returned_product_best_price' => $returned_product_best_price,
+                'returned_products_best_points' => $returned_products_best_points,
+                'returned_products_coupon_discount' => $returned_products_coupon_discount,
+                'returned_products_coupon_points' => $returned_products_coupon_points,
                 'returned_price' => $returned_price,
                 'returned_points' => $returned_points,
+                'weight' => $weight
             ];
         });
+
+        //  Total Best Price of returned products
+        $returned_products_best_price = $returned_products_data->sum('returned_product_best_price');
+
+        //  Total Best Points of returned products
+        $returned_products_best_points = $returned_products_data->sum('returned_product_best_points');
+
+        //  Total Coupon Discount of returned products
+        $returned_products_coupon_discount = $returned_products_data->sum('returned_products_coupon_discount');
+
+        //  Total Coupon Points of returned products
+        $returned_products_coupon_points = $returned_products_data->sum('returned_products_coupon_points');
 
         //  Total Price of returned products
         $returned_price = $returned_products_data->sum('returned_price');
@@ -1128,53 +1166,131 @@ class OrderController extends Controller
         //  Total Points of returned products
         $returned_points = $returned_products_data->sum('returned_points');
 
-        // Total old Points
-        $old_products_points = $old_products->map(function ($product) {
-            return $product->pivot->points * $product->pivot->quantity;
-        })->sum();
+        // Get summation of products final prices
+        $products_final_prices = $products->sum(function ($product) use ($returned_products_quantities) {
+            return $product->final_price * $returned_products_quantities[$product->id];
+        });
+        ############ Return Order Data :: End ############
 
-        ############ Old Order Data ############
-        // subtotal final
-        $old_subtotal_final = $order->subtotal_final;
+
+        ############ Old Order Data :: Start ############
         $old_total = $order->total;
         $payment_method = $order->payment_method;
-        $old_coupon_discount = $order->coupon_products_discount + $order->coupon_order_discount;
-        $old_delivery_fees = $order->delivery_fees;
         $old_used_balance = $order->used_balance;
         $old_used_points = $order->used_points;
         $old_used_points_egp = $old_used_points * config('constants.constants.POINT_RATE');
 
         $old_gift_points = $order->gift_points;
         $old_coupon_points = $order->coupon_products_points + $order->coupon_order_points;
+        ############ Old Order Data :: End ############
+
+        ###################### Delivery Fees :: Start ######################
+        // Get zone data
+        $zone = $order->zone;
+
+        // Total returned products weight
+        $returned_weight = $returned_products_data->sum('weight');
+
+        // returning fees
+        $returning_fees = $returned_weight < $zone->min_weight ? $zone->min_charge : $zone->min_charge + ($returned_weight - $zone->min_weight) * $zone->kg_charge;
+        ###################### Delivery Fees :: End ######################
 
 
-        ############ Order Discounts and Points ############
-        // Old order discount
-        $old_order_discount = $old_subtotal_final - $old_total + $old_delivery_fees;
+        // Returned Order Subtotal (Before subtraction of used points or balance)
+        $return_subtotal = $returning_fees - $returned_price;
 
-        // Old order points
-        $old_order_points = $old_gift_points - $old_products_points - $order->coupon_order_discount;
+        // Return the used points to the user's Points
+        $returned_to_points_egp = $old_used_points_egp <= abs($return_subtotal) ? $old_used_points_egp : abs($return_subtotal);
+        $returned_to_points =  $returned_to_points_egp / config('constants.constants.POINT_RATE');
 
-        // Get Order Products ids and weights from database
-        $products_weights = $old_products->where('free_shipping', 0)->pluck('weight', 'id');
+        // Returned Order Subtotal (After subtraction of used points only)
+        $return_total = $return_subtotal + $returned_to_points_egp;
 
-        // Get Order Products total weight
-        $total_weight = $products_weights->map(function ($weight, $id) use ($products_quantities) {
-            if (isset($products_quantities[$id])) {
-                return $weight * $products_quantities[$id];
+        // Return the used balance to the user's Balance
+        $returned_to_balance = $old_used_balance <= abs($return_total) ? $old_used_balance : abs($return_total);
+
+        // Returned Order Subtotal (After subtraction of used points or balance)
+        $return_total += $returned_to_balance;
+
+        DB::beginTransaction();
+
+        try {
+            // Save Order Request
+            $new_order = Order::updateOrCreate([
+                'user_id' => $order->user_id,
+                'status_id' => 7,
+                'old_order_id' => $order->id
+            ], [
+                'address_id' => $order->address_id,
+                'phone1' => $order->phone1,
+                'phone2'    => $order->phone2,
+                'package_type' => $order->package_type,
+                'package_desc' => $order->package_desc,
+                'num_of_items' => $returned_products_total_quantities,
+                'allow_opening' => $order->allow_opening,
+                'zone_id'   => $order->zone_id,
+                'coupon_id' => $order->coupon_id,
+                'coupon_order_discount' => 0,
+                'coupon_order_points' => 0,
+                'coupon_products_discount' => $returned_products_coupon_discount,
+                'coupon_products_points' => $returned_products_coupon_points,
+                'subtotal_base' => $products_final_prices,
+                'subtotal_final' => $returned_price,
+                'total' => $return_total,
+                'should_pay' => $return_total >= 0 ? $return_total : 0.00,
+                'should_get' => $return_total <= 0 ? abs($return_total) : 0.00,
+                'used_points' => -1 * $returned_to_points,
+                'used_balance' => -1 * $returned_to_balance,
+                'gift_points' => -1 * $returned_points,
+                'delivery_fees' => $returning_fees,
+                'total_weight' => $returned_weight,
+                'payment_method' => $payment_method,
+                'notes' => $order->notes,
+                'old_order_id' => $order->id
+            ]);
+
+            // Add Status (Under Returning)
+            $new_order->statuses()->attach(7);
+
+            // Products data
+            $return_order_products = [];
+
+            foreach ($products_ids as $product_id) {
+                $return_order_products[$product_id] = [
+                    'quantity' => $returned_products_quantities[$product_id],
+                    'price' => $products->find($product_id)->pivot->price,
+                    'points' => $products->find($product_id)->pivot->points,
+                    'coupon_discount' => $products->find($product_id)->pivot->coupon_discount,
+                    'coupon_points' => $products->find($product_id)->pivot->coupon_points,
+                ];
             }
-        })->sum();
 
-        // delivery fees
-        $delivery_fees = $total_weight < $zone->min_weight ? $zone->min_charge : $zone->min_charge + ($total_weight - $zone->min_weight) * $zone->kg_charge;
+            // Attach the return products to the order
+            $new_order->products()->sync($return_order_products);
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return redirect()->back();
+        }
 
         $order_data = [
-            "order_id" => $order->id,
+            "new_order_id" => $new_order->id,
+            "old_order_id" => $order->id,
             "old_order_total" => $old_total,
             "old_products_total_quantities" => $old_products_total_quantities,
             "old_product_gift_points" => $old_gift_points,
             "payment_method" => $payment_method,
             "returned_price" => $returned_price,
+            "returned_points" => $returned_points,
+            "returning_fees" => $returning_fees,
+            "returned_products_total_quantities" => $returned_products_total_quantities,
+            "return_subtotal" => $return_subtotal,
+            "return_total" => $return_total,
+            "returned_to_points_egp" => $returned_to_points_egp,
+            "returned_to_points" => $returned_to_points,
+            "returned_to_balance" => $returned_to_balance,
         ];
 
         return view('front.orders.return_preview', compact('order_data'));

@@ -45,6 +45,7 @@ return new class extends Migration
             $table->string('order_delivery_id')->nullable();
             $table->text('notes')->nullable();
             $table->timestamp('delivered_at')->nullable();
+            $table->unsignedBigInteger('old_order_id')->nullable();
             $table->timestamps();
 
             $table->foreign('coupon_id')->references('id')->on('coupons')->nullOnDelete()->onUpdate('cascade');

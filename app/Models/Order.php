@@ -40,6 +40,7 @@ class Order extends Model
         'tracking_number',
         'order_delivery_id',
         'notes',
+        'old_order_id',
     ];
 
     protected $appends = ['can_returned'];
@@ -76,7 +77,13 @@ class Order extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class)->withPivot('quantity', 'price', 'points')->withTimestamps();
+        return $this->belongsToMany(Product::class)->withPivot(
+            'quantity',
+            'price',
+            'points',
+            'coupon_discount',
+            'coupon_points'
+        )->withTimestamps();
     }
 
     public function invoiceRequests()

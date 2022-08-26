@@ -71,6 +71,22 @@ class StatusSeeder extends Seeder
             'id' => 14,
             'name' => 'Waiting For Refund',
         ]);
+        Status::updateOrCreate([
+            'id' => 7,
+            'name' => 'Under Returning',
+        ]);
+        Status::updateOrCreate([
+            'id' => 17,
+            'name' => 'Return Requested',
+        ]);
+        Status::updateOrCreate([
+            'id' => 18,
+            'name' => 'Return Approved',
+        ]);
+        Status::updateOrCreate([
+            'id' => 19,
+            'name' => 'Return Rejected',
+        ]);
 
         // Bosta Statuses
         Status::updateOrCreate([
