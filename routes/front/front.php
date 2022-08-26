@@ -65,7 +65,7 @@ Route::group([
         Route::post('/{order_id}/return-calc', 'returnCalc')->name('return-calc');
 
         // Confirm the Return order
-        Route::put('/{old_order_id}/{new_older_id}', 'returnConfirm')->name('return-confirm');
+        Route::put('/{order_id}', 'returnConfirm')->name('return-confirm');
 
         // Go to Paymob Iframe
         Route::get('/{order_id}/payment', 'goToPayment')->name('payment');

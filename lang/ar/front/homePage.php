@@ -370,4 +370,10 @@ return [
     "Return Approved"           =>      "تم قبول طلب الاسترجاع",
     "Return Rejected"           =>      "تم رفض طلب الاسترجاع",
     "Under Editing"             =>      "جاري طلب التعديل",
+    "Industrial Defect"         =>      "في حالة وجود عيوب في الصناعة يرجى التواصل معنا :icon وسيتم ارتجاع الطلب مجاناً",
+    "Return Total Order"        =>      "Return Total Order",
+    "Confirm and Refund to My Wallet"            =>      "Confirm and Refund to My Wallet",
+    "Confirm and Return Money"                   =>      "Confirm and Return Money",
+    "Confirm and Refund to Bank Account"         =>      "Confirm and Refund to Bank Account",
+    "Confirm and Refund to My Vodafone Cash Wallet"     =>      "Confirm and Refund to My Vodafone Cash Wallet",
 ];

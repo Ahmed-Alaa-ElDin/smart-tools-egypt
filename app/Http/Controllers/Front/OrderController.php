@@ -1172,7 +1172,6 @@ class OrderController extends Controller
         });
         ############ Return Order Data :: End ############
 
-
         ############ Old Order Data :: Start ############
         $old_total = $order->total;
         $payment_method = $order->payment_method;
