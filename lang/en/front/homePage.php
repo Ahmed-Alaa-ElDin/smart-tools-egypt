@@ -380,7 +380,7 @@ return [
     "Confirm"                   =>      "Confirm",
     "Order Confirmation"        =>      "Order Confirmation",
     "Cancel the Return Request" =>      "Cancel the Return Request",
-    "Cart"                      =>      "Cart",
+    "Returning request has been deleted successfully"   =>      "Returning request has been deleted successfully",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",

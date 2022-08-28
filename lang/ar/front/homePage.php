@@ -379,4 +379,5 @@ return [
     "Confirm"                   =>      "التأكيد",
     "Order Confirmation"        =>      "تأكيد الطلب",
     "Cancel the Return Request" =>      "إلغاء طلب الاسترجاع",
+    "Returning request has been deleted successfully"   =>      "تم الغاء طلب الاسترجاع بنجاح",
 ];

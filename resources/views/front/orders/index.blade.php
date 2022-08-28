@@ -158,10 +158,9 @@
                                                 {{-- Cancel Order Return --}}
                                                 @if (in_array($order->status_id, [17]))
                                                     <form class="inline m-0"
-                                                        action="{{ route('front.orders.return-cancel') }}" method="POST">
+                                                        action="{{ route('front.orders.return-cancel',$order->id) }}" method="POST">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <input type="hidden" name="order_id" value="{{ $order->id }}">
 
                                                         <button type="submit" class="btn btn-sm bg-primary font-bold"
                                                             type="button">

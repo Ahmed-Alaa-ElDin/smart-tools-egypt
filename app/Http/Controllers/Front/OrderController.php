@@ -1345,10 +1345,17 @@ class OrderController extends Controller
     }
     ##################### Confirm Returned Products :: End #####################
 
-    public function returnCancel ($order_id){
-        return $order_id;
+    ##################### Cancel Returning Request :: Start #####################
+    public function returnCancel($order_id)
+    {
+        $order = Order::findOrFail($order_id);
+
+        $order->delete();
+
+        return redirect()->back()->with('success', __('front/homePage.Returning request has been deleted successfully'));
     }
-    
+    ##################### Cancel Returning Request :: End #####################
+
     ##################### Go To Shipping Details During Placing the Order :: Start #####################
     public function shipping()
     {
