@@ -1,4 +1,4 @@
-@extends('layouts.front.site', ['titlePage' => __('front/homePage.Order Billing Details')])
+@extends('layouts.front.site', ['titlePage' => __('front/homePage.Order Confirmation')])
 
 @section('cart-wishlist-compare')
     <div class="grow text-center font-bold text-primary">

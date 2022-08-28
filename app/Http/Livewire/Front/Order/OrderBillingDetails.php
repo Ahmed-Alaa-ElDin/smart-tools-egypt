@@ -125,7 +125,7 @@ class OrderBillingDetails extends Component
                     'status_id'                 =>      2,
                 ]);
 
-                if ($order->statuses()->latest()->first()->id != 2) {
+                if ($order->statuses()->count() == 0 || $order->statuses()->orderBy('pivot_created_at', 'desc')->first()->id != 2) {
                     $order->statuses()->attach(2);
                 }
 

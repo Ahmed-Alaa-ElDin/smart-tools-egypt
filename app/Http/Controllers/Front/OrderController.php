@@ -747,7 +747,7 @@ class OrderController extends Controller
                         'should_pay' => $new_order->should_pay,
                     ]);
 
-                    if ($old_order->statuses()->latest()->first()->id != 2) {
+                    if ($old_order->statuses()->count() == 0 || $old_order->statuses()->orderBy('pivot_created_at', 'desc')->first()->id != 2) {
                         $old_order->statuses()->attach(2);
                     }
 
@@ -1078,34 +1078,38 @@ class OrderController extends Controller
     ##################### Return Total Order :: Start #####################
     public function return(Request $request, $order_id)
     {
-        if ($request->method() == 'GET') {
-            $order = Order::with([
-                'products' => fn ($q) => $q->with('thumbnail')
-            ])->findOrFail($order_id);
+        $order = Order::with([
+            'products' => fn ($q) => $q->with('thumbnail')
+        ])->findOrFail($order_id);
 
-            return view('front.orders.return-products', compact('order'));
-        } else {
-            // todo: return all products
-        }
+        return view('front.orders.return_products', compact('order'));
     }
     ##################### Return Total Order :: End #####################
 
     ##################### Preview Returned Products :: Start #####################
-    public function returnCalc(Request $request, $order_id)
+    public function returnCalc($order_id, Request $request)
     {
-        // todo::Need validation
-
-        // products ids
-        $products_ids = $request->products_ids;
-
         // get old order data from db
         $order = Order::with([
             'products',
             'zone'
         ])->findOrFail($order_id);
 
-        // Get products
-        // $products = Product::whereIn('id', $request->products_ids)->get();
+        if ($request->type == "return") {
+            $request = new Request([
+                'products_ids' => $order->products->pluck('id')->toArray(),
+                'quantities' => $order->products->pluck('pivot.quantity')->toArray(),
+            ]);
+        }
+
+        // Validation
+        $request->validate([
+            'products_ids.*' => 'exists:products,id',
+            'quantities.*' => 'numeric|min:0',
+        ]);
+
+        // products ids
+        $products_ids = $request->products_ids;
 
         ############ Return Order Data :: Start ############
         // Get Order Products ids and quantities from request
@@ -1114,7 +1118,20 @@ class OrderController extends Controller
 
         // Get Order Products ids and quantities from Order DB
         $products = $order->products;
-        $old_products_total_quantities = $products->map(fn ($q) => $q->pivot->quantity)->sum();
+        $old_products_quantities = $products->mapWithKeys(fn ($product) => [$product->id => $product->pivot->quantity]);
+        $old_products_total_quantities = $old_products_quantities->sum();
+
+        // Validate Quantities
+        $quantities_check = collect($returned_products_quantities)->map(function ($quantity, $id) use ($old_products_quantities) {
+            if ($quantity <= $old_products_quantities[$id]) {
+                return true;
+            }
+            return false;
+        })->doesntContain(false);
+
+        if (!$quantities_check) {
+            return redirect()->back()->withErrors(['quantities' => __('front/homePage.max exceeded')]);
+        }
 
         // total price & points of returned products
         $returned_products_data = $products->map(function ($product) use ($returned_products_quantities) {
@@ -1191,35 +1208,45 @@ class OrderController extends Controller
         $returned_weight = $returned_products_data->sum('weight');
 
         // returning fees
-        $returning_fees = $returned_weight < $zone->min_weight ? $zone->min_charge : $zone->min_charge + ($returned_weight - $zone->min_weight) * $zone->kg_charge;
+        $returning_fees = $returned_products_total_quantities > 0 ? ($returned_weight < $zone->min_weight ? $zone->min_charge : $zone->min_charge + ($returned_weight - $zone->min_weight) * $zone->kg_charge) : 0.00;
         ###################### Delivery Fees :: End ######################
 
 
         // Returned Order Subtotal (Before subtraction of used points or balance)
         $return_subtotal = $returning_fees - $returned_price;
 
-        // Return the used points to the user's Points
-        $returned_to_points_egp = $old_used_points_egp <= abs($return_subtotal) ? $old_used_points_egp : abs($return_subtotal);
-        $returned_to_points =  $returned_to_points_egp / config('constants.constants.POINT_RATE');
+        if ($return_subtotal <= 0) {
+            // Return the used points to the user's Points
+            $returned_to_points_egp = $old_used_points_egp <= abs($return_subtotal) ? $old_used_points_egp : abs($return_subtotal);
+            $returned_to_points =  $returned_to_points_egp / config('constants.constants.POINT_RATE');
 
-        // Returned Order Subtotal (After subtraction of used points only)
-        $return_total = $return_subtotal + $returned_to_points_egp;
+            // Returned Order Subtotal (After subtraction of used points only)
+            $return_total = $return_subtotal + $returned_to_points_egp;
 
-        // Return the used balance to the user's Balance
-        $returned_to_balance = $old_used_balance <= abs($return_total) ? $old_used_balance : abs($return_total);
+            // Return the used balance to the user's Balance
+            $returned_to_balance = $old_used_balance <= abs($return_total) ? $old_used_balance : abs($return_total);
 
-        // Returned Order Subtotal (After subtraction of used points or balance)
-        $return_total += $returned_to_balance;
+            // Returned Order Subtotal (After subtraction of used points or balance)
+            $return_total += $returned_to_balance;
+        } else {
+            $returned_to_points_egp = 0;
+            $returned_to_points =  0;
+            $returned_to_balance = 0;
+            $return_total = $return_subtotal;
+        }
 
         DB::beginTransaction();
 
         try {
-            // Save Order Request
-            $new_order = Order::updateOrCreate([
+            $new_order = Order::whereIn('status_id', [7, 17])->where([
                 'user_id' => $order->user_id,
-                'status_id' => 7,
                 'old_order_id' => $order->id
-            ], [
+            ])->first() ?? new Order;
+
+            $new_order->fill([
+                'user_id' => $order->user_id,
+                'old_order_id' => $order->id,
+                'status_id' => 7,
                 'address_id' => $order->address_id,
                 'phone1' => $order->phone1,
                 'phone2'    => $order->phone2,
@@ -1248,8 +1275,14 @@ class OrderController extends Controller
                 'old_order_id' => $order->id
             ]);
 
+            $new_order->save();
+
+            // Save Order Request
+
             // Add Status (Under Returning)
-            $new_order->statuses()->attach(7);
+            if ($new_order->statuses()->count() == 0 || $new_order->statuses()->orderBy('pivot_created_at', 'desc')->first()->id != 7) {
+                $new_order->statuses()->attach(7);
+            }
 
             // Products data
             $return_order_products = [];
@@ -1296,7 +1329,26 @@ class OrderController extends Controller
     }
     ##################### Preview Returned Products :: End #####################
 
+    ##################### Confirm Returned Products :: Start #####################
+    public function returnConfirm($order_id, Request $request)
+    {
+        $order = Order::findOrFail($order_id);
 
+        $order->update([
+            'payment_method' => $request->type == "cod" ? 1 : ($request->type == "card" ? 2 : ($request->type == "vodafone" ? 4 : ($request->type == "wallet" ? 10 : 0))),
+            'status_id' => 17
+        ]);
+
+        $order->statuses()->attach(17);
+
+        return redirect()->route('front.orders.done');
+    }
+    ##################### Confirm Returned Products :: End #####################
+
+    public function returnCancel ($order_id){
+        return $order_id;
+    }
+    
     ##################### Go To Shipping Details During Placing the Order :: Start #####################
     public function shipping()
     {

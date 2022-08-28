@@ -50,10 +50,10 @@ Route::group([
         Route::get('/{order_id}/edit', 'edit')->name('edit');
 
         // Show the orders details after edits
-        Route::post('/{order_id}', 'updateCalc')->name('update-calc');
+        Route::post('/{order_id}/update-calc', 'updateCalc')->name('update-calc');
 
         // Save the updated order
-        Route::put('/{old_order_id}/{new_older_id}', 'update')->name('update');
+        Route::put('/{order_id}/{new_older_id}', 'update')->name('update');
 
         // return total order
         Route::delete('/{order_id}/return/{new_order_id?}', 'return')->name('return');
@@ -66,6 +66,9 @@ Route::group([
 
         // Confirm the Return order
         Route::put('/{order_id}', 'returnConfirm')->name('return-confirm');
+
+        // Cancel the Return order
+        Route::delete('/{order_id}/return-cancel', 'returnCancel')->name('return-cancel');
 
         // Go to Paymob Iframe
         Route::get('/{order_id}/payment', 'goToPayment')->name('payment');

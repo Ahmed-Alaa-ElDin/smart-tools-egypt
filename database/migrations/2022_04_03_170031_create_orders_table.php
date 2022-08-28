@@ -38,7 +38,7 @@ return new class extends Migration
             $table->integer('gift_points')->default(0);
             $table->decimal('used_balance', 8, 2)->default(0.00);
             $table->decimal('total_weight', 8, 2)->default(1)->comment('on Kg');
-            $table->string('payment_method')->nullable();
+            $table->tinyInteger('payment_method')->nullable()->unsigned()->comment('1 => cash, 2 => card, 3 => installments, 4 => vodafone cash, 10 => wallet');
             $table->string('tracking_number')->nullable();
             $table->string('package_type')->default('parcel')->nullable();
             $table->text('package_desc')->nullable();
