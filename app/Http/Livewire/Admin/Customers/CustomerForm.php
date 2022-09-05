@@ -32,7 +32,6 @@ class CustomerForm extends Component
     public $defaultAddress = 0;
 
     public $f_name = ['ar' => '', 'en' => ''], $l_name = ['ar' => '', 'en' => ''], $email, $phone, $gender = '0', $birth_date;
-
     public $countries = [], $governorates = [],  $cities = [];
 
     protected $listeners = ['countryUpdated', 'governorateUpdated', 'resetPassword'];
@@ -44,11 +43,11 @@ class CustomerForm extends Component
             'f_name.en'                     => 'nullable|string|max:20|min:3',
             'l_name.ar'                     => 'nullable|string|max:20|min:3',
             'l_name.en'                     => 'nullable|string|max:20|min:3',
+            'photo'                         => 'nullable|mimes:jpg,jpeg,png|max:2048',
             'email'                         => 'nullable|email|max:50|min:3|unique:users,email,' . $this->customer_id,
             'phones.*.phone'                => 'nullable|required|digits:11|regex:/^01[0-2]\d{1,8}$/|' . Rule::unique('phones')->ignore($this->customer_id, 'user_id'),
             'gender'                        => 'in:0,1',
             'birth_date'                    => 'date|before:today',
-            'photo'                         => 'nullable|mimes:jpg,jpeg,png|max:2048',
             'addresses.*.country_id'        => 'required|exists:countries,id',
             'addresses.*.governorate_id'    => 'required|exists:governorates,id',
             'addresses.*.city_id'           => 'required|exists:cities,id',
@@ -76,34 +75,7 @@ class CustomerForm extends Component
             ]
         ];
 
-        // get user addresses if present
-        $this->addresses =  ["0" => [
-            'country_id' => 1,
-            'governorate_id' => 1,
-            'city_id' => 1,
-            'details' => '',
-            'landmarks' => '',
-            'default' => 1
-        ]];
-
-        // // get all countries
-        // $this->countries = Country::orderBy('name->' . session('locale'))->get();
-
-        // if ($this->countries->count()) {
-        //     // User Has Addresses
-        //     $this->governorates[0] = Governorate::where('country_id', $this->addresses[0]['country_id'])->orderBy('name->' . session('locale'))->get()->toArray();
-        //     $this->cities[0] = City::where('governorate_id', $this->addresses[0]['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray();
-        // }
-
-        $this->countries = Country::get()->toArray();
-        $this->address["0"]['country_id'] = count($this->countries) ? $this->countries[0]['id'] : null;
-
-        $this->governorates = $this->address["0"]['country_id'] ? Governorate::where('country_id', $this->address["0"]['country_id'])->orderBy('name->' . session('locale'))->get()->toArray() : [];
-        $this->address["0"]['governorate_id'] = count($this->governorates) ? $this->governorates[0]['id'] : null;
-
-        $this->cities = $this->address["0"]['governorate_id'] ? City::where('governorate_id', $this->address["0"]['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray() : [];
-        $this->address["0"]['city_id'] = count($this->cities) ? $this->cities[0]['id'] : null;
-
+        $this->countries = Country::orderBy('name->' . session('locale'))->get()->toArray();
 
         if ($this->customer_id) {
             // get User Data
@@ -161,10 +133,8 @@ class CustomerForm extends Component
                 'default' => 1
             ]];
 
-            // all Addresses
-            $this->countries = Country::orderBy('name->' . session('locale'))->get();
-
-            if ($this->countries->count()) {
+            // $this->countries = Country::orderBy('name->' . session('locale'))->get();
+            if (count($this->countries)) {
                 // User Has Addresses
                 foreach ($this->addresses as $index => $address) {
                     $this->governorates[$index] = Governorate::where('country_id', $address['country_id'])->get()->toArray();
@@ -174,13 +144,32 @@ class CustomerForm extends Component
                     return $address['default'] == 1;
                 }));
             }
+        } else {
+            // get user addresses if present
+            $this->addresses =  ["0" => [
+                'country_id' => '',
+                'governorate_id' => '',
+                'city_id' => '',
+                'details' => '',
+                'landmarks' => '',
+                'default' => 1
+            ]];
+
+            $this->addresses["0"]['country_id'] = count($this->countries) ? $this->countries["0"]['id'] : null;
+
+            $this->governorates[0] = $this->addresses["0"]['country_id'] ? Governorate::where('country_id', $this->addresses["0"]['country_id'])->orderBy('name->' . session('locale'))->get()->toArray() : [];
+            $this->addresses["0"]['governorate_id'] = count($this->governorates[0]) ? $this->governorates[0]["0"]['id'] : null;
+
+            $this->cities[0] = $this->addresses["0"]['governorate_id'] ? City::where('governorate_id', $this->addresses["0"]['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray() : [];
+            $this->addresses["0"]['city_id'] = count($this->cities[0]) ? $this->cities[0]['0']['id'] : null;
         }
     }
 
-    // Called with every update
 
+    // Called with every update
     public function render()
     {
+        // dd($this->countries);
         return view('livewire.admin.customers.customer-form');
     }
 
@@ -228,21 +217,28 @@ class CustomerForm extends Component
     public function addAddress()
     {
         $newAddress = [
-            'country_id' => 1,
-            'governorate_id' => 1,
-            'city_id' => 1,
+            'country_id' => '',
+            'governorate_id' => '',
+            'city_id' => '',
             'details' => '',
             'landmarks' => '',
             'default' => 0
         ];
+        $newAddress['country_id'] = count($this->countries) ? $this->countries[0]['id'] : '';
 
-        array_push($this->addresses, $newAddress);
-
-        $governorates = Governorate::where('country_id', 1)->orderBy('name->' . session('locale'))->get()->toArray();
+        $governorates = Governorate::where('country_id', $newAddress['country_id'])->orderBy('name->' . session('locale'))->get()->toArray();
 
         array_push($this->governorates, $governorates);
 
-        array_push($this->cities, City::where('governorate_id', 1)->orderBy('name->' . session('locale'))->get()->toArray());
+        $newAddress['governorate_id'] = count($governorates) ? $governorates[0]['id'] : '';
+
+        $cities = City::where('governorate_id', $newAddress['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray();
+
+        array_push($this->cities, $cities);
+
+        $newAddress['city_id'] = count($cities) ? $cities[0]['id'] : '';
+
+        array_push($this->addresses, $newAddress);
     }
 
 
@@ -399,10 +395,9 @@ class CustomerForm extends Component
     ################ Update #####################
     public function update()
     {
-
         // Final Validate
         $this->validate();
-
+        
         DB::beginTransaction();
 
         try {

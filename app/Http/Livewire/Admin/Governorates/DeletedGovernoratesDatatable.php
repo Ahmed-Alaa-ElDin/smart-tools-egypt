@@ -77,12 +77,12 @@ class DeletedGovernoratesDatatable extends Component
             "text" => __('admin/deliveriesPages.Are you sure, you want to delete this governorate permanently ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
             'focusDeny' => true,
             'icon' => 'warning',
             'method' => 'forceDeleteGovernorate',
-            'governorate_id' => $governorate_id,
+            'id' => $governorate_id,
         ]);
     }
 
@@ -113,12 +113,12 @@ class DeletedGovernoratesDatatable extends Component
             "text" => __('admin/deliveriesPages.Are you sure, you want to restore this governorate ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Confirm'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'red',
             'confirmButtonColor' => 'green',
             'focusDeny' => false,
             'icon' => 'warning',
             'method' => 'restoreGovernorate',
-            'governorate_id' => $governorate_id,
+            'id' => $governorate_id,
         ]);
     }
 
@@ -150,12 +150,12 @@ class DeletedGovernoratesDatatable extends Component
             "text" => __('admin/deliveriesPages.Are you sure, you want to delete all governorates permanently ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'focusDeny' => false,
+            'focusDeny' => true,
             'icon' => 'warning',
             'method' => 'forceDeleteAllGovernorates',
-            'governorate_id' => ''
+            'id' => ''
         ]);
     }
 
@@ -185,12 +185,12 @@ class DeletedGovernoratesDatatable extends Component
             "text" => __('admin/deliveriesPages.Are you sure, you want to restore all governorates ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Confirm'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'red',
             'confirmButtonColor' => 'green',
             'focusDeny' => false,
             'icon' => 'warning',
             'method' => 'restoreAllGovernorates',
-            'governorate_id' => '',
+            'id' => '',
         ]);
     }
 

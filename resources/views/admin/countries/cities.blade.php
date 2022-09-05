@@ -49,7 +49,7 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Datatable Start --}}
-                            @livewire('admin.countries.cities-country-datatable' , ['country_id' => $country->id])
+                            @livewire('admin.cities.cities-datatable' , ['country_id' => $country->id])
                             {{-- Datatable End --}}
                         </div>
                     </div>
@@ -58,46 +58,3 @@
         </div>
     </div>
 @endsection
-
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
-{{-- Extra Scripts --}}
-@push('js')
-    @livewireScripts
-
-    <script>
-        // #### City Deleted ####
-        window.addEventListener('swalConfirmSoftDelete', function(e) {
-            Swal.fire({
-                icon: 'warning',
-                text: e.detail.text,
-                showDenyButton: true,
-                confirmButtonText: e.detail.confirmButtonText,
-                denyButtonText: e.detail.denyButtonText,
-                denyButtonColor: 'gray',
-                confirmButtonColor: 'red',
-                focusDeny: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Livewire.emit('softDeleteCity', e.detail.city_id);
-                }
-            });
-        });
-
-        window.addEventListener('swalCityDeleted', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        });
-        // #### City Deleted ####
-    </script>
-@endpush

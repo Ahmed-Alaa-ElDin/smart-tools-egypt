@@ -49,7 +49,7 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Datatable Start --}}
-                            @livewire('admin.countries.users-country-datatable' , ['country_id' => $country->id])
+                            @livewire('admin.customers.customers-datatable' , ['country_id' => $country->id])
                             {{-- Datatable End --}}
                         </div>
                     </div>
@@ -59,47 +59,9 @@
     </div>
 @endsection
 
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
 {{-- Extra Scripts --}}
 @push('js')
-    @livewireScripts
-
     <script>
-        // #### User Deleted ####
-        window.addEventListener('swalConfirmSoftDelete', function(e) {
-            Swal.fire({
-                icon: 'warning',
-                text: e.detail.text,
-                showDenyButton: true,
-                confirmButtonText: e.detail.confirmButtonText,
-                denyButtonText: e.detail.denyButtonText,
-                denyButtonColor: 'gray',
-                confirmButtonColor: 'red',
-                focusDeny: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Livewire.emit('softDeleteUser', e.detail.user_id);
-                }
-            });
-        });
-
-        window.addEventListener('swalUserDeleted', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        });
-        // #### User Deleted ####
-
         window.addEventListener('swalEditRolesSelect', function(e) {
             Swal.fire({
                 title: e.detail.title,

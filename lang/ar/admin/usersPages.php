@@ -161,7 +161,7 @@ return [
     'Select User Role'                                                                              =>     "اختر دور المستخدم",
     'New role assigned successfully'                                                                =>     "تم تخصيص دور المستخدم بنجاح",
     "New role hasn'n been assigned"                                                                 =>     "لم تتم عملية تخصيص الدور",
-    'Deleted Users'                                                                                 =>     "المستخدمين المحذوفين مؤقتاً",
+    'Deleted Users'                                                                                 =>     "المستخدمين المؤرشفينً",
     'Here you can Restore / Permanently delete users'                                               =>     "من خلال هذه الصفحة يمكنك استرداد المستخدم أو حذفه بشكل نهائي",
     'Restore'                                                                                       =>     'استعادة',
     'Delete Permanently'                                                                            =>     'حذف بشكل نهائي',
@@ -217,7 +217,7 @@ return [
     "Through this form you can add new customer"                                                    =>      "من خلال هذه الصفحة يمكنك إضافة عميل جديد",
     "Customer updated successfully"                                                                 =>      "تم تعديل العميل بنجاح",
     "Customer hasn't been updated"                                                                  =>      "لم يتم تعديل العميل",
-    "Deleted Customers"                                                                             =>      "العملاء المحذوفين مؤقتاً",
+    "Deleted Customers"                                                                             =>      "العملاء المؤرشفينً",
     "Here you can Restore / Permanently delete customers"                                           =>      "من خلال هذه الصفحة يمكنك استرداد العميل أو حذفه بشكل نهائي",
     "Are you sure, you want to delete this customer permanently ?"                                  =>      "هل أنت متأكد من حذف هذا العميل بشكل نهائي ؟",
     "Customer has been deleted successfully"                                                        =>      "تم حذف العميل بنجاح",
@@ -239,5 +239,6 @@ return [
     "Banned"                                                                                        =>      "محظور",
     "Edit Customer"                                                                                 =>      "تعديل العميل",
     "Through this form you can edit customer data"                                                  =>      "من خلال هذه الصفحة يمكنك تعديل بيانات العميل",
+    "Save and Add New Customer"                                                                     =>      "حفظ واضافة عميل جديد",
 
 ];

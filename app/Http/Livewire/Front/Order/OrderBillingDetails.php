@@ -75,9 +75,9 @@ class OrderBillingDetails extends Component
         DB::beginTransaction();
 
         try {
-            $this->balance = ($array_data['subtotal_final'] + $array_data['delivery_fees']) > $this->balance ? $this->balance : ($array_data['subtotal_final'] + $array_data['delivery_fees']);
+            $this->balance = ($array_data['total']) > $this->balance ? $this->balance : ($array_data['total']);
 
-            $this->points_egp = (($array_data['subtotal_final'] + $array_data['delivery_fees']) - $this->balance) > $this->points_egp ? $this->points_egp : (($array_data['subtotal_final'] + $array_data['delivery_fees']) - $this->balance);
+            $this->points_egp = (($array_data['total']) - $this->balance) > $this->points_egp ? $this->points_egp : (($array_data['total']) - $this->balance);
             $this->points = floor($this->points_egp / config('constants.constants.POINT_RATE'));
 
             // get order's products
@@ -134,6 +134,7 @@ class OrderBillingDetails extends Component
                     'user_id' => $order->user_id,
                     'payment_status' => 1,
                 ], [
+                    'payment_status' => $order->should_pay == 0 ? 2 : 1,
                     'payment_amount' => $order->should_pay,
                     'payment_method' => $order->payment_method,
                 ]);

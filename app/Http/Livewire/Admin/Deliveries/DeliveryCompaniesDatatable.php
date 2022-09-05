@@ -17,6 +17,10 @@ class DeliveryCompaniesDatatable extends Component
 
     public $search = "";
 
+    public $city_id = null;
+    public $governorate_id = null;
+    public $country_id = null;
+
     protected $listeners = ['softDeleteDelivery'];
 
     // Render Once
@@ -30,13 +34,25 @@ class DeliveryCompaniesDatatable extends Component
     // Render With each update
     public function render()
     {
-        $deliveries = Delivery::with('phones')
-            ->where('name->en', 'like', '%' . $this->search . '%')
-            ->orWhere('name->ar', 'like', '%' . $this->search . '%')
-            ->orWhere('email', 'like', '%' . $this->search . '%')
-            ->orWhereHas('phones', function ($query) {
-                $query->where('phone', 'like', '%' . $this->search . '%');
-            })
+        $deliveries = Delivery::with(['phones', 'cities'])
+            ->where(fn ($q) => $q
+                ->where('name->en', 'like', '%' . $this->search . '%')
+                ->orWhere('name->ar', 'like', '%' . $this->search . '%')
+                ->orWhere('email', 'like', '%' . $this->search . '%')
+                ->orWhereHas('phones', function ($query) {
+                    $query->where('phone', 'like', '%' . $this->search . '%');
+                }))
+                ->where(function ($q){
+                    if ($this->city_id) {
+                        return $q->whereHas('cities', fn ($q) => $q->where('cities.id', $this->city_id));
+                    }
+                    if ($this->governorate_id) {
+                        return $q->whereHas('governorates', fn ($q) => $q->where('governorates.id', $this->governorate_id));
+                    }
+                    if ($this->country_id) {
+                        return $q->whereHas('countries', fn ($q) => $q->where('countries.id', $this->country_id));
+                    }
+                })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
@@ -67,11 +83,15 @@ class DeliveryCompaniesDatatable extends Component
     ######## Deleted #########
     public function deleteConfirm($delivery_id)
     {
-        $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
+        $this->dispatchBrowserEvent('swalConfirm', [
             "text" => __('admin/deliveriesPages.Are you sure, you want to delete this company ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'delivery_id' => $delivery_id,
+            'denyButtonColor' => 'green',
+            'confirmButtonColor' => 'red',
+            'focusDeny' => true,
+            'method' => 'softDeleteDelivery',
+            'id' => $delivery_id,
         ]);
     }
 
@@ -81,12 +101,12 @@ class DeliveryCompaniesDatatable extends Component
             $user = Delivery::findOrFail($delivery_id);
             $user->delete();
 
-            $this->dispatchBrowserEvent('swalDeliveryDeleted', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('admin/deliveriesPages.Delivery has been deleted successfully'),
                 'icon' => 'success'
             ]);
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('swalDeliveryDeleted', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/deliveriesPages.Delivery hasn't been deleted"),
                 'icon' => 'error'
             ]);

@@ -47,13 +47,3 @@ __("admin/deliveriesPages.Add Delivery Company's Zones")])
         </div>
     </div>
 @endsection
-
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
-{{-- Extra Scripts --}}
-@push('js')
-    @livewireScripts
-@endpush

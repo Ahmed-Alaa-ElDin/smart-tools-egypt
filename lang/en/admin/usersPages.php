@@ -239,6 +239,6 @@ return [
     "Banned"                                                                                        =>      "Banned",
     "Edit Customer"                                                                                 =>      "Edit Customer",
     "Through this form you can edit customer data"                                                  =>      "Through this form you can edit customer data",
-    "Add Points"                                                                                    =>      "Add Points",
+    "Save and Add New Customer"                                                                     =>      "Save and Add New Customer",
     "Add Points"                                                                                    =>      "Add Points",
 ];

@@ -82,9 +82,12 @@ class DeletedSubcategoriesDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to permanently delete this subcategory ?'),
             'confirmButtonText' => __('admin/productsPages.Delete'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'func' => 'forceDeleteSubcategory',
-            'subcategory_id' => $subcategory_id,
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'forceDeleteSubcategory',
+            'id' => $subcategory_id,
         ]);
     }
 
@@ -114,9 +117,12 @@ class DeletedSubcategoriesDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to restore this subcategory ?'),
             'confirmButtonText' => __('admin/productsPages.Restore'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
+            'denyButtonColor' => 'red',
             'confirmButtonColor' => 'green',
-            'func' => 'restoreSubcategory',
-            'subcategory_id' => $subcategory_id,
+            'focusDeny' => false,
+            'icon' => 'warning',
+            'method' => 'restoreSubcategory',
+            'id' => $subcategory_id,
         ]);
     }
 
@@ -146,12 +152,12 @@ class DeletedSubcategoriesDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to delete all subcategories permanently ?'),
             'confirmButtonText' => __('admin/productsPages.Delete'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'focusDeny' => false,
+            'focusDeny' => true,
             'icon' => 'warning',
-            'func' => 'forceDeleteAllSubcategories',
-            'subcategory_id' => ''
+            'method' => 'forceDeleteAllSubcategories',
+            'id' => ''
         ]);
     }
 
@@ -181,12 +187,12 @@ class DeletedSubcategoriesDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to restore all subcategories ?'),
             'confirmButtonText' => __('admin/productsPages.Restore'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'red',
             'confirmButtonColor' => 'green',
             'focusDeny' => false,
             'icon' => 'warning',
-            'func' => 'restoreAllSubcategories',
-            'subcategory_id' => '',
+            'method' => 'restoreAllSubcategories',
+            'id' => '',
         ]);
     }
 

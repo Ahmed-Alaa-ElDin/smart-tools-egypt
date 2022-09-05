@@ -46,15 +46,8 @@ __('admin/usersPages.Edit Customer')])
     </div>
 @endsection
 
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
 {{-- Extra Scripts --}}
 @push('js')
-    @livewireScripts
-
     <script>
         window.addEventListener('swalConfirmPassword', function(e) {
             Swal.fire({

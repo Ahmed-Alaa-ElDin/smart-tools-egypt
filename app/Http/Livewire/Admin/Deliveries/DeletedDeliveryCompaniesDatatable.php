@@ -73,12 +73,12 @@ class DeletedDeliveryCompaniesDatatable extends Component
             "text" => __('admin/deliveriesPages.Are you sure, you want to delete this delivery permanently ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
             'focusDeny' => true,
             'icon' => 'warning',
             'method' => 'forceDeleteDelivery',
-            'delivery_id' => $delivery_id,
+            'id' => $delivery_id,
         ]);
     }
 
@@ -109,12 +109,12 @@ class DeletedDeliveryCompaniesDatatable extends Component
             "text" => __('admin/deliveriesPages.Are you sure, you want to restore this delivery ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Confirm'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'red',
             'confirmButtonColor' => 'green',
             'focusDeny' => false,
             'icon' => 'warning',
             'method' => 'restoreDelivery',
-            'delivery_id' => $delivery_id,
+            'id' => $delivery_id,
         ]);
     }
 
@@ -146,12 +146,12 @@ class DeletedDeliveryCompaniesDatatable extends Component
             "text" => __('admin/deliveriesPages.Are you sure, you want to delete all deliveries permanently ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'focusDeny' => false,
+            'focusDeny' => true,
             'icon' => 'warning',
             'method' => 'forceDeleteAllDeliveries',
-            'delivery_id' => ''
+            'id' => ''
         ]);
     }
 
@@ -181,12 +181,12 @@ class DeletedDeliveryCompaniesDatatable extends Component
             "text" => __('admin/deliveriesPages.Are you sure, you want to restore all deliveries ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Confirm'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'red',
             'confirmButtonColor' => 'green',
             'focusDeny' => false,
             'icon' => 'warning',
             'method' => 'restoreAllDeliveries',
-            'delivery_id' => '',
+            'id' => '',
         ]);
     }
 

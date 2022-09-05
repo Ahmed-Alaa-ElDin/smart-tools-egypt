@@ -269,23 +269,29 @@
                                                 </span>
                                             @elseif ($product->final_price == $product->base_price)
                                                 <span class="bg-success px-2 py-1 rounded text-white">
-                                                    {{ $product->final_price }}
-                                                    <span class="text-xs">
+                                                    <span dir='ltr'>
+                                                        {{ number_format($product->final_price, 2, '.', '\'') }}
+                                                    </span>
+                                                    <span class="text-xs p-1">
                                                         {{ __('admin/productsPages. EGP') }}
                                                     </span>
                                                 </span>
                                             @else
                                                 <span
                                                     class="line-through bg-red-600 px-2 py-1 rounded text-white text-xs">
-                                                    {{ $product->base_price }}
-                                                    <span class="text-xs">
+                                                    <span dir='ltr'>
+                                                        {{ number_format($product->base_price, 2, '.', '\'') }}
+                                                    </span>
+                                                    <span class="text-xs p-1">
                                                         {{ __('admin/productsPages. EGP') }}
                                                     </span>
                                                 </span>
                                                 <span
                                                     class="bg-success px-2 py-1 rounded text-white ltr:ml-1 rtl:mr-1">
-                                                    {{ $product->final_price }}
-                                                    <span class="text-xs">
+                                                    <span dir='ltr'>
+                                                        {{ number_format($product->final_price, 2, '.', '\'') }}
+                                                    </span>
+                                                    <span class="text-xs p-1">
                                                         {{ __('admin/productsPages. EGP') }}
                                                     </span>
                                                 </span>
@@ -308,7 +314,13 @@
                                     {{-- Publish Body --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
                                         <div class="text-sm text-gray-900">
-                                            {!! $product->publish ? '<span class="block cursor-pointer material-icons text-success" wire:click="publish(' . $product->id . ')">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600" wire:click="publish(' . $product->id . ')">toggle_off</span>' !!}
+                                            {!! $product->publish
+                                                ? '<span class="block cursor-pointer material-icons text-success" wire:click="publish(' .
+                                                    $product->id .
+                                                    ')">toggle_on</span>'
+                                                : '<span class="block cursor-pointer material-icons text-red-600" wire:click="publish(' .
+                                                    $product->id .
+                                                    ')">toggle_off</span>' !!}
                                         </div>
                                     </td>
 

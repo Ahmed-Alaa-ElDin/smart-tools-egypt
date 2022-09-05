@@ -84,12 +84,12 @@ class DeletedCustomersDatatable extends Component
             "text" => __('admin/usersPages.Are you sure, you want to delete this customer permanently ?'),
             'confirmButtonText' => __('admin/usersPages.Delete'),
             'denyButtonText' => __('admin/usersPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
             'focusDeny' => true,
             'icon' => 'warning',
             'method' => 'forceDeleteUser',
-            'user_id' => $user_id,
+            'id' => $user_id,
         ]);
     }
 
@@ -120,12 +120,12 @@ class DeletedCustomersDatatable extends Component
             "text" => __('admin/usersPages.Are you sure, you want to restore this customer ?'),
             'confirmButtonText' => __('admin/usersPages.Confirm'),
             'denyButtonText' => __('admin/usersPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'red',
             'confirmButtonColor' => 'green',
             'focusDeny' => false,
             'icon' => 'warning',
             'method' => 'restoreUser',
-            'user_id' => $user_id,
+            'id' => $user_id,
         ]);
     }
 
@@ -157,12 +157,12 @@ class DeletedCustomersDatatable extends Component
             "text" => __('admin/usersPages.Are you sure, you want to delete all customers permanently ?'),
             'confirmButtonText' => __('admin/usersPages.Delete'),
             'denyButtonText' => __('admin/usersPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'focusDeny' => false,
+            'focusDeny' => true,
             'icon' => 'warning',
             'method' => 'forceDeleteAllUsers',
-            'user_id' => ''
+            'id' => ''
         ]);
     }
 
@@ -196,12 +196,12 @@ class DeletedCustomersDatatable extends Component
             "text" => __('admin/usersPages.Are you sure, you want to restore all customers ?'),
             'confirmButtonText' => __('admin/usersPages.Confirm'),
             'denyButtonText' => __('admin/usersPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'red',
             'confirmButtonColor' => 'green',
             'focusDeny' => false,
             'icon' => 'warning',
             'method' => 'restoreAllUsers',
-            'user_id' => '',
+            'id' => '',
         ]);
     }
 

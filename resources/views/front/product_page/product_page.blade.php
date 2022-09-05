@@ -151,7 +151,7 @@
                                     &nbsp;
                                     <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
                                     <span
-                                        class="font-bold text-xl">{{ explode('.', $product->final_price - $product_offer->best_price)[0] }}</span>
+                                        class="font-bold text-xl"  dir="ltr">{{ number_format(explode('.', $product->final_price - $product_offer->best_price)[0],0,'.','\'') }}</span>
                                     <span
                                         class="font-bold text-xs">{{ explode('.', $product->final_price - $product_offer->best_price)[1] ?? '00' }}</span>
                                 </span>

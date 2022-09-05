@@ -69,7 +69,7 @@
                                                     : (in_array($status->id, [8, 9, 13])
                                                         ? 'text-red-600'
                                                         : 'text-blue-600'))) }}">
-                                        {{ __("front/homePage.$status->name") }}
+                                        {{ $status->name }}
                                     </h3>
                                     @if ($status->pivot->notes)
                                         <p class="mb-4 text-base font-normal text-gray-500">

@@ -43,7 +43,7 @@
                 @else
                     {{-- Upload New Image --}}
                     <input
-                        class="col-span-12 form-control block w-full px-2 py-1 text-sm font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
+                        class="col-span-12  block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
                         id="logo" type="file" type="image" wire:model.lazy="logo">
                     <span class="col-span-12 text-xs text-gray-400">
                         {{ __('admin/productsPages.Use 300x300 sizes image') }}</span>

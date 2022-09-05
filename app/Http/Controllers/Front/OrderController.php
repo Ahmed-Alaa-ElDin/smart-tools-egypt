@@ -169,6 +169,9 @@ class OrderController extends Controller
 
         // Get orders discounts value
         $order_offer = Offer::orderOffers()->first();
+        $order_discount = 0.00;
+        $order_discount_percent = 0;
+        $order_points = 0;
 
         if ($order_offer) {
             // Percent Discount
@@ -222,7 +225,7 @@ class OrderController extends Controller
         }
 
         // Get Total Points
-        $total_points = isset($order_points) ? $products_best_points + $order_points + $coupon_points : $products_best_points + $coupon_points;
+        $total_points = $products_best_points + $order_points + $coupon_points;
 
         // Get Used Balance
         $used_balance = $order->used_balance;
@@ -235,7 +238,7 @@ class OrderController extends Controller
         $delivery_fees = $products_total_quantities > 0 ? ($order->coupon_id && $coupon_shipping === 0 ? 0.00 : $delivery_fees) : 0.00;
 
         // Get Total Price
-        $total_price = round($products_best_prices + $delivery_fees - $used_balance - $used_points_egp - $coupon_discount, 2);
+        $total_price = round($products_best_prices + $delivery_fees - $used_balance - $order_discount - $used_points_egp - $coupon_discount, 2);
 
         // Return Points and used balance
         if ($total_price < 0) {
@@ -265,6 +268,7 @@ class OrderController extends Controller
 
         $difference = $payment_status ? round($total_price - $old_price, 2) : $total_price;
 
+        // dd($order->payments()->where('payment_status', 1)->count() == 0);
         $new_order = Order::updateOrCreate([
             'user_id' => $order->user_id,
             'status_id' => 15
@@ -324,6 +328,8 @@ class OrderController extends Controller
             'products_final_prices' => $products_final_prices,
             'offers_discounts' => $offers_discounts,
             'offers_discounts_percentage' => $offers_discounts_percentage,
+            'order_offers_discounts' => $order_discount,
+            'order_offers_discounts_percentage' => $order_discount_percent,
             'products_best_prices' => $products_best_prices,
             'total_points' => $total_points,
             'coupon_discount' => $coupon_discount,
@@ -340,6 +346,7 @@ class OrderController extends Controller
             'payment_method' => $payment_method,
             'should_pay' => $new_order->should_pay,
             'should_get' => $new_order->should_get,
+            'old_order_paid' => $order->payments()->where('payment_status', 1)->count() == 0 ? true : false,
         ];
 
         // return order data;
@@ -421,7 +428,7 @@ class OrderController extends Controller
                         'payment_amount' => $new_order->total
                     ]);
 
-                    $new_order->delete();
+                    $new_order->forceDelete();
 
                     DB::commit();
 
@@ -477,7 +484,7 @@ class OrderController extends Controller
                             'points' => $old_order->user->points + $returned_points + $returned_gift_points,
                         ]);
 
-                        $new_order->delete();
+                        $new_order->forceDelete();
 
                         DB::commit();
 
@@ -604,7 +611,7 @@ class OrderController extends Controller
                             'points' => $old_order->user->points + $returned_points + $returned_gift_points,
                         ]);
 
-                        $new_order->delete();
+                        $new_order->forceDelete();
 
                         DB::commit();
 
@@ -679,7 +686,7 @@ class OrderController extends Controller
                             'points' => $old_order->user->points + $returned_points + $returned_gift_points,
                         ]);
 
-                        $new_order->delete();
+                        $new_order->forceDelete();
 
                         DB::commit();
 
@@ -729,33 +736,54 @@ class OrderController extends Controller
                 // Pay the Difference
                 if ($new_order->should_pay > 0 && $request->type == 'pay') {
                     $payment = [
-                        'order_id' => $new_order->id,
-                        'old_order_id' => $old_order->id,
+                        'order_id' => $old_order->id,
+                        'old_order_id' => null,
                         'user_id' => $new_order->user_id,
                         'payment_amount' => $new_order->should_pay,
                         'payment_method' => 4,
                         'payment_status' => 1,
                     ];
 
-                    $payment = $new_order->payments()->updateOrCreate([
+                    $old_order->payments()->updateOrCreate([
                         'order_id' => $payment['order_id'],
                         'payment_status' => 1,
                     ], $payment);
 
                     $old_order->update([
                         'status_id' => 2,
+                        'num_of_items' => $new_order->num_of_items,
+                        'coupon_order_discount' => $new_order->coupon_order_discount,
+                        'coupon_order_points' => $new_order->coupon_order_points,
+                        'coupon_products_discount' => $new_order->coupon_products_discount,
+                        'coupon_products_points' => $new_order->coupon_products_points,
+                        'subtotal_base' => $new_order->subtotal_base,
+                        'subtotal_final' => $new_order->subtotal_final,
+                        'total' => $new_order->total,
+                        'delivery_fees' => $new_order->delivery_fees,
                         'should_pay' => $new_order->should_pay,
+                        'should_get' => $new_order->should_get,
+                        'used_points' => $new_order->used_points,
+                        'used_balance' => $new_order->used_balance,
+                        'gift_points' => $new_order->gift_points,
+                        'total_weight' => $new_order->total_weight,
                     ]);
 
-                    if ($old_order->statuses()->count() == 0 || $old_order->statuses()->orderBy('pivot_created_at', 'desc')->first()->id != 2) {
-                        $old_order->statuses()->attach(2);
-                    }
+                    $old_order->statuses()->attach([16, 12, 2]);
+
+                    $old_order->products()->sync($order_products);
+
+                    $old_order->user()->update([
+                        'balance' => $old_order->user->balance + $returned_balance + $new_order->should_get,
+                        'points' => $old_order->user->points + $returned_points + $returned_gift_points,
+                    ]);
 
                     // edit products database
                     $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
                         $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
                         $product->save();
                     });
+
+                    $new_order->forceDelete();
 
                     DB::commit();
 
@@ -804,7 +832,7 @@ class OrderController extends Controller
                                 $product->save();
                             });
 
-                            $new_order->delete();
+                            $new_order->forceDelete();
 
                             DB::commit();
 
@@ -825,31 +853,54 @@ class OrderController extends Controller
                 // To Vodafone Wallet
                 elseif ($new_order->should_get > 0 && $request->type == 'vodafone') {
                     $payment = [
-                        'order_id' => $new_order->id,
-                        'old_order_id' => $old_order->id,
+                        'order_id' => $old_order->id,
+                        'old_order_id' => null,
                         'user_id' => $new_order->user_id,
-                        'payment_amount' => $new_order->should_get,
+                        'payment_amount' => -1 * $new_order->should_get,
                         'payment_method' => 4,
                         'payment_status' => 1,
                     ];
 
-                    $payment = $new_order->payments()->updateOrCreate([
+                    $payment = $old_order->payments()->updateOrCreate([
                         'order_id' => $payment['order_id'],
                         'payment_status' => 1,
                     ], $payment);
 
                     $old_order->update([
                         'status_id' => 14,
+                        'num_of_items' => $new_order->num_of_items,
+                        'coupon_order_discount' => $new_order->coupon_order_discount,
+                        'coupon_order_points' => $new_order->coupon_order_points,
+                        'coupon_products_discount' => $new_order->coupon_products_discount,
+                        'coupon_products_points' => $new_order->coupon_products_points,
+                        'subtotal_base' => $new_order->subtotal_base,
+                        'subtotal_final' => $new_order->subtotal_final,
+                        'total' => $new_order->total,
+                        'delivery_fees' => $new_order->delivery_fees,
+                        'should_pay' => $new_order->should_pay,
                         'should_get' => $new_order->should_get,
+                        'used_points' => $new_order->used_points,
+                        'used_balance' => $new_order->used_balance,
+                        'gift_points' => $new_order->gift_points,
+                        'total_weight' => $new_order->total_weight,
                     ]);
 
                     $old_order->statuses()->attach([11, 12, 14]);
+
+                    $old_order->products()->sync($order_products);
+
+                    $old_order->user()->update([
+                        'balance' => $old_order->user->balance + $returned_balance + $new_order->should_get,
+                        'points' => $old_order->user->points + $returned_points + $returned_gift_points,
+                    ]);
 
                     // edit products database
                     $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
                         $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
                         $product->save();
                     });
+
+                    $new_order->forceDelete();
 
                     DB::commit();
 
@@ -898,7 +949,7 @@ class OrderController extends Controller
                                 $product->save();
                             });
 
-                            $new_order->delete();
+                            $new_order->forceDelete();
 
                             DB::commit();
 
@@ -962,7 +1013,7 @@ class OrderController extends Controller
                         $product->save();
                     });
 
-                    $new_order->delete();
+                    $new_order->forceDelete();
 
                     DB::commit();
 
@@ -1025,7 +1076,7 @@ class OrderController extends Controller
                     $payment = [
                         'order_id' => $order->id,
                         'user_id' => $order->user->id,
-                        'payment_amount' => $order->total,
+                        'payment_amount' => -1 * $order->total,
                         'payment_method' => 4,
                         'payment_status' => 4,
                     ];
@@ -1047,6 +1098,13 @@ class OrderController extends Controller
                 } else {
                     // update the database
                     returnTotalOrder($order);
+
+                    $order->payments()->each(function($q){
+                        $q->update([
+                            'payment_status' => $q->payment_status == 2 ? 4 : 3,
+                            'payment_amount' => $q->payment_status == 2 ? (-1 * $q->payment_amount) : $q->payment_amount
+                        ]);
+                    });
                 }
             }
 
@@ -1056,7 +1114,7 @@ class OrderController extends Controller
 
                 $new_order->products()->detach();
 
-                $new_order->delete();
+                $new_order->forceDelete();
             }
 
             // edit products database
@@ -1529,7 +1587,7 @@ class OrderController extends Controller
                                 'points' => $old_order->user->points + $returned_points + $returned_gift_points,
                             ]);
 
-                            $new_order->delete();
+                            $new_order->forceDelete();
 
                             DB::commit();
 
@@ -1696,9 +1754,9 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($request['businessReference']);
 
-
         $order->update([
             'status_id' => $request['state'],
+            'delivered_at' => $request['state'] == 45 ? now() : null,
         ]);
 
         $order->statuses()->attach($request['state'], ['notes' => $request['exceptionReason'] ?? null]);
@@ -1710,15 +1768,11 @@ class OrderController extends Controller
     ##################### Track the Order :: Start #####################
     public function track(Request $request)
     {
-        $order = Order::with('statuses')->find($request['order_id']);
+        $order = Order::with('statuses')->findOrFail($request['order_id']);
 
-        if ($order) {
-            $statuses = $order->statuses()->orderBy('pivot_id', 'desc')->get();
+        $statuses = $order->statuses()->orderBy('pivot_id', 'desc')->get();
 
-            return view('front.orders.track', compact('order', 'statuses'));
-        } else {
-            return response()->json(['success' => false]);
-        }
+        return view('front.orders.track', compact('order', 'statuses'));
     }
     ##################### Track the Order :: Start #####################
 }

@@ -1,4 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Customers', 'activePage' => 'All Customers', 'titlePage' => __('admin/usersPages.All Customers')])
+@extends('layouts.admin.admin', ['activeSection' => 'Orders', 'activePage' => 'All Orders', 'titlePage' => __('admin/ordersPages.All Orders')])
 
 @section('content')
     <div class="content">
@@ -7,8 +7,8 @@
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb text-sm">
                     <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.dashboard') }}">{{ __('admin/usersPages.Dashboard') }}</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/usersPages.All Customers') }}</li>
+                            href="{{ route('admin.dashboard') }}">{{ __('admin/ordersPages.Dashboard') }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/ordersPages.All Orders') }}</li>
                 </ol>
             </nav>
 
@@ -22,18 +22,18 @@
                         <div class="card-header card-header-primary">
                             <div class="flex justify-between">
                                 <div class=" ltr:text-left rtl:text-right font-bold self-center text-gray-100">
-                                    <p class=""> {{ __('admin/usersPages.Here you can manage customers') }}
-                                    </p>
+                                    <p class=""> {{ __('admin/ordersPages.Here you can manage orders') }}</p>
                                 </div>
 
-                                {{-- Add New Customer Button --}}
+                                {{-- Add New Order --}}
                                 <div class="ltr:text-right rtl:text-left">
-                                    <a href="{{ route('admin.customers.create') }}"
+                                    <a href="{{ route('admin.orders.create') }}"
                                         class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
                                         <span class="material-icons rtl:ml-1 ltr:mr-1">
                                             add
                                         </span>
-                                        {{ __('admin/usersPages.Add Customer') }}</a>
+                                        {{ __('admin/ordersPages.Add Order') }}
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -41,9 +41,8 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Datatable Start --}}
-                            @livewire('admin.customers.customers-datatable')
+                            @livewire('admin.orders.orders-datatable')
                             {{-- Datatable End --}}
-
                         </div>
                     </div>
                 </div>
@@ -52,30 +51,30 @@
     </div>
 @endsection
 
-{{-- Extra Scripts --}}
 @push('js')
     <script>
-        // #### Customer Add Points ####
-        window.addEventListener('swalAddPointsForm', function(e) {
+        // #### Edit Order Status ####
+        window.addEventListener('swalSelectBox', function(e) {
             Swal.fire({
                 title: e.detail.title,
-                input: 'number',
+                input: 'select',
+                inputOptions: JSON.parse(e.detail.data),
+                inputValue: e.detail.selected,
                 customClass: {
-                    title: 'text-lg mt-4',
                     input: 'role-grapper rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300',
                 },
                 showDenyButton: true,
                 confirmButtonText: e.detail.confirmButtonText,
                 denyButtonText: e.detail.denyButtonText,
-                denyButtonColor: 'gray',
-                confirmButtonColor: 'green',
+                denyButtonColor: e.detail.denyButtonColor,
+                confirmButtonColor: e.detail.confirmButtonColor,
 
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit('addPoints', e.detail.user_id, result.value);
+                    Livewire.emit(e.detail.method, e.detail.id, result.value);
                 }
             });
         });
-        // #### Customer Add Points ####
+        // #### Edit Order Status ####
     </script>
 @endpush

@@ -20,7 +20,7 @@ return [
     "No data in this table"                                 =>      "لا يوجد بيانات في هذا الجدول",
     "No data available according to your search"            =>      "لا يوجد نتائج مطابقة لبحثك",
     "Search ..."                                            =>      "بحث ...",
-    "Deleted Coupons"                                       =>      "قسائم الشراء المحذوفة مؤقتاً",
+    "Deleted Coupons"                                       =>      "قسائم الشراء المؤرشفةً",
     "Through this form you can add new coupon"              =>      "من خلال هذه الصفحة يمكنك إضافة قسيمة شراء جديدة",
     "Coupon's Information"                                  =>      "معلومات قسمية الشراء",
     "Enter Code"                                            =>      "ادخل الكود",

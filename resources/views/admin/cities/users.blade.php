@@ -49,7 +49,7 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Datatable Start --}}
-                            @livewire('admin.cities.users-city-datatable' , ['city_id' => $city->id])
+                            @livewire('admin.customers.customers-datatable' , ['city_id' => $city->id])
                             {{-- Datatable End --}}
                         </div>
                     </div>
@@ -59,47 +59,10 @@
     </div>
 @endsection
 
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
 {{-- Extra Scripts --}}
 @push('js')
-    @livewireScripts
 
     <script>
-        // #### User Deleted ####
-        window.addEventListener('swalConfirmSoftDelete', function(e) {
-            Swal.fire({
-                icon: 'warning',
-                text: e.detail.text,
-                showDenyButton: true,
-                confirmButtonText: e.detail.confirmButtonText,
-                denyButtonText: e.detail.denyButtonText,
-                denyButtonColor: 'gray',
-                confirmButtonColor: 'red',
-                focusDeny: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Livewire.emit('softDeleteUser', e.detail.user_id);
-                }
-            });
-        });
-
-        window.addEventListener('swalUserDeleted', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        });
-        // #### User Deleted ####
-
         window.addEventListener('swalEditRolesSelect', function(e) {
             Swal.fire({
                 title: e.detail.title,
@@ -133,5 +96,42 @@
                 timerProgressBar: true,
             })
         });
+
+                // #### Customer Add Points ####
+                window.addEventListener('swalAddPointsForm', function(e) {
+            Swal.fire({
+                title: e.detail.title,
+                input: 'number',
+                customClass: {
+                    title: 'text-lg mt-4',
+                    input: 'role-grapper rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300',
+                },
+                showDenyButton: true,
+                confirmButtonText: e.detail.confirmButtonText,
+                denyButtonText: e.detail.denyButtonText,
+                denyButtonColor: 'gray',
+                confirmButtonColor: 'green',
+
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.emit('addPoints', e.detail.user_id, result.value);
+                }
+            });
+        });
+        // #### Customer Add Points ####
+
+        // #### Customer Banned :: Start ####
+        window.addEventListener('swalUserPanned', function(e) {
+            Swal.fire({
+                text: e.detail.text,
+                icon: e.detail.icon,
+                position: 'top-right',
+                showConfirmButton: false,
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+            })
+        })
+        // #### Customer Banned :: End ####
     </script>
 @endpush

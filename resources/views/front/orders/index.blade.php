@@ -86,13 +86,12 @@
                                                                 : (in_array($order->status_id, [8, 9, 13])
                                                                     ? 'bg-red-100 text-red-900'
                                                                     : 'bg-blue-100 text-blue-900'))) }} ">
-                                                    {{ __('front/homePage.' . $order->status->name) }}
+                                                    {{ $order->status->name }}
                                                 </span>
                                             </div>
                                         </div>
 
                                         <div>
-                                            {{-- todo :: Order Actions --}}
                                             <div class="flex flex-wrap justify-around items-center gap-1">
 
                                                 {{-- Go To Paymob Iframe --}}

@@ -50,10 +50,11 @@
                                     <span>
                                         {{ __('auth/authentication.Last Name') }}
                                     </span>
+                                    <span class="text-red-600">*</span>
                                 </label>
                                 <input type="text" id="l_name" name="l_name" value="{{ old('l_name') }}"
                                     class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('l_name') border-red-500 @enderror"
-                                    placeholder="{{ __('auth/authentication.Enter Your Last Name') }}">
+                                    placeholder="{{ __('auth/authentication.Enter Your Last Name') }}" required>
 
                                 @error('l_name')
                                     <div class="col-span-12 my-1 text-red-600 text-center">{{ __($message) }}</div>
@@ -69,7 +70,7 @@
                                     </span>
                                     <span class="text-red-600">*</span>
                                 </label>
-                                <input type="text" id="phone" name="phone" value="{{ old('phone') }}"
+                                <input type="text" id="phone" name="phone" value="{{ old('phone') }}" dir="ltr"
                                     class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('phone') border-red-500 @enderror"
                                     placeholder="{{ __('auth/authentication.Enter Your Phone Number') }}" required>
 
@@ -86,7 +87,7 @@
                                         {{ __('auth/authentication.Email') }}
                                     </span>
                                 </label>
-                                <input type="email" id="email" name="email" value="{{ old('email') }}"
+                                <input type="email" id="email" name="email" value="{{ old('email') }}" dir="ltr"
                                     class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('email') border-red-500 @enderror"
                                     placeholder="{{ __('auth/authentication.Enter Your Email') }}">
 

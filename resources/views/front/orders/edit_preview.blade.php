@@ -126,6 +126,28 @@
                     </div>
                 </div>
 
+                @if ($order_data['order_offers_discounts'] > 0.0)
+                    {{-- Order Offers --}}
+                    <div class="flex justify-between items-center gap-1 px-4 py-1">
+                        <span class="text-sm font-bold"> {{ __('front/homePage.Order Discount:') }} </span>
+
+                        <div class="flex gap-2 text-successDark">
+                            <span class="flex rtl:flex-row-reverse gap-1">
+                                <span class="font-bold text-sm">
+                                    {{ __('front/homePage.EGP') }}
+                                </span>
+                                <span class="font-bold text-xl"
+                                    dir="ltr">{{ number_format(explode('.', $order_data['order_offers_discounts'])[0], 0, '.', '\'') }}</span>
+                                <span
+                                    class="font-bold text-xs">{{ explode('.', number_format($order_data['order_offers_discounts'], 2))[1] ?? '00' }}</span>
+                            </span>
+                            <span>
+                                ({{ $order_data['order_offers_discounts_percentage'] }} %)
+                            </span>
+                        </div>
+                    </div>
+                @endif
+
                 {{-- Coupon --}}
                 @if ($order_data['coupon_discount'] > 0)
                     <div class="flex justify-between items-center gap-1 px-4 py-1">
@@ -299,13 +321,13 @@
                     <div class="font-bold flex gap-2 justify-between items-center px-4 py-1">
                         <span class="text-sm"> {{ __('front/homePage.Payment Status:') }} </span>
 
-                        @if ($order_data['should_pay'] > 0)
-                            <span class="text-primary">
-                                {{ __('front/homePage.Unpaid') }}
-                            </span>
-                        @elseif ($order_data['should_pay'] == 0)
+                        @if ($order_data['old_order_paid'])
                             <span class="text-successDark">
                                 {{ __('front/homePage.Paid') }}
+                            </span>
+                        @else
+                            <span class="text-primary">
+                                {{ __('front/homePage.Unpaid') }}
                             </span>
                         @endif
                     </div>

@@ -101,6 +101,8 @@ return [
     "Products are required." => "المنتجات مطلوبة.",
     "Banners are required." => "البنرات مطلوبة.",
     'The phone number field is required' => 'حقل رقم الهاتف مطلوب',
+    'The phone numbers must start with 010, 011, 012 or 015' => 'حقل رقم الهاتف لابد أن يبدأ بـ 010 أو 011 أو 012 أو 015',
+
 
     /*
     |--------------------------------------------------------------------------

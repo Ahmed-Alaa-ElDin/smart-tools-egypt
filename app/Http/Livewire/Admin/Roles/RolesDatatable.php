@@ -59,11 +59,16 @@ class RolesDatatable extends Component
     ######## Delete #########
     public function deleteConfirm($role_id)
     {
-        $this->dispatchBrowserEvent('swalConfirmDelete', [
+        $this->dispatchBrowserEvent('swalConfirm', [
             "text" => __('admin/usersPages.Are you sure, you want to delete this role ?'),
             'confirmButtonText' => __('admin/usersPages.Delete'),
             'denyButtonText' => __('admin/usersPages.Cancel'),
-            'role_id' => $role_id,
+            'denyButtonColor' => 'green',
+            'confirmButtonColor' => 'red',
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'deleteRole',
+            'id' => $role_id,
         ]);
     }
 
@@ -73,12 +78,12 @@ class RolesDatatable extends Component
             $role = Role::findOrFail($role_id);
             $role->delete();
 
-            $this->dispatchBrowserEvent('swalRoleDeleted', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('admin/usersPages.Role has been deleted successfully'),
                 'icon' => 'success'
             ]);
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('swalRoleDeleted', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/usersPages.Role hasn't been deleted"),
                 'icon' => 'error'
             ]);

@@ -82,12 +82,12 @@ class DeletedUsersDatatable extends Component
             "text" => __('admin/usersPages.Are you sure, you want to delete this user permanently ?'),
             'confirmButtonText' => __('admin/usersPages.Delete'),
             'denyButtonText' => __('admin/usersPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
             'focusDeny' => true,
             'icon' => 'warning',
             'method' => 'forceDeleteUser',
-            'user_id' => $user_id,
+            'id' => $user_id,
         ]);
     }
 
@@ -123,7 +123,7 @@ class DeletedUsersDatatable extends Component
             'focusDeny' => false,
             'icon' => 'warning',
             'method' => 'restoreUser',
-            'user_id' => $user_id,
+            'id' => $user_id,
         ]);
     }
 
@@ -155,12 +155,12 @@ class DeletedUsersDatatable extends Component
             "text" => __('admin/usersPages.Are you sure, you want to delete all users permanently ?'),
             'confirmButtonText' => __('admin/usersPages.Delete'),
             'denyButtonText' => __('admin/usersPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'focusDeny' => false,
+            'focusDeny' => true,
             'icon' => 'warning',
             'method' => 'forceDeleteAllUsers',
-            'user_id' => ''
+            'id' => ''
         ]);
     }
 
@@ -197,7 +197,7 @@ class DeletedUsersDatatable extends Component
             'focusDeny' => false,
             'icon' => 'warning',
             'method' => 'restoreAllUsers',
-            'user_id' => '',
+            'id' => '',
         ]);
     }
 

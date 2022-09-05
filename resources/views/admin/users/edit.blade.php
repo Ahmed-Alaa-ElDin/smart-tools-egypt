@@ -45,15 +45,8 @@ __('admin/usersPages.Edit User')])
         </div>
     </div>
 @endsection
-
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
 {{-- Extra Scripts --}}
 @push('js')
-    @livewireScripts
 
     <script>
         window.addEventListener('swalConfirmPassword', function(e) {

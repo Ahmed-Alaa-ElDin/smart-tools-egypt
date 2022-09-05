@@ -50,7 +50,7 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Datatable Start --}}
-                            @livewire('admin.cities.deliveries-city-datatable' , ['city_id' => $city->id])
+                            @livewire('admin.deliveries.delivery-companies-datatable' , ['city_id' => $city->id])
                             {{-- Datatable End --}}
                         </div>
                     </div>
@@ -60,48 +60,9 @@
     </div>
 @endsection
 
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
 {{-- Extra Scripts --}}
 @push('js')
-    @livewireScripts
-
     <script>
-        // #### Delivery Deleted ####
-        window.addEventListener('swalConfirmSoftDelete', function(e) {
-            Swal.fire({
-                icon: 'warning',
-                text: e.detail.text,
-                showDenyButton: true,
-                confirmButtonText: e.detail.confirmButtonText,
-                denyButtonText: e.detail.denyButtonText,
-                denyButtonColor: 'gray',
-                confirmButtonColor: 'red',
-                focusDeny: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Livewire.emit('softDeleteDelivery', e.detail.delivery_id);
-                }
-            });
-        });
-
-        window.addEventListener('swalDeliveryDeleted', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        });
-        // #### Delivery Deleted ####
-
-
         // #### Delivery Activation / Deactivation ####
         window.addEventListener('swalDeliveryActivated', function(e) {
             Swal.fire({

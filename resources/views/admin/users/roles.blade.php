@@ -58,15 +58,8 @@ __('admin/usersPages.Roles Management')])
         </div>
     </div>
 @endsection
-
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
 {{-- Extra Scripts --}}
 @push('js')
-    @livewireScripts
 
     <script>
         // #### Role Delete ####

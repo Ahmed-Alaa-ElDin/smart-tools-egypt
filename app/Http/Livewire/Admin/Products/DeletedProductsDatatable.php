@@ -113,9 +113,12 @@ class DeletedProductsDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to permanently delete this product ?'),
             'confirmButtonText' => __('admin/productsPages.Delete'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'func' => 'forceDeleteProduct',
-            'product_id' => $product_id,
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'forceDeleteProduct',
+            'id' => $product_id,
         ]);
     }
 
@@ -147,9 +150,12 @@ class DeletedProductsDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to restore this product ?'),
             'confirmButtonText' => __('admin/productsPages.Restore'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
+            'denyButtonColor' => 'red',
             'confirmButtonColor' => 'green',
-            'func' => 'restoreProduct',
-            'product_id' => $product_id,
+            'focusDeny' => false,
+            'icon' => 'warning',
+            'method' => 'restoreProduct',
+            'id' => $product_id,
         ]);
     }
 
@@ -188,9 +194,12 @@ class DeletedProductsDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to delete all selected products permanently?'),
             'confirmButtonText' => __('admin/productsPages.Delete'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'func' => 'forceDeleteAllProduct',
-            'product_id' => '',
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'forceDeleteAllProduct',
+            'id' => '',
         ]);
     }
 
@@ -225,9 +234,12 @@ class DeletedProductsDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to restore all selected products?'),
             'confirmButtonText' => __('admin/productsPages.Restore'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
+            'denyButtonColor' => 'red',
             'confirmButtonColor' => 'green',
-            'func' => 'restoreAllProduct',
-            'product_id' => '',
+            'focusDeny' => false,
+            'icon' => 'warning',
+            'method' => 'restoreAllProduct',
+            'id' => '',
         ]);
     }
 
@@ -262,9 +274,12 @@ class DeletedProductsDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to publish all selected products ?'),
             'confirmButtonText' => __('admin/productsPages.Publish'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
+            'denyButtonColor' => 'red',
             'confirmButtonColor' => 'green',
-            'func' => 'publishAllProduct',
-            'product_id' => '',
+            'focusDeny' => false,
+            'icon' => 'warning',
+            'method' => 'publishAllProduct',
+            'id' => '',
         ]);
     }
 
@@ -302,9 +317,12 @@ class DeletedProductsDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to hide all selected products ?'),
             'confirmButtonText' => __('admin/productsPages.Hide'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'func' => 'hideAllProduct',
-            'product_id' => '',
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'hideAllProduct',
+            'id' => '',
         ]);
     }
 

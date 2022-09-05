@@ -288,11 +288,4 @@
 
 {{-- Extra Scripts --}}
 @push('js')
-    <script src="{{ asset('assets/js/plugins/flowbite/flowbite.js') }}"></script>
-
-    <script>
-        $(document).ready(function() {
-
-        });
-    </script>
 @endpush

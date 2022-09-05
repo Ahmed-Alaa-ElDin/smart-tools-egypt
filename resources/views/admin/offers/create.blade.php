@@ -53,14 +53,11 @@
 
 {{-- Extra Styles --}}
 @push('css')
-    @livewireStyles
-
     <link rel="stylesheet" href={{ asset('assets/js/plugins/daterangepicker-master/daterangepicker.css') }}>
 @endpush
 
 {{-- Extra Scripts --}}
 @push('js')
-    @livewireScripts
 
     <script src="{{ asset('assets/js/plugins/daterangepicker-master/daterangepicker.js') }}"></script>
 

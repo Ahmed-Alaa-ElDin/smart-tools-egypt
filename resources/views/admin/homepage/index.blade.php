@@ -162,48 +162,10 @@
     </div>
 @endsection
 
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
 {{-- Extra Scripts --}}
 @push('js')
-    @livewireScripts
 
     <script>
-        // #### Offer Sweetalert ####
-        window.addEventListener('swalConfirm', function(e) {
-
-            Swal.fire({
-                icon: 'warning',
-                text: e.detail.text,
-                showDenyButton: true,
-                confirmButtonText: e.detail.confirmButtonText,
-                denyButtonText: e.detail.denyButtonText,
-                denyButtonColor: 'gray',
-                confirmButtonColor: e.detail.confirmButtonColor,
-                focusDeny: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Livewire.emit(e.detail.func, e.detail.section_id);
-                }
-            });
-        });
-
-        window.addEventListener('swalDone', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        });
-        // #### Offer Sweetalert ####
-
         // #### Section Activation / Deactivation ####
         window.addEventListener('swalSectionActivated', function(e) {
             Swal.fire({

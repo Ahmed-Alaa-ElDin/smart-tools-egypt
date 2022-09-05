@@ -51,6 +51,16 @@ class Governorate extends Model
         return $this->belongsToMany(User::class, 'addresses');
     }
 
+    // Has many through relationship  Governorate --> users
+    public function customers()
+    {
+        return $this->belongsToMany(User::class, 'addresses', 'governorate_id', 'user_id')->where(
+            function ($q) {
+                return $q->whereHas('roles', fn ($q) => $q->where('name', 'Customer'))->orWhereDoesntHave('roles');
+            }
+        )->distinct('users.id');
+    }
+
     // Has many through relationship  Governorate --> Deliveries
     public function deliveries()
     {

@@ -81,7 +81,7 @@ class Product extends Model
     }
 
     // Many to many through relationship  Categories --> Products
-    public function supercategory()
+    public function supercategories()
     {
         return $this->belongsToThrough(Supercategory::class, [Category::class, Subcategory::class]);
     }
@@ -425,6 +425,86 @@ class Product extends Model
             ->where('publish', 1);
     }
 
+    // public function scopePublishedProducts($query, $products_id)
+    // {
+    //     $query->select(
+    //         [
+    //             'products.id',
+    //             'name',
+    //             'slug',
+    //             'quantity',
+    //             'weight',
+    //             'base_price',
+    //             'final_price',
+    //             'points',
+    //             'description',
+    //             'model',
+    //             'free_shipping',
+    //             'publish',
+    //             'under_reviewing',
+    //             'brand_id',
+    //         ]
+    //     )
+    //         ->with(
+    //             [
+    //                 'thumbnail',
+    //                 'offers' => fn ($q) => $q
+    //                     ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+    //                     ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+    //                     ->where(
+    //                         fn ($q) => $q
+    //                             ->where('offerables.number', '>', 0)
+    //                             ->orWhereNull('offerables.number')
+    //                     ),
+    //                 'brand' => fn ($q) => $q->with([
+    //                     'offers' => fn ($q) => $q
+    //                         ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+    //                         ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+    //                         ->where(
+    //                             fn ($q) => $q
+    //                                 ->where('offerables.number', '>', 0)
+    //                                 ->orWhereNull('offerables.number')
+    //                         )
+    //                 ]),
+    //                 'subcategories' => fn ($q) => $q->with([
+    //                     'offers' => fn ($q) => $q
+    //                         ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+    //                         ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+    //                         ->where(
+    //                             fn ($q) => $q
+    //                                 ->where('offerables.number', '>', 0)
+    //                                 ->orWhereNull('offerables.number')
+    //                         ),
+    //                     'category' => fn ($q) => $q->with([
+    //                         'offers' => fn ($q) => $q
+    //                             ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+    //                             ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+    //                             ->where(
+    //                                 fn ($q) => $q
+    //                                     ->where('offerables.number', '>', 0)
+    //                                     ->orWhereNull('offerables.number')
+    //                             ),
+    //                         'supercategory' => fn ($q) => $q->with([
+    //                             'offers' => fn ($q) => $q
+    //                                 ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+    //                                 ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+    //                                 ->where(
+    //                                     fn ($q) => $q
+    //                                         ->where('offerables.number', '>', 0)
+    //                                         ->orWhereNull('offerables.number')
+    //                                 )
+    //                         ])
+    //                     ]),
+    //                 ]),
+    //                 'reviews' => fn ($q) => $q->where('status', 1),
+    //                 'coupons'
+    //             ]
+    //         )
+    //         ->whereIn('id', $products_id)
+    //         ->where('under_reviewing', 0)
+    //         ->where('publish', 1);
+    // }
+
     public function scopePublishedProducts($query, $products_id)
     {
         $query->select(
@@ -475,26 +555,26 @@ class Product extends Model
                                     ->where('offerables.number', '>', 0)
                                     ->orWhereNull('offerables.number')
                             ),
-                        'category' => fn ($q) => $q->with([
-                            'offers' => fn ($q) => $q
-                                ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                                ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                                ->where(
-                                    fn ($q) => $q
-                                        ->where('offerables.number', '>', 0)
-                                        ->orWhereNull('offerables.number')
-                                ),
-                            'supercategory' => fn ($q) => $q->with([
-                                'offers' => fn ($q) => $q
-                                    ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                                    ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                                    ->where(
-                                        fn ($q) => $q
-                                            ->where('offerables.number', '>', 0)
-                                            ->orWhereNull('offerables.number')
-                                    )
-                            ])
-                        ]),
+                    ]),
+                    'categories' => fn ($q) => $q->with([
+                        'offers' => fn ($q) => $q
+                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                            ->where(
+                                fn ($q) => $q
+                                    ->where('offerables.number', '>', 0)
+                                    ->orWhereNull('offerables.number')
+                            ),
+                    ]),
+                    'supercategories' => fn ($q) => $q->with([
+                        'offers' => fn ($q) => $q
+                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                            ->where(
+                                fn ($q) => $q
+                                    ->where('offerables.number', '>', 0)
+                                    ->orWhereNull('offerables.number')
+                            )
                     ]),
                     'reviews' => fn ($q) => $q->where('status', 1),
                     'coupons'
@@ -504,5 +584,6 @@ class Product extends Model
             ->where('under_reviewing', 0)
             ->where('publish', 1);
     }
+
     ############# Scopes :: End #############
 }

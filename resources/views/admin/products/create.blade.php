@@ -50,15 +50,8 @@
         </div>
     </div>
 @endsection
-
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
 {{-- Extra Scripts --}}
 @push('js')
-    @livewireScripts
 
     {{-- Tinymce --}}
     <script src="{{ asset('assets/js/plugins/tinymce/tinymce.min.js') }}"></script>

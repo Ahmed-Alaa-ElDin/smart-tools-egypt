@@ -17,174 +17,292 @@ class StatusSeeder extends Seeder
     {
         Status::updateOrCreate([
             'id' => 1,
-            'name' => 'Under Processing',
+            'name' => [
+                'en' => 'Under Processing',
+                'ar' => 'جاري إنشاء الطلب',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 2,
-            'name' => 'Waiting For Payment',
+            'name' => [
+                'en' => 'Waiting For Payment',
+                'ar' => 'في انتظار الدفع',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 3,
-            'name' => 'Created',
+            'name' => [
+                'en' => 'Created',
+                'ar' => 'تم إنشاء الطلب',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 4,
-            'name' => 'Preparing',
+            'name' => [
+                'en' => 'Preparing',
+                'ar' => 'جاري التجهيز',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 5,
-            'name' => 'Under Reviewing',
+            'name' => [
+                'en' => 'Under Reviewing',
+                'ar' => 'جاري الفحص والمراجعة',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 6,
-            'name' => 'Shipped',
+            'name' => [
+                'en' => 'Shipped',
+                'ar' => 'تم التسليم لشركة الشحن',
+            ],
         ]);
-        // Status::updateOrCreate([
-        //     'id' => 7,
-        //     'name' => 'Delivered',
-        // ]);
         Status::updateOrCreate([
             'id' => 8,
-            'name' => 'Cancellation Requested',
+            'name' => [
+                'en' => 'Cancellation Requested',
+                'ar' => 'تم طلب الإلغاء',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 9,
-            'name' => 'Cancelled',
+            'name' => [
+                'en' => 'Cancelled',
+                'ar' => 'تم الإلغاء',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 15,
-            'name' => 'Under Editing',
+            'name' => [
+                'en' => 'Under Editing',
+                'ar' => 'جاري التعديل',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 16,
-            'name' => 'Edit Requested',
+            'name' => [
+                'en' => 'Edit Requested',
+                'ar' => 'تم طلب التعديل',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 12,
-            'name' => 'Edit Approved',
+            'name' => [
+                'en' => 'Edit Approved',
+                'ar' => 'تمت الموافقة على التعديل',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 13,
-            'name' => 'Edit Rejected',
+            'name' => [
+                'en' => 'Edit Rejected',
+                'ar' => 'تم رفض التعديل',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 14,
-            'name' => 'Waiting For Refund',
+            'name' => [
+                'en' => 'Waiting For Refund',
+                'ar' => 'في انتظار ارتجاع المبلغ',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 7,
-            'name' => 'Under Returning',
+            'name' => [
+                'en' => 'Under Returning',
+                'ar' => 'جاري طلب الاسترجاع',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 17,
-            'name' => 'Return Requested',
+            'name' => [
+                'en' => 'Return Requested',
+                'ar' => 'تم طلب الاسترجاع',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 18,
-            'name' => 'Return Approved',
+            'name' => [
+                'en' => 'Return Approved',
+                'ar' => 'تم قبول طلب الاسترجاع',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 19,
-            'name' => 'Return Rejected',
+            'name' => [
+                'en' => 'Return Rejected',
+                'ar' => 'تم رفض طلب الاسترجاع',
+            ],
         ]);
 
         // Bosta Statuses
         Status::updateOrCreate([
             'id' => 10,
-            'name' => 'Pickup requested',
+            'name' => [
+                'en' => 'Pickup requested',
+                'ar' => 'تم طلب الاستلام',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 11,
-            'name' => 'Waiting for route',
+            'name' => [
+                'en' => 'Waiting for route',
+                'ar' => 'في انتظار توضيح الطريق',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 20,
-            'name' => 'Route Assigned',
+            'name' => [
+                'en' => 'Route Assigned',
+                'ar' => 'تم تحديد الطريق',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 21,
-            'name' => 'Picked up from business',
+            'name' => [
+                'en' => 'Picked up from business',
+                'ar' => 'تم الاستلام من المتجر',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 22,
-            'name' => 'Picking up from consignee',
+            'name' => [
+                'en' => 'Picking up from consignee',
+                'ar' => 'جاري الاستلام من العميل',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 23,
-            'name' => 'Picked up from consignee',
+            'name' => [
+                'en' => 'Picked up from consignee',
+                'ar' => 'تم الاستلام من العميل',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 24,
-            'name' => 'Received at warehouse',
+            'name' => [
+                'en' => 'Received at warehouse',
+                'ar' => 'تم الاستلام في المستودع',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 30,
-            'name' => 'In transit between Hubs',
+            'name' => [
+                'en' => 'In transit between Hubs',
+                'ar' => 'في الطريق بين المستودعات',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 40,
-            'name' => 'Picking up',
+            'name' => [
+                'en' => 'Picking up',
+                'ar' => 'جاري الاستلام',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 41,
-            'name' => 'Picked up',
+            'name' => [
+                'en' => 'Picked up',
+                'ar' => 'تم الاستلام',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 42,
-            'name' => 'Pending Customer Signature',
+            'name' => [
+                'en' => 'Pending Customer Signature',
+                'ar' => 'في انتظار توقيع العميل',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 43,
-            'name' => 'Debriefed Successfully',
+            'name' => [
+                'en' => 'Debriefed Successfully',
+                'ar' => 'تم التأكيد',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 45,
-            'name' => 'Delivered',
+            'name' => [
+                'en' => 'Delivered',
+                'ar' => 'تم التوصيل',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 46,
-            'name' => 'Returned to business',
+            'name' => [
+                'en' => 'Returned to business',
+                'ar' => 'تم الارجاع إلى المتجر',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 47,
-            'name' => 'Exception',
+            'name' => [
+                'en' => 'Exception',
+                'ar' => 'استثناء',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 48,
-            'name' => 'Terminated',
+            'name' => [
+                'en' => 'Terminated',
+                'ar' => 'منتهي',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 49,
-            'name' => 'Canceled (uncovered area)',
+            'name' => [
+                'en' => 'Canceled (uncovered area)',
+                'ar' => 'ملغي (منطقة غير مغطاة)',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 50,
-            'name' => 'Collection Failed',
+            'name' => [
+                'en' => 'Collection Failed',
+                'ar' => 'فشل في الاستلام',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 100,
-            'name' => 'Lost',
+            'name' => [
+                'en' => 'Lost',
+                'ar' => 'مفقود',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 101,
-            'name' => 'Damaged',
+            'name' => [
+                'en' => 'Damaged',
+                'ar' => 'متضرر',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 102,
-            'name' => 'Investigation',
+            'name' => [
+                'en' => 'Investigation',
+                'ar' => 'جاري التحقيق',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 103,
-            'name' => 'Awaiting your action',
+            'name' => [
+                'en' => 'Awaiting your action',
+                'ar' => 'في انتظار ردك',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 104,
-            'name' => 'Archived',
+            'name' => [
+                'en' => 'Archived',
+                'ar' => 'مؤرشف',
+            ],
         ]);
         Status::updateOrCreate([
             'id' => 105,
-            'name' => 'On hold',
+            'name' => [
+                'en' => 'On hold',
+                'ar' => 'معلق',
+            ],
         ]);
-
     }
 }
