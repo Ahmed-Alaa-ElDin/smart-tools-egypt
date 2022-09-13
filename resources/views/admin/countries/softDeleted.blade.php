@@ -73,8 +73,11 @@
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
+ @if (session('locale' == 'en'))
+                    position: 'top-left',
+                @else
+                    position: 'top-right',
+                @endif                showConfirmButton: false,
                 toast: true,
                 timer: 3000,
                 timerProgressBar: true,

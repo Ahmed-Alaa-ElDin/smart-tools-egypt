@@ -212,7 +212,7 @@
                         {{-- Product Share :: Start --}}
                         <div class="flex justify-center gap-3">
                             {{-- todo : Complete the facebook share --}}
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ "https://smarttoolsegypt.com/".session('locale')."/$product->id-$product->slug" }}&display=popup"
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ 'https://smarttoolsegypt.com/' . session('locale') . "/$product->id-$product->slug" }}&display=popup"
                                 target="_blank"
                                 class="w-9 h-9 bg-facebook rounded-circle flex justify-center items-center text-white shadow transition ease-in-out hover:bg-white hover:text-facebook hover:border hover:border-facebook">
                                 <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
@@ -223,7 +223,7 @@
                             </a>
 
                             {{-- todo : Copy link to clipboard --}}
-                            <button type="button"
+                            <button type="button" id="copyToClipboard"
                                 class="w-9 h-9 bg-white text-gray-800 border border-gray-200 rounded-circle flex justify-center items-center shadow transition ease-in-out hover:bg-secondary hover:text-white hover:border hover:border-white">
                                 <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
                                     height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
@@ -632,6 +632,24 @@
                         });
                     }
                 });
+            })
+
+            $('#copyToClipboard').on('click', function() {
+                navigator.clipboard.writeText(
+                    "https://smarttoolsegypt.com/{{ $product->id }}-{{ $product->slug }}");
+                Swal.fire({
+                    text:"{{ __('front/homePage.The link has been copied successfully') }}",
+                    icon: "success",
+                    @if (session('locale' == 'en'))
+                        position: 'top-left',
+                    @else
+                        position: 'top-right',
+                    @endif
+                    showConfirmButton: false,
+                    toast: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                })
             })
         });
     </script>

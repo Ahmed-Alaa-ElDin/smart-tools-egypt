@@ -19,8 +19,10 @@
     <meta property="og:url" content='{{ isset($url) ? $url : 'https://smarttoolsegypt.com' }}' />
     <meta property="og:type" content='{{ isset($type) ? $type : 'article' }}' />
     <meta property="og:title" content='{{ isset($title) ? $title : 'Smart Tools Egypt' }}' />
-    <meta property="og:description" content='{{ isset($description) ? strip_tags($description) : 'Smart Tools Egypt' }}' />
-    <meta property="og:image" content="{{ isset($thumbnail) ? $thumbnail : asset('assets/img/logos/smart-tools-logos.png') }}" />
+    <meta property="og:description"
+        content='{{ isset($description) ? strip_tags($description) : 'Smart Tools Egypt' }}' />
+    <meta property="og:image"
+        content="{{ isset($thumbnail) ? $thumbnail : asset('assets/img/logos/smart-tools-logos.png') }}" />
 
     {{-- Fonts --}}
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -161,7 +163,11 @@
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
-                position: 'top-right',
+                @if (session('locale' == 'en'))
+                    position: 'top-left',
+                @else
+                    position: 'top-right',
+                @endif
                 showConfirmButton: false,
                 toast: true,
                 timer: 3000,

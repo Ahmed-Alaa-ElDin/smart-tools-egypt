@@ -277,7 +277,7 @@ class CouponBlock extends Component
 
             $this->success_message = __('front/homePage.Coupon applied successfully', ['coupon' => $coupon->code]);
 
-            $this->dispatchBrowserEvent('swalNotification', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => $this->success_message,
                 'icon' => 'success'
             ]);
@@ -318,7 +318,7 @@ class CouponBlock extends Component
         ];
         $this->products_best_coupon = [];
 
-        $this->dispatchBrowserEvent('swalNotification', [
+        $this->dispatchBrowserEvent('swalDone', [
             "text" => __('front/homePage.Coupon removed successfully'),
             'icon' => 'warning'
         ]);

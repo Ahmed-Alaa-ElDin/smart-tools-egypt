@@ -380,4 +380,6 @@ return [
     "Order Confirmation"        =>      "تأكيد الطلب",
     "Cancel the Return Request" =>      "إلغاء طلب الاسترجاع",
     "Returning request has been deleted successfully"   =>      "تم الغاء طلب الاسترجاع بنجاح",
+    "The link has been copied successfully"    =>      "تم نسخ الرابط بنجاح",
+
 ];

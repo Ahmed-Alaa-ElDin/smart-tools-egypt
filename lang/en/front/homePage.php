@@ -382,7 +382,7 @@ return [
     "Order Confirmation"        =>      "Order Confirmation",
     "Cancel the Return Request" =>      "Cancel the Return Request",
     "Returning request has been deleted successfully"   =>      "Returning request has been deleted successfully",
-    "Cart"                      =>      "Cart",
+    "The link has been copied successfully"     =>      "The link has been copied successfully",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",

@@ -254,18 +254,4 @@
 @endsection
 
 {{-- Extra Scripts --}}
-@push('js')
-    <script>
-        window.addEventListener('swalNotification', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        });
-    </script>
-@endpush
+
