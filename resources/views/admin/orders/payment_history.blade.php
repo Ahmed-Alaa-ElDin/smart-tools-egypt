@@ -31,7 +31,7 @@
                             <div class="flex justify-between">
                                 <div class=" ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
-                                        {{ __('admin/ordersPages.Here you can view the payment details for order #', ['order_id' => $order->id]) }}
+                                        {{ __('admin/ordersPages.Here you can view the payment details for order #', ['order_id' => $order_id]) }}
                                     </p>
                                 </div>
                             </div>
@@ -39,39 +39,14 @@
 
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
-                            @livewire('admin.orders.payment-history', ['order' => $order])
+                            @livewire('admin.orders.payment-history', ['order_id' => $order_id])
                         </div>
                     </div>
                 </div>
             </section>
+
         </div>
     </div>
 @endsection
 
-@push('js')
-    <script>
-        // #### Edit Order Status ####
-        window.addEventListener('swalSelectBox', function(e) {
-            Swal.fire({
-                title: e.detail.title,
-                input: 'select',
-                inputOptions: JSON.parse(e.detail.data),
-                inputValue: e.detail.selected,
-                customClass: {
-                    input: 'role-grapper rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300',
-                },
-                showDenyButton: true,
-                confirmButtonText: e.detail.confirmButtonText,
-                denyButtonText: e.detail.denyButtonText,
-                denyButtonColor: e.detail.denyButtonColor,
-                confirmButtonColor: e.detail.confirmButtonColor,
 
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Livewire.emit(e.detail.method, e.detail.id, result.value);
-                }
-            });
-        });
-        // #### Edit Order Status ####
-    </script>
-@endpush

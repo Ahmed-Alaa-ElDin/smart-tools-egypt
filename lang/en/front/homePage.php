@@ -118,6 +118,7 @@ return [
     "Delivery Cost"             =>      "Delivery Cost",
     "Country"                   =>      "Country",
     "Governorate"               =>      "Governorate",
+    "City"                      =>      "City",
     "Calculate"                 =>      "Calculate",
     "Please Choose the Country"         =>      "Please Choose the Country",
     "Please Choose the Governorate"     =>      "Please Choose the Governorate",

@@ -19,8 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('old_order_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->decimal('payment_amount')->default(0.00);
-            $table->tinyInteger('payment_method')->nullable()->unsigned()->comment('1 => cash, 2 => card, 3 => installments, 4 => vodafone cash,10=>wallet');
-            $table->tinyInteger('payment_status')->unsigned()->comment('1 => pending, 2 => paid, 3 => failed, 4 => refunded');
+            $table->tinyInteger('payment_method')->nullable()->unsigned()->comment('1 => cash, 2 => card, 3 => installments, 4 => vodafone cash,10 => wallet');
+            $table->tinyInteger('payment_status')->unsigned()->comment('1 => pending, 2 => paid, 3 => failed, 4 => refunded, 5 => refund_requested');
             $table->string('paymob_order_id', 20)->nullable();
             $table->text('payment_details')->nullable();
             $table->timestamps();

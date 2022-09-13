@@ -86,17 +86,6 @@ class OrderController extends Controller
 
     public function paymentHistory($order_id)
     {
-        $order = Order::with([
-            'payments',
-            'user' => fn ($q) => $q->with([
-                'phones' => fn ($q) => $q->where('default', 1)
-            ])->select('id', 'f_name', 'l_name')
-        ])->findOrFail($order_id);
-
-        $order->paid = $order->payments->where('payment_status', 2)->where('payment_amount', ">=", 0)->sum('payment_amount');
-        $order->unpaid = $order->payments->where('payment_status', 1)->where('payment_amount', ">=", 0)->sum('payment_amount');
-        $order->refund = $order->payments->where('payment_amount', "<", 0)->sum('payment_amount');
-
-        return view('admin.orders.payment_history', compact('order'));
+        return view('admin.orders.payment_history', compact('order_id'));
     }
 }

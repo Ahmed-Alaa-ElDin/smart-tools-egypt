@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ LaravelLocalization::getCurrentLocale() }}"
-    dir="{{ LaravelLocalization::getCurrentLocaleDirection() }}">
+<html lang="{{ LaravelLocalization::getCurrentLocale() }}" dir="{{ LaravelLocalization::getCurrentLocaleDirection() }}">
 
 <head>
     <meta charset="utf-8" />
@@ -10,21 +9,18 @@
     <title>{{ isset($titlePage) ? $titlePage . ' | ' : '' }}{{ __('Smart Tools Egypt') }}</title>
 
     {{-- FavIcons --}}
-    <link rel="apple-touch-icon" sizes="76x76"
-        href="{{ asset('assets/img/logos/smart-tools-logo-fav-only-50.png') }}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/img/logos/smart-tools-logo-fav-only-50.png') }}">
     <link rel="icon" type="image/png" href="{{ asset('assets/img/logos/smart-tools-logo-fav-only-50.png') }}">
 
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
         name='viewport' />
 
     {{-- todo : facebook meta tags --}}
-    <meta property="og:url"
-        content="http://www.nytimes.com/2015/02/19/arts/international/when-great-minds-dont-think-alike.html" />
-    <meta property="og:type" content="article" />
-    <meta property="og:title" content="When Great Minds Don’t Think Alike" />
-    <meta property="og:description" content="How much does culture influence creative thinking?" />
-    <meta property="og:image"
-        content="http://static01.nyt.com/images/2015/02/19/arts/international/19iht-btnumbers19A/19iht-btnumbers19A-facebookJumbo-v2.jpg" />
+    <meta property="og:url" content='{{ isset($url) ? $url : 'https://smarttoolsegypt.com' }}' />
+    <meta property="og:type" content='{{ isset($type) ? $type : 'article' }}' />
+    <meta property="og:title" content='{{ isset($titlel) ? $titlel : 'Smart Tools Egypt' }}' />
+    <meta property="og:description" content='{{ isset($description) ? $description : 'Smart Tools Egypt' }}' />
+    <meta property="og:image" content="{{ isset($thumbnail) ? $thumbnail : asset('assets/img/logos/smart-tools-logos.png') }}" />
 
     {{-- Fonts --}}
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -151,7 +147,7 @@
                 timerProgressBar: true,
                 showConfirmButton: false,
             })
-        @elseif(Session::has('error'))
+        @elseif (Session::has('error'))
             Swal.fire({
                 text: '{{ Session::get('error') }}',
                 icon: 'error',

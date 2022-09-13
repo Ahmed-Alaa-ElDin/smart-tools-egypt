@@ -450,6 +450,7 @@ class OrderController extends Controller
         elseif ($new_order->payment_method == 2 || $new_order->payment_method == 3) {
             if ($new_order->should_get > 0 && $request->type == 'wallet') {
                 if (editBostaOrder($new_order, $old_order_id)) {
+
                     try {
                         $old_order->update([
                             'status_id' => 12,
@@ -471,6 +472,17 @@ class OrderController extends Controller
                         ]);
 
                         $old_order->statuses()->attach([16, 12]);
+
+                        $payment = [
+                            'order_id' => $old_order->id,
+                            'user_id' => $old_order->user_id,
+                            'payment_amount' => -1 * $new_order->should_get,
+                            'payment_method' => 10,
+                            'payment_status' => 4,
+                            'payment_details' => null,
+                        ];
+
+                        $old_order->payments()->create($payment);
 
                         $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
                             $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
@@ -504,7 +516,7 @@ class OrderController extends Controller
             } elseif ($new_order->should_get > 0 && $request->type == 'card') {
                 $old_payment = $old_order->payments()
                     ->where('payment_amount', '>=', $new_order->should_get)
-                    ->whereIn('payment_status', [2, 4])
+                    ->where('payment_status', 2)
                     ->first();
 
                 while (is_null($old_payment)) {
@@ -532,12 +544,11 @@ class OrderController extends Controller
                     if (refundRequestPaymob(json_decode($new_payment->payment_details)->transaction_id, abs($new_payment->payment_amount))) {
                         $new_order->payments()->first()->update([
                             'order_id' => $old_order->id,
-                            'payment_status' => 2,
+                            'payment_status' => 4,
                         ]);
 
                         $old_small_payment->update([
                             'payment_amount' => 0,
-                            'payment_status' => 4,
                         ]);
 
                         $new_order->update([
@@ -547,7 +558,7 @@ class OrderController extends Controller
 
                     $old_payment = $old_order->payments()
                         ->where('payment_amount', '>=', $new_order->should_get)
-                        ->whereIn('payment_status', [2, 4])
+                        ->where('payment_status', 2)
                         ->first();
                 }
 
@@ -591,12 +602,11 @@ class OrderController extends Controller
 
                         $new_order->payments()->first()->update([
                             'order_id' => $old_order->id,
-                            'payment_status' => 2,
+                            'payment_status' => 4,
                         ]);
 
                         $old_payment->update([
                             'payment_amount' => $old_payment->payment_amount - $new_order->should_get,
-                            'payment_status' => 4
                         ]);
 
                         $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
@@ -858,12 +868,12 @@ class OrderController extends Controller
                         'user_id' => $new_order->user_id,
                         'payment_amount' => -1 * $new_order->should_get,
                         'payment_method' => 4,
-                        'payment_status' => 1,
+                        'payment_status' => 5,
                     ];
 
                     $payment = $old_order->payments()->updateOrCreate([
                         'order_id' => $payment['order_id'],
-                        'payment_status' => 1,
+                        'payment_status' => 5,
                     ], $payment);
 
                     $old_order->update([
@@ -1039,7 +1049,7 @@ class OrderController extends Controller
         try {
             $order = Order::with('payments')->findOrFail($order_id);
 
-            $payments = $order->payments()->where('payment_status', 2);
+            $payments = $order->payments()->where('payment_status', 2)->get();
 
             if ($order->payment_method == 1) {
                 // update the database
@@ -1047,11 +1057,30 @@ class OrderController extends Controller
                 // Cancel Bosta Order
                 cancelBostaOrder($order);
             } elseif (($order->payment_method == 2 || $order->payment_method == 3) && $order->should_pay == 0) {
+
+                // Void within 24 h
                 if ($order->created_at->diffInDays() < 1) {
                     $refund_success = [];
-                    foreach ($payments->get() as $payment) {
-                        $refund_success[] = voidRequestPaymob(json_decode($payment->payment_details)->transaction_id);
+
+                    // Void All Payments
+                    foreach ($payments as $payment) {
+                        $refund_status = voidRequestPaymob(json_decode($payment->payment_details)->transaction_id);
+                        $refund_success[] = $refund_status;
+
+                        if ($refund_status) {
+                            $new_payment = [
+                                'order_id' => $order->id,
+                                'user_id' => $order->user_id,
+                                'payment_amount' => -1 * $$payment->payment_amount,
+                                'payment_method' => $order->payment_method,
+                                'payment_status' => 4,
+                                'payment_details' => $payment->payment_details,
+                            ];
+
+                            $order->payments()->create($new_payment);
+                        }
                     }
+
                     if (!array_search(false, $refund_success)) {
                         // update the database
                         returnTotalOrder($order);
@@ -1060,9 +1089,26 @@ class OrderController extends Controller
                     }
                 } else {
                     $refund_success = [];
-                    foreach ($payments->get() as $payment) {
-                        $refund_success[] = refundRequestPaymob(json_decode($payment->payment_details)->transaction_id, json_decode($payment->payment_details)->amount_cents);
+
+                    foreach ($payments as $payment) {
+                        $refund_status = refundRequestPaymob(json_decode($payment->payment_details)->transaction_id, json_decode($payment->payment_details)->amount_cents);
+
+                        $refund_success[] = $refund_status;
+
+                        if ($refund_status) {
+                            $new_payment = [
+                                'order_id' => $order->id,
+                                'user_id' => $order->user_id,
+                                'payment_amount' => -1 * $$payment->payment_amount,
+                                'payment_method' => $order->payment_method,
+                                'payment_status' => 4,
+                                'payment_details' => $payment->payment_details,
+                            ];
+
+                            $order->payments()->create($new_payment);
+                        }
                     }
+
                     if (!array_search(false, $refund_success)) {
                         // update the database
                         returnTotalOrder($order);
@@ -1072,13 +1118,14 @@ class OrderController extends Controller
                 }
             } elseif ($order->payment_method == 4) {
                 if ($order->order_delivery_id != null) {
+
                     // Make Refund Request
                     $payment = [
                         'order_id' => $order->id,
-                        'user_id' => $order->user->id,
+                        'user_id' => $order->user_id,
                         'payment_amount' => -1 * $order->total,
                         'payment_method' => 4,
-                        'payment_status' => 4,
+                        'payment_status' => 5,
                     ];
 
                     $order->payments()->create($payment);
@@ -1099,11 +1146,22 @@ class OrderController extends Controller
                     // update the database
                     returnTotalOrder($order);
 
-                    $order->payments()->each(function($q){
-                        $q->update([
-                            'payment_status' => $q->payment_status == 2 ? 4 : 3,
-                            'payment_amount' => $q->payment_status == 2 ? (-1 * $q->payment_amount) : $q->payment_amount
-                        ]);
+                    $order->payments()->each(function ($payment) use ($order) {
+                        if ($payment->payment_status == 2) {
+                            $new_payment = [
+                                'order_id' => $order->id,
+                                'user_id' => $order->user_id,
+                                'payment_amount' => -1 * $payment->payment_amount,
+                                'payment_method' => 4,
+                                'payment_status' => 5,
+                            ];
+
+                            $order->payments()->create($new_payment);
+                        } else {
+                            $payment->update([
+                                'payment_status' => 3,
+                            ]);
+                        }
                     });
                 }
             }
@@ -1116,12 +1174,6 @@ class OrderController extends Controller
 
                 $new_order->forceDelete();
             }
-
-            // edit products database
-            $order->products->each(function ($product) {
-                $product->quantity = $product->quantity + $product->pivot->quantity;
-                $product->save();
-            });
 
             DB::commit();
 
@@ -1293,6 +1345,9 @@ class OrderController extends Controller
             $return_total = $return_subtotal;
         }
 
+
+        $return_total = abs($return_total) <= $order-> total ? $return_total : -1 * ($order-> total);
+
         DB::beginTransaction();
 
         try {
@@ -1408,7 +1463,7 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($order_id);
 
-        $order->delete();
+        $order->forceDelete();
 
         return redirect()->back()->with('success', __('front/homePage.Returning request has been deleted successfully'));
     }

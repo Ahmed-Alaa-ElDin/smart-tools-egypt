@@ -463,7 +463,7 @@ function editBostaOrder($order, $old_order_id)
         ],
         "businessReference" => "$old_order_id",
         "notes"     =>      $order->notes ?? '',
-        "cod"       =>      $order->payment_method == 1 ? $order->subtotal_final + $order->delivery_fees : 0.00,
+        "cod"       =>      $order->payment_method == 1 ? $order->total : 0.00,
         "allowToOpenPackage" => true,
     ];
 

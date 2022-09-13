@@ -263,7 +263,7 @@
                                             <span class="font-bold">
                                                 {{ $order->user ? $order->user->f_name . ' ' . $order->user->l_name : __('N/A') }}
                                             </span>
-                                            <span>
+                                            <span class="text-gray-500">
                                                 {{ $order->user && $order->user->phones->count() ? $order->user->phones->where('default', 1)->first()->phone : __('N/A') }}
                                             </span>
                                         </div>
@@ -306,13 +306,12 @@
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
                                         <div class="flex flex-col items-center content-center justify-center">
                                             <span>
-
                                                 {{ __('admin/ordersPages.' . Carbon\Carbon::parse($order->updated_at)->format('D')) }}
                                                 ,
                                                 {{ Carbon\Carbon::parse($order->updated_at)->format('d') }}
                                                 {{ __('admin/ordersPages.' . Carbon\Carbon::parse($order->updated_at)->format('M')) }}
                                             </span>
-                                            <span>
+                                            <span class="text-gray-500">
                                                 {{ Carbon\Carbon::parse($order->updated_at)->format('h:i') }}
                                                 {{ __('admin/ordersPages.' . Carbon\Carbon::parse($order->updated_at)->format('A')) }}
                                             </span>

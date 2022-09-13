@@ -6,8 +6,6 @@ use App\Http\Controllers\Front\OrderController;
 use App\Http\Controllers\Front\ProductController;
 use App\Http\Controllers\Front\ProfileController;
 use App\Http\Controllers\InvoiceRequestController;
-use App\Models\InvoiceRequest;
-use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
@@ -22,7 +20,7 @@ Route::group([
     ################ User's Profile :: End ##############
 
     ################ Product Controller :: Start ##############
-    Route::get('/product/{id}/{slug}', [ProductController::class, 'show'])->name('product.show');
+    Route::get('/{id}-{slug?}', [ProductController::class, 'show'])->name('product.show');
     ################ Product Controller :: End ##############
 
     ################ Cart & Order Controller :: Start ##############

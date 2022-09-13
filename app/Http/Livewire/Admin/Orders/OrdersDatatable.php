@@ -29,7 +29,7 @@ class OrdersDatatable extends Component
 
         $this->sortBy = 'orders.id';
 
-        $this->sortDirection = 'ASC';
+        $this->sortDirection = 'DESC';
 
         $this->search = "";
 

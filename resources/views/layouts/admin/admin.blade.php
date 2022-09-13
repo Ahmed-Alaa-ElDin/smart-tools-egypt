@@ -136,7 +136,7 @@
             }).then((result) => {
                 // console.log(result);
                 if (result.isConfirmed) {
-                    Livewire.emit(e.detail.method, e.detail.id);
+                    Livewire.emit(e.detail.method, e.detail.id, e.detail.details || []);
                 }
             });
         });
