@@ -1,6 +1,9 @@
 @extends('layouts.front.site', [
     'titlePage' => __('front/homePage.Product Page Title', ['product_name' => $product->name]),
     'url' => "https://www.smarttoolsegypt.com/$product->id-$product->slug",
+    'title' => $product->name,
+    'description' => $product->description,
+    'thumbnail' => $product->thumbnail,
 ])
 
 @section('content')
@@ -182,13 +185,6 @@
 
                     <hr class="my-4">
 
-                    {{-- Cart Amount :: Start --}}
-                    <div class="grid grid-cols-12 justify-center">
-                        <div class="col-span-6 col-start-4">
-                            @livewire('front.general.cart.cart-amount', ['product_id' => $product->id, 'unique' => 'product-' . $product->id, 'title' => true], key($product->name . '-' . rand()))
-                        </div>
-                    </div>
-                    {{-- Cart Amount :: End --}}
 
                     <div class="flex flex-wrap gap-4 items-center justify-around md:justify-between mt-4">
                         {{-- Add Product : Start --}}
@@ -207,11 +203,16 @@
                         </div>
                         {{-- Add Product : End --}}
 
+                        {{-- Cart Amount :: Start --}}
+                        <div>
+                            @livewire('front.general.cart.cart-amount', ['product_id' => $product->id, 'unique' => 'product-' . $product->id, 'title' => false], key($product->name . '-' . rand()))
+                        </div>
+                        {{-- Cart Amount :: End --}}
+
                         {{-- Product Share :: Start --}}
                         <div class="flex justify-center gap-3">
                             {{-- todo : Complete the facebook share --}}
-                            {{-- <a href="https://www.facebook.com/sharer/sharer.php?u={{ route('front.product.show', ['id' => $product->id, 'slug' => $product->slug]) }}&display=popup" --}}
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ "https://smarttoolsegypt.com/$product->id-$product->slug" }}&display=popup"
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ "https://smarttoolsegypt.com/".session('locale')."/$product->id-$product->slug" }}&display=popup"
                                 target="_blank"
                                 class="w-9 h-9 bg-facebook rounded-circle flex justify-center items-center text-white shadow transition ease-in-out hover:bg-white hover:text-facebook hover:border hover:border-facebook">
                                 <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
