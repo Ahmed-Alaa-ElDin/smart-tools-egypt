@@ -17,6 +17,9 @@ class SubcategoriesDatatable extends Component
 
     public $search = "";
 
+    public $category_id = '%';
+    public $supercategory_id = '%';
+
     protected $listeners = ['softDeleteSubcategory'];
 
     // Render Once
@@ -48,6 +51,8 @@ class SubcategoriesDatatable extends Component
                     ->orWhere('supercategories.name->ar', 'like', '%' . $this->search . '%')
                     ->orWhere('supercategories.name->en', 'like', '%' . $this->search . '%');
             })
+            ->where('category_id', 'like', $this->category_id)
+            ->where('supercategory_id', 'like', $this->supercategory_id)
             ->leftJoin('categories', 'category_id', '=', 'categories.id')
             ->leftJoin('supercategories', 'categories.supercategory_id', '=', 'supercategories.id')
             ->orderBy($this->sortBy, $this->sortDirection)->paginate($this->perPage);

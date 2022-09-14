@@ -51,7 +51,7 @@ class CategoriesDatatable extends Component
                     ->orWhere('supercategories.name->ar', 'like', '%' . $this->search . '%')
                     ->orWhere('supercategories.name->en', 'like', '%' . $this->search . '%');
             })
-            ->where('supercategory_id', 'like', $this->supercategory_id ?? '%')
+            ->where('supercategory_id', 'like', $this->supercategory_id)
             ->orderBy($this->sortBy, $this->sortDirection)->paginate($this->perPage);
 
 
