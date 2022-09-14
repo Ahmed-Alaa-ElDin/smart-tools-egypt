@@ -273,7 +273,7 @@
                         {{-- Video Header :: End --}}
 
                         {{-- Specifications Header :: Start --}}
-                        @if (count(json_decode($product->specs)))
+                        @if (!is_null(json_decode($product->specs)) && count(json_decode($product->specs)))
                             <li role="presentation">
                                 <button
                                     class="inline-flex gap-2 items-center p-4 border-b-2 hover:text-gray-600 hover:border-gray-300"
@@ -374,7 +374,7 @@
                     {{-- Video Body :: End --}}
 
                     {{-- Specifications Body :: Start --}}
-                    @if (count(json_decode($product->specs)))
+                    @if (!is_null(json_decode($product->specs)) && $product->specs)
                         <div class="hidden p-4 rounded-lg flex items-center justify-center relative overflow-x-auto shadow-md sm:rounded-lg"
                             id="specs" role="tabpanel" aria-labelledby="specs-tab">
                             <table class="min-w-[50%] text-sm text-left text-gray-700">
@@ -638,7 +638,7 @@
                 navigator.clipboard.writeText(
                     "https://smarttoolsegypt.com/{{ $product->id }}-{{ $product->slug }}");
                 Swal.fire({
-                    text:"{{ __('front/homePage.The link has been copied successfully') }}",
+                    text: "{{ __('front/homePage.The link has been copied successfully') }}",
                     icon: "success",
                     @if (session('locale' == 'en'))
                         position: 'top-left',

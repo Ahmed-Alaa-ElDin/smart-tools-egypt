@@ -19,9 +19,6 @@ Route::group([
     Route::resource('/profile', ProfileController::class)->middleware('auth');
     ################ User's Profile :: End ##############
 
-    ################ Product Controller :: Start ##############
-    Route::get('/{id}-{slug?}', [ProductController::class, 'show'])->name('product.show');
-    ################ Product Controller :: End ##############
 
     ################ Cart & Order Controller :: Start ##############
     Route::get('/cart', [CartController::class, 'index'])->name('cart')->middleware(['cart_not_empty']);
@@ -79,4 +76,9 @@ Route::group([
     ################ Invoice Request Controller :: Start ##############
     Route::post('/invoice-request-store', [InvoiceRequestController::class, 'store'])->name('invoice-request.store')->middleware('auth');
     ################ Invoice Request Controller :: End ##############
+
+    ################ Product Controller :: Start ##############
+    Route::get('/{id}-{slug?}', [ProductController::class, 'show'])->name('product.show');
+    ################ Product Controller :: End ##############
+
 });

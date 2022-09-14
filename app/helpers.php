@@ -410,7 +410,7 @@ function createBostaOrder($order)
         "businessReference" => "$order->id",
         "type"      =>      10,
         "notes"     =>      $order->notes ? $order->notes . ($order->user->phones->where('default', 0)->count() > 1 ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : '') : ($order->user->phones->where('default', 0)->count() > 1 ? implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : ''),
-        "cod"       =>      $order->payment_method == 1 ? $order->should_pay : 0.00,
+        "cod"       =>      $order->payment_method == 1 ? ceil($order->should_pay) : 0.00,
         "allowToOpenPackage" => true,
         "webhookUrl" => "https://www.smarttoolsegypt.com/api/orders/update-status",
     ];
@@ -463,7 +463,7 @@ function editBostaOrder($order, $old_order_id)
         ],
         "businessReference" => "$old_order_id",
         "notes"     =>      $order->notes ?? '',
-        "cod"       =>      $order->payment_method == 1 ? $order->total : 0.00,
+        "cod"       =>      $order->payment_method == 1 ? ceil($order->should_pay) : 0.00,
         "allowToOpenPackage" => true,
     ];
 
@@ -657,7 +657,7 @@ function returnTotalOrder($order)
 
 ################ COUPON :: START ##################
 // todo: Need Update like in coupon block component (Has no use right now) --> May replace the coupon code checkCoupon function
-function getRemainingProductsCoupon($coupon_id, $products_ids, $products_quantities,$products)
+function getRemainingProductsCoupon($coupon_id, $products_ids, $products_quantities, $products)
 {
     $coupon_discount = 0;
     $coupon_points = 0;
