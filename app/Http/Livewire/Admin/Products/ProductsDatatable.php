@@ -17,6 +17,9 @@ class ProductsDatatable extends Component
 
     public $selectedProducts = [];
 
+    public $subcategory_id = "%";
+    public $brand_id = "%";
+
     protected $listeners = ['softDeleteProduct', 'softDeleteAllProduct', 'publishAllProduct', 'hideAllProduct'];
 
     // Render Once
@@ -33,35 +36,46 @@ class ProductsDatatable extends Component
     public function render()
     {
         $products = Product::select([
-                'products.id',
-                'products.name',
-                'brand_id',
-                'slug',
-                'quantity',
-                'low_stock',
-                'base_price',
-                'final_price',
-                'points',
-                'publish',
-                'under_reviewing',
-                'brands.name as brand_name'
-            ])
+            'products.id',
+            'products.name',
+            'brand_id',
+            'slug',
+            'quantity',
+            'low_stock',
+            'base_price',
+            'final_price',
+            'points',
+            'publish',
+            'under_reviewing',
+            'brands.name as brand_name'
+        ])
             ->with('subcategories', 'brand', 'thumbnail')
             ->leftJoin('brands', 'brand_id', '=', 'brands.id')
-            ->where('products.name->en', 'like', '%' . $this->search . '%')
-            ->orWhere('products.name->ar', 'like', '%' . $this->search . '%')
-            ->orWhere('products.base_price', 'like', '%' . $this->search . '%')
-            ->orWhere('products.final_price', 'like', '%' . $this->search . '%')
-            ->orWhereHas('subcategories', function ($query) {
-                $query->where('name->en', 'like', '%' . $this->search . '%')
-                    ->orWhere('name->ar', 'like', '%' . $this->search . '%');
+            ->where(function ($q) {
+                $q
+                    ->where('products.name->en', 'like', '%' . $this->search . '%')
+                    ->orWhere('products.name->ar', 'like', '%' . $this->search . '%')
+                    ->orWhere('products.base_price', 'like', '%' . $this->search . '%')
+                    ->orWhere('products.final_price', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('subcategories', function ($query) {
+                        $query->where('name->en', 'like', '%' . $this->search . '%')
+                            ->orWhere('name->ar', 'like', '%' . $this->search . '%');
+                    })
+                    ->orWhereHas('brand', function ($query) {
+                        $query->where('name', 'like', '%' . $this->search . '%');
+                    });
             })
-            ->orWhereHas('brand', function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%');
+            ->where('brand_id', 'like', $this->brand_id)
+            ->where(function ($q) {
+                $q->whereHas('subcategories', function ($q) {
+                    $q->where('subcategories.id', 'like', $this->subcategory_id);
+                })->orWhereDoesntHave('subcategories');
             })
+
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
+        // dd($products);
         return view('livewire.admin.products.products-datatable', compact('products'));
     }
 
