@@ -122,9 +122,12 @@ class SectionsList extends Component
             "text" => __('admin/sitePages.Are you sure, you want to delete this section ?'),
             'confirmButtonText' => __('admin/sitePages.Delete'),
             'denyButtonText' => __('admin/sitePages.Cancel'),
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'func' => 'softDeleteSection',
-            'section_id' => $section_id,
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'softDeleteSection',
+            'id' => $section_id,
         ]);
     }
 

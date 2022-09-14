@@ -49,48 +49,11 @@ __('admin/deliveriesPages.Deleted Delivery Companies')])
     </div>
 @endsection
 
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
+
 
 {{-- Extra Scripts --}}
 @push('js')
-    @livewireScripts
-
     <script>
-        // #### Delivery Force Delete ####
-        window.addEventListener('swalConfirm', function(e) {
-            Swal.fire({
-                icon: e.detail.icon,
-                text: e.detail.text,
-                confirmButtonText: e.detail.confirmButtonText,
-                denyButtonText: e.detail.denyButtonText,
-                denyButtonColor: e.detail.denyButtonColor,
-                confirmButtonColor: e.detail.confirmButtonColor,
-                focusDeny: e.detail.focusDeny,
-                showDenyButton: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Livewire.emit(e.detail.method, e.detail.delivery_id);
-                }
-            });
-        });
-
-        window.addEventListener('swalDone', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        });
-        // #### Delivery Force Delete ####
-
-
         // #### Restore ####
         window.addEventListener('swalRestore', function(e) {
             Swal.fire({
@@ -113,8 +76,11 @@ __('admin/deliveriesPages.Deleted Delivery Companies')])
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
+ @if (session('locale' == 'en'))
+                    position: 'top-left',
+                @else
+                    position: 'top-right',
+                @endif                showConfirmButton: false,
                 toast: true,
                 timer: 3000,
                 timerProgressBar: true,

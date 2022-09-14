@@ -47,7 +47,7 @@ return [
     'All Customers'             =>      'All Customers',
     'Add Customer'              =>      'Add Customer',
     'Deleted Customers'         =>      'Deleted Customers',
-    'Categories'                =>      'Categories',
+    'Archived Orders'           =>      'Archived Orders',
     'Categories'                =>      'Categories',
     'Categories'                =>      'Categories',
     'Categories'                =>      'Categories',

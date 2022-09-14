@@ -18,6 +18,7 @@ class CitiesDatatable extends Component
     public $search = "";
 
     public $country_id;
+    public $governorate_id;
 
     protected $listeners = ['softDeleteCity'];
 
@@ -31,12 +32,14 @@ class CitiesDatatable extends Component
 
     public function render()
     {
-        $cities = City::with('governorate:id,name','users:id','deliveries:id')
+        $cities = City::with('governorate:id,name', 'users:id', 'deliveries:id')
             ->join('governorates', 'governorates.id', '=', 'governorate_id')
             ->join('countries', 'countries.id', '=', 'governorates.country_id')
             ->select('cities.*', 'governorates.name as governorate_name', 'countries.name->' . session('locale') . ' as country_name')
-            ->withCount('users')
-            ->withCount('deliveries')
+            ->withCount([
+                'users' => fn ($q) => $q->whereHas('roles', fn ($q) => $q->where('name', 'Customer')),
+                'deliveries'
+            ])
             ->where(function ($query) {
                 return $query
                     ->where('cities.name->en', 'like', '%' . $this->search . '%')
@@ -45,6 +48,14 @@ class CitiesDatatable extends Component
                     ->orWhere('governorates.name->en', 'like', '%' . $this->search . '%')
                     ->orWhere('countries.name->ar', 'like', '%' . $this->search . '%')
                     ->orWhere('countries.name->en', 'like', '%' . $this->search . '%');
+            })
+            ->where(function ($q) {
+                if ($this->governorate_id) {
+                    return $q->where('governorates.id', $this->governorate_id);
+                }
+                if ($this->country_id) {
+                    return $q->where('countries.id', $this->country_id);
+                }
             })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
@@ -78,11 +89,16 @@ class CitiesDatatable extends Component
     ######## Deleted #########
     public function deleteConfirm($city_id)
     {
-        $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
+        $this->dispatchBrowserEvent('swalConfirm', [
             "text" => __('admin/deliveriesPages.Are you sure, you want to delete this city ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'city_id' => $city_id,
+            'denyButtonColor' => 'green',
+            'confirmButtonColor' => 'red',
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'softDeleteCity',
+            'id' => $city_id,
         ]);
     }
 
@@ -92,12 +108,12 @@ class CitiesDatatable extends Component
             $city = City::findOrFail($city_id);
             $city->delete();
 
-            $this->dispatchBrowserEvent('swalCityDeleted', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('admin/deliveriesPages.City has been deleted successfully'),
                 'icon' => 'success'
             ]);
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('swalCityDeleted', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/deliveriesPages.City hasn't been deleted"),
                 'icon' => 'error'
             ]);

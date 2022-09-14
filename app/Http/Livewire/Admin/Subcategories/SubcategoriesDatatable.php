@@ -85,9 +85,12 @@ class SubcategoriesDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to delete this subcategory ?'),
             'confirmButtonText' => __('admin/productsPages.Delete'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'func' => 'softDeleteSubcategory',
-            'subcategory_id' => $subcategories_id,
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'softDeleteSubcategory',
+            'id' => $subcategories_id,
         ]);
     }
 

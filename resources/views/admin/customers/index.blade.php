@@ -52,47 +52,9 @@
     </div>
 @endsection
 
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
 {{-- Extra Scripts --}}
 @push('js')
-    @livewireScripts
-
     <script>
-        // #### Customer Deleted ####
-        window.addEventListener('swalConfirmSoftDelete', function(e) {
-            Swal.fire({
-                icon: 'warning',
-                text: e.detail.text,
-                showDenyButton: true,
-                confirmButtonText: e.detail.confirmButtonText,
-                denyButtonText: e.detail.denyButtonText,
-                denyButtonColor: 'gray',
-                confirmButtonColor: 'red',
-                focusDeny: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Livewire.emit('softDeleteUser', e.detail.user_id);
-                }
-            });
-        });
-
-        window.addEventListener('swalUserDeleted', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        });
-        // #### Customer Deleted ####
-
         // #### Customer Add Points ####
         window.addEventListener('swalAddPointsForm', function(e) {
             Swal.fire({
@@ -115,19 +77,5 @@
             });
         });
         // #### Customer Add Points ####
-
-        // #### Customer Banned :: Start ####
-        window.addEventListener('swalUserPanned', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        })
-        // #### Customer Banned :: End ####
     </script>
 @endpush

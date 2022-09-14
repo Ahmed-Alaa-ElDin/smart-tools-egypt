@@ -33,8 +33,8 @@ class RegisterFromOrder extends Component
     {
         return [
             'f_name'                    => 'required|string|max:40|min:3',
-            'l_name'                    => 'nullable|string|max:40|min:3',
-            'phone'                     => 'required|digits:11|regex:/^01[0-2]\d{1,8}$/|' . Rule::unique('phones'),
+            'l_name'                    => 'required|string|max:40|min:3',
+            'phone'                     => 'required|digits:11|regex:/^01[0-2,5]\d{1,8}$/|' . Rule::unique('phones'),
             'email'                     => 'nullable|email|max:50|min:3',
             'password'                  => 'nullable|string|confirmed|max:50|min:8',
             'address.country_id'        => 'required|exists:countries,id',
@@ -48,6 +48,7 @@ class RegisterFromOrder extends Component
     {
         return [
             'phones.*.phone.digits_between' => __('validation.The phone numbers must contain digits between 8 & 11'),
+            'phones.*.phone.regex:/^01[0-2]\d{1,8}$/' => __('validation.The phone numbers must start with 010, 011, 012 or 015'),
         ];
     }
 

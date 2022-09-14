@@ -280,10 +280,12 @@ class OrderShippingDetails extends Component
                     'notes' => $this->notes,
                 ]);
 
+                $order->statuses()->attach(1);
+
                 DB::commit();
 
                 Session::flash('success', __('front/homePage.Shipping Details Saved Successfully'));
-                redirect()->route('front.order.billing');
+                redirect()->route('front.orders.billing');
             } catch (\Throwable $th) {
                 DB::rollBack();
 

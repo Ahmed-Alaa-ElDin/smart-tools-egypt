@@ -7,6 +7,11 @@
         </a>
     </li>
     <li class="breadcrumb-item hover:text-primary">
+        <a href="{{ route('front.orders.index') }}">
+            {{ __('front/homePage.My Orders') }}
+        </a>
+    </li>
+    <li class="breadcrumb-item hover:text-primary">
         <a href="{{ route('front.orders.edit', $order_data['order_id']) }}">
             {{ __('front/homePage.Edit Order') }}
         </a>
@@ -121,6 +126,28 @@
                     </div>
                 </div>
 
+                @if ($order_data['order_offers_discounts'] > 0.0)
+                    {{-- Order Offers --}}
+                    <div class="flex justify-between items-center gap-1 px-4 py-1">
+                        <span class="text-sm font-bold"> {{ __('front/homePage.Order Discount:') }} </span>
+
+                        <div class="flex gap-2 text-successDark">
+                            <span class="flex rtl:flex-row-reverse gap-1">
+                                <span class="font-bold text-sm">
+                                    {{ __('front/homePage.EGP') }}
+                                </span>
+                                <span class="font-bold text-xl"
+                                    dir="ltr">{{ number_format(explode('.', $order_data['order_offers_discounts'])[0], 0, '.', '\'') }}</span>
+                                <span
+                                    class="font-bold text-xs">{{ explode('.', number_format($order_data['order_offers_discounts'], 2))[1] ?? '00' }}</span>
+                            </span>
+                            <span>
+                                ({{ $order_data['order_offers_discounts_percentage'] }} %)
+                            </span>
+                        </div>
+                    </div>
+                @endif
+
                 {{-- Coupon --}}
                 @if ($order_data['coupon_discount'] > 0)
                     <div class="flex justify-between items-center gap-1 px-4 py-1">
@@ -191,7 +218,8 @@
                         <span class="font-bold">{{ __('front/homePage.EGP') }}</span>
                         <span class="font-bold text-2xl"
                             dir="ltr">{{ number_format(explode('.', $order_data['order_total'])[0], 0, '.', '\'') }}</span>
-                        <span class="font-bold text-sm">{{ explode('.', $order_data['order_total'])[1] ?? '00' }}</span>
+                        <span
+                            class="font-bold text-sm">{{ explode('.', number_format($order_data['order_total'], 2))[1] ?? '00' }}</span>
                     </div>
                 </div>
             </div>
@@ -293,13 +321,13 @@
                     <div class="font-bold flex gap-2 justify-between items-center px-4 py-1">
                         <span class="text-sm"> {{ __('front/homePage.Payment Status:') }} </span>
 
-                        @if ($order_data['should_pay'] > 0)
-                            <span class="text-primary">
-                                {{ __('front/homePage.Unpaid') }}
-                            </span>
-                        @elseif ($order_data['should_pay'] == 0)
+                        @if ($order_data['old_order_paid'])
                             <span class="text-successDark">
                                 {{ __('front/homePage.Paid') }}
+                            </span>
+                        @else
+                            <span class="text-primary">
+                                {{ __('front/homePage.Unpaid') }}
                             </span>
                         @endif
                     </div>
@@ -312,7 +340,8 @@
                             <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
                             <span class="font-bold text-xl"
                                 dir="ltr">{{ number_format(explode('.', $order_data['old_price'])[0], 0, '.', '\'') }}</span>
-                            <span class="font-bold text-xs">{{ explode('.', $order_data['old_price'])[1] ?? '00' }}</span>
+                            <span
+                                class="font-bold text-xs">{{ explode('.', number_format($order_data['old_price'], 2))[1] ?? '00' }}</span>
                         </div>
                     </div>
 
@@ -325,7 +354,7 @@
                             <span class="font-bold text-xl"
                                 dir="ltr">{{ number_format(explode('.', $order_data['order_total'])[0], 0, '.', '\'') }}</span>
                             <span
-                                class="font-bold text-xs">{{ explode('.', $order_data['order_total'])[1] ?? '00' }}</span>
+                                class="font-bold text-xs">{{ explode('.', number_format($order_data['order_total'], 2))[1] ?? '00' }}</span>
                         </div>
                     </div>
 
@@ -347,7 +376,7 @@
                             <span class="font-bold text-2xl"
                                 dir="ltr">{{ number_format(explode('.', abs($order_data['difference']))[0], 0, '.', '\'') }}</span>
                             <span
-                                class="font-bold text-sm">{{ explode('.', abs($order_data['difference']))[1] ?? '00' }}</span>
+                                class="font-bold text-sm">{{ explode('.', number_format(abs($order_data['difference']), 2))[1] ?? '00' }}</span>
                         </div>
                     </div>
 
@@ -360,9 +389,23 @@
             {{-- Buttons :: Start --}}
             <div class="p-2 flex justify-around items-center gap-2">
 
-                @if ($order_data['payment_method'] == 1)
+                @if ($order_data['products_total_quantities'] == 0)
+                    <form method="POST"
+                        action="{{ route('front.orders.cancel', [
+                            'order_id' => $order_data['order_id'],
+                            'new_order_id' => $order_data['new_order_id'],
+                        ]) }}"
+                        class="m-0">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="btn text-red-600 bg-white font-bold focus:outline-none border-2 border-red-200 text-sm px-5 py-2.5 hover:text-red-800 focus:z-10">
+                            {{ __('front/homePage.Cancel Order') }}
+                        </button>
+                    </form>
+                @elseif ($order_data['payment_method'] == 1)
                     <form
-                        action="{{ route('front.orders.save-update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
+                        action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
                         method="POST" class="m-0">
                         @csrf
                         @method('PUT')
@@ -371,14 +414,16 @@
                             {{ __('front/homePage.Save Edits') }}
                         </button>
                     </form>
-                @elseif($order_data['payment_method'] == 2 || $order_data['payment_method'] == 3)
+                @elseif($order_data['payment_method'] == 2 ||
+                    $order_data['payment_method'] == 3 ||
+                    $order_data['payment_method'] == 4)
                     @if ($order_data['difference'] < 0)
                         <button type="button" data-modal-toggle="card-confirm" class="btn bg-successDark font-bold">
                             {{ __('front/homePage.Save Edits and Get Difference') }}
                         </button>
                     @elseif ($order_data['difference'] == 0)
                         <form
-                            action="{{ route('front.orders.save-update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
+                            action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
                             method="POST" class="m-0">
                             @csrf
                             @method('PUT')
@@ -387,8 +432,17 @@
                                 {{ __('front/homePage.Save Edits') }}
                             </button>
                         </form>
-                    @else
-                        {{ __('front/homePage.Save Edits and Pay Difference') }}
+                    @elseif ($order_data['difference'] > 0)
+                        <form
+                            action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
+                            method="POST" class="m-0">
+                            @csrf
+                            @method('PUT')
+
+                            <button type="submit" name="type" value="pay" class="btn bg-successDark font-bold">
+                                {{ __('front/homePage.Save Edits and Pay Difference') }}
+                            </button>
+                        </form>
                     @endif
                 @endif
 
@@ -411,7 +465,7 @@
                 <!-- Modal header -->
                 <div class="flex justify-between items-start p-4 rounded-t border-b">
                     <h3 class="grow text-xl font-semibold text-gray-900 dark:text-white">
-                        {{ __('front/homePage.Return to Card or Wallet') }}
+                        {{ __('front/homePage.Return to Bank Account or Wallet') }}
                     </h3>
                     <button type="button"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
@@ -428,32 +482,45 @@
                 <!-- Modal body -->
                 <div class="p-6 space-y-6">
                     <p class="leading-relaxed text-gray-900 text-center">
-                        {{ __('front/homePage.Card or Wallet') }}
+                        {{ __('front/homePage.Bank Account or Wallet') }}
                     </p>
                 </div>
                 <!-- Modal footer -->
                 <div class="flex items-center justify-around p-2 space-x-2 rounded-b border-t border-gray-200">
                     <form
-                        action="{{ route('front.orders.save-update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
+                        action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
                         method="POST" class="m-0">
                         @csrf
                         @method('PUT')
 
                         <button type="submit" name="type" value="wallet" class="btn bg-successDark font-bold">
-                            {{ __('front/homePage.My Wallet') }}
+                            {{ __('front/homePage.My Wallet on the Website') }}
                         </button>
                     </form>
 
-                    <form
-                        action="{{ route('front.orders.save-update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
-                        method="POST" class="m-0">
-                        @csrf
-                        @method('PUT')
+                    @if ($order_data['payment_method'] == 4)
+                        <form
+                            action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
+                            method="POST" class="m-0">
+                            @csrf
+                            @method('PUT')
 
-                        <button type="submit" name="type" value="card" class="btn bg-successDark font-bold">
-                            {{ __('front/homePage.Card') }}
-                        </button>
-                    </form>
+                            <button type="submit" name="type" value="vodafone" class="btn bg-successDark font-bold">
+                                {{ __('front/homePage.My Vodafone-cash Wallet') }}
+                            </button>
+                        </form>
+                    @else
+                        <form
+                            action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
+                            method="POST" class="m-0">
+                            @csrf
+                            @method('PUT')
+
+                            <button type="submit" name="type" value="card" class="btn bg-successDark font-bold">
+                                {{ __('front/homePage.Bank Account') }}
+                            </button>
+                        </form>
+                    @endif
 
                     <button data-modal-toggle="card-confirm" type="button"
                         class="btn bg-primary focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
@@ -469,18 +536,4 @@
 @endsection
 
 {{-- Extra Scripts --}}
-@push('js')
-    <script>
-        window.addEventListener('swalNotification', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        });
-    </script>
-@endpush
+

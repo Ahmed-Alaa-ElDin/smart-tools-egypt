@@ -68,24 +68,27 @@ class CouponsDatatable extends Component
             "text" => __('admin/offersPages.Are you sure, you want to delete this coupon ?'),
             'confirmButtonText' => __('admin/offersPages.Delete'),
             'denyButtonText' => __('admin/offersPages.Cancel'),
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'func' => 'softDeleteCoupon',
-            'coupon_id' => $coupon_id,
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'deleteCoupon',
+            'id' => $coupon_id,
         ]);
     }
 
-    public function softDeleteCoupon($coupon_id)
+    public function deleteCoupon($coupon_id)
     {
         try {
             $user = Coupon::findOrFail($coupon_id);
             $user->delete();
 
-            $this->dispatchBrowserEvent('swalCouponDeleted', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('admin/offersPages.Coupon has been deleted successfully'),
                 'icon' => 'success'
             ]);
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('swalCouponDeleted', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/offersPages.Coupon hasn't been deleted"),
                 'icon' => 'error'
             ]);

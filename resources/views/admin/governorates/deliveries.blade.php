@@ -1,5 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage'
-=> __("admin/deliveriesPages.'s Delivery Companies",['name'=>$governorate->name])])
+@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage' => __("admin/deliveriesPages.'s Delivery Companies", ['name' => $governorate->name])])
 
 @section('content')
     <div class="content">
@@ -50,7 +49,7 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Datatable Start --}}
-                            @livewire('admin.governorates.deliveries-governorate-datatable' , ['governorate_id' => $governorate->id])
+                            @livewire('admin.deliveries.delivery-companies-datatable', ['governorate_id' => $governorate->id])
                             {{-- Datatable End --}}
                         </div>
                     </div>
@@ -60,55 +59,19 @@
     </div>
 @endsection
 
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
 {{-- Extra Scripts --}}
 @push('js')
-    @livewireScripts
-
     <script>
-        // #### Delivery Deleted ####
-        window.addEventListener('swalConfirmSoftDelete', function(e) {
-            Swal.fire({
-                icon: 'warning',
-                text: e.detail.text,
-                showDenyButton: true,
-                confirmButtonText: e.detail.confirmButtonText,
-                denyButtonText: e.detail.denyButtonText,
-                denyButtonColor: 'gray',
-                confirmButtonColor: 'red',
-                focusDeny: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Livewire.emit('softDeleteDelivery', e.detail.delivery_id);
-                }
-            });
-        });
-
-        window.addEventListener('swalDeliveryDeleted', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        });
-        // #### Delivery Deleted ####
-
-
         // #### Delivery Activation / Deactivation ####
         window.addEventListener('swalDeliveryActivated', function(e) {
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
+ @if (session('locale' == 'en'))
+                    position: 'top-left',
+                @else
+                    position: 'top-right',
+                @endif                showConfirmButton: false,
                 toast: true,
                 timer: 3000,
                 timerProgressBar: true,

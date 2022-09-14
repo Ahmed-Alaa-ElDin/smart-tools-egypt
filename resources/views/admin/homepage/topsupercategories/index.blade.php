@@ -67,13 +67,3 @@
         </div>
     </div>
 @endsection
-
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
-{{-- Extra Scripts --}}
-@push('js')
-    @livewireScripts
-@endpush

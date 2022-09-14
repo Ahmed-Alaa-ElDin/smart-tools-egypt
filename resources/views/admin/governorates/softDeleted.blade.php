@@ -49,47 +49,10 @@ __('admin/deliveriesPages.Deleted Governorates')])
     </div>
 @endsection
 
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
 {{-- Extra Scripts --}}
 @push('js')
-    @livewireScripts
 
     <script>
-        // #### Governorate Force Delete ####
-        window.addEventListener('swalConfirm', function(e) {
-            Swal.fire({
-                icon: e.detail.icon,
-                text: e.detail.text,
-                confirmButtonText: e.detail.confirmButtonText,
-                denyButtonText: e.detail.denyButtonText,
-                denyButtonColor: e.detail.denyButtonColor,
-                confirmButtonColor: e.detail.confirmButtonColor,
-                focusDeny: e.detail.focusDeny,
-                showDenyButton: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Livewire.emit(e.detail.method, e.detail.governorate_id);
-                }
-            });
-        });
-
-        window.addEventListener('swalDone', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        });
-        // #### Governorate Force Delete ####
-
 
         // #### Restore ####
         window.addEventListener('swalRestore', function(e) {
@@ -113,8 +76,11 @@ __('admin/deliveriesPages.Deleted Governorates')])
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
+ @if (session('locale' == 'en'))
+                    position: 'top-left',
+                @else
+                    position: 'top-right',
+                @endif                showConfirmButton: false,
                 toast: true,
                 timer: 3000,
                 timerProgressBar: true,

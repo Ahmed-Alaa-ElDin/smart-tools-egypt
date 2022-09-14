@@ -1,9 +1,14 @@
-@extends('layouts.front.user_control_layout', ['titlePage' => __('front/homePage.My Orders'), 'page' => 'orders'])
+@extends('layouts.front.user_control_layout', ['titlePage' => __('front/homePage.Edit Order'), 'page' => 'orders'])
 
 @section('breadcrumb')
     <li class="breadcrumb-item hover:text-primary">
         <a href="{{ route('front.homepage') }}">
             {{ __('front/homePage.Homepage') }}
+        </a>
+    </li>
+    <li class="breadcrumb-item hover:text-primary">
+        <a href="{{ route('front.orders.index') }}">
+            {{ __('front/homePage.My Orders') }}
         </a>
     </li>
     <li class="breadcrumb-item text-gray-700 font-bold" aria-current="page">
@@ -28,10 +33,8 @@
 
                     <hr>
 
-                    <form class="m-0" action="{{ route('front.orders.update', $order->id) }}" method="POST">
+                    <form class="m-0" action="{{ route('front.orders.update-calc', $order->id) }}" method="POST">
                         @csrf
-                        @method('PUT')
-
 
                         {{-- ################# Order Summary :: Start ################# --}}
                         <div class="p-4 bg-gray-100 flex flex-col gap-3">
@@ -41,9 +44,9 @@
                             </div>
 
                             <div class="flex flex-wrap justify-around items-center">
-                                {{-- Order Placed --}}
+                                {{-- Creation Date --}}
                                 <div class="flex justify-center items-center gap-1">
-                                    <span class="text-sm font-bold"> {{ __('front/homePage.Order Placed') }}:
+                                    <span class="text-sm font-bold"> {{ __('front/homePage.Creation Date') }}:
                                     </span>
                                     <span class="">
                                         {{ $order->created_at->format('d/m/Y') }}
@@ -82,7 +85,7 @@
                                     <div class="flex rtl:flex-row-reverse gap-1">
                                         <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
                                         <span dir="ltr"
-                                            class="font-bold">{{ number_format($order->subtotal_final + $order->delivery_fees, 2, '.', '\'') }}</span>
+                                            class="font-bold">{{ number_format($order->total, 2, '.', '\'') }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -251,18 +254,4 @@
 @endsection
 
 {{-- Extra Scripts --}}
-@push('js')
-    <script>
-        window.addEventListener('swalNotification', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        });
-    </script>
-@endpush
+

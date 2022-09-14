@@ -76,9 +76,12 @@ class SupercategoriesDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to delete this supercategory ?'),
             'confirmButtonText' => __('admin/productsPages.Delete'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'func' => 'softDeleteSupercategory',
-            'supercategory_id' => $supercategories_id,
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'softDeleteSupercategory',
+            'id' => $supercategories_id,
         ]);
     }
 

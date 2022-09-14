@@ -76,9 +76,12 @@ class DeletedBrandsDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to permanently delete this brand ?'),
             'confirmButtonText' => __('admin/productsPages.Delete'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'func' => 'forceDeleteBrand',
-            'brand_id' => $brand_id,
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'forceDeleteBrand',
+            'id' => $brand_id,
         ]);
     }
 
@@ -108,9 +111,12 @@ class DeletedBrandsDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to restore this brand ?'),
             'confirmButtonText' => __('admin/productsPages.Restore'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
+            'denyButtonColor' => 'red',
             'confirmButtonColor' => 'green',
-            'func' => 'restoreBrand',
-            'brand_id' => $brand_id,
+            'focusDeny' => false,
+            'icon' => 'warning',
+            'method' => 'restoreBrand',
+            'id' => $brand_id,
         ]);
     }
 
@@ -140,12 +146,12 @@ class DeletedBrandsDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to delete all brands permanently ?'),
             'confirmButtonText' => __('admin/productsPages.Delete'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'focusDeny' => false,
+            'focusDeny' => true,
             'icon' => 'warning',
-            'func' => 'forceDeleteAllBrands',
-            'brand_id' => ''
+            'method' => 'forceDeleteAllBrands',
+            'id' => ''
         ]);
     }
 
@@ -175,12 +181,12 @@ class DeletedBrandsDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to restore all brands ?'),
             'confirmButtonText' => __('admin/productsPages.Restore'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'red',
             'confirmButtonColor' => 'green',
             'focusDeny' => false,
             'icon' => 'warning',
-            'func' => 'restoreAllBrands',
-            'brand_id' => '',
+            'method' => 'restoreAllBrands',
+            'id' => '',
         ]);
     }
 

@@ -42,7 +42,25 @@ class Delivery extends Model
     // One to many relationship  Delivery --> Zones
     public function destinations()
     {
-        return $this->hasManyThrough(Destination::class,Zone::class);
+        return $this->hasManyThrough(Destination::class, Zone::class);
+    }
+
+    // One to many relationship  Delivery --> Countries
+    public function countries()
+    {
+        return $this->belongsToMany(Country::class, Destination::class);
+    }
+
+    // One to many relationship  Delivery --> Countries
+    public function governorates()
+    {
+        return $this->belongsToMany(Governorate::class, Destination::class);
+    }
+
+    // One to many relationship  Delivery --> Cities
+    public function cities()
+    {
+        return $this->belongsToMany(City::class, Destination::class);
     }
 
     // One to many relationship  Delivery --> phones

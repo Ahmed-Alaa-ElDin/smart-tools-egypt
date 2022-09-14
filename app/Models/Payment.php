@@ -11,10 +11,12 @@ class Payment extends Model
 
     protected $fillable = [
         'order_id',
+        'old_order_id',
         'user_id',
         'payment_amount',
         'payment_method',
         'payment_status',
+        'paymob_order_id',
         'payment_details',
     ];
 

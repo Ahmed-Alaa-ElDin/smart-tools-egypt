@@ -85,9 +85,12 @@ class CategoriesDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to delete this category ?'),
             'confirmButtonText' => __('admin/productsPages.Delete'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'func' => 'softDeleteCategory',
-            'category_id' => $category_id,
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'softDeleteCategory',
+            'id' => $category_id,
         ]);
     }
 

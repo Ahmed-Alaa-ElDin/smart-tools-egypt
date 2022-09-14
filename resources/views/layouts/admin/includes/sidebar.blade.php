@@ -1,9 +1,8 @@
 <div class="sidebar" data-color="red" data-background-color="white"
     data-image="{{ asset('assets/img/logos/smart-tools-logo-only-400.png') }}">
     <div class="logo">
-        <a href="https://creative-tim.com/" class="simple-text logo-normal">
-            <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}" alt="Smart Tools Egypt Logo"
-                width="50px">
+        <a href="{{ route('admin.dashboard') }}" class="simple-text logo-normal">
+            <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}" alt="Smart Tools Egypt Logo" width="50px">
             {{ 'Smart Tools' }}
         </a>
     </div>
@@ -83,6 +82,16 @@
 
         <ul class="nav">
 
+            {{-- Home Page --}}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('front.homepage') }}">
+                    <span class="material-icons">
+                        home
+                    </span>
+                    <span>{{ __('admin/master.HomePage') }}</span>
+                </a>
+            </li>
+
             {{-- Dashboard --}}
             @can('See Dashboard')
                 <li class="nav-item {{ $activeSection == 'dashboard' ? ' active' : '' }}">
@@ -101,8 +110,8 @@
                     <a class="nav-link" data-toggle="collapse" href="#orders"
                         aria-expanded="{{ $activeSection == 'Orders' ? 'true' : 'false' }}">
                         <span class="material-icons">
-                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
-                                preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
+                                height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
                                 <g fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2">
                                     <path stroke-linecap="round"
                                         d="M11.029 2.54a2 2 0 0 1 1.942 0l7.515 4.174a1 1 0 0 1 .514.874v8.235a2 2 0 0 1-1.029 1.748l-7 3.89a2 2 0 0 1-1.942 0l-7-3.89A2 2 0 0 1 3 15.824V7.588a1 1 0 0 1 .514-.874L11.03 2.54Z" />
@@ -122,8 +131,9 @@
                             <li class="nav-item {{ $activePage == 'All Orders' ? ' active' : '' }}">
                                 <a class="nav-link" href="{{ route('admin.orders.index') }}">
                                     <span class="material-icons">
-                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1.13em"
-                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 576 512">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
+                                            width="1.13em" height="1em" preserveAspectRatio="xMidYMid meet"
+                                            viewBox="0 0 576 512">
                                             <path fill="currentColor"
                                                 d="M560 288h-80v96l-32-21.3l-32 21.3v-96h-80c-8.8 0-16 7.2-16 16v192c0 8.8 7.2 16 16 16h224c8.8 0 16-7.2 16-16V304c0-8.8-7.2-16-16-16zm-384-64h224c8.8 0 16-7.2 16-16V16c0-8.8-7.2-16-16-16h-80v96l-32-21.3L256 96V0h-80c-8.8 0-16 7.2-16 16v192c0 8.8 7.2 16 16 16zm64 64h-80v96l-32-21.3L96 384v-96H16c-8.8 0-16 7.2-16 16v192c0 8.8 7.2 16 16 16h224c8.8 0 16-7.2 16-16V304c0-8.8-7.2-16-16-16z" />
                                         </svg>
@@ -136,8 +146,9 @@
                             <li class="nav-item {{ $activePage == 'Add Order' ? ' active' : '' }}">
                                 <a class="nav-link" href="{{ route('admin.orders.create') }}">
                                     <span class="material-icons">
-                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
+                                            width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
+                                            viewBox="0 0 24 24">
                                             <path fill="currentColor"
                                                 d="M12 9c.55 0 1-.45 1-1V6h2c.55 0 1-.45 1-1s-.45-1-1-1h-2V2c0-.55-.45-1-1-1s-1 .45-1 1v2H9c-.55 0-1 .45-1 1s.45 1 1 1h2v2c0 .55.45 1 1 1zm-5 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2s-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2s2-.9 2-2s-.9-2-2-2zm-8.9-5h7.45c.75 0 1.41-.41 1.75-1.03l3.24-6.14a.998.998 0 0 0-.4-1.34a.996.996 0 0 0-1.36.41L15.55 11H8.53L4.27 2H2c-.55 0-1 .45-1 1s.45 1 1 1h1l3.6 7.59l-1.35 2.44C4.52 15.37 5.48 17 7 17h11c.55 0 1-.45 1-1s-.45-1-1-1H7l1.1-2z" />
                                         </svg>
@@ -150,13 +161,14 @@
                             <li class="nav-item {{ $activePage == 'Deleted Orders' ? ' active' : '' }}">
                                 <a class="nav-link" href="{{ route('admin.orders.softDeletedOrders') }}">
                                     <span class="material-icons rtl:ml-2 ltr:mr-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
+                                            width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
+                                            viewBox="0 0 24 24">
                                             <path fill="currentColor"
                                                 d="M14.12 8.53L12 6.41L9.88 8.54L8.46 7.12L10.59 5L8.47 2.88l1.41-1.41L12 3.59l2.12-2.13l1.42 1.42L13.41 5l2.12 2.12l-1.41 1.41M7 18a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2a2 2 0 0 1 2-2m10 0a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2a2 2 0 0 1 2-2m-9.83-3.25a.25.25 0 0 0 .25.25H19v2H7a2 2 0 0 1-2-2c0-.35.09-.68.25-.96l1.35-2.45L3 4H1V2h3.27l.94 2l.95 2l2.24 4.73l.13.27h7.02l2.76-5l1.1-2h.01l1.74.96l-3.86 7.01c-.34.62-1 1.03-1.75 1.03H8.1l-.9 1.63l-.03.12Z" />
                                         </svg>
                                     </span>
-                                    <span>{{ __('admin/master.Deleted Orders') }} </span>
+                                    <span>{{ __('admin/master.Archived Orders') }} </span>
                                 </a>
                             </li>
 
@@ -172,8 +184,8 @@
                     <a class="nav-link" data-toggle="collapse" href="#products"
                         aria-expanded="{{ $activeSection == 'Products' ? 'true' : 'false' }}">
                         <span class="material-icons">
-                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
-                                preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32">
+                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
+                                height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32">
                                 <path fill="currentColor"
                                     d="M20.394 13.675A2.329 2.329 0 0 1 18.069 16h-4.394v-4.65h4.394a2.329 2.329 0 0 1 2.325 2.325zM31.5 16c0 8.563-6.938 15.5-15.5 15.5S.5 24.562.5 16C.5 7.437 7.438.5 16 .5S31.5 7.438 31.5 16zm-8.006-2.325a5.428 5.428 0 0 0-5.425-5.425h-7.494v15.5h3.1V19.1h4.394a5.428 5.428 0 0 0 5.425-5.425z" />
                             </svg>
@@ -220,8 +232,9 @@
                             <li class="nav-item {{ $activePage == 'Brands' ? ' active' : '' }}">
                                 <a class="nav-link" href="{{ route('admin.brands.index') }}">
                                     <span class="material-icons rtl:ml-2 ltr:mr-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 64 64">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
+                                            width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
+                                            viewBox="0 0 64 64">
                                             <path fill="currentColor"
                                                 d="M36.604 23.043c-.623-.342-1.559-.512-2.805-.512h-6.693v7.795h6.525c1.295 0 2.268-.156 2.916-.473c1.146-.551 1.721-1.639 1.721-3.268c0-1.757-.555-2.939-1.664-3.542" />
                                             <path fill="currentColor"
@@ -243,8 +256,8 @@
                     <a class="nav-link" data-toggle="collapse" href="#offers"
                         aria-expanded="{{ $activeSection == 'Offers' ? 'true' : 'false' }}">
                         <span class="material-icons">
-                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
-                                preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
+                                height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
                                 <path fill="currentColor"
                                     d="m20.749 12l1.104-1.908a1 1 0 0 0-.365-1.366l-1.91-1.104v-2.2a1 1 0 0 0-1-1h-2.199l-1.103-1.909a1.008 1.008 0 0 0-.607-.466a.993.993 0 0 0-.759.1L12 3.251l-1.91-1.105a1 1 0 0 0-1.366.366L7.62 4.422H5.421a1 1 0 0 0-1 1v2.199l-1.91 1.104a.998.998 0 0 0-.365 1.367L3.25 12l-1.104 1.908a1.004 1.004 0 0 0 .364 1.367l1.91 1.104v2.199a1 1 0 0 0 1 1h2.2l1.104 1.91a1.01 1.01 0 0 0 .866.5c.174 0 .347-.046.501-.135l1.908-1.104l1.91 1.104a1.001 1.001 0 0 0 1.366-.365l1.103-1.91h2.199a1 1 0 0 0 1-1v-2.199l1.91-1.104a1 1 0 0 0 .365-1.367L20.749 12zM9.499 6.99a1.5 1.5 0 1 1-.001 3.001a1.5 1.5 0 0 1 .001-3.001zm.3 9.6l-1.6-1.199l6-8l1.6 1.199l-6 8zm4.7.4a1.5 1.5 0 1 1 .001-3.001a1.5 1.5 0 0 1-.001 3.001z" />
                             </svg>
@@ -261,8 +274,9 @@
                             <li class="nav-item {{ $activePage == 'All Offers' ? ' active' : '' }}">
                                 <a class="nav-link" href="{{ route('admin.offers.index') }}">
                                     <span class="material-icons">
-                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
+                                            width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
+                                            viewBox="0 0 48 48">
                                             <path fill="none" stroke="currentColor" stroke-linecap="round"
                                                 stroke-linejoin="round" stroke-width="4"
                                                 d="m6 12l36 4v24L6 36V12Zm32 3.555V8L6 12" />
@@ -285,8 +299,9 @@
                             <li class="nav-item {{ $activePage == 'All Coupons' ? ' active' : '' }}">
                                 <a class="nav-link" href="{{ route('admin.coupons.index') }}">
                                     <span class="material-icons rtl:ml-2 ltr:mr-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
+                                            width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
+                                            viewBox="0 0 24 24">
                                             <path fill="currentColor"
                                                 d="M21 5H3a1 1 0 0 0-1 1v4h.893c.996 0 1.92.681 2.08 1.664A2.001 2.001 0 0 1 3 14H2v4a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-4h-1a2.001 2.001 0 0 1-1.973-2.336c.16-.983 1.084-1.664 2.08-1.664H22V6a1 1 0 0 0-1-1zM11 17H9v-2h2v2zm0-4H9v-2h2v2zm0-4H9V7h2v2z" />
                                         </svg>
@@ -320,9 +335,9 @@
                             <li class="nav-item {{ $activePage == 'Supercategories' ? ' active' : '' }}">
                                 <a class="nav-link" href="{{ route('admin.supercategories.index') }}">
                                     <span class="material-icons">
-                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"
-                                            class="inline-block">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
+                                            width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
+                                            viewBox="0 0 32 32" class="inline-block">
                                             <path fill="currentColor" d="M30 30h-8V4h8zm-10 0h-8V12h8zm-10 0H2V18h8z" />
                                         </svg>
                                     </span>
@@ -334,9 +349,9 @@
                             <li class="nav-item {{ $activePage == 'Categories' ? ' active' : '' }}">
                                 <a class="nav-link" href="{{ route('admin.categories.index') }}">
                                     <span class="material-icons">
-                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"
-                                            class="inline-block">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
+                                            width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
+                                            viewBox="0 0 32 32" class="inline-block">
                                             <path fill="currentColor"
                                                 d="M30 30h-8V4h8zm-6-2h4V6h-4zm-4 2h-8V12h8zm-10 0H2V18h8z" />
                                         </svg>
@@ -349,9 +364,9 @@
                             <li class="nav-item {{ $activePage == 'Subcategories' ? ' active' : '' }}">
                                 <a class="nav-link" href="{{ route('admin.subcategories.index') }}">
                                     <span class="material-icons">
-                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"
-                                            class="inline-block">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
+                                            width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
+                                            viewBox="0 0 32 32" class="inline-block">
                                             <path fill="currentColor"
                                                 d="M30 30h-8V4h8zm-6-2h4V6h-4zm-4 2h-8V12h8zm-6-2h4V14h-4zm-4 2H2V18h8z" />
                                         </svg>
@@ -437,8 +452,8 @@
                     <a class="nav-link" data-toggle="collapse" href="#customers"
                         aria-expanded="{{ $activeSection == 'Customers' ? 'true' : 'false' }}">
                         <span class="material-icons">
-                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
-                                preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48">
+                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
+                                height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48">
                                 <g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
                                     <path
                                         d="M30.492 17.142a1 1 0 0 1 1.213.698a8 8 0 1 1-15.41 0a1 1 0 0 1 1.213-.698c3.722.96 9.262.96 12.984 0ZM18.04 19.314a6 6 0 1 0 11.923 0c-3.617.73-8.307.73-11.923 0Z" />
@@ -459,8 +474,9 @@
                             <li class="nav-item {{ $activePage == 'All Customers' ? ' active' : '' }}">
                                 <a class="nav-link" href="{{ route('admin.customers.index') }}">
                                     <span class="material-icons">
-                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
+                                            width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
+                                            viewBox="0 0 36 36">
                                             <path fill="currentColor"
                                                 d="M12 16.14h-.87a8.67 8.67 0 0 0-6.43 2.52l-.24.28v8.28h4.08v-4.7l.55-.62l.25-.29a11 11 0 0 1 4.71-2.86A6.59 6.59 0 0 1 12 16.14Z"
                                                 class="clr-i-solid clr-i-solid-path-1" />

@@ -133,9 +133,12 @@ class BannersDatatable extends Component
             "text" => __('admin/sitePages.Are you sure, you want to delete this banner ?'),
             'confirmButtonText' => __('admin/sitePages.Delete'),
             'denyButtonText' => __('admin/sitePages.Cancel'),
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'func' => 'deleteBanner',
-            'banner_id' => $banner_id,
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'deleteBanner',
+            'id' => $banner_id,
         ]);
     }
 

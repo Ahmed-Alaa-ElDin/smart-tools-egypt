@@ -12,15 +12,22 @@ class CouponBlock extends Component
     public $coupon,
         $coupon_id,
         $products,
-        $products_best_prices,
-        $total_points,
+        $total,
+        $points,
         $free_shipping,
-        $coupon_price,
-        $coupon_points,
-        $coupon_shipping,
+        $coupon_discount = 0,
+        $coupon_points = 0,
+        $coupon_free_shipping = false,
         $coupon_applied = false,
         $success_message,
-        $error_message;
+        $error_message,
+        $products_after_coupon = [],
+        $order_best_coupon = [
+            'discount' => 0.00,
+            'points' => 0
+        ],
+        $products_best_coupon = [];
+
 
     public function render()
     {
@@ -30,11 +37,11 @@ class CouponBlock extends Component
     ############## Check Coupon :: Start ##############
     public function checkCoupon()
     {
-        $this->coupon_price = $this->products_best_prices;
-        $this->coupon_points = $this->total_points;
-        $this->coupon_shipping = $this->free_shipping;
-
         $products_ids = $this->products->pluck('id')->unique()->toArray();
+
+        $products = getBestOfferForProducts($products_ids);
+
+        $product_qty = Cart::instance('cart')->content()->pluck('qty', 'id')->toArray();
 
         $coupon = Coupon::with([
             'supercategories' => function ($q) {
@@ -52,61 +59,42 @@ class CouponBlock extends Component
             'products',
         ])
             ->where('code', $this->coupon)
-            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+            // date range
+            ->where('expire_at', '>=', Carbon::now())
             ->where(fn ($q) => $q->where('number', '>', 0)->orWhere('number', null))
             ->first();
 
         if ($coupon) {
             $this->coupon_id = $coupon->id;
 
-            // get discount on order
-            if ($coupon->on_orders) {
-                // percentage discount
-                if ($coupon->type == 0 && $coupon->value < 100) {
-                    $discount_order_from_coupon = $this->coupon_price * $coupon->value / 100;
-                    $this->coupon_price -= $discount_order_from_coupon;
-                }
-                // fixed discount
-                elseif ($coupon->type == 1) {
-                    $discount_order_from_coupon = $coupon->value;
-                    $this->coupon_price = $discount_order_from_coupon <= $this->coupon_price ? $this->coupon_price - $discount_order_from_coupon : 0;
-                }
-                // points
-                elseif ($coupon->type == 2) {
-                    $points_from_coupon = $coupon->value;
-                    $this->coupon_points += $points_from_coupon;
-                }
-            }
-
             // get free shipping
-            $this->coupon_shipping = $coupon->free_shipping ? true : false;
+            $this->coupon_free_shipping = $coupon->free_shipping ? true : false;
 
             // get discount on brands
             if ($coupon->brands->count()) {
-                $brands_product_from_coupon = $coupon->brands->map(function ($brand) use ($products_ids) {
+                $brands_product_from_coupon = $coupon->brands->map(function ($brand) use ($products) {
                     return [
-                        'products' => $brand->products->whereIn('id', $products_ids),
+                        'products' => $products->whereIn('id', $brand->products->pluck('id')),
                         'type' => $brand->pivot->type,
                         'value' => $brand->pivot->value,
                     ];
                 });
 
-
                 $brands_product_from_coupon->map(function ($brand) {
                     foreach ($brand['products'] as $product) {
-                        $product_qty = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product) {
-                            return $cartItem->id === $product->id;
-                        })->first()->qty;
 
                         if ($brand['type'] == 0 && $brand['value'] < 100) {
-                            $discount_brand_product = $product_qty * ($product->final_price * $brand['value'] / 100);
-                            $this->coupon_price -= $discount_brand_product;
+                            $product->coupon_discount = $product->best_price * $brand['value'] / 100;
+                            $product->coupon_points = 0;
+                            $this->products_after_coupon[] = $product;
                         } elseif ($brand['type'] == 1) {
-                            $discount_brand_product = $product_qty * $brand['value'];
-                            $this->coupon_price = $discount_brand_product  <= $this->coupon_price ? $this->coupon_price - $discount_brand_product : 0;
+                            $product->coupon_discount = $brand['value'] <= $product->best_price ? $brand['value'] : $product->best_price;
+                            $product->coupon_points = 0;
+                            $this->products_after_coupon[] = $product;
                         } elseif ($brand['type'] == 2) {
-                            $points_brand_product = $product_qty * $brand['value'];
-                            $this->coupon_points += $points_brand_product;
+                            $product->coupon_discount = 0.00;
+                            $product->coupon_points = $brand['value'];
+                            $this->products_after_coupon[] = $product;
                         }
                     }
                 });
@@ -114,9 +102,9 @@ class CouponBlock extends Component
 
             // get discount on subcategories
             if ($coupon->subcategories->count()) {
-                $subcategories_product_from_coupon = $coupon->subcategories->map(function ($subcategory) use ($products_ids) {
+                $subcategories_product_from_coupon = $coupon->subcategories->map(function ($subcategory) use ($products) {
                     return [
-                        'products' => $subcategory->products->whereIn('id', $products_ids),
+                        'products' => $products->whereIn('id', $subcategory->products->pluck('id')),
                         'type' => $subcategory->pivot->type,
                         'value' => $subcategory->pivot->value,
                     ];
@@ -124,19 +112,18 @@ class CouponBlock extends Component
 
                 $subcategories_product_from_coupon->map(function ($subcategory) {
                     foreach ($subcategory['products'] as $product) {
-                        $product_qty = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product) {
-                            return $cartItem->id === $product->id;
-                        })->first()->qty;
-
                         if ($subcategory['type'] == 0 && $subcategory['value'] < 100) {
-                            $discount_subcategory_product = $product_qty * ($product->final_price * $subcategory['value'] / 100);
-                            $this->coupon_price -= $discount_subcategory_product;
+                            $product->coupon_discount = $product->best_price * $subcategory['value'] / 100;
+                            $product->coupon_points = 0;
+                            $this->products_after_coupon[] = $product;
                         } elseif ($subcategory['type'] == 1) {
-                            $discount_subcategory_product = $product_qty * $subcategory['value'];
-                            $this->coupon_price = $discount_subcategory_product  <= $this->coupon_price ? $this->coupon_price - $discount_subcategory_product : 0;
+                            $product->coupon_discount = $subcategory['value'] <= $product->best_price ? $subcategory['value'] : $product->best_price;
+                            $product->coupon_points = 0;
+                            $this->products_after_coupon[] = $product;
                         } elseif ($subcategory['type'] == 2) {
-                            $points_subcategory_product = $product_qty * $subcategory['value'];
-                            $this->coupon_points += $points_subcategory_product;
+                            $product->coupon_discount = 0.00;
+                            $product->coupon_points = $subcategory['value'];
+                            $this->products_after_coupon[] = $product;
                         }
                     }
                 });
@@ -144,9 +131,9 @@ class CouponBlock extends Component
 
             // get discount on categories
             if ($coupon->categories->count()) {
-                $categories_product_from_coupon = $coupon->categories->map(function ($category) use ($products_ids) {
+                $categories_product_from_coupon = $coupon->categories->map(function ($category) use ($products) {
                     return [
-                        'products' => $category->products->whereIn('id', $products_ids),
+                        'products' => $products->whereIn('id', $category->products->pluck('id')),
                         'type' => $category->pivot->type,
                         'value' => $category->pivot->value,
                     ];
@@ -154,19 +141,18 @@ class CouponBlock extends Component
 
                 $categories_product_from_coupon->map(function ($category) {
                     foreach ($category['products'] as $product) {
-                        $product_qty = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product) {
-                            return $cartItem->id === $product->id;
-                        })->first()->qty;
-
                         if ($category['type'] == 0 && $category['value'] < 100) {
-                            $discount_category_product = $product_qty * ($product->final_price * $category['value'] / 100);
-                            $this->coupon_price -= $discount_category_product;
+                            $product->coupon_discount = $product->best_price * $category['value'] / 100;
+                            $product->coupon_points = 0;
+                            $this->products_after_coupon[] = $product;
                         } elseif ($category['type'] == 1) {
-                            $discount_category_product = $product_qty * $category['value'];
-                            $this->coupon_price = $discount_category_product  <= $this->coupon_price ? $this->coupon_price - $discount_category_product : 0;
+                            $product->coupon_discount = $category['value'] <= $product->best_price ? $category['value'] : $product->best_price;
+                            $product->coupon_points = 0;
+                            $this->products_after_coupon[] = $product;
                         } elseif ($category['type'] == 2) {
-                            $points_category_product = $product_qty * $category['value'];
-                            $this->coupon_points += $points_category_product;
+                            $product->coupon_discount = 0.00;
+                            $product->coupon_points = $category['value'];
+                            $this->products_after_coupon[] = $product;
                         }
                     }
                 });
@@ -174,9 +160,9 @@ class CouponBlock extends Component
 
             // get discount on supercategories
             if ($coupon->supercategories->count()) {
-                $supercategories_product_from_coupon = $coupon->supercategories->map(function ($supercategory) use ($products_ids) {
+                $supercategories_product_from_coupon = $coupon->supercategories->map(function ($supercategory) use ($products) {
                     return [
-                        'products' => $supercategory->products->whereIn('id', $products_ids),
+                        'products' => $products->whereIn('id', $supercategory->products->pluck('id')),
                         'type' => $supercategory->pivot->type,
                         'value' => $supercategory->pivot->value,
                     ];
@@ -184,19 +170,19 @@ class CouponBlock extends Component
 
                 $supercategories_product_from_coupon->map(function ($supercategory) {
                     foreach ($supercategory['products'] as $product) {
-                        $product_qty = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product) {
-                            return $cartItem->id === $product->id;
-                        })->first()->qty;
 
                         if ($supercategory['type'] == 0 && $supercategory['value'] < 100) {
-                            $discount_supercategory_product = $product_qty * ($product->final_price * $supercategory['value'] / 100);
-                            $this->coupon_price -= $discount_supercategory_product;
+                            $product->coupon_discount = $product->best_price * $supercategory['value'] / 100;
+                            $product->coupon_points = 0;
+                            $this->products_after_coupon[] = $product;
                         } elseif ($supercategory['type'] == 1) {
-                            $discount_supercategory_product = $product_qty * $supercategory['value'];
-                            $this->coupon_price = $discount_supercategory_product  <= $this->coupon_price ? $this->coupon_price - $discount_supercategory_product : 0;
+                            $product->coupon_discount = $supercategory['value'] <= $product->best_price ? $supercategory['value'] : $product->best_price;
+                            $product->coupon_points = 0;
+                            $this->products_after_coupon[] = $product;
                         } elseif ($supercategory['type'] == 2) {
-                            $points_supercategory_product = $product_qty * $supercategory['value'];
-                            $this->coupon_points += $points_supercategory_product;
+                            $product->coupon_discount = 0.00;
+                            $product->coupon_points = $supercategory['value'];
+                            $this->products_after_coupon[] = $product;
                         }
                     }
                 });
@@ -204,10 +190,10 @@ class CouponBlock extends Component
 
             // get discount on products
             if ($coupon->products->count()) {
-                $products_product_from_coupon = $coupon->products->map(function ($product) use ($products_ids) {
+                $products_product_from_coupon = $coupon->products->map(function ($product) use ($products_ids, $products) {
                     if (in_array($product->id, $products_ids)) {
                         return [
-                            'product' => $product,
+                            'product' => $products->find($product->id),
                             'type' => $product->pivot->type,
                             'value' => $product->pivot->value,
                         ];
@@ -215,32 +201,99 @@ class CouponBlock extends Component
                 })->whereNotNull();
 
                 $products_product_from_coupon->map(function ($product) {
-                    $product_qty = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product) {
-                        return $cartItem->id === $product['product']->id;
-                    })->first()->qty;
 
-                    if ($product['type'] == 0  && $product['value'] < 100) {
-                        $discount_product = $product_qty * ($product['product']->final_price * $product['value'] / 100);
-                        $this->coupon_price -= $discount_product;
+                    if ($product['type'] == 0 && $product['value'] < 100) {
+                        $product['product']->coupon_discount = $product['product']->best_price * $product['value'] / 100;
+                        $product['product']->coupon_points = 0;
+                        $this->products_after_coupon[] = $product;
                     } elseif ($product['type'] == 1) {
-                        $discount_product = $product_qty * $product['value'];
-                        $this->coupon_price = $discount_product  <= $this->coupon_price ? $this->coupon_price - $discount_product : 0;
+                        $product['product']->coupon_discount = $product['value'] <= $product['product']->best_price ? $product['value'] : $product['product']->best_price;
+                        $product['product']->coupon_points = 0;
+                        $this->products_after_coupon[] = $product['product'];
                     } elseif ($product['type'] == 2) {
-                        $points_product = $product_qty * $product['value'];
-                        $this->coupon_points += $points_product;
+                        $product['product']->coupon_discount = 0.00;
+                        $product['product']->coupon_points = $product['value'];
+                        $this->products_after_coupon[] = $product['product'];
                     }
                 });
             }
 
+            // Final Products After Coupon Application
+            $this->products_best_coupon = collect($this->products_after_coupon)
+                ->groupBy('id')
+                ->map(function ($products) use ($product_qty) {
+                    $max_discount = $products->max('coupon_discount');
+                    $max_points = $products->max('coupon_points');
+                    $product_qty = $product_qty[$products->first()->id];
+                    return [
+                        'product' => $products->first()->id,
+                        'qty' => $product_qty,
+                        'coupon_discount' => $max_discount,
+                        'total_discount' =>  $product_qty * $max_discount,
+                        'coupon_points' => $max_points,
+                        'total_points' => $product_qty * $max_points,
+                    ];
+                });
+
+            // Total Coupon Discount After Products
+            $this->coupon_discount = $this->products_best_coupon->sum('total_discount');
+            // Total Coupon Points After Products
+            $this->coupon_points = $this->products_best_coupon->sum('total_points');
+
+            // get discount on order
+            if ($coupon->on_orders) {
+                // percentage discount
+                if ($coupon->type == 0 && $coupon->value < 100) {
+                    $discount_order_from_coupon = ($this->total - $this->coupon_discount) * $coupon->value / 100;
+                    $this->order_best_coupon = [
+                        'discount' => $discount_order_from_coupon,
+                        'points' => 0
+                    ];
+                    $this->coupon_discount += $discount_order_from_coupon;
+                }
+                // fixed discount
+                elseif ($coupon->type == 1) {
+                    $discount_order_from_coupon = $coupon->value <= ($this->total - $this->coupon_discount) ? $coupon->value : ($this->total - $this->coupon_discount);
+                    $this->order_best_coupon = [
+                        'discount' => $discount_order_from_coupon,
+                        'points' => 0
+                    ];
+                    $this->coupon_discount += $discount_order_from_coupon <= ($this->total - $this->coupon_discount) ? $discount_order_from_coupon : ($this->total - $this->coupon_discount);
+                }
+                // points
+                elseif ($coupon->type == 2) {
+                    $points_from_coupon = $coupon->value;
+                    $this->order_best_coupon = [
+                        'discount' => 0.00,
+                        'points' => $points_from_coupon
+                    ];
+                    $this->coupon_points += $points_from_coupon;
+                }
+            }
+
+            $this->coupon_discount_percentage = round($this->coupon_discount / $this->total * 100);
+
             $this->coupon_applied = true;
+
             $this->success_message = __('front/homePage.Coupon applied successfully', ['coupon' => $coupon->code]);
-            $this->dispatchBrowserEvent('swalNotification', [
+
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => $this->success_message,
                 'icon' => 'success'
             ]);
+
             $this->error_message = null;
 
-            $this->emit('couponApplied', $this->coupon_id, $this->coupon_price, $this->coupon_points, $this->coupon_shipping);
+            $this->emit(
+                'couponApplied',
+                $this->coupon_id,
+                $this->coupon_discount,
+                $this->coupon_discount_percentage,
+                $this->coupon_points,
+                $this->coupon_free_shipping,
+                $this->products_best_coupon,
+                $this->order_best_coupon
+            );
         } else {
             $this->coupon_applied = false;
             $this->success_message = null;
@@ -255,13 +308,34 @@ class CouponBlock extends Component
         $this->coupon_applied = false;
         $this->success_message = null;
         $this->error_message = null;
+        $this->coupon_discount = 0;
+        $this->coupon_points = 0;
+        $this->coupon_free_shipping = false;
+        $this->products_after_coupon = [];
+        $this->order_best_coupon = [
+            'discount' => 0.00,
+            'points' => 0
+        ];
+        $this->products_best_coupon = [];
 
-        $this->dispatchBrowserEvent('swalNotification', [
+        $this->dispatchBrowserEvent('swalDone', [
             "text" => __('front/homePage.Coupon removed successfully'),
             'icon' => 'warning'
         ]);
         $this->error_message = null;
 
-        $this->emit('couponApplied', null, null, null, null);
+        $this->emit(
+            'couponApplied',
+            null,
+            null,
+            null,
+            null,
+            null,
+            [],
+            [
+                'discount' => 0.00,
+                'points' => 0
+            ]
+        );
     }
 }

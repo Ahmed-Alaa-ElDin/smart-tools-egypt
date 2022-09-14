@@ -264,7 +264,9 @@
                                 wire:change='$emit("countryUpdated",{{ $index }})'
                                 id="country{{ $index }}">
                                 @forelse ($countries as $country)
-                                    <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                    <option value="{{ $country['id'] }}">
+                                        {{ $country['name'][session('locale')] }}
+                                    </option>
                                 @empty
                                     <option value="">{{ __('admin/usersPages.No Countries in Database') }}
                                     </option>

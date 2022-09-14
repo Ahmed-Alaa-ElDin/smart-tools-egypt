@@ -31,6 +31,12 @@ class Country extends Model
         return $this->hasMany(Governorate::class);
     }
 
+    // Has many through relationship  Country --> cities
+    public function cities()
+    {
+        return $this->hasManyThrough(City::class, Governorate::class);
+    }
+
     // One to many relationship  Country --> Addresses
     public function addresses()
     {
@@ -43,12 +49,15 @@ class Country extends Model
         return $this->belongsToMany(User::class, 'addresses');
     }
 
-    // Has many through relationship  Country --> cities
-    public function cities()
+    // Has many through relationship  Country --> Customers
+    public function customers()
     {
-        return $this->hasManyThrough(City::class, Governorate::class);
+        return $this->belongsToMany(User::class, 'addresses', 'country_id', 'user_id')->where(
+            function ($q) {
+                return $q->whereHas('roles', fn ($q) => $q->where('name', 'Customer'))->orWhereDoesntHave('roles');
+            }
+        )->distinct('users.id');
     }
-
 
     // Has many through relationship  Country --> Deliveries
     public function deliveries()

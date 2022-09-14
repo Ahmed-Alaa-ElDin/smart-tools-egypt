@@ -30,8 +30,8 @@ class CountriesDatatable extends Component
     // Render With each update
     public function render()
     {
-        $countries = Country::with('deliveries','governorates','users','cities')
-            ->withCount('users')
+        $countries = Country::with('deliveries', 'governorates', 'customers', 'cities')
+            ->withCount('customers')
             ->withCount('deliveries')
             ->withCount('cities')
             ->withCount('governorates')
@@ -70,11 +70,15 @@ class CountriesDatatable extends Component
     ######## Deleted #########
     public function deleteConfirm($country_id)
     {
-        $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
+        $this->dispatchBrowserEvent('swalConfirm', [
             "text" => __('admin/deliveriesPages.Are you sure, you want to delete this country ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'country_id' => $country_id,
+            'denyButtonColor' => 'green',
+            'confirmButtonColor' => 'red',
+            'focusDeny' => true,
+            'method' => 'softDeleteCountry',
+            'id' => $country_id,
         ]);
     }
 
@@ -84,12 +88,12 @@ class CountriesDatatable extends Component
             $user = Country::findOrFail($country_id);
             $user->delete();
 
-            $this->dispatchBrowserEvent('swalCountryDeleted', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('admin/deliveriesPages.Country has been deleted successfully'),
                 'icon' => 'success'
             ]);
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('swalCountryDeleted', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/deliveriesPages.Country hasn't been deleted"),
                 'icon' => 'error'
             ]);

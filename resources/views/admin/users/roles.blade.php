@@ -58,15 +58,8 @@ __('admin/usersPages.Roles Management')])
         </div>
     </div>
 @endsection
-
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
 {{-- Extra Scripts --}}
 @push('js')
-    @livewireScripts
 
     <script>
         // #### Role Delete ####
@@ -91,8 +84,11 @@ __('admin/usersPages.Roles Management')])
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
+ @if (session('locale' == 'en'))
+                    position: 'top-left',
+                @else
+                    position: 'top-right',
+                @endif                showConfirmButton: false,
                 toast: true,
                 timer: 3000,
                 timerProgressBar: true,

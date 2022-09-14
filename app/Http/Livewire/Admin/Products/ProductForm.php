@@ -23,10 +23,10 @@ class ProductForm extends Component
     public $thumbnail_image,  $thumbnail_image_name;
     public $video;
     public $specs = [
-        [
-            "ar" => ["title" => null, "value" => null],
-            "en" => ["title" => null, "value" => null]
-        ]
+        // [
+        //     "ar" => ["title" => null, "value" => null],
+        //     "en" => ["title" => null, "value" => null]
+        // ]
     ];
     public $name = ["ar" => null, "en" => null], $brand_id, $model, $barcode, $weight, $description = ['ar' => null, 'en' => null], $publish = true, $refundable = true;
     public $base_price, $discount, $final_price, $points, $free_shipping = false, $reviewing = false, $quantity, $low_stock;
@@ -35,9 +35,10 @@ class ProductForm extends Component
     public $parentCategories;
 
     protected $listeners = [
-        "descriptionAr", "descriptionEn",
-        // "descriptionSeo",
-        "supercategoryUpdated", "categoryUpdated"
+        "descriptionAr",
+        "descriptionEn",
+        "supercategoryUpdated",
+        "categoryUpdated"
     ];
 
     public function rules()
@@ -45,7 +46,7 @@ class ProductForm extends Component
         return [
             'gallery_images.*'    =>        'nullable|mimes:jpg,jpeg,png|max:2048',
             'thumbnail_image'     =>        'nullable|mimes:jpg,jpeg,png|max:2048',
-            'video'               =>        'nullable|active_url',
+            'video'               =>        'nullable|string',
 
             'name.ar'             =>        'required|string|max:100|min:3',
             'name.en'             =>        'nullable|string|max:100|min:3',
@@ -246,8 +247,9 @@ class ProductForm extends Component
         ]);
 
         foreach ($gallery_images as $key => $gallery_image) {
+            $file_name = str_replace(" ", "-", pathinfo($gallery_image->getClientOriginalName(), PATHINFO_FILENAME));
             try {
-                $this->gallery_images_name[] = singleImageUpload($gallery_image, 'product-', 'products');
+                $this->gallery_images_name[] = singleImageUpload($gallery_image, $file_name . '-', 'products');
             } catch (\Throwable $th) {
                 throw $th;
             }
@@ -298,9 +300,10 @@ class ProductForm extends Component
     {
         $this->validateOnly($thumbnail_image);
 
+        $file_name = str_replace(" ", "-", pathinfo($thumbnail_image->getClientOriginalName(), PATHINFO_FILENAME));
         // Crop and resize photo
         try {
-            $this->thumbnail_image_name = singleImageUpload($thumbnail_image, 'product-', 'products');
+            $this->thumbnail_image_name = singleImageUpload($thumbnail_image, $file_name . '-', 'products');
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -448,7 +451,7 @@ class ProductForm extends Component
                     'en' => $this->name['en'] ?? $this->name['ar']
                 ],
                 'slug' => [
-                    'ar' => Str::slug($this->name['ar'], '-',Null),
+                    'ar' => Str::slug($this->name['ar'], '-', Null),
                     'en' => Str::slug($this->name['en'], '-'),
                 ],
                 'barcode' => $this->barcode,
@@ -536,7 +539,7 @@ class ProductForm extends Component
                     'en' => $this->name['en'] ?? $this->name['ar']
                 ],
                 'slug' => [
-                    'ar' => Str::slug($this->name['ar'], '-',Null),
+                    'ar' => Str::slug($this->name['ar'], '-', Null),
                     'en' => Str::slug($this->name['en'], '-'),
                 ],
                 'barcode' => $this->barcode,

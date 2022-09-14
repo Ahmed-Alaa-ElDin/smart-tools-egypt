@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('phone',11);
             $table->tinyInteger('default')->default(0)->comment('0 --> Not default , 1 --> Default');
+            $table->timestamp('verified_at')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');

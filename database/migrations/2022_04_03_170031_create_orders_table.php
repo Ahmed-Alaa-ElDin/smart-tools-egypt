@@ -19,14 +19,15 @@ return new class extends Migration
             $table->unsignedBigInteger('address_id')->nullable();
             $table->string('phone1', 11)->nullable();
             $table->string('phone2', 255)->nullable();
-            $table->string('package_type')->default('parcel')->nullable();
-            $table->text('package_desc')->nullable();
+            $table->unsignedBigInteger('status_id')->nullable();
             $table->integer('num_of_items')->default(1)->nullable();
             $table->tinyInteger('allow_opening')->default(1)->comment('0 -> No , 1 -> Yes')->nullable();
             $table->unsignedBigInteger('zone_id')->nullable();
             $table->unsignedBigInteger('coupon_id')->nullable();
-            $table->decimal('coupon_discount', 8, 2)->default(0.00);
-            $table->unsignedBigInteger('status_id')->nullable();
+            $table->decimal('coupon_order_discount', 8, 2)->default(0.00);
+            $table->integer('coupon_order_points')->default(0);
+            $table->decimal('coupon_products_discount', 8, 2)->default(0.00);
+            $table->integer('coupon_products_points')->default(0);
             $table->decimal('subtotal_base', 8, 2)->default(0.00);
             $table->decimal('subtotal_final', 8, 2)->default(0.00);
             $table->decimal('delivery_fees', 8, 2)->default(0.00);
@@ -37,19 +38,22 @@ return new class extends Migration
             $table->integer('gift_points')->default(0);
             $table->decimal('used_balance', 8, 2)->default(0.00);
             $table->decimal('total_weight', 8, 2)->default(1)->comment('on Kg');
-            $table->string('payment_method')->nullable();
-            // $table->text('payment_details')->nullable();
-            // $table->tinyInteger('payment_status')->default(0)->comment('0 -> No , 1 -> Yes');
+            $table->tinyInteger('payment_method')->nullable()->unsigned()->comment('1 => cash, 2 => card, 3 => installments, 4 => vodafone cash, 10 => wallet');
             $table->string('tracking_number')->nullable();
+            $table->string('package_type')->default('parcel')->nullable();
+            $table->text('package_desc')->nullable();
             $table->string('order_delivery_id')->nullable();
             $table->text('notes')->nullable();
+            $table->timestamp('delivered_at')->nullable();
+            $table->unsignedBigInteger('old_order_id')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('coupon_id')->references('id')->on('coupons')->nullOnDelete()->onUpdate('cascade');
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete()->onUpdate('cascade');
             $table->foreign('address_id')->references('id')->on('addresses')->nullOnDelete()->onUpdate('cascade');
             $table->foreign('zone_id')->references('id')->on('zones')->nullOnDelete()->onUpdate('cascade');
-            $table->foreign('status_id')->references('id')->on('order_statuses')->nullOnDelete()->onUpdate('cascade');
+            $table->foreign('status_id')->references('id')->on('statuses')->nullOnDelete()->onUpdate('cascade');
         });
     }
 

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ LaravelLocalization::getCurrentLocale() }}"
-    dir="{{ LaravelLocalization::getCurrentLocaleDirection() }}">
+<html lang="{{ LaravelLocalization::getCurrentLocale() }}" dir="{{ LaravelLocalization::getCurrentLocaleDirection() }}">
 
 <head>
     <meta charset="utf-8" />
@@ -10,8 +9,7 @@
     <title>{{ $titlePage . ' | ' . __('Smart Tools Egypt') }}</title>
 
     {{-- FavIcons --}}
-    <link rel="apple-touch-icon" sizes="76x76"
-        href="{{ asset('assets/img/logos/smart-tools-logo-fav-only-50.png') }}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/img/logos/smart-tools-logo-fav-only-50.png') }}">
     <link rel="icon" type="image/png" href="{{ asset('assets/img/logos/smart-tools-logo-fav-only-50.png') }}">
 
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
@@ -32,6 +30,7 @@
     @if (LaravelLocalization::getCurrentLocale() == 'ar')
         <link href="{{ asset('assets/admin/css/material-dashboard-rtl.css') }}" rel="stylesheet" />
     @endif
+    @livewireStyles
 
     @stack('css')
 
@@ -55,7 +54,10 @@
     <!--   Core JS Files   -->
     <script src="{{ asset('assets/admin/js/core/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/admin/js/core/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/flowbite/flowbite.js') }}"></script>
     <script src="{{ asset('assets/admin/js/core/bootstrap-material-design.min.js') }}"></script>
+    @livewireScripts
+
     {{-- <script src="{{ asset('assets/admin/js/plugins/perfect-scrollbar.jquery.min.js') }}"></script> --}}
 
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
@@ -102,21 +104,58 @@
     <script>
         @if (Session::has('success'))
             Swal.fire({
-            text:'{{ Session::get('success') }}',
-            icon: 'success',
-            timer: 3000,
-            timerProgressBar: true,
-            showConfirmButton: false,
+                text: '{{ Session::get('success') }}',
+                icon: 'success',
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
             })
         @elseif (Session::has('error'))
             Swal.fire({
-            text:'{{ Session::get('error') }}',
-            icon: 'error',
-            timer: 3000,
-            timerProgressBar: true,
-            showConfirmButton: false,
+                text: '{{ Session::get('error') }}',
+                icon: 'error',
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
             })
         @endif
+
+        // #### Sweetalert ####
+        window.addEventListener('swalConfirm', function(e) {
+            // console.log(e.detail);
+
+            Swal.fire({
+                icon: e.detail.icon,
+                text: e.detail.text,
+                showDenyButton: true,
+                confirmButtonText: e.detail.confirmButtonText,
+                denyButtonText: e.detail.denyButtonText,
+                denyButtonColor: e.detail.denyButtonColor,
+                confirmButtonColor: e.detail.confirmButtonColor,
+                focusDeny: e.detail.focusDeny,
+            }).then((result) => {
+                // console.log(result);
+                if (result.isConfirmed) {
+                    Livewire.emit(e.detail.method, e.detail.id, e.detail.details || []);
+                }
+            });
+        });
+
+        window.addEventListener('swalDone', function(e) {
+            Swal.fire({
+                text: e.detail.text,
+                icon: e.detail.icon,
+ @if (session('locale' == 'en'))
+                    position: 'top-left',
+                @else
+                    position: 'top-right',
+                @endif                showConfirmButton: false,
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+            })
+        });
+        // #### Sweetalert ####
 
         // Initation of Popover
         $('[data-toggle="tooltip"]').tooltip()

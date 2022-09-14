@@ -16,6 +16,8 @@ class GovernoratesDatatable extends Component
     public $sortDirection = 'ASC';
     public $perPage;
 
+    public $country_id = null;
+
     public $search = "";
 
     protected $listeners = ['softDeleteGovernorate'];
@@ -32,10 +34,10 @@ class GovernoratesDatatable extends Component
     {
         $governorates = Governorate::with(['country' => function ($query) {
             $query->withTrashed();
-        }, 'deliveries', 'users', 'cities'])
+        }, 'deliveries', 'customers', 'cities'])
             ->join('countries', 'countries.id', '=', 'governorates.country_id')
             ->select('governorates.*', 'countries.name as country_name')
-            ->withCount('users')
+            ->withCount('customers')
             ->withCount('deliveries')
             ->withCount('cities')
             ->where(function ($query) {
@@ -44,6 +46,11 @@ class GovernoratesDatatable extends Component
                     ->orWhere('governorates.name->ar', 'like', '%' . $this->search . '%')
                     ->orWhere('countries.name->en', 'like', '%' . $this->search . '%')
                     ->orWhere('countries.name->ar', 'like', '%' . $this->search . '%');
+            })
+            ->where(function ($query) {
+                if ($this->country_id) {
+                    return $query->whereHas('country', fn ($q) => $q->where('countries.id', $this->country_id));
+                }
             })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
@@ -75,11 +82,16 @@ class GovernoratesDatatable extends Component
     ######## Deleted #########
     public function deleteConfirm($governorate_id)
     {
-        $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
+        $this->dispatchBrowserEvent('swalConfirm', [
             "text" => __('admin/deliveriesPages.Are you sure, you want to delete this governorate ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'governorate_id' => $governorate_id,
+            'denyButtonColor' => 'green',
+            'confirmButtonColor' => 'red',
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'softDeleteGovernorate',
+            'id' => $governorate_id,
         ]);
     }
 
@@ -89,12 +101,12 @@ class GovernoratesDatatable extends Component
             $governorate = Governorate::findOrFail($governorate_id);
             $governorate->delete();
 
-            $this->dispatchBrowserEvent('swalGovernorateDeleted', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('admin/deliveriesPages.Governorate has been deleted successfully'),
                 'icon' => 'success'
             ]);
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('swalGovernorateDeleted', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/deliveriesPages.Governorate hasn't been deleted"),
                 'icon' => 'error'
             ]);

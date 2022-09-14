@@ -13,10 +13,6 @@ class ProductsDatatable extends Component
 {
     use WithPagination;
 
-    public $sortBy;
-    public $sortDirection = 'ASC';
-    public $perPage;
-
     public $search = "";
 
     public $selectedProducts = [];
@@ -29,6 +25,8 @@ class ProductsDatatable extends Component
         $this->perPage = Config::get('constants.constants.PAGINATION');
 
         $this->sortBy = 'products.name->' . session('locale');
+
+        $this->sortDirection = 'ASC';
     }
 
     // Render With each update
@@ -115,9 +113,12 @@ class ProductsDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to delete this product ?'),
             'confirmButtonText' => __('admin/productsPages.Delete'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'func' => 'softDeleteProduct',
-            'product_id' => $product_id,
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'softDeleteProduct',
+            'id' => $product_id,
         ]);
     }
 
@@ -157,9 +158,12 @@ class ProductsDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to delete all selected products ?'),
             'confirmButtonText' => __('admin/productsPages.Delete'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'func' => 'softDeleteAllProduct',
-            'product_id' => '',
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'softDeleteAllProduct',
+            'id' => '',
         ]);
     }
 
@@ -195,9 +199,12 @@ class ProductsDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to publish all selected products ?'),
             'confirmButtonText' => __('admin/productsPages.Publish'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
+            'denyButtonColor' => 'red',
             'confirmButtonColor' => 'green',
-            'func' => 'publishAllProduct',
-            'product_id' => '',
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'publishAllProduct',
+            'id' => '',
         ]);
     }
 
@@ -235,9 +242,12 @@ class ProductsDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to hide all selected products ?'),
             'confirmButtonText' => __('admin/productsPages.Hide'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'func' => 'hideAllProduct',
-            'product_id' => '',
+            'focusDeny' => false,
+            'icon' => 'warning',
+            'method' => 'hideAllProduct',
+            'id' => '',
         ]);
     }
 

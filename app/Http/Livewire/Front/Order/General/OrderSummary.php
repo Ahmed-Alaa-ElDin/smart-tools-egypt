@@ -9,21 +9,35 @@ use Livewire\Component;
 
 class OrderSummary extends Component
 {
+    public $products_base_prices = 0.00;
     public $products_final_prices = 0.00;
+    public $products_discounts = 0.00;
+    public $products_discounts_percentage = 0;
     public $products_best_prices = 0.00;
-    public $discount = 0.00;
-    public $discount_percent = 0;
+    public $offers_discounts = 0.00;
+    public $offers_discounts_percentage = 0;
+    public $products_best_points = 0;
+    public $delivery_fees = 0.00;
+    public $total = 0.00;
     public $order_discount = 0.00;
+    public $order_discount_percentage = 0;
     public $order_points = 0;
-    public $free_shipping = false;
+    public $total_points = 0;
     public $products;
-    public $products_weights;
+    public $products_quantities = [];
+    public $products_weights = 0.00;
     public $step;
-    public $delivery_price;
     public $best_zone_id;
-    public $points = 0, $total_points = 0;
-    public $coupon_id, $coupon_price, $coupon_points, $coupon_shipping, $coupon_discount;
-
+    public $coupon_id;
+    public $coupon_discount = 0.00;
+    public $coupon_discount_percentage = 0;
+    public $coupon_points = 0;
+    public $coupon_free_shipping = false;
+    public $products_best_coupon = [];
+    public $order_best_coupon = [
+        'discount' => 0.00,
+        'points' => 0
+    ];
 
     protected $listeners = [
         'cartUpdated' => 'getProducts',
@@ -35,6 +49,10 @@ class OrderSummary extends Component
     ############# Render :: Start #############
     public function render()
     {
+        $products_quantities = Cart::instance('cart')->content()->pluck('qty', 'id')->toArray();
+
+        $this->products_quantities = $products_quantities;
+
         if ($this->step == 3) {
             $this->getProducts();
         }
@@ -44,7 +62,12 @@ class OrderSummary extends Component
         }
 
         if (Cart::instance('cart')->count()) {
-            $products_quantities = Cart::instance('cart')->content()->pluck('qty', 'id')->toArray();
+            // get base prices
+            $this->products_base_prices = $this->products->map(function ($product) use ($products_quantities) {
+                $product_qty = $products_quantities[$product->id];
+
+                return $product->base_price * $product_qty;
+            })->sum();
 
             // get final prices
             $this->products_final_prices = $this->products->map(function ($product) use ($products_quantities) {
@@ -60,14 +83,20 @@ class OrderSummary extends Component
                 return $product->best_price * $product_qty;
             })->sum();
 
+            // Get products discounts value
+            $this->products_discounts = $this->products_base_prices - $this->products_final_prices;
+
+            // Get products discounts percentage
+            $this->products_discounts_percentage = $this->products_base_prices > 0 ? round(($this->products_discounts / $this->products_base_prices) * 100, 0) : 0.00;
+
             // get discount
-            $this->discount = $this->products_final_prices - $this->products_best_prices;
+            $this->offers_discounts = $this->products_final_prices - $this->products_best_prices;
 
             // get discount percent
-            $this->discount_percent = $this->products_final_prices ? number_format(($this->discount / $this->products_final_prices) * 100) : 0;
+            $this->offers_discounts_percentage = $this->products_final_prices > 0 ? number_format(($this->offers_discounts / $this->products_final_prices) * 100) : 0;
 
             // get products points
-            $this->points = $this->products->map(function ($product) use ($products_quantities) {
+            $this->products_best_points = $this->products->map(function ($product) use ($products_quantities) {
                 $product_qty = $products_quantities[$product->id];
 
                 return $product->best_points * $product_qty;
@@ -80,14 +109,12 @@ class OrderSummary extends Component
                 // Percent Discount
                 if ($order_offer->type == 0 && $order_offer->value <= 100) {
                     $this->order_discount = $this->products_best_prices * ($order_offer->value / 100);
-                    $this->best_price_from_orders = $this->products_best_prices - $this->order_discount;
-                    $this->order_discount_percent = round($order_offer->value);
+                    $this->order_discount_percentage = round($order_offer->value);
                 }
                 // Fixed Discount
                 elseif ($order_offer->type == 1) {
-                    $this->best_price_from_orders = $this->products_best_prices - $order_offer->value > 0 ? $this->products_best_prices - $order_offer->value : 0.00;
-                    $this->order_discount = $order_offer->value;
-                    $this->order_discount_percent = round(($this->order_discount * 100) / $this->products_best_prices);
+                    $this->order_discount = $this->products_best_prices >= $order_offer->value ? $order_offer->value : $this->products_best_prices;
+                    $this->order_discount_percentage = round(($this->order_discount * 100) / $this->products_best_prices);
                 }
                 // Points
                 elseif ($order_offer->type == 2) {
@@ -95,22 +122,10 @@ class OrderSummary extends Component
                 }
             }
 
-            $this->total_points = $this->order_points ? $this->points + $this->order_points : $this->points;
+            // get total points
+            $this->total_points = $this->products_best_points + $this->order_points;
 
-            // get free shipping from products
-            $free_shipping_products = !$this->products->map(function ($product) {
-                return $product->free_shipping;
-            })->contains(0);
-
-            $this->free_shipping = $free_shipping_products;
-
-            $this->products_best_prices = is_numeric($this->delivery_price) && !$this->free_shipping ? $this->products_best_prices + $this->delivery_price : $this->products_best_prices;
-        } else {
-            $this->products_final_prices = 0.00;
-            $this->products_best_prices = 0.00;
-            $this->discount = 0.00;
-            $this->discount_percent = 0;
-            $this->order_discount = 0.00;
+            $this->total = !is_numeric($this->delivery_fees) || $this->delivery_fees == 0 || $this->coupon_free_shipping ? $this->products_best_prices - $this->order_discount - $this->coupon_discount : $this->products_best_prices - $this->order_discount - $this->coupon_discount + $this->delivery_fees;
         }
 
         return view('livewire.front.order.general.order-summary');
@@ -122,17 +137,15 @@ class OrderSummary extends Component
     {
         $products_id = Cart::instance('cart')->content()->pluck('id');
 
-        $products = collect([]);
-
-        $products = getBestOfferForProducts($products_id);
-
-        $this->products = $products;
+        $this->products = getBestOfferForProducts($products_id);
     }
     ############## Get Products :: End ##############
 
     ############## Get Delivery Price :: Start ##############
     public function getDeliveryPrice()
     {
+        $products_quantities = $this->products_quantities;
+
         if (auth()->check()) {
             $address = auth()->user()->addresses->where('default', 1)->first();
 
@@ -148,11 +161,9 @@ class OrderSummary extends Component
                     ->get();
 
                 // get products weights
-                $products_weights = (int)$this->products->map(function ($product) {
+                $products_weights = $this->products->map(function ($product) use ($products_quantities) {
                     if (!$product->free_shipping) {
-                        $product_qty = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product) {
-                            return $cartItem->id === $product->id;
-                        })->first()->qty;
+                        $product_qty = $products_quantities[$product->id];
 
                         return $product->weight * $product_qty;
                     }
@@ -179,10 +190,10 @@ class OrderSummary extends Component
                     }
                 });
 
-                $this->delivery_price = $prices->min('charge');
+                $this->delivery_fees = $prices->min('charge');
 
                 $best_zone = $prices->filter(function ($price) {
-                    return $price['charge'] == $this->delivery_price;
+                    return $price['charge'] == $this->delivery_fees;
                 });
 
                 if ($best_zone->count()) {
@@ -191,25 +202,28 @@ class OrderSummary extends Component
                     $this->best_zone_id = null;
                 }
 
-                if ($this->delivery_price == null) {
-                    $this->delivery_price = 'no delivery';
+                if ($this->delivery_fees == null) {
+                    $this->delivery_fees = 'no delivery';
                     $this->city_name = $address->city->name;
                 }
             } else {
-                $this->delivery_price = 'select default address';
+                $this->delivery_fees = 'select default address';
             }
         }
     }
     ############## Get Delivery Price :: End ##############
 
     ############## Get Coupon Data :: Start ##############
-    public function couponApplied($coupon_id, $coupon_price, $coupon_points, $coupon_shipping)
+    public function couponApplied($coupon_id, $coupon_discount, $coupon_discount_percentage, $coupon_points, $coupon_free_shipping, $products_best_coupon, $order_best_coupon)
     {
         $this->coupon_id = $coupon_id;
-        $this->coupon_price = $coupon_shipping ? $coupon_price - $this->delivery_price : $coupon_price;
+        $this->coupon_discount = $coupon_discount;
+        $this->coupon_discount_percentage = $coupon_discount_percentage;
         $this->coupon_points = $coupon_points;
-        $this->coupon_shipping = $coupon_shipping;
-        $this->coupon_discount = $this->products_best_prices - $this->coupon_price;
+        $this->coupon_free_shipping = $coupon_free_shipping;
+        $this->products_best_coupon = $products_best_coupon;
+        $this->order_best_coupon = $order_best_coupon;
+
         $this->getProducts();
         $this->getDeliveryPrice();
     }
@@ -225,14 +239,18 @@ class OrderSummary extends Component
             'setOrderFinalPrice',
             [
                 'products' => $this->products,
-                'subtotal_base' => $this->products_final_prices ?? 0,
-                'subtotal_final' => $this->coupon_price && $this->coupon_shipping ? $this->coupon_price : ($this->coupon_price && !$this->coupon_shipping ? $this->coupon_price - $this->delivery_price : ($this->products_best_prices - $this->delivery_price ?? 0)),
-                'delivery_fees' => $this->coupon_shipping == true ? 0 : ($this->free_shipping == true ? 0 : ($this->delivery_price ?? 0)),
+                'subtotal_base' => $this->products_final_prices ?? 0.00,
+                'subtotal_final' => $this->products_best_prices -  $this->coupon_discount ?? 0.00,
+                'total' => $this->total,
+                'delivery_fees' => $this->coupon_free_shipping ? 0.00 : $this->delivery_fees,
                 'coupon_id' => $this->coupon_id ?? null,
-                'coupon_discount' => $this->coupon_discount ?? null,
+                'coupon_discount' => $this->coupon_discount,
+                'coupon_points' => $this->coupon_points,
+                'products_best_coupon' => $this->products_best_coupon ?? [],
+                'order_best_coupon' => $this->order_best_coupon,
                 'zone_id' => $this->best_zone_id ?? null,
                 'weight' => $this->products_weights ?? 1,
-                'gift_points' => $this->coupon_points ?? ($this->total_points ?? 0),
+                'gift_points' => $this->coupon_points + $this->total_points,
             ]
         );
     }

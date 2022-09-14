@@ -72,9 +72,12 @@ class BrandsDatatable extends Component
             "text" => __('admin/productsPages.Are you sure, you want to delete this brand ?'),
             'confirmButtonText' => __('admin/productsPages.Delete'),
             'denyButtonText' => __('admin/productsPages.Cancel'),
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'func' => 'softDeleteBrand',
-            'brand_id' => $brand_id,
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'softDeleteBrand',
+            'id' => $brand_id,
         ]);
     }
 

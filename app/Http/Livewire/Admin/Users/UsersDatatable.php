@@ -79,11 +79,16 @@ class UsersDatatable extends Component
     ######## Deleted #########
     public function deleteConfirm($user_id)
     {
-        $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
+        $this->dispatchBrowserEvent('swalConfirm', [
             "text" => __('admin/usersPages.Are you sure, you want to delete this user ?'),
             'confirmButtonText' => __('admin/usersPages.Delete'),
             'denyButtonText' => __('admin/usersPages.Cancel'),
-            'user_id' => $user_id,
+            'denyButtonColor' => 'green',
+            'confirmButtonColor' => 'red',
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'softDeleteUser',
+            'id' => $user_id,
         ]);
     }
 
@@ -93,12 +98,12 @@ class UsersDatatable extends Component
             $user = User::findOrFail($user_id);
             $user->delete();
 
-            $this->dispatchBrowserEvent('swalUserDeleted', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('admin/usersPages.User has been deleted successfully'),
                 'icon' => 'success'
             ]);
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('swalUserDeleted', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/usersPages.User hasn't been deleted"),
                 'icon' => 'error'
             ]);

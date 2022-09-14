@@ -80,11 +80,11 @@
                                 </th>
 
                                 {{-- Users No. --}}
-                                <th wire:click="sortBy('users_count')" scope="col"
+                                <th wire:click="sortBy('customers_count')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Users No.') }}
                                     @include('partials._sort_icon', [
-                                        'field' => 'users_count',
+                                        'field' => 'customers_count',
                                     ])
                                 </th>
 
@@ -165,12 +165,12 @@
 
                                     {{-- Users. No. --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
-                                        @if ($country->users_count)
+                                        @if ($country->customers_count)
                                             <a href="{{ route('admin.countries.usersCountry', [$country->id]) }}"
                                                 title="{{ __('admin/deliveriesPages.View') }}"
                                                 class="m-auto text-sm bg-view hover:bg-viewHover rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
                                                 <span class="bg-white rounded py-1 px-2">
-                                                    {{ $country->users_count }}
+                                                    {{ $country->customers_count }}
                                                 </span>
 
                                                 <span class="material-icons text-lg text-white p-1 ltr:ml-1 rtl:mr-1">

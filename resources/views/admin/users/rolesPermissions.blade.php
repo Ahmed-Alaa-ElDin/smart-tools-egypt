@@ -46,13 +46,3 @@ __('admin/usersPages.Role\'s Permissions List')])
         </div>
     </div>
 @endsection
-
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
-{{-- Extra Scripts --}}
-@push('js')
-    @livewireScripts
-@endpush

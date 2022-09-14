@@ -137,6 +137,7 @@ return [
     "Products are required." => "Products are required.",
     "Banners are required." => "Banners are required.",
     'The phone number field is required' => 'The phone number field is required',
+    'The phone numbers must start with 010, 011, 012 or 015' => 'The phone numbers must start with 010, 011, 012 or 015',
 
     /*
     |--------------------------------------------------------------------------

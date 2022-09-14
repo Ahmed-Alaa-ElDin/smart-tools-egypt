@@ -36,6 +36,7 @@
                                     <span>
                                         {{ __('auth/authentication.Last Name') }}
                                     </span>
+                                    <span class="text-red-600">*</span>
                                 </label>
                                 <input type="text" id="l_name" wire:model="l_name"
                                     class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('l_name') border-red-500 @enderror"
@@ -55,7 +56,7 @@
                                     </span>
                                     <span class="text-red-600">*</span>
                                 </label>
-                                <input type="text" id="phone" wire:model="phone"
+                                <input type="text" id="phone" wire:model="phone" dir='ltr'
                                     class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('phone') border-red-500 @enderror"
                                     placeholder="{{ __('auth/authentication.Enter Your Phone Number') }}" required>
 
@@ -72,7 +73,7 @@
                                         {{ __('auth/authentication.Email') }}
                                     </span>
                                 </label>
-                                <input type="email" id="email" wire:model="email"
+                                <input type="email" id="email" wire:model="email" dir='ltr'
                                     class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('email') border-red-500 @enderror"
                                     placeholder="{{ __('auth/authentication.Enter Your Email') }}">
 

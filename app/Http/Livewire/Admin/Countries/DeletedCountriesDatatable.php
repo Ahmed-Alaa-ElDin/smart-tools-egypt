@@ -75,12 +75,12 @@ class DeletedCountriesDatatable extends Component
             "text" => __('admin/deliveriesPages.Are you sure, you want to delete this country permanently ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
             'focusDeny' => true,
             'icon' => 'warning',
             'method' => 'forceDeleteCountry',
-            'country_id' => $country_id,
+            'id' => $country_id,
         ]);
     }
 
@@ -111,12 +111,12 @@ class DeletedCountriesDatatable extends Component
             "text" => __('admin/deliveriesPages.Are you sure, you want to restore this country ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Confirm'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'red',
             'confirmButtonColor' => 'green',
             'focusDeny' => false,
             'icon' => 'warning',
             'method' => 'restoreCountry',
-            'country_id' => $country_id,
+            'id' => $country_id,
         ]);
     }
 
@@ -148,12 +148,12 @@ class DeletedCountriesDatatable extends Component
             "text" => __('admin/deliveriesPages.Are you sure, you want to delete all countries permanently ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'focusDeny' => false,
+            'focusDeny' => true,
             'icon' => 'warning',
             'method' => 'forceDeleteAllCountries',
-            'country_id' => ''
+            'id' => ''
         ]);
     }
 
@@ -183,12 +183,12 @@ class DeletedCountriesDatatable extends Component
             "text" => __('admin/deliveriesPages.Are you sure, you want to restore all countries ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Confirm'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'red',
             'confirmButtonColor' => 'green',
             'focusDeny' => false,
             'icon' => 'warning',
             'method' => 'restoreAllCountries',
-            'country_id' => '',
+            'id' => '',
         ]);
     }
 

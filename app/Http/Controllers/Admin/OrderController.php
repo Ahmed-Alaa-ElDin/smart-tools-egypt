@@ -83,4 +83,9 @@ class OrderController extends Controller
     {
         //
     }
+
+    public function paymentHistory($order_id)
+    {
+        return view('admin.orders.payment_history', compact('order_id'));
+    }
 }

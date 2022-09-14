@@ -74,9 +74,12 @@ class OffersDatatable extends Component
             "text" => __('admin/offersPages.Are you sure, you want to delete this offer ?'),
             'confirmButtonText' => __('admin/offersPages.Delete'),
             'denyButtonText' => __('admin/offersPages.Cancel'),
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'func' => 'deleteOffer',
-            'offer_id' => $offer_id,
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'deleteOffer',
+            'id' => $offer_id,
         ]);
     }
 

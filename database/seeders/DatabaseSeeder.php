@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             // CitySeeder::class,
             UserSeeder::class,
             SectionSeeder::class,
-            OrderStatusSeeder::class,
+            StatusSeeder::class,
         ]);
     }
 }

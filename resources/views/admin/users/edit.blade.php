@@ -45,15 +45,8 @@ __('admin/usersPages.Edit User')])
         </div>
     </div>
 @endsection
-
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
 {{-- Extra Scripts --}}
 @push('js')
-    @livewireScripts
 
     <script>
         window.addEventListener('swalConfirmPassword', function(e) {
@@ -77,8 +70,11 @@ __('admin/usersPages.Edit User')])
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
+ @if (session('locale' == 'en'))
+                    position: 'top-left',
+                @else
+                    position: 'top-right',
+                @endif                showConfirmButton: false,
                 toast: true,
                 timer: 3000,
                 timerProgressBar: true,

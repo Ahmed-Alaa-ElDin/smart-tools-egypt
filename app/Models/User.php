@@ -99,6 +99,18 @@ class User extends Authenticatable
         return $this->belongsToMany(Country::class, 'addresses');
     }
 
+    // One to many through relationship  User --> Governorate
+    public function governorates()
+    {
+        return $this->belongsToMany(Governorate::class, 'addresses');
+    }
+
+    // One to many through relationship  User --> Cities
+    public function cities()
+    {
+        return $this->belongsToMany(City::class, 'addresses');
+    }
+
     // One to many relationship  User --> Reviews
     public function reviews()
     {

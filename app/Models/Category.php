@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Translatable\HasTranslations;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class Category extends Model
 {
+    use HasRelationships;
     use HasFactory;
     use HasTranslations;
     use SoftDeletes;
@@ -81,7 +83,7 @@ class Category extends Model
     // hasmany through relationship  Category --> Products
     public function products()
     {
-        return $this->hasManyThrough(Product::class, Subcategory::class);
+        return $this->hasManyDeep(Product::class,[Subcategory::class,'product_subcategory']);
     }
 
 

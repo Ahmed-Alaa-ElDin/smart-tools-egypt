@@ -79,12 +79,12 @@ class DeletedCitiesDatatable extends Component
             "text" => __('admin/deliveriesPages.Are you sure, you want to delete this city permanently ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
             'focusDeny' => true,
             'icon' => 'warning',
             'method' => 'forceDeleteCity',
-            'city_id' => $city_id,
+            'id' => $city_id,
         ]);
     }
 
@@ -115,12 +115,12 @@ class DeletedCitiesDatatable extends Component
             "text" => __('admin/deliveriesPages.Are you sure, you want to restore this city ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Confirm'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'red',
             'confirmButtonColor' => 'green',
             'focusDeny' => false,
             'icon' => 'warning',
             'method' => 'restoreCity',
-            'city_id' => $city_id,
+            'id' => $city_id,
         ]);
     }
 
@@ -152,12 +152,12 @@ class DeletedCitiesDatatable extends Component
             "text" => __('admin/deliveriesPages.Are you sure, you want to delete all cities permanently ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Delete'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'green',
             'confirmButtonColor' => 'red',
-            'focusDeny' => false,
+            'focusDeny' => true,
             'icon' => 'warning',
             'method' => 'forceDeleteAllCities',
-            'city_id' => ''
+            'id' => ''
         ]);
     }
 
@@ -187,12 +187,12 @@ class DeletedCitiesDatatable extends Component
             "text" => __('admin/deliveriesPages.Are you sure, you want to restore all cities ?'),
             'confirmButtonText' => __('admin/deliveriesPages.Confirm'),
             'denyButtonText' => __('admin/deliveriesPages.Cancel'),
-            'denyButtonColor' => 'gray',
+            'denyButtonColor' => 'red',
             'confirmButtonColor' => 'green',
             'focusDeny' => false,
             'icon' => 'warning',
             'method' => 'restoreAllCities',
-            'city_id' => '',
+            'id' => '',
         ]);
     }
 

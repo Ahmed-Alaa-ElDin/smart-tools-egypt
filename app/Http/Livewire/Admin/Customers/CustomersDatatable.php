@@ -15,6 +15,10 @@ class CustomersDatatable extends Component
     public $sortDirection = 'ASC';
     public $perPage;
 
+    public $city_id = null;
+    public $governorate_id = null;
+    public $country_id = null;
+
     public $search = "";
 
     protected $listeners = ['softDeleteUser', 'addPoints'];
@@ -29,12 +33,12 @@ class CustomersDatatable extends Component
 
     public function render()
     {
-        $users = User::with('phones', 'roles')
+        $users = User::with(['phones', 'roles', 'cities', 'countries'])
             ->where(
                 fn ($q) => $q
                     ->whereDoesntHave('roles')
                     ->orwhereHas("roles", function ($q) {
-                        $q->whereNull("id")->orWhere("id", 1);
+                        $q->where("id", 1);
                     })
             )
             ->where(
@@ -47,10 +51,18 @@ class CustomersDatatable extends Component
                     ->orWhereHas('phones', function ($query) {
                         $query->where('phone', 'like', '%' . $this->search . '%');
                     })
-                    ->orWhereHas('roles', function ($query) {
-                        $query->where('name', 'like', '%' . $this->search . '%');
-                    })
             )
+            ->where(function ($q) {
+                if ($this->city_id) {
+                    return $q->whereHas('cities', fn ($q) => $q->where('cities.id', $this->city_id));
+                }
+                if ($this->governorate_id) {
+                    return $q->whereHas('governorates', fn ($q) => $q->where('governorates.id', $this->governorate_id));
+                }
+                if ($this->country_id) {
+                    return $q->whereHas('countries', fn ($q) => $q->where('countries.id', $this->country_id));
+                }
+            })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
@@ -80,11 +92,16 @@ class CustomersDatatable extends Component
     ######## Deleted #########
     public function deleteConfirm($user_id)
     {
-        $this->dispatchBrowserEvent('swalConfirmSoftDelete', [
+        $this->dispatchBrowserEvent('swalConfirm', [
             "text" => __('admin/usersPages.Are you sure, you want to delete this customer ?'),
             'confirmButtonText' => __('admin/usersPages.Delete'),
             'denyButtonText' => __('admin/usersPages.Cancel'),
-            'user_id' => $user_id,
+            'denyButtonColor' => 'green',
+            'confirmButtonColor' => 'red',
+            'focusDeny' => true,
+            'icon' => 'warning',
+            'method' => 'softDeleteUser',
+            'id' => $user_id,
         ]);
     }
 
@@ -94,12 +111,12 @@ class CustomersDatatable extends Component
             $user = User::findOrFail($user_id);
             $user->delete();
 
-            $this->dispatchBrowserEvent('swalUserDeleted', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('admin/usersPages.Customer has been deleted successfully'),
                 'icon' => 'success'
             ]);
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('swalUserDeleted', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/usersPages.Customer hasn't been deleted"),
                 'icon' => 'error'
             ]);
@@ -129,7 +146,7 @@ class CustomersDatatable extends Component
 
             $user->save();
 
-            $this->dispatchBrowserEvent('swalUserRoleChanged', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('admin/usersPages.Points added successfully'),
                 'icon' => 'success'
             ]);
@@ -153,18 +170,18 @@ class CustomersDatatable extends Component
             $user->save();
 
             if ($user->banned) {
-                $this->dispatchBrowserEvent('swalUserPanned', [
+                $this->dispatchBrowserEvent('swalDone', [
                     "text" => __('admin/usersPages.Customer has been banned successfully'),
                     'icon' => 'success'
                 ]);
             } else {
-                $this->dispatchBrowserEvent('swalUserPanned', [
+                $this->dispatchBrowserEvent('swalDone', [
                     "text" => __('admin/usersPages.Customer has been unbanned successfully'),
                     'icon' => 'success'
                 ]);
             }
         } catch (\Throwable $th) {
-            $this->dispatchBrowserEvent('swalUserPanned', [
+            $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/usersPages.Customer hasn't been banned"),
                 'icon' => 'error'
             ]);

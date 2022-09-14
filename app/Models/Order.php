@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -20,23 +23,27 @@ class Order extends Model
         'allow_opening',
         'zone_id',
         'coupon_id',
-        'coupon_discount',
+        'coupon_order_discount',
+        'coupon_order_points',
+        'coupon_products_discount',
+        'coupon_products_points',
         'status_id',
         'subtotal_base',
         'subtotal_final',
+        'total',
         'should_pay',
         'should_get',
-        'total',
         'used_points',
         'used_balance',
         'gift_points',
         'delivery_fees',
         'total_weight',
         'payment_method',
-        // 'payment_details',
         'tracking_number',
         'order_delivery_id',
         'notes',
+        'delivered_at',
+        'old_order_id',
     ];
 
     protected $appends = ['can_returned'];
@@ -58,7 +65,12 @@ class Order extends Model
 
     public function status()
     {
-        return $this->belongsTo(OrderStatus::class);
+        return $this->belongsTo(Status::class);
+    }
+
+    public function statuses()
+    {
+        return $this->belongsToMany(Status::class)->withPivot('id', 'notes')->withTimestamps();
     }
 
     public function zone()
@@ -68,7 +80,13 @@ class Order extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class)->withPivot('quantity', 'price');
+        return $this->belongsToMany(Product::class)->withPivot(
+            'quantity',
+            'price',
+            'points',
+            'coupon_discount',
+            'coupon_points'
+        )->withTimestamps();
     }
 
     public function invoiceRequests()
@@ -83,6 +101,9 @@ class Order extends Model
 
     public function getCanReturnedAttribute()
     {
-        return $this->status_id == 7 && $this->created_at->diffInDays() <= config('constants.constants.RETURN_PERIOD');
+        if ($this->delivered_at) {
+            return $this->status_id == 45 && Carbon::create($this->delivered_at)->diffInDays() <= config('constants.constants.RETURN_PERIOD');
+        }
+        return false;
     }
 }

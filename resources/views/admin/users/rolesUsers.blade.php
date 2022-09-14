@@ -49,47 +49,10 @@ __('admin/usersPages.Role\'s Users List')])
     </div>
 @endsection
 
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
 {{-- Extra Scripts --}}
 @push('js')
-    @livewireScripts
 
     <script>
-        // #### User Deleted ####
-        window.addEventListener('swalConfirmSoftDelete', function(e) {
-            Swal.fire({
-                icon: 'warning',
-                text: e.detail.text,
-                showDenyButton: true,
-                confirmButtonText: e.detail.confirmButtonText,
-                denyButtonText: e.detail.denyButtonText,
-                denyButtonColor: 'gray',
-                confirmButtonColor: 'red',
-                focusDeny: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Livewire.emit('softDeleteUser', e.detail.user_id);
-                }
-            });
-        });
-
-        window.addEventListener('swalUserDeleted', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        });
-        // #### User Deleted ####
-
         window.addEventListener('swalEditRolesSelect', function(e) {
             Swal.fire({
                 title: e.detail.title,
@@ -116,8 +79,11 @@ __('admin/usersPages.Role\'s Users List')])
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
+ @if (session('locale' == 'en'))
+                    position: 'top-left',
+                @else
+                    position: 'top-right',
+                @endif                showConfirmButton: false,
                 toast: true,
                 timer: 3000,
                 timerProgressBar: true,

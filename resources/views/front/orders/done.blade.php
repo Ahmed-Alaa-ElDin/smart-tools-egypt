@@ -1,4 +1,4 @@
-@extends('layouts.front.site', ['titlePage' => __('front/homePage.Order Billing Details')])
+@extends('layouts.front.site', ['titlePage' => __('front/homePage.Order Confirmation')])
 
 @section('cart-wishlist-compare')
     <div class="grow text-center font-bold text-primary">
@@ -45,9 +45,8 @@
                                 </div>
                             @endif
 
-                            @if (session('order_id'))
-                                {{-- todo :: add tracking link --}}
-                                <a href="#" class="btn bg-secondary font-bold">
+                            @if ($order_id)
+                                <a href="{{ route('front.orders.track', $order_id) }}" class="btn bg-secondary font-bold">
                                     {{ __('front/homePage.Track Your Order') }}
                                 </a>
                             @else
@@ -67,18 +66,4 @@
 @endsection
 
 {{-- Extra Scripts --}}
-@push('js')
-    <script>
-        window.addEventListener('swalNotification', function(e) {
-            Swal.fire({
-                text: e.detail.text,
-                icon: e.detail.icon,
-                position: 'top-right',
-                showConfirmButton: false,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-            })
-        });
-    </script>
-@endpush
+

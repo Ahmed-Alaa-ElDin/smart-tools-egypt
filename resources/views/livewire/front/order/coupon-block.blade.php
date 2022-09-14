@@ -1,7 +1,7 @@
 <div>
     @if (!$coupon_applied)
         <div class="w-full flex items-center justify-center gap-3">
-            <input
+            <input wire:keydown.enter="checkCoupon"
                 class="grow-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
                 dir="ltr" type="text" placeholder="{{ __('front/homePage.Coupon Code') }}"
                 wire:model.lazy="coupon">

@@ -45,12 +45,3 @@ __('admin/deliveriesPages.Add Delivery Company')])
     </div>
 @endsection
 
-{{-- Extra Styles --}}
-@push('css')
-    @livewireStyles
-@endpush
-
-{{-- Extra Scripts --}}
-@push('js')
-    @livewireScripts
-@endpush

@@ -3,7 +3,7 @@
 @section('content')
     {{-- Login  Form --}}
     <section class="w-full bg-gray-900 min-h-screen flex justify-center items-center">
-        <div class="p-4 md:px-24 md:py-8">
+        <div class="p-4 md:px-24 md:py-8 w-full">
             <div class="grid grid-cols-2 p-4 md:p-8 bg-white rounded-xl shadow-xl">
 
                 {{-- Logo :: Start --}}
