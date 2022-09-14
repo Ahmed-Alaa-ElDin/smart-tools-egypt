@@ -47,7 +47,7 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Datatable Start --}}
-                            @livewire('admin.categories.categories-datatable',['search' => $supercategory->name])
+                            @livewire('admin.categories.categories-datatable',['supercategory_id' => $supercategory->id])
                             {{-- Datatable End --}}
                         </div>
                     </div>

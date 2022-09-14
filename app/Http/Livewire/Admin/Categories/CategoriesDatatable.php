@@ -17,6 +17,8 @@ class CategoriesDatatable extends Component
 
     public $search = "";
 
+    public $supercategory_id = '%';
+
     protected $listeners = ['softDeleteCategory'];
 
     // Render Once
@@ -31,12 +33,12 @@ class CategoriesDatatable extends Component
     public function render()
     {
         $categories = Category::select([
-                'categories.id',
-                'categories.name',
-                'supercategories.name as supercategory_name',
-                'supercategories.id as supercategory_id',
-                'supercategory_id'
-            ])
+            'categories.id',
+            'categories.name',
+            'supercategories.name as supercategory_name',
+            'supercategories.id as supercategory_id',
+            'supercategory_id'
+        ])
             ->leftJoin('supercategories', 'supercategory_id', '=', 'supercategories.id')
             ->with(['supercategory' => function ($q) {
                 return $q->select('id', 'name');
@@ -49,6 +51,7 @@ class CategoriesDatatable extends Component
                     ->orWhere('supercategories.name->ar', 'like', '%' . $this->search . '%')
                     ->orWhere('supercategories.name->en', 'like', '%' . $this->search . '%');
             })
+            ->where('supercategory_id','like', $this->supercategory_id ?? '%')
             ->orderBy($this->sortBy, $this->sortDirection)->paginate($this->perPage);
 
 
@@ -104,7 +107,6 @@ class CategoriesDatatable extends Component
                 "text" => __('admin/productsPages.Category has been deleted successfully'),
                 'icon' => 'success'
             ]);
-
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/productsPages.Category hasn't been deleted"),

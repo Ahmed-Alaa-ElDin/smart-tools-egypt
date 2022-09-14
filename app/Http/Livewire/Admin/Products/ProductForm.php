@@ -92,7 +92,11 @@ class ProductForm extends Component
         if ($this->product_id) {
 
             // Get Old Product's data
-            $product = Product::with(['subcategories' => fn ($q) => $q->with(['category' => fn ($q) => $q->with('supercategory')])])->findOrFail($this->product_id);
+            $product = Product::with(
+                ['subcategories' => fn ($q) => $q->with(
+                    ['category' => fn ($q) => $q->with(['supercategory', 'validOffers'])]
+                )]
+            )->findOrFail($this->product_id);
 
             $this->product = $product;
 
@@ -133,7 +137,7 @@ class ProductForm extends Component
                     $this->parentCategories[] = [
                         'supercategories' => $this->supercategories,
                         'supercategory_id' => $subcategory->category->supercategory->id,
-                        'categories' => Category::where('supercategory_id', $subcategory->category->supercategory->id)->get()->toArray(),
+                        'categories' => Category::with('validOffers')->where('supercategory_id', $subcategory->category->supercategory->id)->get()->toArray(),
                         'category_id' => $subcategory->category->id,
                         'subcategories' => Subcategory::where('category_id', $subcategory->category->id)->get()->toArray(),
                         'subcategory_id' => $subcategory->id,
@@ -180,7 +184,6 @@ class ProductForm extends Component
 
             // SEO
             $this->seo_keywords = $product->meta_keywords;
-            // $this->description_seo = $product->meta_description;
         }
         // If new product
         else {
