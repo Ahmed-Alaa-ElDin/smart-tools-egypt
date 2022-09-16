@@ -94,7 +94,7 @@ class ProductForm extends Component
             // Get Old Product's data
             $product = Product::with(
                 ['subcategories' => fn ($q) => $q->with(
-                    ['category' => fn ($q) => $q->with(['supercategory', 'validOffers'])]
+                    ['category' => fn ($q) => $q->with(['supercategory', 'offers'])]
                 )]
             )->findOrFail($this->product_id);
 
@@ -137,7 +137,7 @@ class ProductForm extends Component
                     $this->parentCategories[] = [
                         'supercategories' => $this->supercategories,
                         'supercategory_id' => $subcategory->category->supercategory->id,
-                        'categories' => Category::with('validOffers')->where('supercategory_id', $subcategory->category->supercategory->id)->get()->toArray(),
+                        'categories' => Category::where('supercategory_id', $subcategory->category->supercategory->id)->get()->toArray(),
                         'category_id' => $subcategory->category->id,
                         'subcategories' => Subcategory::where('category_id', $subcategory->category->id)->get()->toArray(),
                         'subcategory_id' => $subcategory->id,

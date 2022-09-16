@@ -21,6 +21,7 @@ class Supercategory extends Model
     protected $fillable = [
         'name',
         'icon',
+        'publish',
         'meta_title',
         'meta_description',
         'top',

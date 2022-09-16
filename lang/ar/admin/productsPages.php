@@ -274,5 +274,17 @@ return [
     "Add Specification"                                                         =>      "إضافة خاصية جديدة",
     "Keywords"                                                                  =>      "الكلمات الدلالية",
     'Keywords ("Comma Separated")'                                              =>      'الكلمات الدلالية (استخدم فاصلة "," بين الكلمات)',
+    "Subcategory has been published"                                            =>      "تم اظهار القسم المباشر",
+    "Subcategory has been hidden"                                               =>      "تم اخفاء القسم المباشر",
+    "Subcategory hasn't been published"                                         =>      "لم يتم اظهار القسم المباشر",
+    "Subcategory hasn't been hidden"                                            =>      "لم يتم اخفاء القسم المباشر",
+    "Category has been published"                                               =>      "تم اظهار القسم الفرعي",
+    "Category has been hidden"                                                  =>      "تم اخفاء القسم الفرعي",
+    "Category hasn't been published"                                            =>      "لم يتم اظهار القسم الفرعي",
+    "Category hasn't been hidden"                                               =>      "لم يتم اخفاء القسم الفرعي",
+    "Supercategory has been published"                                          =>      "تم اظهار القسم الرئيسي",
+    "Supercategory has been hidden"                                             =>      "تم اخفاء القسم الرئيسي",
+    "Supercategory hasn't been published"                                       =>      "لم يتم اظهار القسم الرئيسي",
+    "Supercategory hasn't been hidden"                                          =>      "لم يتم اخفاء القسم الرئيسي",
 
 ];

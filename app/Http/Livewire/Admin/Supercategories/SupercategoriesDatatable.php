@@ -33,6 +33,7 @@ class SupercategoriesDatatable extends Component
         $supercategories = Supercategory::select([
             'id',
             'name',
+            'publish',
             'icon',
         ])
             ->withCount('categories')
@@ -69,6 +70,29 @@ class SupercategoriesDatatable extends Component
         return $this->sortBy = $field;
     }
 
+    ######################## Publish Toggle :: Start ############################
+    public function publish($supercategory_id)
+    {
+        $supercategory_id = Supercategory::findOrFail($supercategory_id);
+
+        try {
+            $supercategory_id->update([
+                'publish' => $supercategory_id->publish ? 0 : 1
+            ]);
+
+            $this->dispatchBrowserEvent('swalDone', [
+                "text" => $supercategory_id->publish ? __('admin/productsPages.Supercategory has been published') : __('admin/productsPages.Supercategory has been hidden'),
+                'icon' => 'success'
+            ]);
+        } catch (\Throwable $th) {
+            $this->dispatchBrowserEvent('swalDone', [
+                "text" => $supercategory_id->publish ? __("admin/productsPages.Supercategory hasn't been published") : __("admin/productsPages.Supercategory hasn't been hidden"),
+                'icon' => 'error'
+            ]);
+        }
+    }
+    ######################## Publish Toggle :: End ############################
+
     ######## Deleted #########
     public function deleteConfirm($supercategories_id)
     {
@@ -95,7 +119,6 @@ class SupercategoriesDatatable extends Component
                 "text" => __('admin/productsPages.Supercategory has been deleted successfully'),
                 'icon' => 'success'
             ]);
-
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/productsPages.Supercategory hasn't been deleted"),
