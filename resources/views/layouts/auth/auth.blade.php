@@ -16,12 +16,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;400;700;900&display=swap" rel="stylesheet">
 
     <!-- Main css -->
-    <link href="{{ asset('assets/front/css/material-dashboard.min.css') }}" rel="stylesheet" />
+    <link href="{{ mix('assets/css/material-dashboard.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ mix('assets/css/app.css') }}">
-    {{-- <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}"> --}}
 
     @if (LaravelLocalization::getCurrentLocale() == 'ar')
-        <link href="{{ asset('assets/admin/css/material-dashboard-rtl.css') }}" rel="stylesheet" />
+        <link href="{{ mix('assets/css/material-dashboard-rtl.css') }}" rel="stylesheet" />
     @endif
 
 </head>

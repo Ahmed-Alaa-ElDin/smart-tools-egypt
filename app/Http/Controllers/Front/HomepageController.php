@@ -19,14 +19,17 @@ class HomepageController extends Controller
         $sections = Section::with([
             'products' => fn ($q) => $q->publishedproduct()->withPivot('rank')->orderBy('rank'),
             'offer' => fn ($q) => $q->with([
-                'directProducts' => fn ($q) => $q->where('publish', 1),
-                'supercategoryProducts' => fn ($q) => $q->where('publish', 1),
-                'categoryProducts' => fn ($q) => $q->where('publish', 1),
-                'subcategoryProducts' => fn ($q) => $q->where('publish', 1),
-                'brandProducts' => fn ($q) => $q->where('publish', 1),
+                'directProducts' => fn ($q) => $q->where('products.publish', 1),
+                'supercategoryProducts' => fn ($q) => $q->where('products.publish', 1),
+                'categoryProducts' => fn ($q) => $q->where('products.publish', 1),
+                'subcategoryProducts' => fn ($q) => $q->where('products.publish', 1),
+                'brandProducts' => fn ($q) => $q->where('products.publish', 1),
             ]),
             'banners'
-        ])->where('active', 1)->orderBy('rank')->get();
+        ])
+            ->where('active', 1)
+            ->orderBy('rank')
+            ->get();
         ############## Get All Active Sections with Relations :: End ##############
 
         ############ Extract of products From Sections :: Start ############

@@ -22884,6 +22884,58 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/css/material-dashboard.min.css":
+/*!**************************************************!*\
+  !*** ./resources/css/material-dashboard.min.css ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "./resources/css/material-dashboard-rtl.css":
+/*!**************************************************!*\
+  !*** ./resources/css/material-dashboard-rtl.css ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "./resources/css/select2.min.css":
+/*!***************************************!*\
+  !*** ./resources/css/select2.min.css ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "./resources/css/splide.min.css":
+/*!**************************************!*\
+  !*** ./resources/css/splide.min.css ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
 /***/ "./node_modules/process/browser.js":
 /*!*****************************************!*\
   !*** ./node_modules/process/browser.js ***!
@@ -23201,6 +23253,10 @@ process.umask = function() { return 0; };
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
 /******/ 			"/assets/js/app": 0,
+/******/ 			"assets/css/splide.min": 0,
+/******/ 			"assets/css/select2.min": 0,
+/******/ 			"assets/css/material-dashboard-rtl": 0,
+/******/ 			"assets/css/material-dashboard.min": 0,
 /******/ 			"assets/css/app": 0
 /******/ 		};
 /******/ 		
@@ -23251,8 +23307,12 @@ process.umask = function() { return 0; };
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["assets/css/app"], () => (__webpack_require__("./resources/js/app.js")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["assets/css/app"], () => (__webpack_require__("./resources/css/app.css")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/splide.min","assets/css/select2.min","assets/css/material-dashboard-rtl","assets/css/material-dashboard.min","assets/css/app"], () => (__webpack_require__("./resources/js/app.js")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/splide.min","assets/css/select2.min","assets/css/material-dashboard-rtl","assets/css/material-dashboard.min","assets/css/app"], () => (__webpack_require__("./resources/css/app.css")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/splide.min","assets/css/select2.min","assets/css/material-dashboard-rtl","assets/css/material-dashboard.min","assets/css/app"], () => (__webpack_require__("./resources/css/material-dashboard.min.css")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/splide.min","assets/css/select2.min","assets/css/material-dashboard-rtl","assets/css/material-dashboard.min","assets/css/app"], () => (__webpack_require__("./resources/css/material-dashboard-rtl.css")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/splide.min","assets/css/select2.min","assets/css/material-dashboard-rtl","assets/css/material-dashboard.min","assets/css/app"], () => (__webpack_require__("./resources/css/select2.min.css")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["assets/css/splide.min","assets/css/select2.min","assets/css/material-dashboard-rtl","assets/css/material-dashboard.min","assets/css/app"], () => (__webpack_require__("./resources/css/splide.min.css")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

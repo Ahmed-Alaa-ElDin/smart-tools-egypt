@@ -3,7 +3,7 @@
 @section('content')
     {{-- Login  Form --}}
     <section class="w-full bg-gray-900 min-h-screen flex justify-center items-center">
-        <div class="p-4 md:px-24 md:py-8">
+        <div class="p-4 md:px-24 md:py-8 w-full">
             <div class="grid grid-cols-2 p-4 md:p-8 bg-white rounded-xl shadow-xl">
 
                 {{-- Logo :: Start --}}
@@ -19,7 +19,7 @@
                 <div class="col-span-2 md:col-span-1">
 
                     {{-- Header :: Start --}}
-                    <h1 class="h3 font-bold text-center mb-8">{{ __('auth/authentication.Login') }}</h1>
+                    <h1 class="text-2xl font-bold text-center text-secondary mb-8">{{ __('auth/authentication.Login') }}</h1>
                     {{-- Header :: End --}}
 
                     {{-- Form :: Start --}}
@@ -28,7 +28,7 @@
                         <div class="grid grid-cols-12 justify-center items-center gap-4">
 
                             {{-- Phone :: Start --}}
-                            <div class="col-span-12 md:col-span-6 w-full  group grid grid-cols-12">
+                            <div class="col-span-12 md:col-span-6 w-full group grid grid-cols-12 gap-2">
                                 <label for="phone" class="col-span-12 block text-sm font-bold text-gray-900">
                                     <span>
                                         {{ __('auth/authentication.Phone') }}
@@ -45,7 +45,7 @@
                             {{-- Phone :: End --}}
 
                             {{-- Password :: Start --}}
-                            <div class="col-span-12 md:col-span-6 w-full  group grid grid-cols-12">
+                            <div class="col-span-12 md:col-span-6 w-full group grid grid-cols-12 gap-2">
                                 <label for="password" class="col-span-12 block text-sm font-bold text-gray-900">
                                     <span>
                                         {{ __('auth/authentication.Password') }}
@@ -95,7 +95,7 @@
                     {{-- Form :: End --}}
 
                     {{-- Social Media :: Start --}}
-                    <div class="flex items-center justify-center w-full gap-3 mb-3">
+                    <div class="flex items-center justify-center w-full gap-3 my-3">
                         <span class="font-bold">{{ __('auth/authentication.Or login with') }}</span>
 
                         <ul class="flex items-center gap-1">
@@ -141,7 +141,7 @@
                         <span class="font-bold">{{ __("auth/authentication.If you don't have an account") }}</span>
 
                         <a href="{{ route('register') }}"
-                            class="btn btn-sm bg-secondary font-bold rounded-full">{{ __('auth/authentication.Register') }}</a>
+                            class="btn btn-sm bg-secondary text-white text-xs font-bold rounded-full">{{ __('auth/authentication.Register') }}</a>
                     </div>
                     {{-- Or Register :: End --}}
 

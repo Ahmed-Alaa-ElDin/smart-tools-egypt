@@ -1,4 +1,8 @@
 {
     "/assets/js/app.js": "/assets/js/app.js",
+    "/assets/css/splide.min.css": "/assets/css/splide.min.css",
+    "/assets/css/select2.min.css": "/assets/css/select2.min.css",
+    "/assets/css/material-dashboard-rtl.css": "/assets/css/material-dashboard-rtl.css",
+    "/assets/css/material-dashboard.min.css": "/assets/css/material-dashboard.min.css",
     "/assets/css/app.css": "/assets/css/app.css"
 }
