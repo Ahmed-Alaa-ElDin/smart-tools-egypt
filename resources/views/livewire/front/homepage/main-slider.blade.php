@@ -143,7 +143,7 @@
                                     </div>
                                     {{-- Add Product : End --}}
                                     <a class="relative block overflow-hidden h-40 flex items-center justify-center hover:text-current"
-                                        href="{{ route('front.product.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) }}">
+                                        href="{{ route('front.product.show', ['id' => $product['id'], 'slug' => $product['slug']]) }}">
 
                                         {{-- Base Discount : Start --}}
                                         @if (!$product['under_reviewing'] && $product['final_price'] != $product['base_price'])
@@ -164,7 +164,7 @@
                                             <div class="w-full h-full flex justify-center items-center">
                                                 <img class="img-fit mx-auto lazyloaded"
                                                     src="{{ asset('storage/images/products/cropped100/' . $product['thumbnail']['file_name']) }}"
-                                                    alt="{{ $product['name'][session('locale')] . 'image' }}">
+                                                    alt="{{ $product['name'] . 'image' }}">
                                             </div>
                                         @else
                                             <div class="w-full h-full flex justify-center items-center bg-gray-200">
@@ -189,7 +189,7 @@
                                     </a>
 
                                     <a class="block md:p-3 p-2 text-left"
-                                        href="{{ route('front.product.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) }}">
+                                        href="{{ route('front.product.show', ['id' => $product['id'], 'slug' => $product['slug']]) }}">
 
                                         {{-- Price : Start --}}
                                         <div class="flex flex-wrap justify-center items-center gap-2">
@@ -246,7 +246,7 @@
                                         {{-- Product Name : Start --}}
                                         <h3 class="mb-2 text-center">
                                             <span class="block text-gray-800 truncate">
-                                                {{ $product['name'][session('locale')] }}
+                                                {{ $product['name'] }}
                                             </span>
                                         </h3>
                                         {{-- Product Name : End --}}
@@ -264,7 +264,7 @@
 
                                     {{-- Cart Amount : Start --}}
                                     <div class="md:px-3 px-2">
-                                        @livewire('front.general.cart.cart-amount', ['product_id' => $product['id'], 'unique' => 'product-' . $product['id'], 'small' => true], key($product['name'][session('locale')] . '-' . rand()))
+                                        @livewire('front.general.cart.cart-amount', ['product_id' => $product['id'], 'unique' => 'product-' . $product['id'], 'small' => true], key($product['name'] . '-' . rand()))
                                     </div>
                                     {{-- Cart Amount : End --}}
                                 </div>

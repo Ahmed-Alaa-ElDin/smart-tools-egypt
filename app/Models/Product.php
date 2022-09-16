@@ -49,7 +49,7 @@ class Product extends Model
         //  "best_offer"
     ];
 
-    // protected $with = ['reviews', 'orders', 'brand', 'validOffers'];
+    protected $with = ['reviews', 'orders', 'brand', 'validOffers'];
 
     protected function asJson($value)
     {
