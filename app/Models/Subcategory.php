@@ -21,6 +21,7 @@ class Subcategory extends Model
     protected $fillable = [
         'name',
         'category_id',
+        'publish',
         'meta_title',
         'meta_description',
         'top',
