@@ -9,28 +9,40 @@
                 <tr>
                     <th
                         class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
-                        #</th>
+                        #
+                    </th>
                     <th
                         class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
-                        {{ __('admin/ordersPages.Customer Info.') }}</th>
+                        {{ __('admin/ordersPages.Customer Info.') }}
+                    </th>
                     <th
                         class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
-                        {{ __('admin/ordersPages.Num of Items') }}</th>
+                        {{ __('admin/ordersPages.Num of Items') }}
+                    </th>
                     <th
                         class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
-                        {{ __('admin/ordersPages.Total') }}</th>
+                        {{ __('admin/ordersPages.Total') }}
+                    </th>
                     <th
                         class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
-                        {{ __('admin/ordersPages.Unpaid') }}</th>
+                        {{ __('admin/ordersPages.Unpaid') }}
+                    </th>
                     <th
                         class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
-                        {{ __('admin/ordersPages.Paid') }}</th>
+                        {{ __('admin/ordersPages.Paid') }}
+                    </th>
                     <th
                         class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
-                        {{ __('admin/ordersPages.Refund') }}</th>
+                        {{ __('admin/ordersPages.Refund') }}
+                    </th>
                     <th
                         class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
-                        {{ __('admin/ordersPages.Refunded') }}</th>
+                        {{ __('admin/ordersPages.Refunded') }}
+                    </th>
+                    <th
+                        class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
+                        {{ __('admin/ordersPages.Payment Method') }}
+                    </th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-red-200">
@@ -65,6 +77,19 @@
                     </td>
                     <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
                         {{ number_format(abs($order->refunded), 2, '.', '\'') }}
+                    </td>
+                    <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
+                        {{ $order->payment_method == 1
+                            ? __('admin/ordersPages.Cash on delivery (COD)')
+                            : ($order->payment_method == 2
+                                ? __('admin/ordersPages.Credit / Debit Card')
+                                : ($order->payment_method == 3
+                                    ? __('admin/ordersPages.Installment')
+                                    : ($order->payment_method == 4
+                                        ? __('admin/ordersPages.Vodafone Cash')
+                                        : ($order->payment_method == 10
+                                            ? __('admin/ordersPages.Wallet')
+                                            : '')))) }}
                     </td>
                 </tr>
             </tbody>
@@ -124,7 +149,7 @@
                         {{ __('admin/ordersPages.Status') }}</th>
                     <th
                         class="px-6 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider select-none">
-                        {{ __('admin/ordersPages.Type') }}</th>
+                        {{ __('admin/ordersPages.By') }}</th>
                     <th
                         class="px-6 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider select-none">
                         {{ __('admin/ordersPages.Transaction') }}</th>
@@ -146,12 +171,18 @@
                                             ? __('admin/ordersPages.Installment')
                                             : ($payment->payment_method == 4
                                                 ? __('admin/ordersPages.Vodafone Cash')
-                                                : ''))) }}
+                                                : ($payment->payment_method == 10
+                                                    ? __('admin/ordersPages.Wallet')
+                                                    : '')))) }}
                             </span>
                         </td>
+
                         <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                            {{ $payment->payment_amount }}
+                            <span>
+                                {{ number_format($payment->payment_amount, 2, '.', '\'') }}
+                            </span>
                         </td>
+
                         <td class="px-6 py-2 text-center whitespace-nowrap">
                             <span class="text-sm">
                                 {{ $payment->payment_status == 1
@@ -164,9 +195,7 @@
                                                 ? __('admin/ordersPages.Refunded')
                                                 : ($payment->payment_status == 5
                                                     ? __('admin/ordersPages.Refund Requested')
-                                                    : ($payment->payment_status == 10
-                                                        ? __('admin/ordersPages.Wallet')
-                                                        : ''))))) }}
+                                                    : '')))) }}
                             </span>
                         </td>
                         <td class="px-6 py-2 text-center whitespace-nowrap">
@@ -288,5 +317,54 @@
             });
         });
         // #### Get Add Payment Data ####
+
+        // #### Get New Payment Data####
+        window.addEventListener('swalGetNewPaymentData', function(e) {
+            Swal.fire({
+                title: e.detail.title,
+                html: e.detail.html,
+                showDenyButton: true,
+                confirmButtonText: e.detail.confirmButtonText,
+                denyButtonText: e.detail.denyButtonText,
+                denyButtonColor: e.detail.denyButtonColor,
+                confirmButtonColor: e.detail.confirmButtonColor,
+                preConfirm: () => {
+                    return [
+                        document.getElementById('amount').value,
+                        document.querySelector('input[name="type"]:checked').value
+                    ]
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.emit(e.detail.method, result.value);
+                }
+            });
+        });
+        // #### Get New Payment Data ####
+
+        // #### Get New Payment Data####
+        window.addEventListener('swalGetNewRefundData', function(e) {
+            Swal.fire({
+                title: e.detail.title,
+                html: e.detail.html,
+                showDenyButton: true,
+                confirmButtonText: e.detail.confirmButtonText,
+                denyButtonText: e.detail.denyButtonText,
+                denyButtonColor: e.detail.denyButtonColor,
+                confirmButtonColor: e.detail.confirmButtonColor,
+                preConfirm: () => {
+                    return [
+                        document.getElementById('amount').value,
+                        document.getElementById('transaction_id').value,
+                        document.querySelector('input[name="type"]:checked').value
+                    ]
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.emit(e.detail.method, result.value);
+                }
+            });
+        });
+        // #### Get New Payment Data ####
     </script>
 @endpush
