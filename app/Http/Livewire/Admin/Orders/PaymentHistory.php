@@ -142,9 +142,28 @@ class PaymentHistory extends Component
                 }
 
                 if ($payment->payment_method == 10) {
-                    $payment->user->update([
-                        'balance' => $payment->user->balance - $payment_amount
-                    ]);
+                    if ($payment->user->balance - $payment_amount >= 0) {
+                        $payment->user->update([
+                            'balance' => $payment->user->balance - $payment_amount,
+                        ]);
+                    } else {
+                        $payment->user->update([
+                            'balance' => 0,
+                        ]);
+
+                        $order->payments()->create([
+                            'order_id' => $order->id,
+                            'user_id' => $payment->user_id,
+                            'payment_amount' => -1 * ($payment->user->balance - $payment_amount),
+                            'payment_method' => $payment->payment_method,
+                            'payment_status' => 1,
+                            'payment_details' => json_encode([
+                                "amount_cents" => ($payment->user->balance - $payment_amount) * 100,
+                                "transaction_id" => null,
+                                "source_data_sub_type" => auth()->user()->f_name . " " . auth()->user()->l_name
+                            ]),
+                        ]);
+                    }
                 }
 
                 $this->dispatchBrowserEvent('swalDone', [
@@ -157,6 +176,7 @@ class PaymentHistory extends Component
                     'icon' => 'error'
                 ]);
             }
+
             DB::commit();
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
@@ -537,6 +557,45 @@ class PaymentHistory extends Component
                 "text" => __("admin/ordersPages.Please add a valid amount and try again"),
                 'icon' => 'error'
             ]);
+        }
+    }
+
+    public function createEditDelivery()
+    {
+        $order = $this->order;
+
+        if ($order->order_delivery_id) {
+            if (editBostaOrder($order, $order->id)) {
+                $this->dispatchBrowserEvent('swalDone', [
+                    "text" => __("admin/ordersPages.The delivery has been edited successfully"),
+                    'icon' => 'success'
+                ]);
+            } else {
+                $this->dispatchBrowserEvent('swalDone', [
+                    "text" => __("admin/ordersPages.The delivery hasn't been edited"),
+                    'icon' => 'error'
+                ]);
+            }
+        } else {
+            $bosta_order = createBostaOrder($order);
+
+            if ($bosta_order['status']) {
+                $this->dispatchBrowserEvent('swalDone', [
+                    "text" => __("admin/ordersPages.The delivery has been created successfully"),
+                    'icon' => 'success'
+                ]);
+
+                $order->update([
+                    'tracking_number' => $bosta_order['data']['trackingNumber'],
+                    'order_delivery_id' => $bosta_order['data']['_id'],
+                    'status_id' => 3,
+                ]);
+            } else {
+                $this->dispatchBrowserEvent('swalDone', [
+                    "text" => __("admin/ordersPages.The delivery hasn't been created"),
+                    'icon' => 'error'
+                ]);
+            }
         }
     }
 }

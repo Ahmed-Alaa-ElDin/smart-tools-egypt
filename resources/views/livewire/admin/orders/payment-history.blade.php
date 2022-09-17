@@ -125,6 +125,17 @@
                 </svg>
             </span>
         </button>
+
+        {{-- Add Delivery Button --}}
+        <button wire:click="createEditDelivery"
+            class="btn btn-sm py-2 px-3 flex gap-2 items-center justify-center text-xs font-bold text-white bg-secondary hover:secondaryDark rounded">
+            <span>
+                {{ __('admin/ordersPages.Create/Update Delivery') }}
+            </span>
+            <span class="material-icons">
+                local_shipping
+            </span>
+        </button>
     </div>
 
     <hr class="my-2">

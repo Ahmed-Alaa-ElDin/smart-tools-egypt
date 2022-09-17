@@ -102,5 +102,10 @@ return [
     "This transaction has been added successfully"      =>          "تم إضافة العملية بنجاح",
     "Please add a valid amount and try again"           =>          "برجاء ادخال مبلغ صحيح والمحاولة مرة أخرى",
     "Wrong transaction id, please try again"            =>          "رقم العملية خاطئ ، برجاء المحاولة مرة أخرى",
+    "Create/Update Delivery"                            =>          "إنشاء/تحديث عملية التوصيل",
+    "The delivery has been edited successfully"         =>          "تم تعديل طلب التوصيل بنجاح",
+    "The delivery hasn't been edited"                   =>          "لم ينجح تعديل طلب التوصيل",
+    "The delivery has been created successfully"        =>          "تم إنشاء طلب التوصيل بنجاح",
+    "The delivery hasn't been created"                  =>          "لم ينجح إنشاء طلب التوصيل",
 
 ];
