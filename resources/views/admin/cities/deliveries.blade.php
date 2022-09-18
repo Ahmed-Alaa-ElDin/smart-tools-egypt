@@ -1,5 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage'
-=> __("admin/deliveriesPages.'s Delivery Companies",['name'=>$city->name])])
+@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage' => __("admin/deliveriesPages.'s Delivery Companies", ['name' => $city->name])])
 
 @section('content')
     <div class="content">
@@ -50,7 +49,7 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Datatable Start --}}
-                            @livewire('admin.deliveries.delivery-companies-datatable' , ['city_id' => $city->id])
+                            @livewire('admin.deliveries.delivery-companies-datatable', ['city_id' => $city->id])
                             {{-- Datatable End --}}
                         </div>
                     </div>
@@ -68,11 +67,12 @@
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
- @if (session('locale' == 'en'))
+                @if (session('locale' == 'en'))
                     position: 'top-left',
                 @else
                     position: 'top-right',
-                @endif                showConfirmButton: false,
+                @endif
+                showConfirmButton: false,
                 toast: true,
                 timer: 3000,
                 timerProgressBar: true,
