@@ -1,99 +1,7 @@
 <div>
     {{-- Order Summary :: Start --}}
-    <div class="h4 text-center font-bold my-2 text-red-800">
-        {{ __('admin/ordersPages.Order Summary') }}
-    </div>
-    <div class="overflow-x-auto scrollbar scrollbar-thin scrollbar-thumb-red-100 border-b border-red-200 sm:rounded-lg">
-        <table class="min-w-full divide-y divide-red-200">
-            <thead class="bg-red-50">
-                <tr>
-                    <th
-                        class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
-                        #
-                    </th>
-                    <th
-                        class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
-                        {{ __('admin/ordersPages.Customer Info.') }}
-                    </th>
-                    <th
-                        class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
-                        {{ __('admin/ordersPages.Num of Items') }}
-                    </th>
-                    <th
-                        class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
-                        {{ __('admin/ordersPages.Total') }}
-                    </th>
-                    <th
-                        class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
-                        {{ __('admin/ordersPages.Unpaid') }}
-                    </th>
-                    <th
-                        class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
-                        {{ __('admin/ordersPages.Paid') }}
-                    </th>
-                    <th
-                        class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
-                        {{ __('admin/ordersPages.Refund') }}
-                    </th>
-                    <th
-                        class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
-                        {{ __('admin/ordersPages.Refunded') }}
-                    </th>
-                    <th
-                        class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
-                        {{ __('admin/ordersPages.Payment Method') }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-red-200">
-                <tr>
-                    <td class="px-6 py-2 text-center whitespace-nowrap font-bold">
-                        {{ $order->id }}
-                    </td>
-                    <td class="px-6 py-2 text-center whitespace-nowrap">
-                        <div class="flex flex-col justify-center center">
-                            <span class="font-bold">
-                                {{ $order->user->f_name . ' ' . $order->user->l_name }}
-                            </span>
-                            <span>
-                                {{ $order->user->phones()->first()->phone }}
-                            </span>
-                        </div>
-                    </td>
-                    <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ $order->num_of_items }}
-                    </td>
-                    <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format($order->total, 2, '.', '\'') }}
-                    </td>
-                    <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format($order->unpaid, 2, '.', '\'') }}
-                    </td>
-                    <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format($order->paid, 2, '.', '\'') }}
-                    </td>
-                    <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format(abs($order->refund), 2, '.', '\'') }}
-                    </td>
-                    <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format(abs($order->refunded), 2, '.', '\'') }}
-                    </td>
-                    <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ $order->payment_method == 1
-                            ? __('admin/ordersPages.Cash on delivery (COD)')
-                            : ($order->payment_method == 2
-                                ? __('admin/ordersPages.Credit / Debit Card')
-                                : ($order->payment_method == 3
-                                    ? __('admin/ordersPages.Installment')
-                                    : ($order->payment_method == 4
-                                        ? __('admin/ordersPages.Vodafone Cash')
-                                        : ($order->payment_method == 10
-                                            ? __('admin/ordersPages.Wallet')
-                                            : '')))) }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div>
+        <x-admin.orders.order-summary :order="$order" />
     </div>
     {{-- Order Summary :: End --}}
 
@@ -118,8 +26,8 @@
                 {{ __('admin/ordersPages.Add Refund') }}
             </span>
             <span class="material-icons">
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                    preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 24 24">
                     <path fill="currentColor"
                         d="M13.91 2.91L11.83 5H14a8 8 0 0 1 8 8h-2a6 6 0 0 0-6-6h-2.17l2.09 2.09l-1.42 1.41L8 6l1.41-1.41L12.5 1.5l1.41 1.41zM2 12v10h16V12H2zm2 6.56v-3.11A4 4 0 0 0 5.45 14h9.1A4 4 0 0 0 16 15.45v3.11A3.996 3.996 0 0 0 14.57 20H5.45A3.996 3.996 0 0 0 4 18.56zm6 .44c.828 0 1.5-.895 1.5-2s-.672-2-1.5-2s-1.5.895-1.5 2s.672 2 1.5 2z" />
                 </svg>

@@ -45,9 +45,14 @@ class OrderController extends Controller
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function show(Order $order)
+    public function show($order_id)
     {
-        //
+        $order = Order::with([
+            'products' => fn ($q) => $q->with('thumbnail'),
+            "statuses",
+            "payments",
+        ])->findOrFail($order_id);
+        return view('admin.orders.show', compact('order'));
     }
 
     /**

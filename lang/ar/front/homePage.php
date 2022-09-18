@@ -382,4 +382,5 @@ return [
     "Returning request has been deleted successfully"   =>      "تم الغاء طلب الاسترجاع بنجاح",
     "The link has been copied successfully"    =>      "تم نسخ الرابط بنجاح",
     "All Orders"                =>      "جميع الطلبات",
+    "No data to be tracked"     =>      "لا يوجد بيانات لهذا الطلب",
 ];

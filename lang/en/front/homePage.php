@@ -384,7 +384,7 @@ return [
     "Returning request has been deleted successfully"   =>      "Returning request has been deleted successfully",
     "The link has been copied successfully"     =>      "The link has been copied successfully",
     "All Orders"                =>      "All Orders",
-    "Cart"                      =>      "Cart",
+    "No data to be tracked"     =>      "No data to be tracked",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",

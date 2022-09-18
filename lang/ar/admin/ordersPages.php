@@ -107,5 +107,8 @@ return [
     "The delivery hasn't been edited"                   =>          "لم ينجح تعديل طلب التوصيل",
     "The delivery has been created successfully"        =>          "تم إنشاء طلب التوصيل بنجاح",
     "The delivery hasn't been created"                  =>          "لم ينجح إنشاء طلب التوصيل",
-
+    "Order's Details"                                   =>          "تفاصيل الطلب",
+    "Here you can see order's details"                  =>          "من خلال هذه الصفحة يمكنك الإطلاع على تفاصيل الطلب",
+    "Edit Order's Details"                              =>          "تعديل الطلب",
+    "Track Order"                                       =>          "تتبع الطلب",
 ];

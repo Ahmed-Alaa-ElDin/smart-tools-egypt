@@ -1,8 +1,9 @@
 <div>
     @forelse ($products as $product)
         {{-- Product : Start --}}
-        <x-front.product-box-wide :product="$product" type="cart" wire:key="product-{{ rand() }}" />
+        <x-front.product-box-wide :product="$product" type="cart"/>
         {{-- Product : End --}}
+
         <hr>
 
         @if ($loop->last && $step == 1)
