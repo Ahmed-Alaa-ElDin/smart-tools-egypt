@@ -35,10 +35,10 @@
                                     <p class=""> {{ __("admin/ordersPages.Here you can see order's details") }}</p>
                                 </div>
 
-                                {{-- Add New Order --}}
+                                {{-- Create New Order --}}
                                 <div class="ltr:text-right rtl:text-left">
                                     <a href="{{ route('admin.orders.edit', $order->id) }}"
-                                        class="btn btn-sm bg-yellow-400 hover:bg-yellow-700 focus:bg-yellow-700 active:bg-yellow-700 font-bold">
+                                        class="btn btn-sm bg-yellow-400 hover:bg-yellow-500 focus:bg-yellow-500 active:bg-yellow-500 font-bold">
                                         <span class="material-icons rtl:ml-1 ltr:mr-1">
                                             edit
                                         </span>
@@ -66,7 +66,7 @@
 
                             <div class="grid md:grid-cols-3 gap-3 justify-between items-start">
                                 {{-- Order's Statuses :: Start --}}
-                                <div class="overflow-auto md:col-span-1">
+                                <div class="h-full md:col-span-1 md:border-r md:rtl:border-r-0 md:rtl:border-l">
                                     <x-admin.orders.order-track-view :statuses="$order->statuses" />
                                 </div>
                                 {{-- Order's Statuses :: End --}}
@@ -85,31 +85,3 @@
         </div>
     </div>
 @endsection
-
-@push('js')
-    <script>
-        // #### Edit Order Status ####
-        window.addEventListener('swalSelectBox', function(e) {
-            Swal.fire({
-                title: e.detail.title,
-                input: 'select',
-                inputOptions: JSON.parse(e.detail.data),
-                inputValue: e.detail.selected,
-                customClass: {
-                    input: 'role-grapper rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300',
-                },
-                showDenyButton: true,
-                confirmButtonText: e.detail.confirmButtonText,
-                denyButtonText: e.detail.denyButtonText,
-                denyButtonColor: e.detail.denyButtonColor,
-                confirmButtonColor: e.detail.confirmButtonColor,
-
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Livewire.emit(e.detail.method, e.detail.id, result.value);
-                }
-            });
-        });
-        // #### Edit Order Status ####
-    </script>
-@endpush

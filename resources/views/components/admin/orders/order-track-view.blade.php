@@ -5,7 +5,7 @@
     <div class="px-4">
         <ol class="relative border-l rtl:border-r rtl:border-l-0 border-gray-200">
             @forelse ($statuses as $status)
-                <li class="mb-10 ml-4 rtl:mr-4 rtl:ml-0">
+                <li class="mb-6 ml-4 rtl:mr-4 rtl:ml-0">
                     <div
                         class="absolute w-3 h-3 rounded-full mt-1.5 -left-1.5 rtl:-right-1.5 border border-white {{ in_array($status->id, [1, 2, 14, 15, 16])
                             ? 'bg-yellow-500'

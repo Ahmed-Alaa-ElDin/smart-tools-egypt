@@ -111,4 +111,13 @@ return [
     "Here you can see order's details"                  =>          "من خلال هذه الصفحة يمكنك الإطلاع على تفاصيل الطلب",
     "Edit Order's Details"                              =>          "تعديل الطلب",
     "Track Order"                                       =>          "تتبع الطلب",
+    "Create New Order"                                  =>          "إنشاء طلب جديد",
+    "Here you can create new order"                     =>          "من خلال هذه الصفحة يمكنك إنشاء طلب جديد",
+    "No Customers Found"                                =>          "لم يتم العثور على عملاء",
+    "Add Customer"                                      =>          "إضافة عميل جديد",
+    "Default Shipping Address"                          =>          "العنوان الإفتراضي",
+    "Remove Address"                                    =>          "حذف العنوان",
+    "Default Phone"                                     =>          "الهاتف الإفتراضي",
+    "Remove Phone"                                      =>          "حذف الهاتف",
+
 ];

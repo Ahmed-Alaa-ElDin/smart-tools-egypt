@@ -143,7 +143,7 @@
                     </div>
                     {{-- Product Amount :: End --}}
                 @elseif ($type === 'order-view')
-                    <div class="flex justify-center items-center bg-primary rounded-lg shadow overflow-hidden px-2 py-1">
+                    <div class="flex justify-center items-center bg-primary rounded-lg shadow overflow-hidden px-2 py-1 mt-2">
                         <div class="text-white p-2 text-xs   font-bold">
                             {{ __('front/homePage.Quantity') }}
                         </div>

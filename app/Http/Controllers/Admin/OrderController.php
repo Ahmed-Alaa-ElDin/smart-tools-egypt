@@ -25,7 +25,7 @@ class OrderController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.orders.create');
     }
 
     /**
@@ -52,6 +52,7 @@ class OrderController extends Controller
             "statuses",
             "payments",
         ])->findOrFail($order_id);
+
         return view('admin.orders.show', compact('order'));
     }
 
