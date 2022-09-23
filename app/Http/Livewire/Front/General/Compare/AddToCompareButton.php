@@ -10,6 +10,8 @@ class AddToCompareButton extends Component
 {
     public $product_id;
 
+    public $large = false, $text = false;
+
     public function render()
     {
         return view('livewire.front.general.compare.add-to-compare-button');

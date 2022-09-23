@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class AddToCartButton extends Component
 {
-    public $product_id, $text = false, $add_buy = 'add';
+    public $product_id, $text = false, $large = false, $add_buy = 'add';
 
     public function render()
     {
@@ -57,6 +57,12 @@ class AddToCartButton extends Component
                 'icon' => 'success'
             ]);
             ############ Emit Sweet Alert :: End ############
+
+            if ($this->add_buy == 'pay') {
+                ############ Go to Payment :: Start ############
+                redirect()->route('front.order.shipping');
+                ############ Go to Payment :: End ############
+            }
         } elseif ($product->under_reviewing == 1) {
             ############ Emit Sweet Alert :: Start ############
             $this->dispatchBrowserEvent('swalDone', [
@@ -72,12 +78,18 @@ class AddToCartButton extends Component
             ]);
             ############ Emit Sweet Alert :: End ############
         } elseif ($cart_product) {
-            ############ Emit Sweet Alert :: Start ############
-            $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('front/homePage.Sorry This Product is Already in the Cart'),
-                'icon' => 'error'
-            ]);
-            ############ Emit Sweet Alert :: End ############
+            if ($this->add_buy == 'pay') {
+                ############ Go to Payment :: Start ############
+                redirect()->route('front.order.shipping');
+                ############ Go to Payment :: End ############
+            } else {
+                ############ Emit Sweet Alert :: Start ############
+                $this->dispatchBrowserEvent('swalDone', [
+                    "text" => __('front/homePage.Sorry This Product is Already in the Cart'),
+                    'icon' => 'error'
+                ]);
+                ############ Emit Sweet Alert :: End ############
+            }
         }
     }
     ############## Add TO Cart :: End ##############

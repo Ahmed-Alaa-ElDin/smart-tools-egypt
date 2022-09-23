@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class AddToWishlistButton extends Component
 {
-    public $product_id, $text = false, $remove = false;
+    public $product_id, $text = false, $large = false, $remove = false;
 
     public function render()
     {

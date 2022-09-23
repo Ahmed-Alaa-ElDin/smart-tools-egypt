@@ -38,7 +38,7 @@
                         </div>
 
                         {{-- Card Body --}}
-                        <div class="card-body overflow-hidden">
+                        <div class="card-body">
                             {{-- User Part :: Start --}}
                             @livewire('admin.orders.new-order-user-part')
                             {{-- User Part :: End --}}
