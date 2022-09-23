@@ -162,6 +162,25 @@
                             </div>
                         @endif
                         {{-- Extra Discount :: End --}}
+
+                        {{-- Extra Points :: Start --}}
+                        @if ($product_offer->best_points)
+                            <div class="flex gap-3 items-center">
+                                <span class="text-gray-800 font-bold text-md">
+                                    {{ __("front/homePage.You'll get: ") }}
+                                </span>
+                                <span class="flex rtl:flex-row-reverse gap-1 font-bold text-success text-sm">
+                                    <span class="font-bold text-lg">
+                                        <span dir="ltr">
+                                            {{ number_format($product_offer->best_points, 0, '.', '\'') ?? 0 }}
+                                        </span>
+                                        &nbsp;
+                                        {{ trans_choice('front/homePage.Point/Points', $product_offer->best_points, ['points' => $product_offer->best_points]) }}
+                                    </span>
+                                </span>
+                            </div>
+                        @endif
+                        {{-- Extra Points :: End --}}
                     </div>
                     {{-- Product Price :: End --}}
 

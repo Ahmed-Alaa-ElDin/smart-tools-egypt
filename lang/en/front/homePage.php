@@ -388,7 +388,7 @@ return [
     "No products in this list"  =>      "No products in this list",
     "Share on Facebook"         =>      "Share on Facebook",
     "Copy link"                 =>      "Copy link",
-    "Cart"                      =>      "Cart",
+    "You'll get: "              =>      "You'll get: ",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",
 ];

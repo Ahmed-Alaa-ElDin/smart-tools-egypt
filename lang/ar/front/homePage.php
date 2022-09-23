@@ -386,4 +386,5 @@ return [
     "No products in this list"  =>      "لا يوجد منتجات بهذه القائمة",
     "Share on Facebook"         =>      "المشاركة على فيسبوك",
     "Copy link"                 =>      "نسخ الرابط",
+    "You'll get: "              =>      "سوف تحصل على: ",
 ];
