@@ -141,7 +141,8 @@
                                 {{-- User's Balance :: Start --}}
                                 <a class="dropdown-item flex flex-col gap-1 items-center justify-center hover:text-white group"
                                     href="{{ route('front.profile.index') }}">
-                                    <div class="flex gap-1 items-center justify-center text-xs text-secondary transition-all ease-in-out group-hover:text-white">
+                                    <div
+                                        class="flex gap-1 items-center justify-center text-xs text-secondary transition-all ease-in-out group-hover:text-white">
                                         <span class="material-icons">
                                             account_balance_wallet
                                         </span>
@@ -149,20 +150,22 @@
                                             {{ __('front/homePage.Balance') }}
                                         </span>
                                     </div>
-                                    <div class="flex rtl:flex-row-reverse gap-1 justify-center items-center transition-all ease-in-out text-success group-hover:text-white">
+                                    <div
+                                        class="flex rtl:flex-row-reverse gap-1 justify-center items-center transition-all ease-in-out text-success group-hover:text-white">
                                         <span class="font-bold text-sm">
                                             {{ __('front/homePage.EGP') }}
                                         </span>
-                                        <span class="font-bold text-sm">
-                                            {{ auth()->user()->balance }}
+                                        <span class="font-bold text-sm" dir="ltr">
+                                            {{ number_format(auth()->user()->balance,0,'.','\'') }}
                                         </span>
                                     </div>
-                                    <div class="flex gap-1 justify-center items-center transition-all ease-in-out text-warning group-hover:text-white">
-                                        <span class="font-bold text-sm">
-                                            {{ __('front/homePage.Points') }}
+                                    <div
+                                        class="flex gap-1 justify-center items-center transition-all ease-in-out text-warning group-hover:text-white">
+                                        <span class="font-bold text-sm" dir="ltr">
+                                            {{ number_format(auth()->user()->points,0,'.','\'') }}
                                         </span>
                                         <span class="font-bold text-sm">
-                                            {{ auth()->user()->points }}
+                                            {{ trans_choice('front/homePage.Point/Points', auth()->user()->points, ['points' => auth()->user()->points]) }}
                                         </span>
                                     </div>
                                 </a>
