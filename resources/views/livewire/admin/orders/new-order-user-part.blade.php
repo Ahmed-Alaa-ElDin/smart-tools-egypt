@@ -221,8 +221,8 @@
                                             class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
                                             wire:model='newAddress.country_id' id="country">
                                             @forelse ($countries as $country)
-                                                <option value="{{ $country->id }}">
-                                                    {{ $country->name }}
+                                                <option value="{{ $country['id'] }}">
+                                                    {{ $country['name'][session('locale')] }}
                                                 </option>
                                             @empty
                                                 <option value="">
@@ -242,7 +242,7 @@
                                             wire:model='newAddress.governorate_id' id="governorate">
                                             @forelse ($newAddress['governorates'] as $governorate)
                                                 <option value="{{ $governorate['id'] }}">
-                                                    {{ $governorate['name'] }}</option>
+                                                    {{ $governorate['name'][session('locale')] }}</option>
                                             @empty
                                                 @if ($country == null)
                                                     <option value="">
@@ -268,7 +268,7 @@
                                             wire:model='newAddress.city_id' id="city">
                                             @forelse ($newAddress['cities'] as $city)
                                                 <option value="{{ $city['id'] }}">
-                                                    {{ $city['name'] }}
+                                                    {{ $city['name'][session('locale')] }}
                                                 </option>
                                             @empty
                                                 @if ($newAddress['governorate_id'] == null)

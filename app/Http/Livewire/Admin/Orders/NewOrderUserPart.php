@@ -24,11 +24,12 @@ class NewOrderUserPart extends Component
             'governorates' => fn ($q) => $q->with([
                 'cities'
             ])
-        ])->get();
+        ])->get()->toArray();
     }
 
     public function render()
     {
+
         return view('livewire.admin.orders.new-order-user-part');
     }
 
@@ -51,6 +52,12 @@ class NewOrderUserPart extends Component
         }
     }
 
+    public function clearSearch()
+    {
+        $this->search = null;
+        $this->customers = collect([]);
+    }
+
     public function updatedCustomerId()
     {
         $this->selectedCustomer = User::findOrFail($this->customer_id);
@@ -62,29 +69,23 @@ class NewOrderUserPart extends Component
         $this->render();
     }
 
-    public function updatedAddAddress($value)
-    {
-        if ($value) {
-            $this->newAddress = [
-            'country_id'        => $this->countries->first()->id,
-            'governorates'      => $this->countries->first()->governorates,
-            'governorate_id'    => $this->countries->first()->governorates->first()->id,
-            'cities'            => $this->countries->first()->governorates->first()->cities,
-            'city_id'           => $this->countries->first()->governorates->first()->cities->first()->id,
-        ];
-        }
-    }
-
-    public function clearSearch()
-    {
-        $this->search = null;
-        $this->customers = collect([]);
-    }
-
     public function clearCustomer()
     {
         $this->customer_id = null;
         $this->selectedCustomer = null;
+    }
+
+    public function updatedAddAddress($value)
+    {
+        if ($value) {
+            $this->newAddress = [
+            'country_id'        => $this->countries[0]['id'],
+            'governorates'      => $this->countries[0]['governorates'],
+            'governorate_id'    => $this->countries[0]['governorates'][0]['id'],
+            'cities'            => $this->countries[0]['governorates'][0]['cities'],
+            'city_id'           => $this->countries[0]['governorates'][0]['cities'][0]['id'],
+        ];
+        }
     }
 
     public function selectAddress($address_id)
@@ -107,22 +108,15 @@ class NewOrderUserPart extends Component
 
     public function cancelNewAddress()
     {
-        $this->newAddress = [
-            'country_id'        => $this->countries->first()->id,
-            'governorates'      => $this->countries->first()->governorates,
-            'governorate_id'    => $this->countries->first()->governorates->first()->id,
-            'cities'            => $this->countries->first()->governorates->first()->cities,
-            'city_id'           => $this->countries->first()->governorates->first()->cities->first()->id,
-        ];
-
         $this->addAddress = false;
     }
 
     public function updatedNewAddressCountryId($value)
     {
-        $this->newAddress['governorates'] = $this->countries->where('id', $value)->first()->governorates;
-        $this->newAddress['governorate_id'] = $this->countries->where('id', $value)->first()->governorates->first()->id;
-        $this->newAddress['cities'] = $this->countries->where('id', $value)->first()->governorates->first()->cities;
-        $this->newAddress['city_id'] = $this->countries->where('id', $value)->first()->governorates->first()->cities->first()->id;
+        dd('sdas');
+        // $this->newAddress['governorates'] = $this->countries->where('id', $value)->first()->governorates;
+        // $this->newAddress['governorate_id'] = $this->countries->where('id', $value)->first()->governorates->first()->id;
+        // $this->newAddress['cities'] = $this->countries->where('id', $value)->first()->governorates->first()->cities;
+        // $this->newAddress['city_id'] = $this->countries->where('id', $value)->first()->governorates->first()->cities->first()->id;
     }
 }

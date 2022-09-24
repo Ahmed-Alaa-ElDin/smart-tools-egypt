@@ -209,7 +209,7 @@
                             )
                             {{-- Add to cart : End --}}
 
-                            {{-- Add to cart : Start --}}
+                            {{-- Go To Payment : Start --}}
                             @livewire(
                                 'front.general.cart.add-to-cart-button',
                                 [
@@ -220,9 +220,9 @@
                                 ],
                                 key('add-cart-button-' . Str::random(10)),
                             )
-                            {{-- Add to cart : End --}}
+                            {{-- Go To Payment : End --}}
 
-                            <div class="flex gap-2">
+                            <div class="flex flex-wrap justify-around gap-2">
                                 {{-- Add to compare : Start --}}
                                 @livewire(
                                     'front.general.compare.add-to-compare-button',
