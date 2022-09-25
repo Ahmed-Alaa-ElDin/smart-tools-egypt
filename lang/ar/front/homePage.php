@@ -174,7 +174,7 @@ return [
     "No Cities in Database"     =>      "لا يوجد مدن في قاعدة البيانات",
     "Address Details"           =>      "تفاصيل العنوان",
     "Please mention the details of the address such as street name, building number, ... etc."      =>      "يرجى ذكر تفاصيل العنوان مثل اسم الشارع، رقم العمارة ... إلخ.",
-    "Landmarks"            =>      "علامة خاصة",
+    "Landmarks"            =>      "علامة مميزة",
     "Please mention any landmarks such as mosque, grocery, ... etc."                           =>      "يرجى ذكر أي علامة خاصة مثل مسجد، محل ... إلخ.",
     "Update"                    =>      "تحديث",
     "Back"                      =>      "العودة",
@@ -381,5 +381,10 @@ return [
     "Cancel the Return Request" =>      "إلغاء طلب الاسترجاع",
     "Returning request has been deleted successfully"   =>      "تم الغاء طلب الاسترجاع بنجاح",
     "The link has been copied successfully"    =>      "تم نسخ الرابط بنجاح",
-
+    "All Orders"                =>      "جميع الطلبات",
+    "No data to be tracked"     =>      "لا يوجد بيانات لهذا الطلب",
+    "No products in this list"  =>      "لا يوجد منتجات بهذه القائمة",
+    "Share on Facebook"         =>      "المشاركة على فيسبوك",
+    "Copy link"                 =>      "نسخ الرابط",
+    "You'll get: "              =>      "سوف تحصل على: ",
 ];

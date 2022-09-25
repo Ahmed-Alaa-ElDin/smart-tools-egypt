@@ -51,7 +51,7 @@ return [
     "Remember Me"                   =>      "تذكرني",
     "Or register with"              =>      "أو سجل حساب جديد عن طريق",
     "If you already have an account"=>      "إذا كنت بالفعل تمتلك حساب ",
-    "Login"                         =>      "تسجيل دخول",
+    "Login"                         =>      "تسجيل الدخول",
     "Admins Login"                  =>      "تسجيل دخول المديرين",
     "If you don't have an account"  =>      "إذا كنت لا تمتلك حساب",
     "Shipping info."                =>      "معلومات الشحن",

@@ -34,14 +34,14 @@
     @endif
 
     {{-- Main CSS Files --}}
-    <link href="{{ asset('assets/front/css/material-dashboard.min.css') }}" rel="stylesheet" />
+    <link href="{{ mix('assets/css/material-dashboard.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ mix('assets/css/app.css') }}">
     @if (LaravelLocalization::getCurrentLocale() == 'ar')
-        <link href="{{ asset('assets/front/css/material-dashboard-rtl.css') }}" rel="stylesheet" />
+        <link href="{{ mix('assets/css/material-dashboard-rtl.css') }}" rel="stylesheet" />
     @endif
 
     {{-- Splide --}}
-    <link href="{{ asset('assets/front/css/splide.min.css') }}" rel="stylesheet" />
+    <link href="{{ mix('assets/css/splide.min.css') }}" rel="stylesheet" />
 
     {{-- Livewire Styles :: Start --}}
     @livewireStyles
@@ -110,35 +110,6 @@
 
     <!-- Plugin for the Splide  -->
     <script src="{{ asset('assets/front/js/plugins/splide.min.js') }}"></script>
-
-    {{-- <!-- Forms Validations Plugin -->
-        <script src="{{ asset('assets/front/js/plugins/jquery.validate.min.js') }}"></script>
-        <!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
-        <script src="{{ asset('assets/front/js/plugins/jquery.bootstrap-wizard.js') }}"></script>
-        <!--	Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
-        <script src="{{ asset('assets/front/js/plugins/bootstrap-selectpicker.js') }}"></script>
-        <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
-        <script src="{{ asset('assets/front/js/plugins/bootstrap-datetimepicker.min.js') }}"></script>
-        <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
-        <script src="{{ asset('assets/front/js/plugins/jquery.dataTables.min.js') }}"></script>
-        <!--	Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
-        <script src="{{ asset('assets/front/js/plugins/bootstrap-tagsinput.js') }}"></script>
-        <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
-        <script src="{{ asset('assets/front/js/plugins/jasny-bootstrap.min.js') }}"></script>
-        <!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
-        <script src="{{ asset('assets/front/js/plugins/fullcalendar.min.js') }}"></script>
-        <!-- Vector Map plugin, full documentation here: http://jvectormap.com/documentation/ -->
-        <script src="{{ asset('assets/front/js/plugins/jquery-jvectormap.js') }}"></script>
-        <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
-        <script src="{{ asset('assets/front/js/plugins/nouislider.min.js') }}"></script>
-        <!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
-        <!-- Library for adding dinamically elements -->
-        <script src="{{ asset('assets/front/js/plugins/arrive.min.js') }}"></script>
-        <!--  Google Maps Plugin    -->
-        <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE'"></script>
-    <!--  Notifications Plugin    -->
-        <script src="{{ asset('assets/front/js/plugins/bootstrap-notify.js') }}"></script> --}}
 
     <script>
         @if (Session::has('success'))

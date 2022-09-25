@@ -24,13 +24,6 @@
                             </span> &nbsp; {{ __('admin/ordersPages.Control selected orders') }}
                             &nbsp;</button>
                         <div class="dropdown-menu text-black ">
-                            <a wire:click.prevent="archiveAllConfirm"
-                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-red-600 focus:bg-red-600 hover:text-white focus:text-white cursor-pointer">
-                                <span class="material-icons">
-                                    delete
-                                </span> &nbsp;&nbsp;
-                                {{ __('admin/ordersPages.Archive All') }}
-                            </a>
                             <a wire:click.prevent="statusesUpdateSelect"
                                 class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-yellow-400 focus:bg-yellow-400 hover:text-white focus:text-white cursor-pointer">
                                 <span class="material-icons">
@@ -38,12 +31,12 @@
                                 </span> &nbsp;&nbsp;
                                 {{ __('admin/ordersPages.Edit Status') }}
                             </a>
-                            <a wire:click.prevent="hideAllConfirm"
+                            <a wire:click.prevent="archiveAllConfirm"
                                 class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-red-600 focus:bg-red-600 hover:text-white focus:text-white cursor-pointer">
                                 <span class="material-icons">
-                                    hide_source
+                                    delete
                                 </span> &nbsp;&nbsp;
-                                {{ __('admin/ordersPages.Hide All') }}
+                                {{ __('admin/ordersPages.Archive All') }}
                             </a>
                         </div>
                     </div>
@@ -64,7 +57,7 @@
                             <span class="material-icons">
                                 search
                             </span> </span>
-                        <input type="text" name="company-website" id="company-website" wire:model='search'
+                        <input type="text"   wire:model='search'
                             class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                             placeholder="{{ __('admin/ordersPages.Search ...') }}">
                     </div>

@@ -76,11 +76,12 @@ __('admin/deliveriesPages.Deleted Delivery Companies')])
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
- @if (session('locale' == 'en'))
+                @if (session('locale' == 'en'))
                     position: 'top-left',
                 @else
                     position: 'top-right',
-                @endif                showConfirmButton: false,
+                @endif                
+                showConfirmButton: false,
                 toast: true,
                 timer: 3000,
                 timerProgressBar: true,

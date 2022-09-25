@@ -25,7 +25,7 @@
                                     <p class=""> {{ __('admin/ordersPages.Here you can manage orders') }}</p>
                                 </div>
 
-                                {{-- Add New Order --}}
+                                {{-- Create New Order --}}
                                 <div class="ltr:text-right rtl:text-left">
                                     <a href="{{ route('admin.orders.create') }}"
                                         class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">

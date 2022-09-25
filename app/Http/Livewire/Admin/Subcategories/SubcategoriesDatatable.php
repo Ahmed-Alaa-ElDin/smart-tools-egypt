@@ -17,6 +17,9 @@ class SubcategoriesDatatable extends Component
 
     public $search = "";
 
+    public $category_id = '%';
+    public $supercategory_id = '%';
+
     protected $listeners = ['softDeleteSubcategory'];
 
     // Render Once
@@ -48,6 +51,8 @@ class SubcategoriesDatatable extends Component
                     ->orWhere('supercategories.name->ar', 'like', '%' . $this->search . '%')
                     ->orWhere('supercategories.name->en', 'like', '%' . $this->search . '%');
             })
+            ->where('category_id', 'like', $this->category_id)
+            ->where('supercategory_id', 'like', $this->supercategory_id)
             ->leftJoin('categories', 'category_id', '=', 'categories.id')
             ->leftJoin('supercategories', 'categories.supercategory_id', '=', 'supercategories.id')
             ->orderBy($this->sortBy, $this->sortDirection)->paginate($this->perPage);
@@ -61,6 +66,29 @@ class SubcategoriesDatatable extends Component
     {
         $this->resetPage();
     }
+
+    ######################## Publish Toggle :: Start ############################
+    public function publish($subcategory_id)
+    {
+        $subcategory_id = Subcategory::findOrFail($subcategory_id);
+
+        try {
+            $subcategory_id->update([
+                'publish' => $subcategory_id->publish ? 0 : 1
+            ]);
+
+            $this->dispatchBrowserEvent('swalDone', [
+                "text" => $subcategory_id->publish ? __('admin/productsPages.Subcategory has been published') : __('admin/productsPages.Subcategory has been hidden'),
+                'icon' => 'success'
+            ]);
+        } catch (\Throwable $th) {
+            $this->dispatchBrowserEvent('swalDone', [
+                "text" => $subcategory_id->publish ? __("admin/productsPages.Subcategory hasn't been published") : __("admin/productsPages.Subcategory hasn't been hidden"),
+                'icon' => 'error'
+            ]);
+        }
+    }
+    ######################## Publish Toggle :: End ############################
 
     // Add conditions of sorting
     public function sortBy($field)

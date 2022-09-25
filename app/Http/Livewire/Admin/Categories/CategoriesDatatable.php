@@ -17,6 +17,8 @@ class CategoriesDatatable extends Component
 
     public $search = "";
 
+    public $supercategory_id = '%';
+
     protected $listeners = ['softDeleteCategory'];
 
     // Render Once
@@ -31,12 +33,13 @@ class CategoriesDatatable extends Component
     public function render()
     {
         $categories = Category::select([
-                'categories.id',
-                'categories.name',
-                'supercategories.name as supercategory_name',
-                'supercategories.id as supercategory_id',
-                'supercategory_id'
-            ])
+            'categories.id',
+            'categories.name',
+            'categories.publish',
+            'supercategories.name as supercategory_name',
+            'supercategories.id as supercategory_id',
+            'supercategory_id'
+        ])
             ->leftJoin('supercategories', 'supercategory_id', '=', 'supercategories.id')
             ->with(['supercategory' => function ($q) {
                 return $q->select('id', 'name');
@@ -49,6 +52,7 @@ class CategoriesDatatable extends Component
                     ->orWhere('supercategories.name->ar', 'like', '%' . $this->search . '%')
                     ->orWhere('supercategories.name->en', 'like', '%' . $this->search . '%');
             })
+            ->where('supercategory_id', 'like', $this->supercategory_id)
             ->orderBy($this->sortBy, $this->sortDirection)->paginate($this->perPage);
 
 
@@ -77,6 +81,29 @@ class CategoriesDatatable extends Component
 
         return $this->sortBy = $field;
     }
+    
+    ######################## Publish Toggle :: Start ############################
+    public function publish($category_id)
+    {
+        $category_id = Category::findOrFail($category_id);
+
+        try {
+            $category_id->update([
+                'publish' => $category_id->publish ? 0 : 1
+            ]);
+
+            $this->dispatchBrowserEvent('swalDone', [
+                "text" => $category_id->publish ? __('admin/productsPages.Category has been published') : __('admin/productsPages.Category has been hidden'),
+                'icon' => 'success'
+            ]);
+        } catch (\Throwable $th) {
+            $this->dispatchBrowserEvent('swalDone', [
+                "text" => $category_id->publish ? __("admin/productsPages.Category hasn't been published") : __("admin/productsPages.Category hasn't been hidden"),
+                'icon' => 'error'
+            ]);
+        }
+    }
+    ######################## Publish Toggle :: End ############################
 
     ######## Deleted #########
     public function deleteConfirm($category_id)
@@ -104,7 +131,6 @@ class CategoriesDatatable extends Component
                 "text" => __('admin/productsPages.Category has been deleted successfully'),
                 'icon' => 'success'
             ]);
-
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/productsPages.Category hasn't been deleted"),

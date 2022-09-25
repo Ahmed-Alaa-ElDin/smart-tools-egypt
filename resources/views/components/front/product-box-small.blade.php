@@ -23,7 +23,7 @@
             {{-- Add Product : End --}}
 
             <a class="relative block hover:text-current"
-                href="{{ route('front.product.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) }}">
+                href="{{ route('front.product.show', ['id' => $product['id'], 'slug' => $product['slug']]) }}">
 
                 {{-- Base Discount : Start --}}
                 <span
@@ -63,7 +63,7 @@
                 {{-- Extra Discount : End --}}
             </a>
 
-            <a class="md:p-3 p-2 text-left block hover:text-current" href="{{ route('front.product.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) }}">
+            <a class="md:p-3 p-2 text-left block hover:text-current" href="{{ route('front.product.show', ['id' => $product['id'], 'slug' => $product['slug']]) }}">
                 {{-- Price : Start --}}
                 <div class="flex flex-wrap-reverse justify-center items-center gap-3">
                     @if ($product['under_reviewing'])
@@ -121,7 +121,7 @@
 
                     {{-- Product Name : Start --}}
                     <h4 class="text-md m-0 text-center font-bold truncate">
-                        {{ $product['name'][session('locale')] }}
+                        {{ $product['name'] }}
                     </h4>
                     {{-- Product Name : End --}}
 
@@ -165,7 +165,7 @@
 
             {{-- Cart Amount : Start --}}
             <div class="md:p-3 p-2">
-                @livewire('front.general.cart.cart-amount', ['product_id' => $product['id'], 'unique' => 'product-' . $product['id']], key($product['name'][session('locale')] . '-' . rand()))
+                @livewire('front.general.cart.cart-amount', ['product_id' => $product['id'], 'unique' => 'product-' . $product['id']], key($product['name'] . '-' . rand()))
             </div>
             {{-- Cart Amount : End --}}
         </div>

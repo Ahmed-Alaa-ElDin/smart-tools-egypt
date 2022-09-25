@@ -188,8 +188,8 @@
                 class="relative col-span-6  w-full bg-gradient-to-br from-primaryLight to-primaryDark h-36 rounded-xl overflow-hidden shadow-xl">
                 <div class="flex flex-col justify-start items-start gap-2 h-full text-white p-4">
                     <p class="text-4xl font-bold text-center flex gap-2">
-                        <span>
-                            {{ $user->balance }}
+                        <span dir="ltr">
+                            {{ number_format($user->balance,2,'.','\'') }}
                         </span>
                         <span class="text-sm">
                             {{ __('front/homePage.EGP') }}
@@ -212,8 +212,8 @@
                 class="relative col-span-6  w-full bg-gradient-to-br from-green-500 to-green-700 h-36 rounded-xl overflow-hidden shadow-xl">
                 <div class="flex flex-col justify-start items-start gap-2 h-full text-white p-4">
                     <p class="text-4xl font-bold text-center flex gap-2">
-                        <span>
-                            {{ $user->points }}
+                        <span dir="ltr">
+                            {{ number_format($user->points,0,',','\'') }}
                         </span>
                         <span class="text-sm">
                             {{ trans_choice('front/homePage.Point/Points', $user->points) }}
@@ -237,11 +237,10 @@
                 <div class="flex flex-col justify-start items-start gap-2 h-full text-white p-4">
                     <p class="text-4xl font-bold text-center flex gap-2">
                         <span>
-                            {{-- todo :: Get current orders count --}}
-                            6
+                            {{ $user->orders->whereNotIn('status_id',[9,45,49,50,100,101,102,104])->count() }}
                         </span>
                         <span class="text-sm">
-                            {{ trans_choice('front/homePage.Order/Orders', 6) }}
+                            {{ trans_choice('front/homePage.Order/Orders', $user->orders->whereNotIn('status_id',[9,45,49,50,100,101,102,104])->count()) }}
                         </span>
                     </p>
                     <h3 class="text-xs font-bold text-center text-gray-100">
@@ -263,15 +262,14 @@
                 <div class="flex flex-col justify-start items-start gap-2 h-full text-white p-4">
                     <p class="text-4xl font-bold text-center flex gap-2">
                         <span>
-                            {{-- todo :: Get old orders count --}}
-                            0
+                            {{ $user->orders->count() }}
                         </span>
                         <span class="text-sm">
-                            {{ trans_choice('front/homePage.Order/Orders', 0) }}
+                            {{ trans_choice('front/homePage.Order/Orders', $user->orders->count()) }}
                         </span>
                     </p>
                     <h3 class="text-xs font-bold text-center text-gray-100">
-                        {{ __('front/homePage.Old Orders') }}
+                        {{ __('front/homePage.All Orders') }}
                     </h3>
                 </div>
                 <svg class="absolute bottom-0 left-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">

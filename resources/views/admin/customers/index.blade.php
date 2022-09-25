@@ -33,7 +33,8 @@
                                         <span class="material-icons rtl:ml-1 ltr:mr-1">
                                             add
                                         </span>
-                                        {{ __('admin/usersPages.Add Customer') }}</a>
+                                        {{ __('admin/usersPages.Add Customer') }}
+                                    </a>
                                 </div>
                             </div>
                         </div>

@@ -21,6 +21,7 @@ class Category extends Model
     protected $fillable = [
         'name',
         'top',
+        'publish',
         'image_name',
         'supercategory_id',
         'meta_title',

@@ -1,5 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage' =>
-__('admin/deliveriesPages.Deleted Cities')])
+@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage' => __('admin/deliveriesPages.Deleted Cities')])
 
 @section('content')
     <div class="content">
@@ -74,11 +73,12 @@ __('admin/deliveriesPages.Deleted Cities')])
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
- @if (session('locale' == 'en'))
+                @if (session('locale' == 'en'))
                     position: 'top-left',
                 @else
                     position: 'top-right',
-                @endif                showConfirmButton: false,
+                @endif
+                showConfirmButton: false,
                 toast: true,
                 timer: 3000,
                 timerProgressBar: true,

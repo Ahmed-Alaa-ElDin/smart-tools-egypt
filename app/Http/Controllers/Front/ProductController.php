@@ -46,7 +46,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id, $slug)
+    public function show($id, $slug = null)
     {
         // Get the product
         $product = Product::with([

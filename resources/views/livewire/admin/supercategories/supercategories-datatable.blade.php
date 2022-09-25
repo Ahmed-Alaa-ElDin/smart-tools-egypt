@@ -16,7 +16,7 @@
                             <span class="material-icons">
                                 search
                             </span> </span>
-                        <input type="text" name="company-website" id="company-website" wire:model='search'
+                        <input type="text"   wire:model='search'
                             class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                             placeholder="{{ __('admin/productsPages.Search ...') }}">
                     </div>
@@ -87,6 +87,15 @@
                                         @include('partials._sort_icon', [
                                             'field' => 'subcategories_count',
                                         ])
+                                    </div>
+                                </th>
+
+                                {{-- Publish Header --}}
+                                <th wire:click="sortBy('publish')" scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                    <div class="min-w-max">
+                                        {{ __('admin/productsPages.Published') }}&nbsp;
+                                        @include('partials._sort_icon', ['field' => 'publish'])
                                     </div>
                                 </th>
 
@@ -182,6 +191,19 @@
                                         @endif
                                     </td>
 
+                                    {{-- Publish Body --}}
+                                    <td class="px-6 py-2 text-center whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">
+                                            {!! $supercategory->publish
+                                                ? '<span class="block cursor-pointer material-icons text-success" wire:click="publish(' .
+                                                    $supercategory->id .
+                                                    ')">toggle_on</span>'
+                                                : '<span class="block cursor-pointer material-icons text-red-600" wire:click="publish(' .
+                                                    $supercategory->id .
+                                                    ')">toggle_off</span>' !!}
+                                        </div>
+                                    </td>
+
                                     {{-- Manage Body --}}
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
@@ -212,7 +234,7 @@
                             @empty
                                 <tr>
                                     <td class="text-center py-2 font-bold" colspan="6">
-                                        {{ $search == ''? __('admin/productsPages.No data in this table'): __('admin/productsPages.No data available according to your search') }}
+                                        {{ $search == '' ? __('admin/productsPages.No data in this table') : __('admin/productsPages.No data available according to your search') }}
                                     </td>
                                 </tr>
                             @endforelse

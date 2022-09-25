@@ -114,7 +114,7 @@
                             <span class="text-gray-800 font-bold text-md">
                                 {{ __('front/homePage.After Discount: ') }}
                             </span>
-                            <span class="flex rtl:flex-row-reverse gap-1 font-bold text-success text-sm">
+                            <span class="flex rtl:flex-row-reverse gap-1 font-bold text-primary text-sm">
                                 <span>
                                     {{ __('front/homePage.EGP') }}
                                 </span>
@@ -130,9 +130,9 @@
                             <span class="text-gray-800 font-bold text-md">
                                 {{ __('front/homePage.You Saved: ') }}
                             </span>
-                            <span class="flex rtl:flex-row-reverse gap-1 font-bold text-primary text-sm">
+                            <span class="flex rtl:flex-row-reverse gap-1 font-bold text-success text-sm">
                                 <span
-                                    class="font-bold text-xl">(%{{ number_format((($product->base_price - $product->final_price) * 100) / $product->base_price, 2) ?? '%0' }})</span>
+                                    class="font-bold text-lg">(%{{ number_format((($product->base_price - $product->final_price) * 100) / $product->base_price, 0) ?? '%0' }})</span>
                                 &nbsp;
                                 <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
                                 <span class="font-bold text-xl"
@@ -149,9 +149,9 @@
                                 <span class="text-gray-800 font-bold text-md">
                                     {{ __('front/homePage.Extra Discount: ') }}
                                 </span>
-                                <span class="flex rtl:flex-row-reverse gap-1 font-bold text-primary text-sm">
+                                <span class="flex rtl:flex-row-reverse gap-1 font-bold text-success text-sm">
                                     <span
-                                        class="font-bold text-xl">(%{{ number_format((($product->final_price - $product_offer->best_price) * 100) / $product->final_price, 2) ?? '%0' }})</span>
+                                        class="font-bold text-lg">(%{{ number_format((($product->final_price - $product_offer->best_price) * 100) / $product->final_price, 0) ?? '%0' }})</span>
                                     &nbsp;
                                     <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
                                     <span class="font-bold text-xl"
@@ -162,6 +162,25 @@
                             </div>
                         @endif
                         {{-- Extra Discount :: End --}}
+
+                        {{-- Extra Points :: Start --}}
+                        @if ($product_offer->best_points)
+                            <div class="flex gap-3 items-center">
+                                <span class="text-gray-800 font-bold text-md">
+                                    {{ __("front/homePage.You'll get: ") }}
+                                </span>
+                                <span class="flex rtl:flex-row-reverse gap-1 font-bold text-success text-sm">
+                                    <span class="font-bold text-lg">
+                                        <span dir="ltr">
+                                            {{ number_format($product_offer->best_points, 0, '.', '\'') ?? 0 }}
+                                        </span>
+                                        &nbsp;
+                                        {{ trans_choice('front/homePage.Point/Points', $product_offer->best_points, ['points' => $product_offer->best_points]) }}
+                                    </span>
+                                </span>
+                            </div>
+                        @endif
+                        {{-- Extra Points :: End --}}
                     </div>
                     {{-- Product Price :: End --}}
 
@@ -174,73 +193,121 @@
 
                     <hr class="my-4">
 
-                    {{-- Product Description :: Start --}}
-                    <div class="text-gray-800 description">
-                        <h3 class="text-md font-bold mb-2">
-                            {{ __('front/homePage.Description') }}
-                        </h3>
-                        {!! $product->description !!}
-                    </div>
-                    {{-- Product Description :: End --}}
-
-                    <hr class="my-4">
-
-
-                    <div class="flex flex-wrap gap-4 items-center justify-around md:justify-between mt-4">
+                    <div class="grid grid-cols-12 gap-4 items-center justify-around md:justify-between mt-4">
                         {{-- Add Product : Start --}}
-                        <div class="flex flex-wrap-reverse justify-center gap-3">
-                            {{-- Add to compare : Start --}}
-                            @livewire('front.general.compare.add-to-compare-button', ['product_id' => $product['id']], key('add-compare-button-' . Str::random(10)))
-                            {{-- Add to compare : End --}}
-
-                            {{-- Add to wishlist : Start --}}
-                            @livewire('front.general.wishlist.add-to-wishlist-button', ['product_id' => $product['id']], key('add-wishlist-button-' . Str::random(10)))
-                            {{-- Add to wishlist : End --}}
-
+                        <div class="col-span-12 md:col-span-8 flex flex-col justify-center gap-3">
                             {{-- Add to cart : Start --}}
-                            @livewire('front.general.cart.add-to-cart-button', ['product_id' => $product['id'], 'text' => true, 'add_buy' => 'add'], key('add-cart-button-' . Str::random(10)))
+                            @livewire(
+                                'front.general.cart.add-to-cart-button',
+                                [
+                                    'product_id' => $product['id'],
+                                    'text' => true,
+                                    'large' => true,
+                                    'add_buy' => 'add',
+                                ],
+                                key('add-cart-button-' . Str::random(10)),
+                            )
                             {{-- Add to cart : End --}}
+
+                            {{-- Go To Payment : Start --}}
+                            @livewire(
+                                'front.general.cart.add-to-cart-button',
+                                [
+                                    'product_id' => $product['id'],
+                                    'text' => true,
+                                    'large' => true,
+                                    'add_buy' => 'pay',
+                                ],
+                                key('add-cart-button-' . Str::random(10)),
+                            )
+                            {{-- Go To Payment : End --}}
+
+                            <div class="flex flex-wrap justify-around gap-2">
+                                {{-- Add to compare : Start --}}
+                                @livewire(
+                                    'front.general.compare.add-to-compare-button',
+                                    [
+                                        'product_id' => $product['id'],
+                                        'text' => true,
+                                        'large' => true,
+                                    ],
+                                    key('add-compare-button-' . Str::random(10)),
+                                )
+                                {{-- Add to compare : End --}}
+
+                                {{-- Add to wishlist : Start --}}
+                                @livewire(
+                                    'front.general.wishlist.add-to-wishlist-button',
+                                    [
+                                        'product_id' => $product['id'],
+                                        'text' => true,
+                                        'large' => true,
+                                    ],
+                                    key('add-wishlist-button-' . Str::random(10)),
+                                )
+                                {{-- Add to wishlist : End --}}
+                            </div>
                         </div>
                         {{-- Add Product : End --}}
 
-                        {{-- Cart Amount :: Start --}}
-                        <div>
-                            @livewire('front.general.cart.cart-amount', ['product_id' => $product->id, 'unique' => 'product-' . $product->id, 'title' => false], key($product->name . '-' . rand()))
+                        <div class="col-span-12 md:col-span-4 flex md:flex-col gap-3 justify-between items-center">
+                            {{-- Cart Amount :: Start --}}
+                            <div>
+                                @livewire(
+                                    'front.general.cart.cart-amount',
+                                    [
+                                        'product_id' => $product->id,
+                                        'unique' => 'product-' . $product->id,
+                                        'title' => false,
+                                    ],
+                                    key($product->name . '-' . rand()),
+                                )
+                            </div>
+                            {{-- Cart Amount :: End --}}
+
+                            {{-- Product Share :: Start --}}
+                            <div class="flex justify-center gap-3">
+                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ 'https://smarttoolsegypt.com/' . session('locale') . "/$product->id-$product->slug" }}&display=popup"
+                                    target="_blank" title="{{ __('front/homePage.Share on Facebook') }}"
+                                    class="w-9 h-9 bg-facebook rounded-circle flex justify-center items-center text-white shadow transition ease-in-out hover:bg-white hover:text-facebook hover:border hover:border-facebook">
+                                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
+                                        height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 20 20"
+                                        class="text-xl">
+                                        <path fill="currentColor"
+                                            d="M8.46 18h2.93v-7.3h2.45l.37-2.84h-2.82V6.04c0-.82.23-1.38 1.41-1.38h1.51V2.11c-.26-.03-1.15-.11-2.19-.11c-2.18 0-3.66 1.33-3.66 3.76v2.1H6v2.84h2.46V18z" />
+                                    </svg>
+                                </a>
+
+                                <button type="button" id="copyToClipboard" title="{{ __('front/homePage.Copy link') }}"
+                                    class="w-9 h-9 bg-white text-gray-800 border border-gray-200 rounded-circle flex justify-center items-center shadow transition ease-in-out hover:bg-secondary hover:text-white hover:border hover:border-white">
+                                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
+                                        height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                        <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2">
+                                            <path
+                                                d="M13.544 10.456a4.368 4.368 0 0 0-6.176 0l-3.089 3.088a4.367 4.367 0 1 0 6.177 6.177L12 18.177" />
+                                            <path
+                                                d="M10.456 13.544a4.368 4.368 0 0 0 6.176 0l3.089-3.088a4.367 4.367 0 1 0-6.177-6.177L12 5.823" />
+                                        </g>
+                                    </svg>
+                                </button>
+                            </div>
+                            {{-- Product Share :: End --}}
                         </div>
-                        {{-- Cart Amount :: End --}}
-
-                        {{-- Product Share :: Start --}}
-                        <div class="flex justify-center gap-3">
-                            {{-- todo : Complete the facebook share --}}
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ 'https://smarttoolsegypt.com/' . session('locale') . "/$product->id-$product->slug" }}&display=popup"
-                                target="_blank"
-                                class="w-9 h-9 bg-facebook rounded-circle flex justify-center items-center text-white shadow transition ease-in-out hover:bg-white hover:text-facebook hover:border hover:border-facebook">
-                                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                    height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 20 20" class="text-xl">
-                                    <path fill="currentColor"
-                                        d="M8.46 18h2.93v-7.3h2.45l.37-2.84h-2.82V6.04c0-.82.23-1.38 1.41-1.38h1.51V2.11c-.26-.03-1.15-.11-2.19-.11c-2.18 0-3.66 1.33-3.66 3.76v2.1H6v2.84h2.46V18z" />
-                                </svg>
-                            </a>
-
-                            {{-- todo : Copy link to clipboard --}}
-                            <button type="button" id="copyToClipboard"
-                                class="w-9 h-9 bg-white text-gray-800 border border-gray-200 rounded-circle flex justify-center items-center shadow transition ease-in-out hover:bg-secondary hover:text-white hover:border hover:border-white">
-                                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                    height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-                                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2">
-                                        <path
-                                            d="M13.544 10.456a4.368 4.368 0 0 0-6.176 0l-3.089 3.088a4.367 4.367 0 1 0 6.177 6.177L12 18.177" />
-                                        <path
-                                            d="M10.456 13.544a4.368 4.368 0 0 0 6.176 0l3.089-3.088a4.367 4.367 0 1 0-6.177-6.177L12 5.823" />
-                                    </g>
-                                </svg>
-                            </button>
-                        </div>
-
-                        {{-- Product Share :: End --}}
                     </div>
 
+                    @if ($product->description)
+                        <hr class="my-4">
+
+                        {{-- Product Description :: Start --}}
+                        <div class="text-gray-800 description">
+                            <h3 class="text-md font-bold mb-2">
+                                {{ __('front/homePage.Description') }}
+                            </h3>
+                            {!! $product->description !!}
+                        </div>
+                        {{-- Product Description :: End --}}
+                    @endif
                 </div>
             </div>
             {{-- Product Info :: End --}}

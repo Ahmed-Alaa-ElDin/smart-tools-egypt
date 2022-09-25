@@ -47,7 +47,7 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Datatable Start --}}
-                            @livewire('admin.products.products-datatable',['search' => $brand->name])
+                            @livewire('admin.products.products-datatable',['brand_id' => $brand->id])
                             {{-- Datatable End --}}
                         </div>
                     </div>

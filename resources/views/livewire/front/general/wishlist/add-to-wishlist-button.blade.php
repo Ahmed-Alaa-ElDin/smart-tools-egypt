@@ -1,13 +1,13 @@
-<button title="{{ __('front/homePage.Add to Wishlist') }}"
-    class="h-9 px-2 rounded-full inline-flex items-center gap-2 bg-white border border-gray-200
-    @if ($text) border border-secondary transition ease-in-out hover:bg-secondary hover:text-white @else w-9 @endif
-    text-secondary shadow"
-    wire:click="addToWishlist({{ $product_id }})">
-    <span class="material-icons text-lg">
+<button title="{{ __('front/homePage.Add to Wishlist') }}" wire:click="addToWishlist({{ $product_id }})"
+class="stop-propagation rounded-full h-9 text-center bg-white text-gray-900 hover:bg-secondary
+inline-flex justify-center items-center gap-2 min-w-max shadow border border-secondary
+@if ($large) p-4 w-min @endif
+@if ($text) hover:bg-secondary hover:text-white @else w-9 @endif">
+<span class="material-icons text-lg">
         favorite
     </span>
     @if ($text)
-        <span class="text-xs font-bold">
+        <span class=" font-bold text-xs">
             {{ __('front/homePage.Add to Wishlist') }}
         </span>
     @endif

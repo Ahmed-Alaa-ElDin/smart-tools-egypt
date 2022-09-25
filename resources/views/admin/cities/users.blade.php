@@ -1,5 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage'
-=> __("admin/deliveriesPages.'s Users",['name'=>$city->name])])
+@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage' => __("admin/deliveriesPages.'s Users", ['name' => $city->name])])
 
 @section('content')
     <div class="content">
@@ -49,7 +48,7 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Datatable Start --}}
-                            @livewire('admin.customers.customers-datatable' , ['city_id' => $city->id])
+                            @livewire('admin.customers.customers-datatable', ['city_id' => $city->id])
                             {{-- Datatable End --}}
                         </div>
                     </div>
@@ -61,7 +60,6 @@
 
 {{-- Extra Scripts --}}
 @push('js')
-
     <script>
         window.addEventListener('swalEditRolesSelect', function(e) {
             Swal.fire({
@@ -89,19 +87,20 @@
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
- @if (session('locale' == 'en'))
+                @if (session('locale' == 'en'))
                     position: 'top-left',
                 @else
                     position: 'top-right',
-                @endif                showConfirmButton: false,
+                @endif
+                showConfirmButton: false,
                 toast: true,
                 timer: 3000,
                 timerProgressBar: true,
             })
         });
 
-                // #### Customer Add Points ####
-                window.addEventListener('swalAddPointsForm', function(e) {
+        // #### Customer Add Points ####
+        window.addEventListener('swalAddPointsForm', function(e) {
             Swal.fire({
                 title: e.detail.title,
                 input: 'number',
@@ -128,11 +127,12 @@
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
- @if (session('locale' == 'en'))
+                @if (session('locale' == 'en'))
                     position: 'top-left',
                 @else
                     position: 'top-right',
-                @endif                showConfirmButton: false,
+                @endif
+                showConfirmButton: false,
                 toast: true,
                 timer: 3000,
                 timerProgressBar: true,

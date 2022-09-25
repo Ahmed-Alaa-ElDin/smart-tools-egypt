@@ -24,13 +24,15 @@
                 <div class="splide__track">
                     {{-- List of Products : Start --}}
                     <ul class="splide__list">
-
-                        @foreach ($products as $product)
+                        @forelse ($products as $product)
                             {{-- Product : Start --}}
                             <x-front.product-box-small :product="$product" />
                             {{-- Product : End --}}
-                        @endforeach
-
+                        @empty
+                            <div class="text-center w-full p-4 font-bold">
+                                {{ __('front/homePage.No products in this list') }}
+                            </div>
+                        @endforelse
                     </ul>
                     {{-- List of Products : End --}}
 

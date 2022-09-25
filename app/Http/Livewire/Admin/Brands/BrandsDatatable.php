@@ -30,14 +30,12 @@ class BrandsDatatable extends Component
     // Render With each update
     public function render()
     {
-        $brands = Brand::
-            select([
+        $brands = Brand::select([
                 'id',
                 'name',
                 'logo_path',
                 'country_id',
-            ])->
-            with('country')
+            ])->with('country','products')
             ->withCount('products')
             ->where('name', 'like', '%' . $this->search . '%')
             ->orWhereHas('country', function ($query) {

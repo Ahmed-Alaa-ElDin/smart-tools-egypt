@@ -531,14 +531,14 @@ class OrderController extends Controller
                         'user_id' => $new_order->user_id,
                         'payment_amount' => -1 * $old_small_payment->payment_amount,
                         'payment_method' => $new_order->payment_method,
-                        'payment_status' => 1,
+                        'payment_status' => 5,
                         'payment_details' => $old_small_payment->payment_details,
                         'old_order_id' => $old_order->id
                     ];
 
                     $new_payment = $new_order->payments()->updateOrCreate([
                         'order_id' => $payment['order_id'],
-                        'payment_status' => 1,
+                        'payment_status' => 5,
                     ], $payment);
 
                     if (refundRequestPaymob(json_decode($new_payment->payment_details)->transaction_id, abs($new_payment->payment_amount))) {
@@ -1071,7 +1071,7 @@ class OrderController extends Controller
                             $new_payment = [
                                 'order_id' => $order->id,
                                 'user_id' => $order->user_id,
-                                'payment_amount' => -1 * $$payment->payment_amount,
+                                'payment_amount' => -1 * $payment->payment_amount,
                                 'payment_method' => $order->payment_method,
                                 'payment_status' => 4,
                                 'payment_details' => $payment->payment_details,
@@ -1099,7 +1099,7 @@ class OrderController extends Controller
                             $new_payment = [
                                 'order_id' => $order->id,
                                 'user_id' => $order->user_id,
-                                'payment_amount' => -1 * $$payment->payment_amount,
+                                'payment_amount' => -1 * $payment->payment_amount,
                                 'payment_method' => $order->payment_method,
                                 'payment_status' => 4,
                                 'payment_details' => $payment->payment_details,
@@ -1291,7 +1291,7 @@ class OrderController extends Controller
         $returned_price = $returned_products_data->sum('returned_price');
 
         //  Total Points of returned products
-        $returned_points = $returned_products_data->sum('returned_points');
+        $returned_points = $returned_products_total_quantities == $old_products_total_quantities ? $order->gift_points : $returned_products_data->sum('returned_points');
 
         // Get summation of products final prices
         $products_final_prices = $products->sum(function ($product) use ($returned_products_quantities) {
@@ -1346,7 +1346,7 @@ class OrderController extends Controller
         }
 
 
-        $return_total = abs($return_total) <= $order-> total ? $return_total : -1 * ($order-> total);
+        $return_total = abs($return_total) <= $order->total ? $return_total : -1 * ($order->total);
 
         DB::beginTransaction();
 
