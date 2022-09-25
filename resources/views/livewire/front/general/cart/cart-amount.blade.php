@@ -27,7 +27,7 @@
                 {{-- Amount :: End --}}
 
                 {{-- Remove :: Start --}}
-                <button class="w-6 h-6 rounded-circle bg-secondary text-white"
+                <button class="w-6 h-6 rounded-circle bg-secondary text-white" wire:key="DecreaseByOne-{{ rand() }}"
                     title="{{ __('front/homePage.Decrease') }}"
                     wire:click="removeOneFromCart('{{ $cartProduct->rowId }}',{{ $cartAmount - 1 }})">
                     <span class="material-icons text-xs">
@@ -69,7 +69,7 @@
                 {{-- Amount :: End --}}
 
                 {{-- Remove :: Start --}}
-                <button class="w-8 h-8 rounded-circle bg-secondary text-white"
+                <button class="w-8 h-8 rounded-circle bg-secondary text-white" wire:key="DecreaseByOne-{{ rand() }}"
                     title="{{ __('front/homePage.Decrease') }}"
                     wire:click="removeOneFromCart('{{ $cartProduct->rowId }}',{{ $cartAmount - 1 }})">
                     <span class="material-icons text-lg">
@@ -120,7 +120,7 @@
 
                 {{-- Remove :: Start --}}
                 <button class="w-6 h-6 rounded-circle bg-secondary text-white"
-                    title="{{ __('front/homePage.Decrease') }}"
+                    title="{{ __('front/homePage.Decrease') }}" wire:key="disabled-{{ rand() }}"
                     disabled>
                     <span class="material-icons text-xs">
                         remove
@@ -149,7 +149,7 @@
                 {{-- Amount :: End --}}
 
                 {{-- Remove :: Start --}}
-                <button class="w-8 h-8 rounded-circle bg-secondary text-white"
+                <button class="w-8 h-8 rounded-circle bg-secondary text-white" wire:key="disabled-{{ rand() }}"
                     title="{{ __('front/homePage.Decrease') }}"
                     disabled>
                     <span class="material-icons text-lg">
