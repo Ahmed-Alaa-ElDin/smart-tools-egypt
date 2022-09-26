@@ -140,5 +140,13 @@ return [
     "Please mention any landmarks such as mosque, grocery, ... etc."                                =>          "برجاء ذكر علامة مميزة مثل مسجد أو محل مشهور .. الخ",
     "Save"                                              =>          "حفظ",
     "Cancel"                                            =>          "إلغاء",
-
+    "Address has been created successfully"             =>          "تم حفظ العنوان الجديد بنجاح",
+    "Address hasn't been created"                       =>          "لم يتم حفظ العنوان الجديد",
+    "Phone"                                             =>          "رقم الهاتف",
+    "Add New Phone"                                     =>          "إضافة هاتف جديد",
+    "Enter the phone number"                            =>          "ادخل رقم الهاتف",
+    "Phone has been created successfully"               =>          "تم إضافة الهاتف الجديد بنجاح",
+    "Phone hasn't been created"                         =>          "لم يتم إضافة الهاتف الجديد",
+    "Phone has been deleted successfully"               =>          "تم حذف الهاتف بنجاح",
+    "Phone hasn't been deleted"                         =>          "لم يتم حذف الهاتف",
 ];
