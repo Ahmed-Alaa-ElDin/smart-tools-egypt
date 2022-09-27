@@ -81,6 +81,8 @@ class NewOrderUserPart extends Component
 
         $this->addAddress = false;
 
+        $this->emitTo('admin.orders.new-order-payment-part', 'customerUpdated', $this->customer_id);
+
         $this->clearSearch();
     }
 
@@ -88,6 +90,8 @@ class NewOrderUserPart extends Component
     {
         $this->customer_id = null;
         $this->selectedCustomer = null;
+
+        $this->emitTo('admin.orders.new-order-payment-part', 'customerUpdated', null);
     }
 
     ############ Address :: Start ##############
@@ -254,8 +258,8 @@ class NewOrderUserPart extends Component
     public function savePhone()
     {
         $this->validate([
-            'newPhone'      =>    'required|digits:11|regex:/^01[0-2]\d{1,8}$/|' . Rule::unique('phones','phone')->ignore($this->customer_id, 'user_id'),
-        ],[
+            'newPhone'      =>    'required|digits:11|regex:/^01[0-2]\d{1,8}$/|' . Rule::unique('phones', 'phone')->ignore($this->customer_id, 'user_id'),
+        ], [
             'newPhone.regex' => __('validation.The phone numbers must start with 010, 011, 012 or 015')
         ]);
 

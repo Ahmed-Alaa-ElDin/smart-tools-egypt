@@ -149,4 +149,20 @@ return [
     "Phone hasn't been created"                         =>          "لم يتم إضافة الهاتف الجديد",
     "Phone has been deleted successfully"               =>          "تم حذف الهاتف بنجاح",
     "Phone hasn't been deleted"                         =>          "لم يتم حذف الهاتف",
+    "Customer Choosing"                                 =>          "إختيار العميل",
+    "Products Choosing"                                 =>          "إختيار المنتجات",
+    "Add Product"                                       =>          "إضافة منتج جديد",
+    "No Products Found"                                 =>          "لم يتم العثور على منتجات",
+    "Clear Products"                                    =>          "إزالة المنتجات",
+    "Payment"                                           =>          "الدفع",
+    "Address has been deleted successfully"             =>          "تم حذف العنوان بنجاح",
+    "Address hasn't been deleted"                       =>          "لم يتم حذف العنوان",
+    "Enter Coupon Code"                                 =>          "ادخل كود الكوبون",
+    "Apply"                                             =>          "تطبيق",
+    "Coupon"                                            =>          "الكوبون",
+    "Coupon Applied"                                    =>          "تم تطبيق كود ':code' بنجاح",
+    "Coupon Failed"                                     =>          "هذا الكود غير صحيح أو منتهي الصلاحية",
+    "Cancel Coupon"                                     =>          "إلغاء الكوبون",
+
+
 ];

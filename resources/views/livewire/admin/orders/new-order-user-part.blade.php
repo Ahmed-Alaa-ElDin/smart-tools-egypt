@@ -1,9 +1,9 @@
 <div class="bg-gray-50 p-2 rounded-xl shadow">
-    {{-- <div wire:loading.delay class="absolute w-100 h-100 top-0 left-0 z-50 bg-gray-100 flex justify-center items-center">
-        sadasd
-    </div> --}}
+    <div class="text-center mb-2 font-bold text-gray-900">
+        {{ __('admin/ordersPages.Customer Choosing') }}
+    </div>
     <div class="flex flex-wrap-reverse justify-around items-center gap-3">
-        <div class="relative">
+        <div class="relative w-full md:w-auto md:w-[50%]">
 
             {{-- Search Customer Input :: Start --}}
             <div class="flex rounded-md shadow-sm">
@@ -14,6 +14,7 @@
                     </span>
                 </span>
                 <input type="text" wire:model.debounce.500ms='search' wire:keydown.Escape="$set('search','')"
+                    data-name="new-order-user-part"
                     class="searchInput focus:ring-0 flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-700"
                     placeholder="{{ __('admin/ordersPages.Search ...') }}">
             </div>
@@ -148,11 +149,12 @@
         <div class="grid grid-cols-1 md:grid-cols-3 justify-between items-center gap-3">
             {{-- Addresses --}}
             <div
-                class="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-2 justify-center items-center gap-3 grow">
+                class="
+                col-span-1 md:col-span-2 grid grid-cols-2 md:grid-cols-4 justify-center items-center gap-3">
                 @forelse ($selectedCustomer->addresses as $address)
                     <div @if (!$address->default) wire:click="selectAddress({{ $address->id }})" @endif
                         wire:key="address-{{ $address->id }}-{{ rand() }}"
-                        class="relative select-none  @if ($address->default) shadow-inner bg-green-100 @else cursor-pointer hover:shadow-inner shadow bg-gray-100 @endif rounded-xl flex flex-col items-center justify-center gap-2 w-full p-2">
+                        class="relative select-none col-span-2  @if ($address->default) shadow-inner bg-green-100 @else cursor-pointer hover:shadow-inner shadow bg-gray-100 @endif rounded-xl flex flex-col items-center justify-center gap-2 w-full p-2">
                         @if ($address->default)
                             <span class="text-xs font-bold text-success">
                                 {{ __('admin/ordersPages.Default Shipping Address') }}
@@ -200,7 +202,7 @@
                 @endforelse
 
                 @if (!$addAddress)
-                    <div class="col-span-2">
+                    <div class="col-span-4">
                         <div class="flex justify-center items-center gap-2">
                             <button wire:click="$set('addAddress',{{ true }})"
                                 class="btn btn-sm bg-secondary hover:bg-secondaryDark font-bold">
@@ -212,7 +214,7 @@
                         </div>
                     </div>
                 @else
-                    <div class="col-span-2">
+                    <div class="col-span-4">
                         {{-- New Address --}}
                         <div
                             class="col-span-12 grid grid-cols-12 gap-x-4 gap-y-2 items-center bg-gray-100 p-2 rounded text-center my-2">

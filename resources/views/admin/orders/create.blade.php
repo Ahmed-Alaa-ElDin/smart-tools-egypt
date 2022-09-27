@@ -18,7 +18,8 @@
                             href="{{ route('admin.orders.index') }}">{{ __('admin/ordersPages.All Orders') }}
                         </a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/ordersPages.Create New Order') }}</li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/ordersPages.Create New Order') }}
+                    </li>
                 </ol>
             </nav>
 
@@ -38,20 +39,24 @@
                         </div>
 
                         {{-- Card Body --}}
-                        <div class="card-body">
+                        <div class="card-body flex flex-col justify-center items-center gap-3">
                             {{-- User Part :: Start --}}
-                            @livewire('admin.orders.new-order-user-part')
+                            <div class="w-full">
+                                @livewire('admin.orders.new-order-user-part', key('user-part'))
+                            </div>
                             {{-- User Part :: End --}}
 
-                            <hr class="my-2">
-
                             {{-- Products Part :: Start --}}
-                            <div>
-                                Products Part
+                            <div class="w-full">
+                                @livewire('admin.orders.new-order-products-part', key('products-part'))
                             </div>
                             {{-- Products Part :: End --}}
 
-                            <hr class="my-2">
+                            {{-- Payment Part :: Start --}}
+                            <div class="w-full">
+                                @livewire('admin.orders.new-order-payment-part', key('payment-part'))
+                            </div>
+                            {{-- Payment Part :: End --}}
 
                             {{-- Summary Part :: Start --}}
                             <div>
@@ -73,7 +78,9 @@
         for (let i = 0; i < searchInputs.length; i++) {
             const element = searchInputs[i];
             element.addEventListener('blur', function(event) {
-                window.livewire.emit('clearSearch');
+                setTimeout(() => {
+                    window.livewire.emitTo(`admin.orders.${element.dataset.name}`, 'clearSearch');
+                }, 200);
             })
         }
     </script>
