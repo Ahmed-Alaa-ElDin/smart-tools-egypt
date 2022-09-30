@@ -144,7 +144,7 @@
                 <label for="video"
                     class="col-span-6 sm:col-span-1 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/productsPages.Video URL') }}</label>
                 <div class="col-span-6 sm:col-span-5">
-                    <input id="video"
+                    <input id="video" dir="ltr"
                         class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('video') border-red-900 border-2 @enderror"
                         type="text" wire:model.lazy="video"
                         placeholder="{{ __('admin/productsPages.Youtube Link') }}">
@@ -466,7 +466,7 @@
                     <div class="col-span-6 md:col-span-5">
                         <div wire:ignore
                             class="py-1 w-full px-6 rounded text-right border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 cursor-text @error('description.ar') border-red-900 border-2 @enderror"
-                            type="text" id="description_ar" wire:model="description.ar"
+                            type="text" id="description_ar"
                             placeholder="{{ __('admin/productsPages.in Arabic') }}">
                             @if ($description['ar'])
                                 {!! $description['ar'] !!}
@@ -770,14 +770,14 @@
             {{-- SEO Description End --}}
 
             {{-- SEO Keywords :: Start --}}
-            <div class="col-span-3 w-full grid grid-cols-12 gap-x-4 gap-y-2 items-center    rounded text-center">
+            <div class="col-span-3 w-full grid grid-cols-12 gap-x-4 gap-y-2 items-center rounded text-center">
                 <label for="seo_keywords"
                     class="col-span-12 sm:col-span-2 md:col-start-3 lg:col-span-12 lg:col-start-1 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer">
                     {{ __('admin/productsPages.Keywords') }}
                 </label>
 
                 <div class="col-span-12 sm:col-span-10 md:col-span-6 lg:col-span-12">
-                    <textarea wire:model="seo_keywords" placeholder="{{ __('admin/productsPages.Keywords ("Comma Separated")') }}"
+                    <textarea wire:model.lazy="seo_keywords" placeholder="{{ __('admin/productsPages.Keywords ("Comma Separated")') }}"
                         class="py-1 w-full px-6 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 cursor-text @error('seo_keywords') border-red-900 border-2 @enderror"
                         type="text" id="seo_keywords">
                     </textarea>

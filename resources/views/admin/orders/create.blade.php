@@ -18,15 +18,16 @@
                             href="{{ route('admin.orders.index') }}">{{ __('admin/ordersPages.All Orders') }}
                         </a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/ordersPages.Create New Order') }}</li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/ordersPages.Create New Order') }}
+                    </li>
                 </ol>
             </nav>
 
             <section class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 static">
 
                     {{-- Card --}}
-                    <div class="card">
+                    <div class="card static">
 
                         {{-- Card Head --}}
                         <div class="card-header card-header-primary">
@@ -38,26 +39,11 @@
                         </div>
 
                         {{-- Card Body --}}
-                        <div class="card-body">
-                            {{-- User Part :: Start --}}
-                            @livewire('admin.orders.new-order-user-part')
-                            {{-- User Part :: End --}}
+                        <div class="card-body static">
 
-                            <hr class="my-2">
-
-                            {{-- Products Part :: Start --}}
-                            <div>
-                                Products Part
-                            </div>
-                            {{-- Products Part :: End --}}
-
-                            <hr class="my-2">
-
-                            {{-- Summary Part :: Start --}}
-                            <div>
-                                Order Summary Part
-                            </div>
-                            {{-- Summary Part :: End --}}
+                            {{-- Order Form :: Start --}}
+                            @livewire('admin.orders.order-form')
+                            {{-- Order Form :: End --}}
                         </div>
                     </div>
                 </div>
@@ -69,12 +55,20 @@
 @push('js')
     <script>
         var searchInputs = document.getElementsByClassName('searchInput');
+        var displayModal = document.getElementById('displayOrderSummary');
+        const modal = new Modal(displayModal);
 
         for (let i = 0; i < searchInputs.length; i++) {
             const element = searchInputs[i];
             element.addEventListener('blur', function(event) {
-                window.livewire.emit('clearSearch');
+                setTimeout(() => {
+                    window.livewire.emitTo(`admin.orders.${element.dataset.name}`, 'clearSearch');
+                }, 200);
             })
         }
+
+        window.addEventListener('displayOrderSummary',function () {
+            modal.show();
+        })
     </script>
 @endpush

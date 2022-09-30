@@ -56,10 +56,10 @@ class CustomersDatatable extends Component
                 if ($this->city_id) {
                     return $q->whereHas('cities', fn ($q) => $q->where('cities.id', $this->city_id));
                 }
-                if ($this->governorate_id) {
+                elseif ($this->governorate_id) {
                     return $q->whereHas('governorates', fn ($q) => $q->where('governorates.id', $this->governorate_id));
                 }
-                if ($this->country_id) {
+                elseif ($this->country_id) {
                     return $q->whereHas('countries', fn ($q) => $q->where('countries.id', $this->country_id));
                 }
             })

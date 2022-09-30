@@ -74,7 +74,7 @@ return [
     'not_in'               => 'حقل :attribute لاغٍ',
     'numeric'              => 'يجب أن يكون حقل :attribute عبارة عن أرقام',
     'present'              => 'يجب تقديم حقل :attribute',
-    'regex'                => 'صيغة حقل :attribute .غير صحيحة',
+    'regex'                => 'صيغة حقل :attribute غير صحيحة',
     'required'             => 'حقل :attribute مطلوب.',
     'required_if'          => 'حقل :attribute مطلوب في حال ما إذا كان :other يساوي :value.',
     'required_unless'      => 'حقل :attribute مطلوب في حال ما لم يكن :other يساوي :values.',
@@ -252,6 +252,7 @@ return [
         'address.governorate_id'=> 'المحافظة',
         'address.city_id'       => 'المدينة',
         'balance'               => 'الرصيد',
+        'newPhone'              => 'رقم الهاتف',
 
 
     ],

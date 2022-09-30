@@ -1,6 +1,9 @@
 <div class="bg-gray-50 p-2 rounded-xl shadow">
+    <div class="text-center mb-2 font-bold text-gray-900">
+        {{ __('admin/ordersPages.Customer Choosing') }}
+    </div>
     <div class="flex flex-wrap-reverse justify-around items-center gap-3">
-        <div class="relative">
+        <div class="relative w-full md:w-auto md:w-[50%]">
 
             {{-- Search Customer Input :: Start --}}
             <div class="flex rounded-md shadow-sm">
@@ -11,6 +14,7 @@
                     </span>
                 </span>
                 <input type="text" wire:model.debounce.500ms='search' wire:keydown.Escape="$set('search','')"
+                    data-name="new-order-user-part"
                     class="searchInput focus:ring-0 flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-700"
                     placeholder="{{ __('admin/ordersPages.Search ...') }}">
             </div>
@@ -105,7 +109,7 @@
             {{-- Customer's Name & Mail --}}
             <div
                 class="flex flex-col items-center justify-center gap-2 bg-white shadow-inner p-2 rounded-xl border-2 border-gray-800">
-                <span class="text-gray-900 font-bold">
+                <span class="text-lg text-gray-900 font-bold">
                     {{ $selectedCustomer->f_name . ' ' . $selectedCustomer->l_name }}
                 </span>
 
@@ -145,11 +149,12 @@
         <div class="grid grid-cols-1 md:grid-cols-3 justify-between items-center gap-3">
             {{-- Addresses --}}
             <div
-                class="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-2 justify-center items-center gap-3 grow">
+                class="
+                col-span-1 md:col-span-2 grid grid-cols-2 md:grid-cols-4 justify-center items-center gap-3">
                 @forelse ($selectedCustomer->addresses as $address)
                     <div @if (!$address->default) wire:click="selectAddress({{ $address->id }})" @endif
                         wire:key="address-{{ $address->id }}-{{ rand() }}"
-                        class="relative select-none  @if ($address->default) shadow-inner bg-green-100 @else cursor-pointer hover:shadow-inner shadow bg-gray-100 @endif rounded-xl flex flex-col items-center justify-center gap-2 w-full p-2">
+                        class="relative select-none col-span-2  @if ($address->default) shadow-inner bg-green-100 @else cursor-pointer hover:shadow-inner shadow bg-gray-100 @endif rounded-xl flex flex-col items-center justify-center gap-2 w-full p-2">
                         @if ($address->default)
                             <span class="text-xs font-bold text-success">
                                 {{ __('admin/ordersPages.Default Shipping Address') }}
@@ -179,18 +184,25 @@
                                 {{ $address->city ? $address->city->name : '' }}
                             </p>
                         </div>
-                        <p class="text-sm font-bold text-gray-600">
-                            {{ $address->details ?? $address->details }}
-                        </p>
+                        @if ($address->details)
+                            <p class="text-sm font-bold text-gray-600">
+                                {{ $address->details }}
+                            </p>
+                        @endif
+                        @if ($address->landmarks)
+                            <p class="text-sm font-bold text-gray-400">
+                                {{ $address->landmarks }}
+                            </p>
+                        @endif
                     </div>
                 @empty
-                    <div class="text-center font-bold col-span-1 md:col-span-2">
+                    <div class="text-center font-bold col-span-2 md:col-span-4">
                         {{ __('admin/ordersPages.No Addresses for this customer') }}
                     </div>
                 @endforelse
 
                 @if (!$addAddress)
-                    <div class="col-span-2">
+                    <div class="col-span-4">
                         <div class="flex justify-center items-center gap-2">
                             <button wire:click="$set('addAddress',{{ true }})"
                                 class="btn btn-sm bg-secondary hover:bg-secondaryDark font-bold">
@@ -202,8 +214,8 @@
                         </div>
                     </div>
                 @else
-                    <div class="col-span-2">
-                        {{-- Address --}}
+                    <div class="col-span-4">
+                        {{-- New Address --}}
                         <div
                             class="col-span-12 grid grid-cols-12 gap-x-4 gap-y-2 items-center bg-gray-100 p-2 rounded text-center my-2">
                             {{-- User Address Select Boxes --}}
@@ -314,10 +326,10 @@
                                 <div class="col-span-3 flex flex-wrap justify-around items-center">
                                     <button
                                         class="btn btn-sm bg-success hover:bg-successDark text-white font-bold rounded focus:outline-none focus:shadow-outline"
-                                        wire:click="saveAddress(0)">
+                                        wire:click="saveAddress">
                                         {{ __('admin/ordersPages.Save') }}
                                     </button>
-                                    <button wire:click="cancelNewAddress"
+                                    <button wire:click="$set('addAddress',{{ false }})"
                                         class="btn btn-sm bg-primary hover:bg-primaryDark text-white font-bold rounded focus:outline-none focus:shadow-outline">
                                         {{ __('admin/ordersPages.Cancel') }}
                                     </button>
@@ -328,6 +340,7 @@
                 @endif
             </div>
 
+            {{-- Phones --}}
             <div class="col-span-1 flex flex-col justify-center items-center gap-3">
                 @forelse ($selectedCustomer->phones as $phone)
                     <div wire:click="selectPhone({{ $phone->id }})" wire:key="phone-{{ $phone->id }}"
@@ -355,6 +368,57 @@
                         {{ __('admin/ordersPages.No phones for this customer') }}
                     </div>
                 @endforelse
+
+                @if (!$addPhone)
+                    <div class="col-span-2">
+                        <div class="flex justify-center items-center gap-2">
+                            <button wire:click="$set('addPhone',{{ true }})"
+                                class="btn btn-sm bg-secondary hover:bg-secondaryDark font-bold">
+                                <span class="material-icons text-sm">
+                                    add
+                                </span>
+                                {{ __('admin/ordersPages.Add New Phone') }}
+                            </button>
+                        </div>
+                    </div>
+                @else
+                    <div class="col-span-2 w-full">
+                        {{-- New Phone --}}
+                        <div class="grid grid-cols-12 items-center bg-gray-100 p-2 rounded text-center">
+                            <div class="grid grid-cols-3 gap-x-4 gap-y-2 col-span-12">
+                                {{-- Phone --}}
+                                <div class="phone col-span-3 grid grid-cols-3 justify-between items-center gap-2">
+                                    <label
+                                        class="col-span-3 select-none cursor-pointer text-black font-medium m-0 mx-3"
+                                        for="phone">{{ __('admin/ordersPages.Phone') }}</label>
+                                    <input type="text" id="phone" wire:model.lazy="newPhone"
+                                        wire:keydown.enter="savePhone" dir="ltr"
+                                        placeholder="{{ __('admin/ordersPages.Enter the phone number') }}"
+                                        class="col-span-3 w-full py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300">
+                                </div>
+
+                                @error('newPhone')
+                                    <div
+                                        class="inline-block mt-2 col-span-3 bg-red-700 rounded text-white shadow px-3 py-1">
+                                        {{ $message }}</div>
+                                @enderror
+
+                                <div class="col-span-3 flex flex-wrap justify-around items-center">
+                                    <button
+                                        class="btn btn-sm bg-success hover:bg-successDark text-white font-bold rounded focus:outline-none focus:shadow-outline"
+                                        wire:click="savePhone">
+                                        {{ __('admin/ordersPages.Save') }}
+                                    </button>
+                                    <button wire:click="$set('addPhone',{{ false }})"
+                                        class="btn btn-sm bg-primary hover:bg-primaryDark text-white font-bold rounded focus:outline-none focus:shadow-outline">
+                                        {{ __('admin/ordersPages.Cancel') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
             </div>
         </div>
     @endif
