@@ -1,4 +1,6 @@
 <div class="bg-red-50 p-2 rounded-xl shadow">
+    <x-admin.waiting />
+
     <div class="text-center mb-2 font-bold text-red-900">
         {{ __('admin/ordersPages.Products Choosing') }}
     </div>
