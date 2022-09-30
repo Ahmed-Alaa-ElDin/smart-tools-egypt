@@ -12,14 +12,18 @@ class NewOrderPaymentPart extends Component
     public $customer, $code, $coupon_id, $message, $wallet = 0.00, $points = 0, $payment_method = 1;
 
     protected $listeners = [
-        'customerUpdated'
+        'customerUpdated',
+        'getPaymentData',
     ];
 
+    ############## Render :: Start ##############
     public function render()
     {
         return view('livewire.admin.orders.new-order-payment-part');
     }
+    ############## Render :: End ##############
 
+    ############## Get Customer Data :: Start ##############
     public function customerUpdated($customer_id)
     {
         if ($customer_id) {
@@ -34,7 +38,9 @@ class NewOrderPaymentPart extends Component
             $this->payment_method = 1;
         }
     }
+    ############## Get Customer Data :: End ##############
 
+    ############## Apply Coupon :: Start ##############
     public function couponCheck()
     {
         try {
@@ -56,11 +62,41 @@ class NewOrderPaymentPart extends Component
             ];
         }
     }
+    ############## Apply Coupon :: End ##############
 
+    ############## Remove Coupon :: Start ##############
     public function clearCoupon()
     {
         $this->coupon_id = null;
 
         $this->message = null;
     }
+    ############## Remove Coupon :: End ##############
+
+
+    ############## Pay Using Wallet :: Start ##############
+    public function updatedWallet($value)
+    {
+        $this->wallet = $value > 0 ? ($value <= $this->customer->balance ? $value : $this->customer->balance) : 0;
+    }
+    ############## Pay Using Wallet :: End ##############
+
+    ############## Pay Using Points :: Start ##############
+    public function updatedPoints($value)
+    {
+        $this->points = $value > 0 ? ($value <= $this->customer->points ? $value : $this->customer->points) : 0;
+    }
+    ############## Pay Using Points :: End ##############
+
+    ############## Send Payment Data To Parent Order Form :: Start ##############
+    public function getPaymentData()
+    {
+        $this->emitTo('admin.orders.order-form', 'setPaymentData', [
+            'coupon_id' => $this->coupon_id,
+            'wallet' => $this->wallet,
+            'points' => $this->points,
+            'payment_method' => $this->payment_method,
+        ]);
+    }
+    ############## Send Payment Data To Parent Order Form :: End ##############
 }

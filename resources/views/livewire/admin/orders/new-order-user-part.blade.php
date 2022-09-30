@@ -196,7 +196,7 @@
                         @endif
                     </div>
                 @empty
-                    <div class="text-center font-bold col-span-1 md:col-span-2">
+                    <div class="text-center font-bold col-span-2 md:col-span-4">
                         {{ __('admin/ordersPages.No Addresses for this customer') }}
                     </div>
                 @endforelse
@@ -385,7 +385,6 @@
                     <div class="col-span-2 w-full">
                         {{-- New Phone --}}
                         <div class="grid grid-cols-12 items-center bg-gray-100 p-2 rounded text-center">
-                            {{-- User Address Select Boxes --}}
                             <div class="grid grid-cols-3 gap-x-4 gap-y-2 col-span-12">
                                 {{-- Phone --}}
                                 <div class="phone col-span-3 grid grid-cols-3 justify-between items-center gap-2">

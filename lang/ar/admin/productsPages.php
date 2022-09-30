@@ -101,7 +101,7 @@ return [
     "Country"                                                                   =>      "بلد المنشأ",
     "Category"                                                                  =>      "القسم الفرعية",
     "Supercategory"                                                             =>      "القسم الرئيسية",
-    "Created By"                                                                =>      "اضيف براسطة",
+    "Created By"                                                                =>      "اضيف بواسطة",
     "Created at"                                                                =>      "تاريخ الإضافة",
     "Updated at"                                                                =>      "تاريخ آخر تعديل",
     "Products Data"                                                             =>      "بيانات المنتجات",

@@ -4,7 +4,7 @@
     inline-flex justify-center items-center gap-2 min-w-max
     @if ($add_buy == 'pay') bg-secondary hover:bg-secondaryDark @else animate-pulse bg-primary hover:bg-secondary @endif
     @if ($large) p-6 w-full @endif
-    @if ($text) transition ease-in-out hover:animate-none hover:bg-secondary hover:text-white
+    @if ($text) transition ease-in-out p-3 hover:animate-none hover:bg-secondary hover:text-white
     @else w-9 @endif">
     <span class="material-icons  @if ($large) text-xl @else text-lg @endif">
         @if ($add_buy == 'pay')

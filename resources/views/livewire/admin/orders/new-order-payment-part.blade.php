@@ -50,7 +50,7 @@
                             {{ __('admin/ordersPages.Wallet') }}
                         </label>
                         <input type="number" id="wallet" min="0" max="{{ $customer->balance }}" step="0.01" value="0"
-                            wire:model="wallet"
+                            wire:model.lazy="wallet"
                             class="text-sm rounded text-center border-gray-300 focus:outline-0 focus:ring-secondary focus:border-gray-300">
                     </div>
                 @endif
@@ -62,7 +62,7 @@
                             {{ __('admin/ordersPages.Points') }}
                         </label>
                         <input type="number" id="points" min="0" max="{{ $customer->points }}" step="1" value="0"
-                            wire:model="points"
+                            wire:model.lazy="points"
                             class="text-sm rounded text-center border-gray-300 focus:outline-0 focus:ring-secondary focus:border-gray-300">
                     </div>
                 @endif

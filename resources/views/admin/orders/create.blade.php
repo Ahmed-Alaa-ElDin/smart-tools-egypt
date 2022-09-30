@@ -24,10 +24,10 @@
             </nav>
 
             <section class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 static">
 
                     {{-- Card --}}
-                    <div class="card">
+                    <div class="card static">
 
                         {{-- Card Head --}}
                         <div class="card-header card-header-primary">
@@ -39,30 +39,11 @@
                         </div>
 
                         {{-- Card Body --}}
-                        <div class="card-body flex flex-col justify-center items-center gap-3">
-                            {{-- User Part :: Start --}}
-                            <div class="w-full">
-                                @livewire('admin.orders.new-order-user-part', key('user-part'))
-                            </div>
-                            {{-- User Part :: End --}}
+                        <div class="card-body static">
 
-                            {{-- Products Part :: Start --}}
-                            <div class="w-full">
-                                @livewire('admin.orders.new-order-products-part', key('products-part'))
-                            </div>
-                            {{-- Products Part :: End --}}
-
-                            {{-- Payment Part :: Start --}}
-                            <div class="w-full">
-                                @livewire('admin.orders.new-order-payment-part', key('payment-part'))
-                            </div>
-                            {{-- Payment Part :: End --}}
-
-                            {{-- Summary Part :: Start --}}
-                            <div>
-                                Order Summary Part
-                            </div>
-                            {{-- Summary Part :: End --}}
+                            {{-- Order Form :: Start --}}
+                            @livewire('admin.orders.order-form')
+                            {{-- Order Form :: End --}}
                         </div>
                     </div>
                 </div>
@@ -74,6 +55,8 @@
 @push('js')
     <script>
         var searchInputs = document.getElementsByClassName('searchInput');
+        var displayModal = document.getElementById('displayOrderSummary');
+        const modal = new Modal(displayModal);
 
         for (let i = 0; i < searchInputs.length; i++) {
             const element = searchInputs[i];
@@ -83,5 +66,9 @@
                 }, 200);
             })
         }
+
+        window.addEventListener('displayOrderSummary',function () {
+            modal.show();
+        })
     </script>
 @endpush

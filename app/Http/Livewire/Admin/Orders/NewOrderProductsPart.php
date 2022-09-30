@@ -13,6 +13,7 @@ class NewOrderProductsPart extends Component
 
     protected $listeners = [
         'clearSearch',
+        'getProductsData'
     ];
 
     public function mount()
@@ -73,5 +74,12 @@ class NewOrderProductsPart extends Component
         } else {
             unset($this->products[$product_id]);
         }
+    }
+
+    public function getProductsData()
+    {
+        $this->emitTo('admin.orders.order-form','setProductsData',[
+            'products' => $this->products
+        ]);
     }
 }

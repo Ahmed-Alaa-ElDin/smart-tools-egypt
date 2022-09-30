@@ -15,11 +15,12 @@ class NewOrderUserPart extends Component
 
     public $customer_id, $selectedCustomer;
 
-    public $addAddress = false;
-    public $addPhone = false;
+    public $addAddress = false, $defaultAddress;
+    public $addPhone = false, $defaultPhone;
 
     protected $listeners = [
         'clearSearch',
+        'getUserData'
     ];
 
     public function mount()
@@ -79,6 +80,14 @@ class NewOrderUserPart extends Component
     {
         $this->selectedCustomer = User::findOrFail($this->customer_id);
 
+        $defaultAddress = $this->selectedCustomer->addresses->where('default', 1)->first();
+
+        $this->defaultAddress = $defaultAddress ? $defaultAddress->id : null;
+
+        $defaultPhone = $this->selectedCustomer->phones->where('default', 1)->first();
+
+        $this->defaultPhone = $defaultPhone ? $defaultPhone->id : null;
+
         $this->addAddress = false;
 
         $this->emitTo('admin.orders.new-order-payment-part', 'customerUpdated', $this->customer_id);
@@ -107,6 +116,8 @@ class NewOrderUserPart extends Component
             // set default to new address
             $this->selectedCustomer->addresses->where('id', $address_id)->first()->update(['default' => 1]);
         }
+
+        $this->defaultAddress = $address_id;
     }
 
     // Remove exist Address
@@ -224,6 +235,8 @@ class NewOrderUserPart extends Component
             // set default to new phone
             $this->selectedCustomer->phones->where('id', $phone_id)->first()->update(['default' => 1]);
         }
+
+        $this->defaultPhone = $phone_id;
     }
 
     // Remove exist Phone
@@ -287,4 +300,12 @@ class NewOrderUserPart extends Component
     }
     ############ Phone :: End ##############
 
+    public function getUserData()
+    {
+        $this->emitTo('admin.orders.order-form', 'setUserData', [
+            'customer' => $this->selectedCustomer,
+            'defaultAddress' => $this->defaultAddress,
+            'defaultPhone' => $this->defaultPhone,
+        ]);
+    }
 }

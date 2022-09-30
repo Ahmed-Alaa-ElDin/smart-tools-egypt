@@ -205,7 +205,7 @@ class CouponBlock extends Component
                     if ($product['type'] == 0 && $product['value'] < 100) {
                         $product['product']->coupon_discount = $product['product']->best_price * $product['value'] / 100;
                         $product['product']->coupon_points = 0;
-                        $this->products_after_coupon[] = $product;
+                        $this->products_after_coupon[] = $product['product'];
                     } elseif ($product['type'] == 1) {
                         $product['product']->coupon_discount = $product['value'] <= $product['product']->best_price ? $product['value'] : $product['product']->best_price;
                         $product['product']->coupon_points = 0;
