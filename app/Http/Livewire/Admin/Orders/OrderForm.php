@@ -129,6 +129,7 @@ class OrderForm extends Component
         }
     }
 
+    // Calculate Order Cost
     public function calculate()
     {
         // Products Data
@@ -155,6 +156,7 @@ class OrderForm extends Component
         $this->getTotal();
     }
 
+    // Get Best Products Data
     public function getProducts()
     {
         $products = $this->products;
@@ -178,6 +180,7 @@ class OrderForm extends Component
         $this->products_total_weights = $this->products_weights->sum() ?? 0;
     }
 
+    // Get Delivery Fees
     public function getDeliveryFees()
     {
         // Products Total Weight
@@ -234,6 +237,7 @@ class OrderForm extends Component
         }
     }
 
+    // Calculate Subtotal
     public function getSubTotal()
     {
         $products_amounts = $this->products_amounts;
@@ -299,6 +303,7 @@ class OrderForm extends Component
         }
     }
 
+    // Update Order Cost after applying the Coupon
     public function getCoupon()
     {
         $products = $this->best_products;
@@ -530,11 +535,12 @@ class OrderForm extends Component
         $this->coupon_discount_percentage = $this->products_best_prices > 0 ? round($this->coupon_discount / $this->products_best_prices * 100) : 0;
     }
 
+    // Calculate Total Cost
     public function getTotal()
     {
         $this->total_points = $this->products_best_points + $this->order_points + $this->coupon_points;
 
-        $this->products_best_prices = $this->products_best_prices -  $this->coupon_discount ?? 0.00;
+        $this->subtotal = $this->products_best_prices -  $this->coupon_discount ?? 0.00;
 
         $this->total = is_null($this->delivery_fees) || $this->delivery_fees == 0 || $this->coupon_free_shipping ? $this->products_best_prices - $this->order_discount - $this->coupon_discount : $this->products_best_prices - $this->order_discount - $this->coupon_discount + $this->delivery_fees;
 
