@@ -19,6 +19,22 @@
     </div>
     {{-- Payment Part :: End --}}
 
+    {{-- Notes :: Start --}}
+    <div class="w-full bg-red-50 p-2 rounded-xl shadow">
+        <div class="grid grid-cols-4 justify-center items-center gap-3 p-3">
+            <h2 class="col-span-4 text-center font-bold">
+                {{ __('front/homePage.Notes') }}
+            </h2>
+            <div class="col-span-4">
+                <textarea id="notes" rows="2" wire:model.lazy="notes" dir="rtl"
+                    placeholder="{{ __('front/homePage.Please mention any note related to the order') }}"
+                    class="w-full py-1 rounded text-center border-red-300 focus:outline-0 focus:ring-0 focus:border-primary overflow-hidden">
+                </textarea>
+            </div>
+        </div>
+    </div>
+    {{-- Notes :: End --}}
+
     {{-- Errors :: Start --}}
     <div class="">
         @if ($errors->any())
