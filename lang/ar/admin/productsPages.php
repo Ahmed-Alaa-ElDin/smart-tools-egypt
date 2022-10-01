@@ -286,5 +286,6 @@ return [
     "Supercategory has been hidden"                                             =>      "تم اخفاء القسم الرئيسي",
     "Supercategory hasn't been published"                                       =>      "لم يتم اظهار القسم الرئيسي",
     "Supercategory hasn't been hidden"                                          =>      "لم يتم اخفاء القسم الرئيسي",
+    "Original Price"                                                            =>      "سعر الشراء",
 
 ];

@@ -253,6 +253,7 @@ return [
         'address.city_id'       => 'المدينة',
         'balance'               => 'الرصيد',
         'newPhone'              => 'رقم الهاتف',
+        'original_price'        => 'سعر الشراء',
 
 
     ],

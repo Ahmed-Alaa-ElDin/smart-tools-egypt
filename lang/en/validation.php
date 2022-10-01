@@ -225,7 +225,7 @@ return [
         'address.governorate_id'=> 'Governorate',
         'address.city_id'       => 'City',
         'newPhone'              => 'Phone',
-        'banner'                => 'Banner',
+        'original_price'        => 'Original Price',
         'banner'                => 'Banner',
         'banner'                => 'Banner',
     ],

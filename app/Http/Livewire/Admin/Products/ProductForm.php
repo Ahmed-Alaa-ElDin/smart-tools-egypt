@@ -29,7 +29,7 @@ class ProductForm extends Component
         // ]
     ];
     public $name = ["ar" => null, "en" => null], $brand_id, $model, $barcode, $weight, $description = ['ar' => null, 'en' => null], $publish = true, $refundable = true;
-    public $base_price, $discount, $final_price, $points, $free_shipping = false, $reviewing = false, $quantity, $low_stock;
+    public $original_price, $base_price, $discount, $final_price, $points, $free_shipping = false, $reviewing = false, $quantity, $low_stock;
     // public $title, $description_seo;
     public $seo_keywords;
     public $parentCategories;
@@ -61,6 +61,7 @@ class ProductForm extends Component
             'publish'             =>        'boolean',
             'refundable'          =>        'boolean',
 
+            'original_price'      =>        'required|numeric|min:0|max:999999',
             'base_price'          =>        'required|numeric|min:0|max:999999',
             'discount'            =>        'nullable|numeric|min:0|max:100',
             'final_price'         =>        'nullable|numeric|min:0|max:999999|lte:base_price',
@@ -173,6 +174,7 @@ class ProductForm extends Component
             }
 
             // Old Stock and Price
+            $this->original_price = $product->original_price;
             $this->base_price = $product->base_price;
             $this->final_price = $product->final_price;
             $this->discount = round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2);
@@ -461,6 +463,7 @@ class ProductForm extends Component
                 'weight' => $this->weight ?? 0,
                 'quantity' => $this->quantity ?? 0,
                 'low_stock' => $this->low_stock ?? 0,
+                'original_price' => $this->original_price,
                 'base_price' => $this->base_price,
                 'final_price' => $this->final_price,
                 'points' => $this->points,
@@ -549,6 +552,7 @@ class ProductForm extends Component
                 'weight' => $this->weight ?? 0,
                 'quantity' => $this->quantity ?? 0,
                 'low_stock' => $this->low_stock ?? 0,
+                'original_price' => $this->original_price,
                 'base_price' => $this->base_price,
                 'final_price' => $this->final_price,
                 'points' => $this->points,

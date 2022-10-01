@@ -27,6 +27,7 @@ class Product extends Model
         'weight',
         'quantity',
         'low_stock',
+        "original_price",
         'base_price',
         'final_price',
         'points',

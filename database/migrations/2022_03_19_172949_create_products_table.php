@@ -21,8 +21,9 @@ return new class extends Migration
             $table->decimal('weight')->default(1)->comment('on Kg');
             $table->integer('quantity')->default(0);
             $table->integer('low_stock')->default(0);
-            $table->decimal('base_price');
-            $table->decimal('final_price')->nullable();
+            $table->decimal('original_price')->nullable()->default(0.00);
+            $table->decimal('base_price')->nullable()->default(0.00);
+            $table->decimal('final_price')->nullable()->default(0.00);
             $table->integer('points')->nullable();
             $table->text('description')->nullable();
             $table->string('model')->nullable();

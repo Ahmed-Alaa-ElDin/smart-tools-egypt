@@ -286,7 +286,7 @@ return [
     "Supercategory has been hidden"                                         =>      "Supercategory has been hidden",
     "Supercategory hasn't been published"                                   =>      "Supercategory hasn't been published",
     "Supercategory hasn't been hidden"                                      =>      "Supercategory hasn't been hidden",
-    "Publish"                                                               =>      "Publish",
+    "Original Price"                                                        =>      "Original Price",
     "Publish"                                                               =>      "Publish",
     "Publish"                                                               =>      "Publish",
     "Publish"                                                               =>      "Publish",
