@@ -7,7 +7,7 @@
     <div class="flex flex-wrap-reverse justify-around items-center gap-3 ">
         <div class="relative w-full md:w-auto md:min-w-[50%]">
 
-            {{-- Search Customer Input :: Start --}}
+            {{-- Search Product Input :: Start --}}
             <div class="flex rounded-md shadow-sm">
                 <span
                     class="inline-flex items-center px-3 ltr:rounded-l-md rtl:rounded-r-md border border-r-0 border-primary bg-primary text-center text-white text-sm">
@@ -20,7 +20,7 @@
                     class="searchInput focus:ring-0 flex-1 block rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-primary"
                     placeholder="{{ __('admin/ordersPages.Search ...') }}">
             </div>
-            {{-- Search Customer Input :: End --}}
+            {{-- Search Product Input :: End --}}
 
             @if ($search != null)
                 <div
@@ -112,11 +112,11 @@
         @endif
     </div>
 
-    {{-- Customer Selected --}}
+    {{-- Product Selected :: Start --}}
     @if (count($products))
         <hr class="my-2">
 
-        {{-- Customer Info :: Start --}}
+        {{-- Product Info :: Start --}}
         <div class="flex flex-col justify-center items-center gap-2">
             @forelse ($products as $product)
                 {{-- Product : Start --}}
@@ -268,6 +268,8 @@
             @empty
             @endforelse
         </div>
-        {{-- Customer Info :: End --}}
+        {{-- Product Info :: End --}}
     @endif
+    {{-- Product Selected :: End --}}
+
 </div>

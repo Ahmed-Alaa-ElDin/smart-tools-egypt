@@ -15,22 +15,20 @@
                         <span class="material-icons">
                             search
                         </span> </span>
-                    <input type="text"   wire:model='search'
+                    <input type="text" wire:model='search'
                         class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                         placeholder="{{ __('admin/deliveriesPages.Search ...') }}">
                 </div>
 
                 {{-- Deleted Countries --}}
-                @can('Force Delete City')
-                    <div class="ltr:text-right rtl:text-left">
-                        <a href="{{ route('admin.cities.softDeletedCities') }}"
-                            class="btn btn-sm bg-red-600 hover:bg-red-700 focus:bg-red-600 active:bg-red-600 font-bold">
-                            <span class="material-icons rtl:ml-2 ltr:mr-2">
-                                delete_forever
-                            </span>
-                            {{ __('admin/deliveriesPages.Deleted Cities') }}</a>
-                    </div>
-                @endcan
+                <div class="ltr:text-right rtl:text-left">
+                    <a href="{{ route('admin.cities.softDeletedCities') }}"
+                        class="btn btn-sm bg-red-600 hover:bg-red-700 focus:bg-red-600 active:bg-red-600 font-bold">
+                        <span class="material-icons rtl:ml-2 ltr:mr-2">
+                            delete_forever
+                        </span>
+                        {{ __('admin/deliveriesPages.Deleted Cities') }}</a>
+                </div>
 
                 {{-- Pagination Number --}}
                 <div class="form-inline justify-end my-2">
@@ -188,33 +186,28 @@
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- Edit Button --}}
-                                        @can('Edit City')
-                                            <a href="{{ route('admin.cities.edit', [$city->id]) }}"
-                                                title="{{ __('admin/deliveriesPages.Edit') }}" class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
-                                                    edit
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="{{ route('admin.cities.edit', [$city->id]) }}"
+                                            title="{{ __('admin/deliveriesPages.Edit') }}" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
+                                                edit
+                                            </span>
+                                        </a>
 
                                         {{-- Delete Button --}}
-                                        @can('Deleted City')
-                                            <a href="#" title="{{ __('admin/deliveriesPages.Delete') }}"
-                                                wire:click.prevent="deleteConfirm({{ $city->id }})"
-                                                class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
-                                                    delete
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="#" title="{{ __('admin/deliveriesPages.Delete') }}"
+                                            wire:click.prevent="deleteConfirm({{ $city->id }})" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
+                                                delete
+                                            </span>
+                                        </a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
                                     <td class="text-center py-2 font-bold" colspan="6">
-                                        {{ $search == ''? __('admin/deliveriesPages.No data in this table'): __('admin/deliveriesPages.No data available according to your search') }}
+                                        {{ $search == '' ? __('admin/deliveriesPages.No data in this table') : __('admin/deliveriesPages.No data available according to your search') }}
                                     </td>
                                 </tr>
                             @endforelse

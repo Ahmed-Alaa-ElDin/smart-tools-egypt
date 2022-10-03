@@ -1,5 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => 'Countries', 'titlePage'
-=> __('admin/deliveriesPages.All Countries')])
+@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => 'Countries', 'titlePage' => __('admin/deliveriesPages.All Countries')])
 
 @section('content')
     <div class="content">
@@ -29,16 +28,14 @@
                                 </div>
 
                                 {{-- Add New Country Button --}}
-                                @can('Add Country')
-                                    <div class="ltr:text-right rtl:text-left">
-                                        <a href="{{ route('admin.countries.create') }}"
-                                            class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
-                                            <span class="material-icons rtl:ml-1 ltr:mr-1">
-                                                add
-                                            </span>
-                                            {{ __('admin/deliveriesPages.Add Country') }}</a>
-                                    </div>
-                                @endcan
+                                <div class="ltr:text-right rtl:text-left">
+                                    <a href="{{ route('admin.countries.create') }}"
+                                        class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
+                                        <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                            add
+                                        </span>
+                                        {{ __('admin/deliveriesPages.Add Country') }}</a>
+                                </div>
                             </div>
                         </div>
 

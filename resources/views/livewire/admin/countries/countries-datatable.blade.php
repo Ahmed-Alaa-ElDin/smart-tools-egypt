@@ -14,7 +14,7 @@
                         <span class="material-icons">
                             search
                         </span> </span>
-                    <input type="text"   wire:model='search'
+                    <input type="text" wire:model='search'
                         class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                         placeholder="{{ __('admin/deliveriesPages.Search ...') }}">
                 </div>
@@ -211,26 +211,22 @@
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- Edit Button --}}
-                                        @can('Edit Country')
-                                            <a href="{{ route('admin.countries.edit', [$country->id]) }}"
-                                                title="{{ __('admin/deliveriesPages.Edit') }}" class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
-                                                    edit
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="{{ route('admin.countries.edit', [$country->id]) }}"
+                                            title="{{ __('admin/deliveriesPages.Edit') }}" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
+                                                edit
+                                            </span>
+                                        </a>
 
                                         {{-- Delete Button --}}
-                                        @can('Deleted Country')
-                                            <a href="#" title="{{ __('admin/deliveriesPages.Delete') }}"
-                                                wire:click.prevent="deleteConfirm({{ $country->id }})" class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
-                                                    delete
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="#" title="{{ __('admin/deliveriesPages.Delete') }}"
+                                            wire:click.prevent="deleteConfirm({{ $country->id }})" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
+                                                delete
+                                            </span>
+                                        </a>
                                     </td>
                                 </tr>
                             @empty

@@ -17,7 +17,7 @@
                             <span class="material-icons">
                                 search
                             </span> </span>
-                        <input type="text"   wire:model='search'
+                        <input type="text" wire:model='search'
                             class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                             placeholder="{{ __('admin/deliveriesPages.Search ...') }}">
                     </div>
@@ -34,25 +34,21 @@
                             &nbsp;</button>
                         <div class="dropdown-menu">
 
-                            @can('Restore Delivery')
-                                <a href="#" wire:click.prevent="restoreAllConfirm"
-                                    class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-success focus:bg-success">
-                                    <span class="material-icons">
-                                        restore
-                                    </span>
-                                    &nbsp;&nbsp;
-                                    {{ __('admin/deliveriesPages.Restore All') }}</a>
-                            @endcan
+                            <a href="#" wire:click.prevent="restoreAllConfirm"
+                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-success focus:bg-success">
+                                <span class="material-icons">
+                                    restore
+                                </span>
+                                &nbsp;&nbsp;
+                                {{ __('admin/deliveriesPages.Restore All') }}</a>
 
-                            @can('Force Delete Delivery')
-                                <a href="#" wire:click.prevent="forceDeleteAllConfirm"
-                                    class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600">
-                                    <span class="material-icons">
-                                        delete
-                                    </span>
-                                    &nbsp;&nbsp;
-                                    {{ __('admin/deliveriesPages.Delete All Permanently') }}</a>
-                            @endcan
+                            <a href="#" wire:click.prevent="forceDeleteAllConfirm"
+                                class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600">
+                                <span class="material-icons">
+                                    delete
+                                </span>
+                                &nbsp;&nbsp;
+                                {{ __('admin/deliveriesPages.Delete All Permanently') }}</a>
                         </div>
                     </div>
                 </div>
@@ -140,53 +136,46 @@
                                         <div class="text-sm text-gray-900">{{ $delivery->email }}
                                         </div>
                                         <div class="text-sm text-gray-500">
-                                            {{ $delivery->phones->where('default', 1)->first()? $delivery->phones->where('default', 1)->first()->phone: '' }}
+                                            {{ $delivery->phones->where('default', 1)->first() ? $delivery->phones->where('default', 1)->first()->phone : '' }}
                                         </div>
                                     </td>
 
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- Delivery Company Details --}}
-                                        @can("See Delivery's Details")
-                                            <a href="{{ route('admin.deliveries.show', ['delivery' => $delivery->id]) }}"
-                                                title="{{ __('admin/deliveriesPages.View') }}" class="m-0">
+                                        <a href="{{ route('admin.deliveries.show', ['delivery' => $delivery->id]) }}"
+                                            title="{{ __('admin/deliveriesPages.View') }}" class="m-0">
 
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
-                                                    visibility
-                                                </span>
-                                            </a>
-                                        @endcan
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
+                                                visibility
+                                            </span>
+                                        </a>
 
                                         {{-- Restore Button --}}
-                                        @can('Restore Delivery')
-                                            <a href="#" title="{{ __('admin/deliveriesPages.Restore') }}"
-                                                wire:click.prevent="restoreConfirm({{ $delivery->id }})"
-                                                class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-success hover:bg-successDark rounded">
-                                                    restore
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="#" title="{{ __('admin/deliveriesPages.Restore') }}"
+                                            wire:click.prevent="restoreConfirm({{ $delivery->id }})" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-success hover:bg-successDark rounded">
+                                                restore
+                                            </span>
+                                        </a>
 
                                         {{-- Permanent Delete Button --}}
-                                        @can('Force Delete Delivery')
-                                            <a href="#" title="{{ __('admin/deliveriesPages.Delete Permanently') }}"
-                                                wire:click.prevent="forceDeleteConfirm({{ $delivery->id }})"
-                                                class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
-                                                    delete
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="#" title="{{ __('admin/deliveriesPages.Delete Permanently') }}"
+                                            wire:click.prevent="forceDeleteConfirm({{ $delivery->id }})"
+                                            class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
+                                                delete
+                                            </span>
+                                        </a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
                                     <td class="text-center py-2 font-bold" colspan="6">
-                                        {{ $search == ''? __('admin/deliveriesPages.No data in this table'): __('admin/deliveriesPages.No data available according to your search') }}
+                                        {{ $search == '' ? __('admin/deliveriesPages.No data in this table') : __('admin/deliveriesPages.No data available according to your search') }}
                                     </td>
                                 </tr>
                             @endforelse

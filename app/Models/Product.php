@@ -47,7 +47,6 @@ class Product extends Model
 
     protected $appends = [
         "avg_rating", "can_review",
-        //  "best_offer"
     ];
 
     protected $with = ['reviews', 'orders', 'brand', 'validOffers'];
@@ -90,13 +89,13 @@ class Product extends Model
     // One to many relationship Product --> Image
     public function images()
     {
-        return $this->hasMany(ProductImage::class);
+        return $this->morphMany(Image::class, "imagable");
     }
 
     // One to one relationship Product --> Thumbnail
     public function thumbnail()
     {
-        return $this->hasOne(ProductImage::class, 'product_id')->where('is_thumbnail', 1);
+        return $this->morphOne(Image::class, 'imagable')->where('is_thumbnail', 1);
     }
 
     // many to many relationship (polymorphic)  Product --> Coupons
@@ -152,6 +151,14 @@ class Product extends Model
             'points',
             'coupon_discount',
             'coupon_points'
+        )->withTimestamps();
+    }
+
+    // many to many relationship Product --> Collections
+    public function collections()
+    {
+        return $this->belongsToMany(Collection::class)->withPivot(
+            'quantity',
         )->withTimestamps();
     }
 

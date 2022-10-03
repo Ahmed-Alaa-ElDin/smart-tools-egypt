@@ -1,6 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => 'Delivery Companies', 'titlePage'
-=>
-__('admin/deliveriesPages.Delivery Companies')])
+@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => 'Delivery Companies', 'titlePage' => __('admin/deliveriesPages.Delivery Companies')])
 
 @section('content')
     <div class="content">
@@ -30,16 +28,14 @@ __('admin/deliveriesPages.Delivery Companies')])
                                 </div>
 
                                 {{-- Add New Delivery Company Button --}}
-                                @can('Add Delivery')
-                                    <div class="ltr:text-right rtl:text-left">
-                                        <a href="{{ route('admin.deliveries.create') }}"
-                                            class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
-                                            <span class="material-icons rtl:ml-1 ltr:mr-1">
-                                                add
-                                            </span>
-                                            {{ __('admin/deliveriesPages.Add Company') }}</a>
-                                    </div>
-                                @endcan
+                                <div class="ltr:text-right rtl:text-left">
+                                    <a href="{{ route('admin.deliveries.create') }}"
+                                        class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
+                                        <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                            add
+                                        </span>
+                                        {{ __('admin/deliveriesPages.Add Company') }}</a>
+                                </div>
                             </div>
                         </div>
 
@@ -59,7 +55,6 @@ __('admin/deliveriesPages.Delivery Companies')])
 
 {{-- Extra Scripts --}}
 @push('js')
-
     <script>
         // #### Delivery Activation / Deactivation ####
         window.addEventListener('swalDeliveryActivated', function(e) {
@@ -70,7 +65,7 @@ __('admin/deliveriesPages.Delivery Companies')])
                     position: 'top-left',
                 @else
                     position: 'top-right',
-                @endif                
+                @endif
                 showConfirmButton: false,
                 toast: true,
                 timer: 3000,

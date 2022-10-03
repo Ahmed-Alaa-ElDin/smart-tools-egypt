@@ -1,7 +1,7 @@
 <div>
-        {{-- Loader : Start --}}
-        <x-admin.waiting/>
-        {{-- Loader : End --}}
+    {{-- Loader : Start --}}
+    <x-admin.waiting />
+    {{-- Loader : End --}}
 
     <div>
         <div class="flex flex-col">
@@ -17,7 +17,7 @@
                                     search
                                 </span>
                             </span>
-                            <input type="text"   wire:model='search'
+                            <input type="text" wire:model='search'
                                 class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                                 placeholder="{{ __('admin/usersPages.Search ...') }}">
                         </div>
@@ -145,33 +145,28 @@
                                         <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                             {{-- Edit Button --}}
-                                            @can('Edit Role')
-                                                <a href="{{ route('admin.roles.edit', [$role->id]) }}"
-                                                    title="{{ __('admin/usersPages.Edit') }}" class="m-0">
-                                                    <span
-                                                        class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
-                                                        edit
-                                                    </span>
-                                                </a>
-                                            @endcan
+                                            <a href="{{ route('admin.roles.edit', [$role->id]) }}"
+                                                title="{{ __('admin/usersPages.Edit') }}" class="m-0">
+                                                <span
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
+                                                    edit
+                                                </span>
+                                            </a>
 
                                             {{-- Delete Button --}}
-                                            @can('Delete Role')
-                                                <a href="#" title="{{ __('admin/usersPages.Delete') }}"
-                                                    wire:click.prevent="deleteConfirm({{ $role->id }})"
-                                                    class="m-0">
-                                                    <span
-                                                        class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
-                                                        delete
-                                                    </span>
-                                                </a>
-                                            @endcan
+                                            <a href="#" title="{{ __('admin/usersPages.Delete') }}"
+                                                wire:click.prevent="deleteConfirm({{ $role->id }})" class="m-0">
+                                                <span
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
+                                                    delete
+                                                </span>
+                                            </a>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
                                         <td class="text-center py-2 font-bold" colspan="6">
-                                            {{ $search == ''? __('admin/usersPages.No data in this table'): __('admin/usersPages.No data available according to your search') }}
+                                            {{ $search == '' ? __('admin/usersPages.No data in this table') : __('admin/usersPages.No data available according to your search') }}
                                         </td>
                                     </tr>
                                 @endforelse

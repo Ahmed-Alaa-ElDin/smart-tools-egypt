@@ -5,21 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductImage extends Model
+class Image extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'imagable_type',
+        'imagable_id',
         'file_name',
-        'product_id',
         'is_thumbnail',
         'featured',
     ];
 
-    // One to many relationship (Inverse) Product --> Images
-    public function product()
+    public function imagable()
     {
-        return $this->belongsTo(Product::class);
+        return $this->morphTo();
     }
 
     public function scopeThumbnail($query)

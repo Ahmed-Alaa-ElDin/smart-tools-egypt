@@ -33,16 +33,14 @@
                                 </div>
 
                                 {{-- Add New Delivery Button --}}
-                                @can('Add Delivery')
-                                    <div class="ltr:text-right rtl:text-left">
-                                        <a href="{{ route('admin.deliveries.create') }}"
-                                            class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
-                                            <span class="material-icons rtl:ml-1 ltr:mr-1">
-                                                add
-                                            </span>
-                                            {{ __('admin/deliveriesPages.Add Delivery Company') }}</a>
-                                    </div>
-                                @endcan
+                                <div class="ltr:text-right rtl:text-left">
+                                    <a href="{{ route('admin.deliveries.create') }}"
+                                        class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
+                                        <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                            add
+                                        </span>
+                                        {{ __('admin/deliveriesPages.Add Delivery Company') }}</a>
+                                </div>
                             </div>
                         </div>
 

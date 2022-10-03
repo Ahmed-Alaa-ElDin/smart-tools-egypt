@@ -1,5 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage'
-=> __("admin/deliveriesPages.'s Cities",['name'=>$country->name])])
+@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage' => __("admin/deliveriesPages.'s Cities", ['name' => $country->name])])
 
 @section('content')
     <div class="content">
@@ -13,7 +12,7 @@
                             href="{{ route('admin.countries.index') }}">{{ __('admin/deliveriesPages.All Countries') }}</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        {{ __("admin/deliveriesPages.'s Cities",['name'=>$country->name]) }}
+                        {{ __("admin/deliveriesPages.'s Cities", ['name' => $country->name]) }}
                     </li>
                 </ol>
             </nav>
@@ -33,23 +32,21 @@
                                 </div>
 
                                 {{-- Add New City Button --}}
-                                @can('Add City')
-                                    <div class="ltr:text-right rtl:text-left">
-                                        <a href="{{ route('admin.cities.create') }}"
-                                            class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
-                                            <span class="material-icons rtl:ml-1 ltr:mr-1">
-                                                add
-                                            </span>
-                                            {{ __('admin/deliveriesPages.Add City') }}</a>
-                                    </div>
-                                @endcan
+                                <div class="ltr:text-right rtl:text-left">
+                                    <a href="{{ route('admin.cities.create') }}"
+                                        class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
+                                        <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                            add
+                                        </span>
+                                        {{ __('admin/deliveriesPages.Add City') }}</a>
+                                </div>
                             </div>
                         </div>
 
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Datatable Start --}}
-                            @livewire('admin.cities.cities-datatable' , ['country_id' => $country->id])
+                            @livewire('admin.cities.cities-datatable', ['country_id' => $country->id])
                             {{-- Datatable End --}}
                         </div>
                     </div>

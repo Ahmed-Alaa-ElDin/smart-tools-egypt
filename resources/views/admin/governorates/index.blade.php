@@ -29,7 +29,8 @@
                                 </div>
 
                                 {{-- Import Governorates From Bosta --}}
-                                <a href="{{ route('admin.governorates.importFromBosta') }}" class="btn btn-sm bg-secondary font-bold hover:bg-secondayDark">
+                                <a href="{{ route('admin.governorates.importFromBosta') }}"
+                                    class="btn btn-sm bg-secondary font-bold hover:bg-secondayDark">
                                     <span class="material-icons text-sm rtl:ml-1 ltr:mr-1">
                                         cloud_download
                                     </span>
@@ -37,15 +38,13 @@
                                 </a>
 
                                 {{-- Add New Governorate Button --}}
-                                @can('Add Governorate')
-                                    <a href="{{ route('admin.governorates.create') }}"
-                                        class="btn btn-sm bg-success font-bold hover:bg-successDark">
-                                        <span class="material-icons text-sm rtl:ml-1 ltr:mr-1">
-                                            add
-                                        </span>
-                                        {{ __('admin/deliveriesPages.Add Governorate') }}
-                                    </a>
-                                @endcan
+                                <a href="{{ route('admin.governorates.create') }}"
+                                    class="btn btn-sm bg-success font-bold hover:bg-successDark">
+                                    <span class="material-icons text-sm rtl:ml-1 ltr:mr-1">
+                                        add
+                                    </span>
+                                    {{ __('admin/deliveriesPages.Add Governorate') }}
+                                </a>
                             </div>
                         </div>
 
