@@ -89,13 +89,19 @@ class User extends Authenticatable
 
     public function defaultPhone()
     {
-        return $this->hasMany(Phone::class)->where('default',1)->first();
+        return $this->hasMany(Phone::class)->where('default', 1)->first();
     }
 
     // One to many relationship  User --> Products
     public function products()
     {
         return $this->hasMany(Product::class, 'created_by');
+    }
+
+    // One to many relationship  User --> Collections
+    public function collections()
+    {
+        return $this->hasMany(Collection::class, 'created_by');
     }
 
     // One to many through relationship  User --> Countries

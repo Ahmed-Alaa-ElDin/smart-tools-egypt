@@ -1,5 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Users', 'activePage' => 'Roles Management', 'titlePage' =>
-__('admin/usersPages.Roles Management')])
+@extends('layouts.admin.admin', ['activeSection' => 'Users', 'activePage' => 'Roles Management', 'titlePage' => __('admin/usersPages.Roles Management')])
 
 @section('content')
     <div class="content">
@@ -30,17 +29,15 @@ __('admin/usersPages.Roles Management')])
                                 </div>
 
                                 {{-- Add New Role Button --}}
-                                @can('Add Role')
-                                    <div class="ltr:text-right rtl:text-left">
-                                        <a href="{{ route('admin.roles.create') }}"
-                                            class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
-                                            <span class="material-icons rtl:ml-1 ltr:mr-1">
-                                                add
-                                            </span>
-                                            {{ __('admin/usersPages.Add Role') }}
-                                        </a>
-                                    </div>
-                                @endcan
+                                <div class="ltr:text-right rtl:text-left">
+                                    <a href="{{ route('admin.roles.create') }}"
+                                        class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
+                                        <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                            add
+                                        </span>
+                                        {{ __('admin/usersPages.Add Role') }}
+                                    </a>
+                                </div>
                             </div>
                         </div>
 
@@ -60,7 +57,6 @@ __('admin/usersPages.Roles Management')])
 @endsection
 {{-- Extra Scripts --}}
 @push('js')
-
     <script>
         // #### Role Delete ####
         window.addEventListener('swalConfirmDelete', function(e) {
@@ -88,7 +84,7 @@ __('admin/usersPages.Roles Management')])
                     position: 'top-left',
                 @else
                     position: 'top-right',
-                @endif                
+                @endif
                 showConfirmButton: false,
                 toast: true,
                 timer: 3000,

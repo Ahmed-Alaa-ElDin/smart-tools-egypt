@@ -99,7 +99,7 @@
                             <span class="text-gray-800 font-bold text-md">
                                 {{ __('front/homePage.Before Discount: ') }}
                             </span>
-                            <del class="flex rtl:flex-row-reverse gap-1 font-bold text-gray-400 text-sm">
+                            <del class="flex rtl:flex-row-reverse gap-1 font-bold text-red-400 text-sm">
                                 <span>
                                     {{ __('front/homePage.EGP') }}
                                 </span>
@@ -114,7 +114,7 @@
                             <span class="text-gray-800 font-bold text-md">
                                 {{ __('front/homePage.After Discount: ') }}
                             </span>
-                            <span class="flex rtl:flex-row-reverse gap-1 font-bold text-primary text-sm">
+                            <span class="flex rtl:flex-row-reverse gap-1 font-bold text-successDark text-sm">
                                 <span>
                                     {{ __('front/homePage.EGP') }}
                                 </span>

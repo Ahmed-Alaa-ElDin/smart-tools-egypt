@@ -1,4 +1,6 @@
 <div>
+    <x-admin.waiting />
+
     @if ($customer)
         <div class="bg-gray-50 p-2 rounded-xl shadow">
             <div class="text-center mb-2 font-bold text-gray-900 select-none">

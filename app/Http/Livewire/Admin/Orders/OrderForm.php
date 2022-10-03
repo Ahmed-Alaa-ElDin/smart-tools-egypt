@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\Orders;
 use App\Models\Address;
 use App\Models\Coupon;
 use App\Models\Offer;
+use App\Models\Order;
 use App\Models\Zone;
 use Livewire\Component;
 
@@ -48,8 +49,6 @@ class OrderForm extends Component
         $coupon_points = 0,
         $order_best_coupon = 0.00,
         $coupon_free_shipping = 0;
-
-    public $display_order_summary = true;
 
     protected $rules = [
         'customer'              =>       'required',
@@ -129,6 +128,7 @@ class OrderForm extends Component
         }
     }
 
+    // Calculate Order Cost
     public function calculate()
     {
         // Products Data
@@ -155,6 +155,7 @@ class OrderForm extends Component
         $this->getTotal();
     }
 
+    // Get Best Products Data
     public function getProducts()
     {
         $products = $this->products;
@@ -178,6 +179,7 @@ class OrderForm extends Component
         $this->products_total_weights = $this->products_weights->sum() ?? 0;
     }
 
+    // Get Delivery Fees
     public function getDeliveryFees()
     {
         // Products Total Weight
@@ -234,6 +236,7 @@ class OrderForm extends Component
         }
     }
 
+    // Calculate Subtotal
     public function getSubTotal()
     {
         $products_amounts = $this->products_amounts;
@@ -299,6 +302,7 @@ class OrderForm extends Component
         }
     }
 
+    // Update Order Cost after applying the Coupon
     public function getCoupon()
     {
         $products = $this->best_products;
@@ -530,16 +534,64 @@ class OrderForm extends Component
         $this->coupon_discount_percentage = $this->products_best_prices > 0 ? round($this->coupon_discount / $this->products_best_prices * 100) : 0;
     }
 
+    // Calculate Total Cost
     public function getTotal()
     {
         $this->total_points = $this->products_best_points + $this->order_points + $this->coupon_points;
 
-        $this->products_best_prices = $this->products_best_prices -  $this->coupon_discount ?? 0.00;
+        $this->subtotal = $this->products_best_prices -  $this->coupon_discount ?? 0.00;
 
         $this->total = is_null($this->delivery_fees) || $this->delivery_fees == 0 || $this->coupon_free_shipping ? $this->products_best_prices - $this->order_discount - $this->coupon_discount : $this->products_best_prices - $this->order_discount - $this->coupon_discount + $this->delivery_fees;
 
         $this->points_egp = $this->points * config('constants.constants.POINT_RATE');
 
         $this->total_after_wallet = $this->total - $this->wallet - $this->points_egp;
+    }
+
+    // Make Order
+    public function makeOrder()
+    {
+        $non_default_phones =  array_map(fn ($phone) => $phone['phone'], array_filter($this->customer['phones'], fn ($phone) => $phone['default'] == 0));
+
+        // dd($this->product_total_amounts);
+
+        try {
+            Order::updateOrCreate([
+                'status_id' => 1,
+                'user_id'   => $this->customer_id,
+            ], [
+                'address_id' => $this->address_id,
+                'phone1' => $this->default_phone,
+                'phone2' => count($non_default_phones) ? implode("-", $non_default_phones) : null,
+                'package_type' => 'parcel',
+                'package_desc' => 'قابل للكسر',
+                'num_of_items' => $this->product_total_amounts,
+                'allow_opening' => 1,
+                'zone_id' => $this->zone_id,
+                'coupon_id' => $this->coupon_id,
+                'coupon_order_discount' ,
+                'coupon_order_points',
+                'coupon_products_discount',
+                'coupon_products_points',
+                'subtotal_base',
+                'subtotal_final',
+                'total',
+                'should_pay',
+                'should_get',
+                'used_points',
+                'used_balance',
+                'gift_points',
+                'delivery_fees',
+                'total_weight',
+                'payment_method',
+                'tracking_number',
+                'order_delivery_id',
+                'notes',
+                'delivered_at',
+                'old_order_id',
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 }

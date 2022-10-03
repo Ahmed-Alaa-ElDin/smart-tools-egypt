@@ -64,7 +64,7 @@
                             <span class="material-icons">
                                 search
                             </span> </span>
-                        <input type="text"   wire:model='search'
+                        <input type="text" wire:model='search'
                             class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                             placeholder="{{ __('admin/productsPages.Search ...') }}">
                     </div>
@@ -328,37 +328,31 @@
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- User Details --}}
-                                        @can("See User's Details")
-                                            <a href="{{ route('front.product.show', ['id' => $product->id, 'slug' => $product->slug]) }}"
-                                                title="{{ __('admin/productsPages.View') }}" class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
-                                                    visibility
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="{{ route('front.product.show', ['id' => $product->id, 'slug' => $product->slug]) }}"
+                                            title="{{ __('admin/productsPages.View') }}" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
+                                                visibility
+                                            </span>
+                                        </a>
 
                                         {{-- Edit Button --}}
-                                        @can('Edit User')
-                                            <a href="{{ route('admin.products.edit', ['product' => $product->id]) }}"
-                                                title="{{ __('admin/productsPages.Edit') }}" class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
-                                                    edit
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="{{ route('admin.products.edit', ['product' => $product->id]) }}"
+                                            title="{{ __('admin/productsPages.Edit') }}" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
+                                                edit
+                                            </span>
+                                        </a>
 
                                         {{-- Deleted Button --}}
-                                        @can('Deleted User')
-                                            <a href="#" title="{{ __('admin/productsPages.Delete') }}"
-                                                wire:click.prevent="deleteConfirm({{ $product->id }})" class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
-                                                    delete
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="#" title="{{ __('admin/productsPages.Delete') }}"
+                                            wire:click.prevent="deleteConfirm({{ $product->id }})" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
+                                                delete
+                                            </span>
+                                        </a>
                                     </td>
                                 </tr>
                             @empty

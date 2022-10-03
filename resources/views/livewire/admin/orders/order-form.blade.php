@@ -19,6 +19,22 @@
     </div>
     {{-- Payment Part :: End --}}
 
+    {{-- Notes :: Start --}}
+    <div class="w-full bg-red-50 p-2 rounded-xl shadow">
+        <div class="grid grid-cols-4 justify-center items-center gap-3 p-3">
+            <h2 class="col-span-4 text-center font-bold">
+                {{ __('front/homePage.Notes') }}
+            </h2>
+            <div class="col-span-4">
+                <textarea id="notes" rows="2" wire:model.lazy="notes" dir="rtl"
+                    placeholder="{{ __('front/homePage.Please mention any note related to the order') }}"
+                    class="w-full py-1 rounded text-center border-red-300 focus:outline-0 focus:ring-0 focus:border-primary overflow-hidden">
+                </textarea>
+            </div>
+        </div>
+    </div>
+    {{-- Notes :: End --}}
+
     {{-- Errors :: Start --}}
     <div class="">
         @if ($errors->any())
@@ -188,24 +204,24 @@
                                     <hr class="w-full">
                                 @endif
 
-                                {{-- ############## Best Price :: Start ############## --}}
-                                <div class="w-100 flex justify-between items-center gap-6">
-                                    <div class="h6 font-bold m-0">
-                                        {{ __('admin/ordersPages.Subtotal (after offers):') }}
-                                    </div>
-
-                                    <div class="flex rtl:flex-row-reverse gap-1 text-primary ">
-                                        <span class="font-bold text-sm">{{ __('admin/ordersPages.EGP') }}</span>
-                                        <span class="font-bold text-xl"
-                                            dir="ltr">{{ number_format(explode('.', $products_best_prices)[0], 0, '.', '\'') }}</span>
-                                        <span
-                                            class="font-bold text-xs">{{ explode('.', $products_best_prices)[1] ?? '00' }}</span>
-                                    </div>
-                                </div>
-                                {{-- ############## Best Price :: End ############## --}}
-
-                                {{-- ############## Order Discount :: End ############## --}}
                                 @if ($order_discount)
+                                    {{-- ############## Best Price :: Start ############## --}}
+                                    <div class="w-100 flex justify-between items-center gap-6">
+                                        <div class="h6 font-bold m-0">
+                                            {{ __('admin/ordersPages.Subtotal (after offers):') }}
+                                        </div>
+
+                                        <div class="flex rtl:flex-row-reverse gap-1 text-primary ">
+                                            <span class="font-bold text-sm">{{ __('admin/ordersPages.EGP') }}</span>
+                                            <span class="font-bold text-xl"
+                                                dir="ltr">{{ number_format(explode('.', $products_best_prices)[0], 0, '.', '\'') }}</span>
+                                            <span
+                                                class="font-bold text-xs">{{ explode('.', $products_best_prices)[1] ?? '00' }}</span>
+                                        </div>
+                                    </div>
+                                    {{-- ############## Best Price :: End ############## --}}
+
+                                    {{-- ############## Order Discount :: End ############## --}}
                                     <div class="flex justify-between items-center gap-6 py-1 w-full">
                                         <span class="h6 font-bold m-0"> {{ __('admin/ordersPages.Order Discount:') }}
                                         </span>

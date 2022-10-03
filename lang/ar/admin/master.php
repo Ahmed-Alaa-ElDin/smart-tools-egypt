@@ -48,4 +48,8 @@ return [
     'Add Customer'              =>      'إضافة عميل',
     'Deleted Customers'         =>      'العملاء المؤرشفين',
     'Archived Orders'           =>      'الطلبات المؤرشفة',
+    'Collections'               =>      'التجميعات',
+    'All Collections'           =>      'جميع التجميعات',
+    'Add Collection'            =>      'إضافة تجميعة',
+    'Deleted Collections'       =>      'التجميعات المؤرشفة',
 ];

@@ -1,5 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Users', 'activePage' => 'All Users', 'titlePage' =>
-__('admin/usersPages.All Users')])
+@extends('layouts.admin.admin', ['activeSection' => 'Users', 'activePage' => 'All Users', 'titlePage' => __('admin/usersPages.All Users')])
 
 @section('content')
     <div class="content">
@@ -27,16 +26,14 @@ __('admin/usersPages.All Users')])
                                 </div>
 
                                 {{-- Add New User Button --}}
-                                @can('Add User')
-                                    <div class="ltr:text-right rtl:text-left">
-                                        <a href="{{ route('admin.users.create') }}"
-                                            class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
-                                            <span class="material-icons rtl:ml-1 ltr:mr-1">
-                                                add
-                                            </span>
-                                            {{ __('admin/usersPages.Add User') }}</a>
-                                    </div>
-                                @endcan
+                                <div class="ltr:text-right rtl:text-left">
+                                    <a href="{{ route('admin.users.create') }}"
+                                        class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
+                                        <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                            add
+                                        </span>
+                                        {{ __('admin/usersPages.Add User') }}</a>
+                                </div>
                             </div>
                         </div>
 
@@ -56,7 +53,6 @@ __('admin/usersPages.All Users')])
 
 {{-- Extra Scripts --}}
 @push('js')
-
     <script>
         // #### User Edit Role ####
         window.addEventListener('swalEditRolesSelect', function(e) {
@@ -89,7 +85,7 @@ __('admin/usersPages.All Users')])
                     position: 'top-left',
                 @else
                     position: 'top-right',
-                @endif                
+                @endif
                 showConfirmButton: false,
                 toast: true,
                 timer: 3000,
@@ -120,6 +116,5 @@ __('admin/usersPages.All Users')])
             });
         });
         // #### User Add Points ####
-
     </script>
 @endpush

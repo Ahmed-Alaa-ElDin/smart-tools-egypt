@@ -37,15 +37,13 @@
 
 
                                 {{-- Add New City Button --}}
-                                @can('Add City')
-                                    <a href="{{ route('admin.cities.create') }}"
-                                        class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
-                                        <span class="material-icons rtl:ml-1 ltr:mr-1">
-                                            add
-                                        </span>
-                                        {{ __('admin/deliveriesPages.Add City') }}
-                                    </a>
-                                @endcan
+                                <a href="{{ route('admin.cities.create') }}"
+                                    class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
+                                    <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                        add
+                                    </span>
+                                    {{ __('admin/deliveriesPages.Add City') }}
+                                </a>
                             </div>
                         </div>
 
@@ -61,4 +59,3 @@
         </div>
     </div>
 @endsection
-

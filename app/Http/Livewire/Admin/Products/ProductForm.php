@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Admin\Products;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\ProductImage;
 use App\Models\Subcategory;
 use App\Models\Supercategory;
 use Illuminate\Support\Facades\DB;
@@ -22,15 +21,9 @@ class ProductForm extends Component
     public $gallery_images = [], $gallery_images_name = [], $featured = 0, $deletedImages = [];
     public $thumbnail_image,  $thumbnail_image_name;
     public $video;
-    public $specs = [
-        // [
-        //     "ar" => ["title" => null, "value" => null],
-        //     "en" => ["title" => null, "value" => null]
-        // ]
-    ];
+    public $specs = [];
     public $name = ["ar" => null, "en" => null], $brand_id, $model, $barcode, $weight, $description = ['ar' => null, 'en' => null], $publish = true, $refundable = true;
-    public $base_price, $discount, $final_price, $points, $free_shipping = false, $reviewing = false, $quantity, $low_stock;
-    // public $title, $description_seo;
+    public $original_price, $base_price, $discount, $final_price, $points, $free_shipping = false, $reviewing = false, $quantity, $low_stock;
     public $seo_keywords;
     public $parentCategories;
 
@@ -61,6 +54,7 @@ class ProductForm extends Component
             'publish'             =>        'boolean',
             'refundable'          =>        'boolean',
 
+            'original_price'      =>        'required|numeric|min:0|max:999999',
             'base_price'          =>        'required|numeric|min:0|max:999999',
             'discount'            =>        'nullable|numeric|min:0|max:100',
             'final_price'         =>        'nullable|numeric|min:0|max:999999|lte:base_price',
@@ -93,15 +87,18 @@ class ProductForm extends Component
 
             // Get Old Product's data
             $product = Product::with(
-                ['subcategories' => fn ($q) => $q->with(
-                    ['category' => fn ($q) => $q->with(['supercategory', 'offers'])]
-                )]
+                [
+                    'images',
+                    'subcategories' => fn ($q) => $q->with(
+                        ['category' => fn ($q) => $q->with(['supercategory', 'offers'])]
+                    )
+                ]
             )->findOrFail($this->product_id);
 
             $this->product = $product;
 
             // Old Media
-            $products_images = ProductImage::where('product_id', $product->id)->get();
+            $products_images = $product->images;
 
             $this->gallery_images_name = $products_images
                 ->where('is_thumbnail', 0)
@@ -173,6 +170,7 @@ class ProductForm extends Component
             }
 
             // Old Stock and Price
+            $this->original_price = $product->original_price;
             $this->base_price = $product->base_price;
             $this->final_price = $product->final_price;
             $this->discount = round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2);
@@ -461,6 +459,7 @@ class ProductForm extends Component
                 'weight' => $this->weight ?? 0,
                 'quantity' => $this->quantity ?? 0,
                 'low_stock' => $this->low_stock ?? 0,
+                'original_price' => $this->original_price,
                 'base_price' => $this->base_price,
                 'final_price' => $this->final_price,
                 'points' => $this->points,
@@ -472,8 +471,6 @@ class ProductForm extends Component
                 'model' => $this->model,
                 'refundable' => $this->refundable ? 1 : 0,
                 'video' => $this->video,
-                // 'meta_title' => $this->title,
-                // 'meta_description' => $this->description_seo,
                 'meta_keywords' => $this->seo_keywords,
                 'free_shipping' => $this->free_shipping ? 1 : 0,
                 'publish' => $this->publish ? 1 : 0,
@@ -490,18 +487,16 @@ class ProductForm extends Component
 
             if (count($this->gallery_images_name)) {
                 foreach ($this->gallery_images_name as $key => $gallery_image_name) {
-                    ProductImage::create([
+                    $product->images()->create([
                         'file_name' => $gallery_image_name,
-                        'product_id' => $product->id,
                         'featured' => $key == $this->featured ? 1 : 0,
                     ]);
                 }
             }
 
             if ($this->thumbnail_image_name != null) {
-                ProductImage::create([
+                $product->images()->create([
                     'file_name' => $this->thumbnail_image_name,
-                    'product_id' => $product->id,
                     'is_thumbnail' => 1,
                 ]);
             }
@@ -549,6 +544,7 @@ class ProductForm extends Component
                 'weight' => $this->weight ?? 0,
                 'quantity' => $this->quantity ?? 0,
                 'low_stock' => $this->low_stock ?? 0,
+                'original_price' => $this->original_price,
                 'base_price' => $this->base_price,
                 'final_price' => $this->final_price,
                 'points' => $this->points,
@@ -560,8 +556,6 @@ class ProductForm extends Component
                 'model' => $this->model,
                 'refundable' => $this->refundable ? 1 : 0,
                 'video' => $this->video,
-                // 'meta_title' => $this->title,
-                // 'meta_description' => $this->description_seo,
                 'meta_keywords' => $this->seo_keywords,
                 'free_shipping' => $this->free_shipping ? 1 : 0,
                 'publish' => $this->publish ? 1 : 0,
@@ -578,18 +572,16 @@ class ProductForm extends Component
 
             if (count($this->gallery_images_name)) {
                 foreach ($this->gallery_images_name as $key => $gallery_image_name) {
-                    ProductImage::create([
+                    $this->product->images()->create([
                         'file_name' => $gallery_image_name,
-                        'product_id' => $this->product->id,
                         'featured' => $key == $this->featured ? 1 : 0,
                     ]);
                 }
             }
 
             if ($this->thumbnail_image_name != null) {
-                ProductImage::create([
+                $this->product->images()->create([
                     'file_name' => $this->thumbnail_image_name,
-                    'product_id' => $this->product->id,
                     'is_thumbnail' => 1,
                 ]);
             }

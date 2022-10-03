@@ -18,7 +18,7 @@
                                         search
                                     </span>
                                 </span>
-                                <input type="text"   wire:model='search'
+                                <input type="text" wire:model='search'
                                     class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                                     placeholder="{{ __('admin/usersPages.Search ...') }}">
                             </div>
@@ -146,56 +146,46 @@
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- User Details --}}
-                                        @can("See User's Details")
-                                            <a href="{{ route('admin.users.show', ['user' => $user->id]) }}"
-                                                title="{{ __('admin/usersPages.View') }}" class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
-                                                    visibility
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="{{ route('admin.users.show', ['user' => $user->id]) }}"
+                                            title="{{ __('admin/usersPages.View') }}" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
+                                                visibility
+                                            </span>
+                                        </a>
 
                                         {{-- Edit Button --}}
-                                        @can('Edit User')
-                                            <a href="{{ route('admin.users.edit', ['user' => $user->id]) }}"
-                                                title="{{ __('admin/usersPages.Edit') }}" class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
-                                                    edit
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="{{ route('admin.users.edit', ['user' => $user->id]) }}"
+                                            title="{{ __('admin/usersPages.Edit') }}" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
+                                                edit
+                                            </span>
+                                        </a>
 
                                         {{-- Edit Role Button --}}
-                                        @can("Edit User's Role")
-                                            <a href="#" title="{{ __('admin/usersPages.Role') }}"
-                                                wire:click.prevent="editRolesSelect({{ $user->id }})"
-                                                class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-role hover:bg-roleHover rounded">
-                                                    key
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="#" title="{{ __('admin/usersPages.Role') }}"
+                                            wire:click.prevent="editRolesSelect({{ $user->id }})" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-role hover:bg-roleHover rounded">
+                                                key
+                                            </span>
+                                        </a>
 
                                         {{-- Deleted Button --}}
-                                        @can('Deleted User')
-                                            <a href="#" title="{{ __('admin/usersPages.Delete') }}"
-                                                wire:click.prevent="deleteConfirm({{ $user->id }})"
-                                                class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
-                                                    delete
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="#" title="{{ __('admin/usersPages.Delete') }}"
+                                            wire:click.prevent="deleteConfirm({{ $user->id }})" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
+                                                delete
+                                            </span>
+                                        </a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
                                     <td class="text-center py-2 font-bold" colspan="6">
-                                        {{ $search == ''? __('admin/usersPages.No data in this table'): __('admin/usersPages.No data available according to your search') }}
+                                        {{ $search == '' ? __('admin/usersPages.No data in this table') : __('admin/usersPages.No data available according to your search') }}
                                     </td>
                                 </tr>
                             @endforelse

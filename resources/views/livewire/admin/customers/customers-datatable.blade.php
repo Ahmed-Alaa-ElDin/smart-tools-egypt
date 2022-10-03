@@ -16,7 +16,7 @@
                             <span class="material-icons">
                                 search
                             </span> </span>
-                        <input type="text"   wire:model='search'
+                        <input type="text" wire:model='search'
                             class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                             placeholder="{{ __('admin/usersPages.Search ...') }}">
                     </div>
@@ -190,42 +190,45 @@
                                     {{-- Ban Body --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
                                         <div class="text-sm text-gray-900">
-                                            {!! $user->banned ? '<span class="block cursor-pointer material-icons text-success" wire:click="banning(' . $user->id . ')">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600" wire:click="banning(' . $user->id . ')">toggle_off</span>' !!}
+                                            {!! $user->banned
+                                                ? '<span class="block cursor-pointer material-icons text-success" wire:click="banning(' .
+                                                    $user->id .
+                                                    ')">toggle_on</span>'
+                                                : '<span class="block cursor-pointer material-icons text-red-600" wire:click="banning(' .
+                                                    $user->id .
+                                                    ')">toggle_off</span>' !!}
                                         </div>
                                     </td>
 
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- User Details --}}
-                                        @can("See User's Details")
-                                            <a href="{{ route('admin.customers.show', ['customer' => $user->id]) }}"
-                                                title="{{ __('admin/usersPages.View') }}" class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
-                                                    visibility
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="{{ route('admin.customers.show', ['customer' => $user->id]) }}"
+                                            title="{{ __('admin/usersPages.View') }}" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
+                                                visibility
+                                            </span>
+                                        </a>
 
                                         {{-- Edit Button --}}
-                                        @can('Edit User')
-                                            <a href="{{ route('admin.customers.edit', ['customer' => $user->id]) }}"
-                                                title="{{ __('admin/usersPages.Edit') }}" class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
-                                                    edit
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="{{ route('admin.customers.edit', ['customer' => $user->id]) }}"
+                                            title="{{ __('admin/usersPages.Edit') }}" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
+                                                edit
+                                            </span>
+                                        </a>
 
                                         {{-- Add Points Button --}}
                                         <a href="#" wire:click.prevent="addPointsForm({{ $user->id }})"
                                             title="{{ __('admin/usersPages.Add Points') }}" class="m-0">
                                             <span
                                                 class="material-icons p-1 text-lg w-9 h-9 text-white bg-success hover:bg-green-800 rounded">
-                                                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
-                                                    class="inline-block font-bold" width="1em" height="1em"
-                                                    preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+                                                    role="img" class="inline-block font-bold" width="1em"
+                                                    height="1em" preserveAspectRatio="xMidYMid meet"
+                                                    viewBox="0 0 24 24">
                                                     <path fill="currentColor"
                                                         d="M20 7h-1.209A4.92 4.92 0 0 0 19 5.5C19 3.57 17.43 2 15.5 2c-1.622 0-2.705 1.482-3.404 3.085C11.407 3.57 10.269 2 8.5 2C6.57 2 5 3.57 5 5.5c0 .596.079 1.089.209 1.5H4c-1.103 0-2 .897-2 2v2c0 1.103.897 2 2 2v7c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-7c1.103 0 2-.897 2-2V9c0-1.103-.897-2-2-2zm-4.5-3c.827 0 1.5.673 1.5 1.5C17 7 16.374 7 16 7h-2.478c.511-1.576 1.253-3 1.978-3zM7 5.5C7 4.673 7.673 4 8.5 4c.888 0 1.714 1.525 2.198 3H8c-.374 0-1 0-1-1.5zM4 9h7v2H4V9zm2 11v-7h5v7H6zm12 0h-5v-7h5v7zm-5-9V9.085L13.017 9H20l.001 2H13z" />
                                                 </svg>
@@ -234,16 +237,13 @@
 
 
                                         {{-- Deleted Button --}}
-                                        @can('Deleted User')
-                                            <a href="#" title="{{ __('admin/usersPages.Delete') }}"
-                                                wire:click.prevent="deleteConfirm({{ $user->id }})"
-                                                class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
-                                                    delete
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="#" title="{{ __('admin/usersPages.Delete') }}"
+                                            wire:click.prevent="deleteConfirm({{ $user->id }})" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
+                                                delete
+                                            </span>
+                                        </a>
                                     </td>
                                 </tr>
                             @empty

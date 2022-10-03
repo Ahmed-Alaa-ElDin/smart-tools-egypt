@@ -16,7 +16,7 @@
                             <span class="material-icons">
                                 search
                             </span> </span>
-                        <input type="text"   wire:model='search'
+                        <input type="text" wire:model='search'
                             class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                             placeholder="{{ __('admin/usersPages.Search ...') }}">
                     </div>
@@ -32,25 +32,21 @@
                             </span> &nbsp; {{ __('admin/usersPages.Manage All') }}
                             &nbsp;</button>
                         <div class="dropdown-menu">
-                            @can('Restore User')
-                                <a href="#" wire:click.prevent="restoreAllConfirm"
-                                    class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-success focus:bg-success">
-                                    <span class="material-icons">
-                                        restore
-                                    </span>
-                                    &nbsp;&nbsp;
-                                    {{ __('admin/usersPages.Restore All') }}</a>
-                            @endcan
+                            <a href="#" wire:click.prevent="restoreAllConfirm"
+                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-success focus:bg-success">
+                                <span class="material-icons">
+                                    restore
+                                </span>
+                                &nbsp;&nbsp;
+                                {{ __('admin/usersPages.Restore All') }}</a>
 
-                            @can('Force Delete User')
-                                <a href="#" wire:click.prevent="forceDeleteAllConfirm"
-                                    class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600">
-                                    <span class="material-icons">
-                                        delete
-                                    </span>
-                                    &nbsp;&nbsp;
-                                    {{ __('admin/usersPages.Delete All Permanently') }}</a>
-                            @endcan
+                            <a href="#" wire:click.prevent="forceDeleteAllConfirm"
+                                class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600">
+                                <span class="material-icons">
+                                    delete
+                                </span>
+                                &nbsp;&nbsp;
+                                {{ __('admin/usersPages.Delete All Permanently') }}</a>
                         </div>
                     </div>
                 </div>
@@ -187,39 +183,32 @@
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- User Details --}}
-                                        @can("See User's Details")
-                                            <a href="{{ route('admin.users.show', ['user' => $user->id]) }}"
-                                                title="{{ __('admin/usersPages.View') }}" class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
-                                                    visibility
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="{{ route('admin.users.show', ['user' => $user->id]) }}"
+                                            title="{{ __('admin/usersPages.View') }}" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
+                                                visibility
+                                            </span>
+                                        </a>
 
                                         {{-- Restore Button --}}
-                                        @can('Restore User')
-                                            <a href="#" title="{{ __('admin/usersPages.Restore') }}"
-                                                wire:click.prevent="restoreConfirm({{ $user->id }})"
-                                                class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-success hover:bg-successDark rounded">
-                                                    restore
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="#" title="{{ __('admin/usersPages.Restore') }}"
+                                            wire:click.prevent="restoreConfirm({{ $user->id }})" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-success hover:bg-successDark rounded">
+                                                restore
+                                            </span>
+                                        </a>
 
                                         {{-- Permanent Delete Button --}}
-                                        @can('Force Delete User')
-                                            <a href="#" title="{{ __('admin/usersPages.Delete Permanently') }}"
-                                                wire:click.prevent="forceDeleteConfirm({{ $user->id }})"
-                                                class="m-0">
-                                                <span
-                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
-                                                    delete
-                                                </span>
-                                            </a>
-                                        @endcan
+                                        <a href="#" title="{{ __('admin/usersPages.Delete Permanently') }}"
+                                            wire:click.prevent="forceDeleteConfirm({{ $user->id }})"
+                                            class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
+                                                delete
+                                            </span>
+                                        </a>
                                     </td>
                                 </tr>
 

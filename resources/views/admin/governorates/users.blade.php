@@ -1,5 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage'
-=> __("admin/deliveriesPages.'s Users",['name'=>$governorate->name])])
+@extends('layouts.admin.admin', ['activeSection' => 'Delivery System', 'activePage' => '', 'titlePage' => __("admin/deliveriesPages.'s Users", ['name' => $governorate->name])])
 
 @section('content')
     <div class="content">
@@ -33,23 +32,21 @@
                                 </div>
 
                                 {{-- Add New User Button --}}
-                                @can('Add User')
-                                    <div class="ltr:text-right rtl:text-left">
-                                        <a href="{{ route('admin.users.create') }}"
-                                            class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
-                                            <span class="material-icons rtl:ml-1 ltr:mr-1">
-                                                add
-                                            </span>
-                                            {{ __('admin/deliveriesPages.Add User') }}</a>
-                                    </div>
-                                @endcan
+                                <div class="ltr:text-right rtl:text-left">
+                                    <a href="{{ route('admin.users.create') }}"
+                                        class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
+                                        <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                            add
+                                        </span>
+                                        {{ __('admin/deliveriesPages.Add User') }}</a>
+                                </div>
                             </div>
                         </div>
 
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Datatable Start --}}
-                            @livewire('admin.customers.customers-datatable' , ['governorate_id' => $governorate->id])
+                            @livewire('admin.customers.customers-datatable', ['governorate_id' => $governorate->id])
                             {{-- Datatable End --}}
                         </div>
                     </div>
@@ -61,7 +58,6 @@
 
 {{-- Extra Scripts --}}
 @push('js')
-
     <script>
         window.addEventListener('swalEditRolesSelect', function(e) {
             Swal.fire({
@@ -93,7 +89,7 @@
                     position: 'top-left',
                 @else
                     position: 'top-right',
-                @endif                
+                @endif
                 showConfirmButton: false,
                 toast: true,
                 timer: 3000,

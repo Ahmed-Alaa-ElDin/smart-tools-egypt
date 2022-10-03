@@ -572,6 +572,25 @@
             <div class="col-span-12 font-bold text-black mb-2">{{ __('admin/productsPages.Pricing and Stock') }}
             </div>
 
+            {{-- Original Price Start --}}
+            <div
+                class="col-span-12 sm:col-span-6 md:col-span-3 lg:col-span-12 w-full grid grid-cols-3 gap-x-4 gap-y-2 items-center rounded text-center">
+                <label for="original_price"
+                    class="col-span-3 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer">{{ __('admin/productsPages.Original Price') }}</label>
+
+                <div class="col-span-3">
+                    <input
+                        class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('original_price') border-red-900 border-2 @enderror"
+                        type="text" wire:model.lazy="original_price" id="original_price"
+                        placeholder="{{ __('admin/productsPages.EGP') }}" required>
+                    @error('original_price')
+                        <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
+                            {{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+            {{-- Original Price End --}}
+
             {{-- Base Price Start --}}
             <div
                 class="col-span-12 sm:col-span-6 md:col-span-3 lg:col-span-6 w-full grid grid-cols-3 gap-x-4 gap-y-2 items-center rounded text-center">

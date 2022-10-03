@@ -17,25 +17,23 @@
                                 <span class="material-icons">
                                     search
                                 </span> </span>
-                            <input type="text"   wire:model='search'
+                            <input type="text" wire:model='search'
                                 class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                                 placeholder="{{ __('admin/deliveriesPages.Search ...') }}">
                         </div>
 
                         {{-- Seft deleted Delivery Companies --}}
-                        @can('Force Delete Delivery')
-                            <div class="ltr:text-right rtl:text-left">
-                                <a href="{{ route('admin.deliveries.softDeletedDeliveries') }}"
-                                    class="btn btn-sm bg-red-600 hover:bg-red-700 focus:bg-red-600 active:bg-red-600 font-bold">
-                                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                        height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"
-                                        class="inline-block text-xl rtl:ml-2 ltr:mr-2">
-                                        <path fill="currentColor"
-                                            d="M20 8h-3V4H3c-1.11 0-2 .89-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4M6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5s1.5.67 1.5 1.5s-.67 1.5-1.5 1.5m6.54-6.38l-1.42 1.42L9 11.41l-2.12 2.13l-1.41-1.42L7.59 10L5.46 7.88l1.42-1.41L9 8.59l2.12-2.12l1.42 1.41L10.41 10l2.13 2.12M18 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5s1.5.67 1.5 1.5s-.67 1.5-1.5 1.5M17 12V9.5h2.5l1.96 2.5H17Z" />
-                                    </svg>
-                                    {{ __('admin/deliveriesPages.Deleted Companies') }}</a>
-                            </div>
-                        @endcan
+                        <div class="ltr:text-right rtl:text-left">
+                            <a href="{{ route('admin.deliveries.softDeletedDeliveries') }}"
+                                class="btn btn-sm bg-red-600 hover:bg-red-700 focus:bg-red-600 active:bg-red-600 font-bold">
+                                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
+                                    height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"
+                                    class="inline-block text-xl rtl:ml-2 ltr:mr-2">
+                                    <path fill="currentColor"
+                                        d="M20 8h-3V4H3c-1.11 0-2 .89-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4M6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5s1.5.67 1.5 1.5s-.67 1.5-1.5 1.5m6.54-6.38l-1.42 1.42L9 11.41l-2.12 2.13l-1.41-1.42L7.59 10L5.46 7.88l1.42-1.41L9 8.59l2.12-2.12l1.42 1.41L10.41 10l2.13 2.12M18 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5s1.5.67 1.5 1.5s-.67 1.5-1.5 1.5M17 12V9.5h2.5l1.96 2.5H17Z" />
+                                </svg>
+                                {{ __('admin/deliveriesPages.Deleted Companies') }}</a>
+                        </div>
 
                         {{-- Pagination Number --}}
                         <div class="form-inline justify-end my-2">
@@ -75,13 +73,11 @@
                                 </th>
 
                                 {{-- Active --}}
-                                @can('Activate Delivery')
                                     <th wire:click="sortBy('is_active')" scope="col"
                                         class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                         {{ __('admin/deliveriesPages.Active') }}&nbsp;
                                         @include('partials._sort_icon', ['field' => 'is_active'])
                                     </th>
-                                @endcan
 
                                 {{-- Manage --}}
                                 <th scope="col"
@@ -126,24 +122,29 @@
                                         <div class="text-sm text-gray-900">{{ $delivery->email }}
                                         </div>
                                         <div class="text-sm text-gray-500">
-                                            {{ $delivery->phones->where('default', 1)->first()? $delivery->phones->where('default', 1)->first()->phone: '' }}
+                                            {{ $delivery->phones->where('default', 1)->first() ? $delivery->phones->where('default', 1)->first()->phone : '' }}
                                         </div>
                                     </td>
 
                                     {{-- Active --}}
-                                    @can('Activate Delivery')
                                         <td class="px-6 py-2 text-center whitespace-nowrap">
                                             <div class="text-sm text-gray-900">
-                                                {!! $delivery->is_active ? '<span class="text-success">' . __('admin/deliveriesPages.Active') . '</span>' : '<span class="text-red-600">' . __('admin/deliveriesPages.Inactive') . '</span>' !!}
-                                                {!! $delivery->is_active ? '<span class="block cursor-pointer material-icons text-success" wire:click="activate(' . $delivery->id . ')">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600" wire:click="activate(' . $delivery->id . ')">toggle_off</span>' !!}
+                                                {!! $delivery->is_active
+                                                    ? '<span class="text-success">' . __('admin/deliveriesPages.Active') . '</span>'
+                                                    : '<span class="text-red-600">' . __('admin/deliveriesPages.Inactive') . '</span>' !!}
+                                                {!! $delivery->is_active
+                                                    ? '<span class="block cursor-pointer material-icons text-success" wire:click="activate(' .
+                                                        $delivery->id .
+                                                        ')">toggle_on</span>'
+                                                    : '<span class="block cursor-pointer material-icons text-red-600" wire:click="activate(' .
+                                                        $delivery->id .
+                                                        ')">toggle_off</span>' !!}
                                             </div>
                                         </td>
-                                    @endcan
 
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- Delivery Company Details --}}
-                                        @can("See Delivery's Details")
                                             <a href="{{ route('admin.deliveries.show', ['delivery' => $delivery->id]) }}"
                                                 title="{{ __('admin/deliveriesPages.View') }}" class="m-0">
 
@@ -152,10 +153,8 @@
                                                     visibility
                                                 </span>
                                             </a>
-                                        @endcan
 
                                         {{-- Edit Button --}}
-                                        @can('Edit Delivery')
                                             <a href="{{ route('admin.deliveries.edit', ['delivery' => $delivery->id]) }}"
                                                 title="{{ __('admin/deliveriesPages.Edit') }}" class="m-0">
                                                 <span
@@ -163,38 +162,31 @@
                                                     edit
                                                 </span>
                                             </a>
-                                        @endcan
 
                                         {{-- Edit Company Zone --}}
-                                        @can('Edit Zone')
                                             <a href="{{ route('admin.zones.deliveryZones.edit', ['delivery_id' => $delivery->id]) }}"
-                                                title="{{ __('admin/deliveriesPages.Edit Zones') }}"
-                                                class="m-0">
+                                                title="{{ __('admin/deliveriesPages.Edit Zones') }}" class="m-0">
 
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-role hover:bg-roleHover rounded">
                                                     edit_location_alt
                                                 </span>
                                             </a>
-                                        @endcan
 
                                         {{-- Delete Button --}}
-                                        @can('Deleted Delivery')
                                             <a href="#" title="{{ __('admin/deliveriesPages.Delete') }}"
-                                                wire:click.prevent="deleteConfirm({{ $delivery->id }})"
-                                                class="m-0">
+                                                wire:click.prevent="deleteConfirm({{ $delivery->id }})" class="m-0">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
                                                     delete
                                                 </span>
                                             </a>
-                                        @endcan
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
                                     <td class="text-center py-2 font-bold" colspan="6">
-                                        {{ $search == ''? __('admin/deliveriesPages.No data in this table'): __('admin/deliveriesPages.No data available according to your search') }}
+                                        {{ $search == '' ? __('admin/deliveriesPages.No data in this table') : __('admin/deliveriesPages.No data available according to your search') }}
                                     </td>
                                 </tr>
                             @endforelse

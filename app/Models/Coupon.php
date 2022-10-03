@@ -53,4 +53,10 @@ class Coupon extends Model
     {
         return $this->morphedByMany(Product::class, 'couponable')->withPivot('value', 'type');
     }
+
+    // many to many relationship (polymorphic) (inverse)  Collection --> Coupons
+    public function collections()
+    {
+        return $this->morphedByMany(Collection::class, 'couponable')->withPivot('value', 'type');
+    }
 }
