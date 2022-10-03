@@ -237,6 +237,7 @@ class CollectionForm extends Component
             ->toArray();
 
         $product['amount'] = 1;
+
         $this->products[$product_id] = $product;
     }
     ######################## Add product to the Collection :: End ############################
@@ -245,7 +246,7 @@ class CollectionForm extends Component
     public function amountUpdated($product_id, $amount)
     {
         if ($amount > 0) {
-            $this->products[$product_id]['amount'] = $amount <= $this->products[$product_id]['quantity'] ? $amount : $this->products[$product_id]['quantity'];
+            $this->products[$product_id]['amount'] =  $amount;
         } else {
             unset($this->products[$product_id]);
         }
