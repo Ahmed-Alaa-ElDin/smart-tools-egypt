@@ -35,7 +35,6 @@ class OffersDatatable extends Component
                 ->where('title->ar', 'like', '%' . $this->search . '%')
                 ->orWhere('title->en', 'like', '%' . $this->search . '%')
                 ->orWhere('value', 'like', '%' . $this->search . '%')
-                ->orWhere('number', 'like', '%' . $this->search . '%')
                 ->orWhere('start_at', 'like', '%' . $this->search . '%')
                 ->orWhere('expire_at', 'like', '%' . $this->search . '%');
         })

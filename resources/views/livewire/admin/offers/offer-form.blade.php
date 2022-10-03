@@ -112,7 +112,9 @@
             <label wire:click="freeShipping"
                 class="col-span-1 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Free Shipping') }}</label>
             <div class="col-span-1">
-                {!! $free_shipping ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="freeShipping">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="freeShipping">toggle_off</span>' !!}
+                {!! $free_shipping
+                    ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="freeShipping">toggle_on</span>'
+                    : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="freeShipping">toggle_off</span>' !!}
 
                 @error('free_shipping')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -217,7 +219,7 @@
                     <div class="col-span-12 grid grid-cols-12 gap-x-4 gap-y-4" wire:key="brand-{{ $item_key }}">
 
                         {{-- Type Start --}}
-                        <div class="col-span-6 md:col-span-4 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full"
+                        <div class="col-span-6 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full"
                             wire:key="brand-{{ $item_key }}-type">
                             <label for="brand-{{ $item_key }}-type"
                                 class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __("admin/offersPages.Discount's Type") }}</label>
@@ -241,7 +243,7 @@
                         {{-- Type End --}}
 
                         {{-- Value Start --}}
-                        <div class="col-span-6 md:col-span-4 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full"
+                        <div class="col-span-6 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full"
                             wire:key="brand-{{ $item_key }}-value">
                             <label for="brand-{{ $item_key }}-value"
                                 class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Value') }}</label>
@@ -259,27 +261,6 @@
                             </div>
                         </div>
                         {{-- Value End --}}
-
-                        {{-- Times : Start --}}
-                        <div class="col-span-12 md:col-span-4 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full"
-                            wire:key="brand-{{ $item_key }}-offer_number">
-                            <label for="brand-{{ $item_key }}-offer_number"
-                                class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Number of offers') }}</label>
-                            <div class="col-span-3">
-                                <input id="brand-{{ $item_key }}-offer_number"
-                                    class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.offer_number') border-red-900 border-2 @enderror"
-                                    type="number" min="0"
-                                    wire:model.lazy="items.{{ $item_key }}.offer_number"
-                                    placeholder="{{ __('admin/offersPages.Unlimited') }}">
-
-                                @error('items.' . $item_key . '.offer_number')
-                                    <div
-                                        class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                                        {{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        {{-- Times : End --}}
 
                         {{-- Brands Start --}}
                         <div class="col-span-12 grid grid-cols-12 gap-x-4 gap-y-2 items-center w-full"
@@ -356,7 +337,7 @@
                         wire:key="category-{{ $item_key }}">
 
                         {{-- Type Start --}}
-                        <div class="col-span-6 md:col-span-4 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full"
+                        <div class="col-span-6 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full"
                             wire:key="category-{{ $item_key }}-type">
                             <label for="category-{{ $item_key }}-type"
                                 class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __("admin/offersPages.Discount's Type") }}</label>
@@ -380,7 +361,7 @@
                         {{-- Type End --}}
 
                         {{-- Value Start --}}
-                        <div class="col-span-6 md:col-span-4 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full"
+                        <div class="col-span-6 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full"
                             wire:key="category-{{ $item_key }}-value">
                             <label for="category-{{ $item_key }}-value"
                                 class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Value') }}</label>
@@ -398,27 +379,6 @@
                             </div>
                         </div>
                         {{-- Value End --}}
-
-                        {{-- Times : Start --}}
-                        <div class="col-span-12 md:col-span-4 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full"
-                            wire:key="category-{{ $item_key }}-offer_number">
-                            <label for="category-{{ $item_key }}-offer_number"
-                                class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Number of offers') }}</label>
-                            <div class="col-span-3">
-                                <input id="category-{{ $item_key }}-offer_number"
-                                    class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.offer_number') border-red-900 border-2 @enderror"
-                                    type="number" min="0"
-                                    wire:model.lazy="items.{{ $item_key }}.offer_number"
-                                    placeholder="{{ __('admin/offersPages.Unlimited') }}">
-
-                                @error('items.' . $item_key . '.offer_number')
-                                    <div
-                                        class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                                        {{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        {{-- Times : End --}}
 
                         {{-- Supercategory Start --}}
                         <div class="col-span-12 md:col-span-6 lg:col-span-4 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full"
@@ -552,10 +512,10 @@
                         {{-- Products : End --}}
                     </div>
                 @elseif ($items[$item_key]['item_type'] == 'order')
-                    <div class="col-span-12 grid grid-cols-12 gap-x-4 gap-y-4" wire:key="offer-{{ $item_key }}">
+                    <div class="col-span-12 grid grid-cols-12 gap-x-4 gap-y-4" wire:key="order-{{ $item_key }}">
 
                         {{-- Type Start --}}
-                        <div class="col-span-6 md:col-span-4 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full"
+                        <div class="col-span-6 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full"
                             wire:key="offer-{{ $item_key }}-type">
                             <label for="offer-{{ $item_key }}-type"
                                 class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __("admin/offersPages.Discount's Type") }}</label>
@@ -578,7 +538,7 @@
                         {{-- Type End --}}
 
                         {{-- Value Start --}}
-                        <div class="col-span-6 md:col-span-4 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full"
+                        <div class="col-span-6 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full"
                             wire:key="offer-{{ $item_key }}-value">
                             <label for="offer-{{ $item_key }}-value"
                                 class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Value') }}</label>
@@ -597,25 +557,6 @@
                         </div>
                         {{-- Value End --}}
 
-                        {{-- Times : Start --}}
-                        <div class="col-span-12 md:col-span-4 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full"
-                            wire:key="offer-{{ $item_key }}-offer_number">
-                            <label for="offer-{{ $item_key }}-offer_number"
-                                class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Number of offers') }}</label>
-                            <div class="col-span-3">
-                                <input id="offer-{{ $item_key }}-offer_number"
-                                    class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('offer_number') border-red-900 border-2 @enderror"
-                                    type="number" min="0" wire:model.lazy="offer_number"
-                                    placeholder="{{ __('admin/offersPages.Unlimited') }}">
-
-                                @error('offer_number')
-                                    <div
-                                        class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                                        {{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        {{-- Times : End --}}
                     </div>
                 @endif
 
@@ -676,9 +617,6 @@
                                                     {{ $supercategory['pivot']['type'] == 0 ? '%' : ($supercategory['pivot']['type'] == 1 ? __('admin/offersPages.EPG') : ($supercategory['pivot']['type'] == 2 ? trans_choice('admin/offersPages.Points value', $supercategory['pivot']['value'], ['points' => $supercategory['pivot']['value']]) : __('admin/offersPages.Free Shipping'))) }}
                                                 </span>
                                                 <br>
-                                                <span>
-                                                    {{ $supercategory['pivot']['number'] }}
-                                                </span>
 
                                                 <input type="checkbox" wire:model="deleteSupercategories_id"
                                                     id="old-supercategory-{{ $supercategory_key }}"
@@ -709,9 +647,6 @@
                                                     {{ $category['pivot']['type'] == 0 ? '%' : ($category['pivot']['type'] == 1 ? __('admin/offersPages.EPG') : ($category['pivot']['type'] == 2 ? trans_choice('admin/offersPages.Points value', $category['pivot']['value'], ['points' => $category['pivot']['value']]) : __('admin/offersPages.Free Shipping'))) }}
                                                 </span>
                                                 <br>
-                                                <span>
-                                                    {{ $category['pivot']['number'] }}
-                                                </span>
 
                                                 <input type="checkbox" wire:model="deleteCategories_id"
                                                     id="old-category-{{ $category_key }}"
@@ -742,9 +677,6 @@
                                                     {{ $subcategory['pivot']['type'] == 0 ? '%' : ($subcategory['pivot']['type'] == 1 ? __('admin/offersPages.EPG') : ($subcategory['pivot']['type'] == 2 ? trans_choice('admin/offersPages.Points value', $subcategory['pivot']['value'], ['points' => $subcategory['pivot']['value']]) : __('admin/offersPages.Free Shipping'))) }}
                                                 </span>
                                                 <br>
-                                                <span>
-                                                    {{ $subcategory['pivot']['number'] }}
-                                                </span>
 
                                                 <input type="checkbox" wire:model="deleteSubcategories_id"
                                                     id="old-subcategory-{{ $subcategory_key }}"
@@ -774,13 +706,10 @@
                                                     {{ $brand['pivot']['type'] == 0 ? '%' : ($brand['pivot']['type'] == 1 ? __('admin/offersPages.EPG') : ($brand['pivot']['type'] == 2 ? trans_choice('admin/offersPages.Points value', $brand['pivot']['value'], ['points' => $brand['pivot']['value']]) : __('admin/offersPages.Free Shipping'))) }}
                                                 </span>
                                                 <br>
-                                                <span>
-                                                    {{ $brand['pivot']['number'] }}
-                                                </span>
 
                                                 <input type="checkbox" wire:model="deleteBrands_id"
-                                                    id="old-brand-{{ $brand_key }}"
-                                                    value="{{ $brand['id'] }}" class="hidden">
+                                                    id="old-brand-{{ $brand_key }}" value="{{ $brand['id'] }}"
+                                                    class="hidden">
                                             </label>
                                         @endforeach
                                     </div>
@@ -806,9 +735,6 @@
                                                     {{ $product['pivot']['type'] == 0 ? '%' : ($product['pivot']['type'] == 1 ? __('admin/offersPages.EPG') : ($product['pivot']['type'] == 2 ? trans_choice('admin/offersPages.Points value', $product['pivot']['value'], ['points' => $product['pivot']['value']]) : __('admin/offersPages.Free Shipping'))) }}
                                                 </span>
                                                 <br>
-                                                <span>
-                                                    {{ $product['pivot']['number'] }}
-                                                </span>
 
                                                 <input type="checkbox" wire:model="deleteProducts_id"
                                                     id="old-product-{{ $product_key }}"

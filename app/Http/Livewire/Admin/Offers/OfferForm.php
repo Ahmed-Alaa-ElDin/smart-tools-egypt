@@ -22,7 +22,7 @@ class OfferForm extends Component
 
     public $banner, $banner_name, $deletedImages = [];
     public $date_range = ['start' => '', 'end' => ''];
-    public $title = ['en' => '', 'ar' => ''], $free_shipping = false, $on_orders = 0, $type, $value = 0, $offer_number;
+    public $title = ['en' => '', 'ar' => ''], $free_shipping = false, $on_orders = 0, $type, $value = 0;
 
     protected $listeners = ["daterangeUpdated"];
 
@@ -36,7 +36,6 @@ class OfferForm extends Component
             'date_range.end'                =>      "required|date",
             "type"                          =>      "nullable|in:0,1,2,3",
             "value"                         =>      ["nullable", "numeric", new Maxif($this->type), "min:0"],
-            'offer_number'                  =>      "nullable|numeric|min:0",
             'items.*.brand_id'              =>      "exclude_if:items.*.brand_id,all|nullable|exists:brands,id",
             'items.*.supercategory_id'      =>      "exclude_if:items.*.supercategory_id,all|nullable|exists:supercategories,id",
             'items.*.category_id'           =>      "exclude_if:items.*.category_id,all|nullable|exists:categories,id",
@@ -44,7 +43,6 @@ class OfferForm extends Component
             'items.*.products_id.*'         =>      "nullable|exists:products,id",
             'items.*.type'                  =>      "required|in:0,1,2,3",
             'items.*.value'                 =>      ["required", "numeric", "min:0", "exclude_unless:items.*.type,0 | max:100"],
-            'items.*.offer_number'          =>      "nullable|numeric|min:0",
             'on_orders'                     =>      "nullable"
         ];
     }
@@ -89,7 +87,6 @@ class OfferForm extends Component
             ];
             $this->type = $offer->type;
             $this->value = $offer->value;
-            $this->offer_number = $offer->number;
             $this->date_range = [
                 'start' => $offer->start_at,
                 'end' => $offer->expire_at,
@@ -133,7 +130,6 @@ class OfferForm extends Component
                 'products_id' => [],
                 'value' => 0.0,
                 'type' => 0,
-                'offer_number' => null,
             ]];
         }
     }
@@ -218,7 +214,6 @@ class OfferForm extends Component
             'products_id' => [],
             'value' => 0.0,
             'type' => 0,
-            'offer_number' => null,
         ];
     }
     // Restore the default values of item : End
@@ -296,7 +291,6 @@ class OfferForm extends Component
             'products_id' => [],
             'value' => 0.0,
             'type' => 0,
-            'offer_number' => null,
         ];
     }
     // Add Item : End
@@ -331,7 +325,6 @@ class OfferForm extends Component
                 'expire_at' => $this->date_range['end'],
                 'type' => $this->type ?? 0,
                 'value' => $this->value ?? 0,
-                'number'  => !is_null($this->offer_number) ? $this->offer_number : null,
                 'banner' => $this->banner_name ?? null,
                 'free_shipping' => $this->free_shipping ? 1 : 0
             ]);
@@ -348,27 +341,23 @@ class OfferForm extends Component
                         $offer->supercategories()->attach($supercategories, [
                             'type' => $item['type'],
                             'value' => $item['value'],
-                            'number' => !is_null($item['offer_number']) ? $item['offer_number'] : null,
                         ]);
                     } elseif ($item['category_id'] == 'all') {
                         $categories = Category::select('id', 'supercategory_id')->where('supercategory_id', $item['supercategory_id'])->get()->pluck('id');
                         $offer->categories()->attach($categories, [
                             'type' => $item['type'],
                             'value' => $item['value'],
-                            'number' => !is_null($item['offer_number']) ? $item['offer_number'] : null,
                         ]);
                     } elseif ($item['subcategory_id'] == 'all') {
                         $subcategories = Subcategory::select('id', 'category_id')->where('category_id', $item['category_id'])->get()->pluck('id');
                         $offer->subcategories()->attach($subcategories, [
                             'type' => $item['type'],
                             'value' => $item['value'],
-                            'number' => !is_null($item['offer_number']) ? $item['offer_number'] : null,
                         ]);
                     } else {
                         $offer->products()->attach($item['products_id'], [
                             'type' => $item['type'],
                             'value' => $item['value'],
-                            'number' => !is_null($item['offer_number']) ? $item['offer_number'] : null,
                         ]);
                     }
                 } elseif ($item['item_type'] == 'brand') {
@@ -377,13 +366,11 @@ class OfferForm extends Component
                         $offer->brands()->attach($brands, [
                             'type' => $item['type'],
                             'value' => $item['value'],
-                            'number' => !is_null($item['offer_number']) ? $item['offer_number'] : null,
                         ]);
                     } else {
                         $offer->products()->attach($item['products_id'], [
                             'type' => $item['type'],
                             'value' => $item['value'],
-                            'number' => !is_null($item['offer_number']) ? $item['offer_number'] : null,
                         ]);
                     }
                 } elseif ($item['item_type'] == 'order') {
@@ -432,7 +419,6 @@ class OfferForm extends Component
                 'expire_at' => $this->date_range['end'],
                 'type' => $this->type ?? 0,
                 'value' => $this->value ?? 0,
-                'number'  => !is_null($this->offer_number) ? $this->offer_number : null,
                 'banner' => $this->banner_name ?? null,
                 'free_shipping' => $this->free_shipping ? 1 : 0,
                 'on_orders' => $this->on_orders
@@ -470,27 +456,23 @@ class OfferForm extends Component
                         $this->offer->supercategories()->attach($supercategories, [
                             'type' => $item['type'],
                             'value' => $item['value'],
-                            'number' => !is_null($item['offer_number']) ? $item['offer_number'] : null,
                         ]);
                     } elseif ($item['category_id'] == 'all') {
                         $categories = Category::select('id', 'supercategory_id')->where('supercategory_id', $item['supercategory_id'])->get()->pluck('id');
                         $this->offer->categories()->attach($categories, [
                             'type' => $item['type'],
                             'value' => $item['value'],
-                            'number' => !is_null($item['offer_number']) ? $item['offer_number'] : null,
                         ]);
                     } elseif ($item['subcategory_id'] == 'all') {
                         $subcategories = Subcategory::select('id', 'category_id')->where('category_id', $item['category_id'])->get()->pluck('id');
                         $this->offer->subcategories()->attach($subcategories, [
                             'type' => $item['type'],
                             'value' => $item['value'],
-                            'number' => !is_null($item['offer_number']) ? $item['offer_number'] : null,
                         ]);
                     } else {
                         $this->offer->products()->attach($item['products_id'], [
                             'type' => $item['type'],
                             'value' => $item['value'],
-                            'number' => !is_null($item['offer_number']) ? $item['offer_number'] : null,
                         ]);
                     }
                 } elseif ($item['item_type'] == 'brand') {
@@ -499,13 +481,11 @@ class OfferForm extends Component
                         $this->offer->brands()->attach($brands, [
                             'type' => $item['type'],
                             'value' => $item['value'],
-                            'number' => !is_null($item['offer_number']) ? $item['offer_number'] : null,
                         ]);
                     } else {
                         $this->offer->products()->attach($item['products_id'], [
                             'type' => $item['type'],
                             'value' => $item['value'],
-                            'number' => !is_null($item['offer_number']) ? $item['offer_number'] : null,
                         ]);
                     }
                 } elseif ($item['item_type'] == 'order') {

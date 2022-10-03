@@ -110,7 +110,6 @@ class Product extends Model
         return $this->morphToMany(Offer::class, 'offerable')->withPivot([
             'value',
             'type',
-            'number'
         ]);
     }
 
@@ -119,14 +118,9 @@ class Product extends Model
         return $this->morphToMany(Offer::class, 'offerable')
             ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
             ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-            ->where(
-                fn ($q) => $q
-                    ->where('offerables.number', '>', 0)
-                    ->orWhereNull('offerables.number')
-            )->withPivot([
+            ->withPivot([
                 'value',
                 'type',
-                'number'
             ]);
     }
 
@@ -197,126 +191,39 @@ class Product extends Model
         $offers_ids = [];
 
         // Get Final Prices From Direct Offers
-        $direct_offers = $this->validOffers->map(fn ($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type, 'number' => $offer->pivot->number]);
+        $direct_offers = $this->validOffers->map(fn ($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]);
         foreach ($direct_offers as $offer) {
-            if ($offer['number'] == null || $offer['number'] > 0) {
 
-                if ($offer['free_shipping']) {
-                    $free_shipping = 1;
-                    $offers_ids[] = $offer['offer_id'];
-                }
+            if ($offer['free_shipping']) {
+                $free_shipping = 1;
+                $offers_ids[] = $offer['offer_id'];
+            }
 
-                // Percentage Offer
-                if ($offer['type'] == 0) {
-                    $all_prices[] = round($this->final_price - (($offer['value'] / 100) * $this->final_price), 2);
-                    $offers_ids[] = $offer['offer_id'];
+            // Percentage Offer
+            if ($offer['type'] == 0) {
+                $all_prices[] = round($this->final_price - (($offer['value'] / 100) * $this->final_price), 2);
+                $offers_ids[] = $offer['offer_id'];
+            }
+            // Fixed Offer
+            elseif ($offer['type'] == 1) {
+                if ($this->final_price >  $offer['value']) {
+                    $all_prices[] = round($this->final_price - $offer['value'], 2);
+                } else {
+                    $all_prices[] = 0;
                 }
-                // Fixed Offer
-                elseif ($offer['type'] == 1) {
-                    if ($this->final_price >  $offer['value']) {
-                        $all_prices[] = round($this->final_price - $offer['value'], 2);
-                    } else {
-                        $all_prices[] = 0;
-                    }
-                    $offers_ids[] = $offer['offer_id'];
-                }
-                // Points Offer
-                elseif ($offer['type'] == 2) {
-                    $all_points[] = $offer['value'];
-                    $offers_ids[] = $offer['offer_id'];
-                }
+                $offers_ids[] = $offer['offer_id'];
+            }
+            // Points Offer
+            elseif ($offer['type'] == 2) {
+                $all_points[] = $offer['value'];
+                $offers_ids[] = $offer['offer_id'];
             }
         }
 
         // Get Final Prices From Offers Through Subcategories
-        $subcategories_offers = $this->subcategories ? $this->subcategories->map(fn ($subcategory) => $subcategory->validOffers->map(fn ($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type, 'number' => $offer->pivot->number]))->toArray() : [];
+        $subcategories_offers = $this->subcategories ? $this->subcategories->map(fn ($subcategory) => $subcategory->validOffers->map(fn ($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
         foreach ($subcategories_offers as $subcategory) {
             foreach ($subcategory as $offer) {
-                if ($offer['number'] == null || $offer['number'] > 0) {
-                    if ($offer['free_shipping']) {
-                        $free_shipping = 1;
-                        $offers_ids[] = $offer['offer_id'];
-                    }
-
-                    if ($offer['type'] == 0) {
-                        $all_prices[] = round($this->final_price - (($offer['value'] / 100) * $this->final_price), 2);
-                        $offers_ids[] = $offer['offer_id'];
-                    } elseif ($offer['type'] == 1) {
-                        if ($this->final_price >  $offer['value']) {
-                            $all_prices[] = round($this->final_price - $offer['value'], 2);
-                        } else {
-                            $all_prices[] = 0;
-                        }
-                        $offers_ids[] = $offer['offer_id'];
-                    } elseif ($offer['type'] == 2) {
-                        $all_points[] = $offer['value'];
-                        $offers_ids[] = $offer['offer_id'];
-                    }
-                }
-            }
-        }
-
-        // Get Final Prices From Offers Through Categories
-        $categories_offers = $categories ? $categories->map(fn ($category) => $category->validOffers->map(fn ($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type, 'number' => $offer->pivot->number]))->toArray() : [];
-        foreach ($categories_offers as $category) {
-            foreach ($category as $offer) {
-                if ($offer['number'] == null || $offer['number'] > 0) {
-
-                    if ($offer['free_shipping']) {
-                        $free_shipping = 1;
-                        $offers_ids[] = $offer['offer_id'];
-                    }
-
-                    if ($offer['type'] == 0) {
-                        $all_prices[] = round($this->final_price - (($offer['value'] / 100) * $this->final_price), 2);
-                        $offers_ids[] = $offer['offer_id'];
-                    } elseif ($offer['type'] == 1) {
-                        if ($this->final_price >  $offer['value']) {
-                            $all_prices[] = round($this->final_price - $offer['value'], 2);
-                        } else {
-                            $all_prices[] = 0;
-                        }
-                        $offers_ids[] = $offer['offer_id'];
-                    } elseif ($offer['type'] == 2) {
-                        $all_points[] = $offer['value'];
-                        $offers_ids[] = $offer['offer_id'];
-                    }
-                }
-            }
-        }
-
-        // Get Final Prices From Offers Through Supercategories
-        $supercategories_offers = $supercategories ? $supercategories->map(fn ($supercategory) => $supercategory->validOffers->map(fn ($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type, 'number' => $offer->pivot->number])) : [];
-        foreach ($supercategories_offers as $supercategory) {
-            foreach ($supercategory as $offer) {
-                if ($offer['number'] == null || $offer['number'] > 0) {
-                    if ($offer['free_shipping']) {
-                        $free_shipping = 1;
-                        $offers_ids[] = $offer['offer_id'];
-                    }
-
-                    if ($offer['type'] == 0) {
-                        $all_prices[] = round($this->final_price - (($offer['value'] / 100) * $this->final_price), 2);
-                        $offers_ids[] = $offer['offer_id'];
-                    } elseif ($offer['type'] == 1) {
-                        if ($this->final_price >  $offer['value']) {
-                            $all_prices[] = round($this->final_price - $offer['value'], 2);
-                        } else {
-                            $all_prices[] = 0;
-                        }
-                        $offers_ids[] = $offer['offer_id'];
-                    } elseif ($offer['type'] == 2) {
-                        $all_points[] = $offer['value'];
-                        $offers_ids[] = $offer['offer_id'];
-                    }
-                }
-            }
-        }
-
-        // Get Final Prices From Offers Through Brands
-        $brand_offers = $this->brand ? $this->brand->validOffers->map(fn ($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type, 'number' => $offer->pivot->number]) : [];
-        foreach ($brand_offers as $offer) {
-            if ($offer['number'] == null || $offer['number'] > 0) {
                 if ($offer['free_shipping']) {
                     $free_shipping = 1;
                     $offers_ids[] = $offer['offer_id'];
@@ -336,6 +243,84 @@ class Product extends Model
                     $all_points[] = $offer['value'];
                     $offers_ids[] = $offer['offer_id'];
                 }
+            }
+        }
+
+        // Get Final Prices From Offers Through Categories
+        $categories_offers = $categories ? $categories->map(fn ($category) => $category->validOffers->map(fn ($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
+
+        foreach ($categories_offers as $category) {
+            foreach ($category as $offer) {
+
+                if ($offer['free_shipping']) {
+                    $free_shipping = 1;
+                    $offers_ids[] = $offer['offer_id'];
+                }
+
+                if ($offer['type'] == 0) {
+                    $all_prices[] = round($this->final_price - (($offer['value'] / 100) * $this->final_price), 2);
+                    $offers_ids[] = $offer['offer_id'];
+                } elseif ($offer['type'] == 1) {
+                    if ($this->final_price >  $offer['value']) {
+                        $all_prices[] = round($this->final_price - $offer['value'], 2);
+                    } else {
+                        $all_prices[] = 0;
+                    }
+                    $offers_ids[] = $offer['offer_id'];
+                } elseif ($offer['type'] == 2) {
+                    $all_points[] = $offer['value'];
+                    $offers_ids[] = $offer['offer_id'];
+                }
+            }
+        }
+
+        // Get Final Prices From Offers Through Supercategories
+        $supercategories_offers = $supercategories ? $supercategories->map(fn ($supercategory) => $supercategory->validOffers->map(fn ($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type])) : [];
+        foreach ($supercategories_offers as $supercategory) {
+            foreach ($supercategory as $offer) {
+                if ($offer['free_shipping']) {
+                    $free_shipping = 1;
+                    $offers_ids[] = $offer['offer_id'];
+                }
+
+                if ($offer['type'] == 0) {
+                    $all_prices[] = round($this->final_price - (($offer['value'] / 100) * $this->final_price), 2);
+                    $offers_ids[] = $offer['offer_id'];
+                } elseif ($offer['type'] == 1) {
+                    if ($this->final_price >  $offer['value']) {
+                        $all_prices[] = round($this->final_price - $offer['value'], 2);
+                    } else {
+                        $all_prices[] = 0;
+                    }
+                    $offers_ids[] = $offer['offer_id'];
+                } elseif ($offer['type'] == 2) {
+                    $all_points[] = $offer['value'];
+                    $offers_ids[] = $offer['offer_id'];
+                }
+            }
+        }
+
+        // Get Final Prices From Offers Through Brands
+        $brand_offers = $this->brand ? $this->brand->validOffers->map(fn ($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]) : [];
+        foreach ($brand_offers as $offer) {
+            if ($offer['free_shipping']) {
+                $free_shipping = 1;
+                $offers_ids[] = $offer['offer_id'];
+            }
+
+            if ($offer['type'] == 0) {
+                $all_prices[] = round($this->final_price - (($offer['value'] / 100) * $this->final_price), 2);
+                $offers_ids[] = $offer['offer_id'];
+            } elseif ($offer['type'] == 1) {
+                if ($this->final_price >  $offer['value']) {
+                    $all_prices[] = round($this->final_price - $offer['value'], 2);
+                } else {
+                    $all_prices[] = 0;
+                }
+                $offers_ids[] = $offer['offer_id'];
+            } elseif ($offer['type'] == 2) {
+                $all_points[] = $offer['value'];
+                $offers_ids[] = $offer['offer_id'];
             }
         }
 
@@ -381,49 +366,24 @@ class Product extends Model
                     'thumbnail',
                     'offers' => fn ($q) => $q
                         ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                        ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                        ->where(
-                            fn ($q) => $q
-                                ->where('offerables.number', '>', 0)
-                                ->orWhereNull('offerables.number')
-                        ),
+                        ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
                     'brand' => fn ($q) => $q->with([
                         'offers' => fn ($q) => $q
                             ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
                             ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->where(
-                                fn ($q) => $q
-                                    ->where('offerables.number', '>', 0)
-                                    ->orWhereNull('offerables.number')
-                            )
                     ]),
                     'subcategories' => fn ($q) => $q->with([
                         'offers' => fn ($q) => $q
                             ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->where(
-                                fn ($q) => $q
-                                    ->where('offerables.number', '>', 0)
-                                    ->orWhereNull('offerables.number')
-                            ),
+                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
                         'category' => fn ($q) => $q->with([
                             'offers' => fn ($q) => $q
                                 ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                                ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                                ->where(
-                                    fn ($q) => $q
-                                        ->where('offerables.number', '>', 0)
-                                        ->orWhereNull('offerables.number')
-                                ),
+                                ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
                             'supercategory' => fn ($q) => $q->with([
                                 'offers' => fn ($q) => $q
                                     ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
                                     ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                                    ->where(
-                                        fn ($q) => $q
-                                            ->where('offerables.number', '>', 0)
-                                            ->orWhereNull('offerables.number')
-                                    )
                             ])
                         ]),
                     ])
@@ -432,86 +392,6 @@ class Product extends Model
             ->where('under_reviewing', 0)
             ->where('publish', 1);
     }
-
-    // public function scopePublishedProducts($query, $products_id)
-    // {
-    //     $query->select(
-    //         [
-    //             'products.id',
-    //             'name',
-    //             'slug',
-    //             'quantity',
-    //             'weight',
-    //             'base_price',
-    //             'final_price',
-    //             'points',
-    //             'description',
-    //             'model',
-    //             'free_shipping',
-    //             'publish',
-    //             'under_reviewing',
-    //             'brand_id',
-    //         ]
-    //     )
-    //         ->with(
-    //             [
-    //                 'thumbnail',
-    //                 'offers' => fn ($q) => $q
-    //                     ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-    //                     ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-    //                     ->where(
-    //                         fn ($q) => $q
-    //                             ->where('offerables.number', '>', 0)
-    //                             ->orWhereNull('offerables.number')
-    //                     ),
-    //                 'brand' => fn ($q) => $q->with([
-    //                     'offers' => fn ($q) => $q
-    //                         ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-    //                         ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-    //                         ->where(
-    //                             fn ($q) => $q
-    //                                 ->where('offerables.number', '>', 0)
-    //                                 ->orWhereNull('offerables.number')
-    //                         )
-    //                 ]),
-    //                 'subcategories' => fn ($q) => $q->with([
-    //                     'offers' => fn ($q) => $q
-    //                         ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-    //                         ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-    //                         ->where(
-    //                             fn ($q) => $q
-    //                                 ->where('offerables.number', '>', 0)
-    //                                 ->orWhereNull('offerables.number')
-    //                         ),
-    //                     'category' => fn ($q) => $q->with([
-    //                         'offers' => fn ($q) => $q
-    //                             ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-    //                             ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-    //                             ->where(
-    //                                 fn ($q) => $q
-    //                                     ->where('offerables.number', '>', 0)
-    //                                     ->orWhereNull('offerables.number')
-    //                             ),
-    //                         'supercategory' => fn ($q) => $q->with([
-    //                             'offers' => fn ($q) => $q
-    //                                 ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-    //                                 ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-    //                                 ->where(
-    //                                     fn ($q) => $q
-    //                                         ->where('offerables.number', '>', 0)
-    //                                         ->orWhereNull('offerables.number')
-    //                                 )
-    //                         ])
-    //                     ]),
-    //                 ]),
-    //                 'reviews' => fn ($q) => $q->where('status', 1),
-    //                 'coupons'
-    //             ]
-    //         )
-    //         ->whereIn('id', $products_id)
-    //         ->where('under_reviewing', 0)
-    //         ->where('publish', 1);
-    // }
 
     public function scopePublishedProducts($query, $products_id)
     {
@@ -538,51 +418,27 @@ class Product extends Model
                     'thumbnail',
                     'offers' => fn ($q) => $q
                         ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                        ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                        ->where(
-                            fn ($q) => $q
-                                ->where('offerables.number', '>', 0)
-                                ->orWhereNull('offerables.number')
-                        ),
+                        ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
                     'brand' => fn ($q) => $q->with([
                         'offers' => fn ($q) => $q
                             ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
                             ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->where(
-                                fn ($q) => $q
-                                    ->where('offerables.number', '>', 0)
-                                    ->orWhereNull('offerables.number')
-                            )
+
                     ]),
                     'subcategories' => fn ($q) => $q->with([
                         'offers' => fn ($q) => $q
                             ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->where(
-                                fn ($q) => $q
-                                    ->where('offerables.number', '>', 0)
-                                    ->orWhereNull('offerables.number')
-                            ),
+                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
                     ]),
                     'categories' => fn ($q) => $q->with([
                         'offers' => fn ($q) => $q
                             ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->where(
-                                fn ($q) => $q
-                                    ->where('offerables.number', '>', 0)
-                                    ->orWhereNull('offerables.number')
-                            ),
+                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
                     ]),
                     'supercategories' => fn ($q) => $q->with([
                         'offers' => fn ($q) => $q
                             ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
                             ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->where(
-                                fn ($q) => $q
-                                    ->where('offerables.number', '>', 0)
-                                    ->orWhereNull('offerables.number')
-                            )
                     ]),
                     'reviews' => fn ($q) => $q->where('status', 1),
                     'coupons'
