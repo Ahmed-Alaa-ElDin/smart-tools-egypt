@@ -78,6 +78,7 @@ class Product extends Model
     public function categories()
     {
         return $this->belongsToThrough(Category::class, Subcategory::class);
+        // return $this->hasManyDeep(Category::class, ['product_subcategory', Subcategory::class], ['product_id', 'id', 'subcategory_id'], ['id', 'subcategory_id', 'id']);
     }
 
     // Many to many through relationship  Categories --> Products

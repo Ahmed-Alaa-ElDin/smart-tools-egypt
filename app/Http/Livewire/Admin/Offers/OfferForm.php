@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Offers;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Collection;
 use App\Models\Offer;
 use App\Models\Product;
 use App\Models\Subcategory;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use ProtoneMedia\LaravelCrossEloquentSearch\Search;
 
 class OfferForm extends Component
 {
@@ -24,7 +26,12 @@ class OfferForm extends Component
     public $date_range = ['start' => '', 'end' => ''];
     public $title = ['en' => '', 'ar' => ''], $free_shipping = false, $on_orders = 0, $type, $value = 0;
 
-    protected $listeners = ["daterangeUpdated"];
+    public $search1;
+
+    protected $listeners = [
+        "daterangeUpdated",
+        "clearSearch"
+    ];
 
     public function rules()
     {
@@ -55,7 +62,6 @@ class OfferForm extends Component
     // Called Once at the beginning
     public function mount()
     {
-
         $this->brands = Brand::get();
 
         $this->supercategories = Supercategory::select('id', 'name')->get()->toArray();
@@ -119,7 +125,9 @@ class OfferForm extends Component
             $this->items = [];
         } else {
             $this->items = [[
-                'item_type' => 'category',
+                'item_type' => 'product_collection',
+                'search' => '',
+                'list' => [],
                 'supercategory_id' => 'all',
                 'category_id' => 'all',
                 'categories' => [],
@@ -128,6 +136,8 @@ class OfferForm extends Component
                 'brand_id' => 'all',
                 'products' => [],
                 'products_id' => [],
+                'collections' => [],
+                'collections_id' => [],
                 'value' => 0.0,
                 'type' => 0,
             ]];
@@ -185,6 +195,10 @@ class OfferForm extends Component
         array_map(function ($value) use ($item_key) {
             array_push($this->items[$item_key]['products_id'], $value['id']);
         }, $this->items[$item_key]['products']);
+
+        array_map(function ($value) use ($item_key) {
+            array_push($this->items[$item_key]['collections_id'], $value['id']);
+        }, $this->items[$item_key]['collections']);
     }
     // Select All Products : End
 
@@ -193,6 +207,8 @@ class OfferForm extends Component
     public function deselectAll($item_key)
     {
         $this->items[$item_key]['products_id'] = [];
+
+        $this->items[$item_key]['collections_id'] = [];
     }
     // Deselect All Products : End
 
@@ -204,6 +220,8 @@ class OfferForm extends Component
 
         $this->items[$item_key] = [
             'item_type' => $item_type,
+            'search' => '',
+            'list' => [],
             'supercategory_id' => 'all',
             'category_id' => 'all',
             'categories' => [],
@@ -212,6 +230,8 @@ class OfferForm extends Component
             'brand_id' => 'all',
             'products' => [],
             'products_id' => [],
+            'collections' => [],
+            'collections_id' => [],
             'value' => 0.0,
             'type' => 0,
         ];
@@ -264,7 +284,7 @@ class OfferForm extends Component
     // Get the Products of selected Subcategory : End
 
 
-    // Get the products of selected brand
+    // Get the products of selected brand :: Start
     public function brandUpdated($item_key)
     {
         $brand_id = $this->items[$item_key]['brand_id'];
@@ -273,14 +293,99 @@ class OfferForm extends Component
 
         $this->items[$item_key]['products_id'] = [];
     }
-    // Get the products of selected brand
+    // Get the products of selected brand :: End
 
+    // Search Collection :: Start
+    public function searchUpdated($key)
+    {
+        if ($this->items[$key]['search']) {
+            $products = Product::select([
+                'id',
+                'name',
+                'barcode',
+                'original_price',
+                'base_price',
+                'final_price',
+                'under_reviewing',
+                'points',
+                'description',
+                'model'
+            ])
+                ->with(
+                    'brand',
+                )->whereNotIn('id', $this->items[$key]['products_id'])
+                ->where(
+                    fn ($q) =>
+                    $q->where('name', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('barcode', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('original_price', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('base_price', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('final_price', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('description', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('model', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhereHas('brand', fn ($q) => $q->where('brands.name', 'like', '%' . $this->items[$key]['search'] . '%'))
+                )->get();
+
+            $collections = Collection::select([
+                'id',
+                'name',
+                'barcode',
+                'original_price',
+                'base_price',
+                'final_price',
+                'under_reviewing',
+                'points',
+                'description',
+                'model'
+            ])->whereNotIn('id', $this->items[$key]['collections_id'])
+                ->where(
+                    fn ($q) =>
+                    $q->where('name', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('barcode', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('original_price', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('base_price', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('final_price', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('description', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('model', 'like', '%' . $this->items[$key]['search'] . '%')
+                )->get();
+
+            $this->items[$key]['list'] = $collections->concat($products)->map(function ($product_collection) {
+                $product_collection->product_collection = class_basename($product_collection);
+                return $product_collection;
+            })->toArray();
+        }
+    }
+    // Search Collection :: End
+
+    // Clear search input :: Start
+    public function clearSearch($key)
+    {
+        $this->items[$key]['list'] = [];
+
+        $this->items[$key]['search'] = '';
+    }
+    // Clear search input :: End
+
+    // Add Products or Collections to the item :: Start
+    public function addProduct($key, $product_id, $product_collection)
+    {
+        if ($product_collection == 'Product') {
+            $this->items[$key]['products_id'][] = $product_id;
+            $this->items[$key]['products'][] = Product::select('id', 'name')->find($product_id)->toArray();
+        } elseif ($product_collection == 'Collection') {
+            $this->items[$key]['collections_id'][] = $product_id;
+            $this->items[$key]['collections'][] = Collection::select('id', 'name')->find($product_id)->toArray();
+        }
+    }
+    // Add Products or Collections to the item :: End
 
     // Add Item : Start
     public function addItem()
     {
         $this->items[] = [
-            'item_type' => 'category',
+            'item_type' => 'product_collection',
+            'search' => '',
+            'list' => [],
             'supercategory_id' => 'all',
             'category_id' => 'all',
             'categories' => [],
@@ -289,12 +394,13 @@ class OfferForm extends Component
             'brand_id' => 'all',
             'products' => [],
             'products_id' => [],
+            'collections' => [],
+            'collections_id' => [],
             'value' => 0.0,
             'type' => 0,
         ];
     }
     // Add Item : End
-
 
     // Delete Item : Start
     public function deleteItem($item_key)
@@ -330,7 +436,17 @@ class OfferForm extends Component
             ]);
 
             foreach ($this->items as $item) {
-                if ($item['item_type'] == 'category') {
+                if ($item['item_type'] == 'product_collection') {
+                    $offer->products()->attach($item['products_id'], [
+                        'type' => $item['type'],
+                        'value' => $item['value'],
+                    ]);
+
+                    $offer->collections()->attach($item['collections_id'], [
+                        'type' => $item['type'],
+                        'value' => $item['value'],
+                    ]);
+                } elseif ($item['item_type'] == 'category') {
                     if ($item['supercategory_id'] == 'all') {
                         $supercategories = Supercategory::select('id')->with([
                             'subcategories' => fn ($q) => $q->select('subcategories.id')->with([

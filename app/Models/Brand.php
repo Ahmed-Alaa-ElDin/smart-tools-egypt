@@ -57,14 +57,9 @@ class Brand extends Model
         return $this->morphToMany(Offer::class, 'offerable')
             ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
             ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-            ->where(
-                fn ($q) => $q
-                    ->where('offerables.number', '>', 0)
-                    ->orWhereNull('offerables.number')
-            )->withPivot([
+            ->withPivot([
                 'value',
                 'type',
-                'number'
             ]);
     }
 }

@@ -99,4 +99,8 @@ return [
     "Days Remaining to Start"                               =>      "[*,-11] بدأ منذ :days يوم|[-10,-3] بدأ منذ :days أيام|{-1} أمس|{-2} بدأ منذ يومين|{0} أول يوم|{1} غداً|{2} سيبدأ بعد يومين|[3,10] سيبدأ بعد :days أيام|[11,*] سيبدأ بعد :days يوم",
     "Edit Coupon"                                           =>      "تحديث بيانات قسيمة الشراء",
     "Through this form you can edit coupon's data"          =>      "من خلال هذه الصفحة يمكنك تحديث بيانات قسيمة الشراء",
+    "Collections"                                           =>      "تجميعات",
+    "No Products or Collections Found"                      =>      "لم يتم العثور على منتجات أو تجميعات",
+    "Collections & Products"                                =>      "منتجات وتجميعات",
+
 ];
