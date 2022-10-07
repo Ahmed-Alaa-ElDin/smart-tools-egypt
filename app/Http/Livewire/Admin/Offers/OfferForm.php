@@ -121,6 +121,10 @@ class OfferForm extends Component
                 $this->oldProducts = $offer->products->toArray();
                 $this->deleteProducts_id = [];
             }
+            if ($offer->collections->count()) {
+                $this->oldCollections = $offer->collections->toArray();
+                $this->deleteCollections_id = [];
+            }
 
             $this->items = [];
         } else {
@@ -309,7 +313,8 @@ class OfferForm extends Component
                 'under_reviewing',
                 'points',
                 'description',
-                'model'
+                'model',
+                'brand_id'
             ])
                 ->with(
                     'brand',
@@ -560,8 +565,22 @@ class OfferForm extends Component
                 $this->offer->products()->detach($this->deleteProducts_id);
             }
 
+            if (isset($this->deleteCollections_id)) {
+                $this->offer->collections()->detach($this->deleteCollections_id);
+            }
+
             foreach ($this->items as $item) {
-                if ($item['item_type'] == 'category') {
+                if ($item['item_type'] == 'product_collection') {
+                    $this->offer->products()->attach($item['products_id'], [
+                        'type' => $item['type'],
+                        'value' => $item['value'],
+                    ]);
+
+                    $this->offer->collections()->attach($item['collections_id'], [
+                        'type' => $item['type'],
+                        'value' => $item['value'],
+                    ]);
+                } elseif ($item['item_type'] == 'category') {
                     if ($item['supercategory_id'] == 'all') {
                         $supercategories = Supercategory::select('id')->with([
                             'subcategories' => fn ($q) => $q->select('subcategories.id')->with([

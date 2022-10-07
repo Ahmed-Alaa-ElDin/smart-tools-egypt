@@ -969,6 +969,37 @@
                             </tr>
                         @endif
 
+                        @if (isset($oldCollections) && count($oldCollections))
+                            <tr>
+                                <th class="bg-primary text-white w-1/4">
+                                    {{ __('admin/offersPages.Collections') }}
+                                </th>
+                                <td class="p-2 bg-white">
+                                    <div class="flex flex-wrap justify-center gap-3 items-center h-100">
+                                        @foreach ($oldCollections as $collection_key => $collection)
+                                            <label for="old-collection-{{ $collection_key }}"
+                                                wire:key="old-collection-{{ $collection_key }}"
+                                                class=" px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($collection['id'], $deleteCollections_id)) bg-red-200 @else bg-successLight @endif select-none m-0">
+                                                <span>
+                                                    {{ $collection['name'][session('locale')] }}
+                                                </span>
+                                                <br>
+                                                <span>
+                                                    {{ $collection['pivot']['value'] }}
+                                                    {{ $collection['pivot']['type'] == 0 ? '%' : ($collection['pivot']['type'] == 1 ? __('admin/offersPages.EPG') : ($collection['pivot']['type'] == 2 ? trans_choice('admin/offersPages.Points value', $collection['pivot']['value'], ['points' => $collection['pivot']['value']]) : __('admin/offersPages.Free Shipping'))) }}
+                                                </span>
+                                                <br>
+
+                                                <input type="checkbox" wire:model="deleteCollections_id"
+                                                    id="old-collection-{{ $collection_key }}"
+                                                    value="{{ $collection['id'] }}" class="hidden">
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </td>
+                            </tr>
+                        @endif
+
                         @if (isset($oldProducts) && count($oldProducts))
                             <tr>
                                 <th class="bg-primary text-white w-1/4">{{ __('admin/offersPages.Products') }}</th>
