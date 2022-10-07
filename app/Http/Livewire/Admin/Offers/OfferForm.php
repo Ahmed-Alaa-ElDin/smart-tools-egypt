@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use ProtoneMedia\LaravelCrossEloquentSearch\Search;
 
 class OfferForm extends Component
 {
@@ -48,6 +47,7 @@ class OfferForm extends Component
             'items.*.category_id'           =>      "exclude_if:items.*.category_id,all|nullable|exists:categories,id",
             'items.*.subcategory_id'        =>      "exclude_if:items.*.subcategory_id,all|nullable|exists:subcategories,id",
             'items.*.products_id.*'         =>      "nullable|exists:products,id",
+            'items.*.collections_id.*'      =>      "nullable|exists:collections,id",
             'items.*.type'                  =>      "required|in:0,1,2,3",
             'items.*.value'                 =>      ["required", "numeric", "min:0", "exclude_unless:items.*.type,0 | max:100"],
             'on_orders'                     =>      "nullable"
