@@ -12,7 +12,7 @@ class ProductsListForm extends Component
 
     public $search = "", $list = [];
 
-    protected $listeners = ['showResults', 'clearSearch'];
+    protected $listeners = ['clearSearch'];
 
     ######## Fires with each update : Start ########
     public function render()
@@ -222,7 +222,7 @@ class ProductsListForm extends Component
     }
     ######## Rank Down : End #########
 
-    ######## Remove Product or Collection #########
+    ######## Remove Product :: Start #########
     public function removeProduct($product_id)
     {
         try {
@@ -249,8 +249,9 @@ class ProductsListForm extends Component
             ]);
         }
     }
-    ######## Remove Product or Collection #########
+    ######## Remove Product :: End #########
 
+    ######## Remove Collection :: Start #########
     public function removeCollection($collection_id)
     {
         try {
@@ -277,4 +278,5 @@ class ProductsListForm extends Component
             ]);
         }
     }
+    ######## Remove Collection :: End #########
 }

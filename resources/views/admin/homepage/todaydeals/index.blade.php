@@ -41,7 +41,7 @@
 
                                 {{-- Add New Home page section --}}
                                 <div class="ltr:text-right rtl:text-left">
-                                    <a href="{{ route('admin.products.create') }}"
+                                    <a href="{{ route('admin.products.create') }}" target="_blank"
                                         class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
                                         <span class="material-icons rtl:ml-1 ltr:mr-1">
                                             add
@@ -52,7 +52,7 @@
                         </div>
 
                         {{-- Card Body --}}
-                        <div class="card-body overflow-hidden">
+                        <div class="card-body">
 
                             {{-- Datatable Start --}}
                             @livewire('admin.homepage.todaydeals.today-deals-list')

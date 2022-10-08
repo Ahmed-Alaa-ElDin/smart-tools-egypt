@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Homepage\Todaydeals;
 
+use App\Models\Collection;
 use App\Models\Product;
 use App\Models\Section;
 use Illuminate\Support\Facades\DB;
@@ -11,23 +12,24 @@ use Livewire\WithPagination;
 
 class TodayDealsList extends Component
 {
-    use WithPagination;
+    public $items = [];
 
-    public $addProduct = 0;
+    public $search = "", $list = [];
 
-    public $product_id;
-    public $products = [], $products_list, $searchProduct = '', $showResult = 1;
-
-    public $search = "";
-
-    protected $listeners = ['showResults'];
+    protected $listeners = ['clearSearch'];
 
     public function mount()
     {
-        $this->section = Section::with(['products' => fn ($q) => $q
-            ->select(['products.id', 'name', 'base_price', 'final_price', 'points', 'under_reviewing'])
-            ->with(['thumbnail'])
-            ->withPivot('rank')])
+        $this->section = Section::with([
+            'products' => fn ($q) => $q
+                ->select(['products.id', 'name', 'original_price', 'base_price', 'final_price', 'points', 'under_reviewing'])
+                ->with(['thumbnail'])
+                ->withPivot('rank'),
+            'collections' => fn ($q) => $q
+                ->select(['collections.id', 'name', 'original_price', 'base_price', 'final_price', 'points', 'under_reviewing'])
+                ->with(['thumbnail'])
+                ->withPivot('rank'),
+        ])
             ->firstOrCreate([
                 'title->en' =>  "Today's Deal"
             ], [
@@ -41,96 +43,244 @@ class TodayDealsList extends Component
                 'today_deals' => 1
             ]);
 
-        $this->section->products->map(function ($product) {
+        $products = $this->section->products->map(function ($product) {
             $product->rank = $product->pivot->rank;
+            $product->type = 'Product';
             return $product;
-        });
+        })->toArray();
 
-        $this->products =  $this->section->products->toArray();
+        $collections = $this->section->collections->map(function ($collection) {
+            $collection->rank = $collection->pivot->rank;
+            $collection->type = 'Collection';
+            return $collection;
+        })->toArray();
+
+        $this->items =  array_merge(
+            $products,
+            $collections
+        );
     }
 
     public function render()
     {
-        $products = usort($this->products, function ($a, $b) {
+        $products = usort($this->items, function ($a, $b) {
             return $a['rank'] <=> $b['rank'];
         });
-
-        $this->products_list = Product::select(['id', 'name', 'base_price', 'final_price', 'free_shipping', 'brand_id'])
-            ->with(['brand' => function ($q) {
-                $q->select('id', 'name');
-            }])
-            ->where('under_reviewing', '=', 0)
-            ->whereNotIn('id', array_map(fn ($product) => $product['id'], $this->products))
-            ->where(function ($q) {
-                $q->where('name->ar', 'like', '%' . $this->searchProduct . '%')
-                    ->orWhere('name->en', 'like', '%' . $this->searchProduct . '%')
-                    ->orWhere('base_price', 'like', '%' . $this->searchProduct . '%')
-                    ->orWhere('final_price', 'like', '%' . $this->searchProduct . '%')
-                    ->orWhere('points', 'like', '%' . $this->searchProduct . '%');
-            })
-            ->get();
 
         return view('livewire.admin.homepage.todaydeals.today-deals-list', compact('products'));
     }
 
+    ######## Search for product and collection : Start ########
+    public function updatedSearch()
+    {
+        $products_id = array_map(fn ($item) => $item['id'], array_filter($this->items, fn ($item) => $item['type'] == 'Product'));
+
+        $products = Product::select([
+            'id',
+            'name',
+            'barcode',
+            'original_price',
+            'base_price',
+            'final_price',
+            'under_reviewing',
+            'points',
+            'description',
+            'model',
+            'brand_id'
+        ])->with(
+            'brand',
+        )->whereNotIn(
+            'id',
+            $products_id
+        )->where(
+            fn ($q) =>
+            $q->where('name', 'like', '%' . $this->search . '%')
+                ->orWhere('barcode', 'like', '%' . $this->search . '%')
+                ->orWhere('original_price', 'like', '%' . $this->search . '%')
+                ->orWhere('base_price', 'like', '%' . $this->search . '%')
+                ->orWhere('final_price', 'like', '%' . $this->search . '%')
+                ->orWhere('description', 'like', '%' . $this->search . '%')
+                ->orWhere('model', 'like', '%' . $this->search . '%')
+                ->orWhereHas('brand', fn ($q) => $q->where('brands.name', 'like', '%' . $this->search . '%'))
+        )->get();
+
+        $collections_id = array_map(fn ($item) => $item['id'], array_filter($this->items, fn ($item) => $item['type'] == 'Collection'));
+
+        $collections = Collection::select([
+            'id',
+            'name',
+            'barcode',
+            'original_price',
+            'base_price',
+            'final_price',
+            'under_reviewing',
+            'points',
+            'description',
+            'model'
+        ])->whereNotIn(
+            'id',
+            $collections_id
+        )->where(
+            fn ($q) =>
+            $q->where('name', 'like', '%' . $this->search . '%')
+                ->orWhere('barcode', 'like', '%' . $this->search . '%')
+                ->orWhere('original_price', 'like', '%' . $this->search . '%')
+                ->orWhere('base_price', 'like', '%' . $this->search . '%')
+                ->orWhere('final_price', 'like', '%' . $this->search . '%')
+                ->orWhere('description', 'like', '%' . $this->search . '%')
+                ->orWhere('model', 'like', '%' . $this->search . '%')
+        )->get();
+
+        $this->list = $collections->concat($products)->map(function ($product_collection) {
+            $product_collection->product_collection = class_basename($product_collection);
+            return $product_collection;
+        })->toArray();
+    }
+    ######## Search for product and collection : Start ########
+
+    // Clear search input :: Start
+    public function clearSearch()
+    {
+        $this->list = [];
+
+        $this->search = '';
+    }
+    // Clear search input :: End
+
+    // Add Products or Collections to the item :: Start
+    public function addProduct($product_id, $product_collection)
+    {
+        if ($product_collection == 'Product') {
+
+            $product = Product::with('thumbnail')->select([
+                'id',
+                'name',
+                'barcode',
+                'original_price',
+                'base_price',
+                'final_price',
+                'under_reviewing',
+                'points',
+                'description',
+                'model',
+                'brand_id'
+            ])->find($product_id)->toArray();
+
+            $product['rank'] = 127;
+            $product['type'] = $product_collection;
+
+            $this->items[] = $product;
+        } elseif ($product_collection == 'Collection') {
+
+            $collection = Collection::with('thumbnail')->select([
+                'id',
+                'name',
+                'barcode',
+                'original_price',
+                'base_price',
+                'final_price',
+                'under_reviewing',
+                'points',
+                'description',
+                'model',
+            ])->find($product_id)->toArray();
+
+            $collection['rank'] = 127;
+            $collection['type'] = $product_collection;
+
+            $this->items[] = $collection;
+        }
+
+        $this->dispatchBrowserEvent('swalDone', [
+            "text" => __('admin/sitePages.Product has been added to the list successfully'),
+            'icon' => 'success'
+        ]);
+    }
+    // Add Products or Collections to the item :: End
 
     ######## Check Rank : Start ########
     public function checkRank($rank, $old_rank)
     {
-        $product_key = array_search($rank, array_column($this->products, 'rank'));
+        $product_key = null;
 
-        if ($product_key !== false) {
-            $this->products[$product_key]['rank'] = $old_rank;
+        array_map(function ($item) use ($rank, &$product_key) {
+            if ($item['rank'] == $rank) {
+                $product_key = array_search($item, $this->items);
+            }
+        }, $this->items);
+
+        if ($product_key !== null) {
+            $this->items[$product_key]['rank'] = $old_rank;
         }
     }
     ######## Check Rank : End ########
 
     ######## Rank UP : Start #########
-    public function rankUp($product_id)
+    public function rankUp($product_id, $type = 'Product')
     {
-        $product_key = array_search($product_id, array_column($this->products, 'id'));
+        $product_key = null;
 
-        if ($this->products[$product_key]['rank'] > 1) {
-            if ($this->products[$product_key]['rank'] == 127) {
-                $this->checkRank(11, $this->products[$product_key]['rank']);
-                $this->products[$product_key]['rank'] = 11;
+        array_map(function ($item) use ($product_id, $type, &$product_key) {
+            if ($item['id'] == $product_id && $item['type'] == $type) {
+                $product_key = array_search($item, $this->items);
+            }
+        }, $this->items);
+
+        if ($this->items[$product_key]['rank'] > 1) {
+            if ($this->items[$product_key]['rank'] == 127) {
+                $this->checkRank(11, $this->items[$product_key]['rank']);
+                $this->items[$product_key]['rank'] = 11;
             } else {
-                $this->checkRank($this->products[$product_key]['rank'] - 1, $this->products[$product_key]['rank']);
-                $this->products[$product_key]['rank']--;
+                $this->checkRank($this->items[$product_key]['rank'] - 1, $this->items[$product_key]['rank']);
+                $this->items[$product_key]['rank']--;
             }
         }
     }
     ######## Rank UP : End #########
 
     ######## Rank Down : Start #########
-    public function rankDown($product_id)
+    public function rankDown($product_id, $type = 'Product')
     {
-        $product_key = array_search($product_id, array_column($this->products, 'id'));
+        $product_key = null;
 
-        $this->checkRank($this->products[$product_key]['rank'] + 1, $this->products[$product_key]['rank']);
+        array_map(function ($item) use ($product_id, $type, &$product_key) {
+            if ($item['id'] == $product_id && $item['type'] == $type) {
+                $product_key = array_search($item, $this->items);
+            }
+        }, $this->items);
 
-        if ($this->products[$product_key]['rank'] < 12) {
-            if ($this->products[$product_key]['rank'] == 11) {
-                $this->products[$product_key]['rank'] = 127;
+        $this->checkRank($this->items[$product_key]['rank'] + 1, $this->items[$product_key]['rank']);
+
+        if ($this->items[$product_key]['rank'] < 12) {
+            if ($this->items[$product_key]['rank'] == 11) {
+                $this->items[$product_key]['rank'] = 127;
             } else {
-                $this->products[$product_key]['rank']++;
+                $this->items[$product_key]['rank']++;
             }
         }
     }
     ######## Rank Down : End #########
 
-    ######## Deleted #########
+    ######## Remove Product :: Start #########
     public function removeProduct($product_id)
     {
         try {
-            $product_key = array_search($product_id, array_column($this->products, 'id'));
+            $product_key = null;
 
-            unset($this->products[$product_key]);
+            array_map(function ($item) use ($product_id, &$product_key) {
+                if ($item['id'] == $product_id && $item['type'] == 'Product') {
+                    $product_key = array_search($item, $this->items);
+                }
+            }, $this->items);
+
+            unset($this->items[$product_key]);
 
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('admin/sitePages.Product has been removed from list successfully'),
                 'icon' => 'success'
             ]);
+
+            $this->emitTo('admin.homepage.sections.section-form', 'listUpdated', ['selected_products' => $this->items]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/sitePages.Product hasn't been removed from list"),
@@ -138,72 +288,66 @@ class TodayDealsList extends Component
             ]);
         }
     }
-    ######## Deleted #########
+    ######## Remove Product :: End #########
 
-    ######## Product Selected : Start ########
-    public function productSelected($product_id, $product_name)
-    {
-        $this->searchProduct = $product_name;
-        $this->product_id = $product_id;
-        $this->showResult = 0;
-    }
-    ######## Product Selected : End ########
-
-    ######## Show Results : Start ########
-    public function showResults($status)
-    {
-        $this->showResult = $status;
-    }
-    ######## Show Results : End ########
-
-    ######## Add : Start #########
-    public function add()
+    ######## Remove Collection :: Start #########
+    public function removeCollection($collection_id)
     {
         try {
-            $product = Product::select(['id', 'name', 'base_price', 'final_price', 'points', 'under_reviewing'])->with(['thumbnail'])->findOrFail($this->product_id)->toArray();
-            $product['rank'] = 127;
+            $collection_key = null;
 
-            $this->searchProduct = null;
-            $this->product_id = null;
+            array_map(function ($item) use ($collection_id, &$collection_key) {
+                if ($item['id'] == $collection_id && $item['type'] == 'Collection') {
+                    $collection_key = array_search($item, $this->items);
+                }
+            }, $this->items);
 
-            $this->products[] = $product;
+            unset($this->items[$collection_key]);
 
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __('admin/sitePages.Product has been added to the list successfully'),
+                "text" => __('admin/sitePages.Product has been removed from list successfully'),
                 'icon' => 'success'
             ]);
+
+            $this->emitTo('admin.homepage.sections.section-form', 'listUpdated', ['selected_products' => $this->items]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
-                "text" => __("admin/sitePages.Product hasn't been added to the list"),
+                "text" => __("admin/sitePages.Product hasn't been removed from list"),
                 'icon' => 'error'
             ]);
         }
     }
-    ######## Add : End #########
+    ######## Remove Collection :: End #########
 
-    ######## Save : Start #########
+    ######## Update : Start #########
     public function save()
     {
+        // dd($this->items);
         DB::beginTransaction();
 
         try {
             $this->section->products()->detach();
+            $this->section->collections()->detach();
 
-            foreach ($this->products as $product) {
-                $this->section->products()->attach($product['id'], ['rank' => $product['rank']]);
+            foreach ($this->items as $item) {
+                if ($item['type'] == 'Product') {
+                    $this->section->products()->attach($item['id'], ['rank' => $item['rank']]);
+                } elseif ($item['type'] == 'Collection') {
+                    $this->section->collections()->attach($item['id'], ['rank' => $item['rank']]);
+                }
             }
 
             DB::commit();
 
-            Session::flash('success', __('admin/sitePages.Section added successfully'));
+            Session::flash('success', __('admin/sitePages.Section updated successfully'));
             redirect()->route('admin.homepage');
         } catch (\Throwable $th) {
             DB::rollback();
 
-            Session::flash('error', __("admin/sitePages.Section hasn't been added"));
+            Session::flash('error', __("admin/sitePages.Section hasn't been updated"));
             redirect()->route('admin.homepage');
         }
     }
-    ######## Save : End #########
+    ######## Update : End #########
 
 }
