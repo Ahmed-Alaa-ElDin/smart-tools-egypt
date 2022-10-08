@@ -58,7 +58,6 @@ class Offer extends Model
         return $this->morphedByMany(Brand::class, 'offerable')->withPivot('value', 'type');
     }
 
-
     // many to many relationship (polymorphic) (inverse)  Product --> Offers
     public function products()
     {

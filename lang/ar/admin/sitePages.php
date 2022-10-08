@@ -137,5 +137,6 @@ return [
     "Top Brands hasn't been updated"                                        =>      "لم يتم تحديث بيانات أفضل العلامات التجارية",
     "Manage Top Banner Bar"                                                 =>      "إدارة شريط البنر العلوي",
     "Use 1300x50 sizes image"                                               =>      "استخدم صورة أبعادها 1300x50",
-
+    "Products & Collections List"                                           =>      "قائمة منتجات وتجميعات",
+    "Original Price"                                                        =>      "سعر الشراء",
 ];

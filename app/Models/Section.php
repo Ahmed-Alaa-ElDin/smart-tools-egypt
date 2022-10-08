@@ -27,10 +27,16 @@ class Section extends Model
         return json_encode($value, JSON_UNESCAPED_UNICODE);
     }
 
-    // Many to many relationship  Sections --> Products
+    // many to many relationship (polymorphic) (inverse)  Product --> Sections
     public function products()
     {
-        return $this->belongsToMany(Product::class);
+        return $this->morphedByMany(Product::class, 'sectionable')->withPivot('rank');
+    }
+
+    // many to many relationship (polymorphic) (inverse)  Collection --> Sections
+    public function collections()
+    {
+        return $this->morphedByMany(Collection::class, 'sectionable')->withPivot('rank');
     }
 
     // Many to many relationship  Sections --> Banners

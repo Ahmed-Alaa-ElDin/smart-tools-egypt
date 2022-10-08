@@ -69,6 +69,12 @@ class Collection extends Model
         return $this->morphToMany(Coupon::class, 'couponable');
     }
 
+    // Many to many relationship  Sections --> Collections
+    public function sections()
+    {
+        return $this->morphToMany(Section::class, 'sectionable')->withPivot(['rank']);
+    }
+
     // many to many relationship (polymorphic)  Collection --> Offers
     public function offers()
     {

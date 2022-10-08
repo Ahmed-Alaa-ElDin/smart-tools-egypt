@@ -27,7 +27,6 @@ class SectionForm extends Component
             'type'                      =>      'required|in:0,1,2,3',
             'selected_offer'            =>      'exclude_unless:type,1,2|required|exists:offers,id',
             "selected_products"         =>      'exclude_unless:type,0|required|array|min:1',
-            "selected_products.*.id"    =>      'exists:products,id',
             "selected_banners"          =>      'exclude_unless:type,3|required|array|min:3|max:3',
             "selected_banners.*.id"     =>      'exists:banners,id',
         ];
@@ -48,7 +47,19 @@ class SectionForm extends Component
         if ($this->section_id) {
             $this->section = Section::with([
                 'products' =>
-                fn ($q) => $q->select(['products.id', 'name', 'base_price', 'final_price', 'points', 'under_reviewing'])->with(['thumbnail'])->withPivot('rank'),
+                fn ($q) => $q->select([
+                    'products.id',
+                    'name',
+                    'original_price',
+                    'base_price',
+                    'final_price',
+                    'points',
+                    'under_reviewing'
+                ])->with([
+                    'thumbnail'
+                ])->withPivot('rank'),
+                'collections' =>
+                fn ($q) => $q->select(['collections.id', 'name', 'original_price', 'base_price', 'final_price', 'points', 'under_reviewing'])->with(['thumbnail'])->withPivot('rank'),
                 'offer',
                 'banners' => fn ($q) => $q->select(['banners.id', 'banner_name', 'description', 'link'])->withPivot('rank')
             ])->findOrFail($this->section_id);
@@ -63,10 +74,18 @@ class SectionForm extends Component
             $this->type = $this->section->type;
 
             if ($this->type == 0) {
-                $this->selected_products = $this->section->products->toArray();
-                foreach ($this->selected_products as &$product) {
+                $products = $this->section->products->toArray();
+                foreach ($products as &$product) {
                     $product['rank'] = $product['pivot']['rank'];
+                    $product['type'] = 'Product';
                 }
+
+                $collections = $this->section->collections->toArray();
+                foreach ($collections as &$collection) {
+                    $collection['rank'] = $collection['pivot']['rank'];
+                    $collection['type'] = 'Collection';
+                }
+                $this->selected_products = array_merge($products, $collections);
             } elseif ($this->type == 1 || $this->type == 2) {
                 $this->selected_offer = $this->section->offer ? $this->section->offer->id : '';
             } elseif ($this->type == 3) {
@@ -109,6 +128,7 @@ class SectionForm extends Component
     ############ Get Data from Subcomponents :: Start ############
     public function listUpdated($request)
     {
+        // dd($request);
         if (array_key_exists('selected_offer', $request)) {
             $this->selected_offer = $request['selected_offer'];
             $this->validateOnly('selected_offer');
@@ -141,8 +161,12 @@ class SectionForm extends Component
             ]);
 
             if ($this->selected_products != null) {
-                foreach ($this->selected_products as $product) {
-                    $section->products()->attach($product['id'], ['rank' => $product['rank']]);
+                foreach ($this->selected_products as $item) {
+                    if ($item['type'] == 'Product') {
+                        $section->products()->attach($item['id'], ['rank' => $item['rank']]);
+                    } elseif ($item['type'] == 'Collection') {
+                        $section->collections()->attach($item['id'], ['rank' => $item['rank']]);
+                    }
                 }
             } elseif ($this->selected_banners != null) {
                 foreach ($this->selected_banners as $banner) {
@@ -187,11 +211,16 @@ class SectionForm extends Component
             ]);
 
             $this->section->products()->detach();
+            $this->section->collections()->detach();
             $this->section->banners()->detach();
 
             if ($this->selected_products != null) {
-                foreach ($this->selected_products as $product) {
-                    $this->section->products()->attach($product['id'], ['rank' => $product['rank']]);
+                foreach ($this->selected_products as $item) {
+                    if ($item['type'] == 'Product') {
+                        $this->section->products()->attach($item['id'], ['rank' => $item['rank']]);
+                    } elseif ($item['type'] == 'Collection') {
+                        $this->section->collections()->attach($item['id'], ['rank' => $item['rank']]);
+                    }
                 }
             } elseif ($this->selected_banners != null) {
                 foreach ($this->selected_banners as $banner) {

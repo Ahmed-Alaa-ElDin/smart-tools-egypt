@@ -57,15 +57,15 @@
                 {{ __('admin/sitePages.Section Type') }}</label>
             <div class="flex flex-wrap justify-center items-center gap-3">
 
-                {{-- Products List : Start --}}
+                {{-- Products & Collections List : Start --}}
                 <label for="products_list" class="text-black m-0 cursor-pointer select-none">
                     <span class="mx-2">
-                        {{ __('admin/sitePages.Products List') }}
+                        {{ __('admin/sitePages.Products & Collections List') }}
                     </span>
                     <input class="appearance-none checked:bg-secondary outline-none ring-0 cursor-pointer"
                         id="products_list" type="radio" name="type" wire:model="type" value="0">
                 </label>
-                {{-- Products List : End --}}
+                {{-- Products & Collections List : End --}}
 
                 {{-- Offers : Start --}}
                 <label for="offer" class="text-black m-0 cursor-pointer select-none">
@@ -113,7 +113,7 @@
                 </div>
             @enderror
             {{-- Products List : Start --}}
-            @livewire('admin.homepage.sections.products-list-form', ['products' => $selected_products ?? []])
+            @livewire('admin.homepage.sections.products-list-form', ['items' => $selected_products ?? []])
             {{-- Products List : End --}}
         @elseif ($type == 1 || $type == 2)
             @error('selected_offer')
@@ -160,6 +160,4 @@
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Back') }}</a>
     </div>
     {{-- Buttons Section End --}}
-
-
 </div>

@@ -128,7 +128,7 @@ class Product extends Model
     // Many to many relationship  Sections --> Products
     public function sections()
     {
-        return $this->belongsToMany(Section::class);
+        return $this->morphToMany(Section::class, 'sectionable')->withPivot(['rank']);
     }
 
     // One to many relationship Product --> Reviews
