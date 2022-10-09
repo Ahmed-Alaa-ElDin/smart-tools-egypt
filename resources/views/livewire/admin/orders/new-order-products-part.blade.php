@@ -124,7 +124,7 @@
                     wire:key='product-{{ $product['id'] }}-{{ rand() }}'>
                     <div class="flex gap-6 justify-start items-center">
                         {{-- Thumnail :: Start --}}
-                        <a href="{{ route('front.product.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) }}"
+                        <a href="{{ route('front.products.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) }}"
                             target="_blank" class="min-w-max block hover:text-current">
                             @if ($product['thumbnail'])
                                 <img class="w-full h-full flex justify-center items-center bg-gray-200 rounded overflow-hidden"
@@ -154,7 +154,7 @@
 
                                 {{-- Product Name : Start --}}
                                 <div class="flex items-center">
-                                    <a href="{{ route('front.product.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) }}"
+                                    <a href="{{ route('front.products.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) }}"
                                         target="_blank" class="text-lg font-bold hover:text-current">
                                         {{ $product['name'][session('locale')] }}
                                     </a>

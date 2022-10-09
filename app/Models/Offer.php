@@ -70,6 +70,17 @@ class Offer extends Model
         return $this->morphedByMany(Collection::class, 'offerable')->withPivot('value', 'type');
     }
 
+    // many to many Deep relationship  Offer --> Collections
+    public function directCollections()
+    {
+        return $this->hasManyDeep(
+            Collection::class,
+            ['offerables'],
+            [null, 'id'],
+            [null, ['offerable_type', 'offerable_id']]
+        )->withPivot('offerables', ['value', 'type']);
+    }
+
     // many to many Deep relationship  Offer --> Products
     public function directProducts()
     {

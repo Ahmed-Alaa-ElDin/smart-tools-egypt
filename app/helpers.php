@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Collection;
 use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\Review;
@@ -369,13 +370,124 @@ function getBestOfferForProducts($products_id)
     return $products;
 }
 
+// Get the best offer for a collection (best price, best points, free shipping)
+function getBestOfferForCollection($collection_id)
+{
+    $collection = Collection::publishedCollection()->findOrFail($collection_id);
+
+    ############ Get Best Offer for all collections :: Start ############
+    // Get All Collection's Prices -- Start with Collection's Final Price
+    $all_prices = [$collection->final_price];
+
+    // Get All Collection's Points -- Start with Collection's Points
+    $all_points = [$collection->points];
+
+    // Get Free Shipping
+    $free_shipping = $collection->free_shipping;
+
+    // Get Final Prices Fromi Direct Offers
+    $direct_offers = $collection->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]);
+    foreach ($direct_offers as $offer) {
+        if ($offer['free_shipping']) {
+            $free_shipping = 1;
+        }
+
+        if ($offer['type'] == 0) {
+            $all_prices[] = round($collection->final_price - (($offer['value'] / 100) * $collection->final_price), 2);
+        } elseif ($offer['type'] == 1) {
+            if ($collection->final_price >  $offer['value']) {
+                $all_prices[] = round($collection->final_price - $offer['value'], 2);
+            } else {
+                $all_prices[] = 0;
+            }
+        } elseif ($offer['type'] == 2) {
+            $all_points[] = $offer['value'];
+        }
+    }
+
+    // Get the Best Price
+    $collection->best_price = min($all_prices);
+
+    // Get the Best Points
+    $collection->best_points = array_sum($all_points);
+
+    $collection->free_shipping = $free_shipping;
+    ############ Get Best Offer for all collections :: End ############
+
+    return $collection;
+}
+
+// Get the best offer for a list of collections (best price, best points, free shipping)
+function getBestOfferForCollections($collections_id)
+{
+    $collections = Collection::publishedCollections($collections_id)->get();
+
+    foreach ($collections as $key => $collection) {
+        ############ Get Best Offer for all collections :: Start ############
+        // Get All Product's Prices -- Start with Product's Final Price
+        $all_prices = [$collection->final_price];
+
+        // Get All Product's Points -- Start with Product's Points
+        $all_points = [$collection->points];
+
+        // Get Free Shipping
+        $free_shipping = $collection->free_shipping;
+
+        // Get Final Prices From Direct Offers
+        $direct_offers = $collection->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]);
+        foreach ($direct_offers as $offer) {
+            if ($offer['free_shipping']) {
+                $free_shipping = 1;
+            }
+
+            // Percentage Offer
+            if ($offer['type'] == 0) {
+                $all_prices[] = round($collection->final_price - (($offer['value'] / 100) * $collection->final_price), 2);
+            }
+            // Fixed Offer
+            elseif ($offer['type'] == 1) {
+                if ($collection->final_price >  $offer['value']) {
+                    $all_prices[] = round($collection->final_price - $offer['value'], 2);
+                } else {
+                    $all_prices[] = 0;
+                }
+            }
+            // Points Offer
+            elseif ($offer['type'] == 2) {
+                $all_points[] = $offer['value'];
+            }
+        }
+
+        // Get the Best Price
+        $collection->best_price = min($all_prices);
+
+        // Get the Best Points
+        $collection->best_points = array_sum($all_points);
+
+        // Get the Free Shipping
+        $collection->free_shipping = $free_shipping;
+
+        $reviews = $collection->reviews;
+
+        $collection->avg_rating = $reviews->avg('rating');
+
+        $collection->reviews_count = $reviews->count();
+        ############ Get Best Offer for all collections :: End ############
+
+        $collections[$key] = $collection;
+    }
+
+    return $collections;
+}
+
 // get the average rating of a product
-function get_product_rating($product_id)
+function get_item_rating($product_id, $type = 'Product')
 {
     $all_product_reviews = Review::with([
         'user' => fn ($q) => $q->select('id', 'f_name', 'l_name', 'profile_photo_path')
     ])
-        ->where('product_id', $product_id)
+        ->where('reviewable_id', $product_id)
+        ->where('reviewable_type', 'App\\Models\\' . $type)
         ->approved()->get();
 
     return $all_product_reviews;

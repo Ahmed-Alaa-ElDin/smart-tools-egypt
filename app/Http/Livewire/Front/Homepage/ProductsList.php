@@ -13,7 +13,7 @@ class ProductsList extends Component
     ############## Mount :: Start ##############
     public function mount()
     {
-        $this->products = $this->section->finalProducts ?? collect([]);
+        $this->items = $this->section && $this->section->finalItems ? $this->section->finalItems->toArray() : [];
     }
     ############## Mount :: End ##############
 

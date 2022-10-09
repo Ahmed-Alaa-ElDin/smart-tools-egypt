@@ -13,12 +13,15 @@ class HomepageController extends Controller
     {
         // todo :: Make the code more efficient
         $all_products = [];
+        $all_collections = [];
 
         ############## Get All Active Sections with Relations :: Start ##############
         $sections = Section::with([
-            'products' => fn ($q) => $q->publishedproduct()->withPivot('rank')->orderBy('rank'),
+            'products' => fn ($q) => $q->publishedProduct()->withPivot('rank')->orderBy('rank'),
+            'collections' => fn ($q) => $q->publishedCollection()->withPivot('rank')->orderBy('rank'),
             'offer' => fn ($q) => $q->with([
                 'directProducts' => fn ($q) => $q->where('products.publish', 1),
+                'directCollections' => fn ($q) => $q->where('collections.publish', 1),
                 'supercategoryProducts' => fn ($q) => $q->where('products.publish', 1),
                 'categoryProducts' => fn ($q) => $q->where('products.publish', 1),
                 'subcategoryProducts' => fn ($q) => $q->where('products.publish', 1),
@@ -27,8 +30,8 @@ class HomepageController extends Controller
             'banners'
         ])
             ->where('active', 1)
-            ->orderBy('rank')
-            ->get();
+            ->orderBy('rank')->get();
+
         ############## Get All Active Sections with Relations :: End ##############
 
         ############ Extract of products From Sections :: Start ############
@@ -58,23 +61,92 @@ class HomepageController extends Controller
         ############ Extract of products From Sections :: End ############
 
         ############ Get Best Offer for all products :: Start ############
-        $products = getBestOfferForProducts($all_products);
+        $products = getBestOfferForProducts($all_products)->map(function ($product) {
+            $product->type = "Product";
+            return $product;
+        });
         ############ Get Best Offer for all products :: End ############
+
+        ############ Extract of collections From Sections :: Start ############
+        foreach ($sections as $section) {
+            // Section Type is Product List
+            if ($section->collections->count()) {
+                $collections_id = $section->collections->pluck('id');
+                array_push($all_collections, ...$collections_id);
+            }
+            // Section Type is Offer
+            elseif ($section->offer) {
+                $section->offer->uniqueCollections = $section->offer->directCollections->unique('id');
+
+                if ($section->offer->uniqueCollections->count() > 11) {
+                    $section->offer->uniqueCollections = $section->offer->uniqueCollections->random(11)->shuffle();
+                } else {
+                    $section->offer->uniqueCollections = $section->offer->uniqueCollections->shuffle();
+                }
+
+                $collections_id = $section->offer->uniqueCollections->pluck('id');
+
+                array_push($all_collections, ...$collections_id);
+            }
+        }
+        ############ Extract of collections From Sections :: End ############
+
+        ############ Get Best Offer for all collections :: Start ############
+        $collections = getBestOfferForCollections($all_collections)->map(function ($collection) {
+            $collection->type = "Collection";
+            return $collection;
+        });
+        ############ Get Best Offer for all collections :: End ############
+
+        ############ Concatenation of best Products & Collections  :: Start ############
+        $items = $collections->concat($products);
+        ############ Concatenation of best Products & Collections  :: End ############
 
         ############ Return Products' Details to Sections :: Start ############
         foreach ($sections as $section) {
             // Section Type is Product List
-            if ($section->products->count()) {
+            if ($section->products->count() || $section->collections->count()) {
                 $products_id = $section->products->pluck('id');
+                $collections_id = $section->collections->pluck('id');
 
-                $section->finalProducts = $products->whereIn('id', $products_id)->sortBy(function ($product) use ($products_id) {
-                    return array_search($product->id, $products_id->toArray());
-                });
+                $finalProducts = $items
+                    ->whereIn('id', $products_id)
+                    ->where('type', "Product")
+                    ->sortBy(function ($product) use ($products_id) {
+                        return array_search($product->id, $products_id->toArray());
+                    });
+
+                $finalCollections = $items
+                    ->whereIn('id', $collections_id)
+                    ->where('type', "Collection")
+                    ->sortBy(function ($collection) use ($collections_id) {
+                        return array_search($collection->id, $collections_id->toArray());
+                    });
+
+                $section->finalItems = $finalCollections->concat($finalProducts);
             }
 
             // Section Type is Offer
             elseif ($section->offer) {
-                $section->offer->finalProducts = $products->whereIn('id', $section->offer->uniqueProducts->pluck('id'));
+                $products_id = $section->offer->uniqueProducts->pluck('id');
+
+                $finalProducts = $items
+                    ->whereIn('id', $products_id)
+                    ->where('type', "Product")
+                    ->sortBy(function ($product) use ($products_id) {
+                        return array_search($product->id, $products_id->toArray());
+                    });
+
+                $collections_id = $section->offer->uniqueProducts->pluck('id');
+
+                $finalCollections = $items
+                    ->whereIn('id', $collections_id)
+                    ->where('type', "Collection")
+                    ->sortBy(function ($collection) use ($collections_id) {
+                        return array_search($collection->id, $collections_id->toArray());
+                    });;
+
+                $section->offer->finalItems = $finalCollections->concat($finalProducts);
             }
         }
         ############ Return Products' Details to Sections :: End ############

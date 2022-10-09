@@ -24,7 +24,7 @@
                         <li>
                             <div
                                 class="flex flex-nowrap gap-4 justify-between items-center transition-all ease-in-out hover:bg-white hover:text-black rounded hover:shadow-xl px-2">
-                                <a href="{{ route('front.product.show', ['id' => $wishlist_item->id, 'slug' => $wishlist_item->options->slug]) }}"
+                                <a href="{{ route('front.products.show', ['id' => $wishlist_item->id, 'slug' => $wishlist_item->options->slug]) }}"
                                     class="flex flex-nowrap gap-4 justify-between items-center hover:bg-white hover:text-current hover:shadow-none w-full py-2">
 
                                     {{-- Thumbnail :: Start --}}

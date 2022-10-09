@@ -80,7 +80,18 @@ class Order extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class)->withPivot(
+        return $this->morphedByMany(Product::class, 'orderable')->withPivot(
+            'quantity',
+            'price',
+            'points',
+            'coupon_discount',
+            'coupon_points'
+        )->withTimestamps();
+    }
+
+    public function collections()
+    {
+        return $this->morphedByMany(Product::class, 'orderable')->withPivot(
             'quantity',
             'price',
             'points',

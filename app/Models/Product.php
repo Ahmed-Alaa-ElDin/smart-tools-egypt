@@ -134,13 +134,13 @@ class Product extends Model
     // One to many relationship Product --> Reviews
     public function reviews()
     {
-        return $this->hasMany(Review::class);
+        return $this->morphMany(Review::class,'reviewable');
     }
 
     // many to many relationship Product --> Orders
     public function orders()
     {
-        return $this->belongsToMany(Order::class)->withPivot(
+        return $this->morphToMany(Order::class,'orderable')->withPivot(
             'quantity',
             'price',
             'points',

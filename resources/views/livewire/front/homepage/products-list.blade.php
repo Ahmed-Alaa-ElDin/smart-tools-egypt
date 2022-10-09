@@ -24,9 +24,9 @@
                 <div class="splide__track">
                     {{-- List of Products : Start --}}
                     <ul class="splide__list">
-                        @forelse ($products as $product)
+                        @forelse ($items as $item)
                             {{-- Product : Start --}}
-                            <x-front.product-box-small :product="$product" />
+                            <x-front.product-box-small :item="$item" />
                             {{-- Product : End --}}
                         @empty
                             <div class="text-center w-full p-4 font-bold">

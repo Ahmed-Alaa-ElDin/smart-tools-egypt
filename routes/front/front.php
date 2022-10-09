@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Front\CartController;
+use App\Http\Controllers\Front\CollectionController;
 use App\Http\Controllers\Front\HomepageController;
 use App\Http\Controllers\Front\OrderController;
 use App\Http\Controllers\Front\ProductController;
@@ -78,7 +79,12 @@ Route::group([
     ################ Invoice Request Controller :: End ##############
 
     ################ Product Controller :: Start ##############
-    Route::get('/{id}-{slug?}', [ProductController::class, 'show'])->name('product.show');
+    Route::get('/{id}-{slug?}', [ProductController::class, 'show'])->name('products.show');
     ################ Product Controller :: End ##############
+
+    ################ Collection Controller :: Start ##############
+    Route::get('/c/{id}-{slug?}', [CollectionController::class, 'show'])->name('collections.show');
+    ################ Collection Controller :: End ##############
+
 
 });

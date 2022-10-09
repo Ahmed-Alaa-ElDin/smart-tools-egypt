@@ -94,6 +94,7 @@ return [
     "Only 2 Pieces Remaining"   =>      "متبقي آخر قطعتين فقط",
     "Only 3 Pieces Remaining"   =>      "متبقي آخر 3 قطع فقط",
     "Product Page Title"        =>      ":product_name",
+    "Collection Page Title"     =>      ":collection_name",
     "Before Discount: "         =>      "قبل الخصم: ",
     "After Discount: "          =>      "بعد الخصم: ",
     "You Saved: "               =>      "وفرت: ",
@@ -387,4 +388,6 @@ return [
     "Share on Facebook"         =>      "المشاركة على فيسبوك",
     "Copy link"                 =>      "نسخ الرابط",
     "You'll get: "              =>      "سوف تحصل على: ",
+    "Products in the offer"     =>      "المنتجات بالعرض",
+
 ];

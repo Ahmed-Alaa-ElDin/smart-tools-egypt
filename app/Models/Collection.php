@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -40,6 +41,12 @@ class Collection extends Model
         'created_by'
     ];
 
+    protected $appends = [
+        "avg_rating", "can_review",
+    ];
+
+    protected $with = ['reviews', 'orders'];
+
     protected function asJson($value)
     {
         return json_encode($value, JSON_UNESCAPED_UNICODE);
@@ -51,13 +58,13 @@ class Collection extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    // One to many relationship Collection --> Images
+    // One to many relationship (polymorphic) Collection --> Images
     public function images()
     {
         return $this->morphMany(Image::class, "imagable");
     }
 
-    // One to one relationship Collection --> Thumbnail
+    // One to one relationship (polymorphic) Collection --> Thumbnail
     public function thumbnail()
     {
         return $this->morphOne(Image::class, 'imagable')->where('is_thumbnail', 1);
@@ -69,7 +76,7 @@ class Collection extends Model
         return $this->morphToMany(Coupon::class, 'couponable');
     }
 
-    // Many to many relationship  Sections --> Collections
+    // Many to many relationship (polymorphic) Sections --> Collections
     public function sections()
     {
         return $this->morphToMany(Section::class, 'sectionable')->withPivot(['rank']);
@@ -85,10 +92,107 @@ class Collection extends Model
         ]);
     }
 
+    // One to many relationship Collection --> Products
     public function products()
     {
         return $this->belongsToMany(Product::class)->withPivot(
             'quantity',
         )->withTimestamps();
     }
+
+    // One to many (Polymorphic) relationship Collection --> Reviews
+    public function reviews()
+    {
+        return $this->morphMany(Review::class, 'reviewable');
+    }
+
+    // many to many (Polymorphic) relationship Collection --> Orders
+    public function orders()
+    {
+        return $this->morphToMany(Order::class, 'orderable')->withPivot(
+            'quantity',
+            'price',
+            'points',
+            'coupon_discount',
+            'coupon_points'
+        )->withTimestamps();
+    }
+
+    ############# Appends :: Start #############
+    public function getAvgRatingAttribute()
+    {
+        return $this->reviews->avg('rating');
+    }
+
+    public function getCanReviewAttribute()
+    {
+        return $this->reviews->where('user_id', auth()->id())->count() == 0 && $this->orders->where('user_id', auth()->id())->count() > 0 ? true : false;
+    }
+    ############# Appends :: End #############
+
+    ############# Scopes :: Start #############
+    public function scopePublishedCollection($query)
+    {
+        $query->select(
+            [
+                'collections.id',
+                'name',
+                'slug',
+                'base_price',
+                'final_price',
+                'points',
+                'description',
+                'model',
+                'free_shipping',
+                'publish',
+                'under_reviewing',
+            ]
+        )
+            ->with(
+                [
+                    'thumbnail',
+                    'offers' => fn ($q) => $q
+                        ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                        ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                ]
+            )
+            ->where('under_reviewing', 0)
+            ->where('publish', 1);
+    }
+
+    public function scopePublishedCollections($query, $collections_id)
+    {
+        $query->select(
+            [
+                'collections.id',
+                'name',
+                'slug',
+                'weight',
+                'base_price',
+                'final_price',
+                'points',
+                'description',
+                'model',
+                'free_shipping',
+                'publish',
+                'under_reviewing',
+            ]
+        )
+            ->with(
+                [
+                    'thumbnail',
+                    'offers' => fn ($q) => $q
+                        ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                        ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
+                    'reviews' => fn ($q) => $q->where('status', 1),
+                    'coupons'
+                ]
+            )
+            ->whereIn('id', $collections_id)
+            ->where('under_reviewing', 0)
+            ->where('publish', 1);
+    }
+
+    ############# Scopes :: End #############
+
 }

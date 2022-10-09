@@ -2,7 +2,7 @@
 <div class="p-4 scrollbar scrollbar-thin">
     <div class="flex gap-6 justify-start items-center">
         {{-- Thumnail :: Start --}}
-        <a href="{{ route('front.product.show', ['id' => $product['id'], 'slug' => $product->slug]) }}"
+        <a href="{{ route('front.products.show', ['id' => $product['id'], 'slug' => $product->slug]) }}"
             class="min-w-max block hover:text-current">
             @if ($product['thumbnail'])
                 <img class="w-full h-full flex justify-center items-center bg-gray-200"
@@ -32,7 +32,7 @@
 
                 {{-- Product Name : Start --}}
                 <div class="flex items-center">
-                    <a href="{{ route('front.product.show', ['id' => $product['id'], 'slug' => $product->slug]) }}"
+                    <a href="{{ route('front.products.show', ['id' => $product['id'], 'slug' => $product->slug]) }}"
                         class="text-lg font-bold hover:text-current">
                         {{ $product->name }}
                     </a>

@@ -103,7 +103,7 @@
                             <div
                                 class="flex gap-5 items-center p-4 scrollbar scrollbar-hidden rounded @if ($product->pivot->quantity == 0) bg-red-100 @endif">
                                 {{-- Thumnail :: Start --}}
-                                <a href="{{ route('front.product.show', ['id' => $product->id, 'slug' => $product->slug]) }}"
+                                <a href="{{ route('front.products.show', ['id' => $product->id, 'slug' => $product->slug]) }}"
                                     class="block hover:text-current">
                                     @if ($product->thumbnail)
                                         <img class="w-full h-full flex justify-center items-center bg-gray-200"
@@ -132,7 +132,7 @@
 
                                     {{-- Product Name :: Start --}}
                                     <div class="flex items-center">
-                                        <a href="{{ route('front.product.show', ['id' => $product->id, 'slug' => $product->slug]) }}"
+                                        <a href="{{ route('front.products.show', ['id' => $product->id, 'slug' => $product->slug]) }}"
                                             class="text-lg font-bold truncate  hover:text-current">
                                             {{ $product->name }}
                                         </a>

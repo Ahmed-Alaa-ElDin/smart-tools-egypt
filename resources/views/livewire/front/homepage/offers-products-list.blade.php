@@ -94,9 +94,9 @@
                     {{-- List of Products : Start --}}
                     <ul class="splide__list">
 
-                        @foreach ($products as $product)
+                        @foreach ($items as $item)
                             {{-- Product : Start --}}
-                            <x-front.product-box-small :product="$product" wire:key="product-{{ rand() }}"/>
+                            <x-front.product-box-small :item="$item" wire:key="item-{{ rand() }}"/>
                             {{-- Product : End --}}
                         @endforeach
                     </ul>
