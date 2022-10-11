@@ -1092,6 +1092,12 @@ input:checked + .toggle-bg {
 .top-2 {
   top: 0.5rem !important;
 }
+.top-0 {
+  top: 0px !important;
+}
+.left-0 {
+  left: 0px !important;
+}
 .z-0 {
   z-index: 0 !important;
 }
@@ -1106,6 +1112,9 @@ input:checked + .toggle-bg {
 }
 .z-20 {
   z-index: 20 !important;
+}
+.z-10 {
+  z-index: 10 !important;
 }
 .order-2 {
   order: 2 !important;
@@ -1513,6 +1522,9 @@ input:checked + .toggle-bg {
 .h-6 {
   height: 1.5rem !important;
 }
+.h-full {
+  height: 100% !important;
+}
 .max-h-36 {
   max-height: 9rem !important;
 }
@@ -1626,6 +1638,12 @@ input:checked + .toggle-bg {
 .w-6 {
   width: 1.5rem !important;
 }
+.w-full {
+  width: 100% !important;
+}
+.w-48 {
+  width: 12rem !important;
+}
 .min-w-full {
   min-width: 100% !important;
 }
@@ -1642,6 +1660,11 @@ input:checked + .toggle-bg {
 }
 .min-w-\[50\%\] {
   min-width: 50% !important;
+}
+.min-w-max {
+  min-width: -webkit-max-content !important;
+  min-width: -moz-max-content !important;
+  min-width: max-content !important;
 }
 .max-w-max {
   max-width: -webkit-max-content !important;
@@ -1757,6 +1780,16 @@ input:checked + .toggle-bg {
   50% {
     opacity: .5;
   }
+}
+@keyframes pulse {
+
+  50% {
+    opacity: .5;
+  }
+}
+.animate-pulse {
+  -webkit-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
 }
 @keyframes pulse {
 
@@ -1940,6 +1973,15 @@ input:checked + .toggle-bg {
 }
 .gap-4 {
   gap: 1rem !important;
+}
+.gap-3 {
+  gap: 0.75rem !important;
+}
+.gap-1 {
+  gap: 0.25rem !important;
+}
+.gap-2 {
+  gap: 0.5rem !important;
 }
 .gap-x-4 {
   -moz-column-gap: 1rem !important;
@@ -2552,6 +2594,10 @@ input:checked + .toggle-bg {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(249 250 251 / var(--tw-bg-opacity)) !important;
 }
+.bg-primary {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(186 0 36 / var(--tw-bg-opacity)) !important;
+}
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5 !important;
 }
@@ -2679,6 +2725,15 @@ input:checked + .toggle-bg {
 .p-5 {
   padding: 1.25rem !important;
 }
+.p-4 {
+  padding: 1rem !important;
+}
+.p-2 {
+  padding: 0.5rem !important;
+}
+.p-3 {
+  padding: 0.75rem !important;
+}
 .px-4 {
   padding-left: 1rem !important;
   padding-right: 1rem !important;
@@ -2791,6 +2846,10 @@ input:checked + .toggle-bg {
   padding-top: 1rem !important;
   padding-bottom: 1rem !important;
 }
+.px-4 {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
 .pt-3 {
   padding-top: 0.75rem !important;
 }
@@ -2838,6 +2897,9 @@ input:checked + .toggle-bg {
 }
 .pb-1 {
   padding-bottom: 0.25rem !important;
+}
+.pb-4 {
+  padding-bottom: 1rem !important;
 }
 .text-left {
   text-align: left !important;
@@ -2968,6 +3030,22 @@ input:checked + .toggle-bg {
 .text-\[200px\] {
   font-size: 200px !important;
 }
+.text-sm {
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+.text-xl {
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
+}
+.text-xs {
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+}
+.text-2xl {
+  font-size: 1.5rem !important;
+  line-height: 2rem !important;
+}
 .font-medium {
   font-weight: 500 !important;
 }
@@ -3003,6 +3081,9 @@ input:checked + .toggle-bg {
 }
 .font-light {
   font-weight: 300 !important;
+}
+.font-bold {
+  font-weight: 700 !important;
 }
 .uppercase {
   text-transform: uppercase !important;
@@ -3293,6 +3374,22 @@ input:checked + .toggle-bg {
 .text-whatsapp {
   --tw-text-opacity: 1 !important;
   color: rgb(37 211 102 / var(--tw-text-opacity)) !important;
+}
+.text-primary {
+  --tw-text-opacity: 1 !important;
+  color: rgb(186 0 36 / var(--tw-text-opacity)) !important;
+}
+.text-successDark {
+  --tw-text-opacity: 1 !important;
+  color: rgb(61 140 64 / var(--tw-text-opacity)) !important;
+}
+.text-success {
+  --tw-text-opacity: 1 !important;
+  color: rgb(76 175 80 / var(--tw-text-opacity)) !important;
+}
+.text-yellow-500 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(194 120 3 / var(--tw-text-opacity)) !important;
 }
 .underline {
   -webkit-text-decoration-line: underline !important;

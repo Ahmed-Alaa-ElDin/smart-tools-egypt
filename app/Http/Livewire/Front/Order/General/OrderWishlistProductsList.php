@@ -8,10 +8,10 @@ use Livewire\Component;
 
 class OrderWishlistProductsList extends Component
 {
-    public $products;
+    public $items;
 
     protected $listeners = [
-        'cartUpdated' => 'getProducts',
+        'cartUpdated' => 'getItems',
     ];
 
     public function render()
@@ -19,24 +19,34 @@ class OrderWishlistProductsList extends Component
         return view('livewire.front.order.general.order-wishlist-products-list');
     }
 
-    ############## Get Products :: Start ##############
-    public function getProducts()
+    ############## Get Items :: Start ##############
+    public function getItems()
     {
-        $products_id = Cart::instance('wishlist')->content()->pluck('id');
+        $products_id = [];
+        $collections_id = [];
 
-        $products = collect([]);
+        // get items id from wishlist
+        Cart::instance('wishlist')->content()->map(function ($item) use (&$products_id, &$collections_id, &$cart_products_id, &$cart_collections_id) {
+            if ($item->options->type == 'Product') {
+                $products_id[] = $item->id;
+            } elseif ($item->options->type == 'Collection') {
+                $collections_id[] = $item->id;
+            }
+        });
 
+        // get all items data from database with best price
         $products = getBestOfferForProducts($products_id);
+        $collections = getBestOfferForCollections($collections_id);
 
-        $this->products = $products;
+        $this->items = $collections->concat($products)->toArray();
     }
-    ############## Get Products :: End ##############
+    ############## Get Items :: End ##############
 
-    ############## Remove Products from Wishlist :: Start ##############
-    public function removeFromWishlist($product_id)
+    ############## Remove Items from Wishlist :: Start ##############
+    public function removeFromWishlist($item_id, $type)
     {
-        Cart::instance('wishlist')->search(function ($cartItem, $rowId) use ($product_id) {
-            return $cartItem->id === $product_id;
+        Cart::instance('wishlist')->search(function ($cartItem, $rowId) use ($item_id, $type) {
+            return $cartItem->id === $item_id && $cartItem->options->type === $type;
         })->each(function ($cartItem, $rowId) {
             Cart::instance('wishlist')->remove($rowId);
         });
@@ -56,39 +66,44 @@ class OrderWishlistProductsList extends Component
         $this->emit('cartUpdated');
         ############ Emit event to reinitialize the slider :: End ############
     }
-    ############## Remove Products from Wishlist :: End ##############
+    ############## Remove Items from Wishlist :: End ##############
 
-    ############## Add Products to Cart :: Start ##############
-    public function moveToCart($product_id)
+    ############## Add Items to Cart :: Start ##############
+    public function moveToCart($item_id, $type)
     {
-        // Get product from cart
-        $product = Cart::instance('wishlist')->search(function ($cartItem, $rowId) use ($product_id) {
-            return $cartItem->id === $product_id;
+        // Get item from cart
+        $item = Cart::instance('wishlist')->search(function ($cartItem, $rowId) use ($item_id, $type) {
+            return $cartItem->id === $item_id && $cartItem->options->type === $type;
         })->first();
 
-        $product_id = $product->rowId;
+        $item_id = $item->rowId;
 
-        // Get the product's all data from database with best price
-        $product = getBestOfferForProduct($product->id);
+        // Get the item's all data from database with best price
+        if ($type === 'Product') {
+            $item = getBestOfferForProduct($item->id);
+        } else {
+            $item = getBestOfferForCollection($item->id);
+        }
 
-        if ($product->quantity > 0 && $product->under_reviewing != 1) {
-            Cart::instance('wishlist')->remove($product_id);
+        if ($item->quantity > 0 && $item->under_reviewing != 1) {
+            Cart::instance('wishlist')->remove($item_id);
 
-            if (!Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product) {
-                return $cartItem->id === $product->id;
+            if (!Cart::instance('cart')->search(function ($cartItem, $rowId) use ($item, $type) {
+                return $cartItem->id === $item->id && $cartItem->options->type == $type;
             })->count()) {
                 Cart::instance('cart')->add(
-                    $product->id,
+                    $item->id,
                     [
-                        'en' => $product->getTranslation('name', 'en'),
-                        'ar' => $product->getTranslation('name', 'ar'),
+                        'en' => $item->getTranslation('name', 'en'),
+                        'ar' => $item->getTranslation('name', 'ar'),
                     ],
                     1,
-                    $product->best_price,
+                    $item->best_price,
                     [
-                        'thumbnail' => $product->thumbnail ?? null,
-                        "weight" => $product->weight ?? 0,
-                        "slug" => $product->slug ?? ""
+                        'type' => $type,
+                        'thumbnail' => $item->thumbnail ?? null,
+                        "weight" => $item->weight ?? 0,
+                        "slug" => $item->slug ?? ""
                     ]
                 )->associate(Product::class);
 
@@ -100,21 +115,21 @@ class OrderWishlistProductsList extends Component
 
             ############ Emit event to reinitialize the slider :: Start ############
             $this->emit('cartUpdated');
-            $this->emit('cartUpdated:' . "product-" . $product->id);
+            $this->emit('cartUpdated:' . "item-" . $item->id);
             ############ Emit event to reinitialize the slider :: End ############
 
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('front/homePage.Product Has Been Added To The Cart Successfully'),
                 'icon' => 'success'
             ]);
-        } elseif ($product->under_reviewing == 1) {
+        } elseif ($item->under_reviewing == 1) {
             ############ Emit Sweet Alert :: Start ############
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('front/homePage.Sorry This Product is Under Reviewing'),
                 'icon' => 'error'
             ]);
             ############ Emit Sweet Alert :: End ############
-        } elseif ($product->quantity == 0) {
+        } elseif ($item->quantity == 0) {
             ############ Emit Sweet Alert :: Start ############
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('front/homePage.Sorry This Product is Out of Stock'),

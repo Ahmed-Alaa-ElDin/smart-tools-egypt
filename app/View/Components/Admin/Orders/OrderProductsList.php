@@ -6,15 +6,15 @@ use Illuminate\View\Component;
 
 class OrderProductsList extends Component
 {
-    public $products;
+    public $items;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($products)
+    public function __construct($items)
     {
-        $this->products = $products;
+        $this->items = $items;
     }
 
     /**

@@ -107,7 +107,7 @@
         </div>
         {{-- Date Range :: End --}}
 
-        {{-- Free Shipping :: Start --}}
+        {{-- Free Shipping:: Start --}}
         <div class="col-span-6 col-start-4 md:col-span-3 grid grid-cols-2 gap-y-2 gap-x-2 items-center w-full">
             <label wire:click="freeShipping"
                 class="col-span-1 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Free Shipping') }}</label>
@@ -122,7 +122,7 @@
                 @enderror
             </div>
         </div>
-        {{-- Free Shipping :: End --}}
+        {{-- Free Shipping:: End --}}
 
     </div>
     {{-- Offer Information :: End --}}

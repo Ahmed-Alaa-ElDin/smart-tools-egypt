@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class AddToCartButton extends Component
 {
-    public $product_id, $text = false, $large = false, $add_buy = 'add';
+    public $item_id, $type='Product', $text = false, $large = false, $add_buy = 'add';
 
     public function render()
     {
@@ -16,39 +16,44 @@ class AddToCartButton extends Component
     }
 
     ############## Add To Cart :: Start ##############
-    public function addToCart($product_id)
+    public function addToCart($item_id, $type)
     {
-        $product = getBestOfferForProduct($product_id);
+        if ($type == 'Product') {
+            $item = getBestOfferForProduct($item_id);
+        } elseif ($type == 'Collection') {
+            $item = getBestOfferForCollection($item_id);
+        }
 
-        $cart_product = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product) {
-            return $cartItem->id === $product->id;
+        $cart_item = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($item, $type) {
+            return $cartItem->id === $item->id && $cartItem->options->type === $type;
         })->count();
 
-        if (!$cart_product && $product->quantity > 0 && $product->under_reviewing != 1) {
-            ############ Add Product to Wishlist :: Start ############
+        if (!$cart_item && $item->quantity > 0 && $item->under_reviewing != 1) {
+            ############ Add Item to Wishlist :: Start ############
             Cart::instance('cart')->add(
-                $product->id,
+                $item->id,
                 [
-                    'en' => $product->getTranslation('name', 'en'),
-                    'ar' => $product->getTranslation('name', 'ar'),
+                    'en' => $item->getTranslation('name', 'en'),
+                    'ar' => $item->getTranslation('name', 'ar'),
                 ],
                 1,
-                $product->best_price,
+                $item->best_price,
                 [
-                    'thumbnail' => $product->thumbnail ?? null,
-                    "weight" => $product->weight ?? 0,
-                    "slug" => $product->slug ?? ""
+                    'type'  => $type,
+                    'thumbnail' => $item->thumbnail ?? null,
+                    "weight" => $item->weight ?? 0,
+                    "slug" => $item->slug ?? ""
                 ]
-            )->associate(Product::class);
+            )->associate($item['type'] == 'Product' ? Product::class : Collection::class);
 
             if (Auth::check()) {
                 Cart::instance('cart')->store(Auth::user()->id);
             }
-            ############ Add Product to Wishlist :: End ############
+            ############ Add Item to Wishlist :: End ############
 
             ############ Emit event to reinitialize the slider :: Start ############
             $this->emit('cartUpdated');
-            $this->emit('cartUpdated:' . "product-" . $this->product_id);
+            $this->emit('cartUpdated:' . "item-" . $this->item_id);
             ############ Emit event to reinitialize the slider :: End ############
 
             ############ Emit Sweet Alert :: Start ############
@@ -63,21 +68,21 @@ class AddToCartButton extends Component
                 redirect()->route('front.order.shipping');
                 ############ Go to Payment :: End ############
             }
-        } elseif ($product->under_reviewing == 1) {
+        } elseif ($item->under_reviewing == 1) {
             ############ Emit Sweet Alert :: Start ############
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('front/homePage.Sorry This Product is Under Reviewing'),
                 'icon' => 'error'
             ]);
             ############ Emit Sweet Alert :: End ############
-        } elseif ($product->quantity == 0) {
+        } elseif ($item->quantity == 0) {
             ############ Emit Sweet Alert :: Start ############
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('front/homePage.Sorry This Product is Out of Stock'),
                 'icon' => 'error'
             ]);
             ############ Emit Sweet Alert :: End ############
-        } elseif ($cart_product) {
+        } elseif ($cart_item) {
             if ($this->add_buy == 'pay') {
                 ############ Go to Payment :: Start ############
                 redirect()->route('front.order.shipping');

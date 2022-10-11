@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Front\General\Cart;
 
-use Gloudemans\Shoppingcart\Facades\Cart as FacadesCart;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -12,67 +12,72 @@ class CartDropDown extends Component
 
     public function render()
     {
-        $this->cart = FacadesCart::instance('cart')->content();
+        $this->cart = Cart::instance('cart')->content();
 
         return view('livewire.front.general.cart.cart-drop-down');
     }
 
 
     ############## Remove From Cart :: Start ##############
-    public function removeFromCart($rowId, $product_id)
+    public function removeFromCart($rowId, $item_id)
     {
-        FacadesCart::instance('cart')->remove($rowId);
+        Cart::instance('cart')->remove($rowId);
 
         if (Auth::check()) {
-            FacadesCart::instance('cart')->store(Auth::user()->id);
+            Cart::instance('cart')->store(Auth::user()->id);
         }
 
         ############ Emit event to reinitialize the slider :: Start ############
         $this->emit('cartUpdated');
-        $this->emit('cartUpdated:' . "product-" . $product_id);
+        $this->emit('cartUpdated:' . "item-" . $item_id);
         ############ Emit event to reinitialize the slider :: End ############
     }
     ############## Remove From Cart :: End ##############
 
     ############## Move To Wishlist :: Start ##############
-    public function moveToWishlist($rowId)
+    public function moveToWishlist($rowId, $type)
     {
-        // Get product from cart
-        $product = FacadesCart::instance('cart')->get($rowId);
+        // Get item from cart
+        $item = Cart::instance('cart')->get($rowId);
 
-        // Get the product's all data from database with best price
-        $product = getBestOfferForProduct($product->id);
+        // Get the item's all data from database with best price
+        if ($item->options->type == 'Product') {
+            $item = getBestOfferForProduct($item->id);
+        } elseif ($item->options->type == 'Collection') {
+            $item = getBestOfferForCollection($item->id);
+        }
 
-        // Remove product from cart
-        FacadesCart::instance('cart')->remove($rowId);
+        // Remove item from cart
+        Cart::instance('cart')->remove($rowId);
 
-        // Add product to wishlist
-        if (!FacadesCart::instance('wishlist')->search(function ($cartItem, $rowId) use ($product) {
-            return $cartItem->id === $product->id;
+        // Add item to wishlist
+        if (!Cart::instance('wishlist')->search(function ($cartItem, $rowId) use ($item, $type) {
+            return $cartItem->id === $item->id && $cartItem->options['type'] === $type;
         })->count()) {
-            FacadesCart::instance('wishlist')->add(
-                $product->id,
+            Cart::instance('wishlist')->add(
+                $item->id,
                 [
-                    'en' => $product->getTranslation('name', 'en'),
-                    'ar' => $product->getTranslation('name', 'ar'),
+                    'en' => $item->getTranslation('name', 'en'),
+                    'ar' => $item->getTranslation('name', 'ar'),
                 ],
                 1,
-                $product->best_price,
+                $item->best_price,
                 [
-                    'thumbnail' => $product->thumbnail ?? null,
-                    "slug" => $product->slug ?? ""
+                    'type' => $type,
+                    'thumbnail' => $item->thumbnail ?? null,
+                    "slug" => $item->slug ?? ""
                 ]
-            )->associate(Product::class);
+            )->associate($item['type'] == 'Product' ? Product::class : Collection::class);
 
             if (Auth::check()) {
-                FacadesCart::instance('cart')->store(Auth::user()->id);
-                FacadesCart::instance('wishlist')->store(Auth::user()->id);
+                Cart::instance('cart')->store(Auth::user()->id);
+                Cart::instance('wishlist')->store(Auth::user()->id);
             }
         }
 
         ############ Emit event to reinitialize the slider :: Start ############
         $this->emit('cartUpdated');
-        $this->emit('cartUpdated:' . "product-" . $product->id);
+        $this->emit('cartUpdated:' . "item-" . $item->id);
         ############ Emit event to reinitialize the slider :: End ############
     }
     ############## Move To Wishlist :: End ##############
@@ -80,10 +85,10 @@ class CartDropDown extends Component
     ############## Clear Cart :: Start ##############
     public function clearCart()
     {
-        FacadesCart::instance('cart')->destroy();
+        Cart::instance('cart')->destroy();
 
         if (Auth::check()) {
-            FacadesCart::instance('cart')->store(Auth::user()->id);
+            Cart::instance('cart')->store(Auth::user()->id);
         }
 
         ############ Emit event to reinitialize the slider :: Start ############

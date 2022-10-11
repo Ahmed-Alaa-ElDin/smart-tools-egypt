@@ -53,7 +53,8 @@
 
         {{-- Buy Again :: Start --}}
         <div>
-            @livewire('front.general.cart.add-to-cart-button', ['product_id' => $product['id'], 'text' => true, 'add_buy' => 'buy'], key('add-cart-button-' . Str::random(10)))
+            {{-- todo :: Add Item Type --}}
+            @livewire('front.general.cart.add-to-cart-button', ['item_id' => $item['id'], 'text' => true, 'add_buy' => 'buy'], key('add-cart-button-' . Str::random(10)))
         </div>
         {{-- Buy Again :: End --}}
 

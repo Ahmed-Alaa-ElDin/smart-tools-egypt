@@ -130,15 +130,15 @@
                                         class="absolute z-10 top-2 ltr:-right-10 rtl:-left-10 transition-all ease-in-out duration-500 ltr:group-hover:right-2 rtl:group-hover:left-2 flex flex-col gap-1">
 
                                         {{-- Add to compare : Start --}}
-                                        @livewire('front.general.compare.add-to-compare-button', ['item_id' => $item['id']], key('add-compare-button-' . Str::random(10)))
+                                        @livewire('front.general.compare.add-to-compare-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-compare-button-' . Str::random(10)))
                                         {{-- Add to compare : End --}}
 
                                         {{-- Add to wishlist : Start --}}
-                                        @livewire('front.general.wishlist.add-to-wishlist-button', ['item_id' => $item['id']], key('add-wishlist-button-' . Str::random(10)))
+                                        @livewire('front.general.wishlist.add-to-wishlist-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-wishlist-button-' . Str::random(10)))
                                         {{-- Add to wishlist : End --}}
 
                                         {{-- Add to cart : Start --}}
-                                        @livewire('front.general.cart.add-to-cart-button', ['item_id' => $item['id']], key('add-cart-button-' . Str::random(10)))
+                                        @livewire('front.general.cart.add-to-cart-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-cart-button-' . Str::random(10)))
                                         {{-- Add to cart : End --}}
                                     </div>
                                     {{-- Add Product : End --}}
@@ -192,8 +192,8 @@
 
                                     <a class="block md:p-3 p-2 text-left"
                                         @if ($item['type'] == 'Product') href="{{ route('front.products.show', ['id' => $item['id'], 'slug' => $item['slug'][session('locale')]]) }}"
-                                        @elseif ($item['type'] == 'Collection') {{-- todo --}}
-                                        href="{{ route('front.products.show', ['id' => $item['id'], 'slug' => $item['slug'][session('locale')]]) }}" @endif>
+                                        @elseif ($item['type'] == 'Collection')
+                                        href="{{ route('front.collections.show', ['id' => $item['id'], 'slug' => $item['slug'][session('locale')]]) }}" @endif>
 
                                         {{-- Price : Start --}}
                                         <div class="flex flex-wrap justify-center items-center gap-2">
@@ -201,17 +201,16 @@
                                             {{-- Final Price : Start --}}
                                             <div class="flex rtl:flex-row-reverse gap-1">
                                                 <span
-                                                    class="font-bold text-primary text-xs">{{ __('front/homePage.EGP') }}</span>
-                                                <span class="font-bold text-primary text-xl"
+                                                    class="font-bold text-successDark text-xs">{{ __('front/homePage.EGP') }}</span>
+                                                <span class="font-bold text-successDark text-xl"
                                                     dir="ltr">{{ number_format(explode('.', $item['final_price'])[0], 0, '.', '\'') }}</span>
                                                 <span
-                                                    class="font-bold text-primary text-xs">{{ explode('.', $item['final_price'])[1] }}</span>
+                                                    class="font-bold text-successDark text-xs">{{ explode('.', $item['final_price'])[1] }}</span>
                                             </div>
                                             {{-- Final Price : End --}}
 
                                             {{-- Base Price : Start --}}
-                                            <del
-                                                class="flex rtl:flex-row-reverse gap-1 font-bold text-gray-400 text-sm">
+                                            <del class="flex rtl:flex-row-reverse gap-1 font-bold text-red-400 text-sm">
                                                 <span class="text-xs">
                                                     {{ __('front/homePage.EGP') }}
                                                 </span>
@@ -223,13 +222,13 @@
                                         </div>
                                         {{-- Price : End --}}
 
-                                        {{-- Free Shipping : Start --}}
+                                        {{-- Free Shipping: Start --}}
                                         @if ($item['free_shipping'])
                                             <div class="text-center text-success font-bold text-sm">
                                                 {{ __('front/homePage.Free Shipping') }}
                                             </div>
                                         @endif
-                                        {{-- Free Shipping : End --}}
+                                        {{-- Free Shipping: End --}}
 
                                         {{-- Reviews : Start --}}
                                         <div class="my-1 text-center flex justify-center items-center gap-2">
@@ -259,7 +258,8 @@
                                             <div
                                                 class="rounded px-2 my-2 bg-gray-200 border-gray-800 text-black text-sm border flex justify-between items-center">
                                                 <span>{{ __('front/homePage.Points') }}</span>
-                                                <span>{{ $item['best_points'] > $item['points'] ? round($item['best_points']) : $item['points'] }}</span>
+                                                <span
+                                                    dir="ltr">{{ $item['best_points'] > $item['points'] ? number_format($item['best_points'], 0, '.', '\'') : number_format($item['points'], 0, '.', '\'') }}</span>
                                             </div>
                                         @endif
                                         {{-- Points : End --}}
@@ -267,7 +267,16 @@
 
                                     {{-- Cart Amount : Start --}}
                                     <div class="md:px-3 px-2">
-                                        @livewire('front.general.cart.cart-amount', ['item_id' => $item['id'], 'unique' => 'item-' . $item['id'], 'small' => true], key($item['name'][session('locale')] . '-' . rand()))
+                                        @livewire(
+                                            'front.general.cart.cart-amount',
+                                            [
+                                                'item_id' => $item['id'],
+                                                'unique' => 'item-' . $item['id'],
+                                                'type' => $item['type'],
+                                                'small' => true,
+                                            ],
+                                            key($item['name'][session('locale')] . '-' . rand()),
+                                        )
                                     </div>
                                     {{-- Cart Amount : End --}}
                                 </div>

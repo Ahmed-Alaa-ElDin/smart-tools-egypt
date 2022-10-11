@@ -77,10 +77,10 @@ function getBestOfferForProduct($product_id)
 
     ############ Get Best Offer for all products :: Start ############
     // Get All Product's Prices -- Start with Product's Final Price
-    $all_prices = [$product->final_price];
+    $offers_discount = [0];
 
     // Get All Product's Points -- Start with Product's Points
-    $all_points = [$product->points];
+    $offers_points = [0];
 
     // Get Free Shipping
     $free_shipping = $product->free_shipping;
@@ -102,15 +102,15 @@ function getBestOfferForProduct($product_id)
         }
 
         if ($offer['type'] == 0) {
-            $all_prices[] = round($product->final_price - (($offer['value'] / 100) * $product->final_price), 2);
+            $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
         } elseif ($offer['type'] == 1) {
             if ($product->final_price >  $offer['value']) {
-                $all_prices[] = round($product->final_price - $offer['value'], 2);
+                $offers_discount[] = round($offer['value'], 2);
             } else {
-                $all_prices[] = 0;
+                $offers_discount[] = 0;
             }
         } elseif ($offer['type'] == 2) {
-            $all_points[] = $offer['value'];
+            $offers_points[] = $offer['value'];
         }
     }
 
@@ -123,15 +123,15 @@ function getBestOfferForProduct($product_id)
             }
 
             if ($offer['type'] == 0) {
-                $all_prices[] = round($product->final_price - (($offer['value'] / 100) * $product->final_price), 2);
+                $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
             } elseif ($offer['type'] == 1) {
                 if ($product->final_price >  $offer['value']) {
-                    $all_prices[] = round($product->final_price - $offer['value'], 2);
+                    $offers_discount[] = round($offer['value'], 2);
                 } else {
-                    $all_prices[] = 0;
+                    $offers_discount[] = 0;
                 }
             } elseif ($offer['type'] == 2) {
-                $all_points[] = $offer['value'];
+                $offers_points[] = $offer['value'];
             }
         }
     }
@@ -145,15 +145,15 @@ function getBestOfferForProduct($product_id)
             }
 
             if ($offer['type'] == 0) {
-                $all_prices[] = round($product->final_price - (($offer['value'] / 100) * $product->final_price), 2);
+                $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
             } elseif ($offer['type'] == 1) {
                 if ($product->final_price >  $offer['value']) {
-                    $all_prices[] = round($product->final_price - $offer['value'], 2);
+                    $offers_discount[] = round($offer['value'], 2);
                 } else {
-                    $all_prices[] = 0;
+                    $offers_discount[] = 0;
                 }
             } elseif ($offer['type'] == 2) {
-                $all_points[] = $offer['value'];
+                $offers_points[] = $offer['value'];
             }
         }
     }
@@ -167,15 +167,15 @@ function getBestOfferForProduct($product_id)
             }
 
             if ($offer['type'] == 0) {
-                $all_prices[] = round($product->final_price - (($offer['value'] / 100) * $product->final_price), 2);
+                $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
             } elseif ($offer['type'] == 1) {
                 if ($product->final_price >  $offer['value']) {
-                    $all_prices[] = round($product->final_price - $offer['value'], 2);
+                    $offers_discount[] = round($offer['value'], 2);
                 } else {
-                    $all_prices[] = 0;
+                    $offers_discount[] = 0;
                 }
             } elseif ($offer['type'] == 2) {
-                $all_points[] = $offer['value'];
+                $offers_points[] = $offer['value'];
             }
         }
     }
@@ -188,25 +188,27 @@ function getBestOfferForProduct($product_id)
         }
 
         if ($offer['type'] == 0) {
-            $all_prices[] = round($product->final_price - (($offer['value'] / 100) * $product->final_price), 2);
+            $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
         } elseif ($offer['type'] == 1) {
             if ($product->final_price >  $offer['value']) {
-                $all_prices[] = round($product->final_price - $offer['value'], 2);
+                $offers_discount[] = round($offer['value'], 2);
             } else {
-                $all_prices[] = 0;
+                $offers_discount[] = 0;
             }
         } elseif ($offer['type'] == 2) {
-            $all_points[] = $offer['value'];
+            $offers_points[] = $offer['value'];
         }
     }
 
     // Get the Best Price
-    $product->best_price = min($all_prices);
+    $product->offer_discount = max($offers_discount);
+    $product->best_price = $product->final_price - $product->offer_discount;
 
     // Get the Best Points
-    $product->best_points = array_sum($all_points);
+    $product->offer_points = max($offers_points);
+    $product->best_points = $product->points + $product->offer_points;
 
-    $product->free_shipping = $free_shipping;
+    $product->offer_free_shipping = $free_shipping;
     ############ Get Best Offer for all products :: End ############
 
     return $product;
@@ -220,10 +222,10 @@ function getBestOfferForProducts($products_id)
     foreach ($products as $key => $product) {
         ############ Get Best Offer for all products :: Start ############
         // Get All Product's Prices -- Start with Product's Final Price
-        $all_prices = [$product->final_price];
+        $offers_discount = [0];
 
         // Get All Product's Points -- Start with Product's Points
-        $all_points = [$product->points];
+        $offers_points = [0];
 
         // Get Free Shipping
         $free_shipping = $product->free_shipping;
@@ -246,19 +248,19 @@ function getBestOfferForProducts($products_id)
 
             // Percentage Offer
             if ($offer['type'] == 0) {
-                $all_prices[] = round($product->final_price - (($offer['value'] / 100) * $product->final_price), 2);
+                $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
             }
             // Fixed Offer
             elseif ($offer['type'] == 1) {
                 if ($product->final_price >  $offer['value']) {
-                    $all_prices[] = round($product->final_price - $offer['value'], 2);
+                    $offers_discount[] = round($offer['value'], 2);
                 } else {
-                    $all_prices[] = 0;
+                    $offers_discount[] = 0;
                 }
             }
             // Points Offer
             elseif ($offer['type'] == 2) {
-                $all_points[] = $offer['value'];
+                $offers_points[] = $offer['value'];
             }
         }
 
@@ -271,15 +273,15 @@ function getBestOfferForProducts($products_id)
                 }
 
                 if ($offer['type'] == 0) {
-                    $all_prices[] = round($product->final_price - (($offer['value'] / 100) * $product->final_price), 2);
+                    $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
                 } elseif ($offer['type'] == 1) {
                     if ($product->final_price >  $offer['value']) {
-                        $all_prices[] = round($product->final_price - $offer['value'], 2);
+                        $offers_discount[] = round($offer['value'], 2);
                     } else {
-                        $all_prices[] = 0;
+                        $offers_discount[] = 0;
                     }
                 } elseif ($offer['type'] == 2) {
-                    $all_points[] = $offer['value'];
+                    $offers_points[] = $offer['value'];
                 }
             }
         }
@@ -293,15 +295,15 @@ function getBestOfferForProducts($products_id)
                 }
 
                 if ($offer['type'] == 0) {
-                    $all_prices[] = round($product->final_price - (($offer['value'] / 100) * $product->final_price), 2);
+                    $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
                 } elseif ($offer['type'] == 1) {
                     if ($product->final_price >  $offer['value']) {
-                        $all_prices[] = round($product->final_price - $offer['value'], 2);
+                        $offers_discount[] = round($offer['value'], 2);
                     } else {
-                        $all_prices[] = 0;
+                        $offers_discount[] = 0;
                     }
                 } elseif ($offer['type'] == 2) {
-                    $all_points[] = $offer['value'];
+                    $offers_points[] = $offer['value'];
                 }
             }
         }
@@ -315,15 +317,15 @@ function getBestOfferForProducts($products_id)
                 }
 
                 if ($offer['type'] == 0) {
-                    $all_prices[] = round($product->final_price - (($offer['value'] / 100) * $product->final_price), 2);
+                    $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
                 } elseif ($offer['type'] == 1) {
                     if ($product->final_price >  $offer['value']) {
-                        $all_prices[] = round($product->final_price - $offer['value'], 2);
+                        $offers_discount[] = round($offer['value'], 2);
                     } else {
-                        $all_prices[] = 0;
+                        $offers_discount[] = 0;
                     }
                 } elseif ($offer['type'] == 2) {
-                    $all_points[] = $offer['value'];
+                    $offers_points[] = $offer['value'];
                 }
             }
         }
@@ -336,26 +338,28 @@ function getBestOfferForProducts($products_id)
             }
 
             if ($offer['type'] == 0) {
-                $all_prices[] = round($product->final_price - (($offer['value'] / 100) * $product->final_price), 2);
+                $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
             } elseif ($offer['type'] == 1) {
                 if ($product->final_price >  $offer['value']) {
-                    $all_prices[] = round($product->final_price - $offer['value'], 2);
+                    $offers_discount[] = round($offer['value'], 2);
                 } else {
-                    $all_prices[] = 0;
+                    $offers_discount[] = 0;
                 }
             } elseif ($offer['type'] == 2) {
-                $all_points[] = $offer['value'];
+                $offers_points[] = $offer['value'];
             }
         }
 
         // Get the Best Price
-        $product->best_price = min($all_prices);
+        $product->offer_discount = max($offers_discount);
+        $product->best_price = $product->final_price - $product->offer_discount;
 
         // Get the Best Points
-        $product->best_points = array_sum($all_points);
+        $product->offer_points = max($offers_points);
+        $product->best_points = $product->points + $product->offer_points;
 
         // Get the Free Shipping
-        $product->free_shipping = $free_shipping;
+        $product->offer_free_shipping = $free_shipping;
 
         $reviews = $product->reviews;
 
@@ -377,10 +381,10 @@ function getBestOfferForCollection($collection_id)
 
     ############ Get Best Offer for all collections :: Start ############
     // Get All Collection's Prices -- Start with Collection's Final Price
-    $all_prices = [$collection->final_price];
+    $offers_discount = [0];
 
     // Get All Collection's Points -- Start with Collection's Points
-    $all_points = [$collection->points];
+    $offers_points = [0];
 
     // Get Free Shipping
     $free_shipping = $collection->free_shipping;
@@ -393,25 +397,27 @@ function getBestOfferForCollection($collection_id)
         }
 
         if ($offer['type'] == 0) {
-            $all_prices[] = round($collection->final_price - (($offer['value'] / 100) * $collection->final_price), 2);
+            $offers_discount[] = round(($offer['value'] / 100) * $collection->final_price, 2);
         } elseif ($offer['type'] == 1) {
             if ($collection->final_price >  $offer['value']) {
-                $all_prices[] = round($collection->final_price - $offer['value'], 2);
+                $offers_discount[] = round($collection->final_price - $offer['value'], 2);
             } else {
-                $all_prices[] = 0;
+                $offers_discount[] = 0;
             }
         } elseif ($offer['type'] == 2) {
-            $all_points[] = $offer['value'];
+            $offers_points[] = $offer['value'];
         }
     }
 
     // Get the Best Price
-    $collection->best_price = min($all_prices);
+    $collection->offer_discount = max($offers_discount);
+    $collection->best_price = $collection->final_price - $collection->offer_discount;
 
     // Get the Best Points
-    $collection->best_points = array_sum($all_points);
+    $collection->offer_points = max($offers_points);
+    $collection->best_points = $collection->points + $collection->offer_points;
 
-    $collection->free_shipping = $free_shipping;
+    $collection->offer_free_shipping = $free_shipping;
     ############ Get Best Offer for all collections :: End ############
 
     return $collection;
@@ -425,10 +431,10 @@ function getBestOfferForCollections($collections_id)
     foreach ($collections as $key => $collection) {
         ############ Get Best Offer for all collections :: Start ############
         // Get All Product's Prices -- Start with Product's Final Price
-        $all_prices = [$collection->final_price];
+        $offers_discount = [0];
 
         // Get All Product's Points -- Start with Product's Points
-        $all_points = [$collection->points];
+        $offers_points = [0];
 
         // Get Free Shipping
         $free_shipping = $collection->free_shipping;
@@ -442,30 +448,32 @@ function getBestOfferForCollections($collections_id)
 
             // Percentage Offer
             if ($offer['type'] == 0) {
-                $all_prices[] = round($collection->final_price - (($offer['value'] / 100) * $collection->final_price), 2);
+                $offers_discount[] = round(($offer['value'] / 100) * $collection->final_price, 2);
             }
             // Fixed Offer
             elseif ($offer['type'] == 1) {
                 if ($collection->final_price >  $offer['value']) {
-                    $all_prices[] = round($collection->final_price - $offer['value'], 2);
+                    $offers_discount[] = round($collection->final_price - $offer['value'], 2);
                 } else {
-                    $all_prices[] = 0;
+                    $offers_discount[] = 0;
                 }
             }
             // Points Offer
             elseif ($offer['type'] == 2) {
-                $all_points[] = $offer['value'];
+                $offers_points[] = $offer['value'];
             }
         }
 
         // Get the Best Price
-        $collection->best_price = min($all_prices);
+        $collection->offer_discount = max($offers_discount);
+        $collection->best_price = $collection->final_price - $collection->offer_discount;
 
         // Get the Best Points
-        $collection->best_points = array_sum($all_points);
+        $collection->offer_points = max($offers_points);
+        $collection->best_points = $collection->points + $collection->offer_points;
 
         // Get the Free Shipping
-        $collection->free_shipping = $free_shipping;
+        $collection->offer_free_shipping = $free_shipping;
 
         $reviews = $collection->reviews;
 

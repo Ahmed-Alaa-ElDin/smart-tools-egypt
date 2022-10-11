@@ -6,7 +6,7 @@
 
         <hr>
 
-        @if ($loop->last && $step == 1)
+        @if ($loop->last)
             {{-- ############## Buttons :: Start ############## --}}
             <div class="p-2 flex justify-center items-center">
                 <a class="btn bg-primary font-bold self-stretch" href="{{ route('front.order.shipping') }}">

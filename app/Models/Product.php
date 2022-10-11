@@ -46,7 +46,7 @@ class Product extends Model
     ];
 
     protected $appends = [
-        "avg_rating", "can_review",
+        "avg_rating", "can_review",'type'
     ];
 
     protected $with = ['reviews', 'orders', 'brand', 'validOffers'];
@@ -337,6 +337,11 @@ class Product extends Model
             'free_shipping' =>  $free_shipping,
             'offers_ids' => array_unique($offers_ids),
         ];
+    }
+
+    public function getTypeAttribute()
+    {
+        return "Product";
     }
     ############# Appends :: End #############
 

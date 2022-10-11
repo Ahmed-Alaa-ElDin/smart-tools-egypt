@@ -42,10 +42,10 @@ class Collection extends Model
     ];
 
     protected $appends = [
-        "avg_rating", "can_review",
+        "avg_rating", "can_review","quantity",'type'
     ];
 
-    protected $with = ['reviews', 'orders'];
+    protected $with = ['reviews', 'orders','products'];
 
     protected function asJson($value)
     {
@@ -128,7 +128,18 @@ class Collection extends Model
     {
         return $this->reviews->where('user_id', auth()->id())->count() == 0 && $this->orders->where('user_id', auth()->id())->count() > 0 ? true : false;
     }
+
+    public function getQuantityAttribute()
+    {
+        return $this->products->pluck('quantity')->min() ?? 0;
+    }
+
+    public function getTypeAttribute()
+    {
+        return "Collection";
+    }
     ############# Appends :: End #############
+
 
     ############# Scopes :: Start #############
     public function scopePublishedCollection($query)

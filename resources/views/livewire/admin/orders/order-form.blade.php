@@ -268,10 +268,10 @@
                                 @endif
                                 {{-- ############## Coupon Discount :: End ############## --}}
 
-                                {{-- ############## Shipping :: Start ############## --}}
+                                {{-- ############## Shipping:: Start ############## --}}
                                 <div class="w-100 flex justify-between items-center gap-6">
                                     <div class="h6 font-bold m-0 grow min-w-max">
-                                        {{ __('admin/ordersPages.Shipping :') }}
+                                        {{ __('admin/ordersPages.Shipping:') }}
                                     </div>
                                     <div>
                                         {{-- Free Shipping --}}
@@ -294,16 +294,16 @@
                                         @endif
                                     </div>
                                 </div>
-                                {{-- ############## Shipping :: End ############## --}}
+                                {{-- ############## Shipping:: End ############## --}}
                             </div>
 
                             <hr>
 
                             <div class="p-4 flex flex-col gap-3 justify-center items-center">
-                                {{-- ############## Total :: Start ############## --}}
+                                {{-- ############## Total:: Start ############## --}}
                                 <div class="w-full flex justify-between items-center gap-6">
                                     <div class="h6 font-bold m-0">
-                                        {{ __('admin/ordersPages.Total :') }}
+                                        {{ __('admin/ordersPages.Total:') }}
                                     </div>
 
                                     <div class="flex rtl:flex-row-reverse gap-1 text-successDark">
@@ -315,7 +315,7 @@
                                     </div>
 
                                 </div>
-                                {{-- ############## Total :: End ############## --}}
+                                {{-- ############## Total:: End ############## --}}
 
                                 {{-- ############## Wallet :: Start ############## --}}
                                 @if ($wallet)

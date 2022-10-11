@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Livewire\Front\Order\General;
+namespace App\Http\Livewire\Front\Cart;
 
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class OrderProductsList extends Component
+class CartProductsList extends Component
 {
     public $items;
-    public $step;
 
     protected $listeners = [
         'cartUpdated' => 'getItems',
@@ -17,27 +16,37 @@ class OrderProductsList extends Component
 
     public function render()
     {
-        return view('livewire.front.order.general.order-products-list');
+        return view('livewire.front.cart.cart-products-list');
     }
 
     ############## Get Items :: Start ##############
     public function getItems()
     {
-        $items_id = Cart::instance('cart')->content()->pluck('id');
+        $products_id = [];
+        $collections_id = [];
 
-        $items = [];
+        // get items id from cart
+        Cart::instance('cart')->content()->map(function ($item) use (&$products_id, &$collections_id, &$cart_products_id, &$cart_collections_id) {
+            if ($item->options->type == 'Product') {
+                $products_id[] = $item->id;
+            } elseif ($item->options->type == 'Collection') {
+                $collections_id[] = $item->id;
+            }
+        });
 
-        $items = getBestOfferForProducts($items_id);
+        // get all items data from database with best price
+        $products = getBestOfferForProducts($products_id);
+        $collections = getBestOfferForCollections($collections_id);
 
-        $this->items = $items;
+        $this->items = $collections->concat($products)->toArray();
     }
     ############## Get Items :: End ##############
 
     ############## Remove Items from Cart :: Start ##############
-    public function removeFromCart($item_id)
+    public function removeFromCart($item_id , $type)
     {
-        Cart::instance('cart')->search(function ($cartItem, $rowId) use ($item_id) {
-            return $cartItem->id === $item_id;
+        Cart::instance('cart')->search(function ($cartItem, $rowId) use ($item_id, &$type) {
+            return $cartItem->id === $item_id && $cartItem->options->type === $type;
         })->each(function ($cartItem, $rowId) {
             Cart::instance('cart')->remove($rowId);
         });
@@ -58,6 +67,4 @@ class OrderProductsList extends Component
         ############ Emit event to reinitialize the slider :: End ############
     }
     ############## Remove Items from Cart :: End ##############
-
-
 }

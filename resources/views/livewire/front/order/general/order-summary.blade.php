@@ -193,11 +193,11 @@
         @endif
         {{-- ############## Coupon Discount :: End ############## --}}
 
-        {{-- ############## Shipping :: Start ############## --}}
+        {{-- ############## Shipping:: Start ############## --}}
         @if ($products->count())
             <div class="w-100 flex justify-between items-center gap-3">
                 <div class="h6 font-bold m-0 grow min-w-max">
-                    {{ __('front/homePage.Shipping :') }}
+                    {{ __('front/homePage.Shipping:') }}
                 </div>
                 <div>
                     {{-- Free Shipping --}}
@@ -251,16 +251,16 @@
                 </div>
             </div>
         @endif
-        {{-- ############## Shipping :: End ############## --}}
+        {{-- ############## Shipping:: End ############## --}}
     </div>
 
     <hr>
 
     <div class="p-4 flex flex-col gap-3 justify-center items-center">
-        {{-- ############## Total :: Start ############## --}}
+        {{-- ############## Total:: Start ############## --}}
         <div class="w-full flex justify-between items-center">
             <div class="h6 font-bold m-0">
-                {{ __('front/homePage.Total :') }}
+                {{ __('front/homePage.Total:') }}
             </div>
 
             <div class="flex rtl:flex-row-reverse gap-1 text-primary">
@@ -271,7 +271,7 @@
             </div>
 
         </div>
-        {{-- ############## Total :: End ############## --}}
+        {{-- ############## Total:: End ############## --}}
     </div>
 
 

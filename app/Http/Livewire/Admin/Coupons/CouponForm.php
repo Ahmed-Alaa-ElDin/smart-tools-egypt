@@ -379,12 +379,12 @@ class CouponForm extends Component
     }
     // Delete Item : End
 
-    // Free Shipping : End
+    // Free Shipping: End
     public function freeShipping()
     {
         $this->free_shipping = !$this->free_shipping;
     }
-    // Free Shipping : End
+    // Free Shipping: End
 
 
     ######################## Save New Coupon : Start ############################

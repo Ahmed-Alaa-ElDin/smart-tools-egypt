@@ -8,9 +8,9 @@ use Livewire\Component;
 
 class AddToCompareButton extends Component
 {
-    public $product_id;
+    public $item_id;
 
-    public $large = false, $text = false;
+    public $type, $large = false, $text = false;
 
     public function render()
     {
@@ -18,29 +18,34 @@ class AddToCompareButton extends Component
     }
 
     ############## Add To Compare :: Start ##############
-    public function addToCompare($product_id)
+    public function addToCompare($item_id, $type)
     {
-        $product = getBestOfferForProduct($product_id);
+        if ($type == 'Product') {
+            $item = getBestOfferForProduct($item_id);
+        } elseif ($type == 'Collection') {
+            $item = getBestOfferForCollection($item_id);
+        }
 
         ############ Add Product to Compare :: Start ############
-        $in_compare = Cart::instance('compare')->search(function ($cartItem, $rowId) use ($product) {
-            return $cartItem->id === $product->id;
+        $in_compare = Cart::instance('compare')->search(function ($cartItem, $rowId) use ($item, $type) {
+            return $cartItem->id === $item->id && $cartItem->options->type === $type;
         })->count();
 
         if (!$in_compare && Cart::instance('compare')->count() < 3) {
             Cart::instance('compare')->add(
-                $product->id,
+                $item->id,
                 [
-                    'en' => $product->getTranslation('name', 'en'),
-                    'ar' => $product->getTranslation('name', 'ar'),
+                    'en' => $item->getTranslation('name', 'en'),
+                    'ar' => $item->getTranslation('name', 'ar'),
                 ],
                 1,
-                $product->best_price,
+                $item->best_price,
                 [
-                    'thumbnail' => $product->thumbnail ?? null,
-                    "slug" => $product->slug ?? ""
+                    'type'=>$type,
+                    'thumbnail' => $item->thumbnail ?? null,
+                    "slug" => $item->slug ?? ""
                 ]
-            )->associate(Product::class);
+            )->associate($type == "Product" ? Product::class : Collection::class);
 
             if (Auth::check()) {
                 Cart::instance('compare')->store(Auth::user()->id);

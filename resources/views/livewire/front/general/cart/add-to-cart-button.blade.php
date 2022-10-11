@@ -1,4 +1,4 @@
-<button wire:click.stop="addToCart({{ $product_id }})"
+<button wire:click.stop="addToCart({{ $item_id }},'{{ $type }}')"
     title="@if ($add_buy == 'add'){{ __('front/homePage.Add to cart') }}@elseif($add_buy == 'pay') {{ __('front/homePage.Go to payment') }}@elseif ($add_buy == 'buy'){{ __('front/homePage.Buy Again') }}@endif"
     class="stop-propagation rounded-full h-9 text-center shadow text-white
     inline-flex justify-center items-center gap-2 min-w-max

@@ -48,7 +48,7 @@ class OrderController extends Controller
     }
     ##################### Orders List :: End #####################
 
-    ##################### Edit Order Before Shipping :: Start #####################
+    ##################### Edit Order Before Shipping:: Start #####################
     public function edit($order_id)
     {
         $order = Order::with([
@@ -74,7 +74,7 @@ class OrderController extends Controller
 
         return view('front.orders.edit', compact('order'));
     }
-    ##################### Edit Order Before Shipping :: End #####################
+    ##################### Edit Order Before Shipping:: End #####################
 
     ##################### Preview Order's Edits :: Start #####################
     public function updateCalc(Request $request, $order_id)

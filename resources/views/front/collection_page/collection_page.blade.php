@@ -204,9 +204,10 @@
                             @livewire(
                                 'front.general.cart.add-to-cart-button',
                                 [
-                                    'collection_id' => $collection['id'],
+                                    'item_id' => $collection['id'],
                                     'text' => true,
                                     'large' => true,
+                                    'type'=>"Collection",
                                     'add_buy' => 'pay',
                                 ],
                                 key('add-cart-button-' . Str::random(10)),
@@ -218,9 +219,10 @@
                                 @livewire(
                                     'front.general.compare.add-to-compare-button',
                                     [
-                                        'collection_id' => $collection['id'],
+                                        'item_id' => $collection['id'],
                                         'text' => true,
                                         'large' => true,
+                                        'type'=>"Collection"
                                     ],
                                     key('add-compare-button-' . Str::random(10)),
                                 )
@@ -230,9 +232,10 @@
                                 @livewire(
                                     'front.general.wishlist.add-to-wishlist-button',
                                     [
-                                        'collection_id' => $collection['id'],
+                                        'item_id' => $collection['id'],
                                         'text' => true,
                                         'large' => true,
+                                        'type'=>"Collection"
                                     ],
                                     key('add-wishlist-button-' . Str::random(10)),
                                 )
@@ -247,8 +250,9 @@
                                 @livewire(
                                     'front.general.cart.cart-amount',
                                     [
-                                        'collection_id' => $collection->id,
-                                        'unique' => 'collection-' . $collection->id,
+                                        'item_id' => $collection->id,
+                                        'unique' => 'item-' . $collection->id,
+                                        'type' => 'Collection',
                                         'title' => false,
                                     ],
                                     key($collection->name . '-' . rand()),
@@ -384,13 +388,13 @@
                                 </div>
                                 {{-- Price : End --}}
 
-                                {{-- Free Shipping : Start --}}
+                                {{-- Free Shipping: Start --}}
                                 @if ($product->free_shipping)
                                     <div class="text-center text-success font-bold text-sm">
                                         {{ __('front/homePage.Free Shipping') }}
                                     </div>
                                 @endif
-                                {{-- Free Shipping : End --}}
+                                {{-- Free Shipping: End --}}
 
                                 {{-- Reviews : Start --}}
                                 <div class="my-1 text-center flex justify-center items-center gap-2">

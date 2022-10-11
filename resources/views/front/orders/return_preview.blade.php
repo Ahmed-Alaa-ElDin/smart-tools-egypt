@@ -83,7 +83,7 @@
                         @if ($order_data['return_subtotal'] != $order_data['return_total'])
                             <span class="text-sm font-bold"> {{ __('front/homePage.Subtotal :') }} </span>
                         @else
-                            <span class="text-sm font-bold"> {{ __('front/homePage.Total :') }} </span>
+                            <span class="text-sm font-bold"> {{ __('front/homePage.Total:') }} </span>
                         @endif
                         <div
                             class="flex rtl:flex-row-reverse gap-1 @if ($order_data['return_subtotal'] > 0) text-primary @else text-successDark @endif">
@@ -135,7 +135,7 @@
 
                         {{-- Returned Total --}}
                         <div class="flex justify-between items-center gap-1 px-4 py-1">
-                            <span class="text-sm font-bold"> {{ __('front/homePage.Total :') }} </span>
+                            <span class="text-sm font-bold"> {{ __('front/homePage.Total:') }} </span>
 
                             <div
                                 class="flex rtl:flex-row-reverse gap-1 @if ($order_data['return_total'] > 0) text-primary @else text-successDark @endif">

@@ -840,7 +840,7 @@
             </div>
             {{-- Points :: End --}}
 
-            {{-- Free Shipping :: Start --}}
+            {{-- Free Shipping:: Start --}}
             <div
                 class="col-span-6 sm:col-span-6 md:col-span-3 lg:col-span-3 w-full grid grid-cols-3 gap-x-6 gap-y-1 items-center rounded text-center">
                 <label for="free_shipping" wire:click="free_shipping"
@@ -859,7 +859,7 @@
                     </div>
                 </div>
             </div>
-            {{-- Free Shipping :: End --}}
+            {{-- Free Shipping:: End --}}
 
             {{-- under reviewing :: Start --}}
             <div

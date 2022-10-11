@@ -65,7 +65,7 @@
 
                                 {{-- Order Delivery Fees --}}
                                 <div class="flex justify-center items-center gap-1">
-                                    <span class="text-sm font-bold"> {{ __('front/homePage.Shipping :') }} </span>
+                                    <span class="text-sm font-bold"> {{ __('front/homePage.Shipping:') }} </span>
                                     @if ($order->delivery_fees == 0.0)
                                         <div class="text-successDark font-bold">
                                             {{ __('front/homePage.Free Shipping') }}
@@ -81,7 +81,7 @@
 
                                 {{-- Order Total --}}
                                 <div class="flex justify-center items-center gap-1">
-                                    <span class="text-sm font-bold"> {{ __('front/homePage.Total :') }} </span>
+                                    <span class="text-sm font-bold"> {{ __('front/homePage.Total:') }} </span>
                                     <div class="flex rtl:flex-row-reverse gap-1">
                                         <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
                                         <span dir="ltr"
