@@ -237,7 +237,6 @@
     {{-- ############## Buttons :: Start ############## --}}
     @if ($items_total_quantities > 0)
         <hr>
-        @dump($items_total_quantities)
         <div class="p-2 flex justify-center items-center">
             <a class="btn bg-primary font-bold self-stretch" href="{{ route('front.order.shipping') }}">
                 {{ __('front/homePage.Proceed to Shipping Info.') }}

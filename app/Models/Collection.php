@@ -42,10 +42,10 @@ class Collection extends Model
     ];
 
     protected $appends = [
-        "avg_rating", "can_review","quantity",'type'
+        "avg_rating", "can_review", "quantity", 'type'
     ];
 
-    protected $with = ['reviews', 'orders','products'];
+    protected $with = ['reviews', 'orders', 'products'];
 
     protected function asJson($value)
     {
@@ -88,7 +88,6 @@ class Collection extends Model
         return $this->morphToMany(Offer::class, 'offerable')->withPivot([
             'value',
             'type',
-            'number'
         ]);
     }
 
@@ -164,7 +163,9 @@ class Collection extends Model
                     'thumbnail',
                     'offers' => fn ($q) => $q
                         ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                        ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                        ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
+                    'reviews' => fn ($q) => $q->where('status', 1),
+                    'coupons'
                 ]
             )
             ->where('under_reviewing', 0)
@@ -191,6 +192,7 @@ class Collection extends Model
         )
             ->with(
                 [
+                    // 'products' => fn ($q) => $q->with(['brand' => fn ($q) => $q->with('offers')]),
                     'thumbnail',
                     'offers' => fn ($q) => $q
                         ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
@@ -199,7 +201,7 @@ class Collection extends Model
                     'coupons'
                 ]
             )
-            ->whereIn('id', $collections_id)
+            ->whereIn('collections.id', $collections_id)
             ->where('under_reviewing', 0)
             ->where('publish', 1);
     }

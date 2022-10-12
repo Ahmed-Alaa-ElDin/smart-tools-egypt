@@ -17,8 +17,17 @@ class HomepageController extends Controller
 
         ############## Get All Active Sections with Relations :: Start ##############
         $sections = Section::with([
-            'products' => fn ($q) => $q->publishedProduct()->with('brand')->withPivot('rank')->orderBy('rank'),
-            'collections' => fn ($q) => $q->publishedCollection()->withPivot('rank')->orderBy('rank'),
+            'products' => fn ($q) => $q
+                ->select(['products.id', 'products.publish'])
+                ->where('products.publish', 1)
+                ->with('brand')
+                ->withPivot('rank')
+                ->orderBy('rank'),
+            'collections' => fn ($q) => $q
+                ->select(['collections.id', 'collections.publish'])
+                ->where('collections.publish', 1)
+                ->withPivot('rank')
+                ->orderBy('rank'),
             'offer' => fn ($q) => $q->with([
                 'directProducts' => fn ($q) => $q->where('products.publish', 1),
                 'directCollections' => fn ($q) => $q->where('collections.publish', 1),

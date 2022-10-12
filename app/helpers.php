@@ -104,11 +104,7 @@ function getBestOfferForProduct($product_id)
         if ($offer['type'] == 0) {
             $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
         } elseif ($offer['type'] == 1) {
-            if ($product->final_price >  $offer['value']) {
-                $offers_discount[] = round($offer['value'], 2);
-            } else {
-                $offers_discount[] = 0;
-            }
+            $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
         } elseif ($offer['type'] == 2) {
             $offers_points[] = $offer['value'];
         }
@@ -125,11 +121,7 @@ function getBestOfferForProduct($product_id)
             if ($offer['type'] == 0) {
                 $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
             } elseif ($offer['type'] == 1) {
-                if ($product->final_price >  $offer['value']) {
-                    $offers_discount[] = round($offer['value'], 2);
-                } else {
-                    $offers_discount[] = 0;
-                }
+                $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
             } elseif ($offer['type'] == 2) {
                 $offers_points[] = $offer['value'];
             }
@@ -147,11 +139,7 @@ function getBestOfferForProduct($product_id)
             if ($offer['type'] == 0) {
                 $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
             } elseif ($offer['type'] == 1) {
-                if ($product->final_price >  $offer['value']) {
-                    $offers_discount[] = round($offer['value'], 2);
-                } else {
-                    $offers_discount[] = 0;
-                }
+                $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
             } elseif ($offer['type'] == 2) {
                 $offers_points[] = $offer['value'];
             }
@@ -169,11 +157,7 @@ function getBestOfferForProduct($product_id)
             if ($offer['type'] == 0) {
                 $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
             } elseif ($offer['type'] == 1) {
-                if ($product->final_price >  $offer['value']) {
-                    $offers_discount[] = round($offer['value'], 2);
-                } else {
-                    $offers_discount[] = 0;
-                }
+                $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
             } elseif ($offer['type'] == 2) {
                 $offers_points[] = $offer['value'];
             }
@@ -190,11 +174,7 @@ function getBestOfferForProduct($product_id)
         if ($offer['type'] == 0) {
             $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
         } elseif ($offer['type'] == 1) {
-            if ($product->final_price >  $offer['value']) {
-                $offers_discount[] = round($offer['value'], 2);
-            } else {
-                $offers_discount[] = 0;
-            }
+            $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
         } elseif ($offer['type'] == 2) {
             $offers_points[] = $offer['value'];
         }
@@ -252,11 +232,7 @@ function getBestOfferForProducts($products_id)
             }
             // Fixed Offer
             elseif ($offer['type'] == 1) {
-                if ($product->final_price >  $offer['value']) {
-                    $offers_discount[] = round($offer['value'], 2);
-                } else {
-                    $offers_discount[] = 0;
-                }
+                $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
             }
             // Points Offer
             elseif ($offer['type'] == 2) {
@@ -275,11 +251,7 @@ function getBestOfferForProducts($products_id)
                 if ($offer['type'] == 0) {
                     $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
                 } elseif ($offer['type'] == 1) {
-                    if ($product->final_price >  $offer['value']) {
-                        $offers_discount[] = round($offer['value'], 2);
-                    } else {
-                        $offers_discount[] = 0;
-                    }
+                    $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
                 } elseif ($offer['type'] == 2) {
                     $offers_points[] = $offer['value'];
                 }
@@ -297,11 +269,7 @@ function getBestOfferForProducts($products_id)
                 if ($offer['type'] == 0) {
                     $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
                 } elseif ($offer['type'] == 1) {
-                    if ($product->final_price >  $offer['value']) {
-                        $offers_discount[] = round($offer['value'], 2);
-                    } else {
-                        $offers_discount[] = 0;
-                    }
+                    $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
                 } elseif ($offer['type'] == 2) {
                     $offers_points[] = $offer['value'];
                 }
@@ -319,11 +287,7 @@ function getBestOfferForProducts($products_id)
                 if ($offer['type'] == 0) {
                     $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
                 } elseif ($offer['type'] == 1) {
-                    if ($product->final_price >  $offer['value']) {
-                        $offers_discount[] = round($offer['value'], 2);
-                    } else {
-                        $offers_discount[] = 0;
-                    }
+                    $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
                 } elseif ($offer['type'] == 2) {
                     $offers_points[] = $offer['value'];
                 }
@@ -340,11 +304,7 @@ function getBestOfferForProducts($products_id)
             if ($offer['type'] == 0) {
                 $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
             } elseif ($offer['type'] == 1) {
-                if ($product->final_price >  $offer['value']) {
-                    $offers_discount[] = round($offer['value'], 2);
-                } else {
-                    $offers_discount[] = 0;
-                }
+                $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
             } elseif ($offer['type'] == 2) {
                 $offers_points[] = $offer['value'];
             }
@@ -399,11 +359,7 @@ function getBestOfferForCollection($collection_id)
         if ($offer['type'] == 0) {
             $offers_discount[] = round(($offer['value'] / 100) * $collection->final_price, 2);
         } elseif ($offer['type'] == 1) {
-            if ($collection->final_price >  $offer['value']) {
-                $offers_discount[] = round($collection->final_price - $offer['value'], 2);
-            } else {
-                $offers_discount[] = 0;
-            }
+            $offers_discount[] = $collection->final_price >  $offer['value'] ? round($offer['value'], 2) : $collection->final_price;
         } elseif ($offer['type'] == 2) {
             $offers_points[] = $offer['value'];
         }
@@ -452,11 +408,7 @@ function getBestOfferForCollections($collections_id)
             }
             // Fixed Offer
             elseif ($offer['type'] == 1) {
-                if ($collection->final_price >  $offer['value']) {
-                    $offers_discount[] = round($collection->final_price - $offer['value'], 2);
-                } else {
-                    $offers_discount[] = 0;
-                }
+                $offers_discount[] = $collection->final_price >  $offer['value'] ? round($offer['value'], 2) : $collection->final_price;
             }
             // Points Offer
             elseif ($offer['type'] == 2) {

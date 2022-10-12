@@ -48,7 +48,6 @@ class Brand extends Model
             'offerable_type',
             'value',
             'type',
-            'number'
         ]);
     }
 

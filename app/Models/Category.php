@@ -60,8 +60,7 @@ class Category extends Model
         return $this->morphToMany(Offer::class, 'offerable')->withPivot([
             'offerable_type',
             'value',
-            'type',
-            'number'
+            'type'
         ]);
     }
 
