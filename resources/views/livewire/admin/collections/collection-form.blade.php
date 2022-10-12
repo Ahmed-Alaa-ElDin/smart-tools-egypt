@@ -487,14 +487,14 @@
                     @endforelse
                 </div>
                 {{-- Product Info :: End --}}
-                @endif
-                {{-- Product Selected :: End --}}
+            @endif
+            {{-- Product Selected :: End --}}
 
-                @error('products')
-                    <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                        {{ $message }}
-                    </div>
-                @enderror
+            @error('products')
+                <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
+                    {{ $message }}
+                </div>
+            @enderror
 
         </div>
         {{-- Collection's Products :: End --}}
@@ -747,15 +747,15 @@
 
             {{-- Original Price :: Start --}}
             <div
-                class="col-span-12 sm:col-span-6 md:col-span-3 lg:col-span-12 w-full grid grid-cols-3 gap-x-4 gap-y-2 items-center rounded text-center">
+                class="col-span-12 sm:col-span-6 md:col-span-3 lg:col-span-6 w-full grid grid-cols-3 gap-x-4 gap-y-2 items-center rounded text-center">
                 <label for="original_price"
                     class="col-span-3 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer">{{ __('admin/productsPages.Original Price') }}</label>
 
                 <div class="col-span-3">
-                    <input
+                    <input dir="ltr"
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('original_price') border-red-900 border-2 @enderror"
                         type="text" wire:model.lazy="original_price" id="original_price"
-                        placeholder="{{ __('admin/productsPages.EGP') }}" required>
+                        placeholder="{{ __('admin/productsPages.EGP') }}" required disabled>
                     @error('original_price')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                             {{ $message }}</div>
@@ -764,6 +764,25 @@
             </div>
             {{-- Original Price :: End --}}
 
+            {{-- Profit margin :: Start --}}
+            <div
+                class="col-span-12 sm:col-span-6 md:col-span-3 lg:col-span-6 w-full grid grid-cols-3 gap-x-4 gap-y-2 items-center rounded text-center">
+                <label for="profit_margin"
+                    class="col-span-3 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer">{{ __('admin/productsPages.Profit Margin') }}</label>
+
+                <div class="col-span-3">
+                    <input dir="ltr"
+                        class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('profit_margin') border-red-900 border-2 @enderror"
+                        type="text" wire:model.lazy="profit_margin" id="profit_margin"
+                        placeholder="{{ __('admin/productsPages.EGP') }}" required disabled>
+                    @error('profit_margin')
+                        <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
+                            {{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+            {{-- Profit margin :: End --}}
+
             {{-- Base Price :: Start --}}
             <div
                 class="col-span-12 sm:col-span-6 md:col-span-3 lg:col-span-6 w-full grid grid-cols-3 gap-x-4 gap-y-2 items-center rounded text-center">
@@ -771,10 +790,10 @@
                     class="col-span-3 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer">{{ __('admin/productsPages.Base Price') }}</label>
 
                 <div class="col-span-3">
-                    <input
+                    <input dir="ltr"
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('base_price') border-red-900 border-2 @enderror"
                         type="text" wire:model.lazy="base_price" id="base_price"
-                        placeholder="{{ __('admin/productsPages.EGP') }}" required>
+                        placeholder="{{ __('admin/productsPages.EGP') }}" required disabled>
                     @error('base_price')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                             {{ $message }}</div>
@@ -790,7 +809,7 @@
                     class="col-span-3 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer">{{ __('admin/productsPages.Discount') }}</label>
 
                 <div class="col-span-3">
-                    <input
+                    <input dir="ltr"
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('discount') border-red-900 border-2 @enderror"
                         type="text" wire:model.lazy="discount" id="discount"
                         placeholder="{{ __('admin/productsPages.Percentage') }}">
@@ -809,7 +828,7 @@
                     class="col-span-3 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer">{{ __('admin/productsPages.Final Price') }}</label>
 
                 <div class="col-span-3">
-                    <input
+                    <input dir="ltr"
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('final_price') border-red-900 border-2 @enderror"
                         type="text" wire:model.lazy="final_price" id="final_price"
                         placeholder="{{ __('admin/productsPages.EGP') }}">

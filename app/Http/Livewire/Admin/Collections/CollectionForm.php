@@ -20,7 +20,7 @@ class CollectionForm extends Component
     public $thumbnail_image,  $thumbnail_image_name, $video;
     public $specs = [];
     public $name = ["ar" => null, "en" => null], $model, $barcode, $weight, $description = ['ar' => null, 'en' => null], $publish = true, $refundable = true;
-    public $original_price, $base_price, $discount, $final_price, $points, $free_shipping = false, $reviewing = false;
+    public $profit_margin = 0, $original_price = 0, $base_price = 0, $discount, $final_price, $points, $free_shipping = false, $reviewing = false;
     public $seo_keywords;
 
     public $search, $products_list, $products = [];
@@ -153,6 +153,7 @@ class CollectionForm extends Component
 
             // Old Stock and Price
             $this->original_price = $collection->original_price;
+            $this->profit_margin = round($collection->final_price - $collection->original_price);
             $this->base_price = $collection->base_price;
             $this->final_price = $collection->final_price;
             $this->discount = round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2);
@@ -239,6 +240,8 @@ class CollectionForm extends Component
         $product['amount'] = 1;
 
         $this->products[$product_id] = $product;
+
+        $this->priceUpdate();
     }
     ######################## Add product to the Collection :: End ############################
 
@@ -250,6 +253,8 @@ class CollectionForm extends Component
         } else {
             unset($this->products[$product_id]);
         }
+
+        $this->priceUpdate();
     }
     ######################## Update the product amount of the Collection :: End ############################
 
@@ -257,8 +262,39 @@ class CollectionForm extends Component
     public function clearProducts()
     {
         $this->products = [];
+
+        $this->priceUpdate();
     }
     ######################## Remove All products From the Collection :: End ############################
+
+
+    ######################## Update Original Price and Base Price :: Start ############################
+    public function priceUpdate()
+    {
+        $this->original_price = round(array_sum(array_map(function ($product) {
+            return $product['amount'] * $product['original_price'];
+        }, $this->products)),2);
+
+        $this->base_price = round(array_sum(array_map(function ($product) {
+            return $product['amount'] * $product['base_price'];
+        }, $this->products)),2);
+
+        $this->final_price = round(array_sum(array_map(function ($product) {
+            return $product['amount'] * $product['final_price'];
+        }, $this->products)),2);
+
+        $this->discount = $this->base_price ? round((($this->base_price - $this->final_price) * 100) / $this->base_price, 2) : 0;
+
+        $this->profitMarginUpdate();
+    }
+    ######################## Update Original Price and Base Price :: Start ############################
+
+    ######################## Update Profit Margin :: Start ############################
+    public function profitMarginUpdate()
+    {
+        $this->profit_margin = round($this->final_price - $this->original_price,2);
+    }
+    ######################## Update Profit Margin :: Start ############################
 
     ######################## Publish Toggle :: Start ############################
     public function publish()
@@ -394,6 +430,10 @@ class CollectionForm extends Component
             }
             $this->discount = round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2);
         }
+
+        if (in_array($field, ['original_price', 'base_price', 'discount', 'final_price'])) {
+            $this->profitMarginUpdate();
+        }
     }
     ######################## Real Time Validation :: End ############################
 
@@ -477,7 +517,7 @@ class CollectionForm extends Component
 
             if (count($this->products)) {
                 $collection->products()->sync(
-                    array_map(fn ($q) => ['quantity' => $q['amount']], $this->products)
+                    array_map(fn ($product) => ['quantity' => $product['amount']], $this->products)
                 );
             }
 

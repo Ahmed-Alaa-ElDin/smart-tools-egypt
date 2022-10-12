@@ -341,7 +341,7 @@ return [
     "Are you sure, you want to restore all selected collections?"           =>      "Are you sure, you want to restore all selected collections?",
     "Collections have been restored successfully"                           =>      "Collections have been restored successfully",
     "Collections haven't been restored"                                     =>      "Collections haven't been restored",
-    "Publish"                                                               =>      "Publish",
+    "Profit Margin"                                                         =>      "Profit Margin",
     "Publish"                                                               =>      "Publish",
     "Publish"                                                               =>      "Publish",
     "Publish"                                                               =>      "Publish",

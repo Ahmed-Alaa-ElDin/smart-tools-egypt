@@ -17,7 +17,7 @@ class HomepageController extends Controller
 
         ############## Get All Active Sections with Relations :: Start ##############
         $sections = Section::with([
-            'products' => fn ($q) => $q->publishedProduct()->withPivot('rank')->orderBy('rank'),
+            'products' => fn ($q) => $q->publishedProduct()->with('brand')->withPivot('rank')->orderBy('rank'),
             'collections' => fn ($q) => $q->publishedCollection()->withPivot('rank')->orderBy('rank'),
             'offer' => fn ($q) => $q->with([
                 'directProducts' => fn ($q) => $q->where('products.publish', 1),
@@ -167,6 +167,7 @@ class HomepageController extends Controller
         $brands = Brand::where("top", '>', 0)->orderBy("top")->get();
         ############ Get Top Brands :: End ############
 
+        // dd('homepage_sections', 'today_deals_sections', 'categories', 'brands');
         return view('front.homepage.homepage', compact('homepage_sections', 'today_deals_sections', 'categories', 'brands'));
     }
 }
