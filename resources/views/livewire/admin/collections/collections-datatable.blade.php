@@ -294,7 +294,6 @@
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- Collection Details --}}
-                                        {{-- todo --}}
                                         <a href="{{ route('front.collections.show', ['id' => $collection->id, 'slug' => $collection->slug]) }}" title="{{ __('admin/productsPages.View') }}"
                                             class="m-0">
                                             <span

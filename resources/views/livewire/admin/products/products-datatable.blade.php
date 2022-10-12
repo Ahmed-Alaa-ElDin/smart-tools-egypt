@@ -267,34 +267,45 @@
                                                 <span class="bg-yellow-600 px-2 py-1 rounded text-white text-xs">
                                                     {{ __('admin/productsPages.Under Reviewing') }}
                                                 </span>
-                                            @elseif ($product->final_price == $product->base_price)
-                                                <span class="bg-success px-2 py-1 rounded text-white">
-                                                    <span dir='ltr'>
-                                                        {{ number_format($product->final_price, 2, '.', '\'') }}
-                                                    </span>
-                                                    <span class="text-xs p-1">
-                                                        {{ __('admin/productsPages. EGP') }}
-                                                    </span>
-                                                </span>
                                             @else
-                                                <span
-                                                    class="line-through bg-red-600 px-2 py-1 rounded text-white text-xs">
-                                                    <span dir='ltr'>
-                                                        {{ number_format($product->base_price, 2, '.', '\'') }}
+                                                <div class="flex flex-wrap gap-2 items-center justify-center">
+                                                    <span class="bg-secondary px-2 py-1 rounded text-white">
+                                                        <span dir='ltr'>
+                                                            {{ number_format($product->original_price, 2, '.', '\'') }}
+                                                        </span>
+                                                        <span class="text-xs p-1">
+                                                            {{ __('admin/productsPages. EGP') }}
+                                                        </span>
                                                     </span>
-                                                    <span class="text-xs p-1">
-                                                        {{ __('admin/productsPages. EGP') }}
-                                                    </span>
-                                                </span>
-                                                <span
-                                                    class="bg-success px-2 py-1 rounded text-white ltr:ml-1 rtl:mr-1">
-                                                    <span dir='ltr'>
-                                                        {{ number_format($product->final_price, 2, '.', '\'') }}
-                                                    </span>
-                                                    <span class="text-xs p-1">
-                                                        {{ __('admin/productsPages. EGP') }}
-                                                    </span>
-                                                </span>
+                                                    @if ($product->final_price == $product->base_price)
+                                                        <span class="bg-success px-2 py-1 rounded text-white">
+                                                            <span dir='ltr'>
+                                                                {{ number_format($product->final_price, 2, '.', '\'') }}
+                                                            </span>
+                                                            <span class="text-xs p-1">
+                                                                {{ __('admin/productsPages. EGP') }}
+                                                            </span>
+                                                        </span>
+                                                    @else
+                                                        <span
+                                                            class="line-through bg-red-600 px-2 py-1 rounded text-white">
+                                                            <span dir='ltr'>
+                                                                {{ number_format($product->base_price, 2, '.', '\'') }}
+                                                            </span>
+                                                            <span class="text-xs p-1">
+                                                                {{ __('admin/productsPages. EGP') }}
+                                                            </span>
+                                                        </span>
+                                                        <span class="bg-success px-2 py-1 rounded text-white">
+                                                            <span dir='ltr'>
+                                                                {{ number_format($product->final_price, 2, '.', '\'') }}
+                                                            </span>
+                                                            <span class="text-xs p-1">
+                                                                {{ __('admin/productsPages. EGP') }}
+                                                            </span>
+                                                        </span>
+                                                    @endif
+                                                </div>
                                             @endif
                                         </div>
                                     </td>
