@@ -207,7 +207,7 @@
                                     'item_id' => $collection['id'],
                                     'text' => true,
                                     'large' => true,
-                                    'type'=>"Collection",
+                                    'type' => 'Collection',
                                     'add_buy' => 'pay',
                                 ],
                                 key('add-cart-button-' . Str::random(10)),
@@ -222,7 +222,7 @@
                                         'item_id' => $collection['id'],
                                         'text' => true,
                                         'large' => true,
-                                        'type'=>"Collection"
+                                        'type' => 'Collection',
                                     ],
                                     key('add-compare-button-' . Str::random(10)),
                                 )
@@ -235,7 +235,7 @@
                                         'item_id' => $collection['id'],
                                         'text' => true,
                                         'large' => true,
-                                        'type'=>"Collection"
+                                        'type' => 'Collection',
                                     ],
                                     key('add-wishlist-button-' . Str::random(10)),
                                 )
@@ -335,6 +335,13 @@
                                     <span class="flex items-center bg-primary text-white rounded-full p-1">
                                         {{ 100 - round(($product->final_price * 100) / $product->base_price, 0) }}%
                                     </span>
+                                </span>
+                                {{-- Base Discount : End --}}
+
+                                {{-- Base Discount : Start --}}
+                                <span
+                                    class="absolute bg-primary h-9 w-9 gap-1 top-2 ltr:right-2 rtl:left-2 flex justify-center items-center shadow p-1 rounded-circle text-sm text-white font-bold border-4 border-white">
+                                    {{ $product->pivot->quantity }}X
                                 </span>
                                 {{-- Base Discount : End --}}
 

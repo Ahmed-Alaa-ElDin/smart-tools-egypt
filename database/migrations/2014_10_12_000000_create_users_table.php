@@ -25,7 +25,7 @@ return new class extends Migration
             $table->date('birth_date')->nullable();
             $table->string('profile_photo_path')->nullable();
             $table->decimal('balance')->default(0);
-            $table->integer('points')->default(0);
+            // $table->integer('points')->default(0);
             $table->string('auth_id')->nullable();
             $table->string('auth_type')->nullable();
             $table->integer('visit_num')->default(1)->unsigned();

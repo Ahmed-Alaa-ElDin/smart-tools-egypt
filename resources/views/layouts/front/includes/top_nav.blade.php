@@ -162,10 +162,10 @@
                                     <div
                                         class="flex gap-1 justify-center items-center transition-all ease-in-out text-warning group-hover:text-white">
                                         <span class="font-bold text-sm" dir="ltr">
-                                            {{ number_format(auth()->user()->points,0,'.','\'') }}
+                                            {{ number_format(auth()->user()->valid_points,0,'.','\'') }}
                                         </span>
                                         <span class="font-bold text-sm">
-                                            {{ trans_choice('front/homePage.Point/Points', auth()->user()->points, ['points' => auth()->user()->points]) }}
+                                            {{ trans_choice('front/homePage.Point/Points', auth()->user()->valid_points, ['points' => auth()->user()->valid_points]) }}
                                         </span>
                                     </div>
                                 </a>

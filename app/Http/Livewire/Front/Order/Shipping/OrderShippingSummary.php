@@ -1,39 +1,42 @@
 <?php
 
-namespace App\Http\Livewire\Front\Cart;
+namespace App\Http\Livewire\Front\Order\Shipping;
 
 use App\Models\Offer;
+use App\Models\Zone;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Livewire\Component;
 
-class CartSummary extends Component
+class OrderShippingSummary extends Component
 {
     public $items;
-    public $items_total_quantities;
-    public $items_total_weights;
-    public $items_total_base_prices;
-    public $items_total_final_prices;
-    public $items_total_discounts;
-    public $items_discounts_percentage;
-    public $total_after_offer_prices;
-    public $offers_total_discounts;
-    public $offers_discounts_percentage;
-    public $order_discount;
-    public $order_discount_percent;
-    public $order_points;
-    public $total_after_order_discount;
-    public $offers_free_shipping;
-    public $order_offer_free_shipping;
-    public $total_order_free_shipping;
-    public $items_total_points;
-    public $offers_total_points;
-    public $after_offers_total_points;
-    public $total_points_after_order_points;
+
+    public $items_total_base_prices = 0;
+    public $items_total_final_prices = 0;
+    public $items_total_discounts = 0;
+    public $items_discounts_percentage = 0;
+    public $total_after_offer_prices = 0;
+    public $offers_total_discounts = 0;
+    public $offers_discounts_percentage = 0;
+    public $offers_free_shipping = 0;
+    public $order_discount = 0;
+    public $order_discount_percent = 0;
+    public $order_points = 0;
+    public $order_offer_free_shipping = 0;
+    public $total_after_order_discount = 0;
+    public $total_order_free_shipping = 0;
+    public $shipping_fees = 0;
+    public $items_total_shipping_weights = 0;
+    public $best_zone_id = null;
+    public $city_name = null;
+    public $address = null;
 
     protected $listeners = [
-        'cartUpdated' => 'render',
+        'AddressUpdated' => 'render',
+        'PhoneUpdated' => 'render',
     ];
 
+    ############# Render :: Start #############
     public function render()
     {
         $this->items_total_quantities = Cart::instance('cart')->count();
@@ -48,6 +51,7 @@ class CartSummary extends Component
                 $item['after_offer_price'] = $item['final_price'] - $item['offer_discount'];
                 $item['qty'] = $cart_item->qty ?? 0;
                 $item['total_weight'] = $item['weight'] * $item['qty'];
+                $item['total_shipping_weight'] = !$item['free_shipping'] ? $item['weight'] * $item['qty'] : 0;
                 $item['total_base_price'] = $item['base_price'] * $item['qty'];
                 $item['total_item_discount'] = ($item['base_price'] - $item['final_price']) * $item['qty'];
                 $item['total_item_discount_percent'] = $item['base_price'] ? round((($item['base_price'] - $item['final_price']) / $item['base_price']) * 100, 2) : 0;
@@ -63,6 +67,7 @@ class CartSummary extends Component
             }, $this->items);
 
             $this->items_total_weights = array_sum(array_column($this->items, 'total_weight'));
+            $this->items_total_shipping_weights = array_sum(array_column($this->items, 'total_shipping_weight'));
 
             // Order Offer
             $order_offer = Offer::orderOffers()->first();
@@ -98,12 +103,11 @@ class CartSummary extends Component
                 }
             }
 
-
             // 5 - Prices After Order Offer
             $this->total_after_order_discount = $this->total_after_offer_prices - $this->order_discount;
 
             // ------------------------------------------------------------------------------------------------------
-            // B - Free Shipping
+            // B - Shipping
             // ------------------------------------------------------------------------------------------------------
             // 1 - Items Offers Free Shipping
             $this->offers_free_shipping = !in_array(0, array_column($this->items, 'offer_free_shipping'));
@@ -116,6 +120,10 @@ class CartSummary extends Component
 
             // 3 - Total Order Free Shipping (After Items & Order Offers)
             $this->total_order_free_shipping = $this->offers_free_shipping || $this->order_offer_free_shipping;
+
+            // if (!$this->total_order_free_shipping) {
+                $this->getShippingFees();
+            // }
 
             // ------------------------------------------------------------------------------------------------------
             // C - Points
@@ -130,9 +138,6 @@ class CartSummary extends Component
             // 4 - Points After Order Points
             $this->total_points_after_order_points = $this->after_offers_total_points + $this->order_points;
         } else {
-            $this->items = [];
-            $this->items_total_quantities = 0;
-            $this->items_total_weights = 0;
             $this->items_total_base_prices = 0;
             $this->items_total_final_prices = 0;
             $this->items_total_discounts = 0;
@@ -140,19 +145,79 @@ class CartSummary extends Component
             $this->total_after_offer_prices = 0;
             $this->offers_total_discounts = 0;
             $this->offers_discounts_percentage = 0;
+            $this->offers_free_shipping = 0;
             $this->order_discount = 0;
             $this->order_discount_percent = 0;
             $this->order_points = 0;
-            $this->total_after_order_discount = 0;
-            $this->offers_free_shipping = 0;
             $this->order_offer_free_shipping = 0;
+            $this->total_after_order_discount = 0;
             $this->total_order_free_shipping = 0;
-            $this->items_total_points = 0;
-            $this->offers_total_points = 0;
-            $this->after_offers_total_points = 0;
-            $this->total_points_after_order_points = 0;
+            $this->shipping_fees = 0;
+            $this->items_total_shipping_weights = 0;
+            $this->best_zone_id = null;
+            $this->city_name = null;
+            $this->address = null;
         }
 
-        return view('livewire.front.cart.cart-summary');
+        return view('livewire.front.order.shipping.order-shipping-summary');
     }
+    ############# Render :: End #############
+
+    ############# Get Shipping Fees :: Start #############
+    public function getShippingFees()
+    {
+
+        if (auth()->check()) {
+            $this->address = auth()->user()->addresses->where('default', 1)->first();
+
+            $items_total_shipping_weights = $this->items_total_shipping_weights;
+
+            if ($this->address) {
+                // Get City Id
+                $city_id = $this->address->city_id;
+
+                $this->city_name = $this->address->city->name;
+
+                // Get Destinations and Zones for the city
+                $zones = Zone::with(['destinations'])
+                ->where('is_active', 1)
+                ->whereHas('destinations', fn ($q) => $q->where('city_id', $city_id))
+                ->whereHas('delivery', fn ($q) => $q->where('is_active', 1))
+                ->get();
+
+                // Get the best Delivery Cost
+                $prices = $zones->map(function ($zone) use ($items_total_shipping_weights) {
+                    $min_charge = $zone->min_charge;
+                    $min_weight = $zone->min_weight;
+                    $kg_charge = $zone->kg_charge;
+
+                    if ($items_total_shipping_weights < $min_weight) {
+                        return [
+                            'zone_id' => $zone->id,
+                            'charge' => $min_charge
+                        ];
+                    } else {
+                        return [
+                            'zone_id' => $zone->id,
+                            'charge' => $min_charge + ($items_total_shipping_weights - $min_weight) * $kg_charge
+                        ];
+                    }
+                });
+
+                $this->shipping_fees = $prices->min('charge');
+
+                $best_zone = $prices->filter(function ($price) {
+                    return $price['charge'] == $this->shipping_fees;
+                });
+
+                if ($best_zone->count()) {
+                    $this->best_zone_id = $best_zone->first()['zone_id'];
+                } else {
+                    $this->best_zone_id = null;
+                }
+            }
+        }
+    }
+    ############# Get Shipping Fees :: End #############
+
 }

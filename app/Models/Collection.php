@@ -130,7 +130,7 @@ class Collection extends Model
 
     public function getQuantityAttribute()
     {
-        return $this->products->pluck('quantity')->min() ?? 0;
+        return $this->products->map(fn ($product) =>  floor($product->quantity / $product->pivot->quantity))->min() ?? 0;
     }
 
     public function getTypeAttribute()

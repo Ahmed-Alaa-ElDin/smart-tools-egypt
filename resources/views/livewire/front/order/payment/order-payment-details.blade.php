@@ -14,10 +14,10 @@
 
     <div class="px-4">
 
-        @if (auth()->user()->points > 0 || auth()->user()->balance > 0)
+        @if (auth()->user()->valid_points > 0 || auth()->user()->balance > 0)
             <div class="flex gap-2 p-4 justify-around items-center">
                 {{-- Pay with Points --}}
-                @if (auth()->user()->points > 0)
+                @if (auth()->user()->valid_points > 0)
                     <div class="flex flex-col gap-2 justify-center items-center">
                         <h2 class="text-center font-bold">
                             {{ __('front/homePage.Use my points') }}
@@ -27,7 +27,7 @@
                                 class="select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('front/homePage.Use') }}</label>
                             <input type="number" dir="ltr" wire:model.lazy="points"
                                 class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('points') border-2 border-primary @enderror"
-                                id="points" min="0" max="{{ auth()->user()->points }}">
+                                id="points" min="0" max="{{ auth()->user()->valid_points }}">
                             <span
                                 class="select-none font-bold text-xs text-gray-700">{{ __('front/homePage.Equivalent to ') }}</span>
                             <span class="w-full select-none font-bold text-successDark">{{ $points_egp }}
@@ -101,7 +101,7 @@
             <hr>
 
             <div class="flex gap-2 justify-around items-center p-4">
-                <button class="btn bg-success max-w-max font-bold" wire:click="confirm(1)">
+                <button class="btn bg-success max-w-max font-bold" wire:click="submit">
                     {{ __('front/homePage.Submit & Confirm Order') }}
                     &nbsp;
                     <span class="material-icons">
@@ -121,7 +121,7 @@
             <hr>
 
             <div class="flex gap-2 justify-around items-center p-4">
-                <button class="btn bg-success max-w-max font-bold" wire:click="confirm(2)">
+                <button class="btn bg-success max-w-max font-bold" wire:click="submit">
                     {{ __('front/homePage.Go to payment') }}
                     &nbsp;
                     <span class="material-icons">
@@ -140,7 +140,7 @@
         @elseif ($payment_method == 3)
             <hr>
             <div class="flex gap-2 justify-around items-center p-4">
-                <button class="btn bg-success max-w-max font-bold" wire:click="confirm(3)">
+                <button class="btn bg-success max-w-max font-bold" wire:click="submit">
                     {{ __('front/homePage.Go to payment') }}
                     &nbsp;
                     <span class="material-icons">
@@ -174,7 +174,7 @@
             <hr>
 
             <div class="flex gap-2 justify-around items-center p-4">
-                <button class="btn bg-success max-w-max font-bold" wire:click="confirm(4)">
+                <button class="btn bg-success max-w-max font-bold" wire:click="submit">
                     {{ __('front/homePage.Submit & Confirm Order') }}
                     &nbsp;
                     <span class="material-icons">

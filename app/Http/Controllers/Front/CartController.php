@@ -40,15 +40,6 @@ class CartController extends Controller
             }
         });
 
-        // dd(
-        //     $cart_products_id,
-        //     $wishlist_products_id,
-        //     $products_id,
-        //     $cart_collections_id,
-        //     $wishlist_collections_id,
-        //     $collections_id,
-        // );
-
         // get items id from cart and wishlist
         $products_id = array_unique($products_id);
         $collections_id = array_unique($collections_id);

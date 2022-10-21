@@ -28,10 +28,10 @@ Route::group([
 
     Route::prefix('/orders')->middleware('auth')->controller(OrderController::class)->name('orders.')->group(function () {
         // Billing Options
-        Route::get('/billing', 'billing')->name('billing')->middleware(['can_deliver', 'cart_not_empty']);
+        Route::get('/payment', 'payment')->name('payment')->middleware(['can_deliver', 'cart_not_empty']);
 
         // Check the paymob response
-        Route::get('/billing/check', 'billingCheck')->name('billing.check');
+        Route::get('/payment/check', 'paymentCheck')->name('payment.check');
 
         // Confirm the order
         Route::get('/done', 'done')->name('done');
@@ -67,7 +67,7 @@ Route::group([
         Route::delete('/{order_id}/return-cancel', 'returnCancel')->name('return-cancel');
 
         // Go to Paymob Iframe
-        Route::get('/{order_id}/payment', 'goToPayment')->name('payment');
+        Route::get('/{order_id}/paymob', 'goToPayment')->name('paymob.pay');
 
         // track the order
         Route::get('/{order_id}/track', 'track')->name('track');

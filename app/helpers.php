@@ -455,8 +455,9 @@ function get_item_rating($product_id, $type = 'Product')
 
 ################ BOSTA :: START ##################
 // create bosta Order
-function createBostaOrder($order)
+function createBostaOrder($order, $payment_method)
 {
+    // dd($order->transactions()->get());
     $order_data = [
         "specs" => [
             "packageDetails"    =>      [
@@ -482,7 +483,7 @@ function createBostaOrder($order)
         "businessReference" => "$order->id",
         "type"      =>      10,
         "notes"     =>      $order->notes ? $order->notes . ($order->user->phones->where('default', 0)->count() > 1 ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : '') : ($order->user->phones->where('default', 0)->count() > 1 ? implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : ''),
-        "cod"       =>      $order->payment_method == 1 ? ceil($order->should_pay) : 0.00,
+        "cod"       =>      $payment_method == 1 ? ceil($order->transactions()->where('payment_method', 1)->where('payment_status', 1)->sum('payment_amount')) : 0.00,
         "allowToOpenPackage" => true,
         "webhookUrl" => "https://www.smarttoolsegypt.com/api/orders/update-status",
     ];
@@ -580,10 +581,8 @@ function cancelBostaOrder($order)
 
 ################ PAYMOB :: START ##################
 // create transaction in paymob
-function payByPaymob($payment)
+function payByPaymob($order, $transaction)
 {
-    $order = $payment->order;
-
     try {
         // create paymob auth token
         $first_step = Http::acceptJson()->post('https://accept.paymob.com/api/auth/tokens', [
@@ -596,21 +595,21 @@ function payByPaymob($payment)
         $second_step = Http::acceptJson()->post('https://accept.paymob.com/api/ecommerce/orders', [
             "auth_token" =>  $auth_token,
             "delivery_needed" => "false",
-            "amount_cents" => number_format(($order->should_pay) * 100, 0, '', ''),
+            "amount_cents" => number_format(($transaction->payment_amount) * 100, 0, '', ''),
             "currency" => "EGP",
             "items" => []
-        ])->json();
+            ])->json();
 
-        $order_id = $second_step['id'];
+            $order_id = $second_step['id'];
 
-        $payment->update([
+        $transaction->update([
             'paymob_order_id' => $order_id,
         ]);
 
         // create paymob transaction
         $third_step = Http::acceptJson()->post('https://accept.paymob.com/api/acceptance/payment_keys', [
             "auth_token" => $auth_token,
-            "amount_cents" => number_format(($order->should_pay) * 100, 0, '', ''),
+            "amount_cents" => number_format(($transaction->payment_amount) * 100, 0, '', ''),
             "expiration" => 3600,
             "order_id" => $order_id,
             "billing_data" => [
@@ -629,7 +628,7 @@ function payByPaymob($payment)
                 "state" => "NA"
             ],
             "currency" => "EGP",
-            "integration_id" => $order->payment_method == 3 ? env('PAYMOB_CLIENT_ID_INSTALLMENTS') : env('PAYMOB_CLIENT_ID_CARD_TEST'),
+            "integration_id" => $transaction->payment_method == 3 ? env('PAYMOB_CLIENT_ID_INSTALLMENTS') : env('PAYMOB_CLIENT_ID_CARD_TEST'),
         ])->json();
 
         $payment_key = $third_step['token'];

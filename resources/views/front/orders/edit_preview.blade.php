@@ -233,7 +233,7 @@
                         </h4>
 
                         <span class="text-xl text-successDark">
-                            {{ trans_choice('front/homePage.Product', $order_data['products_total_quantities'], ['product' => $order_data['products_total_quantities']]) }}
+                            {{ trans_choice('front/homePage.Item', $order_data['products_total_quantities'], ['item' => $order_data['products_total_quantities']]) }}
                         </span>
                     </div>
                 </div>

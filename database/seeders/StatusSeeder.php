@@ -16,122 +16,136 @@ class StatusSeeder extends Seeder
     public function run()
     {
         Status::updateOrCreate([
-            'id' => 1,
+            'id' => 201,
             'name' => [
                 'en' => 'Under Processing',
                 'ar' => 'جاري إنشاء الطلب',
             ],
         ]);
         Status::updateOrCreate([
-            'id' => 2,
-            'name' => [
-                'en' => 'Waiting For Payment',
-                'ar' => 'في انتظار الدفع',
-            ],
-        ]);
-        Status::updateOrCreate([
-            'id' => 3,
+            'id' => 202,
             'name' => [
                 'en' => 'Created',
                 'ar' => 'تم إنشاء الطلب',
             ],
         ]);
         Status::updateOrCreate([
-            'id' => 4,
+            'id' => 203,
+            'name' => [
+                'en' => 'Waiting For Payment',
+                'ar' => 'في انتظار الدفع',
+            ],
+        ]);
+        Status::updateOrCreate([
+            'id' => 204,
+            'name' => [
+                'en' => 'Shipping Creates',
+                'ar' => 'تم إنشاء طلب التوصيل',
+            ],
+        ]);
+        Status::updateOrCreate([
+            'id' => 205,
             'name' => [
                 'en' => 'Preparing',
                 'ar' => 'جاري التجهيز',
             ],
         ]);
         Status::updateOrCreate([
-            'id' => 5,
+            'id' => 206,
             'name' => [
                 'en' => 'Under Reviewing',
                 'ar' => 'جاري الفحص والمراجعة',
             ],
         ]);
         Status::updateOrCreate([
-            'id' => 6,
+            'id' => 207,
             'name' => [
                 'en' => 'Shipped',
                 'ar' => 'تم التسليم لشركة الشحن',
             ],
         ]);
         Status::updateOrCreate([
-            'id' => 8,
+            'id' => 301,
             'name' => [
                 'en' => 'Cancellation Requested',
                 'ar' => 'تم طلب الإلغاء',
             ],
         ]);
         Status::updateOrCreate([
-            'id' => 9,
+            'id' => 302,
             'name' => [
-                'en' => 'Cancelled',
-                'ar' => 'تم الإلغاء',
+                'en' => 'Cancellation Approved',
+                'ar' => 'تم قبول طلب الإلغاء',
             ],
         ]);
         Status::updateOrCreate([
-            'id' => 15,
+            'id' => 303,
+            'name' => [
+                'en' => 'Cancellation Rejected',
+                'ar' => 'تم رفض طلب الإلغاء',
+            ],
+        ]);
+        Status::updateOrCreate([
+            'id' => 304,
             'name' => [
                 'en' => 'Under Editing',
                 'ar' => 'جاري التعديل',
             ],
         ]);
         Status::updateOrCreate([
-            'id' => 16,
+            'id' => 305,
             'name' => [
                 'en' => 'Edit Requested',
                 'ar' => 'تم طلب التعديل',
             ],
         ]);
         Status::updateOrCreate([
-            'id' => 12,
+            'id' => 306,
             'name' => [
                 'en' => 'Edit Approved',
                 'ar' => 'تمت الموافقة على التعديل',
             ],
         ]);
         Status::updateOrCreate([
-            'id' => 13,
+            'id' => 307,
             'name' => [
                 'en' => 'Edit Rejected',
                 'ar' => 'تم رفض التعديل',
             ],
         ]);
         Status::updateOrCreate([
-            'id' => 14,
-            'name' => [
-                'en' => 'Waiting For Refund',
-                'ar' => 'في انتظار ارتجاع المبلغ',
-            ],
-        ]);
-        Status::updateOrCreate([
-            'id' => 7,
+            'id' => 401,
             'name' => [
                 'en' => 'Under Returning',
                 'ar' => 'جاري طلب الاسترجاع',
             ],
         ]);
         Status::updateOrCreate([
-            'id' => 17,
+            'id' => 402,
             'name' => [
                 'en' => 'Return Requested',
                 'ar' => 'تم طلب الاسترجاع',
             ],
         ]);
         Status::updateOrCreate([
-            'id' => 18,
+            'id' => 403,
             'name' => [
                 'en' => 'Return Approved',
                 'ar' => 'تم قبول طلب الاسترجاع',
             ],
         ]);
         Status::updateOrCreate([
-            'id' => 19,
+            'id' => 404,
             'name' => [
                 'en' => 'Return Rejected',
                 'ar' => 'تم رفض طلب الاسترجاع',
+            ],
+        ]);
+        Status::updateOrCreate([
+            'id' => 405,
+            'name' => [
+                'en' => 'Waiting For Refund',
+                'ar' => 'في انتظار ارتجاع المبلغ',
             ],
         ]);
 

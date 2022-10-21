@@ -8,10 +8,29 @@
         </div>
     </div>
 
+    {{-- ############## Coupon :: Start ############## --}}
+    <div wire:ignore>
+        <div class="flex justify-between items-center p-4">
+            <h3 class="h5 text-center font-bold m-0">
+                {{ __('front/homePage.Add Coupon') }}
+            </h3>
+        </div>
+        <hr>
+        <div class="p-3">
+            @livewire('front.order.payment.coupon-block', [
+                'items' => $items,
+                // 'total' => $total,
+                // 'points' => $total_points,
+            ])
+        </div>
+    </div>
+    <hr>
+    {{-- ############## Coupon :: End ############## --}}
+
     {{-- ############## Title :: Start ############## --}}
     <div class="flex justify-between items-center p-4">
         <h3 class="h5 text-center font-bold m-0">
-            {{ __('front/homePage.Cart Summary') }}
+            {{ __('front/homePage.Order Summary') }}
         </h3>
 
         <h4 class="text-sm font-bold">
@@ -135,15 +154,41 @@
                 </div>
                 <div>
                     {{-- Free Shipping --}}
-                    @if ($total_order_free_shipping)
+                    @if (is_null($address))
+                        <span class="text-xs text-danger">
+                            {{ __('front/homePage.select default address') }}
+                        </span>
+                    @elseif (is_null($best_zone_id))
+                        <span class="text-xs text-danger text-center">
+                            {!! __('front/homePage.No Deliveries', [
+                                'city' => $city_name,
+                                'icon' =>
+                                    '<a href="https://wa.me/+2' .
+                                    config('constants.constants.WHATSAPP_NUMBER') .
+                                    '" target="_blank" class="inline-flex items-center justify-center gap-1 bg-whatsapp text-white rounded-full px-2 py-1 m-1">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <span class="text-sm">' .
+                                    config('constants.constants.WHATSAPP_NUMBER') .
+                                    '</span> <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1024"> <path fill="currentColor" d="M713.5 599.9c-10.9-5.6-65.2-32.2-75.3-35.8c-10.1-3.8-17.5-5.6-24.8 5.6c-7.4 11.1-28.4 35.8-35 43.3c-6.4 7.4-12.9 8.3-23.8 2.8c-64.8-32.4-107.3-57.8-150-131.1c-11.3-19.5 11.3-18.1 32.4-60.2c3.6-7.4 1.8-13.7-1-19.3c-2.8-5.6-24.8-59.8-34-81.9c-8.9-21.5-18.1-18.5-24.8-18.9c-6.4-.4-13.7-.4-21.1-.4c-7.4 0-19.3 2.8-29.4 13.7c-10.1 11.1-38.6 37.8-38.6 92s39.5 106.7 44.9 114.1c5.6 7.4 77.7 118.6 188.4 166.5c70 30.2 97.4 32.8 132.4 27.6c21.3-3.2 65.2-26.6 74.3-52.5c9.1-25.8 9.1-47.9 6.4-52.5c-2.7-4.9-10.1-7.7-21-13z" /> <path fill="currentColor" d="M925.2 338.4c-22.6-53.7-55-101.9-96.3-143.3c-41.3-41.3-89.5-73.8-143.3-96.3C630.6 75.7 572.2 64 512 64h-2c-60.6.3-119.3 12.3-174.5 35.9c-53.3 22.8-101.1 55.2-142 96.5c-40.9 41.3-73 89.3-95.2 142.8c-23 55.4-34.6 114.3-34.3 174.9c.3 69.4 16.9 138.3 48 199.9v152c0 25.4 20.6 46 46 46h152.1c61.6 31.1 130.5 47.7 199.9 48h2.1c59.9 0 118-11.6 172.7-34.3c53.5-22.3 101.6-54.3 142.8-95.2c41.3-40.9 73.8-88.7 96.5-142c23.6-55.2 35.6-113.9 35.9-174.5c.3-60.9-11.5-120-34.8-175.6zm-151.1 438C704 845.8 611 884 512 884h-1.7c-60.3-.3-120.2-15.3-173.1-43.5l-8.4-4.5H188V695.2l-4.5-8.4C155.3 633.9 140.3 574 140 513.7c-.4-99.7 37.7-193.3 107.6-263.8c69.8-70.5 163.1-109.5 262.8-109.9h1.7c50 0 98.5 9.7 144.2 28.9c44.6 18.7 84.6 45.6 119 80c34.3 34.3 61.3 74.4 80 119c19.4 46.2 29.1 95.2 28.9 145.8c-.6 99.6-39.7 192.9-110.1 262.7z" /> </svg> </a>',
+                            ]) !!}
+                        </span>
+                    @elseif ($total_order_free_shipping || $shipping_fees == 0)
                         <span class="text-success">
                             {{ __('front/homePage.Free Shipping') }}
                         </span>
-                    @else
-                        {{-- Calculate Shipping --}}
-                        <span class="text-sm text-yellow-500">
-                            {{ __('front/homePage.Will be determined in the next steps') }}
-                        </span>
+                    @elseif ($shipping_fees)
+                        <div class="flex gap-2 text-success">
+
+                            {{-- Calculate Shipping --}}
+                            <span class="flex rtl:flex-row-reverse gap-1">
+                                <span class="font-bold text-sm">
+                                    {{ __('front/homePage.EGP') }}
+                                </span>
+                                <span class="font-bold text-xl"
+                                    dir="ltr">{{ number_format(explode('.', $shipping_fees)[0], 0, '.', '\'') }}</span>
+                                <span
+                                    class="font-bold text-xs">{{ explode('.', number_format($shipping_fees, 2))[1] ?? '00' }}</span>
+                            </span>
+                        </div>
                     @endif
                 </div>
             </div>
@@ -183,7 +228,8 @@
                     {{ __('front/homePage.Subtotal after order discounts:') }}
                 </div>
 
-                <div class="flex rtl:flex-row-reverse gap-1 text-successDark">
+                <div
+                    class="flex rtl:flex-row-reverse gap-1 text-successDark @if ($coupon_id && $total_after_order_discount > $total_after_coupon_discount) line-through @endif">
                     <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
                     <span class="font-bold text-xl"
                         dir="ltr">{{ number_format(explode('.', $total_after_order_discount)[0], 0, '.', '\'') }}</span>
@@ -191,6 +237,50 @@
                 </div>
             </div>
             {{-- ############## Total After Order Discount :: End ############## --}}
+        @endif
+
+        @if ($coupon_id)
+            {{-- ############## Coupon Discounts :: Start ############## --}}
+            <div class="w-100 flex justify-between items-center">
+                <div class="h6 font-bold m-0">
+                    {{ __('front/homePage.Coupon Discount:') }}
+                </div>
+
+                <div class="flex gap-2 text-success">
+                    <span class="flex rtl:flex-row-reverse gap-1">
+                        <span class="font-bold text-sm">
+                            {{ __('front/homePage.EGP') }}
+                        </span>
+                        <span class="font-bold text-xl"
+                            dir="ltr">{{ number_format(explode('.', $coupon_total_discount)[0], 0, '.', '\'') }}</span>
+                        <span
+                            class="font-bold text-xs">{{ explode('.', number_format($coupon_total_discount, 2))[1] ?? '00' }}</span>
+                    </span>
+                    <span>
+                        ({{ $coupon_total_discount_percent }} %)
+                    </span>
+                </div>
+
+            </div>
+            {{-- ############## Coupon Discounts :: End ############## --}}
+
+            <hr class="my-1 w-full">
+
+            {{-- ############## Total After Coupon Discount :: Start ############## --}}
+            <div class="w-100 flex justify-between items-center">
+                <div class="h6 font-bold m-0">
+                    {{ __('front/homePage.Subtotal after coupon discounts:') }}
+                </div>
+
+                <div class="flex rtl:flex-row-reverse gap-1 text-successDark">
+                    <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
+                    <span class="font-bold text-xl"
+                        dir="ltr">{{ number_format(explode('.', $total_after_coupon_discount)[0], 0, '.', '\'') }}</span>
+                    <span
+                        class="font-bold text-xs">{{ explode('.', number_format($total_after_coupon_discount, 2))[1] ?? '00' }}</span>
+                </div>
+            </div>
+            {{-- ############## Total After Coupon Discount :: End ############## --}}
         @endif
     </div>
 
@@ -207,16 +297,16 @@
             <div class="flex rtl:flex-row-reverse gap-1 text-white">
                 <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
                 <span class="font-bold text-2xl"
-                    dir="ltr">{{ number_format(explode('.', $total_after_order_discount)[0], 0, '.', '\'') }}</span>
+                    dir="ltr">{{ number_format(explode('.', $total_after_coupon_discount)[0], 0, '.', '\'') }}</span>
                 <span
-                    class="font-bold text-xs">{{ explode('.', number_format($total_after_order_discount, 2))[1] ?? '00' }}</span>
+                    class="font-bold text-xs">{{ explode('.', number_format($total_after_coupon_discount, 2))[1] ?? '00' }}</span>
             </div>
 
         </div>
         {{-- ############## Total:: End ############## --}}
 
         {{-- ############## Points :: Start ############## --}}
-        @if ($total_points_after_order_points)
+        @if ($total_points_after_coupon_points)
             <div class="w-full flex justify-between items-center bg-successDark text-white">
                 <div class="h6 font-bold m-0">
                     {{ __('front/homePage.You will get:') }}
@@ -224,9 +314,9 @@
                 <div class="flex flex-col gap-2">
                     <div class="flex rtl:flex-row-reverse gap-1">
                         <span
-                            class="font-bold text-sm">{{ trans_choice('front/homePage.Point/Points', $total_points_after_order_points, ['points' => $total_points_after_order_points]) }}</span>
+                            class="font-bold text-sm">{{ trans_choice('front/homePage.Point/Points', $total_points_after_coupon_points, ['points' => $total_points_after_coupon_points]) }}</span>
                         <span class="font-bold text-2xl"
-                            dir="ltr">{{ number_format($total_points_after_order_points, 0, '.', '\'') }}</span>
+                            dir="ltr">{{ number_format($total_points_after_coupon_points, 0, '.', '\'') }}</span>
                     </div>
                 </div>
             </div>
@@ -234,25 +324,47 @@
     </div>
     {{-- ############## Points :: End ############## --}}
 
-    {{-- ############## Buttons :: Start ############## --}}
-    @if ($items_total_quantities > 0)
+    {{-- Payment Method Details :: Start --}}
+    @if ($payment_method == 1)
         <hr>
-        <div class="p-2 flex justify-center items-center">
-            <a class="btn bg-primary font-bold self-stretch" href="{{ route('front.order.shipping') }}">
-                {{ __('front/homePage.Proceed to Shipping Info.') }}
+
+        <div class="flex gap-2 justify-around items-center p-2">
+            <button class="btn bg-success max-w-max font-bold"
+                wire:click="$emitTo('front.order.payment.order-payment-details','submit')">
+                {{ __('front/homePage.Submit & Confirm Order') }}
                 &nbsp;
                 <span class="material-icons">
-                    local_shipping
+                    done_all
                 </span>
-            </a>
+            </button>
         </div>
-    @else
+    @elseif ($payment_method == 2 || $payment_method == 3)
         <hr>
-        <div class="text-center p-3">
-            <a href="{{ route('front.homepage') }}" class="btn bg-primary font-bold">
-                {{ __('front/homePage.Continue Shopping') }}
-            </a>
+
+        <div class="flex gap-2 justify-around items-center p-2">
+            <button class="btn bg-success max-w-max font-bold"
+                wire:click="$emitTo('front.order.payment.order-payment-details','submit')">
+                {{ __('front/homePage.Go to payment') }}
+                &nbsp;
+                <span class="material-icons">
+                    credit_card
+                </span>
+            </button>
+        </div>
+    @elseif ($payment_method == 4)
+        <hr>
+
+        <div class="flex gap-2 justify-around items-center p-2">
+            <button class="btn bg-success max-w-max font-bold"
+                wire:click="$emitTo('front.order.payment.order-payment-details','submit')">
+                {{ __('front/homePage.Submit & Confirm Order') }}
+                &nbsp;
+                <span class="material-icons">
+                    account_balance_wallet
+                </span>
+            </button>
+
         </div>
     @endif
-    {{-- ############## Buttons :: End ############## --}}
+    {{-- Payment Method Details :: End --}}
 </div>

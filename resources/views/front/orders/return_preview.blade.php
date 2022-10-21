@@ -177,7 +177,7 @@
                             </span>
 
                             <span class="text-successDark font-bold">
-                                {{ trans_choice('front/homePage.Product', $order_data['old_products_total_quantities'], ['product' => $order_data['old_products_total_quantities']]) }}
+                                {{ trans_choice('front/homePage.Item', $order_data['old_products_total_quantities'], ['item' => $order_data['old_products_total_quantities']]) }}
                             </span>
                         </div>
 
@@ -188,7 +188,7 @@
                             </span>
 
                             <span class="text-primary font-bold">
-                                {{ trans_choice('front/homePage.Product', $order_data['returned_products_total_quantities'], ['product' => $order_data['returned_products_total_quantities']]) }}
+                                {{ trans_choice('front/homePage.Item', $order_data['returned_products_total_quantities'], ['item' => $order_data['returned_products_total_quantities']]) }}
                             </span>
                         </div>
                     </div>

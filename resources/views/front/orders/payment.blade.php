@@ -29,8 +29,8 @@
                         <hr>
 
                         {{-- ############## Order Billing Details :: Start ############## --}}
-                        @livewire('front.order.order-billing-details')
-                        {{-- ############## Order Billing Details :: End ############## --}}
+                        @livewire('front.order.payment.order-payment-details')
+                        {{-- ############## Ordergeneral Billing Details :: End ############## --}}
                     </div>
                     {{-- ############## Order Billing Details :: End ############## --}}
                 @endauth
@@ -38,7 +38,7 @@
 
             {{-- ############## Order Summary :: Start ############## --}}
             <div class="col-span-12 md:col-span-4 md:order-none bg-white rounded overflow-hidden self-start">
-                @livewire('front.order.general.order-summary', ['step' => 3])
+                @livewire('front.order.payment.order-payment-summary', ['items' => $cart_items])
             </div>
             {{-- ############## Order Summary :: End ############## --}}
         </div>

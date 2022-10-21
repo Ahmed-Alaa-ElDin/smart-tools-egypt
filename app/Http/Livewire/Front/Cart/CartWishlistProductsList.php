@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Livewire\Front\Order\General;
+namespace App\Http\Livewire\Front\Cart;
 
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class OrderWishlistProductsList extends Component
+class CartWishlistProductsList extends Component
 {
     public $items;
 
@@ -16,7 +16,7 @@ class OrderWishlistProductsList extends Component
 
     public function render()
     {
-        return view('livewire.front.order.general.order-wishlist-products-list');
+        return view('livewire.front.cart.cart-wishlist-products-list');
     }
 
     ############## Get Items :: Start ##############

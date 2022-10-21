@@ -75,7 +75,7 @@ return [
     "Confirmation"              =>      "تأكيد الطلب",
     "Shopping Cart"             =>      "سلة المشتريات",
     "Order Summary"             =>      "ملخص الطلب",
-    "Product"                   =>      "{0} سلة المشتريات فارغة|{1} منتج واحد|{2} منتجان|[3,10] :product منتجات|[11,*] :product منتج",
+    "Item"                   =>      "{0} سلة المشتريات فارغة|{1} منتج واحد|{2} منتجان|[3,10] :item منتجات|[11,*] :item منتج",
     "Coupon Code"               =>      "كود الكوبون",
     "Apply"                     =>      "تطبيق",
     "Shipping:"                =>      "الشحن:",
@@ -396,5 +396,7 @@ return [
     "Subtotal after offers discounts:"      =>      "المجموع بعد خصومات العروض:",
     "Discount on order:"                    =>      "خصم على الطلب:",
     "Subtotal after order discounts:"       =>      "المجموع بعد الخصم على الطلب:",
+    "Subtotal after coupon discounts:"      =>      "المجموع بعد خصم الكوبون:",
+
 
 ];

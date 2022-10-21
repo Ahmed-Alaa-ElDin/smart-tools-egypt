@@ -7,5 +7,6 @@ return [
         'POINT_RATE' => 0.1,
         'WHATSAPP_NUMBER' => '01010097248',
         'RETURN_PERIOD' => 14,
+        'POINTS_EXP_DAYS' => 90,
     ]
 ];

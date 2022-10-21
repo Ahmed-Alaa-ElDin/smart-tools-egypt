@@ -734,7 +734,7 @@ class OrderController extends Controller
                 if ($payment_key) {
                     return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($new_order->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
                 } else {
-                    return redirect()->route('front.orders.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
+                    return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }
             }
         }
@@ -1472,41 +1472,77 @@ class OrderController extends Controller
     ##################### Go To Shipping Details During Placing the Order :: Start #####################
     public function shipping()
     {
+        $cart_products_id = [];
         $products_id = [];
+        $cart_collections_id = [];
+        $collections_id = [];
 
-        // get products id from cart
-        $cart_products_id = Cart::instance('cart')->content()->pluck('id')->toArray();
+        // get items id from cart
+        Cart::instance('cart')->content()->map(function ($item) use (&$products_id, &$collections_id, &$cart_products_id, &$cart_collections_id) {
+            if ($item->options->type == 'Product') {
+                $products_id[] = $item->id;
+                $cart_products_id[] = $item->id;
+            } elseif ($item->options->type == 'Collection') {
+                $collections_id[] = $item->id;
+                $cart_collections_id[] = $item->id;
+            }
+        });
 
-        // get products id from wishlist
-        $wishlist_products_id = Cart::instance('wishlist')->content()->pluck('id')->toArray();
+        // get items id from cart
+        $products_id = array_unique($products_id);
+        $collections_id = array_unique($collections_id);
 
-        // get products id from cart and wishlist
-        $products_id = array_unique(array_merge($cart_products_id, $wishlist_products_id));
-
-        $products = [];
-
-        // get all products data from database with best price
+        // get all items data from database with best price
         $products = getBestOfferForProducts($products_id);
+        $collections = getBestOfferForCollections($collections_id);
 
-        // put products data in cart_products variable
+        // put items data in cart_items variable
         $cart_products = $products->whereIn('id', $cart_products_id);
+        $cart_collections = $collections->whereIn('id', $cart_collections_id);
+        $cart_items = $cart_collections->concat($cart_products)->toArray();
 
-        // put products data in wishlist_products variable
-        $wishlist_products = $products->whereIn('id', $wishlist_products_id);
-
-        return view('front.orders.shipping', compact('cart_products', 'wishlist_products'));
+        return view('front.orders.shipping', compact('cart_items'));
     }
     ##################### Go To Shipping Details During Placing the Order :: End #####################
 
     ##################### Go To Billing Details During Placing the Order :: Start #####################
-    public function billing()
+    public function payment()
     {
-        return view('front.orders.billing');
+        $cart_products_id = [];
+        $products_id = [];
+        $cart_collections_id = [];
+        $collections_id = [];
+
+        // get items id from cart
+        Cart::instance('cart')->content()->map(function ($item) use (&$products_id, &$collections_id, &$cart_products_id, &$cart_collections_id) {
+            if ($item->options->type == 'Product') {
+                $products_id[] = $item->id;
+                $cart_products_id[] = $item->id;
+            } elseif ($item->options->type == 'Collection') {
+                $collections_id[] = $item->id;
+                $cart_collections_id[] = $item->id;
+            }
+        });
+
+        // get items id from cart
+        $products_id = array_unique($products_id);
+        $collections_id = array_unique($collections_id);
+
+        // get all items data from database with best price
+        $products = getBestOfferForProducts($products_id);
+        $collections = getBestOfferForCollections($collections_id);
+
+        // put items data in cart_items variable
+        $cart_products = $products->whereIn('id', $cart_products_id);
+        $cart_collections = $collections->whereIn('id', $cart_collections_id);
+        $cart_items = $cart_collections->concat($cart_products)->toArray();
+
+        return view('front.orders.payment', compact('cart_items'));
     }
     ##################### Go To Billing Details During Placing the Order :: End #####################
 
     ##################### Confirm the Paymob Billing :: Start #####################
-    public function billingCheck(Request $request)
+    public function paymentCheck(Request $request)
     {
         $data = $request->all();
 
@@ -1720,7 +1756,7 @@ class OrderController extends Controller
                         return redirect()->route('front.orders.done')->with('order_id', $order->id);
                     } else {
                         Session::flash('error', __('front/homePage.Order Creation Failed, Please Try Again'));
-                        return redirect()->route('front.orders.billing');
+                        return redirect()->route('front.orders.payment');
                     }
                 }
             } catch (\Throwable $th) {

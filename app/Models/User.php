@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -43,7 +44,7 @@ class User extends Authenticatable
         'auth_id',
         'auth_type',
         'balance',
-        'points'
+        // 'points'
     ];
 
     /**
@@ -68,7 +69,9 @@ class User extends Authenticatable
         'last_visit_at' => 'datetime'
     ];
 
-    protected $with = ['addresses', 'phones'];
+    protected $with = ['addresses', 'phones', 'points'];
+
+    protected $append = ['valid_points'];
 
     protected function asJson($value)
     {
@@ -90,6 +93,17 @@ class User extends Authenticatable
     public function defaultPhone()
     {
         return $this->hasMany(Phone::class)->where('default', 1)->first();
+    }
+
+    // One to many relationship User -> Points
+    public function points()
+    {
+        return $this->hasMany(Point::class);
+    }
+
+    public function getValidPointsAttribute()
+    {
+        return $this->points->where('status', 1)->where('created_at', '>=', Carbon::now()->subDays(90)->toDateTimeString())->sum('value');
     }
 
     // One to many relationship  User --> Products

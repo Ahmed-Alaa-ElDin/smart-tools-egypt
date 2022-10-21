@@ -38,7 +38,7 @@
                     <hr>
 
                     {{-- ############## Wishlist Products' List :: Start ############## --}}
-                    @livewire('front.order.general.order-wishlist-products-list', ['items' => $wishlist_items])
+                    @livewire('front.cart.cart-wishlist-products-list', ['items' => $wishlist_items])
                     {{-- ############## Wishlist Products' List :: End ############## --}}
                 </div>
                 {{-- ############## Wishlist :: End ############## --}}
