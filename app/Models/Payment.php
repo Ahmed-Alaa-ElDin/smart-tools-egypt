@@ -19,8 +19,8 @@ class Payment extends Model
         'coupon_order_discount',
         'delivery_fees',
         'total',
-        'should_pay',
-        'should_get',
+        // 'should_pay',
+        // 'should_get',
     ];
 
     public function transactions()

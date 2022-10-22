@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
-use App\Models\Coupon;
 use App\Models\Offer;
 use App\Models\Order;
-use App\Models\Payment;
-use App\Models\Product;
-use App\Models\User;
+use App\Models\Transaction;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -35,11 +32,17 @@ class OrderController extends Controller
                     },
                 ]);
             },
+            'collections'=> function ($query) {
+                $query->with([
+                    'reviews',
+                    'thumbnail',
+                ]);
+            },
             'status'
         ])
             ->where('user_id', auth()->user()->id)
             ->whereHas('status', function ($query) {
-                $query->whereNotIn('id', [1, 15]);
+                $query->whereNotIn('id', [201, 15]);
             })
             ->orderBy('id', 'desc')
             ->paginate(5);
@@ -1590,28 +1593,29 @@ class OrderController extends Controller
 
             try {
                 // get payment data
-                $payment = Payment::with(['order' => function ($query) {
+                $transaction = Transaction::with(['order' => function ($query) {
                     $query->with(['user', 'products', 'address']);
                 }])
                     ->where('paymob_order_id', $data['order'])
                     ->first();
 
-                // update payment status
-                $payment->update([
+                // update transaction status
+                $transaction->update([
                     'payment_status' => 2,
-                    'payment_details' => [
-                        'amount_cents' => $data['amount_cents'],
-                        'transaction_id' => $data['id'],
-                        'source_data_sub_type' => $data['source_data_sub_type'],
-                    ]
+                    'payment_details' => json_encode([
+                        "amount_cents" => $data['amount_cents'],
+                        "points" => 0,
+                        "transaction_id" => $data['id'],
+                        "source_data_sub_type" => $data['source_data_sub_type']
+                    ])
                 ]);
 
-                // get order from payment
+                // get order from transaction
 
-                // Old Orders
-                if ($payment->old_order_id != null) {
-                    $old_order = Order::with(['products', 'user', 'payments'])->findOrFail($payment->old_order_id);
-                    $new_order = Order::with(['products'])->findOrFail($payment->order_id);
+                // todo :: Old Orders
+                if ($transaction->old_order_id != null) {
+                    $old_order = Order::with(['products', 'user', 'payments'])->findOrFail($transaction->old_order_id);
+                    $new_order = Order::with(['products'])->findOrFail($transaction->order_id);
 
                     $returned_balance = $old_order->used_balance - $new_order->used_balance;
                     $returned_points = $old_order->used_points - $new_order->used_points;
@@ -1621,8 +1625,8 @@ class OrderController extends Controller
                         'should_pay' => 0.00
                     ]);
 
-                    $payment->update([
-                        'order_id' => $payment->old_order_id,
+                    $transaction->update([
+                        'order_id' => $transaction->old_order_id,
                         'old_order_id' => null
                     ]);
 
@@ -1643,7 +1647,7 @@ class OrderController extends Controller
                         ];
                     }
 
-                    if (editBostaOrder($new_order, $payment->old_order_id)) {
+                    if (editBostaOrder($new_order, $transaction->old_order_id)) {
                         try {
                             $old_order->update([
                                 'status_id' => 12,
@@ -1695,61 +1699,31 @@ class OrderController extends Controller
                 }
                 // New Orders
                 else {
-                    $order = $payment->order;
-
-                    // update the database with the order data
-                    $order->update([
-                        'should_pay' => 0.00,
-                    ]);
+                    $order = $transaction->order;
 
                     // Order ==> New Order
-                    $bosta_order = createBostaOrder($order);
+                    $bosta_order = createBostaOrder($order, $transaction->payment_method);
 
                     if ($bosta_order['status']) {
                         // update order in database
                         $order->update([
                             'tracking_number' => $bosta_order['data']['trackingNumber'],
                             'order_delivery_id' => $bosta_order['data']['_id'],
-                            'status_id' => 3,
+                            'status_id' => 204,
                         ]);
 
-                        $order->statuses()->attach(3);
+                        $order->statuses()->attach(204);
 
-                        // update user's balance
-                        $user = User::find(auth()->user()->id);
-
-                        $user->update([
-                            'points' => $user->points - $order->used_points + $order->gift_points ?? 0,
-                            'balance' => $user->balance - $order->used_balance ?? 0,
+                        // update user's Points
+                        $order->points()->update([
+                            'status' => 1
                         ]);
-
-                        // update coupon usage
-                        if ($order->coupon_id != null) {
-                            $coupon = Coupon::find($order->coupon_id);
-
-                            $coupon->update([
-                                'number' => $coupon->number != null && $coupon->number > 0 ? $coupon->number - 1 : $coupon->number,
-                            ]);
-                        }
-
-                        // todo :: edit offer usage
-
-                        // clear cart
-                        Cart::instance('cart')->destroy();
-                        Cart::instance('cart')->store($user->id);
-
-                        // edit products database
-                        foreach ($order->products as $product) {
-                            $product->update([
-                                'quantity' => $product->quantity - $product->pivot->quantity >= 0  ? $product->quantity - $product->pivot->quantity : 0,
-                            ]);
-                        }
 
                         DB::commit();
 
-                        // Send Email To User
+                        // todo :: Send Email To User
 
-                        // Send SMS To User
+                        // todo :: Send SMS To User
 
                         // redirect to done page
                         Session::flash('success', __('front/homePage.Order Created Successfully'));
@@ -1762,22 +1736,22 @@ class OrderController extends Controller
             } catch (\Throwable $th) {
                 DB::rollBack();
 
-                $payment = Payment::where('paymob_order_id', $data['order'])
+                $transaction = Transaction::where('paymob_order_id', $data['order'])
                     ->first();
 
-                $new_payment = Payment::create([
-                    'order_id' => $payment->order_id,
-                    'old_order_id' => $payment->old_order_id,
-                    'user_id' => $payment->user_id,
-                    'payment_amount' => $payment->payment_amount,
-                    'payment_method' => $payment->payment_method,
-                    'payment_status' => $payment->payment_status,
-                    'paymob_order_id' => $payment->paymob_order_id,
-                    'payment_details' => $payment->payment_details,
+                $new_transaction = Transaction::create([
+                    'order_id' => $transaction->order_id,
+                    'old_order_id' => $transaction->old_order_id,
+                    'user_id' => $transaction->user_id,
+                    'payment_amount' => $transaction->payment_amount,
+                    'payment_method' => $transaction->payment_method,
+                    'payment_status' => $transaction->payment_status,
+                    'paymob_order_id' => $transaction->paymob_order_id,
+                    'payment_details' => $transaction->payment_details,
                 ]);
 
-                $payment->update([
-                    'order_id' => $payment->order_id,
+                $transaction->update([
+                    'order_id' => $transaction->order_id,
                     'payment_status' => 3,
                     'payment_details' => $data['data_message']
                 ]);
@@ -1785,22 +1759,22 @@ class OrderController extends Controller
                 return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
             }
         } else {
-            $payment = Payment::where('paymob_order_id', $data['order'])
+            $transaction = Transaction::where('paymob_order_id', $data['order'])
                 ->first();
 
-            $new_payment = Payment::create([
-                'order_id' => $payment->order_id,
-                'old_order_id' => $payment->old_order_id,
-                'user_id' => $payment->user_id,
-                'payment_amount' => $payment->payment_amount,
-                'payment_method' => $payment->payment_method,
-                'payment_status' => $payment->payment_status,
-                'paymob_order_id' => $payment->paymob_order_id,
-                'payment_details' => $payment->payment_details,
+            $new_transaction = Transaction::create([
+                'order_id' => $transaction->order_id,
+                'old_order_id' => $transaction->old_order_id,
+                'user_id' => $transaction->user_id,
+                'payment_amount' => $transaction->payment_amount,
+                'payment_method' => $transaction->payment_method,
+                'payment_status' => $transaction->payment_status,
+                'paymob_order_id' => $transaction->paymob_order_id,
+                'payment_details' => $transaction->payment_details,
             ]);
 
-            $payment->update([
-                'order_id' => $payment->order_id,
+            $transaction->update([
+                'order_id' => $transaction->order_id,
                 'payment_status' => 3,
                 'payment_details' => $data['data_message']
             ]);
