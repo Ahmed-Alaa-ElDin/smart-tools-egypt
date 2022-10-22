@@ -171,11 +171,11 @@
                                         </div>
                                         {{-- Price : End --}}
 
-                                        {{-- Free Shipping : Start --}}
+                                        {{-- Free Shipping: Start --}}
                                         <div class="text-center text-success font-bold text-sm">
                                             {{ __('front/homePage.Free Shipping') }}
                                         </div>
-                                        {{-- Free Shipping : End --}}
+                                        {{-- Free Shipping: End --}}
 
                                         {{-- Reviews : Start --}}
                                         <div class="my-1 text-center flex justify-center items-center gap-2">

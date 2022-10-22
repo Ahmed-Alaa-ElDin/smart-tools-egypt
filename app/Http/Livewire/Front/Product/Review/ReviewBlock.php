@@ -18,7 +18,7 @@ class ReviewBlock extends Component
     public function mount()
     {
         // get all product's reviews
-        $this->all_product_reviews = get_product_rating($this->product_id);
+        $this->all_product_reviews = get_item_rating($this->product_id,'Product');
 
         if (auth()->check()) {
             // get user's review

@@ -213,9 +213,10 @@
                             @livewire(
                                 'front.general.cart.add-to-cart-button',
                                 [
-                                    'product_id' => $product['id'],
+                                    'item_id' => $product['id'],
                                     'text' => true,
                                     'large' => true,
+                                    'type' => 'Product',
                                     'add_buy' => 'pay',
                                 ],
                                 key('add-cart-button-' . Str::random(10)),
@@ -227,9 +228,10 @@
                                 @livewire(
                                     'front.general.compare.add-to-compare-button',
                                     [
-                                        'product_id' => $product['id'],
+                                        'item_id' => $product['id'],
                                         'text' => true,
                                         'large' => true,
+                                        'type' => 'Product'
                                     ],
                                     key('add-compare-button-' . Str::random(10)),
                                 )
@@ -239,9 +241,10 @@
                                 @livewire(
                                     'front.general.wishlist.add-to-wishlist-button',
                                     [
-                                        'product_id' => $product['id'],
+                                        'item_id' => $product['id'],
                                         'text' => true,
                                         'large' => true,
+                                        'type' => 'Product'
                                     ],
                                     key('add-wishlist-button-' . Str::random(10)),
                                 )
@@ -256,8 +259,9 @@
                                 @livewire(
                                     'front.general.cart.cart-amount',
                                     [
-                                        'product_id' => $product->id,
-                                        'unique' => 'product-' . $product->id,
+                                        'item_id' => $product->id,
+                                        'unique' => 'item-' . $product->id,
+                                        'type' => 'Product',
                                         'title' => false,
                                     ],
                                     key($product->name . '-' . rand()),

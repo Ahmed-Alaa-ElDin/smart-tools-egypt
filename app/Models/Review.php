@@ -17,11 +17,16 @@ class Review extends Model
         'status',
     ];
 
-    // One to many relationship (Inverse) Product --> Reviews
-    public function product()
+    public function reviewable()
     {
-        return $this->belongsTo(Product::class);
+        return $this->morphTo();
     }
+
+    // // One to many relationship (Inverse) Product --> Reviews
+    // public function product()
+    // {
+    //     return $this->belongsTo(Product::class);
+    // }
 
     // One to many relationship (Inverse) User --> Reviews
     public function user()

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Front\General\Wishlist;
 
+use App\Models\Collection;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -20,32 +21,38 @@ class WishlistDropDown extends Component
 
     public function moveToCart($rowId)
     {
-        // Get product from cart
-        $product = Cart::instance('wishlist')->get($rowId);
+        // Get item from cart
+        $item = Cart::instance('wishlist')->get($rowId);
 
-        // Get the product's all data from database with best price
-        $product = getBestOfferForProduct($product->id);
+        $type = $item->options->type;
+        // Get the item's all data from database with best price
+        if ($type == "Product") {
+            $item = getBestOfferForProduct($item->id);
+        } elseif ($type == "Collection") {
+            $item = getBestOfferForCollection($item->id);
+        }
 
-        if ($product->quantity > 0 && $product->under_reviewing != 1) {
+        if ($item->quantity > 0 && $item->under_reviewing != 1) {
             Cart::instance('wishlist')->remove($rowId);
 
-            if (!Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product) {
-                return $cartItem->id === $product->id;
+            if (!Cart::instance('cart')->search(function ($cartItem, $rowId) use ($item, $type) {
+                return $cartItem->id === $item->id && $cartItem->options->type == $type;
             })->count()) {
                 Cart::instance('cart')->add(
-                    $product->id,
+                    $item->id,
                     [
-                        'en' => $product->getTranslation('name', 'en'),
-                        'ar' => $product->getTranslation('name', 'ar'),
+                        'en' => $item->getTranslation('name', 'en'),
+                        'ar' => $item->getTranslation('name', 'ar'),
                     ],
                     1,
-                    $product->best_price,
+                    $item->best_price,
                     [
-                        'thumbnail' => $product->thumbnail ?? null,
-                        "weight" => $product->weight ?? 0,
-                        "slug" => $product->slug ?? ""
+                        'type' => $type,
+                        'thumbnail' => $item->thumbnail ?? null,
+                        "weight" => $item->weight ?? 0,
+                        "slug" => $item->slug ?? ""
                     ]
-                )->associate(Product::class);
+                )->associate($type == "Product" ? Product::class : Collection::class);
 
                 if (Auth::check()) {
                     Cart::instance('cart')->store(Auth::user()->id);
@@ -55,16 +62,16 @@ class WishlistDropDown extends Component
 
             ############ Emit event to reinitialize the slider :: Start ############
             $this->emit('cartUpdated');
-            $this->emit('cartUpdated:' . "product-" . $product->id);
+            $this->emit('cartUpdated:' . "item-" . $item->id);
             ############ Emit event to reinitialize the slider :: End ############
-        } elseif ($product->under_reviewing == 1) {
+        } elseif ($item->under_reviewing == 1) {
             ############ Emit Sweet Alert :: Start ############
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('front/homePage.Sorry This Product is Under Reviewing'),
                 'icon' => 'error'
             ]);
             ############ Emit Sweet Alert :: End ############
-        } elseif ($product->quantity == 0) {
+        } elseif ($item->quantity == 0) {
             ############ Emit Sweet Alert :: Start ############
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __('front/homePage.Sorry This Product is Out of Stock'),

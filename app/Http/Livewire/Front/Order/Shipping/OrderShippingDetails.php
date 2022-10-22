@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Front\Order;
+namespace App\Http\Livewire\Front\Order\Shipping;
 
 use App\Models\Address;
 use App\Models\City;
@@ -31,6 +31,10 @@ class OrderShippingDetails extends Component
     public $notes;
     public $billing = false;
 
+    protected $listeners = [
+        'submit'
+    ];
+
     ################### Mount :: Start ###################
     public function mount()
     {
@@ -59,7 +63,7 @@ class OrderShippingDetails extends Component
             $this->checkDefaults();
         }
 
-        return view('livewire.front.order.order-shipping-details');
+        return view('livewire.front.order.shipping.order-shipping-details');
     }
     ################### Render :: End ###################
 
@@ -84,7 +88,6 @@ class OrderShippingDetails extends Component
         }
 
         $this->emit('AddressUpdated');
-        $this->emit('cartUpdated');
     }
     ################### Select Address :: End ###################
 
@@ -136,7 +139,6 @@ class OrderShippingDetails extends Component
 
         if ($default) {
             $this->emit('AddressUpdated');
-            $this->emit('cartUpdated');
         }
     }
     ################### Save Address :: End ###################
@@ -190,6 +192,8 @@ class OrderShippingDetails extends Component
             // set default to new phone
             $this->user->phones->where('id', $phone_id)->first()->update(['default' => 1]);
         }
+
+        $this->emit('PhoneUpdated');
     }
     ################### Select Phone :: End ###################
 
@@ -216,6 +220,10 @@ class OrderShippingDetails extends Component
         ]);
 
         $this->changePhone = false;
+
+        if ($default) {
+            $this->emit('PhoneUpdated');
+        }
     }
     ################### Save Phone :: End ###################
 
@@ -266,10 +274,11 @@ class OrderShippingDetails extends Component
             DB::beginTransaction();
 
             try {
-                $order = Order::updateOrCreate([
+                $order = Order::where('user_id', auth()->user()->id)->whereIn('status_id', [201, 202])->first() ?? new Order;
+
+                $order->fill([
                     'user_id' => auth()->user()->id,
-                    'status_id' => 1,
-                ], [
+                    'status_id' => 201,
                     'address_id' => $address->id,
                     'phone1' => $phones->where('default', 1)->first()->phone,
                     'phone2' => $phones->where('default', 0)->count() ? implode("-", $phones->where('default', 0)->pluck('phone')->toArray()) : null,
@@ -280,12 +289,16 @@ class OrderShippingDetails extends Component
                     'notes' => $this->notes,
                 ]);
 
-                $order->statuses()->attach(1);
+                $order->save();
+
+                if ($order->statuses()->count() == 0 || $order->statuses()->orderBy('pivot_created_at', 'desc')->first()->id != 201) {
+                    $order->statuses()->attach(201);
+                }
 
                 DB::commit();
 
                 Session::flash('success', __('front/homePage.Shipping Details Saved Successfully'));
-                redirect()->route('front.orders.billing');
+                redirect()->route('front.orders.payment');
             } catch (\Throwable $th) {
                 DB::rollBack();
 

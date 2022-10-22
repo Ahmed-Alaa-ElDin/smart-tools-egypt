@@ -1,12 +1,12 @@
 <div>
-    @forelse ($products as $product)
+    @forelse ($items as $item)
         {{-- Product : Start --}}
-        <x-front.product-box-wide :product="$product" type="cart"/>
+        <x-front.product-box-wide :item="$item" type="cart"/>
         {{-- Product : End --}}
 
         <hr>
 
-        @if ($loop->last && $step == 1)
+        @if ($loop->last)
             {{-- ############## Buttons :: Start ############## --}}
             <div class="p-2 flex justify-center items-center">
                 <a class="btn bg-primary font-bold self-stretch" href="{{ route('front.order.shipping') }}">

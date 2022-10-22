@@ -36,7 +36,7 @@
                         <hr>
 
                         {{-- ############## Order Shipping Details :: Start ############## --}}
-                        @livewire('front.order.order-shipping-details')
+                        @livewire('front.order.shipping.order-shipping-details')
                         {{-- ############## Order Shipping Details :: End ############## --}}
                     </div>
                     {{-- ############## Order Shipping Details :: End ############## --}}
@@ -45,7 +45,7 @@
 
             {{-- ############## Order Summary :: Start ############## --}}
             <div class="col-span-12 md:col-span-4 md:order-none bg-white rounded overflow-hidden self-start">
-                @livewire('front.order.general.order-summary', ['products' => $cart_products, 'step' => 2])
+                @livewire('front.order.shipping.order-shipping-summary', ['items' => $cart_items])
             </div>
             {{-- ############## Order Summary :: End ############## --}}
         </div>

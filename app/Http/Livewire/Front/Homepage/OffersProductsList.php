@@ -11,7 +11,7 @@ class OffersProductsList extends Component
     ############## Mount :: Start ##############
     public function mount($section, $flash_sale)
     {
-        $this->products = $section->offer->finalProducts;
+        $this->items = $section->offer->finalItems->toArray();
 
         $this->flash_sale = $flash_sale;
 

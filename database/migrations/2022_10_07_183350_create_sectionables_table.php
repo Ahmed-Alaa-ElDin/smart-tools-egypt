@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('product_section', function (Blueprint $table) {
+        Schema::create('sectionables', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('section_id');
+            $table->string('sectionable_type');
+            $table->unsignedBigInteger('sectionable_id');
             $table->tinyInteger('rank')->default(127);
             $table->timestamps();
 
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('section_id')->references('id')->on('sections')->onDelete('cascade')->onUpdate('cascade');
         });
     }
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_section');
+        Schema::dropIfExists('sectionable');
     }
 };

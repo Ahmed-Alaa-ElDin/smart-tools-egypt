@@ -42,6 +42,7 @@ class ProductsDatatable extends Component
             'slug',
             'quantity',
             'low_stock',
+            'original_price',
             'base_price',
             'final_price',
             'points',

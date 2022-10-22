@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Front\Order;
+namespace App\Http\Livewire\Front\Order\Payment;
 
 use App\Models\Coupon;
 use App\Models\Order;
@@ -8,33 +8,31 @@ use App\Models\Payment;
 use App\Models\User;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 
-class OrderBillingDetails extends Component
+class OrderPaymentDetails extends Component
 {
     public $points, $points_egp;
     public $balance;
     public $payment_method;
     public $iframe;
-    public $ready;
 
     protected $listeners = [
         'setOrderFinalPrice',
+        'submit'
     ];
 
     public function rules()
     {
         return [
-            'points' => 'numeric|min:0|integer|max:' . auth()->user()->points,
+            'points' => 'numeric|min:0|integer|max:' . auth()->user()->valid_points,
             'balance' => 'numeric|min:0|max:' . auth()->user()->balance,
         ];
     }
 
     public function mount()
     {
-        $this->ready = false;
         $this->points = 0;
         $this->points_egp = 0;
         $this->balance = 0;
@@ -42,7 +40,7 @@ class OrderBillingDetails extends Component
 
     public function render()
     {
-        return view('livewire.front.order.order-billing-details');
+        return view('livewire.front.order.payment.order-payment-details');
     }
 
     public function updatedPoints($points)
@@ -52,7 +50,7 @@ class OrderBillingDetails extends Component
         $this->points_egp =  $points * config('constants.constants.POINT_RATE');
     }
 
-    public function updatedBalance($balance)
+    public function updatedBalance()
     {
         $this->validateOnly('balance');
     }
@@ -60,14 +58,12 @@ class OrderBillingDetails extends Component
     public function payBy($payment_method)
     {
         $this->payment_method = $payment_method;
-        $this->ready = true;
+        $this->emitTo('front.order.payment.order-payment-summary', 'updatePaymentMethod', $this->payment_method);
     }
 
-    public function confirm($payment_method)
+    public function submit()
     {
-        $this->payment_method = $payment_method;
-
-        $this->emit('getOrderFinalPrice');
+        $this->emitTo('front.order.payment.order-payment-summary', 'submit', $this->payment_method, $this->balance, $this->points, $this->points_egp);
     }
 
     public function setOrderFinalPrice($array_data)
@@ -199,7 +195,7 @@ class OrderBillingDetails extends Component
                     redirect()->route('front.orders.done')->with('order_id', $order->id);
                 } else {
                     Session::flash('error', __('front/homePage.Order Creation Failed, Please Try Again'));
-                    redirect()->route('front.orders.billing');
+                    redirect()->route('front.orders.payment');
                 }
             } elseif ($order->payment_method == 2) {
                 $payment_key = payByPaymob($payment);
@@ -207,7 +203,7 @@ class OrderBillingDetails extends Component
                 if ($payment_key) {
                     return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . env('PAYMOB_IFRAM_ID_CARD_TEST') . "?payment_token=$payment_key");
                 } else {
-                    return redirect()->route('front.orders.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
+                    return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }
             } elseif ($order->payment_method == 3) {
                 $payment_key = payByPaymob($payment);
@@ -215,7 +211,7 @@ class OrderBillingDetails extends Component
                 if ($payment_key) {
                     return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . env('PAYMOB_IFRAM_ID_INSTALLMENTS')  . "?payment_token=$payment_key");
                 } else {
-                    return redirect()->route('front.orders.billing')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
+                    return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }
             } elseif ($order->payment_method == 4) {
                 $user = $order->user;

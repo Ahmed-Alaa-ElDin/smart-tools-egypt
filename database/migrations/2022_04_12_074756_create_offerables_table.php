@@ -20,7 +20,6 @@ return new class extends Migration
             $table->unsignedBigInteger('offerable_id');
             $table->decimal('value')->default(0);
             $table->tinyInteger('type')->default(0)->comment('0 -> percentage , 1 -> fixed , 2 -> Points');
-            $table->integer('number')->nullable();
             $table->timestamps();
 
             $table->foreign('offer_id')->references('id')->on('offers')->onDelete('cascade')->onUpdate('cascade');

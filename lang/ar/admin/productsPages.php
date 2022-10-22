@@ -341,5 +341,6 @@ return [
     "Are you sure, you want to restore all selected collections?"           =>      "هل أنت متأكد من استعادة جميع التجميعات المختارة ؟",
     "Collections have been restored successfully"                           =>      "تم استعادة التجميعات المختارة بنجاح",
     "Collections haven't been restored"                                     =>      "لم يتم استعادة التجميعات المختارة",
+    "Profit Margin"                                                         =>      "هامش الربح",
 
 ];

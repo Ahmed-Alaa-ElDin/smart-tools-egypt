@@ -83,7 +83,7 @@
                         @if ($order_data['return_subtotal'] != $order_data['return_total'])
                             <span class="text-sm font-bold"> {{ __('front/homePage.Subtotal :') }} </span>
                         @else
-                            <span class="text-sm font-bold"> {{ __('front/homePage.Total :') }} </span>
+                            <span class="text-sm font-bold"> {{ __('front/homePage.Total:') }} </span>
                         @endif
                         <div
                             class="flex rtl:flex-row-reverse gap-1 @if ($order_data['return_subtotal'] > 0) text-primary @else text-successDark @endif">
@@ -135,7 +135,7 @@
 
                         {{-- Returned Total --}}
                         <div class="flex justify-between items-center gap-1 px-4 py-1">
-                            <span class="text-sm font-bold"> {{ __('front/homePage.Total :') }} </span>
+                            <span class="text-sm font-bold"> {{ __('front/homePage.Total:') }} </span>
 
                             <div
                                 class="flex rtl:flex-row-reverse gap-1 @if ($order_data['return_total'] > 0) text-primary @else text-successDark @endif">
@@ -177,7 +177,7 @@
                             </span>
 
                             <span class="text-successDark font-bold">
-                                {{ trans_choice('front/homePage.Product', $order_data['old_products_total_quantities'], ['product' => $order_data['old_products_total_quantities']]) }}
+                                {{ trans_choice('front/homePage.Item', $order_data['old_products_total_quantities'], ['item' => $order_data['old_products_total_quantities']]) }}
                             </span>
                         </div>
 
@@ -188,7 +188,7 @@
                             </span>
 
                             <span class="text-primary font-bold">
-                                {{ trans_choice('front/homePage.Product', $order_data['returned_products_total_quantities'], ['product' => $order_data['returned_products_total_quantities']]) }}
+                                {{ trans_choice('front/homePage.Item', $order_data['returned_products_total_quantities'], ['item' => $order_data['returned_products_total_quantities']]) }}
                             </span>
                         </div>
                     </div>

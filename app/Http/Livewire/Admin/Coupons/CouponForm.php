@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Coupons;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Collection;
 use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\Subcategory;
@@ -19,7 +20,13 @@ class CouponForm extends Component
 
     public $code, $type = 0, $value = 0, $expire_at, $number, $on_orders = 0, $free_shipping = 0;
 
-    protected $listeners = ["brandUpdated", "supercategoryUpdated", "categoryUpdated", "subcategoryUpdated"];
+    protected $listeners = [
+        "brandUpdated",
+        "supercategoryUpdated",
+        "categoryUpdated",
+        "subcategoryUpdated",
+        "clearSearch"
+    ];
 
     public function rules()
     {
@@ -34,6 +41,7 @@ class CouponForm extends Component
             'items.*.category_id'               =>      "exclude_if:items.*.category_id,all|nullable|exists:categories,id",
             'items.*.subcategory_id'            =>      "exclude_if:items.*.subcategory_id,all|nullable|exists:subcategories,id",
             'items.*.products_id.*'             =>      "nullable|exists:products,id",
+            'items.*.collections_id.*'          =>      "nullable|exists:collections,id",
             'items.*.type'                      =>      "required|in:0,1,2,3",
             'items.*.value'                     =>      ["required", "numeric", "min:0", "exclude_unless:items.*.type,0 | max:100"],
             'on_orders'                         =>      "nullable"
@@ -107,11 +115,18 @@ class CouponForm extends Component
                 $this->deleteProducts_id = [];
                 $this->oldProducts_id = $coupon->products->pluck('id')->toArray();
             }
+            if ($coupon->collections->count()) {
+                $this->oldCollections = $coupon->collections->toArray();
+                $this->deleteCollections_id = [];
+                $this->oldCollections_id = $coupon->collections->pluck('id')->toArray();
+            }
 
             $this->items = [];
         } else {
             $this->items = [[
-                'item_type' => 'category',
+                'item_type' => 'product_collection',
+                'search' => '',
+                'list' => [],
                 'supercategory_id' => 'all',
                 'category_id' => 'all',
                 'categories' => [],
@@ -120,6 +135,8 @@ class CouponForm extends Component
                 'brand_id' => 'all',
                 'products' => [],
                 'products_id' => [],
+                'collections' => [],
+                'collections_id' => [],
                 'value' => 0.0,
                 'type' => 0,
             ]];
@@ -144,6 +161,10 @@ class CouponForm extends Component
         array_map(function ($value) use ($item_key) {
             array_push($this->items[$item_key]['products_id'], $value['id']);
         }, $this->items[$item_key]['products']);
+
+        array_map(function ($value) use ($item_key) {
+            array_push($this->items[$item_key]['collections_id'], $value['id']);
+        }, $this->items[$item_key]['collections']);
     }
     // Select All Products : End
 
@@ -152,6 +173,8 @@ class CouponForm extends Component
     public function deselectAll($item_key)
     {
         $this->items[$item_key]['products_id'] = [];
+
+        $this->items[$item_key]['collections_id'] = [];
     }
     // Deselect All Products : End
 
@@ -163,6 +186,8 @@ class CouponForm extends Component
 
         $this->items[$item_key] = [
             'item_type' => $item_type,
+            'search' => '',
+            'list' => [],
             'supercategory_id' => 'all',
             'category_id' => 'all',
             'categories' => [],
@@ -171,6 +196,8 @@ class CouponForm extends Component
             'brand_id' => 'all',
             'products' => [],
             'products_id' => [],
+            'collections' => [],
+            'collections_id' => [],
             'value' => 0.0,
             'type' => 0,
         ];
@@ -234,12 +261,100 @@ class CouponForm extends Component
     }
     // Get the products of selected brand
 
+    // Search Collection :: Start
+    public function searchUpdated($key)
+    {
+        if ($this->items[$key]['search']) {
+            $products = Product::select([
+                'id',
+                'name',
+                'barcode',
+                'original_price',
+                'base_price',
+                'final_price',
+                'under_reviewing',
+                'points',
+                'description',
+                'model',
+                'brand_id'
+            ])
+                ->with(
+                    'brand',
+                )->whereNotIn('id', $this->items[$key]['products_id'])
+                ->where(
+                    fn ($q) =>
+                    $q->where('name', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('barcode', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('original_price', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('base_price', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('final_price', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('description', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('model', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhereHas('brand', fn ($q) => $q->where('brands.name', 'like', '%' . $this->items[$key]['search'] . '%'))
+                )->get();
+
+            $collections = Collection::select([
+                'id',
+                'name',
+                'barcode',
+                'original_price',
+                'base_price',
+                'final_price',
+                'under_reviewing',
+                'points',
+                'description',
+                'model'
+            ])->whereNotIn('id', $this->items[$key]['collections_id'])
+                ->where(
+                    fn ($q) =>
+                    $q->where('name', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('barcode', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('original_price', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('base_price', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('final_price', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('description', 'like', '%' . $this->items[$key]['search'] . '%')
+                        ->orWhere('model', 'like', '%' . $this->items[$key]['search'] . '%')
+                )->get();
+
+
+            $this->items[$key]['list'] = $collections->concat($products)->map(function ($product_collection) {
+                $product_collection->product_collection = class_basename($product_collection);
+                return $product_collection;
+            })->toArray();
+        }
+    }
+    // Search Collection :: End
+
+    // Clear search input :: Start
+    public function clearSearch($key)
+    {
+        $this->items[$key]['list'] = [];
+
+        $this->items[$key]['search'] = '';
+    }
+    // Clear search input :: End
+
+    // Add Products or Collections to the item :: Start
+    public function addProduct($key, $product_id, $product_collection)
+    {
+        if ($product_collection == 'Product') {
+            $this->items[$key]['products_id'][] = $product_id;
+            $this->items[$key]['products'][] = Product::select('id', 'name')->find($product_id)->toArray();
+        } elseif ($product_collection == 'Collection') {
+            $this->items[$key]['collections_id'][] = $product_id;
+            $this->items[$key]['collections'][] = Collection::select('id', 'name')->find($product_id)->toArray();
+        }
+    }
+    // Add Products or Collections to the item :: End
+
 
     // Add Item : Start
     public function addItem()
     {
         $this->items[] = [
-            'item_type' => 'category',
+            'item_type' => 'product_collection',
+            'search' => '',
+            'list' => [],
             'supercategory_id' => 'all',
             'category_id' => 'all',
             'categories' => [],
@@ -248,6 +363,8 @@ class CouponForm extends Component
             'brand_id' => 'all',
             'products' => [],
             'products_id' => [],
+            'collections' => [],
+            'collections_id' => [],
             'value' => 0.0,
             'type' => 0,
         ];
@@ -262,12 +379,12 @@ class CouponForm extends Component
     }
     // Delete Item : End
 
-    // Free Shipping : End
+    // Free Shipping: End
     public function freeShipping()
     {
         $this->free_shipping = !$this->free_shipping;
     }
-    // Free Shipping : End
+    // Free Shipping: End
 
 
     ######################## Save New Coupon : Start ############################
@@ -289,7 +406,17 @@ class CouponForm extends Component
             ]);
 
             foreach ($this->items as $item) {
-                if ($item['item_type'] == 'category') {
+                if ($item['item_type'] == 'product_collection') {
+                    $coupon->products()->attach($item['products_id'], [
+                        'type' => $item['type'],
+                        'value' => $item['value'],
+                    ]);
+
+                    $coupon->collections()->attach($item['collections_id'], [
+                        'type' => $item['type'],
+                        'value' => $item['value'],
+                    ]);
+                } elseif ($item['item_type'] == 'category') {
                     if ($item['supercategory_id'] == 'all') {
                         $supercategories = Supercategory::select('id')->get()->pluck('id');
                         $coupon->supercategories()->attach($supercategories, [
@@ -389,9 +516,22 @@ class CouponForm extends Component
                 $this->coupon->products()->detach($this->deleteProducts_id);
             }
 
+            if (isset($this->deleteCollections_id)) {
+                $this->coupon->collections()->detach($this->deleteCollections_id);
+            }
 
             foreach ($this->items as $item) {
-                if ($item['item_type'] == 'category') {
+                if ($item['item_type'] == 'product_collection') {
+                    $this->coupon->products()->attach($item['products_id'], [
+                        'type' => $item['type'],
+                        'value' => $item['value'],
+                    ]);
+
+                    $this->coupon->collections()->attach($item['collections_id'], [
+                        'type' => $item['type'],
+                        'value' => $item['value'],
+                    ]);
+                } elseif ($item['item_type'] == 'category') {
                     if ($item['supercategory_id'] == 'all') {
                         $supercategories = Supercategory::select('id')->get()->pluck('id');
                         $this->coupon->supercategories()->attach($supercategories, [

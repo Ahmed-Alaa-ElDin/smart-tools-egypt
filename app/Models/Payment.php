@@ -11,57 +11,30 @@ class Payment extends Model
 
     protected $fillable = [
         'order_id',
-        'old_order_id',
-        'user_id',
-        'payment_amount',
-        'payment_method',
-        'payment_status',
-        'paymob_order_id',
-        'payment_details',
+        'subtotal_base',
+        'items_discount',
+        'offers_items_discount',
+        'offers_order_discount',
+        'coupon_items_discount',
+        'coupon_order_discount',
+        'delivery_fees',
+        'total',
+        // 'should_pay',
+        // 'should_get',
     ];
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 
     public function order()
     {
         return $this->belongsTo(Order::class);
     }
 
-    public function user()
+    public function getPaymentMethodAttribute()
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function scopePending($query)
-    {
-        return $query->where('payment_status', 1);
-    }
-
-    public function scopePaid($query)
-    {
-        return $query->where('payment_status', 2);
-    }
-
-    public function scopeFailed($query)
-    {
-        return $query->where('payment_status', 3);
-    }
-
-    public function scopeCash($query)
-    {
-        return $query->where('payment_method', 1);
-    }
-
-    public function scopeCard($query)
-    {
-        return $query->where('payment_method', 2);
-    }
-
-    public function scopeInstallments($query)
-    {
-        return $query->where('payment_method', 3);
-    }
-
-    public function scopeVodafoneCash($query)
-    {
-        return $query->where('payment_method', 4);
+        return $this->transactions()->pluck('payment_method');
     }
 }

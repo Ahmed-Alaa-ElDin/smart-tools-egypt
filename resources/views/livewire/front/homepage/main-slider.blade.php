@@ -119,7 +119,7 @@
             <div>
 
                 <ul class="grid grid-cols-2 lg:grid-cols-1 gap-2 ">
-                    @foreach ($products as $product)
+                    @foreach ($items as $item)
                         {{-- Product : Start --}}
                         <li
                             class="product overflow-hidden bg-white border border-light rounded hover:shadow-md hover:scale-105 transition cursor-pointer">
@@ -130,41 +130,43 @@
                                         class="absolute z-10 top-2 ltr:-right-10 rtl:-left-10 transition-all ease-in-out duration-500 ltr:group-hover:right-2 rtl:group-hover:left-2 flex flex-col gap-1">
 
                                         {{-- Add to compare : Start --}}
-                                        @livewire('front.general.compare.add-to-compare-button', ['product_id' => $product['id']], key('add-compare-button-' . Str::random(10)))
+                                        @livewire('front.general.compare.add-to-compare-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-compare-button-' . Str::random(10)))
                                         {{-- Add to compare : End --}}
 
                                         {{-- Add to wishlist : Start --}}
-                                        @livewire('front.general.wishlist.add-to-wishlist-button', ['product_id' => $product['id']], key('add-wishlist-button-' . Str::random(10)))
+                                        @livewire('front.general.wishlist.add-to-wishlist-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-wishlist-button-' . Str::random(10)))
                                         {{-- Add to wishlist : End --}}
 
                                         {{-- Add to cart : Start --}}
-                                        @livewire('front.general.cart.add-to-cart-button', ['product_id' => $product['id']], key('add-cart-button-' . Str::random(10)))
+                                        @livewire('front.general.cart.add-to-cart-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-cart-button-' . Str::random(10)))
                                         {{-- Add to cart : End --}}
                                     </div>
                                     {{-- Add Product : End --}}
                                     <a class="relative block overflow-hidden h-40 flex items-center justify-center hover:text-current"
-                                        href="{{ route('front.product.show', ['id' => $product['id'], 'slug' => $product['slug']]) }}">
+                                        href="{{ route('front.products.show', ['id' => $item['id'], 'slug' => $item['slug'][session('locale')]]) }}">
 
                                         {{-- Base Discount : Start --}}
-                                        @if (!$product['under_reviewing'] && $product['final_price'] != $product['base_price'])
+                                        @if (!$item['under_reviewing'] && $item['final_price'] != $item['base_price'])
                                             <span
                                                 class="absolute bg-white flex gap-1 top-2 ltr:left-0 rtl:right-0 flex justify-center items-center shadow p-1 ltr:rounded-r-full rtl:rounded-l-full text-primary text-sm font-bold">
                                                 <span>
                                                     {{ __('front/homePage.OFF') }}
                                                 </span>
                                                 <span class="flex items-center bg-primary text-white rounded-full p-1">
-                                                    {{ round((($product['base_price'] - $product['final_price']) / $product['base_price']) * 100) }}%
+                                                    {{ round((($item['base_price'] - $item['final_price']) / $item['base_price']) * 100) }}%
                                                 </span>
                                             </span>
                                         @endif
                                         {{-- Base Discount : End --}}
 
                                         {{-- Product Image : Start --}}
-                                        @if ($product['thumbnail'])
+                                        @if ($item['thumbnail'])
                                             <div class="w-full h-full flex justify-center items-center">
                                                 <img class="img-fit mx-auto lazyloaded"
-                                                    src="{{ asset('storage/images/products/cropped100/' . $product['thumbnail']['file_name']) }}"
-                                                    alt="{{ $product['name'] . 'image' }}">
+                                                    @if ($item['type'] == 'Product') src="{{ asset('storage/images/products/cropped100/' . $item['thumbnail']['file_name']) }}"
+                                                @elseif ($item['type'] == 'Collection')
+                                                src="{{ asset('storage/images/collections/cropped100/' . $item['thumbnail']['file_name']) }}" @endif
+                                                    alt="{{ $item['name'][session('locale')] . 'image' }}">
                                             </div>
                                         @else
                                             <div class="w-full h-full flex justify-center items-center bg-gray-200">
@@ -178,18 +180,20 @@
                                         {{-- Product Image : End --}}
 
                                         {{-- Extra Discount : Start --}}
-                                        @if (round((($product['final_price'] - $product['best_price']) * 100) / $product['final_price']))
+                                        @if (round((($item['final_price'] - $item['best_price']) * 100) / $item['final_price']))
                                             <span
                                                 class="absolute bottom-2 rtl:right-0 ltr:left-0 text-xs font-bold text-white px-2 py-1 bg-primary">
                                                 {{ __('front/homePage.Extra Discount') }}
-                                                {{ round((($product['final_price'] - $product['best_price']) * 100) / $product['final_price']) }}%
+                                                {{ round((($item['final_price'] - $item['best_price']) * 100) / $item['final_price']) }}%
                                             </span>
                                         @endif
                                         {{-- Extra Discount : End --}}
                                     </a>
 
                                     <a class="block md:p-3 p-2 text-left"
-                                        href="{{ route('front.product.show', ['id' => $product['id'], 'slug' => $product['slug']]) }}">
+                                        @if ($item['type'] == 'Product') href="{{ route('front.products.show', ['id' => $item['id'], 'slug' => $item['slug'][session('locale')]]) }}"
+                                        @elseif ($item['type'] == 'Collection')
+                                        href="{{ route('front.collections.show', ['id' => $item['id'], 'slug' => $item['slug'][session('locale')]]) }}" @endif>
 
                                         {{-- Price : Start --}}
                                         <div class="flex flex-wrap justify-center items-center gap-2">
@@ -197,66 +201,65 @@
                                             {{-- Final Price : Start --}}
                                             <div class="flex rtl:flex-row-reverse gap-1">
                                                 <span
-                                                    class="font-bold text-primary text-xs">{{ __('front/homePage.EGP') }}</span>
-                                                <span class="font-bold text-primary text-xl"
-                                                    dir="ltr">{{ number_format(explode('.', $product['final_price'])[0], 0, '.', '\'') }}</span>
+                                                    class="font-bold text-successDark text-xs">{{ __('front/homePage.EGP') }}</span>
+                                                <span class="font-bold text-successDark text-xl"
+                                                    dir="ltr">{{ number_format(explode('.', $item['final_price'])[0], 0, '.', '\'') }}</span>
                                                 <span
-                                                    class="font-bold text-primary text-xs">{{ explode('.', $product['final_price'])[1] }}</span>
+                                                    class="font-bold text-successDark text-xs">{{ explode('.', $item['final_price'])[1] }}</span>
                                             </div>
                                             {{-- Final Price : End --}}
 
                                             {{-- Base Price : Start --}}
-                                            <del
-                                                class="flex rtl:flex-row-reverse gap-1 font-bold text-gray-400 text-sm">
+                                            <del class="flex rtl:flex-row-reverse gap-1 font-bold text-red-400 text-sm">
                                                 <span class="text-xs">
                                                     {{ __('front/homePage.EGP') }}
                                                 </span>
                                                 <span class="font-bold text-2xl"
-                                                    dir="ltr">{{ number_format(explode('.', $product['base_price'])[0], 0, '.', '\'') }}</span>
+                                                    dir="ltr">{{ number_format(explode('.', $item['base_price'])[0], 0, '.', '\'') }}</span>
                                             </del>
                                             {{-- Base Price : End --}}
 
                                         </div>
                                         {{-- Price : End --}}
 
-                                        {{-- Free Shipping : Start --}}
-                                        @if ($product['free_shipping'])
+                                        {{-- Free Shipping: Start --}}
+                                        @if ($item['free_shipping'])
                                             <div class="text-center text-success font-bold text-sm">
                                                 {{ __('front/homePage.Free Shipping') }}
                                             </div>
                                         @endif
-                                        {{-- Free Shipping : End --}}
+                                        {{-- Free Shipping: End --}}
 
                                         {{-- Reviews : Start --}}
                                         <div class="my-1 text-center flex justify-center items-center gap-2">
                                             <div class="rating flex">
                                                 @for ($i = 1; $i <= 5; $i++)
                                                     <span
-                                                        class="material-icons text-lg  inline-block @if ($i <= ceil($product['avg_rating'])) text-yellow-300 @else text-gray-400 @endif">
+                                                        class="material-icons text-lg  inline-block @if ($i <= ceil($item['avg_rating'])) text-yellow-300 @else text-gray-400 @endif">
                                                         star
                                                     </span>
                                                 @endfor
                                             </div>
 
-                                            <span
-                                                class="text-xs text-gray-600">({{ $product['reviews_count'] }})</span>
+                                            <span class="text-xs text-gray-600">({{ $item['reviews_count'] }})</span>
                                         </div>
                                         {{-- Reviews : End --}}
 
-                                        {{-- Product Name : Start --}}
+                                        {{-- Item's Name : Start --}}
                                         <h3 class="mb-2 text-center">
                                             <span class="block text-gray-800 truncate">
-                                                {{ $product['name'] }}
+                                                {{ $item['name'][session('locale')] }}
                                             </span>
                                         </h3>
-                                        {{-- Product Name : End --}}
+                                        {{-- Item's Name : End --}}
 
                                         {{-- Points : Start --}}
-                                        @if ($product['points'] || $product['best_points'])
+                                        @if ($item['points'] || $item['best_points'])
                                             <div
                                                 class="rounded px-2 my-2 bg-gray-200 border-gray-800 text-black text-sm border flex justify-between items-center">
                                                 <span>{{ __('front/homePage.Points') }}</span>
-                                                <span>{{ $product['best_points'] > $product['points'] ? round($product['best_points']) : $product['points'] }}</span>
+                                                <span
+                                                    dir="ltr">{{ $item['best_points'] > $item['points'] ? number_format($item['best_points'], 0, '.', '\'') : number_format($item['points'], 0, '.', '\'') }}</span>
                                             </div>
                                         @endif
                                         {{-- Points : End --}}
@@ -264,7 +267,16 @@
 
                                     {{-- Cart Amount : Start --}}
                                     <div class="md:px-3 px-2">
-                                        @livewire('front.general.cart.cart-amount', ['product_id' => $product['id'], 'unique' => 'product-' . $product['id'], 'small' => true], key($product['name'] . '-' . rand()))
+                                        @livewire(
+                                            'front.general.cart.cart-amount',
+                                            [
+                                                'item_id' => $item['id'],
+                                                'unique' => 'item-' . $item['id'],
+                                                'type' => $item['type'],
+                                                'small' => true,
+                                            ],
+                                            key($item['name'][session('locale')] . '-' . rand()),
+                                        )
                                     </div>
                                     {{-- Cart Amount : End --}}
                                 </div>
@@ -282,7 +294,7 @@
                                 <div class="group mb-2">
                                     <div class="relative overflow-hidden h-40 flex items-center justify-center">
 
-                                        {{-- Product Image : Start --}}
+                                        {{-- Fake Image : Start --}}
                                         <div class="w-full h-full flex justify-center items-center bg-gray-200">
                                             <div class="flex justify-center items-center">
                                                 <span class="block material-icons text-8xl">
@@ -290,7 +302,7 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        {{-- Product Image : End --}}
+                                        {{-- Fake Image : End --}}
 
                                     </div>
 

@@ -5,11 +5,11 @@
         {{-- Title :: End --}}
 
         @if ($free_shipping)
-            {{-- Free Shipping :: Start --}}
+            {{-- Free Shipping:: Start --}}
             <div class="text-xl font-bold text-center text-success">
                 {{ __('front/homePage.Free Shipping') }}
             </div>
-            {{-- Free Shipping :: End --}}
+            {{-- Free Shipping:: End --}}
         @else
             <div class="flex justify-around items-center gap-3">
                 {{-- Country :: Start --}}

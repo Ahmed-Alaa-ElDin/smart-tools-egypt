@@ -1,7 +1,7 @@
 <div>
-    @forelse ($products as $product)
+    @forelse ($items as $item)
         {{-- Product : Start --}}
-        <x-front.product-box-wide :product="$product" type="wishlist" wire:key="product-{{ rand() }}" />
+        <x-front.product-box-wide :item="$item" type="wishlist" wire:key="item-{{ rand() }}" />
         {{-- Product : End --}}
 
         @if (!$loop->last)

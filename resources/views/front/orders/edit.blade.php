@@ -65,7 +65,7 @@
 
                                 {{-- Order Delivery Fees --}}
                                 <div class="flex justify-center items-center gap-1">
-                                    <span class="text-sm font-bold"> {{ __('front/homePage.Shipping :') }} </span>
+                                    <span class="text-sm font-bold"> {{ __('front/homePage.Shipping:') }} </span>
                                     @if ($order->delivery_fees == 0.0)
                                         <div class="text-successDark font-bold">
                                             {{ __('front/homePage.Free Shipping') }}
@@ -81,7 +81,7 @@
 
                                 {{-- Order Total --}}
                                 <div class="flex justify-center items-center gap-1">
-                                    <span class="text-sm font-bold"> {{ __('front/homePage.Total :') }} </span>
+                                    <span class="text-sm font-bold"> {{ __('front/homePage.Total:') }} </span>
                                     <div class="flex rtl:flex-row-reverse gap-1">
                                         <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
                                         <span dir="ltr"
@@ -103,7 +103,7 @@
                             <div
                                 class="flex gap-5 items-center p-4 scrollbar scrollbar-hidden rounded @if ($product->pivot->quantity == 0) bg-red-100 @endif">
                                 {{-- Thumnail :: Start --}}
-                                <a href="{{ route('front.product.show', ['id' => $product->id, 'slug' => $product->slug]) }}"
+                                <a href="{{ route('front.products.show', ['id' => $product->id, 'slug' => $product->slug]) }}"
                                     class="block hover:text-current">
                                     @if ($product->thumbnail)
                                         <img class="w-full h-full flex justify-center items-center bg-gray-200"
@@ -132,7 +132,7 @@
 
                                     {{-- Product Name :: Start --}}
                                     <div class="flex items-center">
-                                        <a href="{{ route('front.product.show', ['id' => $product->id, 'slug' => $product->slug]) }}"
+                                        <a href="{{ route('front.products.show', ['id' => $product->id, 'slug' => $product->slug]) }}"
                                             class="text-lg font-bold truncate  hover:text-current">
                                             {{ $product->name }}
                                         </a>

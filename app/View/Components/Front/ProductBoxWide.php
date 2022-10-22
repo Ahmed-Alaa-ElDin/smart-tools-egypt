@@ -6,7 +6,7 @@ use Illuminate\View\Component;
 
 class ProductBoxWide extends Component
 {
-    public $product;
+    public $item;
     public $type;
 
     /**
@@ -14,9 +14,9 @@ class ProductBoxWide extends Component
      *
      * @return void
      */
-    public function __construct($product , $type)
+    public function __construct($item , $type)
     {
-        $this->product = $product;
+        $this->item = $item;
         $this->type = $type;
     }
     /**

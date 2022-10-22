@@ -24,7 +24,6 @@ class Offer extends Model
         'value',
         'type',
         'on_orders',
-        'number',
     ];
 
     protected function asJson($value)
@@ -36,40 +35,50 @@ class Offer extends Model
     // many to many relationship (polymorphic) (inverse)  Super-Category --> Offers
     public function supercategories()
     {
-        return $this->morphedByMany(Supercategory::class, 'offerable')->withPivot('number', 'value', 'type');
+        return $this->morphedByMany(Supercategory::class, 'offerable')->withPivot('value', 'type');
     }
 
     // many to many relationship (polymorphic) (inverse)  Category --> Offers
     public function categories()
     {
-        return $this->morphedByMany(Category::class, 'offerable')->withPivot('number', 'value', 'type');
+        return $this->morphedByMany(Category::class, 'offerable')->withPivot('value', 'type');
     }
 
 
     // many to many relationship (polymorphic) (inverse)  Subcategory --> Offers
     public function subcategories()
     {
-        return $this->morphedByMany(Subcategory::class, 'offerable')->withPivot('number', 'value', 'type');
+        return $this->morphedByMany(Subcategory::class, 'offerable')->withPivot('value', 'type');
     }
 
 
     // many to many relationship (polymorphic) (inverse)  Brand --> Offers
     public function brands()
     {
-        return $this->morphedByMany(Brand::class, 'offerable')->withPivot('number', 'value', 'type');
+        return $this->morphedByMany(Brand::class, 'offerable')->withPivot('value', 'type');
     }
-
 
     // many to many relationship (polymorphic) (inverse)  Product --> Offers
     public function products()
     {
-        return $this->morphedByMany(Product::class, 'offerable')->withPivot('number', 'value', 'type');
+        return $this->morphedByMany(Product::class, 'offerable')->withPivot('value', 'type');
     }
 
     // many to many relationship (polymorphic) (inverse)  Collection --> Offers
     public function collections()
     {
-        return $this->morphedByMany(Collection::class, 'offerable')->withPivot('number', 'value', 'type');
+        return $this->morphedByMany(Collection::class, 'offerable')->withPivot('value', 'type');
+    }
+
+    // many to many Deep relationship  Offer --> Collections
+    public function directCollections()
+    {
+        return $this->hasManyDeep(
+            Collection::class,
+            ['offerables'],
+            [null, 'id'],
+            [null, ['offerable_type', 'offerable_id']]
+        )->withPivot('offerables', ['value', 'type']);
     }
 
     // many to many Deep relationship  Offer --> Products
@@ -80,7 +89,7 @@ class Offer extends Model
             ['offerables'],
             [null, 'id'],
             [null, ['offerable_type', 'offerable_id']]
-        )->withPivot('offerables', ['number', 'value', 'type']);
+        )->select(['products.id','products.publish'])->withPivot('offerables', ['value', 'type']);
     }
 
     // many to many Deep relationship  Offer --> Super-Category --> Products
@@ -91,7 +100,7 @@ class Offer extends Model
             ['offerables', Supercategory::class, Category::class, Subcategory::class, 'product_subcategory'],
             [null, 'id'],
             [null, ['offerable_type', 'offerable_id']]
-        )->withPivot('offerables', ['number', 'value', 'type']);
+        )->select(['products.id','products.publish'])->withPivot('offerables', ['value', 'type']);
     }
 
     // many to many Deep relationship  Offer --> Category --> Products
@@ -102,7 +111,7 @@ class Offer extends Model
             ['offerables', Category::class, Subcategory::class, 'product_subcategory'],
             [null, 'id'],
             [null, ['offerable_type', 'offerable_id']]
-        )->withPivot('offerables', ['number', 'value', 'type']);
+        )->select(['products.id','products.publish'])->withPivot('offerables', ['value', 'type']);
     }
 
     // many to many Deep relationship  Offer --> Sub-Category --> Products
@@ -113,7 +122,7 @@ class Offer extends Model
             ['offerables', Subcategory::class, 'product_subcategory'],
             [null, 'id'],
             [null, ['offerable_type', 'offerable_id']]
-        )->withPivot('offerables', ['number', 'value', 'type']);
+        )->select(['products.id','products.publish'])->withPivot('offerables', ['value', 'type']);
     }
 
     // many to many Deep relationship  Offer --> Brand --> Products
@@ -124,7 +133,7 @@ class Offer extends Model
             ['offerables', Brand::class],
             [null, 'id'],
             [null, ['offerable_type', 'offerable_id']]
-        )->withPivot('offerables', ['number', 'value', 'type']);
+        )->select(['products.id','products.publish','products.brand_id'])->withPivot('offerables', ['value', 'type']);
     }
 
     // Many to many relationship  Sections --> Offers
@@ -137,7 +146,6 @@ class Offer extends Model
     public function scopeOrderOffers($query)
     {
         return $query->where('on_orders', 1)->where(function ($query) {
-            $query->whereNull('number')->orWhere('number', '>', 0);
         })->where('start_at', '<=', now())->where('expire_at', '>=', now());
     }
 }

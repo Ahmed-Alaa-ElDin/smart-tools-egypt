@@ -30,9 +30,9 @@
                             {{-- Day : Start --}}
                             <div class="countdown-item bg-primary flex justify-center items-center p-1 rounded shadow ">
                                 <span
-                                    class="inline-block text-white text-center text-xs font-bold px-1">{{ __('front/homePage.Day') }}</span>
-                                <span
                                     class="days inline-block text-black bg-white px-1 rounded">{{ $diffDays }}</span>
+                                <span
+                                    class="inline-block text-white text-center text-xs font-bold px-1">{{ __('front/homePage.Day') }}</span>
                             </div>
                             {{-- Day : End --}}
 
@@ -40,9 +40,9 @@
                             {{-- Hour : Start --}}
                             <div class="countdown-item bg-primary flex justify-center items-center p-1 rounded shadow ">
                                 <span
-                                    class="inline-block text-white text-center text-xs font-bold px-1">{{ __('front/homePage.Hour') }}</span>
-                                <span
                                     class="hours inline-block text-black bg-white px-1 rounded">{{ $diffHours }}</span>
+                                <span
+                                    class="inline-block text-white text-center text-xs font-bold px-1">{{ __('front/homePage.Hour') }}</span>
                             </div>
                             {{-- Hour : End --}}
 
@@ -50,9 +50,9 @@
                             {{-- Minute : Start --}}
                             <div class="countdown-item bg-primary flex justify-center items-center p-1 rounded shadow ">
                                 <span
-                                    class="inline-block text-white text-center text-xs font-bold px-1">{{ __('front/homePage.Minute') }}</span>
-                                <span
                                     class="minutes inline-block text-black bg-white px-1 rounded">{{ $diffMinutes }}</span>
+                                <span
+                                    class="inline-block text-white text-center text-xs font-bold px-1">{{ __('front/homePage.Minute') }}</span>
                             </div>
                             {{-- Minute : End --}}
 
@@ -60,9 +60,9 @@
                             {{-- Second : Start --}}
                             <div class="countdown-item bg-primary flex justify-center items-center p-1 rounded shadow ">
                                 <span
-                                    class="inline-block text-white text-center text-xs font-bold px-1">{{ __('front/homePage.Second') }}</span>
-                                <span
                                     class="seconds inline-block text-black bg-white px-1 rounded">{{ $diffSeconds }}</span>
+                                <span
+                                    class="inline-block text-white text-center text-xs font-bold px-1">{{ __('front/homePage.Second') }}</span>
                             </div>
                             {{-- Second : End --}}
                         </div>
@@ -94,9 +94,9 @@
                     {{-- List of Products : Start --}}
                     <ul class="splide__list">
 
-                        @foreach ($products as $product)
+                        @foreach ($items as $item)
                             {{-- Product : Start --}}
-                            <x-front.product-box-small :product="$product" wire:key="product-{{ rand() }}"/>
+                            <x-front.product-box-small :item="$item" wire:key="item-{{ rand() }}"/>
                             {{-- Product : End --}}
                         @endforeach
                     </ul>

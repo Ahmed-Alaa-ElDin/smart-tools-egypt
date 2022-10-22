@@ -1,7 +1,7 @@
 <div>
-    @forelse ($products as $product)
+    @forelse ($items as $item)
         {{-- Product : Start --}}
-        <x-front.product-box-wide :product="$product" type="order-view" />
+        <x-front.product-box-wide :item="$item" type="order-view" />
         {{-- Product : End --}}
     @empty
     @endforelse

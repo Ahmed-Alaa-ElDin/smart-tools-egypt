@@ -14,8 +14,7 @@
             </span>
         </a>
 
-        <div class="dropdown-menu p-0 stop-propagation  z-50 min-w-max overflow-hidden">
-
+        <div class="dropdown-menu p-0 stop-propagation z-50 min-w-max overflow-hidden">
             <div
                 class="text-center p-2 overflow-y-auto overflow-x-hidden scrollbar scrollbar-thin scrollbar-thumb-red-200 max-h-[50vh]">
                 {{-- Cart Items :: Start --}}
@@ -23,11 +22,22 @@
                     @forelse ($cart as $cart_item)
                         <li>
                             <div class="flex flex-nowrap gap-4 justify-between items-center transition-all ease-in-out hover:bg-white hover:text-black rounded hover:shadow-xl px-2">
-                                <a href="{{ route('front.product.show', ['id' => $cart_item->id, 'slug' => $cart_item->options->slug]) }}" class="flex flex-nowrap gap-4 justify-between items-center hover:bg-white hover:text-current hover:shadow-none w-full py-2">
+                                <a
+                                @if($cart_item->options->type == "Product")
+                                href="{{ route('front.products.show', ['id' => $cart_item->id, 'slug' => $cart_item->options->slug]) }}"
+                                @elseif ($cart_item->options->type == "Collection")
+                                href="{{ route('front.collections.show', ['id' => $cart_item->id, 'slug' => $cart_item->options->slug]) }}"
+                                @endif
+                                class="flex flex-nowrap gap-4 justify-between items-center hover:bg-white hover:text-current hover:shadow-none w-full py-2">
 
                                     {{-- Thumbnail :: Start --}}
                                     @if ($cart_item->options->thumbnail)
-                                        <img src="{{ asset('storage/images/products/cropped100/' . $cart_item->options->thumbnail->file_name) }}"
+                                    <img
+                                    @if($cart_item->options->type == "Product")
+                                    src="{{ asset('storage/images/products/cropped100/' . $cart_item->options->thumbnail->file_name) }}"
+                                    @elseif ($cart_item->options->type == "Collection")
+                                    src="{{ asset('storage/images/collections/cropped100/' . $cart_item->options->thumbnail->file_name) }}"
+                                    @endif
                                             class="w-14 h-14 rounded" alt="{{ $cart_item->name[session('locale')] }}">
                                     @else
                                         <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}"
@@ -65,7 +75,7 @@
                                     {{-- Add To Wishlist :: Start --}}
                                     <button title="{{ __('front/homePage.Add to Wishlist') }}"
                                         class="w-8 h-8 rounded-circle bg-white border border-secondary text-secondary transition ease-in-out hover:bg-secondary hover:text-white"
-                                        wire:click="moveToWishlist('{{ $cart_item->rowId }}')">
+                                        wire:click="moveToWishlist('{{ $cart_item->rowId }}','{{ $cart_item->options->type }}')">
                                         <span class="material-icons text-lg">
                                             favorite_border
                                         </span>

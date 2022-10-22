@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class AddToWishlistButton extends Component
 {
-    public $product_id, $text = false, $large = false, $remove = false;
+    public $item_id, $type, $text = false, $large = false, $remove = false;
 
     public function render()
     {
@@ -16,12 +16,12 @@ class AddToWishlistButton extends Component
     }
 
     ############## Add To Wishlist :: Start ##############
-    public function addToWishlist($product_id)
+    public function addToWishlist($item_id, $type)
     {
         ############ Remove Product from Cart :: Start ############
         if ($this->remove) {
-            Cart::instance('cart')->search(function ($cartItem, $rowId) use ($product_id) {
-                return $cartItem->id === $product_id;
+            Cart::instance('cart')->search(function ($cartItem, $rowId) use ($item_id, $type) {
+                return $cartItem->id === $item_id && $cartItem->options->type === $type;
             })->each(function ($cartItem, $rowId) {
                 Cart::instance('cart')->remove($rowId);
             });
@@ -32,27 +32,33 @@ class AddToWishlistButton extends Component
         }
         ############ Remove Product from Cart :: End ############
 
-        $product = getBestOfferForProduct($product_id);
+        if ($type == 'Product') {
+            $item = getBestOfferForProduct($item_id);
+        } elseif ($type == 'Collection') {
+            $item = getBestOfferForCollection($item_id);
+        }
+
 
         ############ Add Product to Wishlist :: Start ############
-        $in_wishlist = Cart::instance('wishlist')->search(function ($cartItem, $rowId) use ($product) {
-            return $cartItem->id === $product->id;
+        $in_wishlist = Cart::instance('wishlist')->search(function ($cartItem, $rowId) use ($item, $type) {
+            return $cartItem->id === $item->id && $cartItem->options->type == $type;
         })->count();
 
         if (!$in_wishlist) {
             Cart::instance('wishlist')->add(
-                $product->id,
+                $item->id,
                 [
-                    'en' => $product->getTranslation('name', 'en'),
-                    'ar' => $product->getTranslation('name', 'ar'),
+                    'en' => $item->getTranslation('name', 'en'),
+                    'ar' => $item->getTranslation('name', 'ar'),
                 ],
                 1,
-                $product->best_price,
+                $item->best_price,
                 [
-                    'thumbnail' => $product->thumbnail ?? null,
-                    "slug" => $product->slug ?? ""
+                    'type' => $type,
+                    'thumbnail' => $item->thumbnail ?? null,
+                    "slug" => $item->slug ?? ""
                 ]
-            )->associate(Product::class);
+            )->associate($type == 'Product' ?  Product::class : Collection::class);
 
             if (Auth::check()) {
                 Cart::instance('wishlist')->store(Auth::user()->id);
@@ -66,6 +72,14 @@ class AddToWishlistButton extends Component
             ############ Emit Sweet Alert :: End ############
         }
         ############ Add Product to Wishlist :: End ############
+        else {
+            ############ Emit Sweet Alert :: Start ############
+            $this->dispatchBrowserEvent('swalDone', [
+                "text" => __('front/homePage.Sorry This Product is Already in the Wishlist'),
+                'icon' => 'error'
+            ]);
+            ############ Emit Sweet Alert :: End ############
+        }
 
         ############ Emit event to reinitialize the slider :: Start ############
         $this->emit('cartUpdated');

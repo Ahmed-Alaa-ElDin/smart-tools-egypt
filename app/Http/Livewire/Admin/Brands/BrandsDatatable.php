@@ -35,7 +35,7 @@ class BrandsDatatable extends Component
                 'name',
                 'logo_path',
                 'country_id',
-            ])->with('country','products')
+            ])->with('country')
             ->withCount('products')
             ->where('name', 'like', '%' . $this->search . '%')
             ->orWhereHas('country', function ($query) {
