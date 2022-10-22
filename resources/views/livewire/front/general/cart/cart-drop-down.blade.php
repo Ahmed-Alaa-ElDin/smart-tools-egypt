@@ -14,7 +14,7 @@
             </span>
         </a>
 
-        <div class="dropdown-menu p-0 stop-propagation  z-50 min-w-max overflow-hidden">
+        <div class="dropdown-menu p-0 stop-propagation z-50 min-w-max overflow-hidden">
             <div
                 class="text-center p-2 overflow-y-auto overflow-x-hidden scrollbar scrollbar-thin scrollbar-thumb-red-200 max-h-[50vh]">
                 {{-- Cart Items :: Start --}}
@@ -22,17 +22,17 @@
                     @forelse ($cart as $cart_item)
                         <li>
                             <div class="flex flex-nowrap gap-4 justify-between items-center transition-all ease-in-out hover:bg-white hover:text-black rounded hover:shadow-xl px-2">
-                                <a 
+                                <a
                                 @if($cart_item->options->type == "Product")
-                                href="{{ route('front.products.show', ['id' => $cart_item->id, 'slug' => $cart_item->options->slug]) }}" 
+                                href="{{ route('front.products.show', ['id' => $cart_item->id, 'slug' => $cart_item->options->slug]) }}"
                                 @elseif ($cart_item->options->type == "Collection")
-                                href="{{ route('front.collections.show', ['id' => $cart_item->id, 'slug' => $cart_item->options->slug]) }}" 
+                                href="{{ route('front.collections.show', ['id' => $cart_item->id, 'slug' => $cart_item->options->slug]) }}"
                                 @endif
                                 class="flex flex-nowrap gap-4 justify-between items-center hover:bg-white hover:text-current hover:shadow-none w-full py-2">
 
                                     {{-- Thumbnail :: Start --}}
                                     @if ($cart_item->options->thumbnail)
-                                    <img 
+                                    <img
                                     @if($cart_item->options->type == "Product")
                                     src="{{ asset('storage/images/products/cropped100/' . $cart_item->options->thumbnail->file_name) }}"
                                     @elseif ($cart_item->options->type == "Collection")

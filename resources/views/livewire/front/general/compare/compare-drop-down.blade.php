@@ -14,7 +14,7 @@
             </span>
         </a>
 
-        <div class="dropdown-menu p-0 stop-propagation  z-50 min-w-max overflow-hidden">
+        <div class="dropdown-menu p-0 stop-propagation z-50 min-w-max overflow-hidden">
 
             <div
                 class="text-center p-2 overflow-y-auto overflow-x-hidden scrollbar scrollbar-thin scrollbar-thumb-red-200 max-h-[50vh]">
@@ -24,7 +24,7 @@
                         <li>
                             <div
                                 class="flex flex-nowrap gap-4 justify-between items-center transition-all ease-in-out hover:bg-white hover:text-black rounded hover:shadow-xl px-2">
-                                <a @if ($compare_item->options->type == 'Product') href="{{ route('front.products.show', ['id' => $compare_item->id, 'slug' => $compare_item->options->slug]) }}" 
+                                <a @if ($compare_item->options->type == 'Product') href="{{ route('front.products.show', ['id' => $compare_item->id, 'slug' => $compare_item->options->slug]) }}"
                                 @elseif ($compare_item->options->type == 'Collection')
                                 href="{{ route('front.collections.show', ['id' => $compare_item->id, 'slug' => $compare_item->options->slug]) }}" @endif
                                     class="flex flex-nowrap gap-4 justify-between items-center hover:bg-white hover:text-current hover:shadow-none w-full py-2">
@@ -46,7 +46,7 @@
                                     <div class="flex flex-col">
 
                                         {{-- Product Name :: Start --}}
-                                        <h3 class="h5 m-0 font-bold truncate">
+                                        <h3 class="h5 m-0 font-bold truncate max-w-[150px]">
                                             {{ $compare_item->name[session('locale')] }}
                                         </h3>
                                         {{-- Product Name :: End --}}

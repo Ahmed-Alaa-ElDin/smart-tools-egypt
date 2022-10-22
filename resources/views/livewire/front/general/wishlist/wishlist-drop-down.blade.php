@@ -24,7 +24,7 @@
                         <li>
                             <div
                                 class="flex flex-nowrap gap-4 justify-between items-center transition-all ease-in-out hover:bg-white hover:text-black rounded hover:shadow-xl px-2">
-                                <a @if ($wishlist_item->options->type == 'Product') href="{{ route('front.products.show', ['id' => $wishlist_item->id, 'slug' => $wishlist_item->options->slug]) }}" 
+                                <a @if ($wishlist_item->options->type == 'Product') href="{{ route('front.products.show', ['id' => $wishlist_item->id, 'slug' => $wishlist_item->options->slug]) }}"
                                 @elseif ($wishlist_item->options->type == 'Collection')
                                 href="{{ route('front.collections.show', ['id' => $wishlist_item->id, 'slug' => $wishlist_item->options->slug]) }}" @endif
                                     class="flex flex-nowrap gap-4 justify-between items-center hover:bg-white hover:text-current hover:shadow-none w-full py-2">
@@ -46,7 +46,7 @@
                                     <div class="flex flex-col">
 
                                         {{-- Product Name :: Start --}}
-                                        <h3 class="h5 m-0 font-bold truncate">
+                                        <h3 class="h5 m-0 font-bold truncate max-w-[150px]">
                                             {{ $wishlist_item->name[session('locale')] }}
                                         </h3>
                                         {{-- Product Name :: End --}}
