@@ -32,4 +32,9 @@ class Payment extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
+    public function getPaymentMethodAttribute()
+    {
+        return $this->transactions()->pluck('payment_method');
+    }
 }

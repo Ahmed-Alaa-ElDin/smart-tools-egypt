@@ -80,6 +80,16 @@ class Order extends Model
         return $this->hasMany(Transaction::class);
     }
 
+    public function getPaymentMethodAttribute()
+    {
+        return $this->transactions->pluck('payment_method');
+    }
+
+    public function getUnpaidPaymentMethodAttribute()
+    {
+        return $this->transactions->where('payment_status', 1)->count() ? $this->transactions->where('payment_status', 1)->first()->payment_method : null;
+    }
+
     public function zone()
     {
         return $this->belongsTo(Zone::class);

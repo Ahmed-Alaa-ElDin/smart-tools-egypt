@@ -32,13 +32,21 @@ class OrderController extends Controller
                     },
                 ]);
             },
-            'collections'=> function ($query) {
-                $query->with([
+            'collections' => function ($query) {
+                $query->select([
+                    'collections.id',
+                    'collections.name',
+                    'collections.slug',
+                    'collections.base_price',
+                ])->with([
+                    'products' => fn ($q) => $q->select('products.id'),
                     'reviews',
                     'thumbnail',
                 ]);
             },
-            'status'
+            'status',
+            'payment',
+            'transactions',
         ])
             ->where('user_id', auth()->user()->id)
             ->whereHas('status', function ($query) {
@@ -1796,15 +1804,15 @@ class OrderController extends Controller
     ##################### Go To Paymob Iframe :: Start #####################
     public function goToPayment($order_id)
     {
-        $order = Order::with(['user', 'products', 'address'])->findOrFail($order_id);
+        $order = Order::with(['user', 'products', 'address', 'transactions'])->findOrFail($order_id);
 
-        $payment = $order->payments()->where('payment_status', 1)->first();
+        $transaction = $order->transactions->where('payment_status', 1)->first();
 
-        if ($payment && ($order->payment_method == 2 || $order->payment_method == 3)) {
-            $payment_key = payByPaymob($payment);
+        if ($transaction && ($transaction->payment_method == 2 || $transaction->payment_method == 3)) {
+            $payment_key = payByPaymob($order, $transaction);
 
             if ($payment_key) {
-                return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($order->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
+                return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($transaction->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
             } else {
                 return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
             }

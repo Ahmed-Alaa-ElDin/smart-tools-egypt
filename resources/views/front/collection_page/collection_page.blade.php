@@ -341,7 +341,7 @@
                                 {{-- Base Discount : Start --}}
                                 <span
                                     class="absolute bg-primary h-9 w-9 gap-1 top-2 ltr:right-2 rtl:left-2 flex justify-center items-center shadow p-1 rounded-circle text-sm text-white font-bold border-4 border-white">
-                                    {{ $product->pivot->quantity }}X
+                                    {{ $product->pivot->quantity }}x
                                 </span>
                                 {{-- Base Discount : End --}}
 
