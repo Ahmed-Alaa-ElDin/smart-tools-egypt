@@ -1058,126 +1058,112 @@ class OrderController extends Controller
         DB::beginTransaction();
 
         try {
-            $order = Order::with('payments')->findOrFail($order_id);
+            $order = Order::with('payment', 'transactions')->findOrFail($order_id);
 
-            $payments = $order->payments()->where('payment_status', 2)->get();
+            $transactions = $order->transactions->whereIn('payment_status', [2, 6]);
 
-            if ($order->payment_method == 1) {
-                // update the database
-                returnTotalOrder($order);
+            // Return the Order
+            if (returnTotalOrder($order)) {
                 // Cancel Bosta Order
-                cancelBostaOrder($order);
-            } elseif (($order->payment_method == 2 || $order->payment_method == 3) && $order->should_pay == 0) {
-
-                // Void within 24 h
-                if ($order->created_at->diffInDays() < 1) {
-                    $refund_success = [];
-
-                    // Void All Payments
-                    foreach ($payments as $payment) {
-                        $refund_status = voidRequestPaymob(json_decode($payment->payment_details)->transaction_id);
-                        $refund_success[] = $refund_status;
-
-                        if ($refund_status) {
-                            $new_payment = [
-                                'order_id' => $order->id,
-                                'user_id' => $order->user_id,
-                                'payment_amount' => -1 * $payment->payment_amount,
-                                'payment_method' => $order->payment_method,
-                                'payment_status' => 4,
-                                'payment_details' => $payment->payment_details,
-                            ];
-
-                            $order->payments()->create($new_payment);
-                        }
-                    }
-
-                    if (!array_search(false, $refund_success)) {
-                        // update the database
-                        returnTotalOrder($order);
-                        // Cancel Bosta Order
-                        cancelBostaOrder($order);
-                    }
-                } else {
-                    $refund_success = [];
-
-                    foreach ($payments as $payment) {
-                        $refund_status = refundRequestPaymob(json_decode($payment->payment_details)->transaction_id, json_decode($payment->payment_details)->amount_cents);
-
-                        $refund_success[] = $refund_status;
-
-                        if ($refund_status) {
-                            $new_payment = [
-                                'order_id' => $order->id,
-                                'user_id' => $order->user_id,
-                                'payment_amount' => -1 * $payment->payment_amount,
-                                'payment_method' => $order->payment_method,
-                                'payment_status' => 4,
-                                'payment_details' => $payment->payment_details,
-                            ];
-
-                            $order->payments()->create($new_payment);
-                        }
-                    }
-
-                    if (!array_search(false, $refund_success)) {
-                        // update the database
-                        returnTotalOrder($order);
-                        // Cancel Bosta Order
-                        cancelBostaOrder($order);
-                    }
-                }
-            } elseif ($order->payment_method == 4) {
-                if ($order->order_delivery_id != null) {
-
-                    // Make Refund Request
-                    $payment = [
-                        'order_id' => $order->id,
-                        'user_id' => $order->user_id,
-                        'payment_amount' => -1 * $order->total,
-                        'payment_method' => 4,
-                        'payment_status' => 5,
-                    ];
-
-                    $order->payments()->create($payment);
-
-                    // update the database
-                    returnTotalOrder($order);
-
-                    $order->update([
-                        'status_id' => 14,
-                        'should_get' => $order->total,
-                    ]);
-
-                    $order->statuses()->attach(14);
-
-                    // Cancel Bosta Order
+                if ($order->order_delivery_id) {
                     cancelBostaOrder($order);
-                } else {
-                    // update the database
-                    returnTotalOrder($order);
+                }
 
-                    $order->payments()->each(function ($payment) use ($order) {
-                        if ($payment->payment_status == 2) {
-                            $new_payment = [
-                                'order_id' => $order->id,
-                                'user_id' => $order->user_id,
-                                'payment_amount' => -1 * $payment->payment_amount,
-                                'payment_method' => 4,
-                                'payment_status' => 5,
-                            ];
-
-                            $order->payments()->create($new_payment);
-                        } else {
-                            $payment->update([
-                                'payment_status' => 3,
+                foreach ($transactions as $transaction) {
+                    if ($transaction->payment_method == 1) {
+                        $transaction->update([
+                            'payment_status' => 3
+                        ]);
+                    } elseif ($transaction->payment_method == 2 || $transaction->payment_method == 3) {
+                        // Void within 24 h
+                        if ($transaction->created_at->diffInDays() < 1) {
+                            $transaction->update([
+                                'payment_status' => 4,
                             ]);
+
+                            $refund_status = voidRequestPaymob(json_decode($transaction->payment_details)->transaction_id);
+
+                            if ($refund_status) {
+                                $transaction->update([
+                                    'payment_status' => 5,
+                                ]);
+                            } else {
+                                $order->transactions()->create([
+                                    'payment_id' => $transaction->payment_id,
+                                    'order_id' => $transaction->order_id,
+                                    'user_id' => $transaction->user_id,
+                                    'payment_amount' => $transaction->payment_amount,
+                                    'payment_method' => $transaction->payment_method,
+                                    'payment_status' => 6,
+                                    'paymob_order_id' => $transaction->paymob_order_id,
+                                    'payment_details' => $transaction->payment_details,
+                                ]);
+
+                                $transaction->update([
+                                    'payment_status' => 2,
+                                ]);
+
+                                $order->update(['status_id' => 405]);
+                                $order->statuses()->attach(405);
+                            }
                         }
-                    });
+
+                        // Refund after 24 h
+                        else {
+                            $transaction->update([
+                                'payment_status' => 4,
+                            ]);
+
+                            $refund_status = refundRequestPaymob(json_decode($transaction->payment_details)->transaction_id, json_decode($transaction->payment_details)->amount_cents);
+
+                            if ($refund_status) {
+                                $transaction->update([
+                                    'payment_status' => 5,
+                                ]);
+                            } else {
+                                $order->transactions()->create([
+                                    'payment_id' => $transaction->payment_id,
+                                    'order_id' => $transaction->order_id,
+                                    'user_id' => $transaction->user_id,
+                                    'payment_amount' => $transaction->payment_amount,
+                                    'payment_method' => $transaction->payment_method,
+                                    'payment_status' => 6,
+                                    'paymob_order_id' => $transaction->paymob_order_id,
+                                    'payment_details' => $transaction->payment_details,
+                                ]);
+
+                                $transaction->update([
+                                    'payment_status' => 2,
+                                ]);
+
+                                $order->update(['status_id' => 405]);
+                                $order->statuses()->attach(405);
+                            }
+                        }
+                    } elseif ($transaction->payment_method == 4) {
+                        $transaction->update([
+                            'payment_status' => 4,
+                        ]);
+                    } elseif ($transaction->payment_method == 10) {
+                        // Return balance to user
+                        $order->user->balance += $transaction->payment_amount;
+                        $order->user->save();
+
+                        // Update transaction status :: Refunded
+                        $transaction->update([
+                            'payment_status' => 5,
+                        ]);
+                    } elseif ($transaction->payment_method == 11) {
+                        $order->points()->create([
+                            'user_id' => $order->user_id,
+                            'value' => json_decode($transaction->payment_details)->points,
+                            'status' => 1
+                        ]);
+                    }
                 }
             }
 
-            // delete the temp order
+            // todo :: delete the temp order
             if ($new_order_id != null) {
                 $new_order = Order::findOrFail($new_order_id);
 
@@ -1190,8 +1176,9 @@ class OrderController extends Controller
 
             return redirect()->route('front.orders.index')->with('success', __('front/homePage.Order Canceled Successfully'));
         } catch (\Throwable $th) {
-            throw $th;
             DB::rollBack();
+
+            throw $th;
         }
     }
     ##################### Cancel Total Order :: End #####################
@@ -1713,14 +1700,6 @@ class OrderController extends Controller
                     $bosta_order = createBostaOrder($order, $transaction->payment_method);
 
                     if ($bosta_order['status']) {
-                        // update order in database
-                        $order->update([
-                            'tracking_number' => $bosta_order['data']['trackingNumber'],
-                            'order_delivery_id' => $bosta_order['data']['_id'],
-                            'status_id' => 204,
-                        ]);
-
-                        $order->statuses()->attach(204);
 
                         // update user's Points
                         $order->points()->update([
@@ -1737,6 +1716,8 @@ class OrderController extends Controller
                         Session::flash('success', __('front/homePage.Order Created Successfully'));
                         return redirect()->route('front.orders.done')->with('order_id', $order->id);
                     } else {
+                        DB::rollBack();
+
                         Session::flash('error', __('front/homePage.Order Creation Failed, Please Try Again'));
                         return redirect()->route('front.orders.payment');
                     }
@@ -1821,6 +1802,75 @@ class OrderController extends Controller
         }
     }
     ##################### Go To Paymob Iframe :: Start #####################
+
+    ##################### Go To Paymob Iframe :: Start #####################
+    public function goToRefund($order_id)
+    {
+        $order = Order::with(['user', 'products', 'address', 'transactions'])->findOrFail($order_id);
+
+        $transaction = $order->transactions->whereIn('payment_method', [2, 3])->where('payment_status', 2)->first();
+
+        DB::beginTransaction();
+
+        try {
+            $transaction->update([
+                'payment_status' => 4,
+            ]);
+
+            $refund_status = refundRequestPaymob(json_decode($transaction->payment_details)->transaction_id, json_decode($transaction->payment_details)->amount_cents);
+
+            if ($refund_status) {
+                $transaction->update([
+                    'payment_status' => 5,
+                ]);
+            } else {
+                $transaction->update([
+                    'payment_status' => 2,
+                ]);
+
+                $order->transactions()->create([
+                    'payment_id' => $transaction->payment_id,
+                    'order_id' => $transaction->order_id,
+                    'user_id' => $transaction->user_id,
+                    'payment_amount' => $transaction->payment_amount,
+                    'payment_method' => $transaction->payment_method,
+                    'payment_status' => 6,
+                    'paymob_order_id' => $transaction->paymob_order_id,
+                    'payment_details' => $transaction->payment_details,
+                ]);
+
+                $order->update(['status_id' => 405]);
+                $order->statuses()->attach(405);
+            }
+
+            DB::commit();
+
+
+            // todo
+            $transaction = $order->transactions->where('payment_status', 1)->first();
+
+            if ($transaction && ($transaction->payment_method == 2 || $transaction->payment_method == 3)) {
+                $payment_key = payByPaymob($order, $transaction);
+
+                if ($payment_key) {
+                    return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($transaction->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
+                } else {
+                    return redirect()->route('front.orders.index')->with('error', __('front/homePage.Refund Failed, Please Try Again'));
+                }
+            } else {
+                return redirect()->route('front.orders.index')->with('error', __('front/homePage.Refund Failed, Please Try Again'));
+            }
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+
+            return redirect()->route('front.orders.index')->with('error', __('front/homePage.Refund Failed, Please Try Again'));
+        }
+    }
+    ##################### Go To Paymob Iframe :: Start #####################
+
 
     ##################### Update Order's Status By Bosta :: Start #####################
     public function updateStatus(Request $request)

@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Review;
 use App\Models\User;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
@@ -457,7 +458,6 @@ function get_item_rating($product_id, $type = 'Product')
 // create bosta Order
 function createBostaOrder($order, $payment_method)
 {
-    // dd($order->transactions()->get());
     $order_data = [
         "specs" => [
             "packageDetails"    =>      [
@@ -498,6 +498,16 @@ function createBostaOrder($order, $payment_method)
     $decoded_bosta_response = $bosta_response->json();
 
     if ($bosta_response->successful()) {
+
+        // update order in database
+        $order->update([
+            'tracking_number' => $decoded_bosta_response['trackingNumber'],
+            'order_delivery_id' => $decoded_bosta_response['_id'],
+            'status_id' => 204,
+        ]);
+
+        $order->statuses()->attach(204);
+
         return [
             'status'    =>  true,
             'data'      =>  $decoded_bosta_response,
@@ -598,9 +608,9 @@ function payByPaymob($order, $transaction)
             "amount_cents" => number_format(($transaction->payment_amount) * 100, 0, '', ''),
             "currency" => "EGP",
             "items" => []
-            ])->json();
+        ])->json();
 
-            $order_id = $second_step['id'];
+        $order_id = $second_step['id'];
 
         $transaction->update([
             'paymob_order_id' => $order_id,
@@ -675,8 +685,8 @@ function refundRequestPaymob($transaction_id, $refund)
         $data = Http::acceptJson()->post('https://accept.paymob.com/api/acceptance/void_refund/refund', [
             "auth_token" => $auth_token,
             "transaction_id" => $transaction_id,
-            "amount_cents" => (int)($refund * 100),
-        ])->json();
+            "amount_cents" => (int)($refund),
+            ])->json();
 
         if ($data['success'] == true) {
             return true;
@@ -691,37 +701,67 @@ function refundRequestPaymob($transaction_id, $refund)
 ################ ORDER :: START ##################
 function returnTotalOrder($order)
 {
-    $user = $order->user;
+    DB::beginTransaction();
 
-    $products = $order->products;
+    try {
+        // Update Order Status :: Cancellation Requested
+        $order->update([
+            'status_id' => 301,
+        ]);
 
-    $user->update([
-        'points' => $user->points - $order->gift_points + $order->used_points,
-        'balance' => $user->balance + $order->used_balance,
-    ]);
+        $order->statuses()->attach(301);
 
-    if ($order->order_delivery_id != null) {
-        foreach ($products as $product) {
-            $product->update([
-                'quantity' => $product->quantity + $product->pivot->quantity,
-            ]);
+        // Return Products & Collections
+        $order->products()->each(function ($product) {
+            $product->quantity += $product->pivot->quantity;
+            $product->save();
+
+            $product->pivot->quantity = 0;
+            $product->pivot->save();
+        });
+
+        $order->collections()->each(function ($collection) {
+            $collection->products()->each(function ($product) use (&$collection) {
+                $product->quantity += $collection->pivot->quantity * $product->pivot->quantity;
+                $product->save();
+            });
+
+            $collection->pivot->quantity = 0;
+            $collection->pivot->save();
+        });
+
+        // Return Gift Points
+        $order->points()->delete();
+
+        // Return Coupon
+        if ($order->coupon && !is_null($order->coupon->number)) {
+            $order->coupon->number += 1;
+            $order->coupon->save();
         }
+
+        // Update Order Status :: Cancellation Accepted
+        $order->update([
+            'status_id' => 302,
+        ]);
+
+        $order->statuses()->attach(302);
+
+        DB::commit();
+
+        return true;
+    } catch (\Throwable $th) {
+        //todo ::throw $th;
+        // Update Order Status :: Cancellation Accepted
+        $order->update([
+            'status_id' => 303,
+        ]);
+
+        $order->statuses()->attach(303);
+
+        DB::rollback();
+
+        return false;
     }
-
-    $order->update([
-        'num_of_items' => 0,
-        'status_id' => 9,
-        'gift_points' => 0,
-        'used_points' => 0,
-        'used_balance' => 0.00,
-    ]);
-
-    $order->statuses()->attach(9);
-
-    $order->products()->syncWithPivotValues(
-        $products,
-        ['quantity' => 0]
-    );
 }
 ################ ORDER :: END ##################
 

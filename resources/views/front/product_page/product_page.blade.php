@@ -200,9 +200,10 @@
                             @livewire(
                                 'front.general.cart.add-to-cart-button',
                                 [
-                                    'product_id' => $product['id'],
+                                    'item_id' => $product['id'],
                                     'text' => true,
                                     'large' => true,
+                                    'type' => 'Product',
                                     'add_buy' => 'add',
                                 ],
                                 key('add-cart-button-' . Str::random(10)),
@@ -219,7 +220,7 @@
                                     'type' => 'Product',
                                     'add_buy' => 'pay',
                                 ],
-                                key('add-cart-button-' . Str::random(10)),
+                                key('go-to-cart-button-' . Str::random(10)),
                             )
                             {{-- Go To Payment : End --}}
 

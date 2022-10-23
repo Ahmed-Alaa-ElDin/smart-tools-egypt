@@ -82,7 +82,7 @@ class Order extends Model
 
     public function getPaymentMethodAttribute()
     {
-        return $this->transactions->where('payment_status', '!=', 3)->pluck('payment_method');
+        return $this->transactions->whereIn('payment_status',  [1,2])->pluck('payment_method');
     }
 
     public function getUnpaidPaymentMethodAttribute()

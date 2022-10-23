@@ -397,6 +397,7 @@ return [
     "Discount on order:"                    =>      "خصم على الطلب:",
     "Subtotal after order discounts:"       =>      "المجموع بعد الخصم على الطلب:",
     "Subtotal after coupon discounts:"      =>      "المجموع بعد خصم الكوبون:",
+    "Refund Failed, Please Try Again"       =>      "فشلت عملية إعادة المبلغ ، برجاء المحاولة لاحقاً",
 
 
 ];

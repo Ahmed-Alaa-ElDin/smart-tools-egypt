@@ -59,7 +59,10 @@ class OrderPaymentSummary extends Component
     public $coupon_total_discount = 0;
     public $coupon_total_discount_percent = 0;
     public $coupon_free_shipping = false;
-    public $order_best_coupon = [];
+    public $order_best_coupon = [
+        'type' => null,
+        'value' => 0,
+    ];
 
     public $payment_method = null, $balance = 0, $points = 0, $points_egp = 0;
 
@@ -110,7 +113,24 @@ class OrderPaymentSummary extends Component
             $order_offer = Offer::orderOffers()->first();
 
             // ------------------------------------------------------------------------------------------------------
-            // A - Prices
+            // A - Shipping
+            // ------------------------------------------------------------------------------------------------------
+            // 1 - Items Offers Free Shipping
+            $this->offers_free_shipping = !in_array(0, array_column($this->items, 'offer_free_shipping'));
+
+            // 2 - Order Offer Free Shipping
+            if ($order_offer) {
+                // Order Free Shipping
+                $this->order_offer_free_shipping = $order_offer->free_shipping;
+            }
+
+            // 3 - Total Order Free Shipping (After Items & Order Offers)
+            $this->total_order_free_shipping = $this->offers_free_shipping || $this->order_offer_free_shipping || $this->coupon_free_shipping;
+
+            $this->getShippingFees();
+
+            // ------------------------------------------------------------------------------------------------------
+            // B - Prices
             // ------------------------------------------------------------------------------------------------------
 
             // 1 - Base Items Prices
@@ -144,24 +164,7 @@ class OrderPaymentSummary extends Component
             $this->total_after_order_discount = $this->total_after_offer_prices - $this->order_discount;
 
             // 6 - Total After Coupon Discounts
-            $this->total_after_coupon_discount = $this->total_after_order_discount - $this->coupon_total_discount;
-
-            // ------------------------------------------------------------------------------------------------------
-            // B - Shipping
-            // ------------------------------------------------------------------------------------------------------
-            // 1 - Items Offers Free Shipping
-            $this->offers_free_shipping = !in_array(0, array_column($this->items, 'offer_free_shipping'));
-
-            // 2 - Order Offer Free Shipping
-            if ($order_offer) {
-                // Order Free Shipping
-                $this->order_offer_free_shipping = $order_offer->free_shipping;
-            }
-
-            // 3 - Total Order Free Shipping (After Items & Order Offers)
-            $this->total_order_free_shipping = $this->offers_free_shipping || $this->order_offer_free_shipping || $this->coupon_free_shipping;
-
-            $this->getShippingFees();
+            $this->total_after_coupon_discount = $this->total_after_order_discount - $this->coupon_total_discount + $this->shipping_fees;
 
             // ------------------------------------------------------------------------------------------------------
             // C - Points
@@ -574,17 +577,12 @@ class OrderPaymentSummary extends Component
             }
 
             if ($should_pay <= 0 || $this->payment_method == 1) {
+
+                $order->statuses()->attach(203);
+
                 $bosta_order = createBostaOrder($order, $this->payment_method);
 
                 if ($bosta_order['status']) {
-                    // update order in database
-                    $order->update([
-                        'tracking_number' => $bosta_order['data']['trackingNumber'],
-                        'order_delivery_id' => $bosta_order['data']['_id'],
-                        'status_id' => 204,
-                    ]);
-
-                    $order->statuses()->attach([203, 204]);
 
                     if ($should_pay <= 0) {
                         $order->points()->update([

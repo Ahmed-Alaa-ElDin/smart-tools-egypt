@@ -312,6 +312,11 @@ class CouponBlock extends Component
                     'type' => $coupon->type,
                     'value' => $coupon->value,
                 ];
+            } else {
+                $this->order_best_coupon = [
+                    'type' => null,
+                    'value' => 0,
+                ];
             }
 
             $this->coupon_applied = true;

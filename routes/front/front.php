@@ -69,6 +69,9 @@ Route::group([
         // Go to Paymob Iframe
         Route::get('/{order_id}/paymob', 'goToPayment')->name('paymob.pay');
 
+        // Go to Paymob Refund
+        Route::get('/{order_id}/paymob/refund', 'goToRefund')->name('paymob.refund');
+
         // track the order
         Route::get('/{order_id}/track', 'track')->name('track');
     });

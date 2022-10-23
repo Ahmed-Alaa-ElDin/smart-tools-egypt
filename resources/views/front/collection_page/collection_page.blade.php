@@ -191,9 +191,10 @@
                             @livewire(
                                 'front.general.cart.add-to-cart-button',
                                 [
-                                    'collection_id' => $collection['id'],
+                                    'item_id' => $collection['id'],
                                     'text' => true,
                                     'large' => true,
+                                    'type' => 'Collection',
                                     'add_buy' => 'add',
                                 ],
                                 key('add-cart-button-' . Str::random(10)),

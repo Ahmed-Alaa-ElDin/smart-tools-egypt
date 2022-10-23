@@ -399,7 +399,7 @@ return [
     "Discount on order:"                    =>      "Discount on order:",
     "Subtotal after order discounts:"       =>      "Subtotal after order discounts:",
     "Subtotal after coupon discounts:"      =>      "Subtotal after coupon discounts:",
-    "Cart"                      =>      "Cart",
+    "Refund Failed, Please Try Again"       =>      "Refund Failed, Please Try Again",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",
