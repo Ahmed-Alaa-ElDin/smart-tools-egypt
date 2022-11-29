@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('orderable_id');
             $table->unsignedBigInteger('order_id');
             $table->integer('quantity')->default(0);
+            $table->decimal('original_price', 10, 2)->default(0.00);
             $table->decimal('price', 10, 2)->default(0.00);
             $table->decimal('coupon_discount', 10, 2)->default(0.00);
             $table->integer('points')->default(0);

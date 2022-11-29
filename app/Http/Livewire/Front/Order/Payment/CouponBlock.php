@@ -233,25 +233,6 @@ class CouponBlock extends Component
                     ];
                 });
 
-            // Final Products After Coupon Application
-            $this->products_best_coupon = collect($this->products_after_coupon)
-                ->groupBy('id')
-                ->map(function ($products) {
-                    $max_discount = $products->max('coupon_discount');
-                    $max_points = $products->max('coupon_points');
-                    $product_qty = $products->first()['qty'];
-                    $product_id = $products->first()['id'];
-                    return [
-                        'product_id' => $product_id,
-                        'qty' => $product_qty,
-                        'coupon_discount' => $max_discount,
-                        'total_discount' =>  $product_qty * $max_discount,
-                        'coupon_points' => $max_points,
-                        'total_points' => $product_qty * $max_points,
-                    ];
-                });
-
-
             // get discount on collections
             if ($coupon->collections->count()) {
                 $collections_ids = array_column($collections, 'id');

@@ -392,12 +392,14 @@ return [
     "Products in the offer"     =>      "المنتجات بالعرض",
     "Cart Summary"                          =>      "ملخص سلة المشتريات:",
     "Subtotal before products discounts"    =>      "المجموع قبل خصومات المنتجات:",
-    "Subtotal after products discounts"     =>      "المجموع بعد خصومات المنتجات:",
+    "Subtotal after products discounts:"     =>      "المجموع بعد خصومات المنتجات:",
     "Subtotal after offers discounts:"      =>      "المجموع بعد خصومات العروض:",
     "Discount on order:"                    =>      "خصم على الطلب:",
     "Subtotal after order discounts:"       =>      "المجموع بعد الخصم على الطلب:",
     "Subtotal after coupon discounts:"      =>      "المجموع بعد خصم الكوبون:",
     "Refund Failed, Please Try Again"       =>      "فشلت عملية إعادة المبلغ ، برجاء المحاولة لاحقاً",
+    "Paid:"                     =>      "المدفوع:",
+    "Order No."                 =>      "رقم الطلب",
 
 
 ];

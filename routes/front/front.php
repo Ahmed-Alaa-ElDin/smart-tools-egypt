@@ -40,7 +40,7 @@ Route::group([
         Route::get('', 'index')->name('index');
 
         // Cancel the order
-        Route::delete('/{order_id}/cancel/{new_order_id?}', 'cancel')->name('cancel');
+        Route::delete('/{order_id}/cancel/{temp_order_id?}', 'cancel')->name('cancel');
 
         // Edit the order
         Route::get('/{order_id}/edit', 'edit')->name('edit');

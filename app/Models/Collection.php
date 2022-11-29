@@ -109,6 +109,7 @@ class Collection extends Model
     public function orders()
     {
         return $this->morphToMany(Order::class, 'orderable')->withPivot(
+            'order_id',
             'quantity',
             'price',
             'points',
@@ -130,7 +131,17 @@ class Collection extends Model
 
     public function getQuantityAttribute()
     {
-        return $this->products->map(fn ($product) =>  floor($product->quantity / $product->pivot->quantity))->min() ?? 0;
+        // dd(
+        //     $this->products()
+        //         ->without(['reviews', 'orders', 'brand', 'validOffers'])
+        //         ->get()
+        //     // ->map(fn ($product) =>  floor($product->quantity / $product->pivot->quantity))
+        //     // ->min()
+        // );
+        return $this->products()
+            ->without(['reviews', 'orders', 'brand', 'validOffers'])->get()
+            ->map(fn ($product) =>  floor($product->quantity / $product->pivot->quantity))
+            ->min() ?? 0;
     }
 
     public function getTypeAttribute()
@@ -148,6 +159,7 @@ class Collection extends Model
                 'collections.id',
                 'name',
                 'slug',
+                'collections.original_price',
                 'base_price',
                 'final_price',
                 'points',
@@ -180,6 +192,7 @@ class Collection extends Model
                 'name',
                 'slug',
                 'weight',
+                'collections.original_price',
                 'base_price',
                 'final_price',
                 'points',

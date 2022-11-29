@@ -19,8 +19,6 @@ class Payment extends Model
         'coupon_order_discount',
         'delivery_fees',
         'total',
-        // 'should_pay',
-        // 'should_get',
     ];
 
     public function transactions()
@@ -33,8 +31,17 @@ class Payment extends Model
         return $this->belongsTo(Order::class);
     }
 
-    public function getPaymentMethodAttribute()
+    public function getPaymentMethodsAttribute()
     {
         return $this->transactions()->pluck('payment_method');
+    }
+
+    public function getMainPaymentMethodAttribute()
+    {
+        return $this->transactions()->whereIn('payment_method',[1,2,3,4])->count() ? $this->transactions()->whereIn('payment_method',[1,2,3,4])->first()->payment_method : null;
+    }
+
+    public function getPaidAttribute(){
+        return $this->transactions()->where('payment_status',2)->sum('payment_amount');
     }
 }

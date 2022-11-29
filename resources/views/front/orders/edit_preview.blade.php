@@ -41,8 +41,8 @@
                     <span class="text-sm font-bold"> {{ __('front/homePage.Subtotal (before discounts):') }} </span>
 
                     <div
-                        class="flex rtl:flex-row-reverse gap-1 text-primary @if ($order_data['products_final_prices'] < $order_data['products_base_prices'] ||
-                            $order_data['products_best_prices'] < $order_data['products_base_prices']) line-through @endif">
+                        class="flex rtl:flex-row-reverse gap-1  @if ($order_data['products_final_prices'] < $order_data['products_base_prices'] ||
+                            $order_data['products_best_prices'] < $order_data['products_base_prices']) text-red-400 line-through @else text-success @endif">
                         <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
                         <span class="font-bold text-xl"
                             dir="ltr">{{ number_format(explode('.', $order_data['products_base_prices'])[0], 0, '.', '\'') }}</span>
@@ -56,7 +56,7 @@
                     <div class="flex justify-between items-center gap-1 px-4 py-1">
                         <span class="text-sm font-bold"> {{ __('front/homePage.Products Discounts:') }} </span>
 
-                        <div class="flex gap-2 text-successDark">
+                        <div class="flex gap-2 text-success">
                             <span class="flex rtl:flex-row-reverse gap-1">
                                 <span class="font-bold text-sm">
                                     {{ __('front/homePage.EGP') }}
@@ -76,10 +76,11 @@
 
                     {{-- Final Price --}}
                     <div class="flex justify-between items-center gap-1 px-4 py-1">
-                        <span class="text-sm font-bold"> {{ __('front/homePage.Subtotal (after discounts):') }} </span>
+                        <span class="text-sm font-bold"> {{ __('front/homePage.Subtotal after products discounts:') }}
+                        </span>
 
                         <div
-                            class="flex rtl:flex-row-reverse gap-1 text-primary @if ($order_data['products_best_prices'] < $order_data['products_final_prices']) line-through @endif">
+                            class="flex rtl:flex-row-reverse gap-1 @if ($order_data['order_total'] < $order_data['products_final_prices']) text-red-400 line-through @else text-success @endif">
                             <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
                             <span class="font-bold text-xl"
                                 dir="ltr">{{ number_format(explode('.', $order_data['products_final_prices'])[0], 0, '.', '\'') }}</span>
@@ -89,12 +90,12 @@
                     </div>
                 @endif
 
-                @if ($order_data['products_best_prices'] < $order_data['products_final_prices'])
+                @if ($order_data['offers_discounts'])
                     {{-- Offers --}}
                     <div class="flex justify-between items-center gap-1 px-4 py-1">
                         <span class="text-sm font-bold"> {{ __('front/homePage.Offers Discounts:') }} </span>
 
-                        <div class="flex gap-2 text-successDark">
+                        <div class="flex gap-2 text-success">
                             <span class="flex rtl:flex-row-reverse gap-1">
                                 <span class="font-bold text-sm">
                                     {{ __('front/homePage.EGP') }}
@@ -111,27 +112,28 @@
                     </div>
 
                     <hr class="my-2">
+
+                    {{-- Best Price --}}
+                    <div class="flex justify-between items-center gap-1 px-4 py-1">
+                        <span class="text-sm font-bold"> {{ __('front/homePage.Subtotal (after offers):') }} </span>
+
+                        <div class="flex rtl:flex-row-reverse gap-1 text-success">
+                            <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
+                            <span class="font-bold text-xl"
+                                dir="ltr">{{ number_format(explode('.', $order_data['products_best_prices'])[0], 0, '.', '\'') }}</span>
+                            <span
+                                class="font-bold text-xs">{{ explode('.', $order_data['products_best_prices'])[1] ?? '00' }}</span>
+                        </div>
+                    </div>
                 @endif
 
-                {{-- Best Price --}}
-                <div class="flex justify-between items-center gap-1 px-4 py-1">
-                    <span class="text-sm font-bold"> {{ __('front/homePage.Subtotal (after offers):') }} </span>
-
-                    <div class="flex rtl:flex-row-reverse gap-1 text-primary">
-                        <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
-                        <span class="font-bold text-xl"
-                            dir="ltr">{{ number_format(explode('.', $order_data['products_best_prices'])[0], 0, '.', '\'') }}</span>
-                        <span
-                            class="font-bold text-xs">{{ explode('.', $order_data['products_best_prices'])[1] ?? '00' }}</span>
-                    </div>
-                </div>
 
                 @if ($order_data['order_offers_discounts'] > 0.0)
                     {{-- Order Offers --}}
                     <div class="flex justify-between items-center gap-1 px-4 py-1">
                         <span class="text-sm font-bold"> {{ __('front/homePage.Order Discount:') }} </span>
 
-                        <div class="flex gap-2 text-successDark">
+                        <div class="flex gap-2 text-success">
                             <span class="flex rtl:flex-row-reverse gap-1">
                                 <span class="font-bold text-sm">
                                     {{ __('front/homePage.EGP') }}
@@ -153,7 +155,7 @@
                     <div class="flex justify-between items-center gap-1 px-4 py-1">
                         <span class="text-sm font-bold"> {{ __('front/homePage.Coupon Discount:') }} </span>
 
-                        <div class="flex gap-2 text-successDark">
+                        <div class="flex gap-2 text-success">
                             <span class="flex rtl:flex-row-reverse gap-1">
                                 <span class="font-bold text-sm">
                                     {{ __('front/homePage.EGP') }}
@@ -175,7 +177,7 @@
                     <div class="flex justify-between items-center gap-1 px-4 py-1">
                         <span class="text-sm font-bold"> {{ __('front/homePage.Wallet Discount:') }} </span>
 
-                        <div class="flex gap-2 text-successDark">
+                        <div class="flex gap-2 text-success">
                             <span class="flex rtl:flex-row-reverse gap-1">
                                 <span class="font-bold text-sm">
                                     {{ __('front/homePage.EGP') }}
@@ -194,7 +196,7 @@
                     <span class="text-sm font-bold"> {{ __('front/homePage.Delivery Fees:') }} </span>
 
                     @if ($order_data['delivery_fees'] > 0)
-                        <div class="flex rtl:flex-row-reverse gap-1 text-primary">
+                        <div class="flex rtl:flex-row-reverse gap-1 text-success">
                             <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
                             <span class="font-bold text-xl"
                                 dir="ltr">{{ number_format(explode('.', $order_data['delivery_fees'])[0], 0, '.', '\'') }}</span>
@@ -202,7 +204,7 @@
                                 class="font-bold text-xs">{{ explode('.', $order_data['delivery_fees'])[1] ?? '00' }}</span>
                         </div>
                     @else
-                        <span class="text-successDark font-bold">
+                        <span class="text-success font-bold">
                             {{ __('front/homePage.Free Shipping') }}
                         </span>
                     @endif
@@ -214,7 +216,7 @@
                 <div class="flex justify-between items-center gap-1 p-4 bg-white">
                     <span class="font-bold"> {{ __('front/homePage.Order Total:') }} </span>
 
-                    <div class="flex rtl:flex-row-reverse gap-1 text-primary">
+                    <div class="flex rtl:flex-row-reverse gap-1 text-successDark">
                         <span class="font-bold">{{ __('front/homePage.EGP') }}</span>
                         <span class="font-bold text-2xl"
                             dir="ltr">{{ number_format(explode('.', $order_data['order_total'])[0], 0, '.', '\'') }}</span>
@@ -239,60 +241,62 @@
                 </div>
 
                 {{-- Gifted Points --}}
-                <div class="rounded-xl shadow pt-4 bg-gray-100 overflow-hidden w-full">
-                    <h4 class="text-center font-bold">
-                        {{ __('front/homePage.You will earn:') }}
-                    </h4>
+                @if ($order_data['total_points'])
+                    <div class="rounded-xl shadow pt-4 bg-gray-100 overflow-hidden w-full">
+                        <h4 class="text-center font-bold">
+                            {{ __('front/homePage.You will earn:') }}
+                        </h4>
 
-                    {{-- Products Points --}}
-                    <div class="font-bold flex gap-2 justify-between items-center px-4 py-1">
-                        <span class="text-sm"> {{ __("front/homePage.Product's Points:") }} </span>
-
-                        <span class="text-xl text-successDark">
-                            <span dir="ltr">
-                                {{ number_format($order_data['total_points'], 0, '.', '\'') }}
-                            </span>
-                            &nbsp;
-                            <span class="text-sm">
-                                {{ trans_choice('front/homePage.Point/Points', $order_data['total_points'], ['points' => $order_data['total_points']]) }}
-                            </span>
-                        </span>
-                    </div>
-
-                    @if ($order_data['coupon_points'] > 0)
-                        {{-- Coupons Points --}}
+                        {{-- Products Points --}}
                         <div class="font-bold flex gap-2 justify-between items-center px-4 py-1">
-                            <span class="text-sm"> {{ __("front/homePage.Coupon's Points:") }} </span>
+                            <span class="text-sm"> {{ __("front/homePage.Product's Points:") }} </span>
 
                             <span class="text-xl text-successDark">
                                 <span dir="ltr">
-                                    {{ number_format($order_data['coupon_points'], 0, '.', '\'') }}
+                                    {{ number_format($order_data['total_points'], 0, '.', '\'') }}
                                 </span>
                                 &nbsp;
                                 <span class="text-sm">
-                                    {{ trans_choice('front/homePage.Point/Points', $order_data['coupon_points'], ['points' => $order_data['coupon_points']]) }}
+                                    {{ trans_choice('front/homePage.Point/Points', $order_data['total_points'], ['points' => $order_data['total_points']]) }}
                                 </span>
                             </span>
                         </div>
-                    @endif
 
-                    <hr class="mt-2">
+                        @if ($order_data['coupon_points'] > 0)
+                            {{-- Coupons Points --}}
+                            <div class="font-bold flex gap-2 justify-between items-center px-4 py-1">
+                                <span class="text-sm"> {{ __("front/homePage.Coupon's Points:") }} </span>
 
-                    {{-- Total Points --}}
-                    <div class="font-bold flex gap-2 justify-between items-center p-4 bg-white">
-                        <span class="text-sm"> {{ __('front/homePage.Total Points:') }} </span>
+                                <span class="text-xl text-successDark">
+                                    <span dir="ltr">
+                                        {{ number_format($order_data['coupon_points'], 0, '.', '\'') }}
+                                    </span>
+                                    &nbsp;
+                                    <span class="text-sm">
+                                        {{ trans_choice('front/homePage.Point/Points', $order_data['coupon_points'], ['points' => $order_data['coupon_points']]) }}
+                                    </span>
+                                </span>
+                            </div>
+                        @endif
 
-                        <span class="text-xl text-successDark">
-                            <span dir="ltr">
-                                {{ number_format($order_data['total_points'] + $order_data['coupon_points'], 0, '.', '\'') }}
+                        <hr class="mt-2">
+
+                        {{-- Total Points --}}
+                        <div class="font-bold flex gap-2 justify-between items-center p-4 bg-white">
+                            <span class="text-sm"> {{ __('front/homePage.Total Points:') }} </span>
+
+                            <span class="text-xl text-successDark">
+                                <span dir="ltr">
+                                    {{ number_format($order_data['total_points'] + $order_data['coupon_points'], 0, '.', '\'') }}
+                                </span>
+                                &nbsp;
+                                <span class="text-sm">
+                                    {{ trans_choice('front/homePage.Point/Points', $order_data['total_points'] + $order_data['coupon_points'], ['points' => $order_data['total_points'] + $order_data['coupon_points']]) }}
+                                </span>
                             </span>
-                            &nbsp;
-                            <span class="text-sm">
-                                {{ trans_choice('front/homePage.Point/Points', $order_data['total_points'] + $order_data['coupon_points'], ['points' => $order_data['total_points'] + $order_data['coupon_points']]) }}
-                            </span>
-                        </span>
+                        </div>
                     </div>
-                </div>
+                @endif
 
                 {{-- Payment --}}
                 <div class="rounded-xl shadow pt-4 bg-gray-100 overflow-hidden w-full">
@@ -304,39 +308,28 @@
                     <div class="font-bold flex gap-2 justify-between items-center px-4 py-1">
                         <span class="text-sm"> {{ __('front/homePage.Payment Method:') }} </span>
 
-                        <span class="text-successDark">
-                            @if ($order_data['payment_method'] == 1)
-                                {{ __('front/homePage.Cash on delivery (COD)') }}
-                            @elseif ($order_data['payment_method'] == 2)
-                                {{ __('front/homePage.Credit / Debit Card') }}
-                            @elseif ($order_data['payment_method'] == 3)
-                                {{ __('front/homePage.Installment') }}
-                            @elseif ($order_data['payment_method'] == 4)
-                                {{ __('front/homePage.Vodafone Cash') }}
-                            @endif
-                        </span>
-                    </div>
-
-                    {{-- Payment Status --}}
-                    <div class="font-bold flex gap-2 justify-between items-center px-4 py-1">
-                        <span class="text-sm"> {{ __('front/homePage.Payment Status:') }} </span>
-
-                        @if ($order_data['old_order_paid'])
-                            <span class="text-successDark">
-                                {{ __('front/homePage.Paid') }}
-                            </span>
-                        @else
-                            <span class="text-primary">
-                                {{ __('front/homePage.Unpaid') }}
-                            </span>
-                        @endif
+                        <div>
+                            @foreach ($order_data['payment_methods'] as $payment_method)
+                                <div class="text-successDark">
+                                    @if ($payment_method == 1)
+                                        {{ __('front/homePage.Cash on delivery (COD)') }}
+                                    @elseif ($payment_method == 2)
+                                        {{ __('front/homePage.Credit / Debit Card') }}
+                                    @elseif ($payment_method == 3)
+                                        {{ __('front/homePage.Installment') }}
+                                    @elseif ($payment_method == 4)
+                                        {{ __('front/homePage.Vodafone Cash') }}
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
 
                     {{-- Old Amount --}}
                     <div class="font-bold flex gap-2 justify-between items-center px-4 py-1">
                         <span class="text-sm"> {{ __('front/homePage.Old Cost:') }} </span>
 
-                        <div class="flex rtl:flex-row-reverse gap-1 text-primary">
+                        <div class="flex rtl:flex-row-reverse gap-1 text-success">
                             <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
                             <span class="font-bold text-xl"
                                 dir="ltr">{{ number_format(explode('.', $order_data['old_price'])[0], 0, '.', '\'') }}</span>
@@ -349,7 +342,7 @@
                     <div class="font-bold flex gap-2 justify-between items-center px-4 py-1">
                         <span class="text-sm"> {{ __('front/homePage.New Cost:') }} </span>
 
-                        <div class="flex rtl:flex-row-reverse gap-1 text-primary">
+                        <div class="flex rtl:flex-row-reverse gap-1 text-success">
                             <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
                             <span class="font-bold text-xl"
                                 dir="ltr">{{ number_format(explode('.', $order_data['order_total'])[0], 0, '.', '\'') }}</span>
@@ -358,10 +351,23 @@
                         </div>
                     </div>
 
+                    {{-- Paid --}}
+                    <div class="font-bold flex gap-2 justify-between items-center px-4 py-1">
+                        <span class="text-sm"> {{ __('front/homePage.Paid:') }} </span>
+
+                        <div class="flex rtl:flex-row-reverse gap-1 text-success">
+                            <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
+                            <span class="font-bold text-xl"
+                                dir="ltr">{{ number_format(explode('.', $order_data['paid'])[0], 0, '.', '\'') }}</span>
+                            <span
+                                class="font-bold text-xs">{{ explode('.', number_format($order_data['paid'], 2))[1] ?? '00' }}</span>
+                        </div>
+                    </div>
+
                     <hr class="mt-2">
 
                     {{-- Difference --}}
-                    <div class="font-bold flex gap-2 justify-between items-center p-4 bg-white">
+                    <div class="font-bold flex gap-2 justify-between items-center p-4 bg-successDark text-white">
                         @if ($order_data['difference'] < 0)
                             <span class="text-sm"> {{ __('front/homePage.Difference (get):') }} </span>
                         @elseif ($order_data['difference'] == 0)
@@ -370,8 +376,7 @@
                             <span class="text-sm"> {{ __('front/homePage.Difference (pay):') }} </span>
                         @endif
 
-                        <div
-                            class="flex rtl:flex-row-reverse gap-1 @if ($order_data['difference'] <= 0) text-successDark @else text-primary @endif">
+                        <div class="flex rtl:flex-row-reverse gap-1">
                             <span class="font-bold">{{ __('front/homePage.EGP') }}</span>
                             <span class="font-bold text-2xl"
                                 dir="ltr">{{ number_format(explode('.', abs($order_data['difference']))[0], 0, '.', '\'') }}</span>
@@ -388,12 +393,11 @@
         <div>
             {{-- Buttons :: Start --}}
             <div class="p-2 flex justify-around items-center gap-2">
-
                 @if ($order_data['products_total_quantities'] == 0)
                     <form method="POST"
                         action="{{ route('front.orders.cancel', [
                             'order_id' => $order_data['order_id'],
-                            'new_order_id' => $order_data['new_order_id'],
+                            'temp_order_id' => $order_data['temp_order_id'],
                         ]) }}"
                         class="m-0">
                         @csrf
@@ -403,9 +407,9 @@
                             {{ __('front/homePage.Cancel Order') }}
                         </button>
                     </form>
-                @elseif ($order_data['payment_method'] == 1)
+                @elseif (is_null($order_data['main_payment_method']) || $order_data['main_payment_method'] == 1)
                     <form
-                        action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
+                        action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['temp_order_id']]) }}"
                         method="POST" class="m-0">
                         @csrf
                         @method('PUT')
@@ -414,16 +418,16 @@
                             {{ __('front/homePage.Save Edits') }}
                         </button>
                     </form>
-                @elseif($order_data['payment_method'] == 2 ||
-                    $order_data['payment_method'] == 3 ||
-                    $order_data['payment_method'] == 4)
+                @elseif($order_data['main_payment_method'] == 2 ||
+                    $order_data['main_payment_method'] == 3 ||
+                    $order_data['main_payment_method'] == 4)
                     @if ($order_data['difference'] < 0)
                         <button type="button" data-modal-toggle="card-confirm" class="btn bg-successDark font-bold">
                             {{ __('front/homePage.Save Edits and Get Difference') }}
                         </button>
                     @elseif ($order_data['difference'] == 0)
                         <form
-                            action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
+                            action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['temp_order_id']]) }}"
                             method="POST" class="m-0">
                             @csrf
                             @method('PUT')
@@ -434,7 +438,7 @@
                         </form>
                     @elseif ($order_data['difference'] > 0)
                         <form
-                            action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
+                            action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['temp_order_id']]) }}"
                             method="POST" class="m-0">
                             @csrf
                             @method('PUT')
@@ -488,7 +492,7 @@
                 <!-- Modal footer -->
                 <div class="flex items-center justify-around p-2 space-x-2 rounded-b border-t border-gray-200">
                     <form
-                        action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
+                        action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['temp_order_id']]) }}"
                         method="POST" class="m-0">
                         @csrf
                         @method('PUT')
@@ -498,9 +502,9 @@
                         </button>
                     </form>
 
-                    @if ($order_data['payment_method'] == 4)
+                    @if ($order_data['main_payment_method'] == 4)
                         <form
-                            action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
+                            action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['temp_order_id']]) }}"
                             method="POST" class="m-0">
                             @csrf
                             @method('PUT')
@@ -511,7 +515,7 @@
                         </form>
                     @else
                         <form
-                            action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['new_order_id']]) }}"
+                            action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['temp_order_id']]) }}"
                             method="POST" class="m-0">
                             @csrf
                             @method('PUT')
@@ -536,4 +540,3 @@
 @endsection
 
 {{-- Extra Scripts --}}
-

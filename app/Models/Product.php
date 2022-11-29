@@ -141,7 +141,9 @@ class Product extends Model
     public function orders()
     {
         return $this->morphToMany(Order::class,'orderable')->withPivot(
+            'order_id',
             'quantity',
+            'original_price',
             'price',
             'points',
             'coupon_discount',
@@ -355,6 +357,7 @@ class Product extends Model
                 'slug',
                 'quantity',
                 'weight',
+                'original_price',
                 'base_price',
                 'final_price',
                 'points',
@@ -408,6 +411,7 @@ class Product extends Model
                 'slug',
                 'quantity',
                 'weight',
+                'original_price',
                 'base_price',
                 'final_price',
                 'points',
