@@ -126,7 +126,7 @@ class Order extends Model
 
     public function getPaymentMethodsAttribute()
     {
-        return $this->transactions->whereIn('payment_status',  [1,2])->pluck('payment_method');
+        return $this->transactions->whereIn('payment_status',  [1, 2])->pluck('payment_method');
     }
 
     public function getUnpaidPaymentMethodAttribute()
@@ -134,4 +134,8 @@ class Order extends Model
         return $this->transactions->where('payment_status', 1)->count() ? $this->transactions->where('payment_status', 1)->first()->payment_method : null;
     }
 
+    public function getMainPaymentMethodAttribute()
+    {
+        return $this->transactions()->whereIn('payment_method', [1, 2, 3, 4])->count() ? $this->transactions()->whereIn('payment_method', [1, 2, 3, 4])->first()->payment_method : null;
+    }
 }

@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Http\Controllers\Controller;
+use ErrorException;
 use App\Models\Offer;
 use App\Models\Order;
-use App\Models\Product;
 use App\Models\Transaction;
-use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 class OrderController extends Controller
 {
@@ -18,7 +18,6 @@ class OrderController extends Controller
     ##################### Orders List :: Start #####################
     public function index()
     {
-        // dd(Order::with('products','collections')->get());
         $orders = Order::with([
             'products' => function ($query) {
                 $query->with([
@@ -401,6 +400,7 @@ class OrderController extends Controller
                 'total' => $total_order,
             ]);
 
+            // Should Pay
             if ($difference > 0) {
                 // Remove old transactions
                 $temp_order->transactions()->delete();
@@ -442,17 +442,20 @@ class OrderController extends Controller
                         "source_data_sub_type" => auth()->user()->f_name . " " . auth()->user()->l_name
                     ]),
                 ]);
-            } elseif ($difference < 0) {
+            }
+            // Should Get
+            elseif ($difference < 0) {
                 // Remove old transactions
                 $temp_order->transactions()->delete();
 
+                // todo
                 // Get old transaction done using user's Card or Vodafone Cash
                 $old_order_used_other_transaction = $order->transactions
                     ->whereNotIn('payment_method', [10, 11])
-                    ->where('payment_status', 2)
-                    ->first();
-                $old_order_used_other = $old_order_used_other_transaction ? $old_order_used_other_transaction->payment_amount : 0.00;
-                $old_order_used_other_transaction_payment_details = $old_order_used_other_transaction ? json_decode($old_order_used_other_transaction->payment_details) : null;
+                    ->where('payment_status', 2);
+                // ->first();
+                $old_order_used_other = $old_order_used_other_transaction ? $old_order_used_other_transaction->sum('payment_amount') : 0.00;
+                // $old_order_used_other_transaction_payment_details = $old_order_used_other_transaction ? json_decode($old_order_used_other_transaction->payment_details) : null;
 
                 // Get old transaction done using user's balance
                 $old_order_used_balance_transaction = $order->transactions
@@ -472,24 +475,24 @@ class OrderController extends Controller
                 // Get old transaction done using user's points + balance
                 $old_order_paid = $old_order_used_other + $old_order_used_balance + $old_order_used_points_egp;
 
-                $returned__other_balance_points_egp = $old_order_paid > $total_order ? $old_order_paid - $total_order : 0.00;
+                $returned_other_balance_points_egp = $old_order_paid > $total_order ? $old_order_paid - $total_order : 0.00;
 
-                if ($returned__other_balance_points_egp) {
+                if ($returned_other_balance_points_egp) {
                     // calculate the other payment methods to be returned
-                    $returned_other = $returned__other_balance_points_egp >= $old_order_used_other ? $old_order_used_other : $returned__other_balance_points_egp;
+                    $returned_other = $returned_other_balance_points_egp >= $old_order_used_other ? $old_order_used_other : $returned_other_balance_points_egp;
 
-                    $returned__other_balance_points_egp -= $returned_other;
+                    $returned_other_balance_points_egp -= $returned_other;
 
                     // calculate the points to be returned
-                    $returned_points_egp = $returned__other_balance_points_egp >= $old_order_used_points_egp ? $old_order_used_points_egp : $returned__other_balance_points_egp;
+                    $returned_points_egp = $returned_other_balance_points_egp >= $old_order_used_points_egp ? $old_order_used_points_egp : $returned_other_balance_points_egp;
                     $returned_points = $returned_points_egp / config('constants.constants.POINT_RATE');
 
-                    $returned__other_balance_points_egp -= $returned_points_egp;
+                    $returned_other_balance_points_egp -= $returned_points_egp;
 
                     // calculate the balance to be returned
-                    $returned_balance = $returned__other_balance_points_egp >= $old_order_used_balance ? $old_order_used_balance : $returned__other_balance_points_egp;
+                    $returned_balance = $returned_other_balance_points_egp >= $old_order_used_balance ? $old_order_used_balance : $returned_other_balance_points_egp;
 
-                    $returned__other_balance_points_egp -= $returned_balance;
+                    $returned_other_balance_points_egp -= $returned_balance;
                 } else {
                     $returned_other = 0.00;
                     $returned_balance = 0.00;
@@ -503,24 +506,54 @@ class OrderController extends Controller
                 $remaining_points = $old_order_used_points - $returned_points;
                 $remaining_points_egp = $old_order_used_points_egp - $returned_points_egp;
 
-                if ($returned_other > 0) {
-                    $temp_order->transactions()->create([
-                        'payment_id' => $payment->id,
-                        'order_id' => $temp_order->id,
-                        'old_order_id' => $order->id,
-                        'user_id' => $temp_order->user_id,
-                        'payment_amount' => $returned_other,
-                        'payment_method' => $old_order_used_other_transaction->payment_method,
-                        'payment_status' => 4,
-                        'paymob_order_id' => $old_order_used_other_transaction->paymob_order_id,
-                        'payment_details' => json_encode([
-                            "amount_cents" => number_format($returned_other * 100, 0, '', ''),
-                            "points" => 0,
-                            "transaction_id" => $old_order_used_other_transaction_payment_details->transaction_id,
-                            "source_data_sub_type" => $old_order_used_other_transaction_payment_details->source_data_sub_type
-                        ]),
-                    ]);
+                foreach ($old_order_used_other_transaction as $temp_transaction) {
+                    $temp_transaction_payment_details = json_decode($temp_transaction->payment_details);
+                    $refund_amount = $returned_other > 0 ? ($returned_other <= $temp_transaction->payment_amount ? $returned_other : $temp_transaction->payment_amount) : 0;
+                    $payment_amount = $returned_other <= 0 || $returned_other <= $temp_transaction->payment_amount ? $temp_transaction->payment_amount - $returned_other : 0.00;
+
+                    // Transactions to be Refunded 
+                    if ($refund_amount > 0) {
+                        $temp_order->transactions()->create([
+                            'payment_id' => $payment->id,
+                            'order_id' => $temp_order->id,
+                            'old_order_id' => $order->id,
+                            'user_id' => $temp_order->user_id,
+                            'payment_amount' => $refund_amount,
+                            'payment_method' => $temp_transaction->payment_method,
+                            'payment_status' => 4,
+                            'paymob_order_id' => $temp_transaction->paymob_order_id,
+                            'payment_details' => json_encode([
+                                "amount_cents" => number_format($refund_amount * 100, 0, '', ''),
+                                "points" => 0,
+                                "transaction_id" => $temp_transaction_payment_details->transaction_id,
+                                "source_data_sub_type" => $temp_transaction_payment_details->source_data_sub_type
+                            ]),
+                        ]);
+
+                        $returned_other -= $refund_amount;
+                    }
+
+                    // Remaining Transactions
+                    if ($payment_amount > 0) {
+                        $temp_order->transactions()->create([
+                            'payment_id' => $payment->id,
+                            'order_id' => $temp_order->id,
+                            'old_order_id' => $order->id,
+                            'user_id' => $temp_order->user_id,
+                            'payment_amount' => $payment_amount,
+                            'payment_method' => $temp_transaction->payment_method,
+                            'payment_status' => 2,
+                            'paymob_order_id' => $temp_transaction->paymob_order_id,
+                            'payment_details' => json_encode([
+                                "amount_cents" => number_format($payment_amount * 100, 0, '', ''),
+                                "points" => 0,
+                                "transaction_id" => $temp_transaction_payment_details->transaction_id,
+                                "source_data_sub_type" => $temp_transaction_payment_details->source_data_sub_type
+                            ]),
+                        ]);
+                    }
                 }
+
 
                 if ($returned_balance > 0) {
                     $temp_order->transactions()->create([
@@ -554,24 +587,6 @@ class OrderController extends Controller
                             "points" => $returned_points,
                             "transaction_id" => null,
                             "source_data_sub_type" => auth()->user()->f_name . " " . auth()->user()->l_name
-                        ]),
-                    ]);
-                }
-
-                if ($remaining_other > 0) {
-                    $temp_order->transactions()->create([
-                        'payment_id' => $payment->id,
-                        'order_id' => $temp_order->id,
-                        'old_order_id' => $order->id,
-                        'user_id' => $temp_order->user_id,
-                        'payment_method' => $old_order_used_other_transaction->payment_method,
-                        'payment_status' => 2,
-                        'paymob_order_id' => $old_order_used_other_transaction->paymob_order_id,
-                        'payment_details' => json_encode([
-                            "amount_cents" => number_format($returned_other * 100, 0, '', ''),
-                            "points" => 0,
-                            "transaction_id" => $old_order_used_other_transaction_payment_details->transaction_id,
-                            "source_data_sub_type" => $old_order_used_other_transaction_payment_details->source_data_sub_type
                         ]),
                     ]);
                 }
@@ -617,7 +632,7 @@ class OrderController extends Controller
 
                 // Extract old order transactions
                 $transactions = [];
-                foreach ($order->transactions as $transaction) {
+                foreach ($order->transactions->whereNotIn('payment_status',[4,5,6]) as $transaction) {
                     $transactions[] = [
                         'payment_id' => $payment->id,
                         'order_id' => $temp_order->id,
@@ -734,14 +749,8 @@ class OrderController extends Controller
         $temp_order = Order::with(['products', 'collections', 'payment', 'transactions', 'points'])->findOrFail($temp_order_id);
         $pended_balance_refund = $temp_order->transactions()->where('payment_method', 10)->where('payment_status', 4)->sum('payment_amount') ?? 0;
         $pended_points_refund = $temp_order->transactions()->where('payment_method', 11)->where('payment_status', 4)->sum('payment_details->points') ?? 0;
-
-        // Old Products Quantities
-        $returned_products = [];
-        foreach ($old_order->products as $product) {
-            $returned_products[$product->id] = [
-                'quantity' => $product->pivot->quantity,
-            ];
-        }
+        $should_get = $temp_order->transactions()->where('payment_status', 4)->count() ? true : false;
+        $should_pay = $temp_order->transactions()->where('payment_status', 1)->count() ? true : false;
 
         // New Products Data
         $new_products = [];
@@ -756,14 +765,6 @@ class OrderController extends Controller
                     'coupon_points' => $product->pivot->coupon_points,
                 ];
             }
-        }
-
-        // Old Collections Quantities
-        $returned_collections = [];
-        foreach ($old_order->collections as $collection) {
-            $returned_collections[$collection->id] = [
-                'quantity' => $collection->pivot->quantity,
-            ];
         }
 
         // New Collections Data
@@ -781,8 +782,6 @@ class OrderController extends Controller
             }
         }
 
-        $temp_order->collections()->attach($old_order->collections);
-
         DB::beginTransaction();
 
         try {
@@ -790,7 +789,7 @@ class OrderController extends Controller
             $old_order->points()->where('status', 0)->delete();
 
             // Cash On Delivery
-            if (is_null($old_order->unpaid_payment_method) || $old_order->unpaid_payment_method == 1) {
+            if (is_null($old_order->mainPaymentMethod) || $old_order->mainPaymentMethod == 1) {
                 if (editBostaOrder($temp_order, $old_order)) {
                     // Update Order Data
                     $old_order->update([
@@ -809,7 +808,7 @@ class OrderController extends Controller
                     $old_order->statuses()->attach([305, 306]);
 
                     // Update Transactions
-                    $old_order->transactions()->delete();
+                    $old_order->transactions()->whereNotIn('payment_status', [4, 5, 6])->delete();
                     $temp_order->transactions()->update([
                         'payment_id' => $temp_order->payment->id,
                         'order_id' => $old_order->id,
@@ -891,610 +890,853 @@ class OrderController extends Controller
                         ]);
                     }
 
-
+                    // Delete Temporary Order
                     $temp_order->forceDelete();
                 } else {
+                    DB::rollback();
+
                     Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
                     return redirect()->route('front.orders.index');
                 }
             }
 
             // Card or installment
-            elseif ($old_order->unpaid_payment_method == 2 || $old_order->unpaid_payment_method == 3) {
-                if ($temp_order->should_get > 0 && $request->type == 'wallet') {
-                    if (editBostaOrder($temp_order, $old_order_id)) {
+            elseif ($old_order->mainPaymentMethod == 2 || $old_order->mainPaymentMethod == 3) {
+                if ($should_get && $request->type == 'wallet') {
+                    $pended_card_refund = $temp_order->transactions()->whereIn('payment_method', [2, 3])->where('payment_status', 4);
+                    $pended_card_refund_amount = $pended_card_refund->sum('payment_amount') ?? 0;
+                    $pended_card_refund_count = $pended_card_refund->count() ? true : false;
 
-                        try {
-                            $old_order->update([
-                                'status_id' => 12,
-                                'num_of_items' => $temp_order->num_of_items,
-                                'coupon_order_discount' => $temp_order->coupon_order_discount,
-                                'coupon_order_points' => $temp_order->coupon_order_points,
-                                'coupon_products_discount' => $temp_order->coupon_products_discount,
-                                'coupon_products_points' => $temp_order->coupon_products_points,
-                                'subtotal_base' => $temp_order->subtotal_base,
-                                'subtotal_final' => $temp_order->subtotal_final,
-                                'total' => $temp_order->total,
-                                'delivery_fees' => $temp_order->delivery_fees,
-                                'should_pay' => $temp_order->should_pay,
-                                'should_get' => $temp_order->should_get,
-                                'used_points' => $temp_order->used_points,
-                                'used_balance' => $temp_order->used_balance,
-                                'gift_points' => $temp_order->gift_points,
-                                'total_weight' => $temp_order->total_weight,
-                            ]);
+                    if (editBostaOrder($temp_order, $old_order)) {
 
-                            $old_order->statuses()->attach([16, 12]);
-
-                            $payment = [
-                                'order_id' => $old_order->id,
-                                'user_id' => $old_order->user_id,
-                                'payment_amount' => -1 * $temp_order->should_get,
-                                'payment_method' => 10,
-                                'payment_status' => 4,
-                                'payment_details' => null,
-                            ];
-
-                            $old_order->payments()->create($payment);
-
-                            $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
-                                $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
-                                $product->save();
-                            });
-
-                            $old_order->products()->sync($order_products);
-
-                            $old_order->user()->update([
-                                'balance' => $old_order->user->balance + $returned_balance + $temp_order->should_get,
-                                'points' => $old_order->user->points + $returned_points + $returned_gift_points,
-                            ]);
-
-                            $temp_order->forceDelete();
-
-                            DB::commit();
-
-                            Session::flash('success', __('front/homePage.Order edit request sent successfully'));
-                            return redirect()->route('front.orders.index');
-                        } catch (\Throwable $th) {
-                            throw $th;
-                            DB::rollBack();
-
-                            Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
-                            return redirect()->route('front.orders.index');
-                        }
-                    } else {
-                        Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
-                        return redirect()->route('front.orders.index');
-                    }
-                } elseif ($temp_order->should_get > 0 && $request->type == 'card') {
-                    $old_payment = $old_order->payments()
-                        ->where('payment_amount', '>=', $temp_order->should_get)
-                        ->where('payment_status', 2)
-                        ->first();
-
-                    while (is_null($old_payment)) {
-                        $old_small_payment = $old_order
-                            ->payments()
-                            ->where('payment_status', 2)
-                            ->where('payment_amount', '>', 0)
-                            ->first();
-
-                        $payment = [
-                            'order_id' => $temp_order->id,
-                            'user_id' => $temp_order->user_id,
-                            'payment_amount' => -1 * $old_small_payment->payment_amount,
-                            'payment_method' => $old_order->unpaid_payment_method,
-                            'payment_status' => 5,
-                            'payment_details' => $old_small_payment->payment_details,
-                            'old_order_id' => $old_order->id
-                        ];
-
-                        $new_payment = $temp_order->payments()->updateOrCreate([
-                            'order_id' => $payment['order_id'],
-                            'payment_status' => 5,
-                        ], $payment);
-
-                        if (refundRequestPaymob(json_decode($new_payment->payment_details)->transaction_id, abs($new_payment->payment_amount))) {
-                            $temp_order->payments()->first()->update([
-                                'order_id' => $old_order->id,
-                                'payment_status' => 4,
-                            ]);
-
-                            $old_small_payment->update([
-                                'payment_amount' => 0,
-                            ]);
-
-                            $temp_order->update([
-                                'should_get' => $temp_order->should_get - abs($new_payment->payment_amount)
-                            ]);
-                        }
-
-                        $old_payment = $old_order->payments()
-                            ->where('payment_amount', '>=', $temp_order->should_get)
-                            ->where('payment_status', 2)
-                            ->first();
-                    }
-
-                    $payment = [
-                        'order_id' => $temp_order->id,
-                        'user_id' => $temp_order->user_id,
-                        'payment_amount' => -1 * $temp_order->should_get,
-                        'payment_method' => $old_order->unpaid_payment_method,
-                        'payment_status' => 1,
-                        'payment_details' => $old_payment->payment_details,
-                        'old_order_id' => $old_order->id
-                    ];
-
-                    $temp_order->payments()->updateOrCreate([
-                        'order_id' => $payment['order_id'],
-                        'payment_status' => 1,
-                    ], $payment);
-
-                    if (refundRequestPaymob(json_decode($payment['payment_details'])->transaction_id, abs($payment['payment_amount'])) && editBostaOrder($temp_order, $old_order_id)) {
-                        try {
-                            $old_order->update([
-                                'status_id' => 12,
-                                'num_of_items' => $temp_order->num_of_items,
-                                'coupon_order_discount' => $temp_order->coupon_order_discount,
-                                'coupon_order_points' => $temp_order->coupon_order_points,
-                                'coupon_products_discount' => $temp_order->coupon_products_discount,
-                                'coupon_products_points' => $temp_order->coupon_products_points,
-                                'subtotal_base' => $temp_order->subtotal_base,
-                                'subtotal_final' => $temp_order->subtotal_final,
-                                'total' => $temp_order->total,
-                                'delivery_fees' => $temp_order->delivery_fees,
-                                'should_pay' => 0,
-                                'should_get' => 0,
-                                'used_points' => $temp_order->used_points,
-                                'used_balance' => $temp_order->used_balance,
-                                'gift_points' => $temp_order->gift_points,
-                                'total_weight' => $temp_order->total_weight,
-                            ]);
-
-                            $old_order->statuses()->attach([16, 12]);
-
-                            $temp_order->payments()->first()->update([
-                                'order_id' => $old_order->id,
-                                'payment_status' => 4,
-                            ]);
-
-                            $old_payment->update([
-                                'payment_amount' => $old_payment->payment_amount - $temp_order->should_get,
-                            ]);
-
-                            $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
-                                $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
-                                $product->save();
-                            });
-
-                            $old_order->products()->sync($order_products);
-
-                            $old_order->user()->update([
-                                'balance' => $old_order->user->balance + $returned_balance,
-                                'points' => $old_order->user->points + $returned_points + $returned_gift_points,
-                            ]);
-
-                            $temp_order->forceDelete();
-
-                            DB::commit();
-
-                            Session::flash('success', __('front/homePage.Order edit request sent successfully'));
-                            return redirect()->route('front.orders.index');
-                        } catch (\Throwable $th) {
-                            DB::rollBack();
-
-                            $temp_order->payments()->first()->update([
-                                'payment_status' => 3,
-                            ]);
-
-                            Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
-                            return redirect()->route('front.orders.index');
-                        }
-                    } else {
-                        $temp_order->payments()->first()->update([
-                            'payment_status' => 3,
+                        // Update Order Data
+                        $old_order->update([
+                            'status_id' => 306,
+                            'num_of_items' => $temp_order->num_of_items,
+                            'items_points' => $temp_order->items_points,
+                            'offers_items_points' => $temp_order->offers_items_points,
+                            'offers_order_points' => $temp_order->offers_order_points,
+                            'coupon_items_points' => $temp_order->coupon_items_points,
+                            'coupon_order_points' => $temp_order->coupon_order_points,
+                            'gift_points' => $temp_order->gift_points,
+                            'total_weight' => $temp_order->total_weight,
                         ]);
 
-                        Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
-                        return redirect()->route('front.orders.index');
-                    }
-                } elseif ($temp_order->should_pay == 0 && $temp_order->should_get == 0 && $request->type == 'equal') {
-                    if (editBostaOrder($temp_order, $old_order_id)) {
-                        try {
-                            $old_order->update([
-                                'status_id' => 12,
-                                'num_of_items' => $temp_order->num_of_items,
-                                'coupon_order_discount' => $temp_order->coupon_order_discount,
-                                'coupon_order_points' => $temp_order->coupon_order_points,
-                                'coupon_products_discount' => $temp_order->coupon_products_discount,
-                                'coupon_products_points' => $temp_order->coupon_products_points,
-                                'subtotal_base' => $temp_order->subtotal_base,
-                                'subtotal_final' => $temp_order->subtotal_final,
-                                'total' => $temp_order->total,
-                                'delivery_fees' => $temp_order->delivery_fees,
-                                'should_pay' => $temp_order->should_pay,
-                                'should_get' => $temp_order->should_get,
-                                'used_points' => $temp_order->used_points,
-                                'used_balance' => $temp_order->used_balance,
-                                'gift_points' => $temp_order->gift_points,
-                                'total_weight' => $temp_order->total_weight,
-                            ]);
+                        // Update order status
+                        $old_order->statuses()->attach([305, 306]);
 
-                            $old_order->statuses()->attach([16, 12]);
+                        // Update Transactions
+                        $old_order->transactions()->where('payment_status', 2)->delete();
+                        $old_order->transactions()->update([
+                            'payment_id' => $temp_order->payment->id,
+                        ]);
+                        $temp_order->transactions()->update([
+                            'payment_id' => $temp_order->payment->id,
+                            'order_id' => $old_order->id,
+                            'old_order_id' => Null,
+                        ]);
 
-                            $order_products = [];
-                            $returned_products = [];
+                        // Update Payment
+                        $old_order->payment()->delete();
+                        $temp_order->payment()->update([
+                            'order_id' => $old_order->id,
+                        ]);
 
-                            foreach ($temp_order->products as $product) {
-                                $order_products[$product->id] = [
-                                    'quantity' => $product->pivot->quantity,
-                                ];
-                            }
+                        // Return Old Products
+                        // Direct Products
+                        $old_order->products()->each(function ($product) {
+                            $product->quantity += $product->pivot->quantity;
+                            $product->save();
+                        });
+                        $old_order->products()->detach();
 
-                            foreach ($old_order->products as $product) {
-                                $returned_products[$product->id] = [
-                                    'quantity' => $product->pivot->quantity,
-                                ];
-                            }
-
-                            $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
-                                $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
+                        // Through Collections
+                        $old_order->collections()->each(function ($collection) {
+                            $collection->products()->each(function ($product) use (&$collection) {
+                                $product->quantity += $collection->pivot->quantity * $product->pivot->quantity;
                                 $product->save();
                             });
+                        });
+                        $old_order->collections()->detach();
 
-                            $old_order->products()->sync($order_products);
+                        // Subtract New Products
+                        // Direct Products
+                        $temp_order->products()->each(function ($product) use ($temp_order) {
+                            $product->quantity -= $product->pivot->quantity;
+                            $product->save();
+                        });
+                        $old_order->products()->attach($new_products);
 
+                        // Through Collections
+                        $temp_order->collections()->each(function ($collection) use ($temp_order) {
+                            $collection->products()->each(function ($product) use (&$collection) {
+                                $product->quantity -= ($collection->pivot->quantity * $product->pivot->quantity);
+                                $product->save();
+                            });
+                        });
+                        $old_order->collections()->attach($new_collections);
+
+                        // Return Balance
+                        if ($pended_balance_refund) {
                             $old_order->user()->update([
-                                'balance' => $old_order->user->balance + $returned_balance,
-                                'points' => $old_order->user->points + $returned_points + $returned_gift_points,
+                                'balance' => $old_order->user->balance + $pended_balance_refund,
                             ]);
 
-                            $temp_order->forceDelete();
-
-                            DB::commit();
-
-                            Session::flash('success', __('front/homePage.Order edit request sent successfully'));
-                            return redirect()->route('front.orders.index');
-                        } catch (\Throwable $th) {
-                            DB::rollBack();
-
-                            Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
-                            return redirect()->route('front.orders.index');
+                            $old_order->transactions()->where('payment_method', 10)->where('payment_status', 4)->update([
+                                'payment_status' => 5
+                            ]);
                         }
+
+                        // Return Points
+                        if ($pended_points_refund) {
+                            $old_order->user->points()->create([
+                                'order_id' => $old_order->id,
+                                'value' => $pended_points_refund,
+                                'status' => 1
+                            ]);
+
+                            $old_order->transactions()->where('payment_method', 11)->where('payment_status', 4)->update([
+                                'payment_status' => 5
+                            ]);
+                        }
+
+                        // Add gift points
+                        // Add Points to the user if present
+                        if ($temp_order->gift_points) {
+                            $old_order->user->points()->create([
+                                'order_id' => $old_order->id,
+                                'value' => $temp_order->gift_points,
+                                'status' => 0
+                            ]);
+                        }
+
+                        // Add Paid Amount to the User's Balance
+                        if ($pended_card_refund_count) {
+                            $old_order->user()->update([
+                                'balance' => $old_order->user->balance + $pended_card_refund_amount,
+                            ]);
+
+                            $old_order->transactions()->whereIn('payment_method', [2, 3])->where('payment_status', 4)->update([
+                                'payment_method' => 10,
+                                'payment_status' => 5,
+                            ]);
+                        }
+
+                        // Delete Temporary Order
+                        $temp_order->forceDelete();
                     } else {
+                        DB::rollback();
+
                         Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
                         return redirect()->route('front.orders.index');
                     }
-                } elseif ($temp_order->should_pay > 0 && $request->type == 'pay') {
-                    $payment = [
-                        'order_id' => $temp_order->id,
-                        'old_order_id' => $old_order->id,
-                        'user_id' => $temp_order->user_id,
-                        'payment_amount' => $temp_order->should_pay,
-                        'payment_method' => $old_order->unpaid_payment_method,
-                        'payment_status' => 1,
-                    ];
+                } elseif ($should_get && $request->type == 'card') {
+                    $pended_card_refund = $temp_order->transactions()->whereIn('payment_method', [2, 3])->where('payment_status', 4);
+                    $pended_card_refund_count = $pended_card_refund->count() ? true : false;
 
-                    $payment = $temp_order->payments()->updateOrCreate([
-                        'order_id' => $payment['order_id'],
-                        'payment_status' => 1,
-                    ], $payment);
+                    if ($pended_card_refund_count) {
+                        $pended_card_refund->each(function ($transaction) {
+                            if (refundRequestPaymob(json_decode($transaction->payment_details)->transaction_id, json_decode($transaction->payment_details)->amount_cents)) {
+                                $transaction->update([
+                                    'payment_status' => 5,
+                                ]);
+                            } else {
+                                throw new ErrorException('Refund Failed');
+                            };
+                        });
+                    }
 
-                    DB::commit();
+                    if (editBostaOrder($temp_order, $old_order)) {
+                        // Update Order Data
+                        $old_order->update([
+                            'status_id' => 306,
+                            'num_of_items' => $temp_order->num_of_items,
+                            'items_points' => $temp_order->items_points,
+                            'offers_items_points' => $temp_order->offers_items_points,
+                            'offers_order_points' => $temp_order->offers_order_points,
+                            'coupon_items_points' => $temp_order->coupon_items_points,
+                            'coupon_order_points' => $temp_order->coupon_order_points,
+                            'gift_points' => $temp_order->gift_points,
+                            'total_weight' => $temp_order->total_weight,
+                        ]);
 
-                    $payment_key = payByPaymob($payment);
+                        // Update order status
+                        $old_order->statuses()->attach([305, 306]);
 
-                    if ($payment_key) {
-                        return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($old_order->unpaid_payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
+                        // Update Transactions
+                        $old_order->transactions()->where('payment_status', 2)->delete();
+                        $old_order->transactions()->update([
+                            'payment_id' => $temp_order->payment->id,
+                        ]);
+                        $temp_order->transactions()->update([
+                            'payment_id' => $temp_order->payment->id,
+                            'order_id' => $old_order->id,
+                            'old_order_id' => Null,
+                        ]);
+
+                        // Update Payment
+                        $old_order->payment()->delete();
+                        $temp_order->payment()->update([
+                            'order_id' => $old_order->id,
+                        ]);
+
+                        // Return Old Products
+                        // Direct Products
+                        $old_order->products()->each(function ($product) {
+                            $product->quantity += $product->pivot->quantity;
+                            $product->save();
+                        });
+                        $old_order->products()->detach();
+
+                        // Through Collections
+                        $old_order->collections()->each(function ($collection) {
+                            $collection->products()->each(function ($product) use (&$collection) {
+                                $product->quantity += $collection->pivot->quantity * $product->pivot->quantity;
+                                $product->save();
+                            });
+                        });
+                        $old_order->collections()->detach();
+
+                        // Subtract New Products
+                        // Direct Products
+                        $temp_order->products()->each(function ($product) use ($temp_order) {
+                            $product->quantity -= $product->pivot->quantity;
+                            $product->save();
+                        });
+                        $old_order->products()->attach($new_products);
+
+                        // Through Collections
+                        $temp_order->collections()->each(function ($collection) use ($temp_order) {
+                            $collection->products()->each(function ($product) use (&$collection) {
+                                $product->quantity -= ($collection->pivot->quantity * $product->pivot->quantity);
+                                $product->save();
+                            });
+                        });
+                        $old_order->collections()->attach($new_collections);
+
+                        // Return Balance
+                        if ($pended_balance_refund) {
+                            $old_order->user()->update([
+                                'balance' => $old_order->user->balance + $pended_balance_refund,
+                            ]);
+
+                            $old_order->transactions()->where('payment_method', 10)->where('payment_status', 4)->update([
+                                'payment_status' => 5
+                            ]);
+                        }
+
+                        // Return Points
+                        if ($pended_points_refund) {
+                            $old_order->user->points()->create([
+                                'order_id' => $old_order->id,
+                                'value' => $pended_points_refund,
+                                'status' => 1
+                            ]);
+
+                            $old_order->transactions()->where('payment_method', 11)->where('payment_status', 4)->update([
+                                'payment_status' => 5
+                            ]);
+                        }
+
+                        // Add gift points
+                        // Add Points to the user if present
+                        if ($temp_order->gift_points) {
+                            $old_order->user->points()->create([
+                                'order_id' => $old_order->id,
+                                'value' => $temp_order->gift_points,
+                                'status' => 0
+                            ]);
+                        }
+
+
+                        // Delete Temporary Order
+                        $temp_order->forceDelete();
                     } else {
-                        return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
+                        DB::rollback();
+
+                        Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
+                        return redirect()->route('front.orders.index');
+                    }
+                } elseif (!$should_pay && !$should_get && $request->type == 'equal') {
+                    if (editBostaOrder($temp_order, $old_order)) {
+                        // Update Order Data
+                        $old_order->update([
+                            'status_id' => 306,
+                            'num_of_items' => $temp_order->num_of_items,
+                            'items_points' => $temp_order->items_points,
+                            'offers_items_points' => $temp_order->offers_items_points,
+                            'offers_order_points' => $temp_order->offers_order_points,
+                            'coupon_items_points' => $temp_order->coupon_items_points,
+                            'coupon_order_points' => $temp_order->coupon_order_points,
+                            'gift_points' => $temp_order->gift_points,
+                            'total_weight' => $temp_order->total_weight,
+                        ]);
+
+                        // Update order status
+                        $old_order->statuses()->attach([305, 306]);
+
+                        // Return Old Products
+                        // Direct Products
+                        $old_order->products()->each(function ($product) {
+                            $product->quantity += $product->pivot->quantity;
+                            $product->save();
+                        });
+                        $old_order->products()->detach();
+
+                        // Through Collections
+                        $old_order->collections()->each(function ($collection) {
+                            $collection->products()->each(function ($product) use (&$collection) {
+                                $product->quantity += $collection->pivot->quantity * $product->pivot->quantity;
+                                $product->save();
+                            });
+                        });
+                        $old_order->collections()->detach();
+
+                        // Subtract New Products
+                        // Direct Products
+                        $temp_order->products()->each(function ($product) use ($temp_order) {
+                            $product->quantity -= $product->pivot->quantity;
+                            $product->save();
+                        });
+                        $old_order->products()->attach($new_products);
+
+                        // Through Collections
+                        $temp_order->collections()->each(function ($collection) use ($temp_order) {
+                            $collection->products()->each(function ($product) use (&$collection) {
+                                $product->quantity -= ($collection->pivot->quantity * $product->pivot->quantity);
+                                $product->save();
+                            });
+                        });
+                        $old_order->collections()->attach($new_collections);
+
+                        // Add gift points
+                        // Add Points to the user if present
+                        if ($temp_order->gift_points) {
+                            $old_order->user->points()->create([
+                                'order_id' => $old_order->id,
+                                'value' => $temp_order->gift_points,
+                                'status' => 0
+                            ]);
+                        }
+
+                        // Delete Temporary Order
+                        $temp_order->forceDelete();
+                    } else {
+                        DB::rollback();
+
+                        Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
+                        return redirect()->route('front.orders.index');
+                    }
+                } elseif ($should_pay && $request->type == 'pay') {
+                    $pended_card_payment = $temp_order->transactions()->whereIn('payment_method', [2, 3])->where('payment_status', 1);
+                    $pended_card_payment_count = $pended_card_payment->count() ? true : false;
+
+                    if ($pended_card_payment_count) {
+                        $payment_key = payByPaymob($temp_order, $pended_card_payment->first());
+
+                        if ($payment_key) {
+                            DB::commit();
+
+                            return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($old_order->unpaid_payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
+                        } else {
+                            DB::rollback();
+
+                            return redirect()->route('front.orders')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
+                        }
                     }
                 }
             }
 
             // Vodafone Cash
-            // elseif ($old_order->unpaid_payment_method == 4) {
-            //     // Old Order Paid
-            //     if ($old_order->should_pay == 0) {
-            //         // Pay the Difference
-            //         if ($temp_order->should_pay > 0 && $request->type == 'pay') {
-            //             $payment = [
-            //                 'order_id' => $old_order->id,
-            //                 'old_order_id' => null,
-            //                 'user_id' => $temp_order->user_id,
-            //                 'payment_amount' => $temp_order->should_pay,
-            //                 'payment_method' => 4,
-            //                 'payment_status' => 1,
-            //             ];
+            elseif ($old_order->mainPaymentMethod == 4) {
+                if ($should_get && $request->type == 'wallet') {
+                    $pended_vodafone_refund = $temp_order->transactions()->where('payment_method', 4)->where('payment_status', 4);
+                    $pended_vodafone_refund_amount = $pended_vodafone_refund->sum('payment_amount') ?? 0;
+                    $pended_vodafone_refund_count = $pended_vodafone_refund->count() ? true : false;
 
-            //             $old_order->payments()->updateOrCreate([
-            //                 'order_id' => $payment['order_id'],
-            //                 'payment_status' => 1,
-            //             ], $payment);
+                    if (
+                        ($old_order->order_delivery_id && editBostaOrder($temp_order, $old_order))
+                        ||
+                        (is_null($old_order->order_delivery_id) && createBostaOrder($temp_order, 4)['status'])
+                    ) {
 
-            //             $old_order->update([
-            //                 'status_id' => 2,
-            //                 'num_of_items' => $temp_order->num_of_items,
-            //                 'coupon_order_discount' => $temp_order->coupon_order_discount,
-            //                 'coupon_order_points' => $temp_order->coupon_order_points,
-            //                 'coupon_products_discount' => $temp_order->coupon_products_discount,
-            //                 'coupon_products_points' => $temp_order->coupon_products_points,
-            //                 'subtotal_base' => $temp_order->subtotal_base,
-            //                 'subtotal_final' => $temp_order->subtotal_final,
-            //                 'total' => $temp_order->total,
-            //                 'delivery_fees' => $temp_order->delivery_fees,
-            //                 'should_pay' => $temp_order->should_pay,
-            //                 'should_get' => $temp_order->should_get,
-            //                 'used_points' => $temp_order->used_points,
-            //                 'used_balance' => $temp_order->used_balance,
-            //                 'gift_points' => $temp_order->gift_points,
-            //                 'total_weight' => $temp_order->total_weight,
-            //             ]);
+                        // Update Order Data
+                        $old_order->update([
+                            'status_id' => 306,
+                            'num_of_items' => $temp_order->num_of_items,
+                            'items_points' => $temp_order->items_points,
+                            'offers_items_points' => $temp_order->offers_items_points,
+                            'offers_order_points' => $temp_order->offers_order_points,
+                            'coupon_items_points' => $temp_order->coupon_items_points,
+                            'coupon_order_points' => $temp_order->coupon_order_points,
+                            'gift_points' => $temp_order->gift_points,
+                            'total_weight' => $temp_order->total_weight,
+                            'order_delivery_id' => $temp_order->order_delivery_id,
+                            'tracking_number' => $temp_order->tracking_number,
+                        ]);
 
-            //             $old_order->statuses()->attach([16, 12, 2]);
+                        // Update order status
+                        $old_order->statuses()->attach([305, 306]);
 
-            //             $old_order->products()->sync($order_products);
+                        // Update Transactions
+                        $old_order->transactions()->whereNotIn('payment_status', [4, 5, 6])->delete();
+                        $old_order->transactions()->update([
+                            'payment_id' => $temp_order->payment->id,
+                        ]);
+                        $temp_order->transactions()->update([
+                            'payment_id' => $temp_order->payment->id,
+                            'order_id' => $old_order->id,
+                            'old_order_id' => Null,
+                        ]);
 
-            //             $old_order->user()->update([
-            //                 'balance' => $old_order->user->balance + $returned_balance + $temp_order->should_get,
-            //                 'points' => $old_order->user->points + $returned_points + $returned_gift_points,
-            //             ]);
+                        // Update Payment
+                        $old_order->payment()->delete();
+                        $temp_order->payment()->update([
+                            'order_id' => $old_order->id,
+                        ]);
 
-            //             // edit products database
-            //             $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
-            //                 $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
-            //                 $product->save();
-            //             });
+                        // Return Old Products
+                        // Direct Products
+                        $old_order->products()->each(function ($product) {
+                            $product->quantity += $product->pivot->quantity;
+                            $product->save();
+                        });
+                        $old_order->products()->detach();
 
-            //             $temp_order->forceDelete();
+                        // Through Collections
+                        $old_order->collections()->each(function ($collection) {
+                            $collection->products()->each(function ($product) use (&$collection) {
+                                $product->quantity += $collection->pivot->quantity * $product->pivot->quantity;
+                                $product->save();
+                            });
+                        });
+                        $old_order->collections()->detach();
 
-            //             DB::commit();
+                        // Subtract New Products
+                        // Direct Products
+                        $temp_order->products()->each(function ($product) {
+                            $product->quantity -= $product->pivot->quantity;
+                            $product->save();
+                        });
+                        $old_order->products()->attach($new_products);
 
-            //             return redirect()->route('front.orders.index')->with('success', __('front/homePage.Order edit request sent successfully'));
-            //         }
-            //         // Old Order Price Equal New Order Price
-            //         elseif ($temp_order->should_pay == 0.00 && $request->type == 'equal') {
-            //             if (editBostaOrder($temp_order, $old_order_id)) {
-            //                 try {
-            //                     $old_order->update([
-            //                         'status_id' => 12,
-            //                         'num_of_items' => $temp_order->num_of_items,
-            //                         'coupon_order_discount' => $temp_order->coupon_order_discount,
-            //                         'coupon_order_points' => $temp_order->coupon_order_points,
-            //                         'coupon_products_discount' => $temp_order->coupon_products_discount,
-            //                         'coupon_products_points' => $temp_order->coupon_products_points,
-            //                         'subtotal_base' => $temp_order->subtotal_base,
-            //                         'subtotal_final' => $temp_order->subtotal_final,
-            //                         'total' => $temp_order->total,
-            //                         'delivery_fees' => $temp_order->delivery_fees,
-            //                         'should_pay' => $temp_order->should_pay,
-            //                         'should_get' => $temp_order->should_get,
-            //                         'used_points' => $temp_order->used_points,
-            //                         'used_balance' => $temp_order->used_balance,
-            //                         'gift_points' => $temp_order->gift_points,
-            //                         'total_weight' => $temp_order->total_weight,
-            //                     ]);
+                        // Through Collections
+                        $temp_order->collections()->each(function ($collection) {
+                            $collection->products()->each(function ($product) use (&$collection) {
+                                $product->quantity -= ($collection->pivot->quantity * $product->pivot->quantity);
+                                $product->save();
+                            });
+                        });
+                        $old_order->collections()->attach($new_collections);
 
-            //                     $old_order->statuses()->attach([16, 12]);
+                        // Return Balance
+                        if ($pended_balance_refund) {
+                            $old_order->user()->update([
+                                'balance' => $old_order->user->balance + $pended_balance_refund,
+                            ]);
 
-            //                     $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
-            //                         $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
-            //                         $product->save();
-            //                     });
+                            $old_order->transactions()->where('payment_method', 10)->where('payment_status', 4)->update([
+                                'payment_status' => 5
+                            ]);
+                        }
 
-            //                     $old_order->products()->sync($order_products);
+                        // Return Points
+                        if ($pended_points_refund) {
+                            $old_order->user->points()->create([
+                                'order_id' => $old_order->id,
+                                'value' => $pended_points_refund,
+                                'status' => 1
+                            ]);
 
-            //                     $old_order->user()->update([
-            //                         'balance' => $old_order->user->balance + $returned_balance,
-            //                         'points' => $old_order->user->points + $returned_points + $returned_gift_points,
-            //                     ]);
+                            $old_order->transactions()->where('payment_method', 11)->where('payment_status', 4)->update([
+                                'payment_status' => 5
+                            ]);
+                        }
 
-            //                     // edit products database
-            //                     $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
-            //                         $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
-            //                         $product->save();
-            //                     });
+                        // Add gift points
+                        // Add Points to the user if present
+                        if ($temp_order->gift_points) {
+                            $old_order->user->points()->create([
+                                'order_id' => $old_order->id,
+                                'value' => $temp_order->gift_points,
+                                'status' => 0
+                            ]);
+                        }
 
-            //                     $temp_order->forceDelete();
+                        // Add Paid Amount to the User's Balance
+                        if ($pended_vodafone_refund_count) {
+                            $old_order->user()->update([
+                                'balance' => $old_order->user->balance + $pended_vodafone_refund_amount,
+                            ]);
 
-            //                     DB::commit();
+                            $old_order->transactions()->where('payment_method', 4)->where('payment_status', 4)->update([
+                                'payment_method' => 10,
+                                'payment_status' => 5,
+                            ]);
+                        }
 
-            //                     Session::flash('success', __('front/homePage.Order edit request sent successfully'));
-            //                     return redirect()->route('front.orders.index');
-            //                 } catch (\Throwable $th) {
-            //                     DB::rollBack();
+                        // Delete Temporary Order
+                        $temp_order->forceDelete();
+                    } else {
+                        DB::rollback();
 
-            //                     Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
-            //                     return redirect()->route('front.orders.index');
-            //                 }
-            //             } else {
-            //                 Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
-            //                 return redirect()->route('front.orders.index');
-            //             }
-            //         }
-            //         // Get the Difference
-            //         // To Vodafone Wallet
-            //         elseif ($temp_order->should_get > 0 && $request->type == 'vodafone') {
-            //             $payment = [
-            //                 'order_id' => $old_order->id,
-            //                 'old_order_id' => null,
-            //                 'user_id' => $temp_order->user_id,
-            //                 'payment_amount' => -1 * $temp_order->should_get,
-            //                 'payment_method' => 4,
-            //                 'payment_status' => 5,
-            //             ];
+                        Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
+                        return redirect()->route('front.orders.index');
+                    }
+                } elseif ($should_get && $request->type == 'vodafone') {
+                    $pended_vodafone_refund = $temp_order->transactions()->where('payment_method', 4)->where('payment_status', 4);
+                    $pended_vodafone_refund_amount = $pended_vodafone_refund->sum('payment_amount') ?? 0;
+                    $pended_vodafone_refund_count = $pended_vodafone_refund->count() ? true : false;
 
-            //             $payment = $old_order->payments()->updateOrCreate([
-            //                 'order_id' => $payment['order_id'],
-            //                 'payment_status' => 5,
-            //             ], $payment);
+                    if (
+                        ($old_order->order_delivery_id && editBostaOrder($temp_order, $old_order))
+                        ||
+                        (is_null($old_order->order_delivery_id) && createBostaOrder($temp_order, 4)['status'])
+                    ) {
 
-            //             $old_order->update([
-            //                 'status_id' => 14,
-            //                 'num_of_items' => $temp_order->num_of_items,
-            //                 'coupon_order_discount' => $temp_order->coupon_order_discount,
-            //                 'coupon_order_points' => $temp_order->coupon_order_points,
-            //                 'coupon_products_discount' => $temp_order->coupon_products_discount,
-            //                 'coupon_products_points' => $temp_order->coupon_products_points,
-            //                 'subtotal_base' => $temp_order->subtotal_base,
-            //                 'subtotal_final' => $temp_order->subtotal_final,
-            //                 'total' => $temp_order->total,
-            //                 'delivery_fees' => $temp_order->delivery_fees,
-            //                 'should_pay' => $temp_order->should_pay,
-            //                 'should_get' => $temp_order->should_get,
-            //                 'used_points' => $temp_order->used_points,
-            //                 'used_balance' => $temp_order->used_balance,
-            //                 'gift_points' => $temp_order->gift_points,
-            //                 'total_weight' => $temp_order->total_weight,
-            //             ]);
+                        // Update Order Data
+                        $old_order->update([
+                            'status_id' => 306,
+                            'num_of_items' => $temp_order->num_of_items,
+                            'items_points' => $temp_order->items_points,
+                            'offers_items_points' => $temp_order->offers_items_points,
+                            'offers_order_points' => $temp_order->offers_order_points,
+                            'coupon_items_points' => $temp_order->coupon_items_points,
+                            'coupon_order_points' => $temp_order->coupon_order_points,
+                            'gift_points' => $temp_order->gift_points,
+                            'total_weight' => $temp_order->total_weight,
+                            'order_delivery_id' => $temp_order->order_delivery_id,
+                            'tracking_number' => $temp_order->tracking_number,
+                        ]);
 
-            //             $old_order->statuses()->attach([11, 12, 14]);
+                        // Update order status
+                        $old_order->statuses()->attach([305, 306]);
 
-            //             $old_order->products()->sync($order_products);
+                        // Update Transactions
+                        $old_order->transactions()->whereNotIn('payment_status', [4, 5, 6])->delete();
+                        $old_order->transactions()->update([
+                            'payment_id' => $temp_order->payment->id,
+                        ]);
+                        $temp_order->transactions()->update([
+                            'payment_id' => $temp_order->payment->id,
+                            'order_id' => $old_order->id,
+                            'old_order_id' => Null,
+                        ]);
 
-            //             $old_order->user()->update([
-            //                 'balance' => $old_order->user->balance + $returned_balance + $temp_order->should_get,
-            //                 'points' => $old_order->user->points + $returned_points + $returned_gift_points,
-            //             ]);
+                        // Update Payment
+                        $old_order->payment()->delete();
+                        $temp_order->payment()->update([
+                            'order_id' => $old_order->id,
+                        ]);
 
-            //             // edit products database
-            //             $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
-            //                 $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
-            //                 $product->save();
-            //             });
+                        // Return Old Products
+                        // Direct Products
+                        $old_order->products()->each(function ($product) {
+                            $product->quantity += $product->pivot->quantity;
+                            $product->save();
+                        });
+                        $old_order->products()->detach();
 
-            //             $temp_order->forceDelete();
+                        // Through Collections
+                        $old_order->collections()->each(function ($collection) {
+                            $collection->products()->each(function ($product) use (&$collection) {
+                                $product->quantity += $collection->pivot->quantity * $product->pivot->quantity;
+                                $product->save();
+                            });
+                        });
+                        $old_order->collections()->detach();
 
-            //             DB::commit();
+                        // Subtract New Products
+                        // Direct Products
+                        $temp_order->products()->each(function ($product) {
+                            $product->quantity -= $product->pivot->quantity;
+                            $product->save();
+                        });
+                        $old_order->products()->attach($new_products);
 
-            //             return redirect()->route('front.orders.index')->with('success', __('front/homePage.Order edit request sent successfully'));
-            //         }
-            //         // To Balance
-            //         elseif ($temp_order->should_get > 0 && $request->type == 'wallet') {
-            //             if (editBostaOrder($temp_order, $old_order_id)) {
-            //                 try {
-            //                     $old_order->update([
-            //                         'status_id' => 12,
-            //                         'num_of_items' => $temp_order->num_of_items,
-            //                         'coupon_order_discount' => $temp_order->coupon_order_discount,
-            //                         'coupon_order_points' => $temp_order->coupon_order_points,
-            //                         'coupon_products_discount' => $temp_order->coupon_products_discount,
-            //                         'coupon_products_points' => $temp_order->coupon_products_points,
-            //                         'subtotal_base' => $temp_order->subtotal_base,
-            //                         'subtotal_final' => $temp_order->subtotal_final,
-            //                         'total' => $temp_order->total,
-            //                         'delivery_fees' => $temp_order->delivery_fees,
-            //                         'should_pay' => $temp_order->should_pay,
-            //                         'should_get' => 0.00,
-            //                         'used_points' => $temp_order->used_points,
-            //                         'used_balance' => $temp_order->used_balance,
-            //                         'gift_points' => $temp_order->gift_points,
-            //                         'total_weight' => $temp_order->total_weight,
-            //                     ]);
+                        // Through Collections
+                        $temp_order->collections()->each(function ($collection) {
+                            $collection->products()->each(function ($product) use (&$collection) {
+                                $product->quantity -= ($collection->pivot->quantity * $product->pivot->quantity);
+                                $product->save();
+                            });
+                        });
+                        $old_order->collections()->attach($new_collections);
 
-            //                     $old_order->statuses()->attach([16, 12]);
+                        // Return Balance
+                        if ($pended_balance_refund) {
+                            $old_order->user()->update([
+                                'balance' => $old_order->user->balance + $pended_balance_refund,
+                            ]);
 
-            //                     $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
-            //                         $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
-            //                         $product->save();
-            //                     });
+                            $old_order->transactions()->where('payment_method', 10)->where('payment_status', 4)->update([
+                                'payment_status' => 5
+                            ]);
+                        }
 
-            //                     $old_order->products()->sync($order_products);
+                        // Return Points
+                        if ($pended_points_refund) {
+                            $old_order->user->points()->create([
+                                'order_id' => $old_order->id,
+                                'value' => $pended_points_refund,
+                                'status' => 1
+                            ]);
 
-            //                     $old_order->user()->update([
-            //                         'balance' => $old_order->user->balance + $returned_balance + $temp_order->should_get,
-            //                         'points' => $old_order->user->points + $returned_points + $returned_gift_points,
-            //                     ]);
+                            $old_order->transactions()->where('payment_method', 11)->where('payment_status', 4)->update([
+                                'payment_status' => 5
+                            ]);
+                        }
 
-            //                     // edit products database
-            //                     $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
-            //                         $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
-            //                         $product->save();
-            //                     });
+                        // Add gift points
+                        // Add Points to the user if present
+                        if ($temp_order->gift_points) {
+                            $old_order->user->points()->create([
+                                'order_id' => $old_order->id,
+                                'value' => $temp_order->gift_points,
+                                'status' => 0
+                            ]);
+                        }
 
-            //                     $temp_order->forceDelete();
+                        // Delete Temporary Order
+                        $temp_order->forceDelete();
+                    } else {
+                        DB::rollback();
 
-            //                     DB::commit();
+                        Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
+                        return redirect()->route('front.orders.index');
+                    }
+                } elseif (!$should_pay && !$should_get && $request->type == 'equal') {
+                    $pended_vodafone_refund = $temp_order->transactions()->where('payment_method', 4)->where('payment_status', 4);
+                    $pended_vodafone_refund_amount = $pended_vodafone_refund->sum('payment_amount') ?? 0;
+                    $pended_vodafone_refund_count = $pended_vodafone_refund->count() ? true : false;
 
-            //                     Session::flash('success', __('front/homePage.Order edit request sent successfully'));
-            //                     return redirect()->route('front.orders.index');
-            //                 } catch (\Throwable $th) {
-            //                     throw $th;
-            //                     DB::rollBack();
+                    if (
+                        ($old_order->order_delivery_id && editBostaOrder($temp_order, $old_order))
+                    ) {
 
-            //                     Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
-            //                     return redirect()->route('front.orders.index');
-            //                 }
-            //             } else {
-            //                 Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
-            //                 return redirect()->route('front.orders.index');
-            //             }
-            //         }
-            //     }
-            //     // Old Order Not Paid
-            //     elseif ($old_order->should_pay > 0) {
-            //         try {
-            //             $old_order->update([
-            //                 'status_id' => 2,
-            //                 'num_of_items' => $temp_order->num_of_items,
-            //                 'coupon_order_discount' => $temp_order->coupon_order_discount,
-            //                 'coupon_order_points' => $temp_order->coupon_order_points,
-            //                 'coupon_products_discount' => $temp_order->coupon_products_discount,
-            //                 'coupon_products_points' => $temp_order->coupon_products_points,
-            //                 'subtotal_base' => $temp_order->subtotal_base,
-            //                 'subtotal_final' => $temp_order->subtotal_final,
-            //                 'total' => $temp_order->total,
-            //                 'delivery_fees' => $temp_order->delivery_fees,
-            //                 'should_pay' => $temp_order->should_pay,
-            //                 'should_get' => $temp_order->should_get,
-            //                 'used_points' => $temp_order->used_points,
-            //                 'used_balance' => $temp_order->used_balance,
-            //                 'gift_points' => $temp_order->gift_points,
-            //                 'total_weight' => $temp_order->total_weight,
-            //             ]);
+                        // Update Order Data
+                        $old_order->update([
+                            'status_id' => 306,
+                            'num_of_items' => $temp_order->num_of_items,
+                            'items_points' => $temp_order->items_points,
+                            'offers_items_points' => $temp_order->offers_items_points,
+                            'offers_order_points' => $temp_order->offers_order_points,
+                            'coupon_items_points' => $temp_order->coupon_items_points,
+                            'coupon_order_points' => $temp_order->coupon_order_points,
+                            'gift_points' => $temp_order->gift_points,
+                            'total_weight' => $temp_order->total_weight,
+                            'order_delivery_id' => $temp_order->order_delivery_id,
+                            'tracking_number' => $temp_order->tracking_number,
+                        ]);
 
-            //             $payment = $old_order->payments()->where('payment_status', 1)->first();
+                        // Update order status
+                        $old_order->statuses()->attach([305, 306]);
 
-            //             if ($payment) {
-            //                 $payment->update([
-            //                     'payment_amount' => $old_order->should_pay,
-            //                 ]);
-            //             }
+                        // Update Transactions
+                        $old_order->transactions()->whereNotIn('payment_status', [4, 5, 6])->delete();
+                        $old_order->transactions()->update([
+                            'payment_id' => $temp_order->payment->id,
+                        ]);
+                        $temp_order->transactions()->update([
+                            'payment_id' => $temp_order->payment->id,
+                            'order_id' => $old_order->id,
+                            'old_order_id' => Null,
+                        ]);
 
-            //             $old_order->statuses()->attach([16, 12, 2]);
+                        // Update Payment
+                        $old_order->payment()->delete();
+                        $temp_order->payment()->update([
+                            'order_id' => $old_order->id,
+                        ]);
 
-            //             $old_order->products()->sync($order_products);
+                        // Return Old Products
+                        // Direct Products
+                        $old_order->products()->each(function ($product) {
+                            $product->quantity += $product->pivot->quantity;
+                            $product->save();
+                        });
+                        $old_order->products()->detach();
 
-            //             $old_order->user()->update([
-            //                 'balance' => $old_order->user->balance + $returned_balance + $temp_order->should_get,
-            //                 'points' => $old_order->user->points + $returned_points + $returned_gift_points,
-            //             ]);
+                        // Through Collections
+                        $old_order->collections()->each(function ($collection) {
+                            $collection->products()->each(function ($product) use (&$collection) {
+                                $product->quantity += $collection->pivot->quantity * $product->pivot->quantity;
+                                $product->save();
+                            });
+                        });
+                        $old_order->collections()->detach();
 
-            //             // edit products database
-            //             $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
-            //                 $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
-            //                 $product->save();
-            //             });
+                        // Subtract New Products
+                        // Direct Products
+                        $temp_order->products()->each(function ($product) {
+                            $product->quantity -= $product->pivot->quantity;
+                            $product->save();
+                        });
+                        $old_order->products()->attach($new_products);
 
-            //             $temp_order->forceDelete();
+                        // Through Collections
+                        $temp_order->collections()->each(function ($collection) {
+                            $collection->products()->each(function ($product) use (&$collection) {
+                                $product->quantity -= ($collection->pivot->quantity * $product->pivot->quantity);
+                                $product->save();
+                            });
+                        });
+                        $old_order->collections()->attach($new_collections);
 
-            //             DB::commit();
+                        // Return Balance
+                        if ($pended_balance_refund) {
+                            $old_order->user()->update([
+                                'balance' => $old_order->user->balance + $pended_balance_refund,
+                            ]);
 
-            //             Session::flash('success', __('front/homePage.Order edit request sent successfully'));
-            //             return redirect()->route('front.orders.index');
-            //         } catch (\Throwable $th) {
-            //             throw $th;
-            //             DB::rollBack();
+                            $old_order->transactions()->where('payment_method', 10)->where('payment_status', 4)->update([
+                                'payment_status' => 5
+                            ]);
+                        }
 
-            //             Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
-            //             return redirect()->route('front.orders.index');
-            //         }
-            //     }
-            // }
+                        // Return Points
+                        if ($pended_points_refund) {
+                            $old_order->user->points()->create([
+                                'order_id' => $old_order->id,
+                                'value' => $pended_points_refund,
+                                'status' => 1
+                            ]);
+
+                            $old_order->transactions()->where('payment_method', 11)->where('payment_status', 4)->update([
+                                'payment_status' => 5
+                            ]);
+                        }
+
+                        // Add gift points
+                        // Add Points to the user if present
+                        if ($temp_order->gift_points) {
+                            $old_order->user->points()->create([
+                                'order_id' => $old_order->id,
+                                'value' => $temp_order->gift_points,
+                                'status' => 0
+                            ]);
+                        }
+
+                        // Delete Temporary Order
+                        $temp_order->forceDelete();
+                    } else {
+                        DB::rollback();
+
+                        Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
+                        return redirect()->route('front.orders.index');
+                    }
+                } elseif ($should_pay && $request->type == 'pay') {
+                    // Delete Bosta order if present
+                    if (!is_null($old_order->order_delivery_id)) {
+                        cancelBostaOrder($old_order);
+                    }
+
+                    // Update Order Data
+                    $old_order->update([
+                        'status_id' => 306,
+                        'num_of_items' => $temp_order->num_of_items,
+                        'items_points' => $temp_order->items_points,
+                        'offers_items_points' => $temp_order->offers_items_points,
+                        'offers_order_points' => $temp_order->offers_order_points,
+                        'coupon_items_points' => $temp_order->coupon_items_points,
+                        'coupon_order_points' => $temp_order->coupon_order_points,
+                        'gift_points' => $temp_order->gift_points,
+                        'total_weight' => $temp_order->total_weight,
+                    ]);
+
+                    // Update order status
+                    $old_order->statuses()->attach([305, 306]);
+
+                    // Update Transactions
+                    $old_order->transactions()->whereNotIn('payment_status', [4, 5, 6])->delete();
+                    $temp_order->transactions()->update([
+                        'payment_id' => $temp_order->payment->id,
+                        'order_id' => $old_order->id,
+                        'old_order_id' => Null,
+                    ]);
+
+                    // Update Payment
+                    $old_order->payment()->delete();
+                    $temp_order->payment()->update([
+                        'order_id' => $old_order->id,
+                    ]);
+
+                    // Return Old Products
+                    // Direct Products
+                    $old_order->products()->each(function ($product) {
+                        $product->quantity += $product->pivot->quantity;
+                        $product->save();
+                    });
+                    $old_order->products()->detach();
+
+                    // Through Collections
+                    $old_order->collections()->each(function ($collection) {
+                        $collection->products()->each(function ($product) use (&$collection) {
+                            $product->quantity += $collection->pivot->quantity * $product->pivot->quantity;
+                            $product->save();
+                        });
+                    });
+                    $old_order->collections()->detach();
+
+
+                    // Subtract New Products
+                    // Direct Products
+                    $temp_order->products()->each(function ($product) use ($temp_order) {
+                        $product->quantity -= $product->pivot->quantity;
+                        $product->save();
+                    });
+                    $old_order->products()->attach($new_products);
+
+                    // Through Collections
+                    $temp_order->collections()->each(function ($collection) use ($temp_order) {
+                        $collection->products()->each(function ($product) use (&$collection) {
+                            $product->quantity -= ($collection->pivot->quantity * $product->pivot->quantity);
+                            $product->save();
+                        });
+                    });
+                    $old_order->collections()->attach($new_collections);
+
+                    // Return Balance
+                    if ($pended_balance_refund) {
+                        $old_order->user()->update([
+                            'balance' => $old_order->user->balance + $pended_balance_refund,
+                        ]);
+
+                        $old_order->transactions()->where('payment_method', 10)->where('payment_status', 4)->update([
+                            'payment_status' => 5
+                        ]);
+                    }
+
+                    // Return Points
+                    if ($pended_points_refund) {
+                        $old_order->user->points()->create([
+                            'order_id' => $old_order->id,
+                            'value' => $pended_points_refund,
+                            'status' => 1
+                        ]);
+
+                        $old_order->transactions()->where('payment_method', 11)->where('payment_status', 4)->update([
+                            'payment_status' => 5
+                        ]);
+                    }
+
+                    // Add gift points
+                    // Add Points to the user if present
+                    if ($temp_order->gift_points) {
+                        $old_order->user->points()->create([
+                            'order_id' => $old_order->id,
+                            'value' => $temp_order->gift_points,
+                            'status' => 0
+                        ]);
+                    }
+
+                    // Delete Temporary Order
+                    $temp_order->forceDelete();
+                }
+            }
 
             DB::commit();
 
-            // dd('sad');
             Session::flash('success', __('front/homePage.Order edit request sent successfully'));
             return redirect()->route('front.orders.index');
         } catch (\Throwable $th) {
@@ -2060,91 +2302,137 @@ class OrderController extends Controller
 
                 // get order from transaction
 
-                // todo :: Old Orders
+                // Old Orders
                 if ($transaction->old_order_id != null) {
-                    $old_order = Order::with(['products', 'user', 'payments'])->findOrFail($transaction->old_order_id);
-                    $new_order = Order::with(['products'])->findOrFail($transaction->order_id);
+                    $old_order = Order::with(['products', 'collections', 'user', 'payment', 'transactions', 'points'])->findOrFail($transaction->old_order_id);
+                    $temp_order = Order::with(['products', 'collections', 'payment', 'transactions', 'points'])->findOrFail($transaction->order_id);
 
-                    $returned_balance = $old_order->used_balance - $new_order->used_balance;
-                    $returned_points = $old_order->used_points - $new_order->used_points;
-                    $returned_gift_points = $new_order->gift_points - $old_order->gift_points;
-
-                    $new_order->update([
-                        'should_pay' => 0.00
-                    ]);
-
-                    $transaction->update([
-                        'order_id' => $transaction->old_order_id,
-                        'old_order_id' => null
-                    ]);
-
-                    $order_products = [];
-                    $returned_products = [];
-
-                    foreach ($new_order->products as $product) {
-                        $order_products[$product->id] = [
-                            'quantity' => $product->pivot->quantity,
-                            'price' => $product->pivot->price,
-                            'points' => $product->pivot->points,
-                        ];
-                    }
-
-                    foreach ($old_order->products as $product) {
-                        $returned_products[$product->id] = [
-                            'quantity' => $product->pivot->quantity,
-                        ];
-                    }
-
-                    if (editBostaOrder($new_order, $transaction->old_order_id)) {
-                        try {
-                            $old_order->update([
-                                'status_id' => 12,
-                                'num_of_items' => $new_order->num_of_items,
-                                'coupon_order_discount' => $new_order->coupon_order_discount,
-                                'coupon_order_points' => $new_order->coupon_order_points,
-                                'coupon_products_discount' => $new_order->coupon_products_discount,
-                                'coupon_products_points' => $new_order->coupon_products_points,
-                                'subtotal_base' => $new_order->subtotal_base,
-                                'subtotal_final' => $new_order->subtotal_final,
-                                'total' => $new_order->total,
-                                'delivery_fees' => $new_order->delivery_fees,
-                                'should_pay' => $new_order->should_pay,
-                                'should_get' => $new_order->should_get,
-                                'used_points' => $new_order->used_points,
-                                'used_balance' => $new_order->used_balance,
-                                'gift_points' => $new_order->gift_points,
-                                'total_weight' => $new_order->total_weight,
-                            ]);
-
-                            $old_order->statuses()->attach([16, 12]);
-
-                            $old_order->products()->each(function ($product) use ($returned_products, $order_products) {
-                                $product->quantity = $product->quantity + $returned_products[$product->id]['quantity'] - $order_products[$product->id]['quantity'];
-                                $product->save();
-                            });
-
-                            $old_order->products()->sync($order_products);
-
-                            $old_order->user()->update([
-                                'balance' => $old_order->user->balance + $returned_balance + $new_order->should_get,
-                                'points' => $old_order->user->points + $returned_points + $returned_gift_points,
-                            ]);
-
-                            $new_order->forceDelete();
-
-                            DB::commit();
-
-                            Session::flash('success', __('front/homePage.Order edit request sent successfully'));
-                            return redirect()->route('front.orders.index');
-                        } catch (\Throwable $th) {
-                            throw $th;
-                            DB::rollBack();
-
-                            Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
-                            return redirect()->route('front.orders.index');
+                    // New Products Data
+                    $new_products = [];
+                    if ($temp_order->products->count()) {
+                        foreach ($temp_order->products as $product) {
+                            $new_products[$product['id']] = [
+                                'quantity' => $product->pivot->quantity,
+                                'original_price' => $product->pivot->original_price,
+                                'price' => $product->pivot->price,
+                                'points' => $product->pivot->points,
+                                'coupon_discount' => $product->pivot->coupon_discount,
+                                'coupon_points' => $product->pivot->coupon_points,
+                            ];
                         }
                     }
+
+                    // New Collections Data
+                    $new_collections = [];
+                    if ($temp_order->collections->count()) {
+                        foreach ($temp_order->collections as $collection) {
+                            $new_collections[$collection['id']] = [
+                                'quantity' => $collection->pivot->quantity,
+                                'original_price' => $collection->pivot->original_price,
+                                'price' => $collection->pivot->price,
+                                'points' => $collection->pivot->points,
+                                'coupon_discount' => $collection->pivot->coupon_discount,
+                                'coupon_points' => $collection->pivot->coupon_points,
+                            ];
+                        }
+                    }
+
+                    if (editBostaOrder($temp_order, $old_order)) {
+                        // Update Order Data
+                        $old_order->update([
+                            'status_id' => 306,
+                            'num_of_items' => $temp_order->num_of_items,
+                            'items_points' => $temp_order->items_points,
+                            'offers_items_points' => $temp_order->offers_items_points,
+                            'offers_order_points' => $temp_order->offers_order_points,
+                            'coupon_items_points' => $temp_order->coupon_items_points,
+                            'coupon_order_points' => $temp_order->coupon_order_points,
+                            'gift_points' => $temp_order->gift_points,
+                            'total_weight' => $temp_order->total_weight,
+                        ]);
+
+                        // Update order status
+                        $old_order->statuses()->attach([305, 306]);
+
+                        // Update Transactions
+                        $old_order->transactions()->where('payment_status', 2)->delete();
+                        $temp_order->transactions()->update([
+                            'payment_id' => $temp_order->payment->id,
+                            'order_id' => $old_order->id,
+                            'old_order_id' => Null,
+                        ]);
+
+                        // Update Payment
+                        $old_order->payment()->delete();
+                        $temp_order->payment()->update([
+                            'order_id' => $old_order->id,
+                        ]);
+
+                        // Return Old Products
+                        // Direct Products
+                        $old_order->products()->each(function ($product) {
+                            $product->quantity += $product->pivot->quantity;
+                            $product->save();
+                        });
+                        $old_order->products()->detach();
+
+                        // Through Collections
+                        $old_order->collections()->each(function ($collection) {
+                            $collection->products()->each(function ($product) use (&$collection) {
+                                $product->quantity += $collection->pivot->quantity * $product->pivot->quantity;
+                                $product->save();
+                            });
+                        });
+                        $old_order->collections()->detach();
+
+                        // Subtract New Products
+                        // Direct Products
+                        $temp_order->products()->each(function ($product) {
+                            $product->quantity -= $product->pivot->quantity;
+                            $product->save();
+                        });
+                        $old_order->products()->attach($new_products);
+
+                        // Through Collections
+                        $temp_order->collections()->each(function ($collection) {
+                            $collection->products()->each(function ($product) use (&$collection) {
+                                $product->quantity -= ($collection->pivot->quantity * $product->pivot->quantity);
+                                $product->save();
+                            });
+                        });
+                        $old_order->collections()->attach($new_collections);
+
+                        // Add gift points
+                        // Add Points to the user if present
+                        if ($temp_order->gift_points) {
+                            $old_order->user->points()->create([
+                                'order_id' => $old_order->id,
+                                'value' => $temp_order->gift_points,
+                                'status' => 0
+                            ]);
+                        }
+
+                        // Delete Temporary Order
+                        $temp_order->forceDelete();
+
+                        DB::commit();
+
+                        // todo :: Send Email To User
+
+                        // todo :: Send SMS To User
+
+                        // redirect to done page
+                        Session::flash('success', __('front/homePage.Order Edited Successfully'));
+
+                        return redirect()->route('front.orders.index');
+                    } else {
+                        DB::rollback();
+
+                        Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
+                        return redirect()->route('front.orders.index');
+                    }
                 }
+
                 // New Orders
                 else {
                     $order = $transaction->order;
@@ -2177,6 +2465,8 @@ class OrderController extends Controller
                 }
             } catch (\Throwable $th) {
                 DB::rollBack();
+
+                throw $th;
 
                 $transaction = Transaction::where('paymob_order_id', $data['order'])
                     ->first();

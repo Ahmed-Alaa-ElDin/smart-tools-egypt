@@ -309,7 +309,7 @@
                         <span class="text-sm"> {{ __('front/homePage.Payment Method:') }} </span>
 
                         <div>
-                            @foreach ($order_data['payment_methods'] as $payment_method)
+                            @foreach ($order_data['payment_methods']->unique() as $payment_method)
                                 <div class="text-successDark">
                                     @if ($payment_method == 1)
                                         {{ __('front/homePage.Cash on delivery (COD)') }}

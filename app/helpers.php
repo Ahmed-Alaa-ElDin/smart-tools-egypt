@@ -506,7 +506,7 @@ function createBostaOrder($order, $payment_method)
         ]);
 
         $order->statuses()->attach(204);
-
+        
         return [
             'status'    =>  true,
             'data'      =>  $decoded_bosta_response,
