@@ -42,7 +42,6 @@ class Product extends Model
         'specs',
         'created_by',
         'brand_id',
-        'today_deal',
     ];
 
     protected $appends = [

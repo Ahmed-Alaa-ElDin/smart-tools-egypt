@@ -316,6 +316,8 @@
                                             </span>
                                         </div>
                                     </div>
+                                    {{-- Loading :: End --}}
+
                                     {{-- Products List :: Start --}}
                                     @forelse ($items[$item_key]['list'] as $product)
                                         <div class="group flex justify-center items-center gap-1 cursor-pointer rounded transition-all ease-in-out hover:bg-red-100 p-2"

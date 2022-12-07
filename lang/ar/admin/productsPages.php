@@ -342,5 +342,7 @@ return [
     "Collections have been restored successfully"                           =>      "تم استعادة التجميعات المختارة بنجاح",
     "Collections haven't been restored"                                     =>      "لم يتم استعادة التجميعات المختارة",
     "Profit Margin"                                                         =>      "هامش الربح",
+    "Copy Product"                                                          =>      "نسخ المنتج",
+    "Product Copied Successfully"                                           =>      "تم نسخ المنتج بنجاح",
 
 ];

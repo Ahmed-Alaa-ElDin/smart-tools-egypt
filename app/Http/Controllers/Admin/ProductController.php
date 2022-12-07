@@ -43,14 +43,35 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Copy the specified product.
      *
      * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function copy(Product $product)
     {
-        //
+        $new_product = Product::create([
+            'name' => '',
+            'slug' => '',
+            'weight' => $product->weight,
+            'quantity' => $product->quantity,
+            'low_stock' => $product->low_stock,
+            "original_price" => $product->original_price,
+            'base_price' => $product->base_price,
+            'final_price' => $product->final_price,
+            'points' => $product->points,
+            'description' => $product->description,
+            'refundable' => $product->refundable,
+            'meta_keywords' => $product->meta_keywords,
+            'free_shipping' => $product->free_shipping,
+            'publish' => $product->publish,
+            'under_reviewing' => $product->under_reviewing,
+            'specs' => $product->specs,
+            'created_by' => auth()->user()->id,
+        ]);
+        
+        $new_product->subcategories()->attach($product->subcategories->pluck('id')->toArray());
+
+        return redirect()->route('admin.products.edit', ['product' => $new_product->id])->with('success', __('admin/productsPages.Product Copied Successfully'));
     }
 
     /**

@@ -18,38 +18,7 @@
                 {{-- Logo : End --}}
 
                 {{-- Search : Start --}}
-                <div class="grow front-header-search flex items-center bg-white ">
-                    <div class="relative grow">
-                        <label class="relative block m-0">
-                            <span class="sr-only">Search</span>
-                            <span class="absolute inset-y-0 rtl:left-1.5 ltr:right-1.5 flex items-center pl-2">
-                                <span class="material-icons">
-                                    search
-                                </span>
-                            </span>
-                            <input
-                                class="placeholder:italic placeholder:text-slate-400 text-gray-800 block bg-white w-full border border-slate-300 rounded-md py-2 ltr:pr-10 ltr:pl-3 rtl:pl-10 rtl:pr-3 shadow-sm focus:outline-none focus:border-gray-600 focus:ring-gray-600 focus:ring-1 sm:text-xs md:text-sm font-bold"
-                                placeholder="{{ __("front/homePage.I'm Shopping for ...") }}" type="text"
-                                name="search" />
-                        </label>
-                        <div class="typed-search-box stop-propagation document-click-hidden hidden bg-white rounded shadow-lg absolute left-0 top-100 w-100"
-                            style="min-height: 200px">
-                            <div class="search-preloader absolute-top-center">
-                                <div class="dot-loader">
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                </div>
-                            </div>
-                            <div class="search-nothing hidden p-3 text-center fs-16">
-
-                            </div>
-                            <div id="search-content" class="text-left">
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @livewire('front.homepage.header-search-box')
                 {{-- Search : End --}}
 
                 @section('cart-wishlist-compare')

@@ -76,7 +76,6 @@ class ProductsDatatable extends Component
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
-        // dd($products);
         return view('livewire.admin.products.products-datatable', compact('products'));
     }
 
