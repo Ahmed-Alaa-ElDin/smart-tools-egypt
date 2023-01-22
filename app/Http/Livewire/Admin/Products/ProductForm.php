@@ -441,6 +441,11 @@ class ProductForm extends Component
     ######################## Save New Product :: Start ############################
     public function save($new = false)
     {
+        dd([
+            'ar' => $this->description['ar'],
+            'en' => $this->description['en'],
+        ]);
+
         $this->validate();
 
         DB::beginTransaction();
@@ -464,8 +469,8 @@ class ProductForm extends Component
                 'final_price' => $this->final_price,
                 'points' => $this->points,
                 'description' => [
-                    'ar' => $this->description['ar'] ?? $this->description['en'],
-                    'en' => $this->description['en'] ?? $this->description['ar']
+                    'ar' => $this->description['ar'] ? $this->description['ar'] : ($this->description['en'] ? $this->description['en'] : ""),
+                    'en' => $this->description['en'] ? $this->description['en'] : ($this->description['ar'] ? $this->description['ar'] : "")
                 ],
                 'specs' => json_encode(array_values($this->specs)),
                 'model' => $this->model,
@@ -526,6 +531,11 @@ class ProductForm extends Component
     ######################## Save Updated Product :: Start ############################
     public function update()
     {
+        // dd([
+        //     'ar' => $this->description['ar'],
+        //     'en' => $this->description['en'],
+        // ]);
+
         $this->validate();
 
         DB::beginTransaction();
@@ -549,8 +559,8 @@ class ProductForm extends Component
                 'final_price' => $this->final_price,
                 'points' => $this->points,
                 'description' => [
-                    'ar' => $this->description['ar'] ?? $this->description['en'],
-                    'en' => $this->description['en'] ?? $this->description['ar']
+                    'ar' => $this->description['ar'] ? $this->description['ar'] : ($this->description['en'] ? $this->description['en'] : ""),
+                    'en' => $this->description['en'] ? $this->description['en'] : ($this->description['ar'] ? $this->description['ar'] : "")
                 ],
                 'specs' => json_encode(array_values($this->specs)),
                 'model' => $this->model,

@@ -400,6 +400,9 @@ return [
     "Refund Failed, Please Try Again"       =>      "فشلت عملية إعادة المبلغ ، برجاء المحاولة لاحقاً",
     "Paid:"                     =>      "المدفوع:",
     "Order No."                 =>      "رقم الطلب",
+    "Model"                     =>      "الموديل",
+    "See More & Apply filter"   =>      "مشاهدة المزيد وتطبيق فلتر",
+
 
 
 ];

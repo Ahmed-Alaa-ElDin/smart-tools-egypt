@@ -131,13 +131,6 @@ class Collection extends Model
 
     public function getQuantityAttribute()
     {
-        // dd(
-        //     $this->products()
-        //         ->without(['reviews', 'orders', 'brand', 'validOffers'])
-        //         ->get()
-        //     // ->map(fn ($product) =>  floor($product->quantity / $product->pivot->quantity))
-        //     // ->min()
-        // );
         return $this->products()
             ->without(['reviews', 'orders', 'brand', 'validOffers'])->get()
             ->map(fn ($product) =>  floor($product->quantity / $product->pivot->quantity))

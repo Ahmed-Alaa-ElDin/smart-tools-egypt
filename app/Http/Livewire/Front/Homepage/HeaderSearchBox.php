@@ -21,6 +21,7 @@ class HeaderSearchBox extends Component
             $products = Product::select([
                 'id',
                 'name',
+                'slug',
                 'barcode',
                 'original_price',
                 'base_price',
@@ -33,6 +34,7 @@ class HeaderSearchBox extends Component
             ])
                 ->with(
                     'brand',
+                    'thumbnail'
                 )
                 ->where(
                     fn ($q) =>
@@ -51,6 +53,7 @@ class HeaderSearchBox extends Component
             $collections = Collection::select([
                 'id',
                 'name',
+                'slug',
                 'barcode',
                 'original_price',
                 'base_price',
@@ -60,6 +63,7 @@ class HeaderSearchBox extends Component
                 'description',
                 'model'
             ])
+                ->with('thumbnail')
                 ->where(
                     fn ($q) =>
                     $q->where('name', 'like', '%' . $this->search . '%')
@@ -77,6 +81,13 @@ class HeaderSearchBox extends Component
                 $product_collection->product_collection = class_basename($product_collection);
                 return $product_collection;
             })->toArray();
+        } else {
+            $this->items = collect([]);
         }
+    }
+
+    public function seeMore()
+    {
+        dd("See More");
     }
 }

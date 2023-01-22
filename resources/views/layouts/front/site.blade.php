@@ -151,6 +151,26 @@
                 e.stopPropagation();
                 $(this).parent().fadeOut();
             })
+
+            // Fade out Results on blur
+            $('input[name="search"]').on('blur', function(e) {
+                $('#typed-search-box').fadeOut();
+            })
+
+            // Fade In Results on Focus
+            $('input[name="search"]').on('focus', function(e) {
+                $('#typed-search-box').fadeIn();
+            })
+
+            $('input[name="search"]').on('keydown', function(e) {
+                // Esc Button
+                if (e.keyCode == 27) {
+                    $('#typed-search-box').fadeOut();
+                    $('input[name="search"]').blur();
+                }
+            })
+
+
         })
     </script>
 
