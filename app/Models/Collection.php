@@ -38,7 +38,7 @@ class Collection extends Model
         'free_shipping',
         'publish',
         'under_reviewing',
-        'created_by'
+        'created_by',
     ];
 
     protected $appends = [
@@ -161,6 +161,7 @@ class Collection extends Model
                 'free_shipping',
                 'publish',
                 'under_reviewing',
+                'created_at'
             ]
         )
             ->with(
@@ -194,6 +195,7 @@ class Collection extends Model
                 'free_shipping',
                 'publish',
                 'under_reviewing',
+                'created_at'
             ]
         )
             ->with(

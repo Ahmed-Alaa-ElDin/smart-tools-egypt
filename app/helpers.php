@@ -210,14 +210,14 @@ function getBestOfferForProducts($products_id)
         // Get Free Shipping
         $free_shipping = $product->free_shipping;
 
-        // Get All Subcategories
-        $subcategories = $product->subcategories ? $product->subcategories->map(fn ($subcategory) => $subcategory->id) : [];
+        // Get Count of Subcategories
+        $subcategories_count = $product->subcategories->count();
 
-        // Get All Categories
-        $categories = $product->categories ? $product->categories->map(fn ($category) => $category->id) : [];
+        // Get Count of Categories
+        $categories_count = $product->subcategories->count('category');
 
-        // Get All Supercategories
-        $supercategories = $product->supercategories ? $product->supercategories->map(fn ($supercategory) => $supercategory->id) : [];
+        // Get Count of Supercategories
+        $supercategories_count = $product->subcategories->count('supercategory');
 
         // Get Final Prices From Direct Offers
         $direct_offers = $product->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]);
@@ -241,7 +241,7 @@ function getBestOfferForProducts($products_id)
         }
 
         // Get Final Prices From Offers Through Subcategories
-        $subcategories_offers = $subcategories ? $product->subcategories->map(fn ($subcategory) => $subcategory->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
+        $subcategories_offers = $subcategories_count ? $product->subcategories->map(fn ($subcategory) => $subcategory->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
         foreach ($subcategories_offers as $subcategory) {
             foreach ($subcategory as $offer) {
                 if ($offer['free_shipping']) {
@@ -259,7 +259,7 @@ function getBestOfferForProducts($products_id)
         }
 
         // Get Final Prices From Offers Through Categories
-        $categories_offers = $categories ? $product->categories->map(fn ($category) => $category->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
+        $categories_offers = $categories_count ? $product->subcategories->whereNotNull('supercategory')->pluck('supercategory')->map(fn ($category) => $category->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
         foreach ($categories_offers as $category) {
             foreach ($category as $offer) {
                 if ($offer['free_shipping']) {
@@ -277,7 +277,7 @@ function getBestOfferForProducts($products_id)
         }
 
         // Get Final Prices From Offers Through Supercategories
-        $supercategories_offers = $supercategories ? $product->supercategories->map(fn ($supercategory) => $supercategory->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type])) : [];
+        $supercategories_offers = $supercategories_count ? $product->subcategories->whereNotNull('supercategory')->pluck('supercategory')->map(fn ($supercategory) => $supercategory->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type])) : [];
         foreach ($supercategories_offers as $supercategory) {
             foreach ($supercategory as $offer) {
                 if ($offer['free_shipping']) {
@@ -506,7 +506,7 @@ function createBostaOrder($order, $payment_method)
         ]);
 
         $order->statuses()->attach(204);
-        
+
         return [
             'status'    =>  true,
             'data'      =>  $decoded_bosta_response,

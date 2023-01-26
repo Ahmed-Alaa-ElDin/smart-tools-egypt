@@ -83,7 +83,7 @@ return [
     "Top Categories has been updated successfully"                          =>      "تم تعديل قائمة أفضل الأقسام الفرعية بنجاح",
     "Top Categories hasn't been updated"                                    =>      "لم يتم تعديل قائمة أفضل الأقسام الفرعية",
     "Add Product to List"                                                   =>      "إضافة منتج إلى القائمة",
-    "Under Reviewing"                                                       =>      "قيد المراجعة",
+    "Under Reviewing"                                                       =>      "قيد التقييم",
     "Final Price"                                                           =>      "السعر النهائي",
     " EGP"                                                                  =>      " ج.م",
     "Base Price"                                                            =>      "السعر المبدئي",

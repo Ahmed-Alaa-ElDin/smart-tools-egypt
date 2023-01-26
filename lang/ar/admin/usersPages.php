@@ -98,7 +98,7 @@ return [
     'Unable to update user'                                                                         =>     'لم نستطع تعديل المستخدم ، برجاء المحاولة مرة أخرى.',
     'Save Edit User'                                                                                =>     'حفظ التعديلات',
     'Show User Details'                                                                             =>     'الملف الشخصي للمستخدم',
-    'Reviews'                                                                                       =>     'المراجعات',
+    'Reviews'                                                                                       =>     'التقييمات',
     'User Profile'                                                                                  =>     'الملف الشخصي',
     'Verified'                                                                                      =>     'تم التأكيد',
     'User Role Edit'                                                                                =>     'تعديل دور المستخدم',

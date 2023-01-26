@@ -10,7 +10,8 @@ class Review extends Model
     use HasFactory;
 
     protected $fillable = [
-        'product_id',
+        'reviewable_id',
+        'reviewable_type',
         'user_id',
         'rating',
         'comment',
@@ -22,7 +23,7 @@ class Review extends Model
         return $this->morphTo();
     }
 
-    // // One to many relationship (Inverse) Product --> Reviews
+    // One to many relationship (Inverse) Product --> Reviews
     // public function product()
     // {
     //     return $this->belongsTo(Product::class);

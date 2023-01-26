@@ -51,7 +51,8 @@ class ProductController extends Controller
         // Get the product
         $product = Product::with([
             'images' => fn ($q) => $q->where('is_thumbnail', 0)->orderBy('featured', 'desc'),
-            'brand'
+            'brand',
+            'reviews'=> fn($q) => $q->with('user')
         ])->findOrFail($id);
 
         // Get the product's Best Offer

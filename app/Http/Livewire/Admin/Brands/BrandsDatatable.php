@@ -31,11 +31,11 @@ class BrandsDatatable extends Component
     public function render()
     {
         $brands = Brand::select([
-                'id',
-                'name',
-                'logo_path',
-                'country_id',
-            ])->with('country')
+            'id',
+            'name',
+            'logo_path',
+            'country_id',
+        ])->with('country')
             ->withCount('products')
             ->where('name', 'like', '%' . $this->search . '%')
             ->orWhereHas('country', function ($query) {
@@ -89,8 +89,6 @@ class BrandsDatatable extends Component
                 "text" => __('admin/productsPages.Brand has been deleted successfully'),
                 'icon' => 'success'
             ]);
-
-            $this->selectedBrands = [];
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/productsPages.Brand hasn't been deleted"),

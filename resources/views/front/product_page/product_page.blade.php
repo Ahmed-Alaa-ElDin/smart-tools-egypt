@@ -206,7 +206,7 @@
                                     'type' => 'Product',
                                     'add_buy' => 'add',
                                 ],
-                                key('add-cart-button-' . Str::random(10)),
+                                key('add-cart-button-' . Str::random(10))
                             )
                             {{-- Add to cart : End --}}
 
@@ -220,7 +220,7 @@
                                     'type' => 'Product',
                                     'add_buy' => 'pay',
                                 ],
-                                key('go-to-cart-button-' . Str::random(10)),
+                                key('go-to-cart-button-' . Str::random(10))
                             )
                             {{-- Go To Payment : End --}}
 
@@ -232,9 +232,9 @@
                                         'item_id' => $product['id'],
                                         'text' => true,
                                         'large' => true,
-                                        'type' => 'Product'
+                                        'type' => 'Product',
                                     ],
-                                    key('add-compare-button-' . Str::random(10)),
+                                    key('add-compare-button-' . Str::random(10))
                                 )
                                 {{-- Add to compare : End --}}
 
@@ -245,9 +245,9 @@
                                         'item_id' => $product['id'],
                                         'text' => true,
                                         'large' => true,
-                                        'type' => 'Product'
+                                        'type' => 'Product',
                                     ],
-                                    key('add-wishlist-button-' . Str::random(10)),
+                                    key('add-wishlist-button-' . Str::random(10))
                                 )
                                 {{-- Add to wishlist : End --}}
                             </div>
@@ -265,7 +265,7 @@
                                         'type' => 'Product',
                                         'title' => false,
                                     ],
-                                    key($product->name . '-' . rand()),
+                                    key($product->name . '-' . rand())
                                 )
                             </div>
                             {{-- Cart Amount :: End --}}
@@ -478,7 +478,7 @@
                     {{-- Reviews Body :: Start --}}
                     <div class="hidden p-4 rounded-lg flex items-center justify-center" id="reviews" role="tabpanel"
                         aria-labelledby="reviews-tab">
-                        @livewire('front.product.review.review-block', ['product_id' => $product->id])
+                        @livewire('front.product.review.review-block', ['item_id' => $product->id, 'type' => 'Product', 'reviews' => $product->reviews])
                     </div>
                     {{-- Reviews Body :: End --}}
 

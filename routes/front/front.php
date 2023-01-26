@@ -16,6 +16,10 @@ Route::group([
 ], function () {
     Route::get('/', [HomepageController::class, 'index'])->name('homepage');
 
+    ################ Search :: Start ##############
+    Route::get('/search/{search}', [HomepageController::class, 'search'])->name('search');
+    ################ Search :: End ##############
+
     ################ User's Profile :: Start ##############
     Route::resource('/profile', ProfileController::class)->middleware('auth');
     ################ User's Profile :: End ##############

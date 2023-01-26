@@ -49,7 +49,7 @@ return [
     "Thumbnail Image"                                                       =>      "الصورة المصغرة",
     "Video URL"                                                             =>      "رابط الفيديو",
     "Youtube Link"                                                          =>      "رابط يوتيوب",
-    "Under Reviewing"                                                       =>      "قيد المراجعة",
+    "Under Reviewing"                                                       =>      "قيد التقييم",
     "Save"                                                                  =>      "حفظ",
     "Save and Add New Product"                                              =>      "حفظ وإضافة منتج آخر",
     "Back"                                                                  =>      "الرجوع للخلف",

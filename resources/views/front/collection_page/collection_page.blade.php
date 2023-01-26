@@ -197,7 +197,7 @@
                                     'type' => 'Collection',
                                     'add_buy' => 'add',
                                 ],
-                                key('add-cart-button-' . Str::random(10)),
+                                key('add-cart-button-' . Str::random(10))
                             )
                             {{-- Add to cart : End --}}
 
@@ -211,7 +211,7 @@
                                     'type' => 'Collection',
                                     'add_buy' => 'pay',
                                 ],
-                                key('add-cart-button-' . Str::random(10)),
+                                key('add-cart-button-' . Str::random(10))
                             )
                             {{-- Go To Payment : End --}}
 
@@ -225,7 +225,7 @@
                                         'large' => true,
                                         'type' => 'Collection',
                                     ],
-                                    key('add-compare-button-' . Str::random(10)),
+                                    key('add-compare-button-' . Str::random(10))
                                 )
                                 {{-- Add to compare : End --}}
 
@@ -238,7 +238,7 @@
                                         'large' => true,
                                         'type' => 'Collection',
                                     ],
-                                    key('add-wishlist-button-' . Str::random(10)),
+                                    key('add-wishlist-button-' . Str::random(10))
                                 )
                                 {{-- Add to wishlist : End --}}
                             </div>
@@ -256,7 +256,7 @@
                                         'type' => 'Collection',
                                         'title' => false,
                                     ],
-                                    key($collection->name . '-' . rand()),
+                                    key($collection->name . '-' . rand())
                                 )
                             </div>
                             {{-- Cart Amount :: End --}}
@@ -602,7 +602,7 @@
                     {{-- Reviews Body :: Start --}}
                     <div class="hidden p-4 rounded-lg flex items-center justify-center" id="reviews" role="tabpanel"
                         aria-labelledby="reviews-tab">
-                        @livewire('front.product.review.review-block', ['collection_id' => $collection->id])
+                        @livewire('front.product.review.review-block', ['item_id' => $collection->id, 'type' => 'Collection', 'reviews' => $collection->reviews])
                     </div>
                     {{-- Reviews Body :: End --}}
 

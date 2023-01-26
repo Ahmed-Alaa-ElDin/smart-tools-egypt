@@ -8,7 +8,11 @@ use Livewire\WithPagination;
 
 class ReviewBlock extends Component
 {
-    public $user_id = null, $product_id, $comment, $rating, $reviewSubmitted = false, $user_review, $all_reviews, $current_page = 1, $total_pages;
+    use WithPagination;
+
+    public $user_id = null, $user_review, $reviews, $item_id, $comment, $rating, $reviewSubmitted = false, $item_rating, $type;
+
+    public $item_reviews_count, $five_stars_count, $five_stars_percentage, $four_stars_count, $four_stars_percentage, $three_stars_count, $three_stars_percentage, $two_stars_count, $two_stars_percentage, $one_stars_count, $one_stars_percentage;
 
     protected $listeners = [
         'updatedComment'
@@ -17,79 +21,82 @@ class ReviewBlock extends Component
     ############# Mount :: Start #############
     public function mount()
     {
-        // get all product's reviews
-        $this->all_product_reviews = get_item_rating($this->product_id,'Product');
-
-        if (auth()->check()) {
-            // get user's review
-            $this->user_review = $this->all_product_reviews->where('user_id', auth()->user()->id)->first();
-            // get other reviews
-            $this->all_reviews = $this->all_product_reviews->where('user_id', '!=', auth()->user()->id)->forPage($this->current_page, config('constants.constants.PAGINATION'));
-        } else {
-            $this->user_review = null;
-            $this->all_reviews = $this->all_product_reviews->forPage($this->current_page, config('constants.constants.PAGINATION'));
-        }
-
-        // get total pages
-        $this->total_pages = ceil($this->all_product_reviews->count() / config('constants.constants.PAGINATION'));
-
-        // get product's average rating
-        $this->product_rating = $this->all_product_reviews->avg('rating');
-
-        // get product's total reviews
-        $this->product_reviews_count = $this->all_product_reviews->count();
-
-        // get 5 stars rating count
-        $this->five_stars_count = $this->all_product_reviews->where('rating', 5)->count();
-        if ($this->five_stars_count) {
-            $this->five_stars_percentage = ($this->five_stars_count / $this->product_reviews_count) * 100;
-        } else {
-            $this->five_stars_percentage = 0;
-        }
-
-        // get 4 stars rating count
-        $this->four_stars_count = $this->all_product_reviews->where('rating', 4)->count();
-        if ($this->four_stars_count) {
-            $this->four_stars_percentage = ($this->four_stars_count / $this->product_reviews_count) * 100;
-        } else {
-            $this->four_stars_percentage = 0;
-        }
-
-        // get 3 stars rating count
-        $this->three_stars_count = $this->all_product_reviews->where('rating', 3)->count();
-        if ($this->three_stars_count) {
-            $this->three_stars_percentage = ($this->three_stars_count / $this->product_reviews_count) * 100;
-        } else {
-            $this->three_stars_percentage = 0;
-        }
-
-        // get 2 stars rating count
-        $this->two_stars_count = $this->all_product_reviews->where('rating', 2)->count();
-        if ($this->two_stars_count) {
-            $this->two_stars_percentage = ($this->two_stars_count / $this->product_reviews_count) * 100;
-        } else {
-            $this->two_stars_percentage = 0;
-        }
-
-        // get 1 stars rating count
-        $this->one_stars_count = $this->all_product_reviews->where('rating', 1)->count();
-        if ($this->one_stars_count) {
-            $this->one_stars_percentage = ($this->one_stars_count / $this->product_reviews_count) * 100;
-        } else {
-            $this->one_stars_percentage = 0;
-        }
-
-        // if user has already reviewed this product
-        if ($this->user_review) {
-            $this->reviewSubmitted = true;
-        }
     }
     ############# Mount :: End #############
 
     ############# Render :: Start #############
     public function render()
     {
-        return view('livewire.front.product.review.review-block');
+        // get all item's reviews
+        $all_item_reviews = $this->reviews;
+
+        if (auth()->check()) {
+            // get user's review
+            $user_review = $all_item_reviews->where('user_id', auth()->user()->id)->first();
+            $this->user_review = $user_review;
+            // get other reviews
+            $all_reviews = $all_item_reviews->where('user_id', '!=', auth()->user()->id)->paginate(config('constants.constants.PAGINATION'));
+        } else {
+            $user_review = null;
+            $this->user_review = null;
+            $all_reviews = $all_item_reviews->paginate(config('constants.constants.PAGINATION'));
+        }
+
+        // get item's average rating
+        $this->item_rating = $all_item_reviews->avg('rating');
+
+        // get item's total reviews
+        $this->item_reviews_count = $all_item_reviews->count();
+
+        // get 5 stars rating count
+        $this->five_stars_count = $all_item_reviews->where('rating', 5)->count();
+        if ($this->five_stars_count) {
+            $this->five_stars_percentage = ($this->five_stars_count / $this->item_reviews_count) * 100;
+        } else {
+            $this->five_stars_percentage = 0;
+        }
+
+        // get 4 stars rating count
+        $this->four_stars_count = $all_item_reviews->where('rating', 4)->count();
+        if ($this->four_stars_count) {
+            $this->four_stars_percentage = ($this->four_stars_count / $this->item_reviews_count) * 100;
+        } else {
+            $this->four_stars_percentage = 0;
+        }
+
+        // get 3 stars rating count
+        $this->three_stars_count = $all_item_reviews->where('rating', 3)->count();
+        if ($this->three_stars_count) {
+            $this->three_stars_percentage = ($this->three_stars_count / $this->item_reviews_count) * 100;
+        } else {
+            $this->three_stars_percentage = 0;
+        }
+
+        // get 2 stars rating count
+        $this->two_stars_count = $all_item_reviews->where('rating', 2)->count();
+        if ($this->two_stars_count) {
+            $this->two_stars_percentage = ($this->two_stars_count / $this->item_reviews_count) * 100;
+        } else {
+            $this->two_stars_percentage = 0;
+        }
+
+        // get 1 stars rating count
+        $this->one_stars_count = $all_item_reviews->where('rating', 1)->count();
+        if ($this->one_stars_count) {
+            $this->one_stars_percentage = ($this->one_stars_count / $this->item_reviews_count) * 100;
+        } else {
+            $this->one_stars_percentage = 0;
+        }
+
+        // if user has already reviewed this item
+        if ($user_review) {
+            $this->reviewSubmitted = true;
+        }
+
+        return view('livewire.front.product.review.review-block', compact(
+            'user_review',
+            'all_reviews'
+        ));
     }
     ############# Render :: End #############
 
@@ -108,18 +115,18 @@ class ReviewBlock extends Component
     ############# Comment :: End #############
 
     ############# Updated Current Page :: Start #############
-    public function updatedCurrentPage($current_page)
-    {
-        if (auth()->check()) {
-            // get user's review
-            $this->user_review = $this->all_product_reviews->where('user_id', auth()->user()->id)->first();
-            // get other reviews
-            $this->all_reviews = $this->all_product_reviews->where('user_id', '!=', auth()->user()->id)->forPage($current_page, config('constants.constants.PAGINATION'));
-        } else {
-            $this->user_review = null;
-            $this->all_reviews = $this->all_product_reviews->forPage($current_page, config('constants.constants.PAGINATION'));
-        }
-    }
+    // public function updatedCurrentPage($currentPage)
+    // {
+    //     if (auth()->check()) {
+    //         // get user's review
+    //         $this->user_review = $this->all_product_reviews->where('user_id', auth()->user()->id)->first();
+    //         // get other reviews
+    //         $this->all_reviews = $this->all_product_reviews->where('user_id', '!=', auth()->user()->id)->forPage($currentPage, config('constants.constants.PAGINATION'));
+    //     } else {
+    //         $this->user_review = null;
+    //         $this->all_reviews = $this->all_product_reviews->forPage($currentPage, config('constants.constants.PAGINATION'));
+    //     }
+    // }
     ############# Updated Current Page :: End #############
 
     ############# Add Review :: Start #############
@@ -135,7 +142,8 @@ class ReviewBlock extends Component
 
         $review = Review::create([
             'user_id' => auth()->user()->id,
-            'product_id' => $this->product_id,
+            'reviewable_id' => $this->item_id,
+            'reviewable_type' => 'App\\Models\\' . $this->type,
             'comment' => $this->comment,
             'rating' => $this->rating,
             'status' => 0
@@ -164,6 +172,8 @@ class ReviewBlock extends Component
 
         $this->reviewSubmitted = false;
         $this->user_review = null;
+
+        return redirect(request()->header('Referer'));
     }
     ############# Delete Review :: End #############
 }

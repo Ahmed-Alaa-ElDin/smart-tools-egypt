@@ -179,4 +179,9 @@ class HomepageController extends Controller
         // dd('homepage_sections', 'today_deals_sections', 'categories', 'brands');
         return view('front.homepage.homepage', compact('homepage_sections', 'today_deals_sections', 'categories', 'brands'));
     }
+
+    public function search($search)
+    {
+        return view('front.search.search_page', compact('search'));
+    }
 }
