@@ -88,6 +88,8 @@ class HeaderSearchBox extends Component
 
     public function seeMore()
     {
-        redirect(route('front.search', ['search' => $this->search]));
+        if ($this->search) {
+            redirect(route('front.search', ['search' => $this->search]));
+        }
     }
 }

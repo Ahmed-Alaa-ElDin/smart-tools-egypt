@@ -80,6 +80,7 @@ class SearchResults extends Component
             $items = collect([]);
         }
 
+        // dd($items);
         return $items;
     }
 }
