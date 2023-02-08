@@ -18576,3 +18576,14 @@ screen and (-ms-high-contrast:active) {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+    margin: 0;
+}
+

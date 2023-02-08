@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,6 +18,8 @@ class Product extends Model
     use HasFactory;
     use HasTranslations;
     use SoftDeletes;
+
+    protected $connection = "mysql";
 
     public $translatable = ['name', 'description', 'slug'];
 
@@ -340,9 +343,11 @@ class Product extends Model
         ];
     }
 
-    public function getTypeAttribute()
+    public function type(): Attribute
     {
-        return "Product";
+        return new Attribute(
+            get: fn () => "Product"
+        );
     }
     ############# Appends :: End #############
 
@@ -359,6 +364,7 @@ class Product extends Model
                 'original_price',
                 'base_price',
                 'final_price',
+                'refundable',
                 'points',
                 'description',
                 'model',
@@ -414,6 +420,7 @@ class Product extends Model
                 'original_price',
                 'base_price',
                 'final_price',
+                'refundable',
                 'points',
                 'description',
                 'model',

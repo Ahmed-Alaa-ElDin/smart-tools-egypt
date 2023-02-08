@@ -18,6 +18,8 @@ class Collection extends Model
     use HasTranslations;
     use SoftDeletes;
 
+    protected $connection = "mysql";
+
     public $translatable = ['name', 'description', 'slug'];
 
     protected $fillable = [
@@ -155,6 +157,7 @@ class Collection extends Model
                 'collections.original_price',
                 'base_price',
                 'final_price',
+                'refundable',
                 'points',
                 'description',
                 'model',
@@ -189,6 +192,7 @@ class Collection extends Model
                 'collections.original_price',
                 'base_price',
                 'final_price',
+                'refundable',
                 'points',
                 'description',
                 'model',

@@ -29,7 +29,7 @@ return [
     "Top Brands"                =>      "أفضل الماركات",
     "See All Brands"            =>      "عرض جميع الماركات",
     "Home"                      =>      "الرئيسية",
-    "Categories"                =>      "الأقسام",
+    "All Categories"            =>      "الأقسام",
     "Cart"                      =>      "السلة",
     "Notifications"             =>      "الإشعارات",
     "Account"                   =>      "الحساب",
@@ -422,6 +422,20 @@ return [
     "Date"                      =>      "التاريخ",
     "Price"                     =>      "السعر",
     "Review has been Deleted successfully"      =>      "تم حذف التقييم بنجاح",
+    "Subcategories"             =>      "الأقسام المباشرة",
+    "Categories"                =>      "الأقسام الفرعية",
+    "Supercategories"           =>      "الأقسام الرئيسية",
+    "Brands"                    =>      "الماركات",
+    "Min"                       =>      "من",
+    "Max"                       =>      "إلى",
+    "Rating"                    =>      "التقييمات",
+    "Other"                     =>      "أخرى",
+    "Returnable"                =>      "قابل للإرتجاع",
+    "Available"                 =>      "متوفر",
+    "Show All"                  =>      "عرض الكل",
+    "Show Less"                 =>      "إخفاء",
+    "Clear Filters"             =>      "إلغاء الفلاتر",
+
 
 
 ];

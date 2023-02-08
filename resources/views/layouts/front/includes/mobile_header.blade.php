@@ -13,7 +13,7 @@
                 <span class="material-icons opacity-60 text-xl">
                     category
                 </span>
-                <span class="block font-bold opacity-60">{{ __('front/homePage.Categories') }}</span>
+                <span class="block font-bold opacity-60">{{ __('front/homePage.All Categories') }}</span>
             </a>
         </div>
         <div class="col">

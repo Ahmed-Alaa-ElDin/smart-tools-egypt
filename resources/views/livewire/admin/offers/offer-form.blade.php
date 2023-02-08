@@ -1078,7 +1078,6 @@
     {{-- extra Js : :: Start --}}
     @if ($offer_id != null)
         @push('js')
-            @livewireScripts
 
             <script src="{{ asset('assets/js/plugins/daterangepicker-master/daterangepicker.js') }}"></script>
 
@@ -1098,8 +1097,7 @@
                             format: 'YYYY-MM-DD hh:mm A',
                         }
                     }, function(start, end, label) {
-                        Livewire.emit('daterangeUpdated', start.format('YYYY-MM-DD H:mm'), end.format(
-                            'YYYY-MM-DD H:mm'));
+                        Livewire.emit('daterangeUpdated', start.format('YYYY-MM-DD H:mm'), end.format('YYYY-MM-DD H:mm'));
                     });
                 });
             </script>

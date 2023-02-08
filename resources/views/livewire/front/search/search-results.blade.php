@@ -1,13 +1,455 @@
-<div class="grid grid-cols-12 gap-4 p-3">
+<div class="grid grid-cols-12 gap-4 p-3 items-start">
     {{-- Filters :: Start --}}
     <div class="col-span-3 d-none md:block">
         <div class="bg-white rounded shadow m-auto px-3">
-            <div class="text-center p-3 text-sm font-bold">
-                {{ __('front/homePage.Filters') }}
-            </div>
-            <hr>
-            <div>
+            <div class="flex justify-center items-center p-3 gap-2">
+                <span class="text-sm font-bold grow text-center">
+                    {{ __('front/homePage.Filters') }}
+                </span>
 
+                @if ($filters)
+                    <button class="bg-primary px-3 py-1 text-xs text-white font-bold rounded" wire:click="clearFilters">
+                        {{ __('front/homePage.Clear Filters') }}
+                    </button>
+                @endif
+            </div>
+
+            <hr>
+
+            <div id="accordion-collapse" data-accordion="open" data-active-classes="bg-transperant">
+                <input type="hidden" wire:model="perPage">
+                {{-- Brands :: Start --}}
+                @if (count($brands))
+                    <h2 id="brand-heading-1">
+                        <button type="button"
+                            class="flex items-center justify-between w-full p-2 font-bold text-center border-0 border-b-1 border-gray-200"
+                            data-accordion-target="#brand-body-1" aria-expanded="true" aria-controls="brand-body-1">
+                            <span class="grow text-xs font-bold">{{ __('front/homePage.Brands') }}</span>
+                            <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor"
+                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </h2>
+                    <div id="brand-body-1" class="hidden" aria-labelledby="brand-heading-1" wire:ignore.self>
+                        <div id="brands" class="p-2 pb-4 font-light border-0 border-b-1 border-gray-200" wire:ignore>
+                            @foreach ($brands as $brand)
+                                <label for="brand-{{ $brand['id'] }}"
+                                    class="flex justify-start items-center gap-2 text-sm m-0 text-gray-900 cursor-pointer">
+                                    <input type="checkbox" id="brand-{{ $brand['id'] }}" value="{{ $brand['id'] }}"
+                                        wire:model="selectedBrands"
+                                        class="rounded-circle cursor-pointer focus:ring-0 checked:bg-secondary">
+                                    <span class="inline-block">
+                                        <span>
+                                            {{ $brand['name'] }}
+                                        </span>
+                                        <span class="text-gray-600 text-xs">({{ $brand['count'] }})</span>
+                                    </span>
+                                </label>
+                            @endforeach
+                            <div class="text-center mt-2 hidden">
+                                <button class="text-secondaryLighter text-xs font-bold" id="showAllBrands">
+                                    {{ __('front/homePage.Show All') }}
+                                </button>
+                            </div>
+                            <div class="text-center mt-2 hidden">
+                                <button class="text-secondaryLighter text-xs font-bold" id="showLessBrands">
+                                    {{ __('front/homePage.Show Less') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                {{-- Brands :: End --}}
+
+
+                {{-- Price :: Start --}}
+                {{-- @if (count($items) > 1) --}}
+                <hr>
+
+                <h2 id="price-heading-1">
+                    <button type="button"
+                        class="flex items-center justify-between w-full p-2 font-bold text-center border-0 border-b-1 border-gray-200"
+                        data-accordion-target="#price-body-1" aria-expanded="true" aria-controls="price-body-1">
+                        <span class="grow text-xs font-bold">{{ __('front/homePage.Price') }}</span>
+                        <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor"
+                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </h2>
+
+                <div id="price-body-1" class="hidden" aria-labelledby="price-heading-1" wire:ignore>
+                    <div class="p-2 pb-4 font-light border-0 border-b-1 border-gray-200">
+                        <div class="price-input flex justify-center items-center gap-3 mb-4 w-100">
+                            <div class="field flex items-center justify-center gap-2">
+                                <span class="text-xs font-bold">{{ __('front/homePage.Min') }}</span>
+                                <input type="number" min="{{ $currentMinPrice }}" max="{{ $currentMaxPrice }}"
+                                    step="1" dir="ltr"
+                                    class="input-min w-24 text-sm rounded focus:ring-primary focus:border-primary border-gray-300 text-center"
+                                    value="{{ $currentMinPrice }}" wire:model.lazy='currentMinPrice'>
+                            </div>
+                            <div class="text-sm">-</div>
+                            <div class="field flex items-center justify-center gap-2">
+                                <span class="text-xs font-bold">{{ __('front/homePage.Max') }}</span>
+                                <input type="number" min="{{ $currentMinPrice }}" max="{{ $currentMaxPrice }}"
+                                    step="1" dir="ltr"
+                                    class="input-max w-24 text-sm rounded focus:ring-primary focus:border-primary border-gray-300 text-center"
+                                    value="{{ $currentMaxPrice }}" wire:model.lazy='currentMaxPrice'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- @endif --}}
+                {{-- Price :: End --}}
+
+                {{-- Supercategories :: Start --}}
+                @if (count($supercategories))
+                    <hr>
+
+                    <h2 id="supercategory-heading-1">
+                        <button type="button"
+                            class="flex items-center justify-between w-full p-2 font-bold text-center border-0 border-b-1 border-gray-200"
+                            data-accordion-target="#supercategory-body-1" aria-expanded="true"
+                            aria-controls="supercategory-body-1">
+                            <span class="grow text-xs font-bold">{{ __('front/homePage.Supercategories') }}</span>
+                            <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor"
+                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </h2>
+                    <div id="supercategory-body-1" class="hidden" aria-labelledby="supercategory-heading-1"
+                        wire:ignore.self>
+                        <div id="supercategories" class="p-2 pb-4 font-light border-0 border-b-1 border-gray-200"
+                            wire:ignore>
+                            @foreach ($supercategories as $supercategory)
+                                <label for="supercategory-{{ $supercategory['id'] }}"
+                                    class="flex justify-start items-center gap-2 text-sm m-0 text-gray-900 cursor-pointer">
+                                    <input type="checkbox" id="supercategory-{{ $supercategory['id'] }}"
+                                        value="{{ $supercategory['id'] }}" wire:model="selectedSupercategories"
+                                        class="rounded-circle cursor-pointer focus:ring-0 checked:bg-secondary">
+                                    <span class="inline-block">
+                                        {{ $supercategory['name'][session('locale')] }}
+                                        <span class="text-gray-600 text-xs">({{ $supercategory['count'] }})</span>
+                                    </span>
+                                </label>
+                            @endforeach
+                            <div class="text-center mt-2 hidden">
+                                <button class="text-secondaryLighter text-xs font-bold" id="showAllSupercategories">
+                                    {{ __('front/homePage.Show All') }}
+                                </button>
+                            </div>
+                            <div class="text-center mt-2 hidden">
+                                <button class="text-secondaryLighter text-xs font-bold" id="showLessSupercategories">
+                                    {{ __('front/homePage.Show Less') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                {{-- Supercategories :: End --}}
+
+                {{-- Categories :: Start --}}
+                @if (count($categories))
+                    <hr>
+
+                    <h2 id="category-heading-1">
+                        <button type="button"
+                            class="flex items-center justify-between w-full p-2 font-bold text-center border-0 border-b-1 border-gray-200"
+                            data-accordion-target="#category-body-1" aria-expanded="true"
+                            aria-controls="category-body-1">
+                            <span class="grow text-xs font-bold">{{ __('front/homePage.Categories') }}</span>
+                            <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor"
+                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </h2>
+                    <div id="category-body-1" class="hidden" aria-labelledby="category-heading-1" wire:ignore.self>
+                        <div id="categories" class="p-2 pb-4 font-light border-0 border-b-1 border-gray-200"
+                            wire:ignore>
+                            @foreach ($categories as $category)
+                                <label for="category-{{ $category['id'] }}"
+                                    class="flex justify-start items-center gap-2 text-sm m-0 text-gray-900 cursor-pointer">
+                                    <input type="checkbox" id="category-{{ $category['id'] }}"
+                                        value="{{ $category['id'] }}" wire:model="selectedCategories"
+                                        class="rounded-circle cursor-pointer focus:ring-0 checked:bg-secondary">
+                                    <span class="inline-block">
+                                        {{ $category['name'][session('locale')] }}
+                                        <span class="text-gray-600 text-xs">({{ $category['count'] }})</span>
+                                    </span>
+                                </label>
+                            @endforeach
+                            <div class="text-center mt-2 hidden">
+                                <button class="text-secondaryLighter text-xs font-bold" id="showAllCategories">
+                                    {{ __('front/homePage.Show All') }}
+                                </button>
+                            </div>
+                            <div class="text-center mt-2 hidden">
+                                <button class="text-secondaryLighter text-xs font-bold" id="showLessCategories">
+                                    {{ __('front/homePage.Show Less') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                {{-- Categories :: End --}}
+
+                {{-- Subcategories :: Start --}}
+                @if (count($subcategories))
+                    <hr>
+
+                    <h2 id="subcategory-heading-1">
+                        <button type="button"
+                            class="flex items-center justify-between w-full p-2 font-bold text-center border-0 border-b-1 border-gray-200"
+                            data-accordion-target="#subcategory-body-1" aria-expanded="true"
+                            aria-controls="subcategory-body-1">
+                            <span class="grow text-xs font-bold">{{ __('front/homePage.Subcategories') }}</span>
+                            <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor"
+                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </h2>
+                    <div id="subcategory-body-1" class="hidden" aria-labelledby="subcategory-heading-1"
+                        wire:ignore.self>
+                        <div id="subcategories" class="p-2 pb-4 font-light border-0 border-b-1 border-gray-200"
+                            wire:ignore>
+                            @foreach ($subcategories as $subcategory)
+                                <label for="subcategory-{{ $subcategory['id'] }}"
+                                    class="flex justify-start items-center gap-2 text-sm m-0 text-gray-900 cursor-pointer">
+                                    <input type="checkbox" id="subcategory-{{ $subcategory['id'] }}"
+                                        value="{{ $subcategory['id'] }}" wire:model="selectedSubcategories"
+                                        class="rounded-circle cursor-pointer focus:ring-0 checked:bg-secondary">
+                                    <span class="inline-block">
+                                        {{ $subcategory['name'][session('locale')] }}
+                                        <span class="text-gray-600 text-xs">({{ $subcategory['count'] }})</span>
+                                    </span>
+                                </label>
+                            @endforeach
+                            <div class="text-center mt-2 hidden">
+                                <button class="text-secondaryLighter text-xs font-bold" id="showAllSubcategories">
+                                    {{ __('front/homePage.Show All') }}
+                                </button>
+                            </div>
+                            <div class="text-center mt-2 hidden">
+                                <button class="text-secondaryLighter text-xs font-bold" id="showLessSubcategories">
+                                    {{ __('front/homePage.Show Less') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                {{-- Subcategories :: End --}}
+
+                {{-- Rating :: Start --}}
+                {{-- @if (count($items)) --}}
+                <hr>
+
+                <h2 id="rating-heading-1">
+                    <button type="button"
+                        class="flex items-center justify-between w-full p-2 font-bold text-center border-0 border-b-1 border-gray-200"
+                        data-accordion-target="#rating-body-1" aria-expanded="true" aria-controls="rating-body-1">
+                        <span class="grow text-xs font-bold">{{ __('front/homePage.Rating') }}</span>
+                        <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor"
+                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </h2>
+                <div id="rating-body-1" class="hidden" aria-labelledby="rating-heading-1" wire:ignore.self>
+                    <div class="p-2 pb-4 font-light border-0 border-b-1 border-gray-200 flex flex-col gap-1 items-center"
+                        wire:ignore.self>
+                        <label class="flex gap-1 items-center m-0 cursor-pointer">
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 5) text-yellow-400 @else text-yellow-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 5) text-yellow-400 @else text-yellow-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 5) text-yellow-400 @else text-yellow-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 5) text-yellow-400 @else text-yellow-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 5) text-yellow-400 @else text-yellow-300 @endif">
+                                star </span>
+                            <span
+                                class="text-sm @if ($currentRating == 5) text-black @else text-gray-400 @endif font-bold">&
+                                up</span>
+                            <span
+                                class="text-sm @if ($currentRating == 5) text-black @else text-gray-400 @endif font-bold">({{ $fiveRatingNo }})</span>
+                            <input type="radio" wire:model="currentRating" value="5" class="hidden">
+                        </label>
+                        <label class="flex gap-1 items-center m-0 cursor-pointer">
+
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 4) text-yellow-400 @else text-yellow-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 4) text-yellow-400 @else text-yellow-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 4) text-yellow-400 @else text-yellow-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 4) text-yellow-400 @else text-yellow-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 4) text-gray-400 @else text-gray-300 @endif">
+                                star </span>
+                            <span
+                                class="text-sm @if ($currentRating == 4) text-black @else text-gray-400 @endif font-bold">&
+                                up</span>
+                            <span
+                                class="text-sm @if ($currentRating == 4) text-black @else text-gray-400 @endif font-bold">({{ $fourRatingNo }})</span>
+                            <input type="radio" wire:model="currentRating" value="4" class="hidden">
+                        </label>
+                        <label class="flex gap-1 items-center m-0 cursor-pointer">
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 3) text-yellow-400 @else text-yellow-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 3) text-yellow-400 @else text-yellow-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 3) text-yellow-400 @else text-yellow-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 3) text-gray-400 @else text-gray-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 3) text-gray-400 @else text-gray-300 @endif">
+                                star </span>
+                            <span
+                                class="text-sm @if ($currentRating == 3) text-black @else text-gray-400 @endif font-bold">&
+                                up</span>
+                            <span
+                                class="text-sm @if ($currentRating == 3) text-black @else text-gray-400 @endif font-bold">({{ $threeRatingNo }})</span>
+                            <input type="radio" wire:model="currentRating" value="3" class="hidden">
+                        </label>
+                        <label class="flex gap-1 items-center m-0 cursor-pointer">
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 2) text-yellow-400 @else text-yellow-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 2) text-yellow-400 @else text-yellow-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 2) text-gray-400 @else text-gray-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 2) text-gray-400 @else text-gray-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 2) text-gray-400 @else text-gray-300 @endif">
+                                star </span>
+                            <span
+                                class="text-sm @if ($currentRating == 2) text-black @else text-gray-400 @endif font-bold">&
+                                up</span>
+                            <span
+                                class="text-sm @if ($currentRating == 2) text-black @else text-gray-400 @endif font-bold">({{ $twoRatingNo }})</span>
+                            <input type="radio" wire:model="currentRating" value="2" class="hidden">
+                        </label>
+                        <label class="flex gap-1 items-center m-0 cursor-pointer">
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 1) text-yellow-400 @else text-yellow-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 1) text-gray-400 @else text-gray-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 1) text-gray-400 @else text-gray-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 1) text-gray-400 @else text-gray-300 @endif">
+                                star </span>
+                            <span
+                                class="material-icons inline-block text-md @if ($currentRating == 1) text-gray-400 @else text-gray-300 @endif">
+                                star </span>
+                            <span
+                                class="text-sm @if ($currentRating == 1) text-black @else text-gray-400 @endif font-bold">&
+                                up</span>
+                            <span
+                                class="text-sm @if ($currentRating == 1) text-black @else text-gray-400 @endif font-bold">({{ $oneRatingNo }})</span>
+                            <input type="radio" wire:model="currentRating" value="1" class="hidden">
+                        </label>
+                    </div>
+                </div>
+                {{-- @endif --}}
+                {{-- Rating :: End --}}
+
+                <hr>
+
+                {{-- Other :: Start --}}
+                <h2 id="other-heading-1">
+                    <button type="button"
+                        class="flex items-center justify-between w-full p-2 font-bold text-center border-0 border-b-1 border-gray-200"
+                        data-accordion-target="#other-body-1" aria-expanded="true" aria-controls="other-body-1">
+                        <span class="grow text-xs font-bold">{{ __('front/homePage.Other') }}</span>
+                        <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor"
+                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </h2>
+                <div id="other-body-1" class="hidden" aria-labelledby="other-heading-1" wire:ignore.self>
+                    <div
+                        class="p-2 pb-4 font-light border-0 border-b-1 border-gray-200 flex flex-col gap-2 items-start">
+
+                        {{-- Available --}}
+                        <label
+                            class="relative inline-flex items-center cursor-pointer items-center justify-center gap-2 m-0">
+                            <span class="text-gray-800 text-xs font-bold">{{ __('front/homePage.Available') }}</span>
+                            <input type="checkbox" wire:model="currentAvailable" value="true"
+                                class="sr-only peer">
+                            <div
+                                class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-secondaryLighter rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-secondary after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary">
+                            </div>
+                        </label>
+
+                        {{-- Free Shipping --}}
+                        <label
+                            class="relative inline-flex items-center cursor-pointer items-center justify-center gap-2 m-0">
+                            <span
+                                class="text-gray-800 text-xs font-bold">{{ __('front/homePage.Free Shipping') }}</span>
+                            <input type="checkbox" wire:model="currentFreeShipping" value="true"
+                                class="sr-only peer">
+                            <div
+                                class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-secondaryLighter rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-secondary after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary">
+                            </div>
+                        </label>
+
+                        {{-- Returnable --}}
+                        <label
+                            class="relative inline-flex items-center cursor-pointer items-center justify-center gap-2 m-0">
+                            <span class="text-gray-800 text-xs font-bold">{{ __('front/homePage.Returnable') }}</span>
+                            <input type="checkbox" wire:model="currentReturnable" value="true"
+                                class="sr-only peer">
+                            <div
+                                class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-secondaryLighter rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-secondary after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary">
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                {{-- Other :: End --}}
             </div>
         </div>
     </div>
@@ -91,7 +533,6 @@
                         @if ($loop->last)
                             <div class="col-span-4">
                                 {{ $items->links() }}
-                                {{-- <x-front.pagination :totalPages="$totalPages" :currentPage="$currentPage" /> --}}
                             </div>
                         @endif
                         {{-- Pagination :: End --}}

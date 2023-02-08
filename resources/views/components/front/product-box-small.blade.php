@@ -2,7 +2,7 @@
 <li class="splide__slide">
     <div class="carousel-box w-full inline-block">
         <div
-            class="group border border-light rounded hover:shadow-md hover:scale-105 mt-1 mb-2 transition overflow-hidden relative">
+            class="group shadow border border-light rounded-lg hover:shadow-md hover:scale-105 mt-1 mb-2 transition overflow-hidden relative">
 
             {{-- Add Product : Start --}}
             <div
@@ -173,17 +173,19 @@
             </a>
 
             {{-- Cart Amount : Start --}}
-            <div class="md:p-3 p-2">
-                @livewire(
-                    'front.general.cart.cart-amount',
-                    [
-                        'item_id' => $item['id'],
-                        'type' => $item['type'],
-                        'unique' => 'item-' . $item['id'],
-                    ],
-                    key($item['name'][session('locale')] . '-' . rand()),
-                )
-            </div>
+            @if ($item['quantity'])
+                <div class="md:p-3 p-2">
+                    @livewire(
+                        'front.general.cart.cart-amount',
+                        [
+                            'item_id' => $item['id'],
+                            'type' => $item['type'],
+                            'unique' => 'item-' . $item['id'],
+                        ],
+                        key($item['name'][session('locale')] . '-' . rand())
+                    )
+                </div>
+            @endif
             {{-- Cart Amount : End --}}
         </div>
     </div>
