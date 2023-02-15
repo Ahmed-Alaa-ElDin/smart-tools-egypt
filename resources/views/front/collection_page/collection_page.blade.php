@@ -731,7 +731,6 @@
 
 {{-- Extra Scripts --}}
 @push('js')
-    <script src="{{ asset('assets/js/plugins/flowbite/flowbite.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/tinymce/tinymce.min.js') }}"></script>
 
     <script>

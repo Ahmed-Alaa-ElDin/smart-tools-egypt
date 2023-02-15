@@ -58,6 +58,7 @@
             // }
             // ####### Products Slider :: End #######
 
+
             // ####### Show More :: Start #######
                 // Brands
             if ($('#brands label[for^="brand"]').length > 3) {
