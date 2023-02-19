@@ -3,7 +3,7 @@
     <div id="filters-dropshadow" class="fixed hidden md:hidden w-100 h-100 left- 0 top-0 drop-shadow backdrop-blur z-40">
     </div>
     <div id="filters"
-        class="col-span-3 overflow-y-auto fixed top-0 ltr:left-0 rtl:right-0 z-50 h-screen ltr:-translate-x-full rtl:translate-x-full transition-transform w-80 md:static md:block md:top-auto md:left-auto md:z-auto md:h-auto ltr:md:translate-x-0 rtl:md:translate-x-0 md:w-auto md:p-0 md:overflow-hidden">
+        class="col-span-3 overflow-y-auto fixed top-0 ltr:left-0 rtl:right-0 z-50 h-[95vh] ltr:-translate-x-full rtl:translate-x-full transition-transform w-80 md:static md:block md:top-auto md:left-auto md:z-auto md:h-auto ltr:md:translate-x-0 rtl:md:translate-x-0 md:w-auto md:p-0 md:overflow-hidden">
         <div class="bg-white rounded shadow m-auto px-3">
             <div class="flex justify-center items-center p-3 gap-2">
                 <span class="text-sm font-bold grow text-center">
