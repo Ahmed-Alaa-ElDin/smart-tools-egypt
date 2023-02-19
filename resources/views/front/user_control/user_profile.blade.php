@@ -213,7 +213,7 @@
                 <div class="flex flex-col justify-start items-start gap-2 h-full text-white p-4">
                     <p class="text-4xl font-bold text-center flex gap-2">
                         <span dir="ltr">
-                            {{ number_format($user->points,0,',','\'') }}
+                            {{ number_format($user->validPoints,0,',','\'') }}
                         </span>
                         <span class="text-sm">
                             {{ trans_choice('front/homePage.Point/Points', $user->points) }}
