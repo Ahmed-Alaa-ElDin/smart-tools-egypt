@@ -1,12 +1,18 @@
 <div class="grid grid-cols-12 gap-4 p-3 items-start">
     {{-- Filters :: Start --}}
-    <div id="filters-dropshadow" class="fixed hidden md:hidden w-100 h-100 left- 0 top-0 drop-shadow backdrop-blur z-40">
+    <div id="filters-dropshadow" class="fixed hidden cursor-pointer w-100 h-100 left- 0 top-0 drop-shadow backdrop-blur z-40 md:hidden">
     </div>
     <div id="filters"
         class="col-span-3 overflow-y-auto fixed top-0 ltr:left-0 rtl:right-0 z-50 h-[95vh] ltr:-translate-x-full rtl:translate-x-full transition-transform w-80 md:static md:block md:top-auto md:left-auto md:z-auto md:h-auto ltr:md:translate-x-0 rtl:md:translate-x-0 md:w-auto md:p-0 md:overflow-hidden">
         <div class="bg-white rounded shadow m-auto px-3">
             <div class="flex justify-center items-center p-3 gap-2">
-                <span class="text-sm font-bold grow text-center">
+                @if ($filters)
+                    <button class="bg-primary px-3 py-1 text-xs text-white font-bold rounded" wire:click="clearFilters">
+                        {{ __('front/homePage.Clear Filters') }}
+                    </button>
+                @endif
+
+                <span class="text-md font-bold grow text-center">
                     {{ __('front/homePage.Filters') }}
                 </span>
 
@@ -17,12 +23,6 @@
                         close
                     </span>
                 </button>
-
-                @if ($filters)
-                    <button class="bg-primary px-3 py-1 text-xs text-white font-bold rounded" wire:click="clearFilters">
-                        {{ __('front/homePage.Clear Filters') }}
-                    </button>
-                @endif
             </div>
 
             <hr>
@@ -480,7 +480,7 @@
                 {{-- Mobile Filter Button :: End --}}
 
                 {{-- Title :: Start --}}
-                <div class="text-center p-3 text-sm font-bold grow">
+                <div class="text-center p-3 text-md font-bold grow">
                     {{ __('front/homePage.Results') }}
                 </div>
                 {{-- Title :: End --}}
