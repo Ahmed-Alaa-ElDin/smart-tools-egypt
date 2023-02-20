@@ -435,7 +435,8 @@ return [
     "Show All"                  =>      "عرض الكل",
     "Show Less"                 =>      "إخفاء",
     "Clear Filters"             =>      "إلغاء الفلاتر",
-
+    "No of products brand"      =>      "{0} لا يوجد منتجات |{1} منتج واحد |{2} منتجان |[3,10] :products منتجات |[11,*] :products منتج",
+    "No Brands have been Found" =>      "لا يوجد ماركات بالموقع",
 
 
 ];

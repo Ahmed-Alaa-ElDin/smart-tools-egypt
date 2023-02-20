@@ -1,13 +1,14 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\CartController;
-use App\Http\Controllers\Front\CollectionController;
-use App\Http\Controllers\Front\HomepageController;
+use App\Http\Controllers\Front\BrandController;
 use App\Http\Controllers\Front\OrderController;
 use App\Http\Controllers\Front\ProductController;
 use App\Http\Controllers\Front\ProfileController;
+use App\Http\Controllers\Front\HomepageController;
 use App\Http\Controllers\InvoiceRequestController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Front\CollectionController;
 
 Route::group([
     'middleware' => ['getCart'],
@@ -24,6 +25,9 @@ Route::group([
     Route::resource('/profile', ProfileController::class)->middleware('auth');
     ################ User's Profile :: End ##############
 
+    ################ Brands :: Start ##############
+    Route::resource('/brand', BrandController::class);
+    ################ Brands :: End ##############
 
     ################ Cart & Order Controller :: Start ##############
     Route::get('/cart', [CartController::class, 'index'])->name('cart')->middleware(['cart_not_empty']);

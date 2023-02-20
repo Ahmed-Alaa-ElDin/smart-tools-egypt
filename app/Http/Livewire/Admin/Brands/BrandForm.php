@@ -13,7 +13,7 @@ class BrandForm extends Component
 {
     use WithFileUploads;
 
-    public $brand_id;
+    public $brand_id, $countries, $brand;
     public $logo,  $logo_name, $deletedImages = [];
     public $name, $country_id;
     public $title, $description_seo;
@@ -148,7 +148,7 @@ class BrandForm extends Component
             ]);
 
             foreach ($this->deletedImages as $key => $deletedImage) {
-                imageDelete($deletedImage, 'brands');
+                imageDelete($deletedImage, 'logos');
             }
 
             DB::commit();
