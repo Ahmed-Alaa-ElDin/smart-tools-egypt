@@ -88,6 +88,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'categories' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/images/categories'),
+            'url' => env('APP_URL') . '/images/categories',
+            'visibility' => 'public',
+        ],
+
         'subcategories' => [
             'driver' => 'local',
             'root' => storage_path('app/public/images/subcategories'),

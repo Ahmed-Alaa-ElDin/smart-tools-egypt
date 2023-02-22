@@ -80,4 +80,10 @@ class Category extends Model
     {
         return $this->hasManyDeep(Product::class, [Subcategory::class, 'product_subcategory']);
     }
+
+    // One to many relationship Category --> Image
+    public function images()
+    {
+        return $this->morphMany(Image::class, "imagable");
+    }
 }

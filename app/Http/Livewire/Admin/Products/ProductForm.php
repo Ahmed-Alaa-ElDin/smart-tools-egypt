@@ -531,11 +531,6 @@ class ProductForm extends Component
     ######################## Save Updated Product :: Start ############################
     public function update()
     {
-        // dd([
-        //     'ar' => $this->description['ar'],
-        //     'en' => $this->description['en'],
-        // ]);
-
         $this->validate();
 
         DB::beginTransaction();
@@ -576,6 +571,7 @@ class ProductForm extends Component
 
             // Add Subcategories
             $subcategories_id = array_map(fn ($value) => $value['subcategory_id'], $this->parentCategories);
+
             $this->product->subcategories()->sync($subcategories_id);
 
             $this->product->images()->delete();
@@ -607,7 +603,7 @@ class ProductForm extends Component
             redirect()->route('admin.products.index');
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+
             Session::flash('error', __("admin/productsPages.Product hasn't been updated"));
             redirect()->route('admin.products.index');
         }

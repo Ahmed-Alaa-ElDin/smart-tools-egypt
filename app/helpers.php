@@ -5,11 +5,9 @@ use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\User;
-use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 

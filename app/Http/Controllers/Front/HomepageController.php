@@ -169,14 +169,13 @@ class HomepageController extends Controller
         ############ Get Today Deals Section :: End ############
 
         ############ Get Top Categories :: Start ############
-        $categories = Category::where("top", '>', 0)->orderBy("top")->get();
+        $categories = Category::select('id','name','top')->without('validOffers')->with('images')->where("top", '>', 0)->orderBy("top")->get();
         ############ Get Top Categories :: End ############
 
         ############ Get Top Brands :: Start ############
-        $brands = Brand::where("top", '>', 0)->orderBy("top")->get();
+        $brands = Brand::select('id','name','top','logo_path')->without('validOffers')->where("top", '>', 0)->orderBy("top")->get();
         ############ Get Top Brands :: End ############
 
-        // dd('homepage_sections', 'today_deals_sections', 'categories', 'brands');
         return view('front.homepage.homepage', compact('homepage_sections', 'today_deals_sections', 'categories', 'brands'));
     }
 

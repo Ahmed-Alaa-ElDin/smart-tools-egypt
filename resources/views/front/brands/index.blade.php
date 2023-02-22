@@ -1,6 +1,6 @@
 @extends('layouts.front.site', [
     'titlePage' => __('front/homePage.All Brands'),
-    'url' => env('APP_URL') . '/' . session('locale') . '/brand',
+    'url' => route('front.brand.index'),
     'title' => __('front/homePage.All Brands'),
     'description' => '',
 ])

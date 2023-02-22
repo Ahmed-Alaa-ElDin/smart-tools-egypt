@@ -1,14 +1,17 @@
 <?php
 
+use App\Http\Controllers\Front\SupercategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\BrandController;
+use App\Http\Controllers\Front\CategoryController;
 use App\Http\Controllers\Front\OrderController;
 use App\Http\Controllers\Front\ProductController;
 use App\Http\Controllers\Front\ProfileController;
 use App\Http\Controllers\Front\HomepageController;
 use App\Http\Controllers\InvoiceRequestController;
 use App\Http\Controllers\Front\CollectionController;
+use App\Http\Controllers\Front\SubcategoryController;
 
 Route::group([
     'middleware' => ['getCart'],
@@ -28,6 +31,21 @@ Route::group([
     ################ Brands :: Start ##############
     Route::resource('/brand', BrandController::class);
     ################ Brands :: End ##############
+
+    ################ Supercategory :: Start ##############
+    Route::resource('/supercategory', SupercategoryController::class);
+    Route::get('/supercategory/{supercategory_id}/subcategories', [SupercategoryController::class,'subcategories'])->name('supercategory.subcategories');
+    Route::get('/supercategory/{supercategory_id}/products', [SupercategoryController::class,'products'])->name('supercategory.products');
+    ################ Supercategory :: End ##############
+
+    ################ Category :: Start ##############
+    Route::resource('/category', CategoryController::class);
+    Route::get('/category/{category_id}/products', [CategoryController::class,'products'])->name('category.products');
+    ################ Category :: End ##############
+
+        ################ Subcategory :: Start ##############
+        Route::resource('/subcategory', SubcategoryController::class);
+        ################ Subcategory :: End ##############
 
     ################ Cart & Order Controller :: Start ##############
     Route::get('/cart', [CartController::class, 'index'])->name('cart')->middleware(['cart_not_empty']);

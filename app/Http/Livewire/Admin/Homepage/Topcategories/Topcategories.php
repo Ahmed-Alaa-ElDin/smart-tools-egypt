@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Admin\Homepage\Topcategories;
 
 use App\Models\Category;
-use App\Models\Subcategory;
 use App\Models\Supercategory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -150,6 +149,7 @@ class Topcategories extends Component
             Category::select('id', 'top')->update(['top' => 0]);
 
             foreach ($this->items as $key => $item) {
+                dd($item);
                 if ($item['category_id'] > 0) {
                     $updatedCategory = Category::select('id', 'top')->findOrFail($item['category_id']);
 

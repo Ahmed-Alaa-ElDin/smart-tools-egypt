@@ -26,10 +26,10 @@
                     <a href="#" class="bg-white border block rounded p-2 hover:shadow-md">
                         <div class="grid grid-cols-12 items-center">
 
-                            @if ($category->image_name)
+                            @if ($category->images->count())
                                 {{-- Image : Start --}}
                                 <div class="col-span-3 w-16 h-16">
-                                    <img src="{{ asset('storage/images/categories/cropped100/' . $category->image_name) }}"
+                                    <img src="{{ asset('storage/images/categories/cropped100/' . $category->images->first()->file_name) }}"
                                         alt="{{ $category->name }}" class="img-fluid img rounded lazyloaded">
                                 </div>
                                 {{-- Image : End --}}
