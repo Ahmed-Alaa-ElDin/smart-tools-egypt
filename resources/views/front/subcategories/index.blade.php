@@ -1,7 +1,7 @@
 @extends('layouts.front.site', [
-    'titlePage' => __('front/homePage.All Supercategories'),
-    'url' => route('front.supercategory.index'),
-    'title' => __('front/homePage.All Supercategories'),
+    'titlePage' => __('front/homePage.All Subcategories'),
+    'url' => route('front.subcategory.index'),
+    'title' => __('front/homePage.All Subcategories'),
     'description' => '',
 ])
 
@@ -16,23 +16,24 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item text-gray-700 font-bold" aria-current="page">
-                    {{ __('front/homePage.All Supercategories') }}
+                    {{ __('front/homePage.All Subcategories') }}
                 </li>
             </ol>
         </nav>
         {{-- Breadcrumb :: End --}}
 
-        {{-- Supercategories :: Start --}}
+        {{-- Subcategories :: Start --}}
         <section class="grid grid-cols-12 justify-center items-start align-top gap-3 bg-white rounded shadow-lg p-4">
-            @forelse ($supercategories as $supercategory)
-                {{-- Supercategory :: Start --}}
+            @forelse ($subcategories as $subcategory)
+                {{-- Category :: Start --}}
                 <div
                     class="col-span-6 sm:col-span-4 md:col-span-3 p-2 group shadow border border-light rounded-lg hover:shadow-md hover:scale-105 transition overflow-hidden relative">
-                    <a href="{{ route('front.supercategory.show', $supercategory->id) }}">
-                        @if ($supercategory->icon)
+                    <a href="{{ route('front.subcategory.show', $subcategory->id) }}">
+                        @if ($subcategory->image_name)
                             {{-- Image : Start --}}
                             <div class="flex justify-center items-center col-span-3 w-100 max-w-100 text-9xl">
-                                {!! $supercategory->icon !!}
+                                <img class="mx-auto max-h-52 h-full md:h-52 lazyloaded"
+                                    src="{{ asset('storage/images/categories/original/' . $subcategory->image_name) }}">
                             </div>
                             {{-- Image : End --}}
                         @else
@@ -47,51 +48,38 @@
                     </a>
 
                     <div class="flex flex-col gap-2 my-2 items-center justify-center">
-                        {{-- Supercategory Name :: Start --}}
+                        {{-- Category Name :: Start --}}
                         <a
-                            href="{{ route('front.supercategory.show', $supercategory->id) }}"class="text-center font-bold select-none text-xl max-w-max">
-                            {{ $supercategory->name }}
+                            href="{{ route('front.subcategory.show', $subcategory->id) }}"class="text-center font-bold select-none text-xl max-w-max">
+                            {{ $subcategory->name }}
                         </a>
-                        {{-- Supercategory Name :: End --}}
-
-                        {{-- Categories No :: Start --}}
-                        <a href="{{ route('front.supercategory.show', $supercategory->id) }}"
-                            class="text-center rounded-full bg-primaryDarker text-white px-2 py-1 shadow text-sm font-bold">
-                            {{ trans_choice('front/homePage.No of categories supercategory', $supercategory->categories_count, ['categories' => $supercategory->categories_count]) }}
-                        </a>
-                        {{-- Categories No :: End --}}
-
-                        {{-- Subcategories No :: Start --}}
-                        <a href="{{ route('front.supercategory.subcategories', ['supercategory_id' => $supercategory->id]) }}"
-                            class="text-center rounded-full bg-primaryDark text-white px-2 py-1 shadow text-sm font-bold">
-                            {{ trans_choice('front/homePage.No of subcategories supercategory', $supercategory->subcategories_count, ['subcategories' => $supercategory->subcategories_count]) }}
-                        </a>
-                        {{-- Subcategories No :: End --}}
+                        {{-- Category Name :: End --}}
 
                         {{-- Products No :: Start --}}
-                        <a href="{{ route('front.supercategory.products', ['supercategory_id' => $supercategory->id]) }}"
+                        <a href="{{ route('front.subcategory.show',  $subcategory->id) }}"
                             class="text-center rounded-full bg-primary text-white px-2 py-1 shadow text-sm font-bold">
-                            {{ trans_choice('front/homePage.No of products supercategory', $supercategory->products_count, ['products' => $supercategory->products_count]) }}
+                            {{ trans_choice('front/homePage.No of products subcategory', $subcategory->products_count, ['products' => $subcategory->products_count]) }}
                         </a>
                         {{-- Products No :: End --}}
                     </div>
                 </div>
-                {{-- Supercategory :: End --}}
+                {{-- Category :: End --}}
 
                 {{-- Pagination :: Start --}}
                 @if ($loop->last)
                     <div class="col-span-12">
-                        {{ $supercategories->links() }}
+                        {{ $subcategories->links() }}
                     </div>
                 @endif
                 {{-- Pagination :: End --}}
+
             @empty
                 <div class="col-span-12 text-center font-bold p-3">
-                    {{ __('front/homePage.No Supercategories have been Found') }}
+                    {{ __('front/homePage.No Subcategories have been Found') }}
                 </div>
             @endforelse
         </section>
-        {{-- Supercategories :: Start --}}
+        {{-- Subcategories :: Start --}}
     </div>
 @endsection
 

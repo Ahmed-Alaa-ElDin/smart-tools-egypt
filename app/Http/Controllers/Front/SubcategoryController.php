@@ -15,28 +15,12 @@ class SubcategoryController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $subcategories = Subcategory::without('validOffers')
+            ->withCount(['products'])
+            ->orderBy('products_count', 'desc')
+            ->paginate(config('constants.constants.FRONT_PAGINATION'));
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        return view('front.subcategories.index', compact('subcategories'));
     }
 
     /**
@@ -45,42 +29,18 @@ class SubcategoryController extends Controller
      * @param  \App\Models\Subcategory  $subcategory
      * @return \Illuminate\Http\Response
      */
-    public function show(Subcategory $subcategory)
+    public function show($subcategory_id)
     {
-        //
-    }
+        $subcategory = Subcategory::with([
+            'products' => fn ($q) => $q->select('products.id'),
+        ])
+            ->without('validOffers')
+            ->findOrFail($subcategory_id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Subcategory  $subcategory
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Subcategory $subcategory)
-    {
-        //
-    }
+        $productsIds = $subcategory->products->pluck('id');
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Subcategory  $subcategory
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Subcategory $subcategory)
-    {
-        //
-    }
+        $products = getBestOfferForProducts($productsIds)->paginate(config('constants.constants.FRONT_PAGINATION'));
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Subcategory  $subcategory
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Subcategory $subcategory)
-    {
-        //
+        return view('front.subcategories.show', compact(['subcategory', 'products']));
     }
 }

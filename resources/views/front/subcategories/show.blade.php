@@ -1,7 +1,7 @@
 @extends('layouts.front.site', [
-    'titlePage' => __('front/homePage.Supercategory Products', ['supercategory' => $supercategory->name]),
-    'url' => route('front.supercategory.products', $supercategory->id),
-    'title' => __('front/homePage.Supercategory Products', ['supercategory' => $supercategory->name]),
+    'titlePage' => $subcategory->name,
+    'url' => route('front.subcategory.show', $subcategory->id),
+    'title' => $subcategory->name,
     'description' => '',
 ])
 
@@ -16,31 +16,32 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item hover:text-primary">
-                    <a href="{{ route('front.supercategory.index') }}">
-                        {{ __('front/homePage.All Supercategories') }}
+                    <a href="{{ route('front.subcategory.index') }}">
+                        {{ __('front/homePage.All Subcategories') }}
                     </a>
                 </li>
                 <li class="breadcrumb-item text-gray-700 font-bold" aria-current="page">
-                    {{ __('front/homePage.Supercategory Products', ['supercategory' => $supercategory->name]) }}
+                    {{ $subcategory->name }}
                 </li>
             </ol>
         </nav>
         {{-- Breadcrumb :: End --}}
 
-        {{-- Supercategories :: Start --}}
+        {{-- Subcategory :: Start --}}
         <section class="bg-white rounded shadow-lg">
             <div class="border-b border-gray-300">
                 <div class="flex justify-start items-center gap-4 p-3 border-b-2 border-primary max-w-max">
                     <div>
-                        @if ($supercategory->icon)
+                        @if ($subcategory->image_name)
                             {{-- Image : Start --}}
-                            <div class="flex justify-center items-center col-span-3 w-16 max-w-100 text-6xl">
-                                {!! $supercategory->icon !!}
+                            <div class="flex justify-center items-center col-span-3">
+                                <img class="mx-auto w-16 lazyloaded"
+                                    src="{{ asset('storage/images/categories/original/' . $subcategory->image_name) }}">
                             </div>
                             {{-- Image : End --}}
                         @else
                             {{-- Image : Start --}}
-                            <div class="col-span-3 w-16 flex justify-center items-center">
+                            <div class="col-span-3 w-100 flex justify-center items-center">
                                 <span class="material-icons text-center text-6xl">
                                     construction
                                 </span>
@@ -49,14 +50,14 @@
                         @endif
                     </div>
                     <div class="text-xl font-bold">
-                        {{ $supercategory->name }}
+                        {{ $subcategory->name }}
                     </div>
                 </div>
             </div>
 
             <div class="p-3">
                 {{-- Products :: Start --}}
-                <div class="p-3 w-full grid grid-cols-4 gap-3">
+                <div class="p-3 w-full grid grid-cols-4 gap-3 items-start">
                     @forelse ($products as $product)
                         <div class="col-span-2 lg:col-span-1">
                             <x-front.product-box-small :item="$product->toArray()" wire:key="product-{{ rand() }}" />
@@ -71,7 +72,7 @@
                         {{-- Pagination :: End --}}
                     @empty
                         <div class="col-span-4 text-center font-bold p-2 text-lg">
-                            {{ __('front/homePage.No Products belongs to Supercategory', ['supercategory' => $supercategory->name]) }}
+                            {{ __('front/homePage.No Products belongs to Subcategory', ['subcategory' => $subcategory->name]) }}
                         </div>
                     @endforelse
                 </div>
@@ -79,7 +80,7 @@
             </div>
 
         </section>
-        {{-- Supercategories :: Start --}}
+        {{-- Subcategory :: Start --}}
     </div>
 @endsection
 

@@ -56,38 +56,39 @@
 
             <div class="p-3">
                 {{-- Products :: Start --}}
-                <div class="p-3 w-full grid grid-cols-12 gap-3">
+                <div class="p-3 w-full grid grid-cols-12 gap-3 items-start">
                     @forelse ($subcategories as $subcategory)
                         <div
                             class="col-span-6 sm:col-span-4 md:col-span-3 p-2 group shadow border border-light rounded-lg hover:shadow-md hover:scale-105 transition overflow-hidden relative">
                             <a href="{{ route('front.subcategory.show', $subcategory->id) }}">
-                            @if ($subcategory->images_name)
-                                {{-- Image : Start --}}
-                                <div class="flex justify-center items-center col-span-3 w-100 max-w-100 text-9xl">
-                                    <img class="mx-auto max-h-52 h-full md:h-52 lazyloaded"
-                                        src="{{ asset('storage/images/categories/original/' . $subcategory->images_name) }}">
-                                </div>
-                                {{-- Image : End --}}
-                            @else
-                                {{-- Image : Start --}}
-                                <div class="col-span-3 w-100 flex justify-center items-center">
-                                    <span class="material-icons text-center text-9xl">
-                                        construction
-                                    </span>
-                                </div>
-                                {{-- Image : End --}}
-                            @endif
+                                @if ($subcategory->image_name)
+                                    {{-- Image : Start --}}
+                                    <div class="flex justify-center items-center col-span-3 w-100 max-w-100 text-9xl">
+                                        <img class="mx-auto max-h-52 h-full md:h-52 lazyloaded"
+                                            src="{{ asset('storage/images/subcategories/original/' . $subcategory->image_name) }}">
+                                    </div>
+                                    {{-- Image : End --}}
+                                @else
+                                    {{-- Image : Start --}}
+                                    <div class="col-span-3 w-100 flex justify-center items-center">
+                                        <span class="material-icons text-center text-9xl">
+                                            construction
+                                        </span>
+                                    </div>
+                                    {{-- Image : End --}}
+                                @endif
                             </a>
 
                             <div class="flex flex-col gap-2 my-2 items-center justify-center">
                                 {{-- Subercategory Name :: Start --}}
-                                <a href="{{ route('front.subcategory.show', $subcategory->id) }}" class="text-center font-bold select-none text-xl max-w-max">
+                                <a href="{{ route('front.subcategory.show', $subcategory->id) }}"
+                                    class="text-center font-bold select-none text-xl max-w-max">
                                     {{ $subcategory->name }}
                                 </a>
                                 {{-- Subercategory Name :: End --}}
 
                                 {{-- Products No :: Start --}}
-                                <a href="{{ route('front.subcategory.show',$subcategory->id) }}"
+                                <a href="{{ route('front.subcategory.show', $subcategory->id) }}"
                                     class="text-center rounded-full bg-primary text-white px-2 py-1 shadow text-sm font-bold">
                                     {{ trans_choice('front/homePage.No of products subcategory', $subcategory->products_count, ['products' => $subcategory->products_count]) }}
                                 </a>
@@ -104,7 +105,8 @@
                         {{-- Pagination :: End --}}
                     @empty
                         <div class="col-span-12 text-center font-bold p-2 text-lg">
-                            {{ __('front/homePage.No Subcategories belongs to Supercategory', ['supercategory' => $supercategory->name]) }}
+                            {{-- todo --}}
+                            {{ __('front/homePage.No Subategories belongs to Supercategory', ['supercategory' => $supercategory->name]) }}
                         </div>
                     @endforelse
                 </div>

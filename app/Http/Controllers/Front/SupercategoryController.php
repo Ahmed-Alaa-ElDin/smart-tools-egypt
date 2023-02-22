@@ -15,7 +15,10 @@ class SupercategoryController extends Controller
      */
     public function index()
     {
-        $supercategories = Supercategory::withCount(['products', 'categories', 'subcategories'])->get();
+        $supercategories = Supercategory::without('validOffers')
+            ->withCount(['products', 'categories', 'subcategories'])
+            ->orderBy('products_count', 'desc')
+            ->paginate(config('constants.constants.FRONT_PAGINATION'));
 
         return view('front.supercategories.index', compact('supercategories'));
     }
@@ -30,7 +33,9 @@ class SupercategoryController extends Controller
     {
         $supercategory = Supercategory::withOut('validOffers')
             ->with(['categories' => function ($q) {
-                $q->with('images')->withOut('validOffers')->withCount(['subcategories', 'products']);
+                $q->with('images')->withOut('validOffers')
+                    ->orderBy('products_count', 'desc')
+                    ->withCount(['subcategories', 'products']);
             }])
             ->findOrFail($supercategory_id);
 
@@ -43,13 +48,15 @@ class SupercategoryController extends Controller
     {
         $supercategory = Supercategory::withOut('validOffers')
             ->with(['subcategories' => function ($q) {
-                $q->withOut('validOffers')->withCount(['products']);
+                $q->withOut('validOffers')
+                    ->withCount(['products'])
+                    ->orderBy('products_count', 'desc');
             }])
             ->findOrFail($supercategory_id);
 
         $subcategories = $supercategory->subcategories->paginate(config('constants.constants.FRONT_PAGINATION'));
 
-        return view('front.supercategories.subcategories', compact('supercategory','subcategories'));
+        return view('front.supercategories.subcategories', compact('supercategory', 'subcategories'));
     }
 
     public function products($supercategory_id)

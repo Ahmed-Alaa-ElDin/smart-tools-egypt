@@ -34,18 +34,18 @@ Route::group([
 
     ################ Supercategory :: Start ##############
     Route::resource('/supercategory', SupercategoryController::class);
-    Route::get('/supercategory/{supercategory_id}/subcategories', [SupercategoryController::class,'subcategories'])->name('supercategory.subcategories');
-    Route::get('/supercategory/{supercategory_id}/products', [SupercategoryController::class,'products'])->name('supercategory.products');
+    Route::get('/supercategory/{supercategory_id}/subcategories', [SupercategoryController::class, 'subcategories'])->name('supercategory.subcategories');
+    Route::get('/supercategory/{supercategory_id}/products', [SupercategoryController::class, 'products'])->name('supercategory.products');
     ################ Supercategory :: End ##############
 
     ################ Category :: Start ##############
     Route::resource('/category', CategoryController::class);
-    Route::get('/category/{category_id}/products', [CategoryController::class,'products'])->name('category.products');
+    Route::get('/category/{category_id}/products', [CategoryController::class, 'products'])->name('category.products');
     ################ Category :: End ##############
 
-        ################ Subcategory :: Start ##############
-        Route::resource('/subcategory', SubcategoryController::class);
-        ################ Subcategory :: End ##############
+    ################ Subcategory :: Start ##############
+    Route::resource('/subcategory', SubcategoryController::class);
+    ################ Subcategory :: End ##############
 
     ################ Cart & Order Controller :: Start ##############
     Route::get('/cart', [CartController::class, 'index'])->name('cart')->middleware(['cart_not_empty']);

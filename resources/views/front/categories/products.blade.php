@@ -1,7 +1,7 @@
 @extends('layouts.front.site', [
-    'titlePage' => __('front/homePage.Supercategory Products', ['supercategory' => $supercategory->name]),
-    'url' => route('front.supercategory.products', $supercategory->id),
-    'title' => __('front/homePage.Supercategory Products', ['supercategory' => $supercategory->name]),
+    'titlePage' => __('front/homePage.Category Products', ['category' => $category->name]),
+    'url' => route('front.category.products', $category->id),
+    'title' => __('front/homePage.Category Products', ['category' => $category->name]),
     'description' => '',
 ])
 
@@ -16,31 +16,32 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item hover:text-primary">
-                    <a href="{{ route('front.supercategory.index') }}">
-                        {{ __('front/homePage.All Supercategories') }}
+                    <a href="{{ route('front.category.index') }}">
+                        {{ __('front/homePage.All Categories') }}
                     </a>
                 </li>
                 <li class="breadcrumb-item text-gray-700 font-bold" aria-current="page">
-                    {{ __('front/homePage.Supercategory Products', ['supercategory' => $supercategory->name]) }}
+                    {{ __('front/homePage.Category Products', ['category' => $category->name]) }}
                 </li>
             </ol>
         </nav>
         {{-- Breadcrumb :: End --}}
 
-        {{-- Supercategories :: Start --}}
+        {{-- Categories :: Start --}}
         <section class="bg-white rounded shadow-lg">
             <div class="border-b border-gray-300">
                 <div class="flex justify-start items-center gap-4 p-3 border-b-2 border-primary max-w-max">
                     <div>
-                        @if ($supercategory->icon)
+                        @if ($category->images->count())
                             {{-- Image : Start --}}
-                            <div class="flex justify-center items-center col-span-3 w-16 max-w-100 text-6xl">
-                                {!! $supercategory->icon !!}
+                            <div class="flex justify-center items-center col-span-3">
+                                <img class="mx-auto w-16 lazyloaded"
+                                    src="{{ asset('storage/images/categories/original/' . $category->images->first()->file_name) }}">
                             </div>
                             {{-- Image : End --}}
                         @else
                             {{-- Image : Start --}}
-                            <div class="col-span-3 w-16 flex justify-center items-center">
+                            <div class="col-span-3 w-100 flex justify-center items-center">
                                 <span class="material-icons text-center text-6xl">
                                     construction
                                 </span>
@@ -49,7 +50,7 @@
                         @endif
                     </div>
                     <div class="text-xl font-bold">
-                        {{ $supercategory->name }}
+                        {{ $category->name }}
                     </div>
                 </div>
             </div>
@@ -71,7 +72,7 @@
                         {{-- Pagination :: End --}}
                     @empty
                         <div class="col-span-4 text-center font-bold p-2 text-lg">
-                            {{ __('front/homePage.No Products belongs to Supercategory', ['supercategory' => $supercategory->name]) }}
+                            {{ __('front/homePage.No Products belongs to Category', ['category' => $category->name]) }}
                         </div>
                     @endforelse
                 </div>
@@ -79,7 +80,7 @@
             </div>
 
         </section>
-        {{-- Supercategories :: Start --}}
+        {{-- Categories :: Start --}}
     </div>
 @endsection
 

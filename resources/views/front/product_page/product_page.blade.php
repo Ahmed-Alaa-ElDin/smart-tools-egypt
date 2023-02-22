@@ -16,12 +16,13 @@
                         {{ __('front/homePage.Homepage') }}
                     </a>
                 </li>
-                <li class="breadcrumb-item hover:text-primary">
-                    {{-- todo :: brand page --}}
-                    <a href="{{ route('admin.users.index') }}">
-                        {{ $product->brand ? $product->brand->name : '' }}
-                    </a>
-                </li>
+                @if ($product->brand)
+                    <li class="breadcrumb-item hover:text-primary">
+                        <a href="{{ route('front.brand.show', $product->brand_id) }}">
+                            {{ $product->brand->name }}
+                        </a>
+                    </li>
+                @endif
                 <li class="breadcrumb-item text-gray-700 font-bold" aria-current="page">
                     {{ $product->name }}
                 </li>
@@ -80,10 +81,13 @@
 
                     {{-- Product Brand & Model :: Start --}}
                     <div class="flex justify-start items-center gap-3">
-                        {{-- todo : Add Brand Link --}}
-                        <h2 class="text-gray-800 font-bold">
-                            {{ $product->brand ? $product->brand->name : '' }}
-                        </h2>
+                        @if ($product->brand)
+                            <h2 class="text-gray-800 font-bold">
+                                <a href="{{ route('front.brand.show', $product->brand->id) }}">
+                                    {{ $product->brand->name }}
+                                </a>
+                            </h2>
+                        @endif
                         <h3 class="text-gray-500 font-bold">
                             {{ $product->model }}
                         </h3>
