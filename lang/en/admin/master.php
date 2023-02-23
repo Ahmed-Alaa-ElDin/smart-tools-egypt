@@ -52,7 +52,7 @@ return [
     'All Collections'           =>      'All Collections',
     'Add Collection'            =>      'Add Collection',
     'Deleted Collections'       =>      'Deleted Collections',
-    'Categories'                =>      'Categories',
+    'General Settings'          =>      'General Settings',
     'Categories'                =>      'Categories',
     'Categories'                =>      'Categories',
     'Categories'                =>      'Categories',

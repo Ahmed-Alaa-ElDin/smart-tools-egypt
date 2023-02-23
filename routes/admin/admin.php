@@ -36,6 +36,6 @@ Route::group([
     // ############## Delivery System Routes End ##############
 
     // ############## Home Page Control Start ##############
-    require_once __DIR__ . "/homepage/homepage.php";
+    require_once __DIR__ . "/settings/settings.php";
     // ############## Home Page Control End ##############
 });

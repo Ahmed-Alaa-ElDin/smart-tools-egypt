@@ -139,4 +139,10 @@ return [
     "Use 1300x50 sizes image"                                               =>      "استخدم صورة أبعادها 1300x50",
     "Products & Collections List"                                           =>      "قائمة منتجات وتجميعات",
     "Original Price"                                                        =>      "سعر الشراء",
+    "Homepage's Top Bar Banner"                                             =>      "الإعلان العلوي للصفحة الرئيسية",
+    "Here you can manage homepage's top bar banner"                         =>      "من خلال هذه الصفحة يمكنك التحكم في الإعلان العلوي",
+    "Homepage's Top Brands"                                                 =>      "أفضل العلامات التجارية بالصفحة الرئيسية",
+    "Here you can manage homepage's top brands"                             =>      "من خلال هذه الصفحة يمكنك التحكم في أفضل العلامات التجارية بالصفحة الرئيسية",
+    "Add Brand"                                                             =>      "إضافة علامة تجارية",
+
 ];
