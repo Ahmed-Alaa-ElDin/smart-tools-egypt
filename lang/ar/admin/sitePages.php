@@ -144,5 +144,14 @@ return [
     "Homepage's Top Brands"                                                 =>      "أفضل العلامات التجارية بالصفحة الرئيسية",
     "Here you can manage homepage's top brands"                             =>      "من خلال هذه الصفحة يمكنك التحكم في أفضل العلامات التجارية بالصفحة الرئيسية",
     "Add Brand"                                                             =>      "إضافة علامة تجارية",
+    "General Settings"                                                      =>      "الضبط العام",
+    "Here you can manage general website settings"                          =>      "من خلال هذه الصفحة يمكنك ضبط الأجزاء المشتركة بالموقع",
+    "Manage Header Navbar"                                                  =>      "التحكم بالأزرار العلوية",
+    "Header's Navbar"                                                       =>      "الأزرار العلوية",
+    "Here you can manage homepage's top bar banner"                         =>      "من خلال هذه الصفحة يمكنك ضبط الأزرار العلوية",
+    "Name"                                                                  =>      "الاسم",
+    "Enter URL"                                                             =>      "ادخل الرابط",
+    "Links have been updated successfully"                                  =>      "تم تحديث الروابط بنجاح",
+    "Links haven't been updated"                                            =>      "لم يتم تحديث الروابط",
 
 ];

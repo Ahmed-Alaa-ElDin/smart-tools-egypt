@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Front\SupercategoryController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Front\SupercategoryController;
 use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\BrandController;
 use App\Http\Controllers\Front\CategoryController;
@@ -9,7 +9,7 @@ use App\Http\Controllers\Front\OrderController;
 use App\Http\Controllers\Front\ProductController;
 use App\Http\Controllers\Front\ProfileController;
 use App\Http\Controllers\Front\HomepageController;
-use App\Http\Controllers\InvoiceRequestController;
+use App\Http\Controllers\Front\InvoiceRequestController;
 use App\Http\Controllers\Front\CollectionController;
 use App\Http\Controllers\Front\SubcategoryController;
 

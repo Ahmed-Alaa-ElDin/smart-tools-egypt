@@ -42,7 +42,9 @@
     {{-- Middle Bar : End --}}
 
     {{-- Lower Bar : Start --}}
-    <div class="bg-white border-top border-gray-200 py-1 scrollbar scrollbar-hidden-x">
+    {{-- @component('front.general.lower-header') --}}
+    <x-front.general.lower-header/>
+    {{-- <div class="bg-white border-top border-gray-200 py-1 scrollbar scrollbar-hidden-x">
         <div class="container">
             <ul class="flex flex-nowrap justify-between lg:justify-center items-center gap-2 text-center">
                 <li class="min-w-max">
@@ -89,7 +91,7 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </div> --}}
     {{-- Lower Bar : End --}}
 
 </header>

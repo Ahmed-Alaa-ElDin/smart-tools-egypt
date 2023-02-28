@@ -102,6 +102,9 @@ return [
     "Banners are required." => "البنرات مطلوبة.",
     'The phone number field is required' => 'حقل رقم الهاتف مطلوب',
     'The phone numbers must start with 010, 011, 012 or 015' => 'حقل رقم الهاتف لابد أن يبدأ بـ 010 أو 011 أو 012 أو 015',
+    'arabic name required' => 'الاسم بالعربية مطلوب',
+    'english name required' => 'الاسم بالإنجليزية مطلوب',
+    'url required' => 'الرابط مطلوب',
 
 
     /*
@@ -254,6 +257,10 @@ return [
         'balance'               => 'الرصيد',
         'newPhone'              => 'رقم الهاتف',
         'original_price'        => 'سعر الشراء',
+        'nav_links.*.name.ar'   => "الاسم بالعربية",
+        'nav_links.*.name.en'   => "الاسم بالإنجليزية",
+        'nav_links.*.url'       => 'الرابط',
+        'nav_links.*.active'    => 'حالة الزر',
 
 
     ],

@@ -642,9 +642,8 @@
                     <ul class="nav">
 
                         {{-- General --}}
-                        <li class="nav-item {{ $activePage == 'generalSettings' ? ' active' : '' }}">
-                            {{-- todo --}}
-                            <a class="nav-link" href="#">
+                        <li class="nav-item {{ $activePage == 'general' ? ' active' : '' }}">
+                            <a class="nav-link" href="{{ route('admin.setting.general') }}">
                                 <span class="material-icons">
                                     settings_suggest
                                 </span>

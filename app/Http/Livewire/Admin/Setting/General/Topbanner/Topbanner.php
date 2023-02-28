@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Setting\Homepage\Topbanner;
+namespace App\Http\Livewire\Admin\Setting\General\Topbanner;
 
 use App\Models\Banner;
 use Illuminate\Support\Facades\DB;
@@ -57,7 +57,7 @@ class Topbanner extends Component
 
     public function render()
     {
-        return view('livewire.admin.setting.homepage.topbanner.topbanner');
+        return view('livewire.admin.setting.general.topbanner.topbanner');
     }
 
     // Validate inputs on blur : Start
@@ -111,12 +111,12 @@ class Topbanner extends Component
             }
 
             Session::flash('success', __('admin/sitePages.Banner updated successfully'));
-            redirect()->route('admin.setting.homepage');
+            redirect()->route('admin.setting.general');
         } catch (\Throwable $th) {
             DB::rollBack();
 
             Session::flash('error', __("admin/sitePages.Banner hasn't been updated"));
-            redirect()->route('admin.setting.homepage');
+            redirect()->route('admin.setting.general');
         }
     }
     ######################## Save Updated Banner : End ############################

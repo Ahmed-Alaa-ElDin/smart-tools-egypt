@@ -1,5 +1,5 @@
 @extends('layouts.admin.admin', ['activeSection' => 'Site Control', 'activePage' => '', 'titlePage'
-=> __("admin/sitePages.Homepage's Top Bar Banner")])
+=> __("admin/sitePages.Header's Navbar")])
 
 @section('content')
     <div class="content">
@@ -14,13 +14,13 @@
                     </li>
 
                     <li class="breadcrumb-item hover:text-primary">
-                        <a href="{{ route('admin.setting.homepage') }}">
-                            {{ __('admin/sitePages.Homepage Control') }}
+                        <a href="{{ route('admin.setting.general') }}">
+                            {{ __('admin/sitePages.General Settings') }}
                         </a>
                     </li>
 
                     <li class="breadcrumb-item active" aria-current="page">
-                        {{ __("admin/sitePages.Homepage's Top Bar Banner") }}
+                        {{ __("admin/sitePages.Header's Navbar") }}
                     </li>
                 </ol>
             </nav>
@@ -35,7 +35,7 @@
                         <div class="card-header card-header-primary">
                             <div class="flex justify-between items-center">
                                 <div class=" ltr:text-left rtl:text-right font-bold self-center text-gray-100">
-                                    <p class="">
+                                    <p class="text-center">
                                         {{ __("admin/sitePages.Here you can manage homepage's top bar banner") }}</p>
                                 </div>
 
@@ -45,9 +45,9 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
 
-                            {{-- Datatable Start --}}
-                            @livewire('admin.setting.homepage.topbanner.topbanner')
-                            {{-- Datatable End --}}
+                            {{-- Form Start --}}
+                            @livewire('admin.setting.general.nav-links.nav-links-form')
+                            {{-- Form End --}}
 
                         </div>
                     </div>

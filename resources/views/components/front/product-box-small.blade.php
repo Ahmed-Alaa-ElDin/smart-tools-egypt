@@ -4,9 +4,9 @@
         <div
             class="group shadow border border-light rounded-lg hover:shadow-md hover:scale-105 mt-1 mb-2 transition overflow-hidden relative">
 
-            {{-- Add Product : Start --}}
+            {{-- Add Product Large Screen : Start --}}
             <div
-                class="absolute top-2 ltr:-right-10 z-10 rtl:-left-10 transition-all ease-in-out duration-500 ltr:group-hover:right-2 rtl:group-hover:left-2 flex flex-col gap-1">
+                class="hidden lg:flex absolute top-2 ltr:-right-10 z-10 rtl:-left-10 transition-all ease-in-out duration-500 ltr:group-hover:right-2 rtl:group-hover:left-2 flex-col gap-1">
                 {{-- Add to compare : Start --}}
                 @livewire('front.general.compare.add-to-compare-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-compare-button-' . Str::random(10)))
                 {{-- Add to compare : End --}}
@@ -21,7 +21,7 @@
                     {{-- Add to cart : End --}}
                 @endif
             </div>
-            {{-- Add Product : End --}}
+            {{-- Add Product Large Screen : End --}}
 
             <a class="relative block hover:text-current"
                 @if ($item['type'] == 'Product') href="{{ route('front.products.show', ['id' => $item['id'], 'slug' => $item['slug'][session('locale')]]) }}"
@@ -187,6 +187,25 @@
                 </div>
             @endif
             {{-- Cart Amount : End --}}
+
+            {{-- Add Product Small Screen : Start --}}
+            <div
+                class="flex top-2 gap-1 justify-center mb-3 lg:hidden">
+                {{-- Add to compare : Start --}}
+                @livewire('front.general.compare.add-to-compare-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-compare-button-' . Str::random(10)))
+                {{-- Add to compare : End --}}
+
+                {{-- Add to wishlist : Start --}}
+                @livewire('front.general.wishlist.add-to-wishlist-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-wishlist-button-' . Str::random(10)))
+                {{-- Add to wishlist : End --}}
+
+                @if (isset($item['quantity']) && $item['quantity'] > 0)
+                    {{-- Add to cart : Start --}}
+                    @livewire('front.general.cart.add-to-cart-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-cart-button-' . Str::random(10)))
+                    {{-- Add to cart : End --}}
+                @endif
+            </div>
+            {{-- Add Product Small Screen : End --}}
         </div>
     </div>
 
