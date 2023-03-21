@@ -1,6 +1,6 @@
 @extends('layouts.front.site', [
     'titlePage' => __('front/homePage.All Brands'),
-    'url' => route('front.brand.index'),
+    'url' => route('front.brands.index'),
     'title' => __('front/homePage.All Brands'),
     'description' => '',
 ])
@@ -26,7 +26,7 @@
         <section class="grid grid-cols-12 justify-center items-start align-top gap-3 bg-white rounded shadow-lg p-4">
             @forelse ($brands as $brand)
                 {{-- Brand :: Start --}}
-                <a href="{{ route('front.brand.show', $brand->id) }}"
+                <a href="{{ route('front.brands.show', $brand->id) }}"
                     class="col-span-6 sm:col-span-4 md:col-span-3 p-2 group shadow border border-light rounded-lg hover:shadow-md hover:scale-105 transition overflow-hidden relative">
                     @if ($brand->logo_path)
                         {{-- Image : Start --}}

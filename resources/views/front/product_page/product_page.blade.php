@@ -18,7 +18,7 @@
                 </li>
                 @if ($product->brand)
                     <li class="breadcrumb-item hover:text-primary">
-                        <a href="{{ route('front.brand.show', $product->brand_id) }}">
+                        <a href="{{ route('front.brands.show', $product->brand_id) }}">
                             {{ $product->brand->name }}
                         </a>
                     </li>
@@ -83,7 +83,7 @@
                     <div class="flex justify-start items-center gap-3">
                         @if ($product->brand)
                             <h2 class="text-gray-800 font-bold">
-                                <a href="{{ route('front.brand.show', $product->brand->id) }}">
+                                <a href="{{ route('front.brands.show', $product->brand->id) }}">
                                     {{ $product->brand->name }}
                                 </a>
                             </h2>

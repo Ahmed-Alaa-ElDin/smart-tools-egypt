@@ -1,6 +1,6 @@
 @extends('layouts.front.site', [
     'titlePage' => $supercategory->name,
-    'url' => route('front.supercategory.show', $supercategory->id),
+    'url' => route('front.supercategories.show', $supercategory->id),
     'title' => $supercategory->name,
     'description' => '',
 ])
@@ -16,7 +16,7 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item hover:text-primary">
-                    <a href="{{ route('front.supercategory.index') }}">
+                    <a href="{{ route('front.supercategories.index') }}">
                         {{ __('front/homePage.All Supercategories') }}
                     </a>
                 </li>
@@ -30,7 +30,7 @@
         {{-- Supercategories :: Start --}}
         <section class="bg-white rounded shadow-lg">
             <div class="border-b border-gray-300">
-                <div class="flex justify-start items-center gap-4 p-3 border-b-2 border-primary max-w-max">
+                <div class="flex justify-start items-center gap-4 p-3 border-b-2 border-primary">
                     <div>
                         @if ($supercategory->icon)
                             {{-- Image : Start --}}
@@ -60,7 +60,7 @@
                     @forelse ($categories as $category)
                         <div
                             class="col-span-6 sm:col-span-4 md:col-span-3 p-2 group shadow border border-light rounded-lg hover:shadow-md hover:scale-105 transition overflow-hidden relative">
-                            <a href="{{ route('front.category.show', $category->id) }}">
+                            <a href="{{ route('front.categories.show', $category->id) }}">
                                 @if ($category->images->count())
                                     {{-- Image : Start --}}
                                     <div class="flex justify-center items-center col-span-3 w-100 max-w-100 text-9xl">
@@ -81,14 +81,14 @@
 
                             <div class="flex flex-col gap-2 my-2 items-center justify-center">
                                 {{-- Supercategory Name :: Start --}}
-                                <a href="{{ route('front.category.show', $category->id) }}"
+                                <a href="{{ route('front.categories.show', $category->id) }}"
                                     class="text-center font-bold select-none text-xl max-w-max">
                                     {{ $category->name }}
                                 </a>
                                 {{-- Supercategory Name :: End --}}
 
                                 {{-- Subcategories No :: Start --}}
-                                <a href="{{ route('front.category.show', $category->id) }}"
+                                <a href="{{ route('front.categories.show', $category->id) }}"
                                     class="text-center rounded-full bg-primaryDark text-white px-2 py-1 shadow text-sm font-bold">
                                     {{ trans_choice('front/homePage.No of subcategories category', $category->subcategories_count, ['subcategories' => $category->subcategories_count]) }}
                                 </a>

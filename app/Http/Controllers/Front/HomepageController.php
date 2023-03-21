@@ -29,7 +29,7 @@ class HomepageController extends Controller
                 ->withPivot('rank')
                 ->orderBy('rank'),
             'offer' => fn ($q) => $q->with([
-                'directProducts' => fn ($q) => $q->where('products.publish', 1),
+                'directProducts' => fn ($q) => $q->with('brand')->where('products.publish', 1),
                 'directCollections' => fn ($q) => $q->where('collections.publish', 1),
                 'supercategoryProducts' => fn ($q) => $q->where('products.publish', 1),
                 'categoryProducts' => fn ($q) => $q->where('products.publish', 1),
@@ -40,7 +40,6 @@ class HomepageController extends Controller
         ])
             ->where('active', 1)
             ->orderBy('rank')->get();
-
         ############## Get All Active Sections with Relations :: End ##############
 
         ############ Extract of products From Sections :: Start ############

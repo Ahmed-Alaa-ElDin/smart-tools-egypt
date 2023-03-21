@@ -11,7 +11,10 @@ use App\Http\Controllers\Front\ProfileController;
 use App\Http\Controllers\Front\HomepageController;
 use App\Http\Controllers\Front\InvoiceRequestController;
 use App\Http\Controllers\Front\CollectionController;
+use App\Http\Controllers\Front\FavoriteController;
+use App\Http\Controllers\Front\OfferController;
 use App\Http\Controllers\Front\SubcategoryController;
+use App\Http\Controllers\Front\WishlistController;
 
 Route::group([
     'middleware' => ['getCart'],
@@ -29,23 +32,27 @@ Route::group([
     ################ User's Profile :: End ##############
 
     ################ Brands :: Start ##############
-    Route::resource('/brand', BrandController::class);
+    Route::resource('/brands', BrandController::class);
     ################ Brands :: End ##############
 
     ################ Supercategory :: Start ##############
-    Route::resource('/supercategory', SupercategoryController::class);
-    Route::get('/supercategory/{supercategory_id}/subcategories', [SupercategoryController::class, 'subcategories'])->name('supercategory.subcategories');
-    Route::get('/supercategory/{supercategory_id}/products', [SupercategoryController::class, 'products'])->name('supercategory.products');
+    Route::resource('/supercategories', SupercategoryController::class);
+    Route::get('/supercategories/{supercategory_id}/subcategories', [SupercategoryController::class, 'subcategories'])->name('supercategory.subcategories');
+    Route::get('/supercategories/{supercategory_id}/products', [SupercategoryController::class, 'products'])->name('supercategory.products');
     ################ Supercategory :: End ##############
 
     ################ Category :: Start ##############
-    Route::resource('/category', CategoryController::class);
-    Route::get('/category/{category_id}/products', [CategoryController::class, 'products'])->name('category.products');
+    Route::resource('/categories', CategoryController::class);
+    Route::get('/categories/{category_id}/products', [CategoryController::class, 'products'])->name('category.products');
     ################ Category :: End ##############
 
     ################ Subcategory :: Start ##############
-    Route::resource('/subcategory', SubcategoryController::class);
+    Route::resource('/subcategories', SubcategoryController::class);
     ################ Subcategory :: End ##############
+
+    ################ Offers :: Start ##############
+    Route::resource('/offers', OfferController::class);
+    ################ Offers :: End ##############
 
     ################ Cart & Order Controller :: Start ##############
     Route::get('/cart', [CartController::class, 'index'])->name('cart')->middleware(['cart_not_empty']);
@@ -102,6 +109,10 @@ Route::group([
         Route::get('/{order_id}/track', 'track')->name('track');
     });
     ################ Cart & Order Controller :: End ##############
+
+    ################ Wishlist :: Start ##############
+    Route::get('/wishlist',[WishlistController::class,'index'])->name('wishlist');
+    ################ Wishlist :: End ##############
 
     ################ Invoice Request Controller :: Start ##############
     Route::post('/invoice-request-store', [InvoiceRequestController::class, 'store'])->name('invoice-request.store')->middleware('auth');

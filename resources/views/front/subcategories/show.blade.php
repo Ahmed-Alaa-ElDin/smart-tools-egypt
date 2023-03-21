@@ -1,6 +1,6 @@
 @extends('layouts.front.site', [
     'titlePage' => $subcategory->name,
-    'url' => route('front.subcategory.show', $subcategory->id),
+    'url' => route('front.subcategories.show', $subcategory->id),
     'title' => $subcategory->name,
     'description' => '',
 ])
@@ -16,7 +16,7 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item hover:text-primary">
-                    <a href="{{ route('front.subcategory.index') }}">
+                    <a href="{{ route('front.subcategories.index') }}">
                         {{ __('front/homePage.All Subcategories') }}
                     </a>
                 </li>

@@ -128,7 +128,6 @@ class SectionForm extends Component
     ############ Get Data from Subcomponents :: Start ############
     public function listUpdated($request)
     {
-        // dd($request);
         if (array_key_exists('selected_offer', $request)) {
             $this->selected_offer = $request['selected_offer'];
             $this->validateOnly('selected_offer');

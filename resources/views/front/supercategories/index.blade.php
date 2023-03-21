@@ -1,6 +1,6 @@
 @extends('layouts.front.site', [
     'titlePage' => __('front/homePage.All Supercategories'),
-    'url' => route('front.supercategory.index'),
+    'url' => route('front.supercategories.index'),
     'title' => __('front/homePage.All Supercategories'),
     'description' => '',
 ])
@@ -28,7 +28,7 @@
                 {{-- Supercategory :: Start --}}
                 <div
                     class="col-span-6 sm:col-span-4 md:col-span-3 p-2 group shadow border border-light rounded-lg hover:shadow-md hover:scale-105 transition overflow-hidden relative">
-                    <a href="{{ route('front.supercategory.show', $supercategory->id) }}">
+                    <a href="{{ route('front.supercategories.show', $supercategory->id) }}">
                         @if ($supercategory->icon)
                             {{-- Image : Start --}}
                             <div class="flex justify-center items-center col-span-3 w-100 max-w-100 text-9xl">
@@ -49,13 +49,13 @@
                     <div class="flex flex-col gap-2 my-2 items-center justify-center">
                         {{-- Supercategory Name :: Start --}}
                         <a
-                            href="{{ route('front.supercategory.show', $supercategory->id) }}"class="text-center font-bold select-none text-xl max-w-max">
+                            href="{{ route('front.supercategories.show', $supercategory->id) }}"class="text-center font-bold select-none text-xl max-w-max">
                             {{ $supercategory->name }}
                         </a>
                         {{-- Supercategory Name :: End --}}
 
                         {{-- Categories No :: Start --}}
-                        <a href="{{ route('front.supercategory.show', $supercategory->id) }}"
+                        <a href="{{ route('front.supercategories.show', $supercategory->id) }}"
                             class="text-center rounded-full bg-primaryDarker text-white px-2 py-1 shadow text-sm font-bold">
                             {{ trans_choice('front/homePage.No of categories supercategory', $supercategory->categories_count, ['categories' => $supercategory->categories_count]) }}
                         </a>

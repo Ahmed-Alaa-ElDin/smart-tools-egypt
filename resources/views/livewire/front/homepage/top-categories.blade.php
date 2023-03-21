@@ -11,7 +11,7 @@
             {{-- Title : End --}}
 
             {{-- View More Button : Start --}}
-            <a href="{{ route('front.category.index') }}"
+            <a href="{{ route('front.categories.index') }}"
                 class="btn bg-secondary btn-sm shadow-md font-bold">{{ __('front/homePage.See All Categories') }}</a>
             {{-- View More Button : End --}}
         </div>
@@ -23,7 +23,7 @@
             @foreach ($categories as $category)
                 {{-- Category : Start --}}
                 <div class="col-span-6 md:col-span-3">
-                    <a href="{{ route('front.category.show', $category->id) }}"
+                    <a href="{{ route('front.categories.show', $category->id) }}"
                         class="bg-white border block rounded p-2 hover:shadow-md">
                         <div class="grid grid-cols-12 items-center">
 

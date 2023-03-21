@@ -10,7 +10,7 @@
             {{-- Title : End --}}
 
             {{-- View More Button : Start --}}
-            <a href="{{ route('front.brand.index') }}"
+            <a href="{{ route('front.brands.index') }}"
                 class="btn bg-secondary btn-sm shadow-md font-bold">{{ __('front/homePage.See All Brands') }}</a>
             {{-- View More Button : End --}}
         </div>
@@ -22,7 +22,7 @@
             @foreach ($brands as $brand)
                 {{-- Brand : Start --}}
                 <div class="col-span-6 md:col-span-3">
-                    <a href="{{ route('front.brand.show', $brand->id) }}"
+                    <a href="{{ route('front.brands.show', $brand->id) }}"
                         class="bg-white border block rounded p-2 hover:shadow-md">
                         <div class="grid grid-cols-12 items-center">
 

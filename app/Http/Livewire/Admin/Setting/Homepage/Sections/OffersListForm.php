@@ -55,7 +55,7 @@ class OffersListForm extends Component
             $this->selected_offer = $offer_id;
         }
 
-        $this->emitTo('admin.homepage.sections.section-form', 'listUpdated', ['selected_offer' => $this->selected_offer]);
+        $this->emitTo('admin.setting.homepage.sections.section-form', 'listUpdated', ['selected_offer' => $this->selected_offer]);
     }
     ######## Select Offer : End ########
 }

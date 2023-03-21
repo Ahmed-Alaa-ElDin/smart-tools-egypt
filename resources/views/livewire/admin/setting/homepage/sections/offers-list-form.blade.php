@@ -12,7 +12,7 @@
                     <span class="material-icons">
                         search
                     </span> </span>
-                <input type="text"   wire:model='search'
+                <input type="text" wire:model='search'
                     class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                     placeholder="{{ __('admin/offersPages.Search ...') }}">
             </div>

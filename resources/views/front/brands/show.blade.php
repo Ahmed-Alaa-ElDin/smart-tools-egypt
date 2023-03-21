@@ -1,6 +1,6 @@
 @extends('layouts.front.site', [
     'titlePage' => $brand->name,
-    'url' => route('front.brand.show', $brand->id),
+    'url' => route('front.brands.show', $brand->id),
     'title' => $brand->name,
     'description' => '',
 ])
@@ -16,7 +16,7 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item hover:text-primary">
-                    <a href="{{ route('front.brand.index') }}">
+                    <a href="{{ route('front.brands.index') }}">
                         {{ __('front/homePage.All Brands') }}
                     </a>
                 </li>
@@ -34,14 +34,14 @@
                     <div>
                         @if ($brand->logo_path)
                             {{-- Image : Start --}}
-                            <div class="flex justify-center items-center col-span-3 w-16 max-w-100">
+                            <div class="flex justify-center items-center w-16 max-w-100">
                                 <img src="{{ asset('storage/images/logos/original/' . $brand->logo_path) }}"
                                     alt="{{ $brand->name }}" class="img w-100 max-w-100 rounded-circle lazyloaded">
                             </div>
                             {{-- Image : End --}}
                         @else
                             {{-- Image : Start --}}
-                            <div class="col-span-3 w-16 flex justify-center items-center">
+                            <div class="w-16 flex justify-center items-center">
                                 <span class="material-icons text-center text-6xl ">
                                     <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
                                         height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 64 64">

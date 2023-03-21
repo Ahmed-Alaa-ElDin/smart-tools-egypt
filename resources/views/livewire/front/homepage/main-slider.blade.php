@@ -13,7 +13,7 @@
                 <li class="group" data-id="1">
                     <div
                         class="relative w-full cursor-pointer group-hover:shadow p-1 group-hover:after:block after:hidden after:content-[''] after:w-7 after:h-7 after:rotate-45 ltr:after:border-t-8 ltr:after:border-r-8 rtl:after:border-b-8 rtl:after:border-l-8 after:border-white after:absolute ltr:after:-right-1 rtl:after:-left-1 after:top-2">
-                        <a href="{{ route('front.supercategory.show', $topSupercategory->id) }}"
+                        <a href="{{ route('front.supercategories.show', $topSupercategory->id) }}"
                             class="text-truncate text-reset py-2 px-3 block text-sm flex gap-3 items-center">
                             <span class="material-icons">
                                 {!! $topSupercategory->icon ?? 'construction' !!}
@@ -30,14 +30,14 @@
                                     <ul class="list-unstyled my-2 text-center w-full">
                                         <li class="fw-600 border-b font-bold text-sm py-2 my-2">
                                             <a class="text-reset"
-                                                href="{{ route('front.category.show', $category->id) }}">
+                                                href="{{ route('front.categories.show', $category->id) }}">
                                                 {{ $category->name }}
                                             </a>
                                         </li>
                                         @foreach ($category->subcategories as $subcategory)
                                             <li class="mb-2 text-sm">
                                                 <a class="text-reset"
-                                                    href="{{ route('front.subcategory.show', $subcategory->id) }}">
+                                                    href="{{ route('front.subcategories.show', $subcategory->id) }}">
                                                     {{ $subcategory->name }}
                                                 </a>
                                             </li>
@@ -52,7 +52,7 @@
             @endforeach
 
             <li class="group flex justify-center items-center py-2">
-                <a href="{{ route('front.supercategory.index') }}"
+                <a href="{{ route('front.supercategories.index') }}"
                     class="btn bg-secondary text-white text-sm py-1 px-2 rounded m-1 font-bold">
                     {{ __('front/homePage.Show All') }}
                 </a>
@@ -83,7 +83,7 @@
         {{-- Top Subcategories : Start --}}
         <div class="row-span-1 grid grid-cols-5 gap-3 justify-between items-center">
             @foreach ($topSubcategories as $topSubcategory)
-                <a href="{{ route('front.subcategory.show', $topSubcategory->id) }}"
+                <a href="{{ route('front.subcategories.show', $topSubcategory->id) }}"
                     class="shadow rounded overflow-hidden bg-white p-1 text-center">
                     @if ($topSubcategory->image_name)
                         <img src="{{ asset('storage/images/subcategories/cropped100/' . $topSubcategory->image_name) }}"

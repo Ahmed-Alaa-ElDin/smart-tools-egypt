@@ -11,6 +11,7 @@ use Livewire\Component;
 class MainSlider extends Component
 {
     public $todayDeals;
+    public $banners, $topSupercategories, $topSubcategories, $items;
 
     public function mount()
     {

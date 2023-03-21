@@ -16,7 +16,7 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item hover:text-primary">
-                    <a href="{{ route('front.supercategory.index') }}">
+                    <a href="{{ route('front.supercategories.index') }}">
                         {{ __('front/homePage.All Supercategories') }}
                     </a>
                 </li>

@@ -48,7 +48,8 @@ class Product extends Model
     ];
 
     protected $appends = [
-        "avg_rating", "can_review", 'type'
+        // "avg_rating", "can_review",
+        'type'
     ];
 
     protected $with = ['reviews', 'orders', 'brand', 'validOffers'];
@@ -431,6 +432,7 @@ class Product extends Model
                 'created_at'
             ]
         )
+            ->without(['orders'])
             ->with(
                 [
                     'thumbnail',

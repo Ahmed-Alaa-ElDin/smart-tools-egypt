@@ -16,7 +16,7 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item hover:text-primary">
-                    <a href="{{ route('front.supercategory.index') }}">
+                    <a href="{{ route('front.supercategories.index') }}">
                         {{ __('front/homePage.All Supercategories') }}
                     </a>
                 </li>
@@ -60,7 +60,7 @@
                     @forelse ($subcategories as $subcategory)
                         <div
                             class="col-span-6 sm:col-span-4 md:col-span-3 p-2 group shadow border border-light rounded-lg hover:shadow-md hover:scale-105 transition overflow-hidden relative">
-                            <a href="{{ route('front.subcategory.show', $subcategory->id) }}">
+                            <a href="{{ route('front.subcategories.show', $subcategory->id) }}">
                                 @if ($subcategory->image_name)
                                     {{-- Image : Start --}}
                                     <div class="flex justify-center items-center col-span-3 w-100 max-w-100 text-9xl">
@@ -81,14 +81,14 @@
 
                             <div class="flex flex-col gap-2 my-2 items-center justify-center">
                                 {{-- Subercategory Name :: Start --}}
-                                <a href="{{ route('front.subcategory.show', $subcategory->id) }}"
+                                <a href="{{ route('front.subcategories.show', $subcategory->id) }}"
                                     class="text-center font-bold select-none text-xl max-w-max">
                                     {{ $subcategory->name }}
                                 </a>
                                 {{-- Subercategory Name :: End --}}
 
                                 {{-- Products No :: Start --}}
-                                <a href="{{ route('front.subcategory.show', $subcategory->id) }}"
+                                <a href="{{ route('front.subcategories.show', $subcategory->id) }}"
                                     class="text-center rounded-full bg-primary text-white px-2 py-1 shadow text-sm font-bold">
                                     {{ trans_choice('front/homePage.No of products subcategory', $subcategory->products_count, ['products' => $subcategory->products_count]) }}
                                 </a>
