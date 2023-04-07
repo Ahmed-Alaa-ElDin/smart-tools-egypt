@@ -53,22 +53,22 @@ class ProductController extends Controller
             'name' => '',
             'slug' => '',
             'weight' => $product->weight,
-            'quantity' => $product->quantity,
-            'low_stock' => $product->low_stock,
-            "original_price" => $product->original_price,
-            'base_price' => $product->base_price,
-            'final_price' => $product->final_price,
-            'points' => $product->points,
-            'description' => $product->description,
-            'refundable' => $product->refundable,
+            'quantity' => 0,
+            'low_stock' => 0,
+            "original_price" => 0,
+            'base_price' => 0,
+            'final_price' => 0,
+            'points' => 0,
+            'description' => $product->getTranslations('description'),
+            'refundable' => 1,
             'meta_keywords' => $product->meta_keywords,
-            'free_shipping' => $product->free_shipping,
-            'publish' => $product->publish,
-            'under_reviewing' => $product->under_reviewing,
+            'free_shipping' => 0,
+            'publish' => 1,
+            'under_reviewing' => 0,
             'specs' => $product->specs,
             'created_by' => auth()->user()->id,
         ]);
-        
+
         $new_product->subcategories()->attach($product->subcategories->pluck('id')->toArray());
 
         return redirect()->route('admin.products.edit', ['product' => $new_product->id])->with('success', __('admin/productsPages.Product Copied Successfully'));

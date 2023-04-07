@@ -209,8 +209,8 @@
                 <div class="col-span-3 sm:col-span-2">
                     <input id="model"
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('model') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="model"
-                        placeholder="{{ __('admin/productsPages.Model') }}" maxlength="100">
+                        type="text" wire:model.lazy="model" placeholder="{{ __('admin/productsPages.Model') }}"
+                        maxlength="100">
 
                     @error('model')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -430,7 +430,9 @@
                 <label wire:click="publish"
                     class="col-span-1 lg:col-span-2 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/productsPages.Publish') }}</label>
                 <div class="col-span-1 lg:col-span-2">
-                    {!! $publish ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="publish">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="publish">toggle_off</span>' !!}
+                    {!! $publish
+                        ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="publish">toggle_on</span>'
+                        : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="publish">toggle_off</span>' !!}
 
                     @error('publish')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -446,7 +448,9 @@
                 <label wire:click="refund"
                     class="col-span-1 lg:col-span-2 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/productsPages.Refundable') }}</label>
                 <div class="col-span-1 lg:col-span-2">
-                    {!! $refundable ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="refund">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="refund">toggle_off</span>' !!}
+                    {!! $refundable
+                        ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="refund">toggle_on</span>'
+                        : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="refund">toggle_off</span>' !!}
 
                     @error('refundable')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -675,7 +679,9 @@
 
                 <div class="col-span-3">
                     <div class="col-span-2 md:col-span-1">
-                        {!! $free_shipping ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="free_shipping">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="free_shipping">toggle_off</span>' !!}
+                        {!! $free_shipping
+                            ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="free_shipping">toggle_on</span>'
+                            : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="free_shipping">toggle_off</span>' !!}
 
                         @error('free_shipping')
                             <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -694,7 +700,9 @@
 
                 <div class="col-span-3">
                     <div class="col-span-2 md:col-span-1">
-                        {!! $reviewing ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="reviewing">toggle_on</span>' : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="reviewing">toggle_off</span>' !!}
+                        {!! $reviewing
+                            ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="reviewing">toggle_on</span>'
+                            : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="reviewing">toggle_off</span>' !!}
 
                         @error('reviewing')
                             <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -750,43 +758,6 @@
         <div class="grid grid-cols-3 gap-x-6 gap-y-2 items-center bg-gray-100 p-4 text-center  rounded shadow">
 
             <div class="col-span-3 font-bold text-black mb-2">{{ __('admin/productsPages.SEO') }}</div>
-
-            {{-- SEO Title Start --}}
-            {{-- <div class="col-span-3 w-full grid grid-cols-12 gap-x-4 gap-y-2 items-center    rounded text-center">
-                <label for="title"
-                    class="col-span-12 sm:col-span-2 md:col-start-3 lg:col-span-12 lg:col-start-1 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer">{{ __('admin/productsPages.Title') }}</label>
-                <div class="col-span-12 sm:col-span-10 md:col-span-6 lg:col-span-12">
-                    <input
-                        class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('title') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="title" id="title">
-                    @error('title')
-                        <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                            {{ $message }}</div>
-                    @enderror
-                </div>
-            </div> --}}
-            {{-- SEO Title End --}}
-
-            {{-- SEO Description Start --}}
-            {{-- <div class="col-span-3 w-full grid grid-cols-12 gap-x-4 gap-y-2 items-center    rounded text-center">
-                <label for="seo_description"
-                    class="col-span-12 sm:col-span-2 md:col-start-3 lg:col-span-12 lg:col-start-1 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer">{{ __('admin/productsPages.Description') }}</label>
-
-                <div class="col-span-12 sm:col-span-10 md:col-span-6 lg:col-span-12">
-                    <div wire:ignore
-                        class="py-1 w-full px-6 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 cursor-text @error('seo_description') border-red-900 border-2 @enderror"
-                        type="text" id="seo_description">
-                        {!! $description_seo !!}
-                    </div>
-
-                    @error('seo_description')
-                        <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-            </div> --}}
-            {{-- SEO Description End --}}
 
             {{-- SEO Keywords :: Start --}}
             <div class="col-span-3 w-full grid grid-cols-12 gap-x-4 gap-y-2 items-center rounded text-center">

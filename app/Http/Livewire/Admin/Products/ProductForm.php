@@ -173,7 +173,7 @@ class ProductForm extends Component
             $this->original_price = $product->original_price;
             $this->base_price = $product->base_price;
             $this->final_price = $product->final_price;
-            $this->discount = round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2);
+            $this->discount = $this->base_price > 0 ? round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2) : 0;
             $this->points = $product->points;
             $this->free_shipping = $product->free_shipping;
             $this->reviewing = $product->under_reviewing;
@@ -339,7 +339,7 @@ class ProductForm extends Component
             if ($this->final_price == null) {
                 $this->final_price = 0;
             }
-            $this->discount = round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2);
+            $this->discount = $this->base_price > 0 ? round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2) : 0;
         }
     }
     ######################## Real Time Validation :: End ############################
@@ -441,11 +441,6 @@ class ProductForm extends Component
     ######################## Save New Product :: Start ############################
     public function save($new = false)
     {
-        dd([
-            'ar' => $this->description['ar'],
-            'en' => $this->description['en'],
-        ]);
-
         $this->validate();
 
         DB::beginTransaction();

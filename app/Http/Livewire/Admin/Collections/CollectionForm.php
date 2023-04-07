@@ -156,7 +156,7 @@ class CollectionForm extends Component
             $this->profit_margin = round($collection->final_price - $collection->original_price);
             $this->base_price = $collection->base_price;
             $this->final_price = $collection->final_price;
-            $this->discount = round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2);
+            $this->discount = $this->base_price > 0 ? round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2) : 0;
             $this->points = $collection->points;
             $this->free_shipping = $collection->free_shipping;
             $this->reviewing = $collection->under_reviewing;
@@ -428,7 +428,7 @@ class CollectionForm extends Component
             if ($this->final_price == null) {
                 $this->final_price = 0;
             }
-            $this->discount = round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2);
+            $this->discount = $this->base_price > 0 ? round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2) : 0;
         }
 
         if (in_array($field, ['original_price', 'base_price', 'discount', 'final_price'])) {
