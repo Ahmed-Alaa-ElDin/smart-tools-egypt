@@ -18,6 +18,7 @@ class ProductForm extends Component
     use WithFileUploads;
 
     public $product_id;
+    public $old_product_id;
     public $gallery_images = [], $gallery_images_name = [], $featured = 0, $deletedImages = [];
     public $thumbnail_image,  $thumbnail_image_name;
     public $video;
@@ -179,6 +180,62 @@ class ProductForm extends Component
             $this->reviewing = $product->under_reviewing;
             $this->quantity = $product->quantity;
             $this->low_stock = $product->low_stock;
+
+            // SEO
+            $this->seo_keywords = $product->meta_keywords;
+        } elseif ($this->old_product_id) {
+            // Get Old Product's data
+            $product = Product::with(
+                [
+                    'subcategories' => fn ($q) => $q->with(
+                        ['category' => fn ($q) => $q->with(['supercategory', 'offers'])]
+                    )
+                ]
+            )->findOrFail($this->old_product_id);
+
+            $this->product = $product;
+
+
+            // Old Product's Info
+            $this->name = [
+                'ar' => "",
+                'en' => ""
+            ];
+
+            // old Subcategories
+            if (count($this->product->subcategories)) {
+                foreach ($this->product->subcategories as $key => $subcategory) {
+                    $this->parentCategories[] = [
+                        'supercategories' => $this->supercategories,
+                        'supercategory_id' => $subcategory->category->supercategory->id,
+                        'categories' => Category::where('supercategory_id', $subcategory->category->supercategory->id)->get()->toArray(),
+                        'category_id' => $subcategory->category->id,
+                        'subcategories' => Subcategory::where('category_id', $subcategory->category->id)->get()->toArray(),
+                        'subcategory_id' => $subcategory->id,
+                    ];
+                }
+            } else {
+                $this->parentCategories = [
+                    [
+                        'supercategory_id' => 0,
+                        'supercategories' => $this->supercategories,
+                        'category_id' => 0,
+                        'categories' => null,
+                        'subcategory_id' => 0,
+                        'subcategories' => null,
+                    ]
+                ];
+            }
+
+            $this->weight = $product->weight;
+            $this->description = [
+                'ar' => $product->getTranslation('description', 'ar'),
+                'en' => $product->getTranslation('description', 'en'),
+            ];
+
+            if ($product->specs != null) {
+                $this->specs = json_decode($product->specs);
+            }
 
             // SEO
             $this->seo_keywords = $product->meta_keywords;

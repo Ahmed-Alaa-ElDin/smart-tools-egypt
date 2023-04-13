@@ -47,31 +47,9 @@ class ProductController extends Controller
      *
      * @param  \App\Models\Product  $product
      */
-    public function copy(Product $product)
+    public function copy($product_id)
     {
-        $new_product = Product::create([
-            'name' => '',
-            'slug' => '',
-            'weight' => $product->weight,
-            'quantity' => 0,
-            'low_stock' => 0,
-            "original_price" => 0,
-            'base_price' => 0,
-            'final_price' => 0,
-            'points' => 0,
-            'description' => $product->getTranslations('description'),
-            'refundable' => 1,
-            'meta_keywords' => $product->meta_keywords,
-            'free_shipping' => 0,
-            'publish' => 1,
-            'under_reviewing' => 0,
-            'specs' => $product->specs,
-            'created_by' => auth()->user()->id,
-        ]);
-
-        $new_product->subcategories()->attach($product->subcategories->pluck('id')->toArray());
-
-        return redirect()->route('admin.products.edit', ['product' => $new_product->id])->with('success', __('admin/productsPages.Product Copied Successfully'));
+        return view('admin.products.copy', ['old_product_id' => $product_id])->with('success', __('admin/productsPages.Product Copied Successfully'));
     }
 
     /**

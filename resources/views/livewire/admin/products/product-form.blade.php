@@ -790,6 +790,10 @@
         @if ($product_id != null)
             <button type="button" wire:click.prevent="update"
                 class="bg-success hover:bg-successDark text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Update') }}</button>
+        @elseif ($old_product_id != null)
+            {{-- Save and Back --}}
+            <button type="button" wire:click.prevent="save"
+                class="bg-success hover:bg-successDark text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/productsPages.Copy') }}</button>
         @else
             {{-- Save and Back --}}
             <button type="button" wire:click.prevent="save"

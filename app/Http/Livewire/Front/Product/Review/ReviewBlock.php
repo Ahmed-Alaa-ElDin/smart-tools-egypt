@@ -51,7 +51,7 @@ class ReviewBlock extends Component
         // get 5 stars rating count
         $this->five_stars_count = $all_item_reviews->where('rating', 5)->count();
         if ($this->five_stars_count) {
-            $this->five_stars_percentage = ($this->five_stars_count / $this->item_reviews_count) * 100;
+            $this->five_stars_percentage = $this->item_reviews_count > 0 ? ($this->five_stars_count / $this->item_reviews_count) * 100 : 0;
         } else {
             $this->five_stars_percentage = 0;
         }
@@ -59,7 +59,7 @@ class ReviewBlock extends Component
         // get 4 stars rating count
         $this->four_stars_count = $all_item_reviews->where('rating', 4)->count();
         if ($this->four_stars_count) {
-            $this->four_stars_percentage = ($this->four_stars_count / $this->item_reviews_count) * 100;
+            $this->four_stars_percentage = $this->item_reviews_count > 0 ? ($this->four_stars_count / $this->item_reviews_count) * 100 : 0;
         } else {
             $this->four_stars_percentage = 0;
         }
@@ -67,7 +67,7 @@ class ReviewBlock extends Component
         // get 3 stars rating count
         $this->three_stars_count = $all_item_reviews->where('rating', 3)->count();
         if ($this->three_stars_count) {
-            $this->three_stars_percentage = ($this->three_stars_count / $this->item_reviews_count) * 100;
+            $this->three_stars_percentage = $this->item_reviews_count > 0 ? ($this->three_stars_count / $this->item_reviews_count) * 100 : 0;
         } else {
             $this->three_stars_percentage = 0;
         }
@@ -75,7 +75,7 @@ class ReviewBlock extends Component
         // get 2 stars rating count
         $this->two_stars_count = $all_item_reviews->where('rating', 2)->count();
         if ($this->two_stars_count) {
-            $this->two_stars_percentage = ($this->two_stars_count / $this->item_reviews_count) * 100;
+            $this->two_stars_percentage = $this->item_reviews_count > 0 ? ($this->two_stars_count / $this->item_reviews_count) * 100 : 0;
         } else {
             $this->two_stars_percentage = 0;
         }
@@ -83,7 +83,7 @@ class ReviewBlock extends Component
         // get 1 stars rating count
         $this->one_stars_count = $all_item_reviews->where('rating', 1)->count();
         if ($this->one_stars_count) {
-            $this->one_stars_percentage = ($this->one_stars_count / $this->item_reviews_count) * 100;
+            $this->one_stars_percentage = $this->item_reviews_count > 0 ? ($this->one_stars_count / $this->item_reviews_count) * 100 : 0;
         } else {
             $this->one_stars_percentage = 0;
         }

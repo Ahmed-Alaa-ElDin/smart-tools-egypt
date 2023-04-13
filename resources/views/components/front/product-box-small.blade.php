@@ -13,13 +13,13 @@
 
 
                 @if ($wishlist)
-                {{-- Remove from wishlist : Start --}}
-                @livewire('front.general.wishlist.remove-from-wishlist-button', ['item_id' => $item['id'], 'type' => $item['type']], key('remove-wishlist-button-' . Str::random(10)))
-                {{-- Remove from wishlist : End --}}
+                    {{-- Remove from wishlist : Start --}}
+                    @livewire('front.general.wishlist.remove-from-wishlist-button', ['item_id' => $item['id'], 'type' => $item['type']], key('remove-wishlist-button-' . Str::random(10)))
+                    {{-- Remove from wishlist : End --}}
                 @else
-                {{-- Add to wishlist : Start --}}
-                @livewire('front.general.wishlist.add-to-wishlist-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-wishlist-button-' . Str::random(10)))
-                {{-- Add to wishlist : End --}}
+                    {{-- Add to wishlist : Start --}}
+                    @livewire('front.general.wishlist.add-to-wishlist-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-wishlist-button-' . Str::random(10)))
+                    {{-- Add to wishlist : End --}}
                 @endif
 
                 @if (isset($item['quantity']) && $item['quantity'] > 0)
@@ -41,7 +41,7 @@
                         {{ __('front/homePage.OFF') }}
                     </span>
                     <span class="flex items-center bg-primary text-white rounded-full p-1">
-                        {{ 100 - round(($item['final_price'] * 100) / $item['base_price'], 0) }}%
+                        {{ $item['base_price'] > 0 ? 100 - round(($item['final_price'] * 100) / $item['base_price'], 0) : 0 }}%
                     </span>
                 </span>
                 {{-- Base Discount : End --}}
@@ -67,7 +67,7 @@
                     <span
                         class="absolute bottom-2 rtl:right-0 ltr:left-0 text-xs font-bold text-white px-2 py-1 bg-primary">
                         {{ __('front/homePage.Extra Discount') }}
-                        {{ round(($item['offer_discount'] * 100) / $item['final_price']) }}%
+                        {{ $item['final_price'] > 0 ? round(($item['offer_discount'] * 100) / $item['final_price']) : 0 }}%
                     </span>
                 @endif
                 {{-- Extra Discount : End --}}

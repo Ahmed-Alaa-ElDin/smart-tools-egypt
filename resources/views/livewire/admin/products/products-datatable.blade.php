@@ -367,7 +367,7 @@
                                         </a>
 
                                         {{-- Copy Product --}}
-                                        <a href="{{ route('admin.products.copy', ['product' => $product->id]) }}"
+                                        <a href="{{ route('admin.products.copy', ['product_id' => $product->id]) }}"
                                             title="{{ __('admin/productsPages.Copy Product') }}" class="m-0">
                                             <span
                                                 class="material-icons p-1 text-lg w-9 h-9 text-white bg-yellow-400 hover:bg-yellow-500 rounded">

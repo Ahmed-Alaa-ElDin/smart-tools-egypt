@@ -334,7 +334,7 @@
                                         {{ __('front/homePage.OFF') }}
                                     </span>
                                     <span class="flex items-center bg-primary text-white rounded-full p-1">
-                                        {{ 100 - round(($product->final_price * 100) / $product->base_price, 0) }}%
+                                        {{ $product->base_price > 0 ? 100 - round(($product->final_price * 100) / $product->base_price, 0) : 0 }}%
                                     </span>
                                 </span>
                                 {{-- Base Discount : End --}}

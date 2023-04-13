@@ -344,5 +344,6 @@ return [
     "Profit Margin"                                                         =>      "هامش الربح",
     "Copy Product"                                                          =>      "نسخ المنتج",
     "Product Copied Successfully"                                           =>      "تم نسخ المنتج بنجاح",
+    "Copy"                                                                  =>      "نسخ",
 
 ];

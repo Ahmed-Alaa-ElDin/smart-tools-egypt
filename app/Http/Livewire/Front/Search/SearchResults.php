@@ -6,7 +6,6 @@ use App\Models\Collection;
 use App\Models\Product;
 use Livewire\Component;
 use Livewire\WithPagination;
-use phpDocumentor\Reflection\Types\This;
 
 class SearchResults extends Component
 {
@@ -33,8 +32,6 @@ class SearchResults extends Component
 
     public function render()
     {
-        $this->resetPage();
-
         $totalItems = $this->search();
 
         $this->minPrice = round($totalItems->min('final_price'), 2);
@@ -286,12 +283,13 @@ class SearchResults extends Component
         }
     }
 
-    public function clearFilters() {
+    public function clearFilters()
+    {
         $this->filters = false;
 
         $this->selectedSupercategories = [];
-        $this->selectedCategories =[];
-        $this->selectedSubcategories =[];
+        $this->selectedCategories = [];
+        $this->selectedSubcategories = [];
         $this->selectedBrands = [];
         $this->currentRating = null;
         $this->currentAvailable = null;
