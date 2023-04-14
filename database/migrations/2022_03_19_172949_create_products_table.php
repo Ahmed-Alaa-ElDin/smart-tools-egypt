@@ -39,6 +39,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
+            $table->fullText(['name', 'description']);
             $table->foreign('brand_id')->references('id')->on('brands')->nullOnDelete()->onUpdate('cascade');
             $table->foreign('created_by')->references('id')->on('users')->nullOnDelete()->onUpdate('cascade');
         });

@@ -59,18 +59,18 @@
             // ####### Products Slider :: End #######
 
             // ####### Filters Slider :: Start #######
-            function toggleFilters(){
+            function toggleFilters() {
                 if (document.dir == "rtl") {
                     $('#filters').toggleClass('rtl:translate-x-full');
                     $('#filters-dropshadow').toggleClass('hidden');
-                } else {                    
+                } else {
                     $('#filters').toggleClass('ltr:-translate-x-full');
                     $('#filters-dropshadow').toggleClass('hidden');
                 }
             }
-            
+
             $('#filters-button').on('click', toggleFilters)
-            
+
             $('#filters-dropshadow').on('click', toggleFilters)
 
             $('#filters-colse').on('click', toggleFilters)

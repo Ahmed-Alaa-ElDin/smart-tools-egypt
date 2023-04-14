@@ -38,8 +38,11 @@ class HeaderSearchBox extends Component
                 )
                 ->where(
                     fn ($q) =>
-                    $q->where('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('barcode', 'like', '%' . $this->search . '%')
+                    $q->whereRaw(
+                        "MATCH(name,description) AGAINST(?)",
+                        array(trim($this->search))
+                    )->orWhere('barcode', 'like', '%' . $this->search . '%')
+                        ->orWhere('name', 'like', '%' . $this->search . '%')
                         ->orWhere('original_price', 'like', '%' . $this->search . '%')
                         ->orWhere('base_price', 'like', '%' . $this->search . '%')
                         ->orWhere('final_price', 'like', '%' . $this->search . '%')
@@ -66,8 +69,11 @@ class HeaderSearchBox extends Component
                 ->with('thumbnail')
                 ->where(
                     fn ($q) =>
-                    $q->where('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('barcode', 'like', '%' . $this->search . '%')
+                    $q->whereRaw(
+                        "MATCH(name,description) AGAINST(?)",
+                        array(trim($this->search))
+                    )->orWhere('barcode', 'like', '%' . $this->search . '%')
+                    ->orWhere('name', 'like', '%' . $this->search . '%')
                         ->orWhere('original_price', 'like', '%' . $this->search . '%')
                         ->orWhere('base_price', 'like', '%' . $this->search . '%')
                         ->orWhere('final_price', 'like', '%' . $this->search . '%')

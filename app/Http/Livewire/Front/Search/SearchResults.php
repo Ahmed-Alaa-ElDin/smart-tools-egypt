@@ -172,7 +172,11 @@ class SearchResults extends Component
                 )
                 ->where(
                     fn ($q) =>
-                    $q->where('name', 'like', '%' . $this->search . '%')
+                    $q->whereRaw(
+                        "MATCH(name,description) AGAINST(?)",
+                        array(trim($this->search))
+                    )
+                        ->orWhere('name', 'like', '%' . $this->search . '%')
                         ->orWhere('barcode', 'like', '%' . $this->search . '%')
                         ->orWhere('original_price', 'like', '%' . $this->search . '%')
                         ->orWhere('base_price', 'like', '%' . $this->search . '%')
@@ -190,7 +194,11 @@ class SearchResults extends Component
             ])
                 ->where(
                     fn ($q) =>
-                    $q->where('name', 'like', '%' . $this->search . '%')
+                    $q->whereRaw(
+                        "MATCH(name,description) AGAINST(?)",
+                        array(trim($this->search))
+                    )
+                    ->orWhere('name', 'like', '%' . $this->search . '%')
                         ->orWhere('barcode', 'like', '%' . $this->search . '%')
                         ->orWhere('original_price', 'like', '%' . $this->search . '%')
                         ->orWhere('base_price', 'like', '%' . $this->search . '%')
