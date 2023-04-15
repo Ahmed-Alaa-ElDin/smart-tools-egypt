@@ -81,7 +81,7 @@
 
                 {{-- View More Button : Start --}}
                 <div class="w-full md:w-auto">
-                    <a href="{{ $section->id }}" {{-- todo --}}
+                    <a href="{{ env('APP_URL') . session('locale') . '/offers/'. $section->offer_id }}" {{-- todo --}}
                         class="btn bg-secondary btn-sm shadow-md font-bold mb-3 md:mb-auto m-auto">{{ __('front/homePage.View More') }}</a>
                 </div>
                 {{-- View More Button : End --}}

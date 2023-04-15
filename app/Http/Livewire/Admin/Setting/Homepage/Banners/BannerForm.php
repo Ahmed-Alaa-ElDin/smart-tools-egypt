@@ -31,7 +31,7 @@ class BannerForm extends Component
             "description.ar"                =>      "required|string|max:100",
             "description.en"                =>      "required|string|max:100",
             "rank"                          =>      "required|min:0|max:127|exclude_if:rank,127|unique:banners,rank," . $this->banner_id,
-            'link'                          =>      "nullable|url",
+            'link'                          =>      "nullable",
         ];
     }
 

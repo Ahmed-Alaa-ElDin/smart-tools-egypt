@@ -1,7 +1,7 @@
 @extends('layouts.front.site', ['titlePage' => __('front/homePage.Search for ') . '"' . $search . '"'])
 
 @section('content')
-    @livewire('front.search.search-results', ['search' => $search])
+    @livewire('front.search.search-results')
 @endsection
 
 {{-- Extra Scripts --}}

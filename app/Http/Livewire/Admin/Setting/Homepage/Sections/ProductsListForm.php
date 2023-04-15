@@ -151,7 +151,7 @@ class ProductsListForm extends Component
             'icon' => 'success'
         ]);
 
-        $this->emitTo('admin.homepage.sections.section-form', 'listUpdated', ['selected_products' => $this->items]);
+        $this->emitTo('admin.setting.homepage.sections.section-form', 'listUpdated', ['selected_products' => $this->items]);
     }
     // Add Products or Collections to the item :: End
 
@@ -193,7 +193,7 @@ class ProductsListForm extends Component
             }
         }
 
-        $this->emitTo('admin.homepage.sections.section-form', 'listUpdated', ['selected_products' => $this->items]);
+        $this->emitTo('admin.setting.homepage.sections.section-form', 'listUpdated', ['selected_products' => $this->items]);
     }
     ######## Rank UP : End #########
 
@@ -218,7 +218,7 @@ class ProductsListForm extends Component
             }
         }
 
-        $this->emitTo('admin.homepage.sections.section-form', 'listUpdated', ['selected_products' => $this->items]);
+        $this->emitTo('admin.setting.homepage.sections.section-form', 'listUpdated', ['selected_products' => $this->items]);
     }
     ######## Rank Down : End #########
 
@@ -241,7 +241,7 @@ class ProductsListForm extends Component
                 'icon' => 'success'
             ]);
 
-            $this->emitTo('admin.homepage.sections.section-form', 'listUpdated', ['selected_products' => $this->items]);
+            $this->emitTo('admin.setting.homepage.sections.section-form', 'listUpdated', ['selected_products' => $this->items]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/sitePages.Product hasn't been removed from list"),
@@ -270,7 +270,7 @@ class ProductsListForm extends Component
                 'icon' => 'success'
             ]);
 
-            $this->emitTo('admin.homepage.sections.section-form', 'listUpdated', ['selected_products' => $this->items]);
+            $this->emitTo('admin.setting.homepage.sections.section-form', 'listUpdated', ['selected_products' => $this->items]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/sitePages.Product hasn't been removed from list"),

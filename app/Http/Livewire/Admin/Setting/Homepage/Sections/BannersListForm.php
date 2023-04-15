@@ -58,7 +58,7 @@ class BannersListForm extends Component
             $this->banners[$banner_key]['rank']--;
         }
 
-        $this->emitTo('admin.homepage.sections.section-form', 'listUpdated', ['selected_banners' => $this->banners]);
+        $this->emitTo('admin.setting.homepage.sections.section-form', 'listUpdated', ['selected_banners' => $this->banners]);
     }
     ######## Rank UP : End #########
 
@@ -72,7 +72,7 @@ class BannersListForm extends Component
             $this->banners[$banner_key]['rank']++;
         }
 
-        $this->emitTo('admin.homepage.sections.section-form', 'listUpdated', ['selected_banners' => $this->banners]);
+        $this->emitTo('admin.setting.homepage.sections.section-form', 'listUpdated', ['selected_banners' => $this->banners]);
     }
     ######## Rank Down : End #########
 
@@ -89,7 +89,7 @@ class BannersListForm extends Component
                 'icon' => 'success'
             ]);
 
-            $this->emitTo('admin.homepage.sections.section-form', 'listUpdated', ['selected_banners' => $this->banners]);
+            $this->emitTo('admin.setting.homepage.sections.section-form', 'listUpdated', ['selected_banners' => $this->banners]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/sitePages.Banner hasn't been removed from list"),
@@ -132,7 +132,7 @@ class BannersListForm extends Component
                 'icon' => 'success'
             ]);
 
-            $this->emitTo('admin.homepage.sections.section-form', 'listUpdated', ['selected_banners' => $this->banners]);
+            $this->emitTo('admin.setting.homepage.sections.section-form', 'listUpdated', ['selected_banners' => $this->banners]);
         } catch (\Throwable $th) {
             $this->dispatchBrowserEvent('swalDone', [
                 "text" => __("admin/sitePages.Banner hasn't been added to the list"),

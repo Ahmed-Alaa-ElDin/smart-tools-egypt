@@ -24,8 +24,12 @@ Route::group([
     Route::get('/', [HomepageController::class, 'index'])->name('homepage');
 
     ################ Search :: Start ##############
-    Route::get('/search/{search}', [HomepageController::class, 'search'])->name('search');
+    Route::get('/search', [HomepageController::class, 'search'])->name('search');
     ################ Search :: End ##############
+    
+    ################ Section Products List :: Start ##############
+    Route::get('/section-products/{section_id}', [HomepageController::class, 'showProductList'])->name('section-products');
+    ################ Section Products List :: End ##############
 
     ################ User's Profile :: Start ##############
     Route::resource('/profile', ProfileController::class)->middleware('auth');
@@ -125,6 +129,4 @@ Route::group([
     ################ Collection Controller :: Start ##############
     Route::get('/c/{id}-{slug?}', [CollectionController::class, 'show'])->name('collections.show');
     ################ Collection Controller :: End ##############
-
-
 });
