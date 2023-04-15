@@ -293,7 +293,7 @@ class OrderForm extends Component
             // Fixed Discount
             elseif ($order_offer->type == 1) {
                 $this->order_discount = $this->products_best_prices >= $order_offer->value ? $order_offer->value : $this->products_best_prices;
-                $this->order_discount_percentage = round(($this->order_discount * 100) / $this->products_best_prices);
+                $this->order_discount_percentage = $this->products_best_prices > 0 ? round(($this->order_discount * 100) / $this->products_best_prices) : 0;
             }
             // Points
             elseif ($order_offer->type == 2) {
@@ -569,7 +569,7 @@ class OrderForm extends Component
                 'allow_opening' => 1,
                 'zone_id' => $this->zone_id,
                 'coupon_id' => $this->coupon_id,
-                'coupon_order_discount' ,
+                'coupon_order_discount',
                 'coupon_order_points',
                 'coupon_products_discount',
                 'coupon_products_points',

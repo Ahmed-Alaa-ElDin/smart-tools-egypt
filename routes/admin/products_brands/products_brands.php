@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/products/export-excel', [ProductController::class, 'exportExcel'])->name('products.exportExcel');
 Route::get('/products/export-pdf', [ProductController::class, 'exportPDF'])->name('products.exportPDF');
 Route::get('/products/deleted-products', [ProductController::class, 'softDeletedProducts'])->name('products.softDeletedProducts');
+Route::get('/products/copy-product/{product_id}', [ProductController::class, 'copy'])->name('products.copy');
 Route::resource('/products', ProductController::class);
 
 Route::get('/countries/{brand}/products-brand', [BrandController::class, 'productsBrand'])->name('brands.productsBrand');

@@ -3,6 +3,7 @@
 return [
     "constants" => [
         'PAGINATION' => 10,
+        'FRONT_PAGINATION' =>12,
         'DEFAULT_PASSWORD' => 'Password@1234',
         'POINT_RATE' => 0.1,
         'WHATSAPP_NUMBER' => '01010097248',

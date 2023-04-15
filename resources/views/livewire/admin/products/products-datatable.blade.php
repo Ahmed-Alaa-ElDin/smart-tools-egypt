@@ -338,7 +338,7 @@
                                     {{-- Manage Body --}}
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
-                                        {{-- User Details --}}
+                                        {{-- Product Details --}}
                                         <a href="{{ route('front.products.show', ['id' => $product->id, 'slug' => $product->slug]) }}"
                                             title="{{ __('admin/productsPages.View') }}" class="m-0">
                                             <span
@@ -346,6 +346,7 @@
                                                 visibility
                                             </span>
                                         </a>
+
 
                                         {{-- Edit Button --}}
                                         <a href="{{ route('admin.products.edit', ['product' => $product->id]) }}"
@@ -362,6 +363,15 @@
                                             <span
                                                 class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
                                                 delete
+                                            </span>
+                                        </a>
+
+                                        {{-- Copy Product --}}
+                                        <a href="{{ route('admin.products.copy', ['product_id' => $product->id]) }}"
+                                            title="{{ __('admin/productsPages.Copy Product') }}" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-yellow-400 hover:bg-yellow-500 rounded">
+                                                content_copy
                                             </span>
                                         </a>
                                     </td>

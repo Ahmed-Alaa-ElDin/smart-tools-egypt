@@ -75,9 +75,15 @@ class Category extends Model
             ]);
     }
 
-    // hasmany through relationship  Category --> Products
+    // has many through relationship  Category --> Products
     public function products()
     {
         return $this->hasManyDeep(Product::class, [Subcategory::class, 'product_subcategory']);
+    }
+
+    // One to many relationship Category --> Image
+    public function images()
+    {
+        return $this->morphMany(Image::class, "imagable");
     }
 }

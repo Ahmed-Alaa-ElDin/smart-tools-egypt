@@ -80,16 +80,6 @@ class Order extends Model
         return $this->hasMany(Transaction::class);
     }
 
-    public function getPaymentMethodAttribute()
-    {
-        return $this->transactions->where('payment_status', '!=', 3)->pluck('payment_method');
-    }
-
-    public function getUnpaidPaymentMethodAttribute()
-    {
-        return $this->transactions->where('payment_status', 1)->count() ? $this->transactions->where('payment_status', 1)->first()->payment_method : null;
-    }
-
     public function zone()
     {
         return $this->belongsTo(Zone::class);
@@ -98,7 +88,9 @@ class Order extends Model
     public function products()
     {
         return $this->morphedByMany(Product::class, 'orderable')->withPivot(
+            'order_id',
             'quantity',
+            'original_price',
             'price',
             'points',
             'coupon_discount',
@@ -109,7 +101,9 @@ class Order extends Model
     public function collections()
     {
         return $this->morphedByMany(Collection::class, 'orderable')->withPivot(
+            'order_id',
             'quantity',
+            'original_price',
             'price',
             'points',
             'coupon_discount',
@@ -128,5 +122,20 @@ class Order extends Model
             return $this->status_id == 45 && Carbon::create($this->delivered_at)->diffInDays() <= config('constants.constants.RETURN_PERIOD');
         }
         return false;
+    }
+
+    public function getPaymentMethodsAttribute()
+    {
+        return $this->transactions->whereIn('payment_status',  [1, 2])->pluck('payment_method');
+    }
+
+    public function getUnpaidPaymentMethodAttribute()
+    {
+        return $this->transactions->where('payment_status', 1)->count() ? $this->transactions->where('payment_status', 1)->first()->payment_method : null;
+    }
+
+    public function getMainPaymentMethodAttribute()
+    {
+        return $this->transactions()->whereIn('payment_method', [1, 2, 3, 4])->count() ? $this->transactions()->whereIn('payment_method', [1, 2, 3, 4])->first()->payment_method : null;
     }
 }

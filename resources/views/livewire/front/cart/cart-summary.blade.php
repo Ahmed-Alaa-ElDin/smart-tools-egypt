@@ -69,7 +69,7 @@
             {{-- ############## Final Price :: Start ############## --}}
             <div class="w-100 flex justify-between items-center">
                 <div class="h6 font-bold m-0">
-                    {{ __('front/homePage.Subtotal after products discounts') }}
+                    {{ __('front/homePage.Subtotal after products discounts:') }}
                 </div>
 
                 <div

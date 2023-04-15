@@ -43,14 +43,13 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Copy the specified product.
      *
      * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function copy($product_id)
     {
-        //
+        return view('admin.products.copy', ['old_product_id' => $product_id])->with('success', __('admin/productsPages.Product Copied Successfully'));
     }
 
     /**

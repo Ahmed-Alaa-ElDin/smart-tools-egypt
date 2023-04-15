@@ -18,6 +18,8 @@ class Collection extends Model
     use HasTranslations;
     use SoftDeletes;
 
+    protected $connection = "mysql";
+
     public $translatable = ['name', 'description', 'slug'];
 
     protected $fillable = [
@@ -38,7 +40,7 @@ class Collection extends Model
         'free_shipping',
         'publish',
         'under_reviewing',
-        'created_by'
+        'created_by',
     ];
 
     protected $appends = [
@@ -109,6 +111,7 @@ class Collection extends Model
     public function orders()
     {
         return $this->morphToMany(Order::class, 'orderable')->withPivot(
+            'order_id',
             'quantity',
             'price',
             'points',
@@ -130,7 +133,10 @@ class Collection extends Model
 
     public function getQuantityAttribute()
     {
-        return $this->products->map(fn ($product) =>  floor($product->quantity / $product->pivot->quantity))->min() ?? 0;
+        return $this->products()
+            ->without(['reviews', 'orders', 'brand', 'validOffers'])->get()
+            ->map(fn ($product) =>  floor($product->quantity / $product->pivot->quantity))
+            ->min() ?? 0;
     }
 
     public function getTypeAttribute()
@@ -148,14 +154,17 @@ class Collection extends Model
                 'collections.id',
                 'name',
                 'slug',
+                'collections.original_price',
                 'base_price',
                 'final_price',
+                'refundable',
                 'points',
                 'description',
                 'model',
                 'free_shipping',
                 'publish',
                 'under_reviewing',
+                'created_at'
             ]
         )
             ->with(
@@ -180,14 +189,17 @@ class Collection extends Model
                 'name',
                 'slug',
                 'weight',
+                'collections.original_price',
                 'base_price',
                 'final_price',
+                'refundable',
                 'points',
                 'description',
                 'model',
                 'free_shipping',
                 'publish',
                 'under_reviewing',
+                'created_at'
             ]
         )
             ->with(

@@ -94,7 +94,7 @@ class CollectionsExport implements FromCollection, WithHeadings, WithStyles, Wit
             $collection->original_price ??  __('N/A'),
             $collection->base_price ??  __('N/A'),
             $collection->final_price ??  __('N/A'),
-            $collection->final_price ? round((100 * ($collection->base_price - $collection->final_price)) / $collection->base_price, 2) . '%' :  '0%',
+            $collection->final_price && $collection->base_price ? round((100 * ($collection->base_price - $collection->final_price)) / $collection->base_price, 2) . '%' :  '0%',
             $collection->points ?? '0',
             $collection->weight ?? '0',
             $collection->refundable ? __('Yes') :  __('No'),

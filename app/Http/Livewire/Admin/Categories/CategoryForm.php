@@ -43,7 +43,7 @@ class CategoryForm extends Component
         if ($this->category_id) {
 
             // Get Old Category's data
-            $category = Category::findOrFail($this->category_id);
+            $category = Category::with('images')->findOrFail($this->category_id);
 
             $this->category = $category;
 
@@ -55,7 +55,7 @@ class CategoryForm extends Component
             $this->supercategory_id = $category->supercategory_id;
             $this->title = $category->meta_title;
             $this->description_seo = $category->meta_description;
-            $this->image_name = $category->image_name;
+            $this->image_name = $category->images->count() ? $category->images->first()->file_name : null;
         }
     }
 
@@ -109,18 +109,27 @@ class CategoryForm extends Component
         DB::beginTransaction();
 
         try {
-            Category::create([
+            $category = Category::create([
                 'name' => ['ar' => $this->name['ar'], 'en' => $this->name['en']],
-                'image_name' => $this->image_name,
                 'supercategory_id' => $this->supercategory_id,
                 'meta_title' => $this->title,
                 'meta_description' => $this->description_seo,
             ]);
 
+            $category->images()->delete();
+
+            if ($this->image_name != null) {
+                $category->images()->create([
+                    'file_name' => $this->image_name,
+                    'is_thumbnail' => 0,
+                    'featured' => 1,
+                ]);
+            }
+
             DB::commit();
 
             foreach ($this->deletedImages as $deletedImage) {
-                imageDelete($deletedImage, 'banners');
+                imageDelete($deletedImage, 'categories');
             }
 
             if ($new) {
@@ -152,16 +161,31 @@ class CategoryForm extends Component
                 'supercategory_id' => $this->supercategory_id,
                 'meta_title' => $this->title,
                 'meta_description' => $this->description_seo,
-                'image_name' => $this->image_name
             ]);
 
+            $this->category->images()->delete();
+
+            if ($this->image_name != null) {
+                $this->category->images()->create([
+                    'file_name' => $this->image_name,
+                    'is_thumbnail' => 0,
+                    'featured' => 1,
+                ]);
+            }
+
             DB::commit();
+
+            foreach ($this->deletedImages as $deletedImage) {
+                imageDelete($deletedImage, 'categories');
+            }
 
             Session::flash('success', __('admin/productsPages.Category updated successfully'));
             redirect()->route('admin.categories.index');
         } catch (\Throwable $th) {
             DB::rollBack();
+
             throw $th;
+
             Session::flash('error', __("admin/productsPages.Category hasn't been updated"));
             redirect()->route('admin.categories.index');
         }

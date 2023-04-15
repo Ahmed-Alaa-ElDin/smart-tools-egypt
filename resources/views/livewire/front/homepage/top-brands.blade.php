@@ -10,7 +10,7 @@
             {{-- Title : End --}}
 
             {{-- View More Button : Start --}}
-            <a href="#"
+            <a href="{{ route('front.brands.index') }}"
                 class="btn bg-secondary btn-sm shadow-md font-bold">{{ __('front/homePage.See All Brands') }}</a>
             {{-- View More Button : End --}}
         </div>
@@ -22,7 +22,8 @@
             @foreach ($brands as $brand)
                 {{-- Brand : Start --}}
                 <div class="col-span-6 md:col-span-3">
-                    <a href="#" class="bg-white border block rounded p-2 hover:shadow-md">
+                    <a href="{{ route('front.brands.show', $brand->id) }}"
+                        class="bg-white border block rounded p-2 hover:shadow-md">
                         <div class="grid grid-cols-12 items-center">
 
                             @if ($brand->logo_path)
@@ -36,8 +37,9 @@
                                 {{-- Image : Start --}}
                                 <div class="col-span-3 w-16 h-16 flex justify-center items-center">
                                     <span class="material-icons text-center text-5xl ">
-                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 64 64">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
+                                            width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
+                                            viewBox="0 0 64 64">
                                             <path fill="currentColor"
                                                 d="M36.604 23.043c-.623-.342-1.559-.512-2.805-.512h-6.693v7.795h6.525c1.295 0 2.268-.156 2.916-.473c1.146-.551 1.721-1.639 1.721-3.268c0-1.757-.555-2.939-1.664-3.542" />
                                             <path fill="currentColor"
@@ -48,13 +50,13 @@
                                 {{-- Image : End --}}
                             @endif
 
-                            {{-- Category Name : Start --}}
+                            {{-- Brand Name : Start --}}
                             <div class="col-span-7">
                                 <div class="truncate font-bold text-center px-3">
                                     {{ $brand->name }}
                                 </div>
                             </div>
-                            {{-- Category Name : End --}}
+                            {{-- Brand Name : End --}}
 
                             {{-- Arrow : Start --}}
                             <div class="col-span-2 text-center">

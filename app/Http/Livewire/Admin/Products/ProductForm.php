@@ -18,6 +18,7 @@ class ProductForm extends Component
     use WithFileUploads;
 
     public $product_id;
+    public $old_product_id;
     public $gallery_images = [], $gallery_images_name = [], $featured = 0, $deletedImages = [];
     public $thumbnail_image,  $thumbnail_image_name;
     public $video;
@@ -173,12 +174,68 @@ class ProductForm extends Component
             $this->original_price = $product->original_price;
             $this->base_price = $product->base_price;
             $this->final_price = $product->final_price;
-            $this->discount = round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2);
+            $this->discount = $this->base_price > 0 ? round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2) : 0;
             $this->points = $product->points;
             $this->free_shipping = $product->free_shipping;
             $this->reviewing = $product->under_reviewing;
             $this->quantity = $product->quantity;
             $this->low_stock = $product->low_stock;
+
+            // SEO
+            $this->seo_keywords = $product->meta_keywords;
+        } elseif ($this->old_product_id) {
+            // Get Old Product's data
+            $product = Product::with(
+                [
+                    'subcategories' => fn ($q) => $q->with(
+                        ['category' => fn ($q) => $q->with(['supercategory', 'offers'])]
+                    )
+                ]
+            )->findOrFail($this->old_product_id);
+
+            $this->product = $product;
+
+
+            // Old Product's Info
+            $this->name = [
+                'ar' => "",
+                'en' => ""
+            ];
+
+            // old Subcategories
+            if (count($this->product->subcategories)) {
+                foreach ($this->product->subcategories as $key => $subcategory) {
+                    $this->parentCategories[] = [
+                        'supercategories' => $this->supercategories,
+                        'supercategory_id' => $subcategory->category->supercategory->id,
+                        'categories' => Category::where('supercategory_id', $subcategory->category->supercategory->id)->get()->toArray(),
+                        'category_id' => $subcategory->category->id,
+                        'subcategories' => Subcategory::where('category_id', $subcategory->category->id)->get()->toArray(),
+                        'subcategory_id' => $subcategory->id,
+                    ];
+                }
+            } else {
+                $this->parentCategories = [
+                    [
+                        'supercategory_id' => 0,
+                        'supercategories' => $this->supercategories,
+                        'category_id' => 0,
+                        'categories' => null,
+                        'subcategory_id' => 0,
+                        'subcategories' => null,
+                    ]
+                ];
+            }
+
+            $this->weight = $product->weight;
+            $this->description = [
+                'ar' => $product->getTranslation('description', 'ar'),
+                'en' => $product->getTranslation('description', 'en'),
+            ];
+
+            if ($product->specs != null) {
+                $this->specs = json_decode($product->specs);
+            }
 
             // SEO
             $this->seo_keywords = $product->meta_keywords;
@@ -339,7 +396,7 @@ class ProductForm extends Component
             if ($this->final_price == null) {
                 $this->final_price = 0;
             }
-            $this->discount = round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2);
+            $this->discount = $this->base_price > 0 ? round((($this->base_price - $this->final_price) / $this->base_price) * 100, 2) : 0;
         }
     }
     ######################## Real Time Validation :: End ############################
@@ -464,8 +521,8 @@ class ProductForm extends Component
                 'final_price' => $this->final_price,
                 'points' => $this->points,
                 'description' => [
-                    'ar' => $this->description['ar'] ?? $this->description['en'],
-                    'en' => $this->description['en'] ?? $this->description['ar']
+                    'ar' => $this->description['ar'] ? $this->description['ar'] : ($this->description['en'] ? $this->description['en'] : ""),
+                    'en' => $this->description['en'] ? $this->description['en'] : ($this->description['ar'] ? $this->description['ar'] : "")
                 ],
                 'specs' => json_encode(array_values($this->specs)),
                 'model' => $this->model,
@@ -549,8 +606,8 @@ class ProductForm extends Component
                 'final_price' => $this->final_price,
                 'points' => $this->points,
                 'description' => [
-                    'ar' => $this->description['ar'] ?? $this->description['en'],
-                    'en' => $this->description['en'] ?? $this->description['ar']
+                    'ar' => $this->description['ar'] ? $this->description['ar'] : ($this->description['en'] ? $this->description['en'] : ""),
+                    'en' => $this->description['en'] ? $this->description['en'] : ($this->description['ar'] ? $this->description['ar'] : "")
                 ],
                 'specs' => json_encode(array_values($this->specs)),
                 'model' => $this->model,
@@ -566,6 +623,7 @@ class ProductForm extends Component
 
             // Add Subcategories
             $subcategories_id = array_map(fn ($value) => $value['subcategory_id'], $this->parentCategories);
+
             $this->product->subcategories()->sync($subcategories_id);
 
             $this->product->images()->delete();
@@ -597,7 +655,7 @@ class ProductForm extends Component
             redirect()->route('admin.products.index');
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+
             Session::flash('error', __("admin/productsPages.Product hasn't been updated"));
             redirect()->route('admin.products.index');
         }

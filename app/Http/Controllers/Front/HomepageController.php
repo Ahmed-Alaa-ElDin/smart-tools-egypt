@@ -29,7 +29,7 @@ class HomepageController extends Controller
                 ->withPivot('rank')
                 ->orderBy('rank'),
             'offer' => fn ($q) => $q->with([
-                'directProducts' => fn ($q) => $q->where('products.publish', 1),
+                'directProducts' => fn ($q) => $q->with('brand')->where('products.publish', 1),
                 'directCollections' => fn ($q) => $q->where('collections.publish', 1),
                 'supercategoryProducts' => fn ($q) => $q->where('products.publish', 1),
                 'categoryProducts' => fn ($q) => $q->where('products.publish', 1),
@@ -40,7 +40,6 @@ class HomepageController extends Controller
         ])
             ->where('active', 1)
             ->orderBy('rank')->get();
-
         ############## Get All Active Sections with Relations :: End ##############
 
         ############ Extract of products From Sections :: Start ############
@@ -169,14 +168,18 @@ class HomepageController extends Controller
         ############ Get Today Deals Section :: End ############
 
         ############ Get Top Categories :: Start ############
-        $categories = Category::where("top", '>', 0)->orderBy("top")->get();
+        $categories = Category::select('id','name','top')->without('validOffers')->with('images')->where("top", '>', 0)->orderBy("top")->get();
         ############ Get Top Categories :: End ############
 
         ############ Get Top Brands :: Start ############
-        $brands = Brand::where("top", '>', 0)->orderBy("top")->get();
+        $brands = Brand::select('id','name','top','logo_path')->without('validOffers')->where("top", '>', 0)->orderBy("top")->get();
         ############ Get Top Brands :: End ############
 
-        // dd('homepage_sections', 'today_deals_sections', 'categories', 'brands');
         return view('front.homepage.homepage', compact('homepage_sections', 'today_deals_sections', 'categories', 'brands'));
+    }
+
+    public function search($search)
+    {
+        return view('front.search.search_page', compact('search'));
     }
 }

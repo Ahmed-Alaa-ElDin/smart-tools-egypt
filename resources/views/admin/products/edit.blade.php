@@ -53,7 +53,6 @@
 
 {{-- Extra Scripts --}}
 @push('js')
-
     {{-- Tinymce --}}
     <script src="{{ asset('assets/js/plugins/tinymce/tinymce.min.js') }}"></script>
 
@@ -68,7 +67,6 @@
                 'directionality',
                 'table',
                 'autoresize',
-                // 'fullscreen'
             ],
             toolbar: 'ltr rtl | ' +
                 'bold italic backcolor fontsizeselect| alignleft aligncenter ' +
@@ -93,14 +91,6 @@
             ...options,
             directionality: 'rtl',
             selector: '#description_ar',
-            // content_style: `
-            //         ul {
-            //             text-align: right;
-            //         }
-            //         p {
-            //             text-align: right;
-            //         }
-            //     `,
             setup: function(editor) {
                 editor.on('blur', function(e) {
                     window.livewire.emit('descriptionAr', tinymce.get(e.target.id).getContent())
@@ -113,14 +103,6 @@
             ...options,
             directionality: 'ltr',
             selector: '#description_en',
-            // content_style: `
-            //         ul {
-            //             text-align: left;
-            //         }
-            //         p {
-            //             text-align: left;
-            //         }
-            //     `,
             setup: function(editor) {
                 editor.on('blur', function(e) {
                     window.livewire.emit('descriptionEn', tinymce.get(e.target.id).getContent())
@@ -128,16 +110,13 @@
             }
         });
 
-        // tinymce for SEO Description
-        // tinymce.init({
-        //     ...options,
-        //     directionality: 'rtl',
-        //     selector: '#seo_description',
-        //     setup: function(editor) {
-        //         editor.on('blur', function(e) {
-        //             window.livewire.emit('descriptionSeo', tinymce.get(e.target.id).getContent())
-        //         });
-        //     }
-        // });
+        // Clear Zeros fields
+        document.addEventListener("keydown", (event) => {
+            if (event.ctrlKey && event.key.toLowerCase() === "k") {
+                event.preventDefault();
+
+                $("#original_price,#base_price,#discount,#final_price,#points,#quantity,#low_stock").val('');
+            }
+        });
     </script>
 @endpush

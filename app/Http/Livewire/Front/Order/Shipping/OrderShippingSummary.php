@@ -73,7 +73,24 @@ class OrderShippingSummary extends Component
             $order_offer = Offer::orderOffers()->first();
 
             // ------------------------------------------------------------------------------------------------------
-            // A - Prices
+            // A - Shipping
+            // ------------------------------------------------------------------------------------------------------
+            // 1 - Items Offers Free Shipping
+            $this->offers_free_shipping = !in_array(0, array_column($this->items, 'offer_free_shipping'));
+
+            // 2 - Order Offer Free Shipping
+            if ($order_offer) {
+                // Order Free Shipping
+                $this->order_offer_free_shipping = $order_offer->free_shipping;
+            }
+
+            // 3 - Total Order Free Shipping (After Items & Order Offers)
+            $this->total_order_free_shipping = $this->offers_free_shipping || $this->order_offer_free_shipping;
+
+            $this->getShippingFees();
+
+            // ------------------------------------------------------------------------------------------------------
+            // B - Prices
             // ------------------------------------------------------------------------------------------------------
 
             // 1 - Base Items Prices
@@ -104,26 +121,8 @@ class OrderShippingSummary extends Component
             }
 
             // 5 - Prices After Order Offer
-            $this->total_after_order_discount = $this->total_after_offer_prices - $this->order_discount;
+            $this->total_after_order_discount = $this->total_after_offer_prices - $this->order_discount + $this->shipping_fees;
 
-            // ------------------------------------------------------------------------------------------------------
-            // B - Shipping
-            // ------------------------------------------------------------------------------------------------------
-            // 1 - Items Offers Free Shipping
-            $this->offers_free_shipping = !in_array(0, array_column($this->items, 'offer_free_shipping'));
-
-            // 2 - Order Offer Free Shipping
-            if ($order_offer) {
-                // Order Free Shipping
-                $this->order_offer_free_shipping = $order_offer->free_shipping;
-            }
-
-            // 3 - Total Order Free Shipping (After Items & Order Offers)
-            $this->total_order_free_shipping = $this->offers_free_shipping || $this->order_offer_free_shipping;
-
-            // if (!$this->total_order_free_shipping) {
-                $this->getShippingFees();
-            // }
 
             // ------------------------------------------------------------------------------------------------------
             // C - Points
@@ -180,10 +179,10 @@ class OrderShippingSummary extends Component
 
                 // Get Destinations and Zones for the city
                 $zones = Zone::with(['destinations'])
-                ->where('is_active', 1)
-                ->whereHas('destinations', fn ($q) => $q->where('city_id', $city_id))
-                ->whereHas('delivery', fn ($q) => $q->where('is_active', 1))
-                ->get();
+                    ->where('is_active', 1)
+                    ->whereHas('destinations', fn ($q) => $q->where('city_id', $city_id))
+                    ->whereHas('delivery', fn ($q) => $q->where('is_active', 1))
+                    ->get();
 
                 // Get the best Delivery Cost
                 $prices = $zones->map(function ($zone) use ($items_total_shipping_weights) {

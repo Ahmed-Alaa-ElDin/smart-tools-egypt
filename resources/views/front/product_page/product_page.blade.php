@@ -16,12 +16,13 @@
                         {{ __('front/homePage.Homepage') }}
                     </a>
                 </li>
-                <li class="breadcrumb-item hover:text-primary">
-                    {{-- todo :: brand page --}}
-                    <a href="{{ route('admin.users.index') }}">
-                        {{ $product->brand ? $product->brand->name : '' }}
-                    </a>
-                </li>
+                @if ($product->brand)
+                    <li class="breadcrumb-item hover:text-primary">
+                        <a href="{{ route('front.brands.show', $product->brand_id) }}">
+                            {{ $product->brand->name }}
+                        </a>
+                    </li>
+                @endif
                 <li class="breadcrumb-item text-gray-700 font-bold" aria-current="page">
                     {{ $product->name }}
                 </li>
@@ -80,10 +81,13 @@
 
                     {{-- Product Brand & Model :: Start --}}
                     <div class="flex justify-start items-center gap-3">
-                        {{-- todo : Add Brand Link --}}
-                        <h2 class="text-gray-800 font-bold">
-                            {{ $product->brand ? $product->brand->name : '' }}
-                        </h2>
+                        @if ($product->brand)
+                            <h2 class="text-gray-800 font-bold">
+                                <a href="{{ route('front.brands.show', $product->brand->id) }}">
+                                    {{ $product->brand->name }}
+                                </a>
+                            </h2>
+                        @endif
                         <h3 class="text-gray-500 font-bold">
                             {{ $product->model }}
                         </h3>
@@ -200,12 +204,13 @@
                             @livewire(
                                 'front.general.cart.add-to-cart-button',
                                 [
-                                    'product_id' => $product['id'],
+                                    'item_id' => $product['id'],
                                     'text' => true,
                                     'large' => true,
+                                    'type' => 'Product',
                                     'add_buy' => 'add',
                                 ],
-                                key('add-cart-button-' . Str::random(10)),
+                                key('add-cart-button-' . Str::random(10))
                             )
                             {{-- Add to cart : End --}}
 
@@ -219,7 +224,7 @@
                                     'type' => 'Product',
                                     'add_buy' => 'pay',
                                 ],
-                                key('add-cart-button-' . Str::random(10)),
+                                key('go-to-cart-button-' . Str::random(10))
                             )
                             {{-- Go To Payment : End --}}
 
@@ -231,9 +236,9 @@
                                         'item_id' => $product['id'],
                                         'text' => true,
                                         'large' => true,
-                                        'type' => 'Product'
+                                        'type' => 'Product',
                                     ],
-                                    key('add-compare-button-' . Str::random(10)),
+                                    key('add-compare-button-' . Str::random(10))
                                 )
                                 {{-- Add to compare : End --}}
 
@@ -244,9 +249,9 @@
                                         'item_id' => $product['id'],
                                         'text' => true,
                                         'large' => true,
-                                        'type' => 'Product'
+                                        'type' => 'Product',
                                     ],
-                                    key('add-wishlist-button-' . Str::random(10)),
+                                    key('add-wishlist-button-' . Str::random(10))
                                 )
                                 {{-- Add to wishlist : End --}}
                             </div>
@@ -264,7 +269,7 @@
                                         'type' => 'Product',
                                         'title' => false,
                                     ],
-                                    key($product->name . '-' . rand()),
+                                    key($product->name . '-' . rand())
                                 )
                             </div>
                             {{-- Cart Amount :: End --}}
@@ -477,7 +482,7 @@
                     {{-- Reviews Body :: Start --}}
                     <div class="hidden p-4 rounded-lg flex items-center justify-center" id="reviews" role="tabpanel"
                         aria-labelledby="reviews-tab">
-                        @livewire('front.product.review.review-block', ['product_id' => $product->id])
+                        @livewire('front.product.review.review-block', ['item_id' => $product->id, 'type' => 'Product', 'reviews' => $product->reviews])
                     </div>
                     {{-- Reviews Body :: End --}}
 
@@ -606,7 +611,6 @@
 
 {{-- Extra Scripts --}}
 @push('js')
-    <script src="{{ asset('assets/js/plugins/flowbite/flowbite.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/tinymce/tinymce.min.js') }}"></script>
 
     <script>

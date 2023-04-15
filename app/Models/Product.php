@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,6 +18,8 @@ class Product extends Model
     use HasFactory;
     use HasTranslations;
     use SoftDeletes;
+
+    protected $connection = "mysql";
 
     public $translatable = ['name', 'description', 'slug'];
 
@@ -42,11 +45,11 @@ class Product extends Model
         'specs',
         'created_by',
         'brand_id',
-        'today_deal',
     ];
 
     protected $appends = [
-        "avg_rating", "can_review",'type'
+        // "avg_rating", "can_review",
+        'type'
     ];
 
     protected $with = ['reviews', 'orders', 'brand', 'validOffers'];
@@ -134,14 +137,16 @@ class Product extends Model
     // One to many relationship Product --> Reviews
     public function reviews()
     {
-        return $this->morphMany(Review::class,'reviewable');
+        return $this->morphMany(Review::class, 'reviewable');
     }
 
     // many to many relationship Product --> Orders
     public function orders()
     {
-        return $this->morphToMany(Order::class,'orderable')->withPivot(
+        return $this->morphToMany(Order::class, 'orderable')->withPivot(
+            'order_id',
             'quantity',
+            'original_price',
             'price',
             'points',
             'coupon_discount',
@@ -339,9 +344,11 @@ class Product extends Model
         ];
     }
 
-    public function getTypeAttribute()
+    public function type(): Attribute
     {
-        return "Product";
+        return new Attribute(
+            get: fn () => "Product"
+        );
     }
     ############# Appends :: End #############
 
@@ -355,8 +362,10 @@ class Product extends Model
                 'slug',
                 'quantity',
                 'weight',
+                'original_price',
                 'base_price',
                 'final_price',
+                'refundable',
                 'points',
                 'description',
                 'model',
@@ -364,7 +373,8 @@ class Product extends Model
                 'publish',
                 'under_reviewing',
                 'brand_id',
-                'final_price'
+                'final_price',
+                'created_at'
             ]
         )
             ->with(
@@ -408,8 +418,10 @@ class Product extends Model
                 'slug',
                 'quantity',
                 'weight',
+                'original_price',
                 'base_price',
                 'final_price',
+                'refundable',
                 'points',
                 'description',
                 'model',
@@ -417,8 +429,10 @@ class Product extends Model
                 'publish',
                 'under_reviewing',
                 'brand_id',
+                'created_at'
             ]
         )
+            ->without(['orders'])
             ->with(
                 [
                     'thumbnail',
@@ -432,19 +446,19 @@ class Product extends Model
 
                     ]),
                     'subcategories' => fn ($q) => $q->with([
+                        'category' => fn ($q) => $q->with([
+                            'offers' => fn ($q) => $q
+                                ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                                ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
+                        ]),
+                        'supercategory' => fn ($q) => $q->with([
+                            'offers' => fn ($q) => $q
+                                ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                                ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                        ]),
                         'offers' => fn ($q) => $q
                             ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
                             ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
-                    ]),
-                    'categories' => fn ($q) => $q->with([
-                        'offers' => fn ($q) => $q
-                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
-                    ]),
-                    'supercategories' => fn ($q) => $q->with([
-                        'offers' => fn ($q) => $q
-                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
                     ]),
                     'reviews' => fn ($q) => $q->where('status', 1),
                     'coupons'

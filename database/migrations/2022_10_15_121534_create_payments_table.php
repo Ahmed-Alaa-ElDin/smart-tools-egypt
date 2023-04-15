@@ -24,8 +24,6 @@ return new class extends Migration
             $table->decimal('coupon_order_discount', 8, 2)->default(0.00);
             $table->decimal('delivery_fees', 8, 2)->default(0.00);
             $table->decimal('total', 8, 2)->default(0.00);
-            // $table->decimal('should_pay', 8, 2)->default(0.00);
-            // $table->decimal('should_get', 8, 2)->default(0.00);
             $table->timestamps();
 
             $table->foreign('order_id')->references('id')->on('orders')->onUpdate('cascade')->nullOnDelete();

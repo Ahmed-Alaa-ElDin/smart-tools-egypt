@@ -6,16 +6,13 @@ use Illuminate\View\Component;
 
 class ProductBoxSmall extends Component
 {
-    public $item;
-
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($item)
+    public function __construct(public array $item, public bool $wishlist = false)
     {
-        $this->item = $item;
     }
 
     /**

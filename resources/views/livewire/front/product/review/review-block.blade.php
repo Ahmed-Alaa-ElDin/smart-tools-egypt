@@ -10,19 +10,19 @@
                 {{-- Cumulative Rating :: Start --}}
                 <div class="flex gap-4 items-center mb-4">
                     <h5 class="text-8xl font-black">
-                        {{ number_format($product_rating, 1) }}
+                        {{ number_format($item_rating, 1) }}
                     </h5>
                     <div class="flex flex-col justify-center items-center">
                         <div>
                             @for ($i = 1; $i <= 5; $i++)
                                 <span
-                                    class="material-icons inline-block @if ($i <= ceil($product_rating)) text-yellow-300 @else text-gray-400 @endif">
+                                    class="material-icons inline-block @if ($i <= ceil($item_rating)) text-yellow-300 @else text-gray-400 @endif">
                                     star
                                 </span>
                             @endfor
                         </div>
                         <span class="text-sm font-bold text-gray-600">
-                            {{ trans_choice('front/homePage.Review/Reviews', $product_reviews_count, ['review' => $product_reviews_count]) }}
+                            {{ trans_choice('front/homePage.Review/Reviews', $item_reviews_count, ['review' => $item_reviews_count]) }}
                         </span>
                     </div>
                 </div>
@@ -319,9 +319,9 @@
                 </div>
             @endforeach
 
-            @if ($total_pages > 1)
-                <x-front.pagination :totalPages="$total_pages" :currentPage="$current_page" />
-            @endif
+            <div>
+                {{ $all_reviews->links() }}
+            </div>
             {{-- Other User's Reviews :: End --}}
         </div>
         {{-- Old Reviews :: End --}}

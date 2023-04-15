@@ -52,4 +52,6 @@ return [
     'All Collections'           =>      'جميع التجميعات',
     'Add Collection'            =>      'إضافة تجميعة',
     'Deleted Collections'       =>      'التجميعات المؤرشفة',
+    'General Settings'          =>      'الضبط العام',
+
 ];

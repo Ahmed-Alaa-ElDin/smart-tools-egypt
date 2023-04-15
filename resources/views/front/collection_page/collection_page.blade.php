@@ -191,12 +191,13 @@
                             @livewire(
                                 'front.general.cart.add-to-cart-button',
                                 [
-                                    'collection_id' => $collection['id'],
+                                    'item_id' => $collection['id'],
                                     'text' => true,
                                     'large' => true,
+                                    'type' => 'Collection',
                                     'add_buy' => 'add',
                                 ],
-                                key('add-cart-button-' . Str::random(10)),
+                                key('add-cart-button-' . Str::random(10))
                             )
                             {{-- Add to cart : End --}}
 
@@ -210,7 +211,7 @@
                                     'type' => 'Collection',
                                     'add_buy' => 'pay',
                                 ],
-                                key('add-cart-button-' . Str::random(10)),
+                                key('add-cart-button-' . Str::random(10))
                             )
                             {{-- Go To Payment : End --}}
 
@@ -224,7 +225,7 @@
                                         'large' => true,
                                         'type' => 'Collection',
                                     ],
-                                    key('add-compare-button-' . Str::random(10)),
+                                    key('add-compare-button-' . Str::random(10))
                                 )
                                 {{-- Add to compare : End --}}
 
@@ -237,7 +238,7 @@
                                         'large' => true,
                                         'type' => 'Collection',
                                     ],
-                                    key('add-wishlist-button-' . Str::random(10)),
+                                    key('add-wishlist-button-' . Str::random(10))
                                 )
                                 {{-- Add to wishlist : End --}}
                             </div>
@@ -255,7 +256,7 @@
                                         'type' => 'Collection',
                                         'title' => false,
                                     ],
-                                    key($collection->name . '-' . rand()),
+                                    key($collection->name . '-' . rand())
                                 )
                             </div>
                             {{-- Cart Amount :: End --}}
@@ -333,7 +334,7 @@
                                         {{ __('front/homePage.OFF') }}
                                     </span>
                                     <span class="flex items-center bg-primary text-white rounded-full p-1">
-                                        {{ 100 - round(($product->final_price * 100) / $product->base_price, 0) }}%
+                                        {{ $product->base_price > 0 ? 100 - round(($product->final_price * 100) / $product->base_price, 0) : 0 }}%
                                     </span>
                                 </span>
                                 {{-- Base Discount : End --}}
@@ -601,7 +602,7 @@
                     {{-- Reviews Body :: Start --}}
                     <div class="hidden p-4 rounded-lg flex items-center justify-center" id="reviews" role="tabpanel"
                         aria-labelledby="reviews-tab">
-                        @livewire('front.product.review.review-block', ['collection_id' => $collection->id])
+                        @livewire('front.product.review.review-block', ['item_id' => $collection->id, 'type' => 'Collection', 'reviews' => $collection->reviews])
                     </div>
                     {{-- Reviews Body :: End --}}
 
@@ -730,7 +731,6 @@
 
 {{-- Extra Scripts --}}
 @push('js')
-    <script src="{{ asset('assets/js/plugins/flowbite/flowbite.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/tinymce/tinymce.min.js') }}"></script>
 
     <script>

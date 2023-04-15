@@ -49,7 +49,7 @@ return [
     "Thumbnail Image"                                                       =>      "الصورة المصغرة",
     "Video URL"                                                             =>      "رابط الفيديو",
     "Youtube Link"                                                          =>      "رابط يوتيوب",
-    "Under Reviewing"                                                       =>      "قيد المراجعة",
+    "Under Reviewing"                                                       =>      "قيد التقييم",
     "Save"                                                                  =>      "حفظ",
     "Save and Add New Product"                                              =>      "حفظ وإضافة منتج آخر",
     "Back"                                                                  =>      "الرجوع للخلف",
@@ -342,5 +342,8 @@ return [
     "Collections have been restored successfully"                           =>      "تم استعادة التجميعات المختارة بنجاح",
     "Collections haven't been restored"                                     =>      "لم يتم استعادة التجميعات المختارة",
     "Profit Margin"                                                         =>      "هامش الربح",
+    "Copy Product"                                                          =>      "نسخ المنتج",
+    "Product Copied Successfully"                                           =>      "تم نسخ المنتج بنجاح",
+    "Copy"                                                                  =>      "نسخ",
 
 ];

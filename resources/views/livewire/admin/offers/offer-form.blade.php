@@ -316,6 +316,8 @@
                                             </span>
                                         </div>
                                     </div>
+                                    {{-- Loading :: End --}}
+
                                     {{-- Products List :: Start --}}
                                     @forelse ($items[$item_key]['list'] as $product)
                                         <div class="group flex justify-center items-center gap-1 cursor-pointer rounded transition-all ease-in-out hover:bg-red-100 p-2"
@@ -1076,7 +1078,6 @@
     {{-- extra Js : :: Start --}}
     @if ($offer_id != null)
         @push('js')
-            @livewireScripts
 
             <script src="{{ asset('assets/js/plugins/daterangepicker-master/daterangepicker.js') }}"></script>
 
@@ -1096,8 +1097,7 @@
                             format: 'YYYY-MM-DD hh:mm A',
                         }
                     }, function(start, end, label) {
-                        Livewire.emit('daterangeUpdated', start.format('YYYY-MM-DD H:mm'), end.format(
-                            'YYYY-MM-DD H:mm'));
+                        Livewire.emit('daterangeUpdated', start.format('YYYY-MM-DD H:mm'), end.format('YYYY-MM-DD H:mm'));
                     });
                 });
             </script>

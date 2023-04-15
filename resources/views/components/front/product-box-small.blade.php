@@ -2,18 +2,25 @@
 <li class="splide__slide">
     <div class="carousel-box w-full inline-block">
         <div
-            class="group border border-light rounded hover:shadow-md hover:scale-105 mt-1 mb-2 transition overflow-hidden relative">
+            class="group shadow border border-light rounded-lg hover:shadow-md hover:scale-105 mt-1 mb-2 transition overflow-hidden relative">
 
-            {{-- Add Product : Start --}}
+            {{-- Add Product Large Screen : Start --}}
             <div
-                class="absolute top-2 ltr:-right-10 z-10 rtl:-left-10 transition-all ease-in-out duration-500 ltr:group-hover:right-2 rtl:group-hover:left-2 flex flex-col gap-1">
+                class="hidden lg:flex absolute top-2 ltr:-right-10 z-10 rtl:-left-10 transition-all ease-in-out duration-500 ltr:group-hover:right-2 rtl:group-hover:left-2 flex-col gap-1">
                 {{-- Add to compare : Start --}}
                 @livewire('front.general.compare.add-to-compare-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-compare-button-' . Str::random(10)))
                 {{-- Add to compare : End --}}
 
-                {{-- Add to wishlist : Start --}}
-                @livewire('front.general.wishlist.add-to-wishlist-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-wishlist-button-' . Str::random(10)))
-                {{-- Add to wishlist : End --}}
+
+                @if ($wishlist)
+                    {{-- Remove from wishlist : Start --}}
+                    @livewire('front.general.wishlist.remove-from-wishlist-button', ['item_id' => $item['id'], 'type' => $item['type']], key('remove-wishlist-button-' . Str::random(10)))
+                    {{-- Remove from wishlist : End --}}
+                @else
+                    {{-- Add to wishlist : Start --}}
+                    @livewire('front.general.wishlist.add-to-wishlist-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-wishlist-button-' . Str::random(10)))
+                    {{-- Add to wishlist : End --}}
+                @endif
 
                 @if (isset($item['quantity']) && $item['quantity'] > 0)
                     {{-- Add to cart : Start --}}
@@ -21,7 +28,7 @@
                     {{-- Add to cart : End --}}
                 @endif
             </div>
-            {{-- Add Product : End --}}
+            {{-- Add Product Large Screen : End --}}
 
             <a class="relative block hover:text-current"
                 @if ($item['type'] == 'Product') href="{{ route('front.products.show', ['id' => $item['id'], 'slug' => $item['slug'][session('locale')]]) }}"
@@ -34,7 +41,7 @@
                         {{ __('front/homePage.OFF') }}
                     </span>
                     <span class="flex items-center bg-primary text-white rounded-full p-1">
-                        {{ 100 - round(($item['final_price'] * 100) / $item['base_price'], 0) }}%
+                        {{ $item['base_price'] > 0 ? 100 - round(($item['final_price'] * 100) / $item['base_price'], 0) : 0 }}%
                     </span>
                 </span>
                 {{-- Base Discount : End --}}
@@ -60,7 +67,7 @@
                     <span
                         class="absolute bottom-2 rtl:right-0 ltr:left-0 text-xs font-bold text-white px-2 py-1 bg-primary">
                         {{ __('front/homePage.Extra Discount') }}
-                        {{ round(($item['offer_discount'] * 100) / $item['final_price']) }}%
+                        {{ $item['final_price'] > 0 ? round(($item['offer_discount'] * 100) / $item['final_price']) : 0 }}%
                     </span>
                 @endif
                 {{-- Extra Discount : End --}}
@@ -173,18 +180,42 @@
             </a>
 
             {{-- Cart Amount : Start --}}
-            <div class="md:p-3 p-2">
-                @livewire(
-                    'front.general.cart.cart-amount',
-                    [
-                        'item_id' => $item['id'],
-                        'type' => $item['type'],
-                        'unique' => 'item-' . $item['id'],
-                    ],
-                    key($item['name'][session('locale')] . '-' . rand()),
-                )
-            </div>
+            @if ($item['quantity'])
+                <div class="md:p-3 p-2">
+                    @livewire(
+                        'front.general.cart.cart-amount',
+                        [
+                            'item_id' => $item['id'],
+                            'type' => $item['type'],
+                            'unique' => 'item-' . $item['id'],
+                        ],
+                        key($item['name'][session('locale')] . '-' . rand())
+                    )
+                </div>
+            @endif
             {{-- Cart Amount : End --}}
+
+            {{-- Add Product Small Screen : Start --}}
+            <div class="flex top-2 gap-1 justify-center mb-3 lg:hidden">
+                {{-- Add to compare : Start --}}
+                @livewire('front.general.compare.add-to-compare-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-compare-button-' . Str::random(10)))
+                {{-- Add to compare : End --}}
+
+                {{-- Add to wishlist : Start --}}
+                @livewire('front.general.wishlist.add-to-wishlist-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-wishlist-button-' . Str::random(10)))
+                {{-- Add to wishlist : End --}}
+
+                {{-- Remove from wishlist : Start --}}
+                @livewire('front.general.wishlist.remove-from-wishlist-button', ['item_id' => $item['id'], 'type' => $item['type']], key('remove-wishlist-button-' . Str::random(10)))
+                {{-- Remove from wishlist : End --}}
+
+                @if (isset($item['quantity']) && $item['quantity'] > 0)
+                    {{-- Add to cart : Start --}}
+                    @livewire('front.general.cart.add-to-cart-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-cart-button-' . Str::random(10)))
+                    {{-- Add to cart : End --}}
+                @endif
+            </div>
+            {{-- Add Product Small Screen : End --}}
         </div>
     </div>
 

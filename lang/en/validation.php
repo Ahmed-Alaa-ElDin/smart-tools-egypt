@@ -138,6 +138,10 @@ return [
     "Banners are required." => "Banners are required.",
     'The phone number field is required' => 'The phone number field is required',
     'The phone numbers must start with 010, 011, 012 or 015' => 'The phone numbers must start with 010, 011, 012 or 015',
+    'arabic name required' => 'Arabic Name is required',
+    'english name required' => 'English Name is required',
+    'url required' => 'Link is required',
+
 
     /*
     |--------------------------------------------------------------------------
@@ -226,8 +230,21 @@ return [
         'address.city_id'       => 'City',
         'newPhone'              => 'Phone',
         'original_price'        => 'Original Price',
+        'nav_links.*.name.ar'   => "Link's Arabic Name",
+        'nav_links.*.name.en'   => "Link's English Name",
+        'nav_links.*.url'       => 'Link',
+        'nav_links.*.active'    => 'Active Status',
         'banner'                => 'Banner',
         'banner'                => 'Banner',
+        'banner'                => 'Banner',
+        'banner'                => 'Banner',
+        'banner'                => 'Banner',
+        'banner'                => 'Banner',
+        'banner'                => 'Banner',
+        'banner'                => 'Banner',
+        'banner'                => 'Banner',
+        'banner'                => 'Banner',
+
     ],
 
 ];

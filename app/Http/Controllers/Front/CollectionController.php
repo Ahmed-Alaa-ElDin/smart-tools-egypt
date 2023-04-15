@@ -52,8 +52,11 @@ class CollectionController extends Controller
         $collection = Collection::with([
             'images' => fn ($q) => $q->where('is_thumbnail', 0)->orderBy('featured', 'desc'),
             'products' => fn ($q) => $q->select([
-                'products.id','name','slug','base_price','final_price','products.quantity','brand_id','under_reviewing'
-            ])->with('brand','thumbnail')
+                'products.id', 'name', 'slug', 'base_price', 'final_price', 'products.quantity', 'brand_id', 'under_reviewing'
+            ])->with([
+                'brand', 'thumbnail'
+            ]),
+            'reviews' => fn ($q) => $q->with('user')
         ])->findOrFail($id);
 
         // Get the collection's Best Offer

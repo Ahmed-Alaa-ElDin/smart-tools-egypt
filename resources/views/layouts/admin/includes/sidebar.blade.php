@@ -641,9 +641,19 @@
                 <div class="collapse {{ $activeSection == 'Site Control' ? ' show' : '' }}" id="site">
                     <ul class="nav">
 
+                        {{-- General --}}
+                        <li class="nav-item {{ $activePage == 'general' ? ' active' : '' }}">
+                            <a class="nav-link" href="{{ route('admin.setting.general') }}">
+                                <span class="material-icons">
+                                    settings_suggest
+                                </span>
+                                <span>{{ __('admin/master.General Settings') }} </span>
+                            </a>
+                        </li>
+
                         {{-- HomePage --}}
                         <li class="nav-item {{ $activePage == 'HomePage' ? ' active' : '' }}">
-                            <a class="nav-link" href="{{ route('admin.homepage') }}">
+                            <a class="nav-link" href="{{ route('admin.setting.homepage') }}">
                                 <span class="material-icons">
                                     space_dashboard
                                 </span>
