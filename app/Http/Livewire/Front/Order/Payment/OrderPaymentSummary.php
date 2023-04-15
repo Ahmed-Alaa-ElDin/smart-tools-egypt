@@ -95,6 +95,7 @@ class OrderPaymentSummary extends Component
                 $item['total_item_points'] =  $item['points'] * $item['qty'];
                 $item['total_offer_points'] =  $item['offer_points'] * $item['qty'];
                 $item['total_after_offer_points'] =  $item['total_item_points'] + $item['total_offer_points'];
+                
                 if (is_null($this->coupon_id)) {
                     $item['coupon_discount'] =  0;
                     $item['coupon_points'] =  0;
@@ -618,7 +619,7 @@ class OrderPaymentSummary extends Component
 
                     DB::commit();
 
-                    return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . env('PAYMOB_IFRAM_ID_CARD_TEST') . "?payment_token=$payment_key");
+                    return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . env('PAYMOB_IFRAM_ID_CARD') . "?payment_token=$payment_key");
                 } else {
                     return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }
