@@ -204,21 +204,21 @@
 
                                             {{-- Final Price : Start --}}
                                             <div class="flex rtl:flex-row-reverse gap-1">
-                                                <span
-                                                    class="font-bold text-successDark text-xs">{{ __('front/homePage.EGP') }}</span>
-                                                <span class="font-bold text-successDark text-xl"
+                                                <sup
+                                                    class="font-bold text-successDark text-xs">{{ __('front/homePage.EGP') }}</sup>
+                                                <span class="font-bold text-successDark text-lg"
                                                     dir="ltr">{{ number_format(explode('.', $item['final_price'])[0], 0, '.', '\'') }}</span>
-                                                <span
-                                                    class="font-bold text-successDark text-xs">{{ explode('.', $item['final_price'])[1] }}</span>
+                                                <sup
+                                                    class="font-bold text-successDark text-xs">{{ explode('.', $item['final_price'])[1] }}</sup>
                                             </div>
                                             {{-- Final Price : End --}}
 
                                             {{-- Base Price : Start --}}
                                             <del class="flex rtl:flex-row-reverse gap-1 font-bold text-red-400 text-sm">
-                                                <span class="text-xs">
+                                                <sup class="text-xs">
                                                     {{ __('front/homePage.EGP') }}
-                                                </span>
-                                                <span class="font-bold text-2xl"
+                                                </sup>
+                                                <span class="font-bold text-xl"
                                                     dir="ltr">{{ number_format(explode('.', $item['base_price'])[0], 0, '.', '\'') }}</span>
                                             </del>
                                             {{-- Base Price : End --}}

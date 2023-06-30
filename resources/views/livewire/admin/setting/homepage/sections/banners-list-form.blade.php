@@ -178,7 +178,7 @@ bg-gray-200 @endif select-none"
                                     class="bg-white w-100 z-10 rounded-b-xl overflow-auto border-x border-b border-primary px-1 max-h-48 scrollbar scrollbar-hidden-y">
                                     @forelse ($banners_list as $key => $banner)
                                         {{-- Item :: Start --}}
-                                        <li wire:click.stop.prevent="bannerSelected({{ $banner->id }},'{{ $banner->description }}')"
+                                        <li wire:click.stop.prevent='bannerSelected({{ $banner->id }},"{{ $banner->description }}")'
                                             wire:key="add-banner-{{ $key }}-{{ $banner->id }}"
                                             class="btn bg-white border-b p-3 flex flex-wrap justify-center items-center gap-3 rounded-xl overflow-hidden">
 

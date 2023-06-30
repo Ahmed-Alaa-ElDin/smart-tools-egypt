@@ -12,7 +12,7 @@
 
                 {{-- View More Button : Start --}}
                 <div class="w-full md:w-auto">
-                    <a href="{{ $section->id }}" {{-- todo --}}
+                    <a href="{{ route('front.section-products', [$section->id]) }}"
                         class="btn bg-secondary btn-sm shadow-md font-bold mb-3 md:mb-auto m-auto">{{ __('front/homePage.View More') }}</a>
                 </div>
                 {{-- View More Button : End --}}

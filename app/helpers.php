@@ -635,7 +635,7 @@ function payByPaymob($order, $transaction)
                 "state" => "NA"
             ],
             "currency" => "EGP",
-            "integration_id" => $transaction->payment_method == 3 ? env('PAYMOB_CLIENT_ID_INSTALLMENTS') : env('PAYMOB_CLIENT_ID_CARD_TEST'),
+            "integration_id" => $transaction->payment_method == 3 ? env('PAYMOB_CLIENT_ID_INSTALLMENTS') : env('PAYMOB_CLIENT_ID_CARD'),
         ])->json();
 
         $payment_key = $third_step['token'];

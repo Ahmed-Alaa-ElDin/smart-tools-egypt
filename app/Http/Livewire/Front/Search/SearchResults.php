@@ -11,7 +11,6 @@ class SearchResults extends Component
 {
     use WithPagination;
 
-    protected $queryString = ['sort_by', 'direction'];
 
     public $totalItems;
     public $perPage;
@@ -24,6 +23,8 @@ class SearchResults extends Component
     public $minPrice, $maxPrice, $currentMinPrice, $currentMaxPrice;
     public $currentRating, $oneRatingNo, $twoRatingNo, $threeRatingNo, $fourRatingNo, $fiveRatingNo;
     public $currentFreeShipping, $currentReturnable, $currentAvailable;
+
+    protected $queryString = ['search', 'sort_by', 'direction'];
 
     public function mount()
     {
@@ -198,7 +199,7 @@ class SearchResults extends Component
                         "MATCH(name,description) AGAINST(?)",
                         array(trim($this->search))
                     )
-                    ->orWhere('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('name', 'like', '%' . $this->search . '%')
                         ->orWhere('barcode', 'like', '%' . $this->search . '%')
                         ->orWhere('original_price', 'like', '%' . $this->search . '%')
                         ->orWhere('base_price', 'like', '%' . $this->search . '%')
@@ -215,7 +216,27 @@ class SearchResults extends Component
                 return $product_collection;
             });
         } else {
-            $items = collect([]);
+            $productsIds = Product::select([
+                'id',
+            ])
+                ->with(
+                    'brand',
+                )
+                ->pluck('id');
+
+            $products = getBestOfferForProducts($productsIds);
+
+            $collectionsIds = Collection::select([
+                'id',
+            ])
+                ->pluck('id');
+
+            $collections = getBestOfferForCollections($collectionsIds);
+
+            $items = $collections->concat($products)->sortBy([[$this->sort_by, $this->direction]])->map(function ($product_collection) {
+                $product_collection->product_collection = class_basename($product_collection);
+                return $product_collection;
+            });
         }
 
         return $items;

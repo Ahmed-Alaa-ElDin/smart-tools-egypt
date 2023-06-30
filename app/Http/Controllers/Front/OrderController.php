@@ -1237,7 +1237,7 @@ class OrderController extends Controller
                         if ($payment_key) {
                             DB::commit();
 
-                            return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($old_order->unpaid_payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
+                            return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($old_order->unpaid_payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD')) . "?payment_token=$payment_key");
                         } else {
                             DB::rollback();
 
@@ -2281,6 +2281,8 @@ class OrderController extends Controller
         if ($generated_hmac == $hmac && $data['success'] == 'true') {
             DB::beginTransaction();
 
+            DB::rollBack();
+
             try {
                 // get payment data
                 $transaction = Transaction::with(['order' => function ($query) {
@@ -2536,7 +2538,7 @@ class OrderController extends Controller
             $payment_key = payByPaymob($order, $transaction);
 
             if ($payment_key) {
-                return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($transaction->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
+                return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($transaction->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD')) . "?payment_token=$payment_key");
             } else {
                 return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
             }
@@ -2596,7 +2598,7 @@ class OrderController extends Controller
                 $payment_key = payByPaymob($order, $transaction);
 
                 if ($payment_key) {
-                    return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($transaction->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD_TEST')) . "?payment_token=$payment_key");
+                    return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($transaction->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD')) . "?payment_token=$payment_key");
                 } else {
                     return redirect()->route('front.orders.index')->with('error', __('front/homePage.Refund Failed, Please Try Again'));
                 }

@@ -33,7 +33,7 @@
                         <div class="splide__track">
                             <ul class="splide__list">
                                 @foreach ($collection->images as $image)
-                                    <li class="splide__slide">
+                                    <li class="splide__slide zoom">
                                         <img src="{{ asset('storage/images/collections/original/' . $image->file_name) }}"
                                             alt="{{ $collection->name }}" class="m-auto">
                                     </li>
@@ -846,6 +846,38 @@
                     timerProgressBar: true,
                 })
             })
+        });
+
+        // Zoom to Image when hover 
+        const zoomDivs = document.querySelectorAll('.zoom');
+
+        zoomDivs.forEach(zoomDiv => {
+            const img = zoomDiv.querySelector('img');
+
+            const {
+                width,
+                height
+            } = img.getBoundingClientRect();
+
+            const scale = 2;
+            zoomDiv.addEventListener('mousemove', e => {
+                const {
+                    left,
+                    top
+                } = zoomDiv.getBoundingClientRect();
+                const x = e.clientX - left;
+                const y = e.clientY - top;
+                const bgPosX = -x * (scale - 1);
+                const bgPosY = -y * (scale - 1);
+                img.style.transform = `scale(${scale})`;
+                img.style.transformOrigin = `${x}px ${y}px`;
+                img.style.backgroundPosition = `${bgPosX}px ${bgPosY}px`;
+            });
+            zoomDiv.addEventListener('mouseleave', () => {
+                img.style.transform = 'none';
+                img.style.transformOrigin = '50% 50%';
+                img.style.backgroundPosition = '50% 50%';
+            });
         });
     </script>
 @endpush

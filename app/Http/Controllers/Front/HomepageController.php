@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Section;
+use Symfony\Component\HttpFoundation\Request;
 
 class HomepageController extends Controller
 {
@@ -168,18 +169,52 @@ class HomepageController extends Controller
         ############ Get Today Deals Section :: End ############
 
         ############ Get Top Categories :: Start ############
-        $categories = Category::select('id','name','top')->without('validOffers')->with('images')->where("top", '>', 0)->orderBy("top")->get();
+        $categories = Category::select('id', 'name', 'top')->without('validOffers')->with('images')->where("top", '>', 0)->orderBy("top")->get();
         ############ Get Top Categories :: End ############
 
         ############ Get Top Brands :: Start ############
-        $brands = Brand::select('id','name','top','logo_path')->without('validOffers')->where("top", '>', 0)->orderBy("top")->get();
+        $brands = Brand::select('id', 'name', 'top', 'logo_path')->without('validOffers')->where("top", '>', 0)->orderBy("top")->get();
         ############ Get Top Brands :: End ############
 
         return view('front.homepage.homepage', compact('homepage_sections', 'today_deals_sections', 'categories', 'brands'));
     }
 
-    public function search($search)
+    public function search(Request $request)
     {
+        $search = $request->get('search');
+
         return view('front.search.search_page', compact('search'));
+    }
+
+    public function showProductList(int $section_id = 1)
+    {
+        $section = Section::with([
+            'products' => fn ($q) => $q->select('products.id'),
+            'collections' => fn ($q) => $q->select('collections.id')
+        ])->findOrFail($section_id);
+
+        ############ Get Best Offer for all products :: Start ############
+        $products_id = $section->products->pluck('id');
+
+        $products = getBestOfferForProducts($products_id)->map(function ($product) {
+            $product->type = "Product";
+            return $product;
+        });
+        ############ Get Best Offer for all products :: End ############
+
+        ############ Get Best Offer for all collections :: Start ############
+        $collections_id = $section->collections->pluck('id');
+
+        $collections = getBestOfferForCollections($collections_id)->map(function ($collection) {
+            $collection->type = "Collection";
+            return $collection;
+        });
+        ############ Get Best Offer for all collections :: End ############
+
+        ############ Concatenation of best Products & Collections  :: Start ############
+        $items = $collections->concat($products)->paginate(config('constants.constants.FRONT_PAGINATION'));
+        ############ Concatenation of best Products & Collections  :: End ############
+
+        return view('front.sections.section_products', compact('section', 'items'));
     }
 }

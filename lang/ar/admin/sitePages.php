@@ -47,6 +47,8 @@ return [
     "Banner hasn't been added"                                              =>      "لم يتم إضافة البنر",
     "Banner updated successfully"                                           =>      "تم تحديث بيانات البنر بنجاح",
     "Banner hasn't been updated"                                            =>      "لم يتم تحديث بيانات البنر",
+    "Banner has been added to the list successfully"                        =>      "تم اضافة البنر إلى القائمة بنجاح",
+    "Banner hasn't been added to the list"                                  =>      "لم يتم إضافة البنر إلى القائمة",
     "Edit Banner"                                                           =>      "تحديث بيانات البنر",
     "Through this form you can edit this banner"                            =>      "من خلال هذه الصفحة يمكنك تحديث بيانات البنر",
     "Top Supercategories has been updated successfully"                     =>      "تم تعديل قائمة أفضل الأقسام الرئيسية بنجاح",
