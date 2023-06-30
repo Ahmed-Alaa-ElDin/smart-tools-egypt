@@ -29,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
         // $this->app->bind('path.public', function () {
         //     return base_path() . '/../public_html';
         // });
+        // $this->app->usePublicPath(__DIR__ . '/../../../public_html'); For V10
 
         // Macro for pagination in Collection
         Collection::macro('paginate', function($perPage, $total = null, $page = null, $pageName = 'page') {
