@@ -9,6 +9,7 @@ use Livewire\Component;
 class CompareDropDown extends Component
 {
     protected $listeners = ['cartUpdated' => 'render'];
+    public $compare, $compare_count;
 
     public function render()
     {

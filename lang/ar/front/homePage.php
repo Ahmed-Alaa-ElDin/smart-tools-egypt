@@ -461,5 +461,7 @@ return [
     "The offer is expired"      =>      "العرض انتهى",
     "Remove From Wishlist"      =>      "حذف من المفضلة",
     "Product Has Been Removed From Wishlist Successfully"   =>      "تم حذف المنتج من المفضلة بنجاح",
+    "Comparison"                      =>      "مقارنة المنتاجات",
+    "Comparison list is Empty"  =>      "قائمة المقارنات فارغة",
 
 ];

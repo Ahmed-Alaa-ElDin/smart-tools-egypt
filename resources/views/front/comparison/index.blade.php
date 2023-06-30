@@ -1,7 +1,7 @@
 @extends('layouts.front.site', [
-    'titlePage' => __('front/homePage.Wishlist'),
-    'url' => route('front.wishlist'),
-    'title' => __('front/homePage.Wishlist'),
+    'titlePage' => __('front/homePage.Comparison'),
+    'url' => route('front.comparison'),
+    'title' => __('front/homePage.Comparison'),
     'description' => '',
 ])
 
@@ -16,15 +16,15 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item text-gray-700 font-bold" aria-current="page">
-                    {{ __('front/homePage.Wishlist') }}
+                    {{ __('front/homePage.Comparison') }}
                 </li>
             </ol>
         </nav>
         {{-- Breadcrumb :: End --}}
 
-        {{-- Wishlist Items :: Start --}}
-        @livewire('front.wishlist.wishlist-items')
-        {{-- Wishlist Items :: Start --}}
+        {{-- Comparison Items :: Start --}}
+        @livewire('front.comparison.comparison-items')
+        {{-- Comparison Items :: Start --}}
     </div>
 @endsection
 

@@ -347,7 +347,7 @@ function getBestOfferForCollection($collection_id)
     // Get Free Shipping
     $free_shipping = $collection->free_shipping;
 
-    // Get Final Prices Fromi Direct Offers
+    // Get Final Prices From Direct Offers
     $direct_offers = $collection->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]);
     foreach ($direct_offers as $offer) {
         if ($offer['free_shipping']) {

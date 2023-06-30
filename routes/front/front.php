@@ -11,6 +11,7 @@ use App\Http\Controllers\Front\ProfileController;
 use App\Http\Controllers\Front\HomepageController;
 use App\Http\Controllers\Front\InvoiceRequestController;
 use App\Http\Controllers\Front\CollectionController;
+use App\Http\Controllers\Front\ComparisonController;
 use App\Http\Controllers\Front\FavoriteController;
 use App\Http\Controllers\Front\OfferController;
 use App\Http\Controllers\Front\SubcategoryController;
@@ -26,7 +27,7 @@ Route::group([
     ################ Search :: Start ##############
     Route::get('/search', [HomepageController::class, 'search'])->name('search');
     ################ Search :: End ##############
-    
+
     ################ Section Products List :: Start ##############
     Route::get('/section-products/{section_id}', [HomepageController::class, 'showProductList'])->name('section-products');
     ################ Section Products List :: End ##############
@@ -117,6 +118,10 @@ Route::group([
     ################ Wishlist :: Start ##############
     Route::get('/wishlist',[WishlistController::class,'index'])->name('wishlist');
     ################ Wishlist :: End ##############
+
+    ################ Comparison :: Start ##############
+    Route::get('/comparison',[ComparisonController::class,'index'])->name('comparison');
+    ################ Comparison :: End ##############
 
     ################ Invoice Request Controller :: Start ##############
     Route::post('/invoice-request-store', [InvoiceRequestController::class, 'store'])->name('invoice-request.store')->middleware('auth');

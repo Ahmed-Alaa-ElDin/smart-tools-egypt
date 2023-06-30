@@ -107,7 +107,7 @@
                 <div class="flex flex-col justify-center items-center gap-1 m-1 px-2">
                     <div class="flex justify-center items-center gap-3 w-full">
                         {{-- View & Edit Compare:: Start --}}
-                        <a href="#" class="grow btn bg-primary btn-sm text-white font-bold">
+                        <a href="{{ route('front.comparison') }}" class="grow btn bg-primary btn-sm text-white font-bold">
                             <span class="material-icons">
                                 visibility
                             </span>

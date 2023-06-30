@@ -10,6 +10,7 @@ use Livewire\Component;
 class WishlistDropDown extends Component
 {
     protected $listeners = ['cartUpdated' => 'render'];
+    public $wishlist, $wishlist_count;
 
     public function render()
     {

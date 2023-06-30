@@ -15,26 +15,6 @@ class WishlistController extends Controller
      */
     public function index()
     {
-        // $products_id = [];
-        // $collections_id = [];
-
-        // get items id from wishlist
-        // Cart::instance('wishlist')->content()->map(function ($item) use (&$products_id, &$collections_id) {
-        //     if ($item->options->type == 'Product') {
-        //         $products_id[] = $item->id;
-        //         $wishlist_products_id[] = $item->id;
-        //     } elseif ($item->options->type == 'Collection') {
-        //         $collections_id[] = $item->id;
-        //         $wishlist_collections_id[] = $item->id;
-        //     }
-        // });
-
-        // get all items data from database with best price
-        // $products = getBestOfferForProducts($products_id);
-        // $collections = getBestOfferForCollections($collections_id);
-
-        // $items = $collections->concat($products);
-
         return view('front.wishlist.index');
     }
 

@@ -469,5 +469,14 @@ class Product extends Model
             ->where('publish', 1);
     }
 
+    public function scopeWhereHasValidOffers($query)
+    {
+        $now = Carbon::now('Africa/Cairo')->format('Y-m-d H:i');
+
+        return $query->whereHas('offers', function ($query) use ($now) {
+            $query->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", $now)
+                ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", $now);
+        });
+    }
     ############# Scopes :: End #############
 }
