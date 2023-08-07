@@ -89,6 +89,7 @@ class ProductForm extends Component
             // Get Old Product's data
             $product = Product::with(
                 [
+                    'specs',
                     'images',
                     'subcategories' => fn ($q) => $q->with(
                         ['category' => fn ($q) => $q->with(['supercategory', 'offers'])]
@@ -167,7 +168,18 @@ class ProductForm extends Component
             $this->refundable = $product->refundable;
 
             if ($product->specs != null) {
-                $this->specs = json_decode($product->specs);
+                foreach ($product->specs as $spec) {
+                    $this->specs[] = [
+                        'ar' => [
+                            'title' => $spec->getTranslation('title', 'ar'),
+                            'value' => $spec->getTranslation('value', 'ar'),
+                        ],
+                        'en' => [
+                            'title' => $spec->getTranslation('title', 'en'),
+                            'value' => $spec->getTranslation('value', 'en'),
+                        ]
+                    ];
+                }
             }
 
             // Old Stock and Price
@@ -524,7 +536,6 @@ class ProductForm extends Component
                     'ar' => $this->description['ar'] ? $this->description['ar'] : ($this->description['en'] ? $this->description['en'] : ""),
                     'en' => $this->description['en'] ? $this->description['en'] : ($this->description['ar'] ? $this->description['ar'] : "")
                 ],
-                'specs' => json_encode(array_values($this->specs)),
                 'model' => $this->model,
                 'refundable' => $this->refundable ? 1 : 0,
                 'video' => $this->video,
@@ -542,6 +553,7 @@ class ProductForm extends Component
                 $product->subcategories()->attach($subcategories_id);
             }
 
+            // Add Images
             if (count($this->gallery_images_name)) {
                 foreach ($this->gallery_images_name as $key => $gallery_image_name) {
                     $product->images()->create([
@@ -551,6 +563,7 @@ class ProductForm extends Component
                 }
             }
 
+            // Add Thumbnail
             if ($this->thumbnail_image_name != null) {
                 $product->images()->create([
                     'file_name' => $this->thumbnail_image_name,
@@ -558,8 +571,25 @@ class ProductForm extends Component
                 ]);
             }
 
+            // Add Specs
+            if (count($this->specs)) {
+                foreach ($this->specs as $key => $spec) {
+                    $product->specs()->create([
+                        "title" => [
+                            "ar" => $spec['ar']['title'],
+                            "en" => $spec['en']['title'],
+                        ],
+                        "value" => [
+                            "ar" => $spec['ar']['value'],
+                            "en" => $spec['en']['value'],
+                        ],
+                    ]);
+                }
+            }
+
             DB::commit();
 
+            // Remove Old Images
             foreach ($this->deletedImages as $key => $deletedImage) {
                 imageDelete($deletedImage, 'products');
             }
@@ -609,7 +639,6 @@ class ProductForm extends Component
                     'ar' => $this->description['ar'] ? $this->description['ar'] : ($this->description['en'] ? $this->description['en'] : ""),
                     'en' => $this->description['en'] ? $this->description['en'] : ($this->description['ar'] ? $this->description['ar'] : "")
                 ],
-                'specs' => json_encode(array_values($this->specs)),
                 'model' => $this->model,
                 'refundable' => $this->refundable ? 1 : 0,
                 'video' => $this->video,
@@ -628,6 +657,7 @@ class ProductForm extends Component
 
             $this->product->images()->delete();
 
+            // Add Images
             if (count($this->gallery_images_name)) {
                 foreach ($this->gallery_images_name as $key => $gallery_image_name) {
                     $this->product->images()->create([
@@ -637,6 +667,7 @@ class ProductForm extends Component
                 }
             }
 
+            // Add Thumbnail
             if ($this->thumbnail_image_name != null) {
                 $this->product->images()->create([
                     'file_name' => $this->thumbnail_image_name,
@@ -644,7 +675,25 @@ class ProductForm extends Component
                 ]);
             }
 
+            // Edit Specs
+            $this->product->specs()->delete();
 
+            if (count($this->specs)) {
+                foreach ($this->specs as $key => $spec) {
+                    $this->product->specs()->create([
+                        "title" => [
+                            "ar" => $spec['ar']['title'],
+                            "en" => $spec['en']['title'],
+                        ],
+                        "value" => [
+                            "ar" => $spec['ar']['value'],
+                            "en" => $spec['en']['value'],
+                        ],
+                    ]);
+                }
+            }
+
+            // Remove Old Images
             foreach ($this->deletedImages as $key => $deletedImage) {
                 imageDelete($deletedImage, 'products');
             }
@@ -655,6 +704,8 @@ class ProductForm extends Component
             redirect()->route('admin.products.index');
         } catch (\Throwable $th) {
             DB::rollBack();
+
+            throw $th;
 
             Session::flash('error', __("admin/productsPages.Product hasn't been updated"));
             redirect()->route('admin.products.index');

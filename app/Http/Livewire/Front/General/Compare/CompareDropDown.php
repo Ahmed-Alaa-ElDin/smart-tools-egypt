@@ -79,6 +79,13 @@ class CompareDropDown extends Component
                 'icon' => 'error'
             ]);
             ############ Emit Sweet Alert :: End ############
+        } else {
+            ############ Emit Sweet Alert :: Start ############
+            $this->dispatchBrowserEvent('swalDone', [
+                "text" => __('front/homePage.Sorry This Product is already in your cart'),
+                'icon' => 'error'
+            ]);
+            ############ Emit Sweet Alert :: End ############
         }
     }
 

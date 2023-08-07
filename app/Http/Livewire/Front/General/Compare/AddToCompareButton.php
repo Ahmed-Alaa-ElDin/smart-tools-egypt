@@ -62,6 +62,13 @@ class AddToCompareButton extends Component
                 "text" => __('front/homePage.Comparison Limit Reached'),
                 'icon' => 'error'
             ]);
+        } else {
+            ############ Emit Sweet Alert :: Start ############
+            $this->dispatchBrowserEvent('swalDone', [
+                "text" => __('front/homePage.This product Is Already In The Comparison'),
+                'icon' => 'error'
+            ]);
+            ############ Emit Sweet Alert :: End ############
         }
         ############ Add Product to Compare :: End ############
 

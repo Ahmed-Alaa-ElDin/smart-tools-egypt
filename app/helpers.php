@@ -69,125 +69,177 @@ function imageDelete($image_f_name, $folder_name)
 }
 
 // Get the best offer for a product (best price, best points, free shipping)
+// function getBestOfferForProduct($product_id)
+// {
+//     $product = Product::publishedproduct()->findOrFail($product_id);
+
+//     ############ Get Best Offer for all products :: Start ############
+//     // Get All Product's Prices -- Start with Product's Final Price
+//     $offers_discount = [0];
+
+//     // Get All Product's Points -- Start with Product's Points
+//     $offers_points = [0];
+
+//     // Get Free Shipping
+//     $free_shipping = $product->free_shipping;
+
+//     // Get All Subcategories
+//     $subcategories = $product->subcategories ? $product->subcategories->map(fn ($subcategory) => $subcategory->id) : [];
+
+//     // Get All Categories
+//     $categories = $product->categories ? $product->categories->map(fn ($category) => $category->id) : [];
+
+//     // Get All Supercategories
+//     $supercategories = $product->supercategories ? $product->supercategories->map(fn ($supercategory) => $supercategory->id) : [];
+
+//     // Get Final Prices Fromi Direct Offers
+//     $direct_offers = $product->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]);
+//     foreach ($direct_offers as $offer) {
+//         if ($offer['free_shipping']) {
+//             $free_shipping = 1;
+//         }
+
+//         if ($offer['type'] == 0) {
+//             $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
+//         } elseif ($offer['type'] == 1) {
+//             $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
+//         } elseif ($offer['type'] == 2) {
+//             $offers_points[] = $offer['value'];
+//         }
+//     }
+
+//     // Get Final Prices From Offers Through Subcategories
+//     $subcategories_offers = $subcategories ? $product->subcategories->map(fn ($subcategory) => $subcategory->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
+//     foreach ($subcategories_offers as $subcategory) {
+//         foreach ($subcategory as $offer) {
+//             if ($offer['free_shipping']) {
+//                 $free_shipping = 1;
+//             }
+
+//             if ($offer['type'] == 0) {
+//                 $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
+//             } elseif ($offer['type'] == 1) {
+//                 $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
+//             } elseif ($offer['type'] == 2) {
+//                 $offers_points[] = $offer['value'];
+//             }
+//         }
+//     }
+
+//     // Get Final Prices From Offers Through Categories
+//     $categories_offers = $categories ? $product->categories->map(fn ($category) => $category->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
+//     foreach ($categories_offers as $category) {
+//         foreach ($category as $offer) {
+//             if ($offer['free_shipping']) {
+//                 $free_shipping = 1;
+//             }
+
+//             if ($offer['type'] == 0) {
+//                 $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
+//             } elseif ($offer['type'] == 1) {
+//                 $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
+//             } elseif ($offer['type'] == 2) {
+//                 $offers_points[] = $offer['value'];
+//             }
+//         }
+//     }
+
+//     // Get Final Prices From Offers Through Supercategories
+//     $supercategories_offers = $supercategories ? $product->supercategories->map(fn ($supercategory) => $supercategory->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type])) : [];
+//     foreach ($supercategories_offers as $supercategory) {
+//         foreach ($supercategory as $offer) {
+//             if ($offer['free_shipping']) {
+//                 $free_shipping = 1;
+//             }
+
+//             if ($offer['type'] == 0) {
+//                 $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
+//             } elseif ($offer['type'] == 1) {
+//                 $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
+//             } elseif ($offer['type'] == 2) {
+//                 $offers_points[] = $offer['value'];
+//             }
+//         }
+//     }
+
+//     // Get Final Prices From Offers Through Brands
+//     $brand_offers = $product->brand ? $product->brand->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]) : [];
+//     foreach ($brand_offers as $offer) {
+//         if ($offer['free_shipping']) {
+//             $free_shipping = 1;
+//         }
+
+//         if ($offer['type'] == 0) {
+//             $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
+//         } elseif ($offer['type'] == 1) {
+//             $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
+//         } elseif ($offer['type'] == 2) {
+//             $offers_points[] = $offer['value'];
+//         }
+//     }
+
+//     // Get the Best Price
+//     $product->offer_discount = max($offers_discount);
+//     $product->best_price = $product->final_price - $product->offer_discount;
+
+//     // Get the Best Points
+//     $product->offer_points = max($offers_points);
+//     $product->best_points = $product->points + $product->offer_points;
+
+//     $product->offer_free_shipping = $free_shipping;
+//     ############ Get Best Offer for all products :: End ############
+
+//     return $product;
+// }
+
+// Get the best offer for a product (best price, best points, free shipping)
 function getBestOfferForProduct($product_id)
 {
     $product = Product::publishedproduct()->findOrFail($product_id);
 
-    ############ Get Best Offer for all products :: Start ############
-    // Get All Product's Prices -- Start with Product's Final Price
-    $offers_discount = [0];
+    // Collect all offers for the product and its related entities
+    $offers = collect();
 
-    // Get All Product's Points -- Start with Product's Points
-    $offers_points = [0];
+    // Add product's offers
+    $offers = $offers->merge($product->offers);
 
-    // Get Free Shipping
-    $free_shipping = $product->free_shipping;
+    // Add offers from subcategories
+    $product->subcategories?->each(function ($subcategory) use (&$offers) {
+        $offers = $offers->merge($subcategory->offers);
+    });
 
-    // Get All Subcategories
-    $subcategories = $product->subcategories ? $product->subcategories->map(fn ($subcategory) => $subcategory->id) : [];
+    // Add offers from categories
+    $product->categories?->each(function ($category) use (&$offers) {
+        $offers = $offers->merge($category->offers);
+    });
 
-    // Get All Categories
-    $categories = $product->categories ? $product->categories->map(fn ($category) => $category->id) : [];
+    // Add offers from supercategories
+    $product->supercategories?->each(function ($supercategory) use (&$offers) {
+        $offers = $offers->merge($supercategory->offers);
+    });
 
-    // Get All Supercategories
-    $supercategories = $product->supercategories ? $product->supercategories->map(fn ($supercategory) => $supercategory->id) : [];
+    // Add offers from the brand
+    $offers = $offers->merge($product->brand?->offers);
 
-    // Get Final Prices Fromi Direct Offers
-    $direct_offers = $product->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]);
-    foreach ($direct_offers as $offer) {
-        if ($offer['free_shipping']) {
-            $free_shipping = 1;
-        }
+    // Calculate the best discount
+    $bestDiscount = $offers->map(function ($offer) use ($product) {
+        $value = $offer->pivot->type === 0 ? ($offer->pivot->value / 100) * $product->final_price : $offer->pivot->value;
+        return $product->final_price > $value ? round($value, 2) : $product->final_price;
+    })->max();
 
-        if ($offer['type'] == 0) {
-            $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
-        } elseif ($offer['type'] == 1) {
-            $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
-        } elseif ($offer['type'] == 2) {
-            $offers_points[] = $offer['value'];
-        }
-    }
+    // Calculate the best points
+    $bestPoints = $offers->where('pivot.type', 2)->max('pivot.value');
 
-    // Get Final Prices From Offers Through Subcategories
-    $subcategories_offers = $subcategories ? $product->subcategories->map(fn ($subcategory) => $subcategory->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
-    foreach ($subcategories_offers as $subcategory) {
-        foreach ($subcategory as $offer) {
-            if ($offer['free_shipping']) {
-                $free_shipping = 1;
-            }
+    // Check if there is a free shipping offer
+    $bestFreeShipping = $offers->contains('free_shipping', true);
 
-            if ($offer['type'] == 0) {
-                $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
-            } elseif ($offer['type'] == 1) {
-                $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
-            } elseif ($offer['type'] == 2) {
-                $offers_points[] = $offer['value'];
-            }
-        }
-    }
+    $product->offer_discount = $bestDiscount;
+    $product->best_price = $product->final_price - $bestDiscount;
 
-    // Get Final Prices From Offers Through Categories
-    $categories_offers = $categories ? $product->categories->map(fn ($category) => $category->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
-    foreach ($categories_offers as $category) {
-        foreach ($category as $offer) {
-            if ($offer['free_shipping']) {
-                $free_shipping = 1;
-            }
+    $product->offer_points = $bestPoints;
+    $product->best_points = $product->points + $bestPoints;
 
-            if ($offer['type'] == 0) {
-                $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
-            } elseif ($offer['type'] == 1) {
-                $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
-            } elseif ($offer['type'] == 2) {
-                $offers_points[] = $offer['value'];
-            }
-        }
-    }
-
-    // Get Final Prices From Offers Through Supercategories
-    $supercategories_offers = $supercategories ? $product->supercategories->map(fn ($supercategory) => $supercategory->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type])) : [];
-    foreach ($supercategories_offers as $supercategory) {
-        foreach ($supercategory as $offer) {
-            if ($offer['free_shipping']) {
-                $free_shipping = 1;
-            }
-
-            if ($offer['type'] == 0) {
-                $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
-            } elseif ($offer['type'] == 1) {
-                $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
-            } elseif ($offer['type'] == 2) {
-                $offers_points[] = $offer['value'];
-            }
-        }
-    }
-
-    // Get Final Prices From Offers Through Brands
-    $brand_offers = $product->brand ? $product->brand->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]) : [];
-    foreach ($brand_offers as $offer) {
-        if ($offer['free_shipping']) {
-            $free_shipping = 1;
-        }
-
-        if ($offer['type'] == 0) {
-            $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
-        } elseif ($offer['type'] == 1) {
-            $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
-        } elseif ($offer['type'] == 2) {
-            $offers_points[] = $offer['value'];
-        }
-    }
-
-    // Get the Best Price
-    $product->offer_discount = max($offers_discount);
-    $product->best_price = $product->final_price - $product->offer_discount;
-
-    // Get the Best Points
-    $product->offer_points = max($offers_points);
-    $product->best_points = $product->points + $product->offer_points;
-
-    $product->offer_free_shipping = $free_shipping;
-    ############ Get Best Offer for all products :: End ############
+    $product->offer_free_shipping = $bestFreeShipping;
 
     return $product;
 }
@@ -199,132 +251,55 @@ function getBestOfferForProducts($products_id)
 
     foreach ($products as $key => $product) {
         ############ Get Best Offer for all products :: Start ############
-        // Get All Product's Prices -- Start with Product's Final Price
-        $offers_discount = [0];
+        // Collect all offers for the product and its related entities
+        $offers = collect();
 
-        // Get All Product's Points -- Start with Product's Points
-        $offers_points = [0];
+        // Add product's offers
+        $offers = $offers->merge($product->offers);
 
-        // Get Free Shipping
-        $free_shipping = $product->free_shipping;
+        // Add offers from subcategories
+        $product->subcategories?->each(function ($subcategory) use (&$offers) {
+            $offers = $offers->merge($subcategory->offers);
+        });
 
-        // Get Count of Subcategories
-        $subcategories_count = $product->subcategories->count();
+        // Add offers from categories
+        $product->categories?->each(function ($category) use (&$offers) {
+            $offers = $offers->merge($category->offers);
+        });
 
-        // Get Count of Categories
-        $categories_count = $product->subcategories->count('category');
+        // Add offers from supercategories
+        $product->supercategories?->each(function ($supercategory) use (&$offers) {
+            $offers = $offers->merge($supercategory->offers);
+        });
 
-        // Get Count of Supercategories
-        $supercategories_count = $product->subcategories->count('supercategory');
+        // Add offers from the brand
+        $offers = $offers->merge($product->brand?->offers);
 
-        // Get Final Prices From Direct Offers
-        $direct_offers = $product->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]);
-        foreach ($direct_offers as $offer) {
-            if ($offer['free_shipping']) {
-                $free_shipping = 1;
-            }
+        // Calculate the best discount
+        $bestDiscount = $offers->map(function ($offer) use ($product) {
+            $value = $offer->pivot->type === 0 ? ($offer->pivot->value / 100) * $product->final_price : $offer->pivot->value;
+            return $product->final_price > $value ? round($value, 2) : $product->final_price;
+        })->max();
 
-            // Percentage Offer
-            if ($offer['type'] == 0) {
-                $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
-            }
-            // Fixed Offer
-            elseif ($offer['type'] == 1) {
-                $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
-            }
-            // Points Offer
-            elseif ($offer['type'] == 2) {
-                $offers_points[] = $offer['value'];
-            }
-        }
+        // Calculate the best points
+        $bestPoints = $offers->where('pivot.type', 2)->max('pivot.value');
 
-        // Get Final Prices From Offers Through Subcategories
-        $subcategories_offers = $subcategories_count ? $product->subcategories->map(fn ($subcategory) => $subcategory->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
-        foreach ($subcategories_offers as $subcategory) {
-            foreach ($subcategory as $offer) {
-                if ($offer['free_shipping']) {
-                    $free_shipping = 1;
-                }
+        // Check if there is a free shipping offer
+        $bestFreeShipping = $offers->contains('free_shipping', true);
 
-                if ($offer['type'] == 0) {
-                    $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
-                } elseif ($offer['type'] == 1) {
-                    $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
-                } elseif ($offer['type'] == 2) {
-                    $offers_points[] = $offer['value'];
-                }
-            }
-        }
+        $product->offer_discount = $bestDiscount;
+        $product->best_price = $product->final_price - $bestDiscount;
 
-        // Get Final Prices From Offers Through Categories
-        $categories_offers = $categories_count ? $product->subcategories->whereNotNull('supercategory')->pluck('supercategory')->map(fn ($category) => $category->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
-        foreach ($categories_offers as $category) {
-            foreach ($category as $offer) {
-                if ($offer['free_shipping']) {
-                    $free_shipping = 1;
-                }
+        $product->offer_points = $bestPoints;
+        $product->best_points = $product->points + $bestPoints;
 
-                if ($offer['type'] == 0) {
-                    $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
-                } elseif ($offer['type'] == 1) {
-                    $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
-                } elseif ($offer['type'] == 2) {
-                    $offers_points[] = $offer['value'];
-                }
-            }
-        }
-
-        // Get Final Prices From Offers Through Supercategories
-        $supercategories_offers = $supercategories_count ? $product->subcategories->whereNotNull('supercategory')->pluck('supercategory')->map(fn ($supercategory) => $supercategory->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type])) : [];
-        foreach ($supercategories_offers as $supercategory) {
-            foreach ($supercategory as $offer) {
-                if ($offer['free_shipping']) {
-                    $free_shipping = 1;
-                }
-
-                if ($offer['type'] == 0) {
-                    $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
-                } elseif ($offer['type'] == 1) {
-                    $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
-                } elseif ($offer['type'] == 2) {
-                    $offers_points[] = $offer['value'];
-                }
-            }
-        }
-
-        // Get Final Prices From Offers Through Brands
-        $brand_offers = $product->brand ? $product->brand->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]) : [];
-        foreach ($brand_offers as $offer) {
-            if ($offer['free_shipping']) {
-                $free_shipping = 1;
-            }
-
-            if ($offer['type'] == 0) {
-                $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
-            } elseif ($offer['type'] == 1) {
-                $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
-            } elseif ($offer['type'] == 2) {
-                $offers_points[] = $offer['value'];
-            }
-        }
-
-        // Get the Best Price
-        $product->offer_discount = max($offers_discount);
-        $product->best_price = $product->final_price - $product->offer_discount;
-
-        // Get the Best Points
-        $product->offer_points = max($offers_points);
-        $product->best_points = $product->points + $product->offer_points;
-
-        // Get the Free Shipping
-        $product->offer_free_shipping = $free_shipping;
+        $product->offer_free_shipping = $bestFreeShipping;
 
         $reviews = $product->reviews;
 
         $product->avg_rating = $reviews->avg('rating');
 
         $product->reviews_count = $reviews->count();
-        ############ Get Best Offer for all products :: End ############
 
         $products[$key] = $product;
     }
@@ -337,42 +312,24 @@ function getBestOfferForCollection($collection_id)
 {
     $collection = Collection::publishedCollection()->findOrFail($collection_id);
 
-    ############ Get Best Offer for all collections :: Start ############
-    // Get All Collection's Prices -- Start with Collection's Final Price
-    $offers_discount = [0];
+    $offers = $collection->offers;
 
-    // Get All Collection's Points -- Start with Collection's Points
-    $offers_points = [0];
+    $bestDiscount = $offers->map(function ($offer) use ($collection) {
+        $value = $offer->pivot->type === 0 ? ($offer->pivot->value / 100) * $collection->final_price : $offer->pivot->value;
+        return $collection->final_price > $value ? round($value, 2) : $collection->final_price;
+    })->max();
 
-    // Get Free Shipping
-    $free_shipping = $collection->free_shipping;
+    $bestPoints = $offers->where('pivot.type', 2)->max('pivot.value');
 
-    // Get Final Prices From Direct Offers
-    $direct_offers = $collection->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]);
-    foreach ($direct_offers as $offer) {
-        if ($offer['free_shipping']) {
-            $free_shipping = 1;
-        }
+    $bestFreeShipping = $offers->contains('free_shipping', true);
 
-        if ($offer['type'] == 0) {
-            $offers_discount[] = round(($offer['value'] / 100) * $collection->final_price, 2);
-        } elseif ($offer['type'] == 1) {
-            $offers_discount[] = $collection->final_price >  $offer['value'] ? round($offer['value'], 2) : $collection->final_price;
-        } elseif ($offer['type'] == 2) {
-            $offers_points[] = $offer['value'];
-        }
-    }
+    $collection->offer_discount = $bestDiscount;
+    $collection->best_price = $collection->final_price - $bestDiscount;
 
-    // Get the Best Price
-    $collection->offer_discount = max($offers_discount);
-    $collection->best_price = $collection->final_price - $collection->offer_discount;
+    $collection->offer_points = $bestPoints;
+    $collection->best_points = $collection->points + $bestPoints;
 
-    // Get the Best Points
-    $collection->offer_points = max($offers_points);
-    $collection->best_points = $collection->points + $collection->offer_points;
-
-    $collection->offer_free_shipping = $free_shipping;
-    ############ Get Best Offer for all collections :: End ############
+    $collection->offer_free_shipping = $bestFreeShipping;
 
     return $collection;
 }
@@ -383,47 +340,24 @@ function getBestOfferForCollections($collections_id)
     $collections = Collection::publishedCollections($collections_id)->get();
 
     foreach ($collections as $key => $collection) {
-        ############ Get Best Offer for all collections :: Start ############
-        // Get All Product's Prices -- Start with Product's Final Price
-        $offers_discount = [0];
+        $offers = $collection->offers;
 
-        // Get All Product's Points -- Start with Product's Points
-        $offers_points = [0];
+        $bestDiscount = $offers->map(function ($offer) use ($collection) {
+            $value = $offer->pivot->type === 0 ? ($offer->pivot->value / 100) * $collection->final_price : $offer->pivot->value;
+            return $collection->final_price > $value ? round($value, 2) : $collection->final_price;
+        })->max();
 
-        // Get Free Shipping
-        $free_shipping = $collection->free_shipping;
+        $bestPoints = $offers->where('pivot.type', 2)->max('pivot.value');
 
-        // Get Final Prices From Direct Offers
-        $direct_offers = $collection->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]);
-        foreach ($direct_offers as $offer) {
-            if ($offer['free_shipping']) {
-                $free_shipping = 1;
-            }
+        $bestFreeShipping = $offers->contains('free_shipping', true);
 
-            // Percentage Offer
-            if ($offer['type'] == 0) {
-                $offers_discount[] = round(($offer['value'] / 100) * $collection->final_price, 2);
-            }
-            // Fixed Offer
-            elseif ($offer['type'] == 1) {
-                $offers_discount[] = $collection->final_price >  $offer['value'] ? round($offer['value'], 2) : $collection->final_price;
-            }
-            // Points Offer
-            elseif ($offer['type'] == 2) {
-                $offers_points[] = $offer['value'];
-            }
-        }
+        $collection->offer_discount = $bestDiscount;
+        $collection->best_price = $collection->final_price - $bestDiscount;
 
-        // Get the Best Price
-        $collection->offer_discount = max($offers_discount);
-        $collection->best_price = $collection->final_price - $collection->offer_discount;
+        $collection->offer_points = $bestPoints;
+        $collection->best_points = $collection->points + $bestPoints;
 
-        // Get the Best Points
-        $collection->offer_points = max($offers_points);
-        $collection->best_points = $collection->points + $collection->offer_points;
-
-        // Get the Free Shipping
-        $collection->offer_free_shipping = $free_shipping;
+        $collection->offer_free_shipping = $bestFreeShipping;
 
         $reviews = $collection->reviews;
 

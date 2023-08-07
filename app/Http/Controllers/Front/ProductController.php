@@ -50,6 +50,7 @@ class ProductController extends Controller
     {
         // Get the product
         $product = Product::with([
+            'specs',
             'images' => fn ($q) => $q->where('is_thumbnail', 0)->orderBy('featured', 'desc'),
             'brand',
             'reviews'=> fn($q) => $q->with('user')

@@ -27,7 +27,6 @@ return new class extends Migration
             $table->integer('points')->nullable();
             $table->text('description')->nullable();
             $table->string('model')->nullable();
-            $table->json('specs')->nullable();
             $table->string('video')->nullable();
             $table->text('meta_keywords')->nullable();
             $table->tinyInteger('refundable')->default(1)->comment('0 -> No , 1 -> Yes');

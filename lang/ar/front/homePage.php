@@ -463,5 +463,16 @@ return [
     "Product Has Been Removed From Wishlist Successfully"   =>      "تم حذف المنتج من المفضلة بنجاح",
     "Comparison"                      =>      "مقارنة المنتاجات",
     "Comparison list is Empty"  =>      "قائمة المقارنات فارغة",
+    "Before Discount"           =>      "قبل الخصم",
+    "After Discount"            =>      "بعد الخصم",
+    "Final Price"               =>      "السعر النهائي",
+    "This product Is Already In The Comparison"     =>      "عذراً، هذا المنتج موجود بالفعل في قائمة المقارنة",
+    "Sorry This Product is already in your cart"    =>      "عذراً، هذا المنتج موجود بالفعل في سلة المشتريات",
+    "Specs"                     =>      "خصائص",
+    "Remove from the compare list"                  =>      "حذف من قائمة المقارنة",
+    "Actions"                   =>      "الإجراءات",
+    "Product Has Been Removed From the Comparison Successfully"     =>      "تم حذف المنتج من قائمة المقارنة بنجاح",
+
+
 
 ];

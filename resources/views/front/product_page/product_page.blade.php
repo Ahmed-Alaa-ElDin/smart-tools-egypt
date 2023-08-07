@@ -450,7 +450,7 @@
                     {{-- Video Body :: End --}}
 
                     {{-- Specifications Body :: Start --}}
-                    @if (!is_null(json_decode($product->specs)) && $product->specs)
+                    @if ($product->specs)
                         <div class="hidden p-4 rounded-lg flex items-center justify-center relative overflow-x-auto shadow-md sm:rounded-lg"
                             id="specs" role="tabpanel" aria-labelledby="specs-tab">
                             <table class="min-w-[50%] text-sm text-left text-gray-700">
@@ -464,13 +464,13 @@
                                         </th>
                                     </tr>
                                 </thead>
-                                @foreach (json_decode($product->specs) as $spec)
+                                @foreach ($product->specs as $spec)
                                     <tr class="bg-white border-b hover:bg-gray-50">
                                         <th class="px-6 py-4 font-bold text-gray-900 whitespace-nowrap text-center">
-                                            {{ $spec->$locale->title }}
+                                            {{ $spec->getTranslation('title', $locale) }}
                                         </th>
                                         <td class="px-6 py-4 text-center">
-                                            {{ $spec->$locale->value }}
+                                            {{ $spec->getTranslation('value', $locale) }}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -728,7 +728,7 @@
             })
         });
 
-        // Zoom to Image when hover 
+        // Zoom to Image when hover
         const zoomDivs = document.querySelectorAll('.zoom');
 
         zoomDivs.forEach(zoomDiv => {

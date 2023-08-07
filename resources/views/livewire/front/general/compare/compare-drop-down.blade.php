@@ -77,7 +77,7 @@
                                     {{-- Add To Cart :: End --}}
 
                                     {{-- Delete :: Start --}}
-                                    <button title="{{ __('front/homePage.Remove from Wishlist') }}"
+                                    <button title="{{ __('front/homePage.Remove from the compare list') }}"
                                         class="w-8 h-8 rounded-circle bg-white border border-primary text-primary transition ease-in-out hover:bg-primary hover:text-white"
                                         wire:click="removeFromCompare('{{ $compare_item->rowId }}')">
                                         <span class="material-icons text-lg">
