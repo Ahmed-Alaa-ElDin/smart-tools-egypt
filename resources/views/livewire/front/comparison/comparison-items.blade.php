@@ -4,7 +4,7 @@
     @endphp
     @if (count($items))
         <div
-            class="grid grid-cols-12 justify-center items-start align-top gap-3 rounded-xl overflow-hidden border-2 border-secondary">
+            class="grid grid-cols-12 justify-center items-start align-top gap-3 rounded-xl overflow-x-scroll border-2 border-secondary">
 
             {{-- Table :: Start --}}
             <table class="col-span-12">
@@ -19,7 +19,7 @@
                     <tr>
                         <th rowspan="2" colspan="2"
                             class="text-center bg-primary text-white border border-secondary p-2">
-                            <span class="text-sm font-bold">
+                            <span class="text-xs md:text-sm font-bold">
                                 {{ __('front/homePage.Name') }}
                             </span>
                         </th>
@@ -27,7 +27,7 @@
                             <th class="text-center border border-secondary bg-primary">
                                 {{-- link contains the name of the product --}}
                                 <a href="{{ $item->type == 'Product' ? route('front.products.show', ['id' => $item->id, 'slug' => $item->slug]) : route('front.collections.show', ['id' => $item->id, 'slug' => $item->slug]) }}"
-                                    class="hover:text-gray-200 text-white">
+                                    class="hover:text-gray-200 text-white text-xs md:text-md">
                                     {{ $item->name }}
                                 </a>
                             </th>
@@ -61,13 +61,13 @@
                     {{-- Product's model --}}
                     <tr>
                         <th colspan="2" class="text-center bg-primary text-white border border-secondary p-2">
-                            <span class="text-sm font-bold">
+                            <span class="text-xs md:text-sm font-bold">
                                 {{ __('front/homePage.Model') }}
                             </span>
                         </th>
                         @foreach ($items as $item)
                             <td class="text-center border border-secondary {{ $i % 2 ?: 'bg-gray-100' }}">
-                                <span class="text-gray-800 text-sm font-bold">
+                                <span class="text-gray-800 text-xs md:text-sm font-bold">
                                     {{ $item->model }}
                                 </span>
                             </td>
@@ -78,14 +78,14 @@
                     {{-- Product's Base Price --}}
                     <tr>
                         <th colspan="2" class="text-center bg-primary text-white border border-secondary p-2">
-                            <span class="text-sm font-bold">
+                            <span class="text-xs md:text-sm font-bold">
                                 {{ __('front/homePage.Before Discount') }}
                             </span>
                         </th>
                         @foreach ($items as $item)
                             <td class="text-center border border-secondary {{ $i % 2 ?: 'bg-gray-100' }}">
                                 <span
-                                    class="font-bold {{ $item->final_price < $item->base_price ? 'text-sm line-through text-red-500' : 'text-green-500' }}">
+                                    class="font-bold {{ $item->final_price < $item->base_price ? 'text-xs md:text-sm line-through text-red-500' : 'text-sm md:text-md text-green-500' }}">
                                     {{ $item->base_price . ' ' . __('front/homePage.EGP') }}
                                 </span>
                             </td>
@@ -96,14 +96,14 @@
                     {{-- Products Final Price --}}
                     <tr>
                         <th colspan="2" class="text-center bg-primary text-white border border-secondary p-2">
-                            <span class="text-sm font-bold">
+                            <span class="text-xs md:text-sm font-bold">
                                 {{ __('front/homePage.After Discount') }}
                             </span>
                         </th>
                         @foreach ($items as $item)
                             <td class="text-center border border-secondary {{ $i % 2 ?: 'bg-gray-100' }}">
                                 <span
-                                    class="font-bold {{ $item->best_price < $item->final_price ? 'text-sm line-through text-red-500' : 'text-green-500' }}">
+                                    class="font-bold {{ $item->best_price < $item->final_price ? 'text-xs md:text-sm line-through text-red-500' : 'text-sm md:text-md text-green-500' }}">
                                     {{ $item->final_price . ' ' . __('front/homePage.EGP') }}
                                 </span>
                             </td>
@@ -114,13 +114,13 @@
                     {{-- Products Best Price --}}
                     <tr>
                         <th colspan="2" class="text-center bg-primary text-white border border-secondary p-2">
-                            <span class="text-sm font-bold">
+                            <span class="text-xs md:text-sm font-bold">
                                 {{ __('front/homePage.Final Price') }}
                             </span>
                         </th>
                         @foreach ($items as $item)
                             <td class="text-center border border-secondary {{ $i % 2 ?: 'bg-gray-100' }}">
-                                <span class="font-bold text-green-500">
+                                <span class="font-bold text-green-500 text-xs md:text-sm">
                                     {{ $item->best_price . ' ' . __('front/homePage.EGP') }}
                                 </span>
                             </td>
@@ -131,13 +131,13 @@
                     {{-- Points --}}
                     <tr>
                         <th colspan="2" class="text-center bg-primary text-white border border-secondary p-2">
-                            <span class="text-sm font-bold">
+                            <span class="text-xs md:text-sm font-bold">
                                 {{ __('front/homePage.Points') }}
                             </span>
                         </th>
                         @foreach ($items as $item)
                             <td class="text-center border border-secondary {{ $i % 2 ?: 'bg-gray-100' }}">
-                                <span class="font-bold text-green-500">
+                                <span class="font-bold text-green-500 text-xs md:text-sm">
                                     {{ $item->best_points . ' ' . trans_choice('front/homePage.Point/Points', $item->best_points) }}
                                 </span>
                             </td>
@@ -148,13 +148,13 @@
                     {{-- Description --}}
                     <tr>
                         <th colspan="2" class="text-center bg-primary text-white border border-secondary p-2">
-                            <span class="text-sm font-bold">
+                            <span class="text-xs md:text-sm font-bold">
                                 {{ __('front/homePage.Description') }}
                             </span>
                         </th>
                         @foreach ($items as $item)
                             <td class="description border border-secondary p-2 {{ $i % 2 ?: 'bg-gray-100' }}">
-                                <span class="font-bold text-sm text-gray-800 overflow-hidden">
+                                <span class="font-bold text-xs md:text-sm text-gray-800 overflow-hidden">
                                     {!! $item->description !!}
                                 </span>
                             </td>
@@ -168,19 +168,19 @@
                             @if ($loop->first)
                                 <th rowspan="{{ count($specs) }}"
                                     class="text-center bg-primary text-white border border-secondary p-2">
-                                    <span class="text-sm font-bold">
+                                    <span class="text-xs md:text-sm font-bold">
                                         {{ __('front/homePage.Specs') }}
                                     </span>
                                 </th>
                             @endif
                             <th class="text-center bg-primary text-white border border-secondary p-2">
-                                <span class="text-sm font-bold">
+                                <span class="text-xs md:text-sm font-bold">
                                     {{ $title }}
                                 </span>
                             </th>
                             @foreach ($items as $item)
                                 <td class="specs border border-secondary {{ $i % 2 ?: 'bg-gray-100' }} text-center">
-                                    <span class="font-bold text-sm text-gray-800 overflow-hidden">
+                                    <span class="font-bold text-xs md:text-sm text-gray-800 overflow-hidden">
                                         {{ $spec[$item->id] }}
                                     </span>
                                 </td>
@@ -192,7 +192,7 @@
                     {{-- Actions --}}
                     <tr>
                         <th colspan="2" class="text-center bg-primary text-white border border-secondary p-2">
-                            <span class="text-sm font-bold">
+                            <span class="text-xs md:text-sm font-bold">
                                 {{ __('front/homePage.Actions') }}
                             </span>
                         </th>
