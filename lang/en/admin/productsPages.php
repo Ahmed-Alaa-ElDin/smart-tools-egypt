@@ -363,5 +363,4 @@ return [
     "Publish"                                                               =>      "Publish",
     "Publish"                                                               =>      "Publish",
     "Publish"                                                               =>      "Publish",
-    "Publish"                                                               =>      "Publish",
 ];

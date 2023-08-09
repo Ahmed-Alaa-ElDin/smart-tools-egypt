@@ -1,4 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Products', 'activePage' => '', 'titlePage' => __('admin/productsPages.Edit Product')])
+@extends('layouts.admin.admin', ['activeSection' => 'Products', 'activePage' => '', 'titlePage' => __('admin/productsPages.Copy Product')])
 
 @section('content')
     <div class="content">
@@ -15,7 +15,7 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        {{ __('admin/productsPages.Edit Product') }}
+                        {{ __('admin/productsPages.Copy Product') }}
                     </li>
                 </ol>
             </nav>

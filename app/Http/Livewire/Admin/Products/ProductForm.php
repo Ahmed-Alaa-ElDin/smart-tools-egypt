@@ -199,6 +199,7 @@ class ProductForm extends Component
             // Get Old Product's data
             $product = Product::with(
                 [
+                    'specs',
                     'subcategories' => fn ($q) => $q->with(
                         ['category' => fn ($q) => $q->with(['supercategory', 'offers'])]
                     )
@@ -246,7 +247,18 @@ class ProductForm extends Component
             ];
 
             if ($product->specs != null) {
-                $this->specs = json_decode($product->specs);
+                foreach ($product->specs as $spec) {
+                    $this->specs[] = [
+                        'ar' => [
+                            'title' => $spec->getTranslation('title', 'ar'),
+                            'value' => $spec->getTranslation('value', 'ar'),
+                        ],
+                        'en' => [
+                            'title' => $spec->getTranslation('title', 'en'),
+                            'value' => $spec->getTranslation('value', 'en'),
+                        ]
+                    ];
+                }
             }
 
             // SEO
