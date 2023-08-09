@@ -114,6 +114,21 @@
                 </ul>
             </div>
 
+            {{-- Comparison & Wishlist for Small Screen :: Start --}}
+            <div class="flex items-center justify-end col lg:hidden text-white">
+                <a href="{{ route('front.comparison') }}" class="py-1 pr-3 pl-2 bg-primary rounded-l shadow">
+                    <span class="material-icons">
+                        compare_arrows
+                    </span>
+                </a>
+                <a href="{{ route('front.wishlist') }}" class="py-1 pl-3 pr-2 bg-primary rounded-r shadow">
+                    <span class="material-icons">
+                        favorite
+                    </span>
+                </a>
+            </div>
+            {{-- Comparison & Wishlist for Small Screen :: End --}}
+
             {{-- Invisible in mobile view --}}
             <div class="col-5 hidden lg:block">
                 <ul class="list-inline mb-0 h-100 flex justify-end items-center text-sm">
@@ -156,13 +171,13 @@
                                             {{ __('front/homePage.EGP') }}
                                         </span>
                                         <span class="font-bold text-sm" dir="ltr">
-                                            {{ number_format(auth()->user()->balance,0,'.','\'') }}
+                                            {{ number_format(auth()->user()->balance, 0, '.', '\'') }}
                                         </span>
                                     </div>
                                     <div
                                         class="flex gap-1 justify-center items-center transition-all ease-in-out text-warning group-hover:text-white">
                                         <span class="font-bold text-sm" dir="ltr">
-                                            {{ number_format(auth()->user()->valid_points,0,'.','\'') }}
+                                            {{ number_format(auth()->user()->valid_points, 0, '.', '\'') }}
                                         </span>
                                         <span class="font-bold text-sm">
                                             {{ trans_choice('front/homePage.Point/Points', auth()->user()->valid_points, ['points' => auth()->user()->valid_points]) }}
