@@ -585,7 +585,7 @@ class ProductForm extends Component
 
             // Add Specs
             if (count($this->specs)) {
-                foreach ($this->specs as $key => $spec) {
+                foreach ($this->specs as $spec) {
                     $product->specs()->create([
                         "title" => [
                             "ar" => $spec['ar']['title'],

@@ -311,7 +311,7 @@
                         {{-- Product Description :: Start --}}
                         <div class="text-gray-800 description">
                             <h3 class="text-md font-bold mb-2">
-                                {{ __('front/homePage.Description') }}
+                                {{ __('front/homePage.Why invest') . " 👇 💪" }}
                             </h3>
                             {!! $product->description !!}
                         </div>
@@ -349,8 +349,8 @@
                         {{-- Video Header :: End --}}
 
                         {{-- Specifications Header :: Start --}}
-                        @if (!is_null(json_decode($product->specs)) && count(json_decode($product->specs)))
-                            <li role="presentation">
+                        @if (count($product->specs))
+                        <li role="presentation">
                                 <button
                                     class="inline-flex gap-2 items-center p-4 border-b-2 hover:text-gray-600 hover:border-gray-300"
                                     id="specs-tab" data-tabs-target="#specs" type="button" role="tab"

@@ -16,6 +16,7 @@ class CollectionForm extends Component
     use WithFileUploads;
 
     public $collection_id;
+    public $old_collection_id;
     public $gallery_images = [], $gallery_images_name = [], $featured = 0, $deletedImages = [];
     public $thumbnail_image,  $thumbnail_image_name, $video;
     public $specs = [];
@@ -92,6 +93,7 @@ class CollectionForm extends Component
                     'products.quantity',
                 ]),
                 'images',
+                'specs'
             ])->findOrFail($this->collection_id);
 
             $this->collection = $collection;
@@ -120,10 +122,12 @@ class CollectionForm extends Component
                 ->first() ? $collections_images->where('is_thumbnail', 1)->first()->file_name : null;
 
             // Old Collection's Products
-            $products = array_map(function ($product) {
-                $product['amount'] = $product['pivot']['quantity'];
-                return $product;
-            }, $collection->products->toArray());
+            $products = $collection->products->map(function ($product) {
+                $productArray = $product->toArray();
+                $productArray['amount'] = $product->pivot->quantity;
+                $productArray['avg_rating'] = $product->reviews->avg('rating');
+                return $productArray;
+            })->toArray();
 
             $products_ids = array_map(fn ($product) => $product['id'], $products);
 
@@ -148,7 +152,18 @@ class CollectionForm extends Component
             $this->refundable = $collection->refundable;
 
             if ($collection->specs != null) {
-                $this->specs = json_decode($collection->specs);
+                foreach ($collection->specs as $spec) {
+                    $this->specs[] = [
+                        'ar' => [
+                            'title' => $spec->getTranslation('title', 'ar'),
+                            'value' => $spec->getTranslation('value', 'ar'),
+                        ],
+                        'en' => [
+                            'title' => $spec->getTranslation('title', 'en'),
+                            'value' => $spec->getTranslation('value', 'en'),
+                        ]
+                    ];
+                }
             }
 
             // Old Stock and Price
@@ -163,6 +178,72 @@ class CollectionForm extends Component
 
             // SEO
             $this->seo_keywords = $collection->meta_keywords;
+        } elseif ($this->old_collection_id) {
+            // Get Old Collection's data
+            $collection = Collection::with([
+                'products' => fn ($q) => $q->with('thumbnail')->select([
+                    'products.id',
+                    'name',
+                    'original_price',
+                    'base_price',
+                    'final_price',
+                    'free_shipping',
+                    'brand_id',
+                    'points',
+                    'slug',
+                    'under_reviewing',
+                    'products.quantity',
+                ]),
+                'images',
+            ])->findOrFail($this->old_collection_id);
+
+            $this->collection = $collection;
+
+            // Old Data
+            $this->name = [
+                'ar' => "",
+                'en' => ""
+            ];
+
+            $this->weight = $collection->weight;
+
+            $this->description = [
+                'ar' => $collection->getTranslation('description', 'ar'),
+                'en' => $collection->getTranslation('description', 'en'),
+            ];
+
+            $this->publish = $collection->publish;
+
+            $products = $collection->products->map(function ($product) {
+                $productArray = $product->toArray();
+                $productArray['amount'] = $product->pivot->quantity;
+                $productArray['avg_rating'] = $product->reviews->avg('rating');
+                return $productArray;
+            })->toArray();
+
+            $products_ids = array_map(fn ($product) => $product['id'], $products);
+
+            $this->products = array_combine($products_ids, $products);
+
+            if ($collection->specs != null) {
+                foreach ($collection->specs as $spec) {
+                    $this->specs[] = [
+                        'ar' => [
+                            'title' => $spec->getTranslation('title', 'ar'),
+                            'value' => $spec->getTranslation('value', 'ar'),
+                        ],
+                        'en' => [
+                            'title' => $spec->getTranslation('title', 'en'),
+                            'value' => $spec->getTranslation('value', 'en'),
+                        ]
+                    ];
+                }
+            }
+
+            // SEO
+            $this->seo_keywords = $collection->meta_keywords;
+
+            $this->priceUpdate();
         }
     }
     ######################## Mount :: End ############################
@@ -235,6 +316,7 @@ class CollectionForm extends Component
                 'quantity',
             ])
             ->findOrFail($product_id)
+            ->append('avg_rating')
             ->toArray();
 
         $product['amount'] = 1;
@@ -242,6 +324,7 @@ class CollectionForm extends Component
         $this->products[$product_id] = $product;
 
         $this->priceUpdate();
+        $this->clearSearch();
     }
     ######################## Add product to the Collection :: End ############################
 
@@ -273,15 +356,15 @@ class CollectionForm extends Component
     {
         $this->original_price = round(array_sum(array_map(function ($product) {
             return $product['amount'] * $product['original_price'];
-        }, $this->products)),2);
+        }, $this->products)), 2);
 
         $this->base_price = round(array_sum(array_map(function ($product) {
             return $product['amount'] * $product['base_price'];
-        }, $this->products)),2);
+        }, $this->products)), 2);
 
         $this->final_price = round(array_sum(array_map(function ($product) {
             return $product['amount'] * $product['final_price'];
-        }, $this->products)),2);
+        }, $this->products)), 2);
 
         $this->discount = $this->base_price ? round((($this->base_price - $this->final_price) * 100) / $this->base_price, 2) : 0;
 
@@ -292,7 +375,7 @@ class CollectionForm extends Component
     ######################## Update Profit Margin :: Start ############################
     public function profitMarginUpdate()
     {
-        $this->profit_margin = round($this->final_price - $this->original_price,2);
+        $this->profit_margin = round($this->final_price - $this->original_price, 2);
     }
     ######################## Update Profit Margin :: Start ############################
 
@@ -505,7 +588,6 @@ class CollectionForm extends Component
                     'ar' => $this->description['ar'] ?? $this->description['en'],
                     'en' => $this->description['en'] ?? $this->description['ar']
                 ],
-                'specs' => json_encode(array_values($this->specs)),
                 'model' => $this->model,
                 'refundable' => $this->refundable ? 1 : 0,
                 'meta_keywords' => $this->seo_keywords,
@@ -537,8 +619,25 @@ class CollectionForm extends Component
                 ]);
             }
 
+            // Add Specs
+            if (count($this->specs)) {
+                foreach ($this->specs as $spec) {
+                    $collection->specs()->create([
+                        'title' => [
+                            'ar' => $spec['ar']['title'],
+                            'en' => $spec['en']['title']
+                        ],
+                        'value' => [
+                            'ar' => $spec['ar']['value'],
+                            'en' => $spec['en']['value']
+                        ],
+                    ]);
+                }
+            }
+
             DB::commit();
 
+            // Remove Old Images
             foreach ($this->deletedImages as $key => $deletedImage) {
                 imageDelete($deletedImage, 'collections');
             }
@@ -621,7 +720,25 @@ class CollectionForm extends Component
                 ]);
             }
 
+            // Edit Specs
+            $this->collection->specs()->delete();
 
+            if (count($this->specs)) {
+                foreach ($this->specs as $spec) {
+                    $this->collection->specs()->create([
+                        'title' => [
+                            'ar' => $spec['ar']['title'],
+                            'en' => $spec['en']['title']
+                        ],
+                        'value' => [
+                            'ar' => $spec['ar']['value'],
+                            'en' => $spec['en']['value']
+                        ],
+                    ]);
+                }
+            }
+
+            // Delete Old Images
             foreach ($this->deletedImages as $key => $deletedImage) {
                 imageDelete($deletedImage, 'collections');
             }

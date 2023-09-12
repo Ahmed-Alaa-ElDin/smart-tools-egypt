@@ -111,4 +111,13 @@ class CollectionController extends Controller
     {
         return view('admin.collections.softDeleted');
     }
+
+    /**
+     * Copy Collection
+     * @param  int  $collection_id
+     */
+    public function copy($collection_id) {
+        return view('admin.collections.copy')->with('old_collection_id', $collection_id)->with('success', __('admin/productsPages.Collection Copied Successfully'));
+    }
+
 }

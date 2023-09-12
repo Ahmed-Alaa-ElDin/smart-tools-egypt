@@ -345,5 +345,8 @@ return [
     "Copy Product"                                                          =>      "نسخ المنتج",
     "Product Copied Successfully"                                           =>      "تم نسخ المنتج بنجاح",
     "Copy"                                                                  =>      "نسخ",
+    "Collection Copied Successfully"                                        =>      "تم نسخ التجميعة بنجاح",
+    "Copy Collection"                                                       =>      "نسخ التجميعة",
+    "Through this form you can copy collections' data"                      =>      "من خلال هذه الصفحة يمكنك نسخ بيانات التجميعة",
 
 ];

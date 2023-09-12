@@ -319,6 +319,15 @@
                                                 delete
                                             </span>
                                         </a>
+
+                                        {{-- Copy Product --}}
+                                        <a href="{{ route('admin.collections.copy', ['collection_id' => $collection->id]) }}"
+                                            title="{{ __('admin/productsPages.Copy Collection') }}" class="m-0">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-yellow-400 hover:bg-yellow-500 rounded">
+                                                content_copy
+                                            </span>
+                                        </a>
                                     </td>
                                 </tr>
                             @empty

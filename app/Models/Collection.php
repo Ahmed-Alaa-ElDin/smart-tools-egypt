@@ -34,7 +34,6 @@ class Collection extends Model
         'points',
         'description',
         'model',
-        'specs',
         'meta_keywords',
         'refundable',
         'free_shipping',
@@ -99,6 +98,12 @@ class Collection extends Model
         return $this->belongsToMany(Product::class)->withPivot(
             'quantity',
         )->withTimestamps();
+    }
+
+    // one to many relationship Collection --> Specs
+    public function specs()
+    {
+        return $this->hasMany(CollectionSpec::class);
     }
 
     // One to many (Polymorphic) relationship Collection --> Reviews

@@ -472,7 +472,7 @@ return [
     "Remove from the compare list"                  =>      "حذف من قائمة المقارنة",
     "Actions"                   =>      "الإجراءات",
     "Product Has Been Removed From the Comparison Successfully"     =>      "تم حذف المنتج من قائمة المقارنة بنجاح",
-
+    "Why invest"                =>      "ليه تشتري",
 
 
 ];

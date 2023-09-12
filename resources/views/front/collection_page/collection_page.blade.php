@@ -469,8 +469,8 @@
                         {{-- Video Header :: End --}}
 
                         {{-- Specifications Header :: Start --}}
-                        @if (!is_null(json_decode($collection->specs)) && count(json_decode($collection->specs)))
-                            <li role="presentation">
+                        @if (count($collection->specs))
+                        <li role="presentation">
                                 <button
                                     class="inline-flex gap-2 items-center p-4 border-b-2 hover:text-gray-600 hover:border-gray-300"
                                     id="specs-tab" data-tabs-target="#specs" type="button" role="tab"
@@ -570,7 +570,7 @@
                     {{-- Video Body :: End --}}
 
                     {{-- Specifications Body :: Start --}}
-                    @if (!is_null(json_decode($collection->specs)) && $collection->specs)
+                    @if ($collection->specs)
                         <div class="hidden p-4 rounded-lg flex items-center justify-center relative overflow-x-auto shadow-md sm:rounded-lg"
                             id="specs" role="tabpanel" aria-labelledby="specs-tab">
                             <table class="min-w-[50%] text-sm text-left text-gray-700">
@@ -584,13 +584,13 @@
                                         </th>
                                     </tr>
                                 </thead>
-                                @foreach (json_decode($collection->specs) as $spec)
+                                @foreach ($collection->specs as $spec)
                                     <tr class="bg-white border-b hover:bg-gray-50">
                                         <th class="px-6 py-4 font-bold text-gray-900 whitespace-nowrap text-center">
-                                            {{ $spec->$locale->title }}
+                                            {{ $spec->getTranslation('title', $locale) }}
                                         </th>
                                         <td class="px-6 py-4 text-center">
-                                            {{ $spec->$locale->value }}
+                                            {{ $spec->getTranslation('value', $locale) }}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -848,7 +848,7 @@
             })
         });
 
-        // Zoom to Image when hover 
+        // Zoom to Image when hover
         const zoomDivs = document.querySelectorAll('.zoom');
 
         zoomDivs.forEach(zoomDiv => {

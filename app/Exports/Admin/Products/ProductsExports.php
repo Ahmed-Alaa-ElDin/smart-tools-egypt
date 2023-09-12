@@ -115,7 +115,7 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
             $product->subcategories->first() ? ($product->subcategories->first()->category ? ($product->subcategories->first()->category->supercategory ? $product->subcategories->first()->category->supercategory->getTranslation('name', session('locale')) : __('N/A')) : __('N/A')) : __('N/A'),
             $product->base_price ??  __('N/A'),
             $product->final_price ??  __('N/A'),
-            $product->final_price && $product->base_price ? round((100 * ($product->base_price - $product->final_price)) / $product->base_price, 2) . '%' :  '0%',
+            $product->final_price && $product->base_price && $product->base_price > 0 ? round((100 * ($product->base_price - $product->final_price)) / $product->base_price, 2) . '%' :  '0%',
             $product->points ?? 0,
             $product->under_reviewing ? __('Yes') :  __('No'),
             $product->weight ?? 0,

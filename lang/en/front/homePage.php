@@ -477,7 +477,7 @@ return [
     "Remove from the compare list"                  =>      "Remove from the compare list",
     "Actions"                   =>      "Actions",
     "Product Has Been Removed From the Comparison Successfully"     =>      "Product Has Been Removed From the Comparison Successfully",
-    "Cart"                      =>      "Cart",
+    "Why invest"                =>      "Why invest",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",

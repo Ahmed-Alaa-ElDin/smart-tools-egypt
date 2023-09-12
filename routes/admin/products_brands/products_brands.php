@@ -20,4 +20,5 @@ Route::get('/collections/export-excel', [CollectionController::class, 'exportExc
 Route::get('/collections/export-pdf', [CollectionController::class, 'exportPDF'])->name('collections.exportPDF');
 
 Route::get('/collections/deleted-collections', [CollectionController::class, 'softDeletedCollections'])->name('collections.softDeletedCollections');
+Route::get('/collections/copy-collection/{collection_id}', [CollectionController::class, 'copy'])->name('collections.copy');
 Route::resource('/collections', CollectionController::class);
