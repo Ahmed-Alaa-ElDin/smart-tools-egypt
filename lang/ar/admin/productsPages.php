@@ -348,5 +348,7 @@ return [
     "Collection Copied Successfully"                                        =>      "تم نسخ التجميعة بنجاح",
     "Copy Collection"                                                       =>      "نسخ التجميعة",
     "Through this form you can copy collections' data"                      =>      "من خلال هذه الصفحة يمكنك نسخ بيانات التجميعة",
+    "Related Products"                                                      =>      "اكتشف عالم العدد",
+    "Complementary Products"                                                =>      "الشيء لزوم الشيء",
 
 ];

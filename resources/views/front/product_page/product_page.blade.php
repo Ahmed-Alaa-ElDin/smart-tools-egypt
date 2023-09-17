@@ -7,9 +7,9 @@
 ])
 
 @section('content')
-    <div class="container px-4 py-2 ">
+    <main class="container px-4 py-2 flex flex-col gap-3">
         {{-- Breadcrumb :: Start --}}
-        <nav aria-label="breadcrumb" role="navigation" class="mb-2">
+        <nav aria-label="breadcrumb" role="navigation">
             <ol class="breadcrumb text-sm">
                 <li class="breadcrumb-item hover:text-primary">
                     <a href="{{ route('front.homepage') }}">
@@ -148,27 +148,27 @@
                         {{-- Disount Amount :: End --}}
 
                         {{-- Extra Discount :: Start --}}
-                        @if ($product_offer->best_price < $product->final_price)
+                        @if ($productOffer->best_price < $product->final_price)
                             <div class="flex gap-3 items-center">
                                 <span class="text-gray-800 font-bold text-md">
                                     {{ __('front/homePage.Extra Discount: ') }}
                                 </span>
                                 <span class="flex rtl:flex-row-reverse gap-1 font-bold text-success text-sm">
                                     <span
-                                        class="font-bold text-lg">(%{{ number_format((($product->final_price - $product_offer->best_price) * 100) / $product->final_price, 0) ?? '%0' }})</span>
+                                        class="font-bold text-lg">(%{{ number_format((($product->final_price - $productOffer->best_price) * 100) / $product->final_price, 0) ?? '%0' }})</span>
                                     &nbsp;
                                     <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
                                     <span class="font-bold text-xl"
-                                        dir="ltr">{{ number_format(explode('.', $product->final_price - $product_offer->best_price)[0], 0, '.', '\'') }}</span>
+                                        dir="ltr">{{ number_format(explode('.', $product->final_price - $productOffer->best_price)[0], 0, '.', '\'') }}</span>
                                     <span
-                                        class="font-bold text-xs">{{ explode('.', $product->final_price - $product_offer->best_price)[1] ?? '00' }}</span>
+                                        class="font-bold text-xs">{{ explode('.', $product->final_price - $productOffer->best_price)[1] ?? '00' }}</span>
                                 </span>
                             </div>
                         @endif
                         {{-- Extra Discount :: End --}}
 
                         {{-- Extra Points :: Start --}}
-                        @if ($product_offer->best_points)
+                        @if ($productOffer->best_points)
                             <div class="flex gap-3 items-center">
                                 <span class="text-gray-800 font-bold text-md">
                                     {{ __("front/homePage.You'll get: ") }}
@@ -176,10 +176,10 @@
                                 <span class="flex rtl:flex-row-reverse gap-1 font-bold text-success text-sm">
                                     <span class="font-bold text-lg">
                                         <span dir="ltr">
-                                            {{ number_format($product_offer->best_points, 0, '.', '\'') ?? 0 }}
+                                            {{ number_format($productOffer->best_points, 0, '.', '\'') ?? 0 }}
                                         </span>
                                         &nbsp;
-                                        {{ trans_choice('front/homePage.Point/Points', $product_offer->best_points, ['points' => $product_offer->best_points]) }}
+                                        {{ trans_choice('front/homePage.Point/Points', $productOffer->best_points, ['points' => $productOffer->best_points]) }}
                                     </span>
                                 </span>
                             </div>
@@ -311,7 +311,7 @@
                         {{-- Product Description :: Start --}}
                         <div class="text-gray-800 description">
                             <h3 class="text-md font-bold mb-2">
-                                {{ __('front/homePage.Why invest') . " 👇 💪" }}
+                                {{ __('front/homePage.Why invest') . ' 👇 💪' }}
                             </h3>
                             {!! $product->description !!}
                         </div>
@@ -350,7 +350,7 @@
 
                         {{-- Specifications Header :: Start --}}
                         @if (count($product->specs))
-                        <li role="presentation">
+                            <li role="presentation">
                                 <button
                                     class="inline-flex gap-2 items-center p-4 border-b-2 hover:text-gray-600 hover:border-gray-300"
                                     id="specs-tab" data-tabs-target="#specs" type="button" role="tab"
@@ -432,7 +432,6 @@
                 </div>
 
                 <div id="myTabContent">
-
                     {{-- Video Body :: Start --}}
                     @if ($product->video)
                         <div class="hidden p-4 rounded-lg flex items-center justify-center" id="video"
@@ -598,79 +597,169 @@
                     {{-- Delivery Cost Body :: Start --}}
                     <div class="hidden p-4 rounded-lg flex items-center justify-center" id="delivery-cost"
                         role="tabpanel" aria-labelledby="delivery-cost-tab">
-                        @livewire('front.product.delivery.product-delivery', ['free_shipping' => $product_offer->free_shipping, 'product_weight' => $product->weight])
+                        @livewire('front.product.delivery.product-delivery', ['free_shipping' => $productOffer->free_shipping, 'product_weight' => $product->weight])
                     </div>
                     {{-- Delivery Cost Body :: End --}}
 
                 </div>
             </div>
             {{-- Product Other Info :: End --}}
+
         </section>
-    </div>
-@endsection
 
-{{-- Extra Scripts --}}
-@push('js')
-    <script src="{{ asset('assets/js/plugins/tinymce/tinymce.min.js') }}"></script>
+        {{-- Complementary Products :: Start --}}
+        @if (count($complementableItems))
+            <section class="col-span-12 flex flex-col gap-2 bg-white rounded shadow-lg p-4">
 
-    <script>
-        $(document).ready(function() {
-            @if ($product->images->count())
-                {
-                    var main = new Splide('#main-slider', {
-                        type: 'fade',
-                        width: "100%",
-                        rewind: true,
-                        autoplay: true,
-                        @if (LaravelLocalization::getCurrentLocale() == 'ar')
-                            direction: 'rtl',
-                            pagination: 'rtl',
-                        @else
-                            pagination: 'ltr',
-                        @endif
-                    });
+                <h3 class="text-2xl font-bold text-center text-gray-700 mb-4">
+                    {{ __('front/homePage.Complementary Products') }}
+                </h3>
 
-                    var thumbnails = new Splide('#thumbnail-slider', {
-                        rewind: true,
-                        fixedWidth: 100,
-                        fixedHeight: 100,
-                        isNavigation: true,
-                        @if (LaravelLocalization::getCurrentLocale() == 'ar')
-                            direction: 'rtl',
-                            pagination: 'rtl',
-                        @else
-                            pagination: 'ltr',
-                        @endif
-                        padding: 10,
-                        focus: 'center',
-                        pagination: false,
-                        cover: true,
-                        arrows: false,
-                        dragMinThreshold: {
-                            mouse: 4,
-                            touch: 10,
+                {{-- Slider : Start --}}
+                <div class="product_list splide h-full w-full row-span-2 rounded overflow-hidden" wire:ignore>
+                    <div class="splide__track">
+                        {{-- List of Products : Start --}}
+                        <ul class="splide__list">
+                            @foreach ($complementableItems as $item)
+                                {{-- Product : Start --}}
+                                <x-front.product-box-small :item="$item" />
+                                {{-- Product : End --}}
+                            @endforeach
+                        </ul>
+                        {{-- List of Products : End --}}
+                    </div>
+                </div>
+                {{-- Slider : End --}}
+            </section>
+        @endif
+        {{-- Complementary Products :: End --}}
+
+        {{-- Related Products :: Start --}}
+        @if (count($relatedItems))
+            <section class="col-span-12 flex flex-col gap-2 bg-white rounded shadow-lg p-4">
+
+                <h3 class="text-2xl font-bold text-center text-gray-700 mb-4">
+                    {{ __('front/homePage.Related Products') }}
+                </h3>
+
+                {{-- Slider : Start --}}
+                <div class="product_list splide h-full w-full row-span-2 rounded overflow-hidden" wire:ignore>
+                    <div class="splide__track">
+                        {{-- List of Products : Start --}}
+                        <ul class="splide__list">
+                            @foreach ($relatedItems as $item)
+                                {{-- Product : Start --}}
+                                <x-front.product-box-small :item="$item" />
+                                {{-- Product : End --}}
+                            @endforeach
+                        </ul>
+                        {{-- List of Products : End --}}
+                    </div>
+                </div>
+                {{-- Slider : End --}}
+            </section>
+        @endif
+        {{-- Related Products :: End --}}
+        </div>
+    @endsection
+
+    {{-- Extra Scripts --}}
+    @push('js')
+        <script src="{{ asset('assets/js/plugins/tinymce/tinymce.min.js') }}"></script>
+
+        <script>
+            $(document).ready(function() {
+                // ####### Products Slider :: Start #######
+                var splide_options = {
+                    @if (LaravelLocalization::getCurrentLocale() == 'ar')
+                        direction: 'rtl',
+                        pagination: 'rtl',
+                    @else
+                        pagination: 'ltr',
+                    @endif
+                    perPage: 5,
+                    perMove: 2,
+                    drag: 'free',
+                    breakpoints: {
+                        1200: {
+                            perPage: 3,
                         },
-                    });
+                        770: {
+                            perPage: 2,
+                        }
+                    },
+                    type: 'slide',
+                    keyboard: true,
+                    cover: true,
+                    gap: 15,
+                    height: "inherit",
+                };
 
-                    main.sync(thumbnails);
-                    main.mount();
-                    thumbnails.mount();
+                var product_lists = $('.product_list');
+
+                for (let i = 0; i < product_lists.length; i++) {
+                    new Splide(product_lists[i], splide_options).mount();
                 }
-            @endif
+                // ####### Products Slider :: End #######
 
-            let options = {
-                inline: true,
-                plugins: [
-                    'directionality',
-                    'lists',
-                    'autoresize',
-                ],
-                toolbar: 'ltr rtl | ' +
-                    'bold | alignleft ' +
-                    'alignright | bullist',
-                statusbar: false,
-                menubar: false,
-                content_style: `
+                // ####### Product Images Slider :: Start #######
+                @if ($product->images->count())
+                    {
+                        var main = new Splide('#main-slider', {
+                            type: 'fade',
+                            width: "100%",
+                            rewind: true,
+                            autoplay: true,
+                            @if (LaravelLocalization::getCurrentLocale() == 'ar')
+                                direction: 'rtl',
+                                pagination: 'rtl',
+                            @else
+                                pagination: 'ltr',
+                            @endif
+                        });
+
+                        var thumbnails = new Splide('#thumbnail-slider', {
+                            rewind: true,
+                            fixedWidth: 100,
+                            fixedHeight: 100,
+                            isNavigation: true,
+                            @if (LaravelLocalization::getCurrentLocale() == 'ar')
+                                direction: 'rtl',
+                                pagination: 'rtl',
+                            @else
+                                pagination: 'ltr',
+                            @endif
+                            padding: 10,
+                            focus: 'center',
+                            pagination: false,
+                            cover: true,
+                            arrows: false,
+                            dragMinThreshold: {
+                                mouse: 4,
+                                touch: 10,
+                            },
+                        });
+
+                        main.sync(thumbnails);
+                        main.mount();
+                        thumbnails.mount();
+                    }
+                @endif
+                // ####### Product Images Slider :: End #######
+
+                let options = {
+                    inline: true,
+                    plugins: [
+                        'directionality',
+                        'lists',
+                        'autoresize',
+                    ],
+                    toolbar: 'ltr rtl | ' +
+                        'bold | alignleft ' +
+                        'alignright | bullist',
+                    statusbar: false,
+                    menubar: false,
+                    content_style: `
                 .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {
                     text-align: center ; width: 100%
                     }
@@ -679,85 +768,85 @@
                         list-style-type: disc;
                     }
                 `,
-                directionality: 'rtl'
-            };
+                    directionality: 'rtl'
+                };
 
-            // tinymce for Description
-            tinymce.init({
-                ...options,
-                selector: '#comment',
-                setup: function(editor) {
-                    editor.on('blur', function(e) {
-                        window.livewire.emit('updatedComment', tinymce.get(e.target.id)
-                            .getContent())
-                    });
-                }
-            });
-
-            // reinitialize tinymce for Description
-            window.addEventListener('tinyMCE', function() {
+                // tinymce for Description
                 tinymce.init({
                     ...options,
                     selector: '#comment',
                     setup: function(editor) {
                         editor.on('blur', function(e) {
-                            window.livewire.emit('updatedComment', tinymce.get(e.target
-                                    .id)
+                            window.livewire.emit('updatedComment', tinymce.get(e.target.id)
                                 .getContent())
                         });
                     }
                 });
-            })
 
-            $('#copyToClipboard').on('click', function() {
-                navigator.clipboard.writeText(
-                    "https://smarttoolsegypt.com/{{ $product->id }}-{{ $product->slug }}");
-                Swal.fire({
-                    text: "{{ __('front/homePage.The link has been copied successfully') }}",
-                    icon: "success",
-                    @if (session('locale' == 'en'))
-                        position: 'top-left',
-                    @else
-                        position: 'top-right',
-                    @endif
-                    showConfirmButton: false,
-                    toast: true,
-                    timer: 3000,
-                    timerProgressBar: true,
+                // reinitialize tinymce for Description
+                window.addEventListener('tinyMCE', function() {
+                    tinymce.init({
+                        ...options,
+                        selector: '#comment',
+                        setup: function(editor) {
+                            editor.on('blur', function(e) {
+                                window.livewire.emit('updatedComment', tinymce.get(e.target
+                                        .id)
+                                    .getContent())
+                            });
+                        }
+                    });
                 })
-            })
-        });
 
-        // Zoom to Image when hover
-        const zoomDivs = document.querySelectorAll('.zoom');
+                $('#copyToClipboard').on('click', function() {
+                    navigator.clipboard.writeText(
+                        "https://smarttoolsegypt.com/{{ $product->id }}-{{ $product->slug }}");
+                    Swal.fire({
+                        text: "{{ __('front/homePage.The link has been copied successfully') }}",
+                        icon: "success",
+                        @if (session('locale' == 'en'))
+                            position: 'top-left',
+                        @else
+                            position: 'top-right',
+                        @endif
+                        showConfirmButton: false,
+                        toast: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                    })
+                })
+            });
 
-        zoomDivs.forEach(zoomDiv => {
-            const img = zoomDiv.querySelector('img');
+            // Zoom to Image when hover
+            const zoomDivs = document.querySelectorAll('.zoom');
 
-            const {
-                width,
-                height
-            } = img.getBoundingClientRect();
+            zoomDivs.forEach(zoomDiv => {
+                const img = zoomDiv.querySelector('img');
 
-            const scale = 2;
-            zoomDiv.addEventListener('mousemove', e => {
                 const {
-                    left,
-                    top
-                } = zoomDiv.getBoundingClientRect();
-                const x = e.clientX - left;
-                const y = e.clientY - top;
-                const bgPosX = -x * (scale - 1);
-                const bgPosY = -y * (scale - 1);
-                img.style.transform = `scale(${scale})`;
-                img.style.transformOrigin = `${x}px ${y}px`;
-                img.style.backgroundPosition = `${bgPosX}px ${bgPosY}px`;
+                    width,
+                    height
+                } = img.getBoundingClientRect();
+
+                const scale = 2;
+                zoomDiv.addEventListener('mousemove', e => {
+                    const {
+                        left,
+                        top
+                    } = zoomDiv.getBoundingClientRect();
+                    const x = e.clientX - left;
+                    const y = e.clientY - top;
+                    const bgPosX = -x * (scale - 1);
+                    const bgPosY = -y * (scale - 1);
+                    img.style.transform = `scale(${scale})`;
+                    img.style.transformOrigin = `${x}px ${y}px`;
+                    img.style.backgroundPosition = `${bgPosX}px ${bgPosY}px`;
+                });
+                zoomDiv.addEventListener('mouseleave', () => {
+                    img.style.transform = 'none';
+                    img.style.transformOrigin = '50% 50%';
+                    img.style.backgroundPosition = '50% 50%';
+                });
             });
-            zoomDiv.addEventListener('mouseleave', () => {
-                img.style.transform = 'none';
-                img.style.transformOrigin = '50% 50%';
-                img.style.backgroundPosition = '50% 50%';
-            });
-        });
-    </script>
-@endpush
+        </script>
+    @endpush

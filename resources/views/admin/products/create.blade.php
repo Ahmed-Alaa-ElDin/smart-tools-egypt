@@ -38,7 +38,7 @@
                         </div>
 
                         {{-- Card Body --}}
-                        <div class="card-body overflow-hidden">
+                        <div class="card-body">
 
                             {{-- Form Start --}}
                             @livewire('admin.products.product-form')

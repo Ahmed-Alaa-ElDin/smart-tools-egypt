@@ -74,6 +74,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'collections' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/images/collections'),
+            'url' => env('APP_URL') . '/images/collections',
+            'visibility' => 'public',
+        ],
+
         'logos' => [
             'driver' => 'local',
             'root' => storage_path('app/public/images/logos'),

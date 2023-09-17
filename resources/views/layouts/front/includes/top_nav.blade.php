@@ -116,12 +116,12 @@
 
             {{-- Comparison & Wishlist for Small Screen :: Start --}}
             <div class="flex items-center justify-end col lg:hidden text-white">
-                <a href="{{ route('front.comparison') }}" class="py-1 pr-3 pl-2 bg-primary rounded-l shadow">
+                <a href="{{ route('front.comparison') }}" class="py-1 ltr:pr-3 ltr:pl-2 rtl:pl-3 rtl:pr-2 bg-primary ltr:rounded-l rtl:rounded-r shadow hover:text-secondary">
                     <span class="material-icons">
                         compare_arrows
                     </span>
                 </a>
-                <a href="{{ route('front.wishlist') }}" class="py-1 pl-3 pr-2 bg-primary rounded-r shadow">
+                <a href="{{ route('front.wishlist') }}" class="py-1 ltr:pl-3 ltr:pr-2 rtl:pr-3 rtl:pl-2 bg-primary ltr:rounded-r rtl:rounded-l shadow hover:text-secondary">
                     <span class="material-icons">
                         favorite
                     </span>

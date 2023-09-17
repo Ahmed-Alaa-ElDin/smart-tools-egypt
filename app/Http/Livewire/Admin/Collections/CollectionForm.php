@@ -16,15 +16,17 @@ class CollectionForm extends Component
     use WithFileUploads;
 
     public $collection_id;
+    public $collection;
     public $old_collection_id;
     public $gallery_images = [], $gallery_images_name = [], $featured = 0, $deletedImages = [];
+    public $gallery_images_featured;
     public $thumbnail_image,  $thumbnail_image_name, $video;
     public $specs = [];
     public $name = ["ar" => null, "en" => null], $model, $barcode, $weight, $description = ['ar' => null, 'en' => null], $publish = true, $refundable = true;
     public $profit_margin = 0, $original_price = 0, $base_price = 0, $discount, $final_price, $points, $free_shipping = false, $reviewing = false;
     public $seo_keywords;
 
-    public $search, $products_list, $products = [];
+    public $search, $productsList, $products = [];
 
     protected $listeners = [
         "descriptionAr",
@@ -72,7 +74,7 @@ class CollectionForm extends Component
     ######################## Mount :: Start ############################
     public function mount()
     {
-        $this->products_list = collect([]);
+        $this->productsList = collect([]);
 
         // If editing collection
         if ($this->collection_id) {
@@ -260,7 +262,7 @@ class CollectionForm extends Component
     public function updatedSearch()
     {
         if ($this->search != "") {
-            $this->products_list = Product::select([
+            $this->productsList = Product::select([
                 'id',
                 'name',
                 'original_price',
@@ -274,7 +276,6 @@ class CollectionForm extends Component
                 ->with(['brand' => function ($q) {
                     $q->select('id', 'name');
                 }])
-                ->where('under_reviewing', 0)
                 ->whereNotIn('id', array_map(fn ($product) => $product['id'], $this->products))
                 ->where(function ($q) {
                     $q->where('name->ar', 'like', '%' . $this->search . '%')
@@ -286,7 +287,7 @@ class CollectionForm extends Component
                 })
                 ->get();
         } else {
-            $this->products_list = collect([]);
+            $this->productsList = collect([]);
         }
     }
     ######################## Search Products :: End ############################

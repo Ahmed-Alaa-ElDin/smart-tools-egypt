@@ -125,6 +125,18 @@ class Collection extends Model
         )->withTimestamps();
     }
 
+    // many to many polymorphic (inverse) relationship Product --> Relatable
+    public function relatableInverse()
+    {
+        return $this->morphedByMany(Product::class, 'relatable')->withTimestamps();
+    }
+
+    // many to many polymorphic (inverse) relationship Product --> Complementable
+    public function complementableInverse()
+    {
+        return $this->morphedByMany(Product::class, 'complementable')->withTimestamps();
+    }
+
     ############# Appends :: Start #############
     public function getAvgRatingAttribute()
     {

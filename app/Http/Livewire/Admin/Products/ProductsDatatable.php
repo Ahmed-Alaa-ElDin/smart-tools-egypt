@@ -3,17 +3,18 @@
 namespace App\Http\Livewire\Admin\Products;
 
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Spatie\Permission\Models\Role;
 
 class ProductsDatatable extends Component
 {
     use WithPagination;
 
     public $search = "";
+    public $perPage;
+    public $sortBy;
+    public $sortDirection;
 
     public $selectedProducts = [];
 

@@ -473,6 +473,8 @@ return [
     "Actions"                   =>      "الإجراءات",
     "Product Has Been Removed From the Comparison Successfully"     =>      "تم حذف المنتج من قائمة المقارنة بنجاح",
     "Why invest"                =>      "ليه تشتري",
+    "Related Products"                                                      =>      "اكتشف عالم العدد 🧑‍🏭👷",
+    "Complementary Products"                                                =>      "الشيء لزوم الشيء 🪛🧑‍🔧",
 
 
 ];

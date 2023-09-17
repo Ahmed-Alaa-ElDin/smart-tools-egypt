@@ -478,6 +478,8 @@ return [
     "Actions"                   =>      "Actions",
     "Product Has Been Removed From the Comparison Successfully"     =>      "Product Has Been Removed From the Comparison Successfully",
     "Why invest"                =>      "Why invest",
+    "Related Products"                                                      =>      "Related Products",
+    "Complementary Products"                                                =>      "Complementary Products",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",
     "Cart"                      =>      "Cart",

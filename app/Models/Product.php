@@ -122,6 +122,42 @@ class Product extends Model
         return $this->hasMany(ProductSpec::class);
     }
 
+    // many to many polymorphic relationship Product --> Relatable
+    public function relatable()
+    {
+        return $this->morphToMany(Product::class, 'relatable')->withTimestamps();
+    }
+
+    // many to many polymorphic (inverse) relationship Product --> Relatable (Product)
+    public function relatableProducts()
+    {
+        return $this->morphedByMany(Product::class, 'relatable')->withTimestamps();
+    }
+
+    // many to many polymorphic (inverse) relationship Product --> Relatable (Collection)
+    public function relatableCollections()
+    {
+        return $this->morphedByMany(Collection::class, 'relatable')->withTimestamps();
+    }
+
+    // many to many polymorphic relationship Product --> Complementable
+    public function complementable()
+    {
+        return $this->morphToMany(Product::class, 'complementable')->withTimestamps();
+    }
+
+    // many to many polymorphic (inverse) relationship Product --> Complementable (Product)
+    public function complementableProducts()
+    {
+        return $this->morphedByMany(Product::class, 'complementable')->withTimestamps();
+    }
+
+    // many to many polymorphic (inverse) relationship Product --> Complementable (Collection)
+    public function complementableCollections()
+    {
+        return $this->morphedByMany(Collection::class, 'complementable')->withTimestamps();
+    }
+
     public function validOffers()
     {
         return $this->morphToMany(Offer::class, 'offerable')

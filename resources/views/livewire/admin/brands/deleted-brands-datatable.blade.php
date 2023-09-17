@@ -191,7 +191,7 @@
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- User Details --}}
-                                        <a href="{{ route('admin.brands.show', ['brand' => $brand->id]) }}"
+                                        <a href="{{ route('front.brands.show', ['brand' => $brand->id]) }}"
                                             title="{{ __('admin/productsPages.View') }}" class="m-0">
                                             <span
                                                 class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">

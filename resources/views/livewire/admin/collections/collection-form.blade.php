@@ -203,7 +203,7 @@
                             </div>
                         </div>
                         {{-- Products List :: Start --}}
-                        @forelse ($products_list as $product)
+                        @forelse ($productsList as $product)
                             <div class="group flex justify-center items-center gap-1 cursor-pointer rounded transition-all ease-in-out hover:bg-red-100 p-2"
                                 wire:click.stop="addProduct({{ $product->id }})"
                                 wire:key="product-{{ $product->id }}-{{ rand() }}">
@@ -312,9 +312,8 @@
                                     {{-- Product Info : Start --}}
                                     <div class="grow flex flex-col justify-start gap-2">
                                         {{-- Product's Brand :: Start --}}
-                                        {{-- todo :: brand link --}}
                                         <div class="flex items-center">
-                                            <a href="#"
+                                            <a href="{{ route('front.brands.show', ['brand' => $product['brand']['id']]) }}"
                                                 class="text-sm font-bold text-gray-400 hover:text-current">
                                                 {{ $product['brand'] ? $product['brand']['name'] : '' }}
                                             </a>

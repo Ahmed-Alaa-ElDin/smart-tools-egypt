@@ -201,13 +201,15 @@
                 @livewire('front.general.compare.add-to-compare-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-compare-button-' . Str::random(10)))
                 {{-- Add to compare : End --}}
 
-                {{-- Add to wishlist : Start --}}
-                @livewire('front.general.wishlist.add-to-wishlist-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-wishlist-button-' . Str::random(10)))
-                {{-- Add to wishlist : End --}}
-
-                {{-- Remove from wishlist : Start --}}
-                @livewire('front.general.wishlist.remove-from-wishlist-button', ['item_id' => $item['id'], 'type' => $item['type']], key('remove-wishlist-button-' . Str::random(10)))
-                {{-- Remove from wishlist : End --}}
+                @if ($wishlist)
+                    {{-- Remove from wishlist : Start --}}
+                    @livewire('front.general.wishlist.remove-from-wishlist-button', ['item_id' => $item['id'], 'type' => $item['type']], key('remove-wishlist-button-' . Str::random(10)))
+                    {{-- Remove from wishlist : End --}}
+                @else
+                    {{-- Add to wishlist : Start --}}
+                    @livewire('front.general.wishlist.add-to-wishlist-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-wishlist-button-' . Str::random(10)))
+                    {{-- Add to wishlist : End --}}
+                @endif
 
                 @if (isset($item['quantity']) && $item['quantity'] > 0)
                     {{-- Add to cart : Start --}}
