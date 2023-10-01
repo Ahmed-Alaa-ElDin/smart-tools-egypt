@@ -608,7 +608,7 @@
 
                         {{-- Search Result :: Start --}}
                         @forelse ($complementaryList as $complementaryProduct)
-                            <div class="group col-span-12 md:col-span-6 lg:col-span-4 flex justify-center items-center gap-1 cursor-pointer rounded transition-all ease-in-out hover:bg-red-100 md:border md:border-white hover:md:border hover:md:border-red-700 p-2"
+                            <div class="group col-span-12 md:col-span-6 lg:col-span-4 flex justify-center items-center gap-1 cursor-pointer rounded transition-all ease-in-out hover:bg-gray-100 md:border md:border-white hover:md:border hover:md:border-gray-700 p-2"
                                 wire:click.stop="addComplementaryProduct({{ $complementaryProduct['id'] }}, '{{ $complementaryProduct['type'] }}')"
                                 wire:key="complementaryProduct-{{ $complementaryProduct['id'] }}-{{ rand() }}">
                                 {{-- Product's Name --}}

@@ -405,6 +405,7 @@ class ProductForm extends Component
     }
     ######################## Render :: End ############################
 
+
     ######################## Publish Toggle :: Start ############################
     public function publish()
     {
@@ -968,7 +969,7 @@ class ProductForm extends Component
             }
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+            // throw $th;
             Session::flash('error', __("admin/productsPages.Product hasn't been added"));
             redirect()->route('admin.products.index');
         }

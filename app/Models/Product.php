@@ -125,25 +125,45 @@ class Product extends Model
     // many to many relationship Product --> Related Products
     public function relatedProducts()
     {
-        return $this->belongsToMany(Product::class, 'product_product_related', 'first_product_id', 'second_product_id');
+        return $this->belongsToMany(
+            Product::class,
+            'product_product_related',
+            'first_product_id',
+            'second_product_id'
+        );
     }
 
     // many to many relationship Product --> Related Collections
     public function relatedCollections()
     {
-        return $this->belongsToMany(Collection::class, 'collection_product_related', 'product_id', 'collection_id');
+        return $this->belongsToMany(
+            Collection::class,
+            'collection_product_related',
+            'product_id',
+            'collection_id'
+        );
     }
 
     // many to many relationship Product --> Complemented Products
     public function complementedProducts()
     {
-        return $this->belongsToMany(Product::class, 'product_product_complemented', 'first_product_id', 'second_product_id');
+        return $this->belongsToMany(
+            Product::class,
+            'product_product_complemented',
+            'first_product_id',
+            'second_product_id'
+        );
     }
 
     // many to many relationship Product --> Complemented Collections
     public function complementedCollections()
     {
-        return $this->belongsToMany(Collection::class, 'collection_product_complemented', 'product_id', 'collection_id');
+        return $this->belongsToMany(
+            Collection::class,
+            'collection_product_complemented',
+            'product_id',
+            'collection_id'
+        );
     }
 
     public function validOffers()

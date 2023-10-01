@@ -128,25 +128,45 @@ class Collection extends Model
     // many to many Relationship Collection --> Related Collections
     public function relatedCollections()
     {
-        return $this->belongsToMany(Collection::class, 'collection_collection_related', 'first_collection_id', 'second_collection_id');
+        return $this->belongsToMany(
+            Collection::class,
+            'collection_collection_related',
+            'first_collection_id',
+            'second_collection_id'
+        );
     }
 
     // many to many Relationship Collection --> Related Products
     public function relatedProducts()
     {
-        return $this->belongsToMany(Product::class, 'collection_product_related', 'collection_id', 'product_id');
+        return $this->belongsToMany(
+            Product::class,
+            'collection_product_related',
+            'collection_id',
+            'product_id'
+        );
     }
 
     // many to many Relationship Collection --> Complement Collections
     public function complementedCollections()
     {
-        return $this->belongsToMany(Collection::class, 'collection_collection_complemented', 'first_collection_id', 'second_collection_id');
+        return $this->belongsToMany(
+            Collection::class,
+            'collection_collection_complemented',
+            'first_collection_id',
+            'second_collection_id'
+        );
     }
 
     // many to many Relationship Collection --> Complemented Products
     public function complementedProducts()
     {
-        return $this->belongsToMany(Product::class, 'collection_product_complemented', 'collection_id', 'product_id');
+        return $this->belongsToMany(
+            Product::class,
+            'collection_product_complemented',
+            'collection_id',
+            'product_id'
+        );
     }
 
     ############# Appends :: Start #############
