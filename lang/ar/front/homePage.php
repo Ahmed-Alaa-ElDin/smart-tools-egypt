@@ -388,7 +388,7 @@ return [
     "Share on Facebook"         =>      "المشاركة على فيسبوك",
     "Copy link"                 =>      "نسخ الرابط",
     "You'll get: "              =>      "سوف تحصل على: ",
-    "Products in the offer"     =>      "المنتجات بالعرض",
+    "Products in the Collection"     =>      "المنتجات بالعرض",
     "Cart Summary"                          =>      "ملخص سلة المشتريات:",
     "Subtotal before products discounts"    =>      "المجموع قبل خصومات المنتجات:",
     "Subtotal after products discounts:"     =>      "المجموع بعد خصومات المنتجات:",

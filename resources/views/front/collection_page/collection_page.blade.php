@@ -315,7 +315,7 @@
             {{-- Product List :: Start --}}
             <div class="col-span-12 grid grid-cols-10 items-start gap-3 overflow-hidden">
                 <label class="col-span-10 text-md font-bold text-gray-900 text-center">
-                    {{ __('front/homePage.Products in the offer') }}
+                    {{ __('front/homePage.Products in the Collection') }}
                 </label>
 
                 @foreach ($collection->products as $product)
@@ -470,7 +470,7 @@
 
                         {{-- Specifications Header :: Start --}}
                         @if (count($collection->specs))
-                        <li role="presentation">
+                            <li role="presentation">
                                 <button
                                     class="inline-flex gap-2 items-center p-4 border-b-2 hover:text-gray-600 hover:border-gray-300"
                                     id="specs-tab" data-tabs-target="#specs" type="button" role="tab"
@@ -726,6 +726,60 @@
             </div>
             {{-- Collection Other Info :: End --}}
         </section>
+
+        {{-- Complementary Products :: Start --}}
+        @if (count($complementedItems))
+            <section class="col-span-12 flex flex-col gap-2 bg-white rounded shadow-lg p-4">
+
+                <h3 class="text-2xl font-bold text-center text-gray-700 mb-4">
+                    {{ __('front/homePage.Complementary Products') }}
+                </h3>
+
+                {{-- Slider : Start --}}
+                <div class="product_list splide h-full w-full row-span-2 rounded overflow-hidden" wire:ignore>
+                    <div class="splide__track">
+                        {{-- List of Products : Start --}}
+                        <ul class="splide__list">
+                            @foreach ($complementedItems as $item)
+                                {{-- Product : Start --}}
+                                <x-front.product-box-small :item="$item" />
+                                {{-- Product : End --}}
+                            @endforeach
+                        </ul>
+                        {{-- List of Products : End --}}
+                    </div>
+                </div>
+                {{-- Slider : End --}}
+            </section>
+        @endif
+        {{-- Complementary Products :: End --}}
+
+        {{-- Related Products :: Start --}}
+        @if (count($relatedItems))
+            <section class="col-span-12 flex flex-col gap-2 bg-white rounded shadow-lg p-4">
+
+                <h3 class="text-2xl font-bold text-center text-gray-700 mb-4">
+                    {{ __('front/homePage.Related Products') }}
+                </h3>
+
+                {{-- Slider : Start --}}
+                <div class="product_list splide h-full w-full row-span-2 rounded overflow-hidden" wire:ignore>
+                    <div class="splide__track">
+                        {{-- List of Products : Start --}}
+                        <ul class="splide__list">
+                            @foreach ($relatedItems as $item)
+                                {{-- Product : Start --}}
+                                <x-front.product-box-small :item="$item" />
+                                {{-- Product : End --}}
+                            @endforeach
+                        </ul>
+                        {{-- List of Products : End --}}
+                    </div>
+                </div>
+                {{-- Slider : End --}}
+            </section>
+        @endif
+        {{-- Related Products :: End --}}
     </div>
 @endsection
 
@@ -735,6 +789,39 @@
 
     <script>
         $(document).ready(function() {
+            // ####### Products Slider :: Start #######
+            var splide_options = {
+                @if (LaravelLocalization::getCurrentLocale() == 'ar')
+                    direction: 'rtl',
+                    pagination: 'rtl',
+                @else
+                    pagination: 'ltr',
+                @endif
+                perPage: 5,
+                perMove: 2,
+                drag: 'free',
+                breakpoints: {
+                    1200: {
+                        perPage: 3,
+                    },
+                    770: {
+                        perPage: 2,
+                    }
+                },
+                type: 'slide',
+                keyboard: true,
+                cover: true,
+                gap: 15,
+                height: "inherit",
+            };
+
+            var product_lists = $('.product_list');
+
+            for (let i = 0; i < product_lists.length; i++) {
+                new Splide(product_lists[i], splide_options).mount();
+            }
+            // ####### Products Slider :: End #######
+
             @if ($collection->images->count())
                 {
                     var main = new Splide('#main-slider', {

@@ -125,16 +125,28 @@ class Collection extends Model
         )->withTimestamps();
     }
 
-    // many to many polymorphic (inverse) relationship Product --> Relatable
-    public function relatableInverse()
+    // many to many Relationship Collection --> Related Collections
+    public function relatedCollections()
     {
-        return $this->morphedByMany(Product::class, 'relatable')->withTimestamps();
+        return $this->belongsToMany(Collection::class, 'collection_collection_related', 'first_collection_id', 'second_collection_id');
     }
 
-    // many to many polymorphic (inverse) relationship Product --> Complementable
-    public function complementableInverse()
+    // many to many Relationship Collection --> Related Products
+    public function relatedProducts()
     {
-        return $this->morphedByMany(Product::class, 'complementable')->withTimestamps();
+        return $this->belongsToMany(Product::class, 'collection_product_related', 'collection_id', 'product_id');
+    }
+
+    // many to many Relationship Collection --> Complement Collections
+    public function complementedCollections()
+    {
+        return $this->belongsToMany(Collection::class, 'collection_collection_complemented', 'first_collection_id', 'second_collection_id');
+    }
+
+    // many to many Relationship Collection --> Complemented Products
+    public function complementedProducts()
+    {
+        return $this->belongsToMany(Product::class, 'collection_product_complemented', 'collection_id', 'product_id');
     }
 
     ############# Appends :: Start #############

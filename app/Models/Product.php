@@ -122,40 +122,28 @@ class Product extends Model
         return $this->hasMany(ProductSpec::class);
     }
 
-    // many to many polymorphic relationship Product --> Relatable
-    public function relatable()
+    // many to many relationship Product --> Related Products
+    public function relatedProducts()
     {
-        return $this->morphToMany(Product::class, 'relatable')->withTimestamps();
+        return $this->belongsToMany(Product::class, 'product_product_related', 'first_product_id', 'second_product_id');
     }
 
-    // many to many polymorphic (inverse) relationship Product --> Relatable (Product)
-    public function relatableProducts()
+    // many to many relationship Product --> Related Collections
+    public function relatedCollections()
     {
-        return $this->morphedByMany(Product::class, 'relatable')->withTimestamps();
+        return $this->belongsToMany(Collection::class, 'collection_product_related', 'product_id', 'collection_id');
     }
 
-    // many to many polymorphic (inverse) relationship Product --> Relatable (Collection)
-    public function relatableCollections()
+    // many to many relationship Product --> Complemented Products
+    public function complementedProducts()
     {
-        return $this->morphedByMany(Collection::class, 'relatable')->withTimestamps();
+        return $this->belongsToMany(Product::class, 'product_product_complemented', 'first_product_id', 'second_product_id');
     }
 
-    // many to many polymorphic relationship Product --> Complementable
-    public function complementable()
+    // many to many relationship Product --> Complemented Collections
+    public function complementedCollections()
     {
-        return $this->morphToMany(Product::class, 'complementable')->withTimestamps();
-    }
-
-    // many to many polymorphic (inverse) relationship Product --> Complementable (Product)
-    public function complementableProducts()
-    {
-        return $this->morphedByMany(Product::class, 'complementable')->withTimestamps();
-    }
-
-    // many to many polymorphic (inverse) relationship Product --> Complementable (Collection)
-    public function complementableCollections()
-    {
-        return $this->morphedByMany(Collection::class, 'complementable')->withTimestamps();
+        return $this->belongsToMany(Collection::class, 'collection_product_complemented', 'product_id', 'collection_id');
     }
 
     public function validOffers()
@@ -490,8 +478,8 @@ class Product extends Model
                     ]),
                     'subcategories' => fn ($q) => $q->with([
                         'offers' => fn ($q) => $q
-                        ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                        ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
+                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
                     ]),
                     'categories' => fn ($q) => $q->with([
                         'offers' => fn ($q) => $q

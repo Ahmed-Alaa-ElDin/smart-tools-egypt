@@ -56,11 +56,44 @@ class CollectionController extends Controller
             ])->with([
                 'brand', 'thumbnail'
             ]),
-            'reviews' => fn ($q) => $q->with('user')
+            'reviews' => fn ($q) => $q->with('user'),
+            'relatedProducts' => fn ($q) => $q->select('products.id'),
+            'relatedCollections' => fn ($q) => $q->select('collections.id'),
+            'complementedProducts' => fn ($q) => $q->select('products.id'),
+            'complementedCollections' => fn ($q) => $q->select('collections.id'),
         ])->findOrFail($id);
 
+        // Get all products ids
+        $relatedProductsIds = $collection->relatedProducts->pluck('id')->toArray();
+        $complementedProductsIds = $collection->complementedProducts->pluck('id')->toArray();
+
+        $allProductsIds = array_merge($relatedProductsIds, $complementedProductsIds);
+
+        // Get all collections ids
+        $collectionId = $collection->id;
+        $relatedCollectionsIds = $collection->relatedCollections->pluck('id')->toArray();
+        $complementedCollectionsIds = $collection->complementedCollections->pluck('id')->toArray();
+
+        $allCollectionsIds = array_merge([$collectionId], $relatedCollectionsIds, $complementedCollectionsIds);
+
+        // Get the product's Best Offer for all products
+        $productsOffers = getBestOfferForProducts($allProductsIds);
+
+        // Get the product's Best Offer for all collections
+        $collectionsOffers = getBestOfferForCollections($allCollectionsIds);
+
         // Get the collection's Best Offer
-        $collection_offer = getBestOfferForCollection($id);
+        $collection_offer = $collectionsOffers->where('id', $collectionId)->first();
+
+        // Get the product's related products and collections
+        $relatedProducts = $productsOffers->whereIn('id', $relatedProductsIds);
+        $relatedCollections = $collectionsOffers->whereIn('id', $relatedCollectionsIds);
+        $relatedItems = $relatedProducts->concat($relatedCollections)->toArray();
+
+        // Get the product's complemented products and collections
+        $complementedProducts = $productsOffers->whereIn('id', $complementedProductsIds);
+        $complementedCollections = $collectionsOffers->whereIn('id', $complementedCollectionsIds);
+        $complementedItems = $complementedProducts->concat($complementedCollections)->toArray();
 
         // Get the collection's data from the cart
         $collection_cart = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($id) {
@@ -70,7 +103,7 @@ class CollectionController extends Controller
         // Get the app locale
         $locale = session('locale');
 
-        return view('front.collection_page.collection_page', compact('collection', 'collection_offer', 'collection_cart', 'locale'));
+        return view('front.collection_page.collection_page', compact('collection', 'collection_offer', 'relatedItems', 'complementedItems', 'collection_cart', 'locale'));
     }
 
     /**

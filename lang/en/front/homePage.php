@@ -392,7 +392,7 @@ return [
     "Share on Facebook"         =>      "Share on Facebook",
     "Copy link"                 =>      "Copy link",
     "You'll get: "              =>      "You'll get: ",
-    "Products in the offer"     =>      "Products in the offer",
+    "Products in the Collection"     =>      "Products in the Collection",
     "Cart Summary"                          =>      "Cart Summary",
     "Subtotal before products discounts"    =>      "Subtotal before products discounts",
     "Subtotal after products discounts:"    =>      "Subtotal after products discounts:",

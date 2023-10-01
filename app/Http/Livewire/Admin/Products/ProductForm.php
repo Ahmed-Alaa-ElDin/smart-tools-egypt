@@ -120,7 +120,7 @@ class ProductForm extends Component
                     'subcategories' => fn ($q) => $q->with(
                         ['category' => fn ($q) => $q->with(['supercategory', 'offers'])]
                     ),
-                    'relatableProducts' => fn ($q) => $q->select([
+                    'relatedProducts' => fn ($q) => $q->select([
                         'products.id',
                         'products.name',
                         'products.slug',
@@ -128,14 +128,14 @@ class ProductForm extends Component
                     ])->with(
                         ['brand' => fn ($q) => $q->select('id', 'name'), 'thumbnail']
                     ),
-                    'relatableCollections' => fn ($q) => $q->select([
+                    'relatedCollections' => fn ($q) => $q->select([
                         'collections.id',
                         'collections.name',
                         'collections.slug',
                     ])->with(
                         ['thumbnail']
                     ),
-                    'complementableProducts' => fn ($q) => $q->select([
+                    'complementedProducts' => fn ($q) => $q->select([
                         'products.id',
                         'products.name',
                         'products.slug',
@@ -143,7 +143,7 @@ class ProductForm extends Component
                     ])->with(
                         ['brand' => fn ($q) => $q->select('id', 'name'), 'thumbnail']
                     ),
-                    'complementableCollections' => fn ($q) => $q->select([
+                    'complementedCollections' => fn ($q) => $q->select([
                         'collections.id',
                         'collections.name',
                         'collections.slug',
@@ -253,15 +253,15 @@ class ProductForm extends Component
             $this->seo_keywords = $product->meta_keywords;
 
             // Get Old Complementary Products
-            $complementaryProduct = $product->complementableProducts->toArray();
-            $complementaryCollection = $product->complementableCollections->toArray();
+            $complementaryProduct = $product->complementedProducts->toArray();
+            $complementaryCollection = $product->complementedCollections->toArray();
             $this->complementaryItems = array_merge($this->complementaryItems, $complementaryProduct, $complementaryCollection);
             $this->complementaryProductsIds = array_map(fn ($product) => $product['id'], $complementaryProduct);
             $this->complementaryCollectionsIds = array_map(fn ($product) => $product['id'], $complementaryCollection);
 
             // Get Old Related Products
-            $relatedProduct = $product->relatableProducts->toArray();
-            $relatedCollection = $product->relatableCollections->toArray();
+            $relatedProduct = $product->relatedProducts->toArray();
+            $relatedCollection = $product->relatedCollections->toArray();
             $this->relatedItems = array_merge($this->relatedItems, $relatedProduct, $relatedCollection);
             $this->relatedProductsIds = array_map(fn ($product) => $product['id'], $relatedProduct);
             $this->relatedCollectionsIds = array_map(fn ($product) => $product['id'], $relatedCollection);
@@ -272,9 +272,40 @@ class ProductForm extends Component
             $product = Product::with(
                 [
                     'specs',
+                    'images',
                     'subcategories' => fn ($q) => $q->with(
                         ['category' => fn ($q) => $q->with(['supercategory', 'offers'])]
-                    )
+                    ),
+                    'relatedProducts' => fn ($q) => $q->select([
+                        'products.id',
+                        'products.name',
+                        'products.slug',
+                        'products.brand_id',
+                    ])->with(
+                        ['brand' => fn ($q) => $q->select('id', 'name'), 'thumbnail']
+                    ),
+                    'relatedCollections' => fn ($q) => $q->select([
+                        'collections.id',
+                        'collections.name',
+                        'collections.slug',
+                    ])->with(
+                        ['thumbnail']
+                    ),
+                    'complementedProducts' => fn ($q) => $q->select([
+                        'products.id',
+                        'products.name',
+                        'products.slug',
+                        'products.brand_id',
+                    ])->with(
+                        ['brand' => fn ($q) => $q->select('id', 'name'), 'thumbnail']
+                    ),
+                    'complementedCollections' => fn ($q) => $q->select([
+                        'collections.id',
+                        'collections.name',
+                        'collections.slug',
+                    ])->with(
+                        ['thumbnail']
+                    ),
                 ]
             )->findOrFail($this->old_product_id);
 
@@ -335,6 +366,20 @@ class ProductForm extends Component
 
             // SEO
             $this->seo_keywords = $product->meta_keywords;
+
+            // Get Old Complementary Products
+            $complementaryProduct = $product->complementedProducts->toArray();
+            $complementaryCollection = $product->complementedCollections->toArray();
+            $this->complementaryItems = array_merge($this->complementaryItems, $complementaryProduct, $complementaryCollection);
+            $this->complementaryProductsIds = array_map(fn ($product) => $product['id'], $complementaryProduct);
+            $this->complementaryCollectionsIds = array_map(fn ($product) => $product['id'], $complementaryCollection);
+
+            // Get Old Related Products
+            $relatedProduct = $product->relatedProducts->toArray();
+            $relatedCollection = $product->relatedCollections->toArray();
+            $this->relatedItems = array_merge($this->relatedItems, $relatedProduct, $relatedCollection);
+            $this->relatedProductsIds = array_map(fn ($product) => $product['id'], $relatedProduct);
+            $this->relatedCollectionsIds = array_map(fn ($product) => $product['id'], $relatedCollection);
         }
         // If new product
         else {
@@ -684,6 +729,8 @@ class ProductForm extends Component
     ######################## Fetch Products Or Collections :: Start ############################
     private function fetchProductsOrCollections(string $searchTerm, string $type, array $excludeIds = [])
     {
+        $searchTerm = strtolower($searchTerm);
+
         if ($type == self::PRODUCT) {
             return Product::select([
                 'id',
@@ -693,14 +740,14 @@ class ProductForm extends Component
                 ->with([
                     'brand' => function ($q) {
                         $q->select('id', 'name');
-                    }, 'thumbnail'
+                    },
+                    'thumbnail'
                 ])
                 ->whereNotIn('id', $excludeIds)
                 ->where(function ($q) use ($searchTerm) {
-                    $q->where('name->en', 'like', '%' . $searchTerm . '%')
-                        ->orWhere('name->ar', 'like', '%' . $searchTerm . '%')
+                    $q->whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%'])
                         ->orWhereHas('brand', function ($q) use ($searchTerm) {
-                            $q->where('name', 'like', '%' . $searchTerm . '%');
+                            $q->whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%']);
                         });
                 })
                 ->limit(self::LIMIT)
@@ -716,8 +763,7 @@ class ProductForm extends Component
                 ])
                 ->whereNotIn('id', $excludeIds)
                 ->where(function ($q) use ($searchTerm) {
-                    $q->where('name->en', 'like', '%' . $searchTerm . '%')
-                        ->orWhere('name->ar', 'like', '%' . $searchTerm . '%');
+                    $q->whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%']);
                 })
                 ->limit(self::LIMIT)
                 ->get();
@@ -896,14 +942,14 @@ class ProductForm extends Component
 
             // Add Complementary Products
             if (count($this->complementaryItems)) {
-                $product->complementableProducts()->sync($this->complementaryProductsIds);
-                $product->complementableCollections()->sync($this->complementaryCollectionsIds);
+                $product->complementedProducts()->sync($this->complementaryProductsIds);
+                $product->complementedCollections()->sync($this->complementaryCollectionsIds);
             }
 
             // Add Related Products
             if (count($this->relatedItems)) {
-                $product->relatableProducts()->sync($this->relatedProductsIds);
-                $product->relatableCollections()->sync($this->relatedCollectionsIds);
+                $product->relatedProducts()->sync($this->relatedProductsIds);
+                $product->relatedCollections()->sync($this->relatedCollectionsIds);
             }
 
             DB::commit();
@@ -922,7 +968,7 @@ class ProductForm extends Component
             }
         } catch (\Throwable $th) {
             DB::rollBack();
-            // throw $th;
+            throw $th;
             Session::flash('error', __("admin/productsPages.Product hasn't been added"));
             redirect()->route('admin.products.index');
         }
@@ -1019,14 +1065,14 @@ class ProductForm extends Component
 
             // Add Complementary Products
             if (count($this->complementaryItems)) {
-                $this->product->complementableProducts()->sync($this->complementaryProductsIds);
-                $this->product->complementableCollections()->sync($this->complementaryCollectionsIds);
+                $this->product->complementedProducts()->sync($this->complementaryProductsIds);
+                $this->product->complementedCollections()->sync($this->complementaryCollectionsIds);
             }
 
             // Add Related Products
             if (count($this->relatedItems)) {
-                $this->product->relatableProducts()->sync($this->relatedProductsIds);
-                $this->product->relatableCollections()->sync($this->relatedCollectionsIds);
+                $this->product->relatedProducts()->sync($this->relatedProductsIds);
+                $this->product->relatedCollections()->sync($this->relatedCollectionsIds);
             }
 
             DB::commit();
@@ -1036,8 +1082,7 @@ class ProductForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            throw $th;
-
+            // throw $th;
             Session::flash('error', __("admin/productsPages.Product hasn't been updated"));
             redirect()->route('admin.products.index');
         }

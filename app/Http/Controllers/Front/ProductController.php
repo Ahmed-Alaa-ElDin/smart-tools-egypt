@@ -54,24 +54,24 @@ class ProductController extends Controller
             'images' => fn ($q) => $q->where('is_thumbnail', 0)->orderBy('featured', 'desc'),
             'brand',
             'reviews' => fn ($q) => $q->with('user'),
-            'relatableProducts' => fn ($q) => $q->select('products.id'),
-            'relatableCollections' => fn ($q) => $q->select('collections.id'),
-            'complementableProducts' => fn ($q) => $q->select('products.id'),
-            'complementableCollections' => fn ($q) => $q->select('collections.id'),
+            'relatedProducts' => fn ($q) => $q->select('products.id'),
+            'relatedCollections' => fn ($q) => $q->select('collections.id'),
+            'complementedProducts' => fn ($q) => $q->select('products.id'),
+            'complementedCollections' => fn ($q) => $q->select('collections.id'),
         ])->findOrFail($id);
 
         // Get all products ids
         $productId = $product->id;
-        $relatableProductsIds = $product->relatableProducts->pluck('id')->toArray();
-        $complementableProductsIds = $product->complementableProducts->pluck('id')->toArray();
+        $relatedProductsIds = $product->relatedProducts->pluck('id')->toArray();
+        $complementedProductsIds = $product->complementedProducts->pluck('id')->toArray();
 
-        $allProductsIds = array_merge([$productId], $relatableProductsIds, $complementableProductsIds);
+        $allProductsIds = array_merge([$productId], $relatedProductsIds, $complementedProductsIds);
 
         // Get all collections ids
-        $relatableCollectionsIds = $product->relatableCollections->pluck('id')->toArray();
-        $complementableCollectionsIds = $product->complementableCollections->pluck('id')->toArray();
+        $relatedCollectionsIds = $product->relatedCollections->pluck('id')->toArray();
+        $complementedCollectionsIds = $product->complementedCollections->pluck('id')->toArray();
 
-        $allCollectionsIds = array_merge($relatableCollectionsIds, $complementableCollectionsIds);
+        $allCollectionsIds = array_merge($relatedCollectionsIds, $complementedCollectionsIds);
 
         // Get the product's Best Offer for all products
         $productsOffers = getBestOfferForProducts($allProductsIds);
@@ -83,14 +83,14 @@ class ProductController extends Controller
         $productOffer = $productsOffers->where('id', $productId)->first();
 
         // Get the product's related products and collections
-        $relatedProducts = $productsOffers->whereIn('id', $relatableProductsIds);
-        $relatedCollections = $collectionsOffers->whereIn('id', $relatableCollectionsIds);
+        $relatedProducts = $productsOffers->whereIn('id', $relatedProductsIds);
+        $relatedCollections = $collectionsOffers->whereIn('id', $relatedCollectionsIds);
         $relatedItems = $relatedProducts->concat($relatedCollections)->toArray();
 
-        // Get the product's complementable products and collections
-        $complementableProducts = $productsOffers->whereIn('id', $complementableProductsIds);
-        $complementableCollections = $collectionsOffers->whereIn('id', $complementableCollectionsIds);
-        $complementableItems = $complementableProducts->concat($complementableCollections)->toArray();
+        // Get the product's complemented products and collections
+        $complementedProducts = $productsOffers->whereIn('id', $complementedProductsIds);
+        $complementedCollections = $collectionsOffers->whereIn('id', $complementedCollectionsIds);
+        $complementedItems = $complementedProducts->concat($complementedCollections)->toArray();
 
         // Get the product's data from the cart
         $product_cart = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($id) {
@@ -100,7 +100,7 @@ class ProductController extends Controller
         // Get the app locale
         $locale = session('locale');
 
-        return view('front.product_page.product_page', compact('product', 'productOffer', 'relatedItems', 'complementableItems', 'product_cart', 'locale'));
+        return view('front.product_page.product_page', compact('product', 'productOffer', 'relatedItems', 'complementedItems', 'product_cart', 'locale'));
     }
 
     /**

@@ -608,7 +608,7 @@
         </section>
 
         {{-- Complementary Products :: Start --}}
-        @if (count($complementableItems))
+        @if (count($complementedItems))
             <section class="col-span-12 flex flex-col gap-2 bg-white rounded shadow-lg p-4">
 
                 <h3 class="text-2xl font-bold text-center text-gray-700 mb-4">
@@ -620,7 +620,7 @@
                     <div class="splide__track">
                         {{-- List of Products : Start --}}
                         <ul class="splide__list">
-                            @foreach ($complementableItems as $item)
+                            @foreach ($complementedItems as $item)
                                 {{-- Product : Start --}}
                                 <x-front.product-box-small :item="$item" />
                                 {{-- Product : End --}}
