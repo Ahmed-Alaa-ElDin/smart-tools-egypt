@@ -2,11 +2,10 @@
 
 namespace App\Http\Livewire\Front\Homepage;
 
-use App\Models\Banner;
-use App\Models\Product;
+use Livewire\Component;
 use App\Models\Subcategory;
 use App\Models\Supercategory;
-use Livewire\Component;
+use App\Models\MainSliderBanner;
 
 class MainSlider extends Component
 {
@@ -15,7 +14,10 @@ class MainSlider extends Component
 
     public function mount()
     {
-        $this->banners = Banner::where('rank', '<=', 10)->orderBy('rank')->get();
+        $this->banners = MainSliderBanner::with("banner")
+            ->where('rank', "<=", 10)
+            ->orderBy("rank")
+            ->get();
 
         $this->topSupercategories = Supercategory::select('id', 'name', 'icon', 'top')->with([
             'categories' => function ($q) {

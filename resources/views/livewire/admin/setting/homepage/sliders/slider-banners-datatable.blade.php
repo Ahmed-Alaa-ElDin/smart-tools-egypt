@@ -15,7 +15,7 @@
                             search
                         </span>
                     </span>
-                    <input type="text"   wire:model='search'
+                    <input type="text" wire:model='search'
                         class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                         placeholder="{{ __('admin/sitePages.Search ...') }}">
                 </div>
@@ -44,35 +44,26 @@
                         <thead class="bg-gray-50">
                             <tr>
 
-                                <th>
-
-                                </th>
+                                <th></th>
 
                                 {{-- Rank --}}
-                                <th wire:click="sortBy('rank')" scope="col"
+                                <th scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
-                                        {{ __('admin/sitePages.Rank') }}&nbsp;
-                                        @include('partials._sort_icon', ['field' => 'rank'])
+                                        {{ __('admin/sitePages.Rank') }}
                                     </div>
                                 </th>
 
                                 {{-- Descrition --}}
-                                <th wire:click="sortBy('description->{{ session('locale') }}')" scope="col"
+                                <th scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
-                                    {{ __('admin/sitePages.Description') }} &nbsp;
-                                    @include('partials._sort_icon', [
-                                        'field' => 'description->' . session('locale'),
-                                    ])
+                                    {{ __('admin/sitePages.Description') }} 
                                 </th>
 
                                 {{-- Link --}}
-                                <th wire:click="sortBy('link')" scope="col"
+                                <th scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/sitePages.Link') }}
-                                    @include('partials._sort_icon', [
-                                        'field' => 'link',
-                                    ])
                                 </th>
 
                                 {{-- Manage --}}
@@ -90,9 +81,9 @@
                                 <tr class="@if ($key % 2 == 0) bg-red-100 @else bg-gray-100 @endif">
                                     {{-- Image Preview --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
-                                        <span wire:click="togglePreview({{ $banner->id }})"
-                                            class="material-icons rounded-circle w-7 h-7 text-center text-white text-lg bg-secondary select-none cursor-pointer">
-                                            @if (in_array($banner->id, $preview_ids))
+                                        <span class="material-icons rounded-circle w-7 h-7 text-center text-white text-lg bg-secondary select-none cursor-pointer"
+                                        wire:click="togglePreview({{ $banner->banner->id }})">
+                                            @if (in_array($banner->banner->id, $preview_ids))
                                                 remove
                                             @else
                                                 add
@@ -159,9 +150,9 @@
 
                                     {{-- Description --}}
                                     <td class="px-6 py-2 whitespace-nowrap">
-                                        <div class="flex items-center content-center justify-center">
-                                            <div class="text-sm font-medium text-gray-900">
-                                                {{ $banner->description }}
+                                        <div class="flex items-center content-center justify-center w-44">
+                                            <div class="text-sm font-medium text-gray-900 truncate">
+                                                {{ $banner->banner->description }}
                                             </div>
                                         </div>
                                     </td>
@@ -170,7 +161,7 @@
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
                                         <div class="flex items-center content-center justify-center">
                                             <div class="text-sm font-medium text-gray-900">
-                                                {{ $banner->link }}
+                                                {{ $banner->banner->link }}
                                             </div>
                                         </div>
                                     </td>
@@ -178,7 +169,7 @@
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- Edit Button --}}
-                                        <a href="{{ route('admin.setting.homepage.banners.edit', [$banner->id]) }}"
+                                        <a href="{{ route('admin.setting.general.banners.edit', [$banner->banner->id]) }}"
                                             title="{{ __('admin/sitePages.Edit') }}" class="m-0">
                                             <span
                                                 class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
@@ -197,10 +188,10 @@
                                         </a>
                                     </td>
                                 </tr>
-                                @if (in_array($banner->id, $preview_ids))
+                                @if (in_array($banner->banner->id, $preview_ids))
                                     <tr class="@if ($key % 2 == 0) bg-red-100 @else bg-gray-100 @endif">
                                         <td colspan="5" class="text-center px-6 py-2">
-                                            <img src="{{ asset('storage/images/banners/original/' . $banner->banner_name) }}"
+                                            <img src="{{ asset('storage/images/banners/original/' . $banner->banner->banner_name) }}"
                                                 class="rounded-xl h-24 m-auto">
                                         </td>
                                     </tr>
@@ -208,7 +199,7 @@
                             @empty
                                 <tr>
                                     <td class="text-center py-2 font-bold" colspan="5">
-                                        {{ $search == ''? __('admin/sitePages.No data in this table'): __('admin/sitePages.No data available according to your search') }}
+                                        {{ $search == '' ? __('admin/sitePages.No data in this table') : __('admin/sitePages.No data available according to your search') }}
                                     </td>
                                 </tr>
                             @endforelse

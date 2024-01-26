@@ -350,5 +350,8 @@ return [
     "Through this form you can copy collections' data"                      =>      "من خلال هذه الصفحة يمكنك نسخ بيانات التجميعة",
     "Related Products"                                                      =>      "اكتشف عالم العدد",
     "Complementary Products"                                                =>      "الشيء لزوم الشيء",
+    "Are you sure, you want to delete this banner ?"                        =>      "هل أنت متأكد من حذف البانر ؟",
+    "Banner has been deleted successfully"                                  =>      "تم حذف البانر بنجاح",
+    "Banner hasn't been deleted"                                            =>      "لم يتم حذف البانر",
 
 ];

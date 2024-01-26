@@ -10,8 +10,13 @@
                     <a href="{{ route('front.homepage') }}"
                         class="flex items-center gap-2 simple-text logo-normal uppercase font-bold hover:text-current">
                         <img src="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}" alt="Smart Tools Egypt Logo">
-                        <span class="hidden md:block">
-                            {{ __('front/homePage.Smart Tools Egypt') }}
+                        <span class="hidden flex-col items-center justify-center md:flex">
+                            <span>
+                                {{ __('front/homePage.Smart Tools Egypt') }}
+                            </span>
+                            <span class="text-xs">
+                                موقع تجريبي
+                            </span>
                         </span>
                     </a>
                 </div>

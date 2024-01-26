@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Setting\Homepage\Banners;
+namespace App\Http\Livewire\Admin\Setting\General\Banners;
 
 use App\Models\Banner;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +13,6 @@ class BannerForm extends Component
     use WithFileUploads;
 
     public $banner_id;
-
     public $banner;
     public $banner_model;
     public $banner_name;
@@ -30,7 +29,6 @@ class BannerForm extends Component
             "description"                   =>      "array",
             "description.ar"                =>      "required|string|max:100",
             "description.en"                =>      "required|string|max:100",
-            "rank"                          =>      "required|min:0|max:127|exclude_if:rank,127|unique:banners,rank," . $this->banner_id,
             'link'                          =>      "nullable",
         ];
     }
@@ -54,7 +52,6 @@ class BannerForm extends Component
             ];
 
             $this->link = $banner->link;
-            $this->rank = $banner->rank;
             $this->banner_name = $banner->banner_name;
         }
     }
@@ -90,8 +87,6 @@ class BannerForm extends Component
     ######################## Save New Banner : Start ############################
     public function save($new = false)
     {
-
-        // dd($this->description);
         $this->validate();
 
         DB::beginTransaction();
@@ -104,7 +99,6 @@ class BannerForm extends Component
                 ],
                 'link' => $this->link ?? null,
                 'banner_name' => $this->banner_name ?? null,
-                'rank' => $this->rank == 0 || $this->rank > 10 || !$this->rank  ? 127 : $this->rank,
             ]);
 
 
@@ -116,16 +110,15 @@ class BannerForm extends Component
 
             if ($new) {
                 Session::flash('success', __('admin/sitePages.Banner added successfully'));
-                redirect()->route('admin.setting.homepage.banners.create');
+                redirect()->route('admin.setting.general.banners.create');
             } else {
                 Session::flash('success', __('admin/sitePages.Banner added successfully'));
-                redirect()->route('admin.setting.homepage.banners.index');
+                redirect()->route('admin.setting.general.banners.index');
             }
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
             Session::flash('error', __("admin/sitePages.Banner hasn't been added"));
-            redirect()->route('admin.setting.homepage.banners.index');
+            redirect()->route('admin.setting.general.banners.index');
         }
     }
     ######################## Save New Banner : End ############################
@@ -145,7 +138,6 @@ class BannerForm extends Component
                 ],
                 'link' => $this->link ?? null,
                 'banner_name' => $this->banner_name ?? null,
-                'rank' => $this->rank == 0 || $this->rank > 10 || !$this->rank  ? 127 : $this->rank,
             ]);
 
             DB::commit();
@@ -155,12 +147,11 @@ class BannerForm extends Component
             }
 
             Session::flash('success', __('admin/sitePages.Banner updated successfully'));
-            redirect()->route('admin.setting.homepage.banners.index');
+            redirect()->route('admin.setting.general.banners.index');
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
             Session::flash('error', __("admin/sitePages.Banner hasn't been updated"));
-            redirect()->route('admin.setting.homepage.banners.index');
+            redirect()->route('admin.setting.general.banners.index');
         }
     }
     ######################## Save Updated Banner : End ############################

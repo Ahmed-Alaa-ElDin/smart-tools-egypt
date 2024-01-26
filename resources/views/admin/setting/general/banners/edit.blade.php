@@ -1,5 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Site Control', 'activePage' => '', 'titlePage'
-=> __("admin/sitePages.Edit Banner")])
+@extends('layouts.admin.admin', ['activeSection' => 'Site Control', 'activePage' => 'general', 'titlePage' => __('admin/sitePages.Edit Banner')])
 
 @section('content')
     <div class="content">
@@ -8,19 +7,17 @@
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb text-sm">
                     <li class="breadcrumb-item hover:text-primary">
-                        <a href="{{ route('admin.dashboard') }}">{{ __('admin/sitePages.Dashboard') }}
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item hover:text-primary">
-                        <a href="{{ route('admin.setting.homepage') }}">
-                            {{ __('admin/sitePages.Homepage Control') }}
+                        <a href="{{ route('admin.dashboard') }}">
+                            {{ __('admin/sitePages.Dashboard') }}
                         </a>
                     </li>
 
                     <li class="breadcrumb-item hover:text-primary">
-                        <a href="{{ route('admin.setting.homepage.banners.index') }}">{{ __("admin/sitePages.Homepage's Slider Control") }}
+                        <a href="{{ route('admin.setting.general') }}">
+                            {{ __('admin/sitePages.General Settings') }}
                         </a>
                     </li>
+
                     <li class="breadcrumb-item active" aria-current="page">
                         {{ __('admin/sitePages.Edit Banner') }}
                     </li>
@@ -47,7 +44,8 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
 
-                            @livewire('admin.setting.homepage.banners.banner-form',['banner_id'=> $banner])
+                            {{-- Form Start --}}
+                            @livewire('admin.setting.general.banners.banner-form', ['banner_id' => $banner_id])
 
                         </div>
                     </div>
@@ -56,3 +54,4 @@
         </div>
     </div>
 @endsection
+

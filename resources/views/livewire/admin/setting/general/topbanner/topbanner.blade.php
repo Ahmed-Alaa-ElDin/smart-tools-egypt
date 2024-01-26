@@ -96,11 +96,11 @@
 
         {{-- Link Start --}}
         <div
-            class="col-span-12 col-start-0 md:col-span-6 md:col-start-4 w-full grid grid-cols-12 gap-x-4 gap-y-2 items-center bg-red-100 rounded text-center">
+            class="col-span-12 w-full grid grid-cols-12 gap-x-4 gap-y-2 items-center bg-red-100 rounded text-center">
             <label for="link"
-                class="col-span-12 md:col-span-3 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer">{{ __('admin/sitePages.Link') }}</label>
+                class="col-span-12 md:col-span-2 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer">{{ __('admin/sitePages.Link') }}</label>
             {{-- Link --}}
-            <div class="col-span-12 md:col-span-9">
+            <div class="col-span-12 md:col-span-10">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('link') border-red-900 border-2 @enderror"
                     type="url" wire:model.lazy="link" id="link"
@@ -123,7 +123,7 @@
         <button type="button" wire:click.prevent="update"
             class="bg-success hover:bg-successDark text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Update') }}</button>
         {{-- Back --}}
-        <a href="{{ route('admin.setting.homepage') }}"
+        <a href="{{ route('admin.setting.general') }}"
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Back') }}</a>
     </div>
     {{-- Buttons Section End --}}

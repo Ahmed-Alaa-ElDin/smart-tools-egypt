@@ -69,9 +69,9 @@
                 <ul class="splide__list shadow">
                     @foreach ($banners as $banner)
                         <li class="splide__slide">
-                            <a href="{{ $banner->link }}">
-                                <img src="{{ asset('storage/images/banners/original/' . $banner->banner_name) }}"
-                                    class="" alt="{{ $banner->description }}">
+                            <a href="{{ $banner->banner->link }}">
+                                <img src="{{ asset('storage/images/banners/original/' . $banner->banner->banner_name) }}"
+                                    class="" alt="{{ $banner->banner->description }}">
                             </a>
                         </li>
                     @endforeach

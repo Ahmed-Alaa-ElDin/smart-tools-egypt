@@ -1,5 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Site Control', 'activePage' => '', 'titlePage'
-=> __("admin/sitePages.Homepage's Slider Control")])
+@extends('layouts.admin.admin', ['activeSection' => 'Site Control', 'activePage' => 'general', 'titlePage' => __('admin/sitePages.Banners List')])
 
 @section('content')
     <div class="content">
@@ -14,13 +13,13 @@
                     </li>
 
                     <li class="breadcrumb-item hover:text-primary">
-                        <a href="{{ route('admin.setting.homepage') }}">
-                            {{ __('admin/sitePages.Homepage Control') }}
+                        <a href="{{ route('admin.setting.general') }}">
+                            {{ __('admin/sitePages.General Settings') }}
                         </a>
                     </li>
 
                     <li class="breadcrumb-item active" aria-current="page">
-                        {{ __("admin/sitePages.Homepage's Slider Control") }}
+                        {{ __('admin/sitePages.Banners List') }}
                     </li>
                 </ol>
             </nav>
@@ -36,12 +35,12 @@
                             <div class="flex justify-between items-center">
                                 <div class=" ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
-                                        {{ __("admin/sitePages.Here you can manage homepage's main slider") }}</p>
+                                        {{ __("admin/sitePages.Here you can manage the banners of this website") }}</p>
                                 </div>
 
-                                {{-- Add New Home page section --}}
+                                {{-- Add New Banner --}}
                                 <div class="ltr:text-right rtl:text-left">
-                                    <a href="{{ route('admin.setting.homepage.banners.create') }}"
+                                    <a href="{{ route('admin.setting.general.banners.create') }}"
                                         class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
                                         <span class="material-icons rtl:ml-1 ltr:mr-1">
                                             add
@@ -51,17 +50,19 @@
                             </div>
                         </div>
 
-                        {{-- Card Body --}}
+                        {{-- Card Body :: Start --}}
                         <div class="card-body overflow-hidden">
 
-                            {{-- Datatable Start --}}
-                            @livewire('admin.setting.homepage.banners.banners-datatable')
-                            {{-- Datatable End --}}
+                            {{-- DataTable Start --}}
+                            @livewire('admin.setting.general.banners.banners-datatable')
+                            {{-- DataTable End --}}
 
                         </div>
+                        {{-- Card Body :: End --}}
                     </div>
                 </div>
             </section>
         </div>
     </div>
 @endsection
+

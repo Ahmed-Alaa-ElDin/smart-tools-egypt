@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Setting\Homepage\Banners;
+namespace App\Http\Livewire\Admin\Setting\Homepage\Sliders;
 
 use App\Models\Banner;
+use App\Models\MainSliderBanner;
 use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class BannersDatatable extends Component
+class SliderBannersDatatable extends Component
 {
     use WithPagination;
 
-    public $sortBy;
-    public $sortDirection = 'ASC';
     public $perPage;
 
     public $search = "";
@@ -26,23 +25,22 @@ class BannersDatatable extends Component
     public function mount()
     {
         $this->perPage = Config::get('constants.constants.PAGINATION');
-
-        $this->sortBy = 'rank';
     }
 
     // Render With each update
     public function render()
     {
-        $banners = Banner::where(function ($query) {
-            return $query
-                ->where('description->ar', 'like', '%' . $this->search . '%')
-                ->orWhere('description->en', 'like', '%' . $this->search . '%')
-                ->orWhere('link', 'like', '%' . $this->search . '%');
-        })->where("top_banner", 0)
-            ->orderBy($this->sortBy, $this->sortDirection)
+        $banners = MainSliderBanner::with([
+            "banner" => function ($q) {
+                $q->where('description->ar', 'like', '%' . $this->search . '%')
+                    ->orWhere('description->en', 'like', '%' . $this->search . '%')
+                    ->orWhere('link', 'like', '%' . $this->search . '%');
+            }
+        ])
+            ->orderBy("rank")
             ->paginate($this->perPage);
 
-        return view('livewire.admin.setting.homepage.banners.banners-datatable', compact('banners'));
+        return view('livewire.admin.setting.homepage.sliders.slider-banners-datatable', compact('banners'));
     }
 
     // reset pagination after new search
@@ -51,25 +49,9 @@ class BannersDatatable extends Component
         $this->resetPage();
     }
 
-    // Add conditions of sorting
-    public function sortBy($field)
-    {
-        if ($this->sortDirection == 'ASC') {
-            $this->sortDirection = 'DESC';
-        } else {
-            $this->sortDirection = 'ASC';
-        }
-
-        if ($field == 'description') {
-            return $this->sortBy = 'description->' . session('locale');
-        }
-
-        return $this->sortBy = $field;
-    }
-
     public function checkRank($rank, $old_rank)
     {
-        $banner = Banner::where('rank', $rank)->first();
+        $banner = MainSliderBanner::where('rank', $rank)->first();
 
         if ($banner) {
             $banner->rank = $old_rank;
@@ -82,7 +64,7 @@ class BannersDatatable extends Component
     ######## Rank UP : Start #########
     public function rankUp($banner_id)
     {
-        $banner = Banner::findOrFail($banner_id);
+        $banner = MainSliderBanner::findOrFail($banner_id);
 
         if ($banner->rank > 1) {
             if ($banner->rank == 127) {
@@ -100,7 +82,7 @@ class BannersDatatable extends Component
     ######## Rank Down : Start #########
     public function rankDown($banner_id)
     {
-        $banner = Banner::findOrFail($banner_id);
+        $banner = MainSliderBanner::findOrFail($banner_id);
 
         $this->checkRank($banner->rank + 1, $banner->rank);
 
@@ -145,7 +127,7 @@ class BannersDatatable extends Component
     public function deleteBanner($banner_id)
     {
         try {
-            $banner = Banner::findOrFail($banner_id);
+            $banner = MainSliderBanner::findOrFail($banner_id);
 
             $banner->delete();
 

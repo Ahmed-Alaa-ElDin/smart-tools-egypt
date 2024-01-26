@@ -2,30 +2,33 @@
 
 namespace App\Http\Controllers\Admin\Setting\Homepage;
 
-use App\Http\Controllers\Controller;
 use App\Models\Banner;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class BannerController extends Controller
+class SliderController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function index()
     {
-        return view('admin.setting.homepage.slider.index');
+        return view('admin.setting.homepage.sliders.index');
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function create()
     {
-        return view('admin.setting.homepage.slider.create');
+        $banners = Banner::all();
+
+        return view('admin.setting.homepage.sliders.create', compact('banners'));
     }
 
     /**
@@ -58,7 +61,7 @@ class BannerController extends Controller
      */
     public function edit($banner)
     {
-        return view('admin.setting.homepage.slider.edit', compact('banner'));
+        //
     }
 
     /**

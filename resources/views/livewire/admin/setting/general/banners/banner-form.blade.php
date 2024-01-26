@@ -96,11 +96,11 @@
 
         {{-- Link Start --}}
         <div
-            class="col-span-12 md:col-span-9 w-full grid grid-cols-12 gap-x-4 gap-y-2 items-center bg-red-100 rounded text-center">
+            class="col-span-12 w-full grid grid-cols-12 gap-x-4 gap-y-2 items-center bg-red-100 rounded text-center">
             <label for="link"
-                class="col-span-12 md:col-span-3 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer">{{ __('admin/sitePages.Link') }}</label>
+                class="col-span-12 md:col-span-2 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer">{{ __('admin/sitePages.Link') }}</label>
             {{-- Link --}}
-            <div class="col-span-12 md:col-span-9">
+            <div class="col-span-12 md:col-span-10">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('link') border-red-900 border-2 @enderror"
                     type="url" wire:model.lazy="link" id="link"
@@ -112,24 +112,6 @@
             </div>
         </div>
         {{-- Link End --}}
-
-        {{-- Rank Start --}}
-        <div class="col-span-6 col-start-4 md:col-span-3 grid grid-cols-2 gap-y-2 gap-x-2 items-center w-full">
-            <label for="rank"
-                class="col-span-1 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/sitePages.Rank') }}</label>
-            <div class="col-span-1">
-                <input type="number" id="rank" min="1" max="127" wire:model.lazy="rank"
-                    class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('rank') border-red-900 border-2 @enderror">
-
-                @error('rank')
-                    <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                        {{ $message }}</div>
-                @enderror
-            </div>
-
-        </div>
-        {{-- Rank End --}}
-
     </div>
     {{-- Banner Information End --}}
     {{-- ######################################################### --}}
@@ -149,7 +131,7 @@
                 class="bg-success hover:bg-successDark text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Save and Add New Banner') }}</button>
         @endif
         {{-- Back --}}
-        <a href="{{ route('admin.setting.homepage.banners.index') }}"
+        <a href="{{ route('admin.setting.general.banners.index') }}"
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/sitePages.Back') }}</a>
 
     </div>

@@ -16,8 +16,9 @@ class Banner extends Model
     protected $fillable = [
         'banner_name',
         'description',
-        'top_banner',
         'link',
+        'top_banner',
+        'slider',
         'rank',
         'active'
     ];
@@ -33,4 +34,21 @@ class Banner extends Model
         return $this->belongsToMany(Section::class);
     }
 
+    // One to many relationship  Banners --> MainSliders
+    public function mainSliderBanner()
+    {
+        return $this->hasOne(MainSliderBanner::class);
+    }
+
+    // Scope Slider
+    public function scopeSlider($query)
+    {
+        return $query->where('slider', 1);
+    }
+
+    // Scope Top Banner
+    public function scopeTopBanner($query)
+    {
+        return $query->where('top_banner', 1);
+    }
 }

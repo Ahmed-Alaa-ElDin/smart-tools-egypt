@@ -102,6 +102,7 @@ class Topbanner extends Component
                 ],
                 'link' => $this->link ?? null,
                 'banner_name' => $this->banner_name ?? null,
+                'top_banner' => 1
             ]);
 
             DB::commit();

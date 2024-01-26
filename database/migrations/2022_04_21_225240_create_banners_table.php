@@ -19,7 +19,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->tinyInteger('top_banner')->default(0)->comment('0 -> No , 1 -> Yes');
             $table->string('link')->nullable();
-            $table->tinyInteger('rank')->default(127);
             $table->timestamps();
         });
     }

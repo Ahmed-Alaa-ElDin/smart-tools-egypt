@@ -1,18 +1,18 @@
 <?php
 
-use App\Http\Controllers\Admin\Setting\Homepage\BannerController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\Setting\General\BannerController;
+use App\Http\Controllers\Admin\Setting\General\NavLinkController;
+use App\Http\Controllers\Admin\Setting\Homepage\SliderController;
+use App\Http\Controllers\Admin\Setting\General\TopBannerController;
 use App\Http\Controllers\Admin\Setting\Homepage\HomepageController;
-use App\Http\Controllers\Admin\Setting\Homepage\TodayDealsController;
+
 use App\Http\Controllers\Admin\Setting\Homepage\TopBrandsController;
+use App\Http\Controllers\Admin\Setting\Homepage\TodayDealsController;
+use App\Http\Controllers\Admin\Setting\General\generalSettingController;
 use App\Http\Controllers\Admin\Setting\Homepage\TopCategoriesController;
 use App\Http\Controllers\Admin\Setting\Homepage\TopSubcategoriesController;
 use App\Http\Controllers\Admin\Setting\Homepage\TopSuperCategoriesController;
-
-use App\Http\Controllers\Admin\Setting\General\TopBannerController;
-use App\Http\Controllers\Admin\Setting\General\generalSettingController;
-use App\Http\Controllers\Admin\Setting\General\NavLinkController;
-
-use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'setting/', 'as' => 'setting.'], function () {
 
@@ -28,6 +28,10 @@ Route::group(['prefix' => 'setting/', 'as' => 'setting.'], function () {
         // Nav Links : Start
         Route::resource('nav-link', NavLinkController::class);
         // Nav Links : End
+
+        // Banners : Start
+        Route::resource('banners', BannerController::class);
+        // Banners : End
     });
     // General : End
 
@@ -43,7 +47,7 @@ Route::group(['prefix' => 'setting/', 'as' => 'setting.'], function () {
 
 
         // Slider : Start
-        Route::resource('/banners', BannerController::class);
+        Route::resource('/sliders', SliderController::class);
         // Slider : End
 
         // Top Super Categories : Start
