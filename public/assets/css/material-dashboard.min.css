@@ -18582,7 +18582,18 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 input[type=number] {
+    -webkit-appearance: textfield;
+            appearance: textfield;
     -moz-appearance: textfield;
     margin: 0;
 }
 
+.products-list-popup {
+    max-width: 70vw;
+    max-height: 90vh;
+}
+
+/* select:not([size]) {
+    text-align: center;
+    background-position: center !important;
+} */

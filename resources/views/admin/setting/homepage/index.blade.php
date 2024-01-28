@@ -47,7 +47,7 @@
                         <div class="card-body overflow-hidden">
 
                             {{-- Static Part : Start --}}
-                            <div class="grid grid-cols-12 gap-4 justify-between items-center mb-3">
+                            <div class="grid grid-cols-12 gap-4 justify-between mb-3">
 
                                 {{-- Slider : Start --}}
                                 <a href="{{ route('admin.setting.homepage.sliders.index') }}"

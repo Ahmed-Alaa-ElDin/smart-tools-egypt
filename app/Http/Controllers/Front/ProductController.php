@@ -79,18 +79,40 @@ class ProductController extends Controller
         // Get the product's Best Offer for all collections
         $collectionsOffers = getBestOfferForCollections($allCollectionsIds);
 
+        // Get related/complementary products/collections id (key) and rank (value)
+        $relatedProductsRank = $product->relatedProducts->pluck('pivot.rank', 'id')->toArray();
+        $complementedProductsRank = $product->complementedProducts->pluck('pivot.rank', 'id')->toArray();
+        $relatedCollectionsRank = $product->relatedCollections->pluck('pivot.rank', 'id')->toArray();
+        $complementedCollectionsRank = $product->complementedCollections->pluck('pivot.rank', 'id')->toArray();
+
         // Main Product Offer
         $productOffer = $productsOffers->where('id', $productId)->first();
 
         // Get the product's related products and collections
-        $relatedProducts = $productsOffers->whereIn('id', $relatedProductsIds);
-        $relatedCollections = $collectionsOffers->whereIn('id', $relatedCollectionsIds);
-        $relatedItems = $relatedProducts->concat($relatedCollections)->toArray();
+        $relatedProducts = $productsOffers->whereIn('id', $relatedProductsIds)->map(function ($product) use ($relatedProductsRank) {
+            $product->rank = $relatedProductsRank[$product->id];
+            return $product;
+        });
+        $relatedCollections = $collectionsOffers->whereIn('id', $relatedCollectionsIds)->map(function ($collection) use ($relatedCollectionsRank) {
+            $collection->rank = $relatedCollectionsRank[$collection->id];
+            return $collection;
+        });
+        $relatedItems = $relatedProducts->concat($relatedCollections)
+            ->sortBy('rank')
+            ->toArray();
 
         // Get the product's complemented products and collections
-        $complementedProducts = $productsOffers->whereIn('id', $complementedProductsIds);
-        $complementedCollections = $collectionsOffers->whereIn('id', $complementedCollectionsIds);
-        $complementedItems = $complementedProducts->concat($complementedCollections)->toArray();
+        $complementedProducts = $productsOffers->whereIn('id', $complementedProductsIds)->map(function ($product) use ($complementedProductsRank) {
+            $product->rank = $complementedProductsRank[$product->id];
+            return $product;
+        });
+        $complementedCollections = $collectionsOffers->whereIn('id', $complementedCollectionsIds)->map(function ($collection) use ($complementedCollectionsRank) {
+            $collection->rank = $complementedCollectionsRank[$collection->id];
+            return $collection;
+        });
+        $complementedItems = $complementedProducts->concat($complementedCollections)
+            ->sortBy('rank')
+            ->toArray();
 
         // Get the product's data from the cart
         $product_cart = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($id) {

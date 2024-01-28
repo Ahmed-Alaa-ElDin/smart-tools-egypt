@@ -353,5 +353,8 @@ return [
     "Are you sure, you want to delete this banner ?"                        =>      "هل أنت متأكد من حذف البانر ؟",
     "Banner has been deleted successfully"                                  =>      "تم حذف البانر بنجاح",
     "Banner hasn't been deleted"                                            =>      "لم يتم حذف البانر",
-
+    "Add Selected"                                                          =>      "إضافة",
+    "Product List"                                                          =>      "قائمة المنتجات",
+    "Add Products"                                                          =>      "اضافة منتجات",
+    "Clear Products"                                                        =>      "ازالة المنتجات",
 ];

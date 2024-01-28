@@ -130,7 +130,9 @@ class Product extends Model
             'product_product_related',
             'first_product_id',
             'second_product_id'
-        );
+        )->withPivot([
+            'rank',
+        ]);
     }
 
     // many to many relationship Product --> Related Collections
@@ -141,7 +143,9 @@ class Product extends Model
             'collection_product_related',
             'product_id',
             'collection_id'
-        );
+        )->withPivot([
+            'rank',
+        ]);
     }
 
     // many to many relationship Product --> Complemented Products
@@ -152,7 +156,9 @@ class Product extends Model
             'product_product_complemented',
             'first_product_id',
             'second_product_id'
-        );
+        )->withPivot([
+            'rank',
+        ]);
     }
 
     // many to many relationship Product --> Complemented Collections
@@ -163,7 +169,9 @@ class Product extends Model
             'collection_product_complemented',
             'product_id',
             'collection_id'
-        );
+        )->withPivot([
+            'rank',
+        ]);
     }
 
     public function validOffers()

@@ -37,7 +37,19 @@
                         <div class="card-body overflow-hidden">
 
                             {{-- Static Part : Start --}}
-                            <div class="grid grid-cols-12 gap-4 justify-between items-center mb-3">
+                            <div class="grid grid-cols-12 gap-4 justify-between mb-3">
+
+                                {{-- Banners List : Start --}}
+                                <a href="{{ route('admin.setting.general.banners.index') }}"
+                                    class="col-span-6 md:col-span-3 bg-gray-100 rounded-xl shadow hover:shadow-lg cursor-pointer p-3 flex flex-col justify-center items-center gap-3">
+                                    <span class="material-icons text-center text-9xl ">
+                                        view_carousel
+                                    </span>
+                                    <span class="text-center font-bold">
+                                        {{ __('admin/sitePages.Banners List') }}
+                                    </span>
+                                </a>
+                                {{-- Banners List : End --}}
 
                                 {{-- Top Banner Bar : Start --}}
                                 <a href="{{ route('admin.setting.general.topbanner.index') }}"
@@ -65,18 +77,6 @@
                                     </span>
                                 </a>
                                 {{-- Slider : End --}}
-
-                                {{-- Banners List : Start --}}
-                                <a href="{{ route('admin.setting.general.banners.index') }}"
-                                    class="col-span-6 md:col-span-3 bg-gray-100 rounded-xl shadow hover:shadow-lg cursor-pointer p-3 flex flex-col justify-center items-center gap-3">
-                                    <span class="material-icons text-center text-9xl ">
-                                        view_carousel
-                                    </span>
-                                    <span class="text-center font-bold">
-                                        {{ __('admin/sitePages.Banners List') }}
-                                    </span>
-                                </a>
-                                {{-- Banners List : End --}}
 
                             </div>
                             {{-- Static Part : End --}}

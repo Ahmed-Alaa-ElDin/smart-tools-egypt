@@ -133,7 +133,7 @@ class Collection extends Model
             'collection_collection_related',
             'first_collection_id',
             'second_collection_id'
-        );
+        )->withPivot('rank');
     }
 
     // many to many Relationship Collection --> Related Products
@@ -144,7 +144,7 @@ class Collection extends Model
             'collection_product_related',
             'collection_id',
             'product_id'
-        );
+        )->withPivot('rank');
     }
 
     // many to many Relationship Collection --> Complement Collections
@@ -155,7 +155,7 @@ class Collection extends Model
             'collection_collection_complemented',
             'first_collection_id',
             'second_collection_id'
-        );
+        )->withPivot('rank');
     }
 
     // many to many Relationship Collection --> Complemented Products
@@ -166,7 +166,7 @@ class Collection extends Model
             'collection_product_complemented',
             'collection_id',
             'product_id'
-        );
+        )->withPivot('rank');
     }
 
     ############# Appends :: Start #############

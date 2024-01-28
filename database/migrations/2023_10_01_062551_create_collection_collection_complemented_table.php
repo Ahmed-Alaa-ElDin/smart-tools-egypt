@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('first_collection_id');
             $table->unsignedBigInteger('second_collection_id');
+            $table->tinyInteger('rank')->default(0);
             $table->timestamps();
 
             $table->foreign('first_collection_id')

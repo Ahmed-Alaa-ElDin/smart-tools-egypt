@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('collection_id');
             $table->unsignedBigInteger('product_id');
+            $table->tinyInteger('rank')->default(0);
             $table->timestamps();
 
             $table->foreign('collection_id')

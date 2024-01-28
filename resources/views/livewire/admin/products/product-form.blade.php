@@ -569,85 +569,31 @@
         {{-- Complementary Products Start --}}
         <div class="grid grid-cols-12 gap-x-4 gap-y-2 items-center bg-gray-100 p-4 text-center  rounded shadow">
 
-            <div class="col-span-12 font-bold text-black mb-2">{{ __('admin/productsPages.Complementary Products') }}
+            <div class="col-span-12 font-bold text-black mb-2">
+                {{ __('admin/productsPages.Complementary Products') }}
             </div>
 
-            {{-- Search Product/Collection Start --}}
-            <div class="col-span-12 relative">
-                {{-- Search Product Input :: Start --}}
-                <div class="flex rounded-md shadow-sm">
-                    <span
-                        class="inline-flex items-center px-3 ltr:rounded-l-md rtl:rounded-r-md border border-r-0 border-secondary bg-secondary text-center text-white text-sm">
-                        <span class="material-icons">
-                            search
-                        </span>
+            {{-- Add/Clear Complementary Product :: Start --}}
+            <div class="col-span-12 flex items-center justify-around">
+                <button wire:click="$emitTo('admin.products.product-list-popup','show','complementary-items-list')"
+                    class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
+                    <span class="material-icons rtl:ml-1 ltr:mr-1">
+                        add
                     </span>
-                    <input type="text" wire:model.debounce.500ms='searchComplementaryProducts'
-                        wire:keydown.Escape="$set('searchComplementaryProducts','')" data-name="collection-form"
-                        class="searchInput flex-1 block rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm py-1 w-full border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                        placeholder="{{ __('admin/ordersPages.Search ...') }}">
-                </div>
-                {{-- Search Product Input :: End --}}
+                    {{ __('admin/productsPages.Add Products') }}
+                </button>
 
-                @if ($searchComplementaryProducts != null)
-                    <div
-                        class="absolute grid grid-cols-12 items-center justify-center gap-2 button-0 left-0 w-full z-40 bg-white border border-t-0 border-secondary max-h-36 overflow-x-hidden rounded-b-xl p-2 scrollbar scrollbar-thin scrollbar-thumb-secondary">
-                        {{-- Loading :: Start --}}
-                        <div wire:loading.delay wire:target="searchComplementaryProducts" class="w-full col-span-12">
-                            <div class="flex col-span-12 gap-2 justify-center items-center p-4">
-                                <span class="text-secondary text-xs font-bold">
-                                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
-                                        width="1em" class="animate-spin text-9xl" height="1em"
-                                        preserveAspectRatio="xMidYMid meet" viewBox="0 0 50 50">
-                                        <path fill="currentColor"
-                                            d="M41.9 23.9c-.3-6.1-4-11.8-9.5-14.4c-6-2.7-13.3-1.6-18.3 2.6c-4.8 4-7 10.5-5.6 16.6c1.3 6 6 10.9 11.9 12.5c7.1 2 13.6-1.4 17.6-7.2c-3.6 4.8-9.1 8-15.2 6.9c-6.1-1.1-11.1-5.7-12.5-11.7c-1.5-6.4 1.5-13.1 7.2-16.4c5.9-3.4 14.2-2.1 18.1 3.7c1 1.4 1.7 3.1 2 4.8c.3 1.4.2 2.9.4 4.3c.2 1.3 1.3 3 2.8 2.1c1.3-.8 1.2-2.5 1.1-3.8c0-.4.1.7 0 0z" />
-                                    </svg>
-                                </span>
-                            </div>
-                        </div>
-
-                        {{-- Search Result :: Start --}}
-                        @forelse ($complementaryList as $complementaryProduct)
-                            <div class="group col-span-12 md:col-span-6 lg:col-span-4 flex justify-center items-center gap-1 cursor-pointer rounded transition-all ease-in-out hover:bg-gray-100 md:border md:border-white hover:md:border hover:md:border-gray-700 p-2"
-                                wire:click.stop="addComplementaryProduct({{ $complementaryProduct['id'] }}, '{{ $complementaryProduct['type'] }}')"
-                                wire:key="complementaryProduct-{{ $complementaryProduct['id'] }}-{{ rand() }}">
-                                {{-- Product's Name --}}
-                                <div class="flex flex-col justify-center text-center gap-2">
-                                    <span
-                                        class="text-sm font-bold text-black">{{ $complementaryProduct['name'][session('locale')] }}</span>
-                                    @isset($complementaryProduct['brand'])
-                                        <span
-                                            class="text-xs font-bold text-gray-500">{{ $complementaryProduct['brand']['name'] }}</span>
-                                    @endisset
-                                </div>
-                            </div>
-
-                            @if (!$loop->last)
-                                <hr class="md:hidden col-span-12 my-1">
-                            @endif
-                        @empty
-                            <div class="text-center font-bold col-span-12">
-                                {{ __('admin/ordersPages.No Products Found') }}
-                            </div>
-                        @endforelse
-                        {{-- Search Result :: End --}}
-                    </div>
-                @endif
-            </div>
-
-            {{-- Clear All Products :: Start --}}
-            @if (count($complementaryItems))
-                <div class="col-span-12">
+                @if (count($complementaryItems))
                     <button wire:click="clearComplementaryProducts"
                         class="btn btn-sm bg-red-500 hover:bg-red-700 focus:bg-red-700 active:bg-red-700 font-bold">
                         <span class="material-icons rtl:ml-1 ltr:mr-1">
                             close
                         </span>
-                        {{ __('admin/ordersPages.Clear Products') }}
+                        {{ __('admin/productsPages.Clear Products') }}
                     </button>
-                </div>
-            @endif
-            {{-- Clear All Products :: End --}}
+                @endif
+            </div>
+            {{-- Add/Clear Complementary Product :: End --}}
 
             {{-- Selected Product :: Start --}}
             @if (count($complementaryItems))
@@ -655,7 +601,7 @@
 
                 {{-- Product Info :: Start --}}
                 <div class="col-span-12 grid grid-cols-10 justify-center items-center gap-2">
-                    @foreach ($complementaryItems as $complementaryItem)
+                    @foreach ($complementaryItems as $key => $complementaryItem)
                         {{-- Product : Start --}}
                         <div class="col-span-10 lg:col-span-5 p-4 w-full relative bg-white rounded shadow max-w-100 overflow-hidden"
                             wire:key='product-{{ $complementaryItem['id'] }}-{{ rand() }}'>
@@ -729,22 +675,44 @@
                                             @endif
                                         </div>
                                         {{-- Product Name : End --}}
+
+                                        {{-- Product's Rank :: Start --}}
+                                        <div class="flex items-center justify-center gap-2">
+                                            <label for="" class="m-0 text-xs font-bold">Rank</label>
+                                            <input
+                                                class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('complementaryItems.' . $key . '.pivot.rank') border-red-900 border-2 @enderror"
+                                                type="number"
+                                                wire:model.lazy="complementaryItems.{{ $key }}.pivot.rank">
+                                        </div>
+                                        {{-- Product's Rank :: End --}}
+
                                     </div>
                                     {{-- Product Info : End --}}
                                 </div>
                             </div>
                             <div class="absolute top-2 right-2">
-                                <button wire:click="deleteComplementaryProduct({{ $complementaryItem['id'] }},'{{ $complementaryItem['type'] }}')" class="material-icons bg-red-500 p-1 w-6 h-6 text-white text-xs font-bold shadow-xl rounded-circle" title="Delete Product">
+                                <button
+                                    wire:click="deleteComplementaryProduct({{ $complementaryItem['id'] }},'{{ $complementaryItem['type'] }}')"
+                                    class="material-icons bg-red-500 p-1 w-6 h-6 text-white text-xs font-bold shadow-xl rounded-circle"
+                                    title="Delete Product">
                                     close
                                 </button>
                             </div>
                         </div>
                         {{-- Product : End --}}
                     @endforeach
+
                 </div>
                 {{-- Product Info :: End --}}
             @endif
             {{-- Selected Product :: End --}}
+
+            @error('complementaryItems.*.pivot.rank')
+                <div
+                    class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1 max-w-2xl">
+                    {{ $message }}
+                </div>
+            @enderror
 
             @error('complementaryItems')
                 <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -762,85 +730,33 @@
         {{-- Related Products Start --}}
         <div class="grid grid-cols-12 gap-x-4 gap-y-2 items-center bg-red-100 p-4 text-center rounded shadow">
 
-            <div class="col-span-12 font-bold text-black mb-2">{{ __('admin/productsPages.Related Products') }}
+            <div class="col-span-12 font-bold text-black mb-2">
+                {{ __('admin/productsPages.Related Products') }}
             </div>
 
-            {{-- Search Product/Collection Start --}}
-            <div class="col-span-12 relative">
-                {{-- Search Product Input :: Start --}}
-                <div class="flex rounded-md shadow-sm">
-                    <span
-                        class="inline-flex items-center px-3 ltr:rounded-l-md rtl:rounded-r-md border border-r-0 border-primary bg-primary text-center text-white text-sm">
-                        <span class="material-icons">
-                            search
-                        </span>
+            {{-- Add/Clear Complementary Product :: Start --}}
+            <div class="col-span-12 flex items-center justify-around">
+                <button wire:click="$emitTo('admin.products.product-list-popup','show','related-items-list')"
+                    class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
+                    <span class="material-icons rtl:ml-1 ltr:mr-1">
+                        add
                     </span>
-                    <input type="text" wire:model.debounce.500ms='searchRelatedProducts'
-                        wire:keydown.Escape="$set('searchRelatedProducts','')" data-name="collection-form"
-                        class="searchInput flex-1 block rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm py-1 w-full border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                        placeholder="{{ __('admin/ordersPages.Search ...') }}">
-                </div>
-                {{-- Search Product Input :: End --}}
+                    {{ __('admin/productsPages.Add Products') }}
+                </button>
 
-                @if ($searchRelatedProducts != null)
-                    <div
-                        class="absolute grid grid-cols-12 items-center justify-center gap-2 button-0 left-0 w-full z-40 bg-white border border-t-0 border-primary max-h-36 overflow-x-hidden rounded-b-xl p-2 scrollbar scrollbar-thin scrollbar-thumb-primary">
-                        {{-- Loading :: Start --}}
-                        <div wire:loading.delay wire:target="searchRelatedProducts" class="w-full col-span-12">
-                            <div class="flex col-span-12 gap-2 justify-center items-center p-4">
-                                <span class="text-primary text-xs font-bold">
-                                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
-                                        width="1em" class="animate-spin text-9xl" height="1em"
-                                        preserveAspectRatio="xMidYMid meet" viewBox="0 0 50 50">
-                                        <path fill="currentColor"
-                                            d="M41.9 23.9c-.3-6.1-4-11.8-9.5-14.4c-6-2.7-13.3-1.6-18.3 2.6c-4.8 4-7 10.5-5.6 16.6c1.3 6 6 10.9 11.9 12.5c7.1 2 13.6-1.4 17.6-7.2c-3.6 4.8-9.1 8-15.2 6.9c-6.1-1.1-11.1-5.7-12.5-11.7c-1.5-6.4 1.5-13.1 7.2-16.4c5.9-3.4 14.2-2.1 18.1 3.7c1 1.4 1.7 3.1 2 4.8c.3 1.4.2 2.9.4 4.3c.2 1.3 1.3 3 2.8 2.1c1.3-.8 1.2-2.5 1.1-3.8c0-.4.1.7 0 0z" />
-                                    </svg>
-                                </span>
-                            </div>
-                        </div>
-
-                        {{-- Search Result :: Start --}}
-                        @forelse ($relatedList as $relatedProduct)
-                            <div class="group col-span-12 md:col-span-6 lg:col-span-4 flex justify-center items-center gap-1 cursor-pointer rounded transition-all ease-in-out hover:bg-red-100  md:border md:border-white  hover:md:border hover:md:border-red-700 p-2"
-                                wire:click.stop="addRelatedProduct({{ $relatedProduct['id'] }}, '{{ $relatedProduct['type'] }}')"
-                                wire:key="relatedProduct-{{ $relatedProduct['id'] }}-{{ rand() }}">
-                                {{-- Product's Name --}}
-                                <div class="flex flex-col justify-center text-center gap-2">
-                                    <span
-                                        class="text-sm font-bold text-black">{{ $relatedProduct['name'][session('locale')] }}</span>
-                                    @isset($relatedProduct['brand'])
-                                        <span
-                                            class="text-xs font-bold text-gray-500">{{ $relatedProduct['brand']['name'] }}</span>
-                                    @endisset
-                                </div>
-                            </div>
-
-                            @if (!$loop->last)
-                                <hr class="md:hidden col-span-12 my-1">
-                            @endif
-                        @empty
-                            <div class="text-center font-bold col-span-12">
-                                {{ __('admin/ordersPages.No Products Found') }}
-                            </div>
-                        @endforelse
-                        {{-- Search Result :: End --}}
+                @if (count($relatedItems))
+                    <div class="col-span-12">
+                        <button wire:click="clearRelatedProducts"
+                            class="btn btn-sm bg-red-500 hover:bg-red-700 focus:bg-red-700 active:bg-red-700 font-bold">
+                            <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                close
+                            </span>
+                            {{ __('admin/productsPages.Clear Products') }}
+                        </button>
                     </div>
                 @endif
             </div>
-
-            {{-- Clear All Products :: Start --}}
-            @if (count($relatedItems))
-                <div class="col-span-12">
-                    <button wire:click="clearRelatedProducts"
-                        class="btn btn-sm bg-red-500 hover:bg-red-700 focus:bg-red-700 active:bg-red-700 font-bold">
-                        <span class="material-icons rtl:ml-1 ltr:mr-1">
-                            close
-                        </span>
-                        {{ __('admin/ordersPages.Clear Products') }}
-                    </button>
-                </div>
-            @endif
-            {{-- Clear All Products :: End --}}
+            {{-- Add/Clear Complementary Product :: End --}}
 
             {{-- Selected Product :: Start --}}
             @if (count($relatedItems))
@@ -848,7 +764,7 @@
 
                 {{-- Product Info :: Start --}}
                 <div class="col-span-12 grid grid-cols-10 justify-center items-center gap-2">
-                    @foreach ($relatedItems as $relatedItem)
+                    @foreach ($relatedItems as $key => $relatedItem)
                         {{-- Product : Start --}}
                         <div class="col-span-10 lg:col-span-5 p-4 w-full relative bg-white rounded shadow max-w-100 overflow-hidden"
                             wire:key='product-{{ $relatedItem['id'] }}-{{ rand() }}'>
@@ -922,12 +838,25 @@
                                             @endif
                                         </div>
                                         {{-- Product Name : End --}}
+
+                                        {{-- Product's Rank :: Start --}}
+                                        <div class="flex items-center justify-center gap-2">
+                                            <label for="" class="m-0 text-xs font-bold">Rank</label>
+                                            <input
+                                                class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('relatedItems.' . $key . '.pivot.rank') border-red-900 border-2 @enderror"
+                                                type="number"
+                                                wire:model.lazy="relatedItems.{{ $key }}.pivot.rank">
+                                        </div>
+                                        {{-- Product's Rank :: End --}}
                                     </div>
                                     {{-- Product Info : End --}}
                                 </div>
                             </div>
                             <div class="absolute top-2 right-2">
-                                <button wire:click="deleteRelatedProduct({{ $relatedItem['id'] }},'{{ $relatedItem['type'] }}')" class="material-icons bg-red-500 p-1 w-6 h-6 text-white text-xs font-bold shadow-xl rounded-circle" title="Delete Product">
+                                <button
+                                    wire:click="deleteRelatedProduct({{ $relatedItem['id'] }},'{{ $relatedItem['type'] }}')"
+                                    class="material-icons bg-red-500 p-1 w-6 h-6 text-white text-xs font-bold shadow-xl rounded-circle"
+                                    title="Delete Product">
                                     close
                                 </button>
                             </div>
@@ -938,6 +867,13 @@
                 {{-- Product Info :: End --}}
             @endif
             {{-- Selected Product :: End --}}
+
+            @error('relatedItems.*.pivot.rank')
+                <div
+                    class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1 max-w-2xl">
+                    {{ $message }}
+                </div>
+            @enderror
 
             @error('relatedItems')
                 <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -1195,4 +1131,25 @@
     </div>
     {{-- Buttons Section End --}}
 
+    {{-- Modals Section Start --}}
+    @livewire('admin.products.product-list-popup', [
+        'modalName' => 'complementary-items-list',
+        'excludedProducts' => array_column(array_filter($complementaryItems, function ($item) {
+            return $item['type'] == 'Product';
+        }), 'id'),
+        'excludedCollections' => array_column(array_filter($complementaryItems, function ($item) {
+            return $item['type'] == 'Collection';
+        }), 'id'),
+    ])
+
+    @livewire('admin.products.product-list-popup', [
+        'modalName' => 'related-items-list',
+        'excludedProducts' => array_column(array_filter($relatedItems, function ($item) {
+            return $item['type'] == 'Product';
+        }), 'id'),
+        'excludedCollections' => array_column(array_filter($relatedItems, function ($item) {
+            return $item['type'] == 'Collection';
+        }), 'id'),
+    ])
+    {{-- Modals Section End --}}
 </div>
