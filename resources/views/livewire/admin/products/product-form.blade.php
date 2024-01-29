@@ -595,6 +595,30 @@
             </div>
             {{-- Add/Clear Complementary Product :: End --}}
 
+            {{-- Control Ranking :: Start --}}
+            <div class="col-span-12 flex items-center justify-around">
+                @if (count($complementaryItems))
+                    {{-- Clean Ranking --}}
+                    <button wire:click="cleanComplementaryRanking"
+                        class="btn btn-sm bg-info hover:bg-infoDark focus:bg-infoDark active:bg-infoDark font-bold">
+                        <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                sanitizer
+                        </span>
+                        {{ __('admin/productsPages.Clean Ranking') }}
+                    </button>
+
+                    {{-- Reset Ranking --}}
+                    <button wire:click="resetComplementaryRank"
+                        class="btn btn-sm bg-warningDark hover:bg-warningDarker focus:bg-warningDarker active:bg-warningDarker font-bold">
+                        <span class="material-icons rtl:ml-1 ltr:mr-1">
+                            restart_alt
+                        </span>
+                        {{ __('admin/productsPages.Reset Ranking') }}
+                    </button>
+                @endif
+            </div>
+            {{-- Control Ranking :: End --}}
+
             {{-- Selected Product :: Start --}}
             @if (count($complementaryItems))
                 <hr class="col-span-12 ">
@@ -661,14 +685,14 @@
                                             @if ($complementaryItem['type'] == 'Product')
                                                 <a href="{{ route('front.products.show', ['id' => $complementaryItem['id'], 'slug' => $complementaryItem['slug'][session('locale')]]) }}"
                                                     target="_blank" class="font-bold hover:text-current">
-                                                    <span style="max-width: 100%; display: block;">
+                                                    <span class="max-w-full block text-left rtl:text-right">
                                                         {{ $complementaryItem['name'][session('locale')] }}
                                                     </span>
                                                 </a>
                                             @elseif($complementaryItem['type'] == 'Collection')
                                                 <a href="{{ route('front.collections.show', ['id' => $complementaryItem['id'], 'slug' => $complementaryItem['slug'][session('locale')]]) }}"
                                                     target="_blank" class="font-bold hover:text-current">
-                                                    <span style="max-width: 100%; display: block;">
+                                                    <span class="max-w-full block text-left rtl:text-right">
                                                         {{ $complementaryItem['name'][session('locale')] }}
                                                     </span>
                                                 </a>
@@ -680,9 +704,10 @@
                                         <div class="flex items-center justify-center gap-2">
                                             <label for="" class="m-0 text-xs font-bold">Rank</label>
                                             <input
-                                                class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('complementaryItems.' . $key . '.pivot.rank') border-red-900 border-2 @enderror"
-                                                type="number"
-                                                wire:model.lazy="complementaryItems.{{ $key }}.pivot.rank">
+                                                class="py-1 w-12 rounded-circle text-center select-none cursor-pointer focus:outline-success focus:ring-success focus:border-success @if ($complementaryItems[$key]['pivot']['rank'] == 0) border-danger border-2 @else border-success border-2 @endif"
+                                                type="number" readonly
+                                                wire:click="editComplementaryRank({{ $key }})"
+                                                wire:model="complementaryItems.{{ $key }}.pivot.rank">
                                         </div>
                                         {{-- Product's Rank :: End --}}
 
@@ -690,7 +715,7 @@
                                     {{-- Product Info : End --}}
                                 </div>
                             </div>
-                            <div class="absolute top-2 right-2">
+                            <div class="absolute top-2 right-2 rtl:right-auto rtl:left-2">
                                 <button
                                     wire:click="deleteComplementaryProduct({{ $complementaryItem['id'] }},'{{ $complementaryItem['type'] }}')"
                                     class="material-icons bg-red-500 p-1 w-6 h-6 text-white text-xs font-bold shadow-xl rounded-circle"
@@ -708,8 +733,7 @@
             {{-- Selected Product :: End --}}
 
             @error('complementaryItems.*.pivot.rank')
-                <div
-                    class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1 max-w-2xl">
+                <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1 max-w-2xl">
                     {{ $message }}
                 </div>
             @enderror
@@ -745,18 +769,40 @@
                 </button>
 
                 @if (count($relatedItems))
-                    <div class="col-span-12">
-                        <button wire:click="clearRelatedProducts"
-                            class="btn btn-sm bg-red-500 hover:bg-red-700 focus:bg-red-700 active:bg-red-700 font-bold">
-                            <span class="material-icons rtl:ml-1 ltr:mr-1">
-                                close
-                            </span>
-                            {{ __('admin/productsPages.Clear Products') }}
-                        </button>
-                    </div>
+                    <button wire:click="clearRelatedProducts"
+                        class="btn btn-sm bg-red-500 hover:bg-red-700 focus:bg-red-700 active:bg-red-700 font-bold">
+                        <span class="material-icons rtl:ml-1 ltr:mr-1">
+                            close
+                        </span>
+                        {{ __('admin/productsPages.Clear Products') }}
+                    </button>
                 @endif
             </div>
             {{-- Add/Clear Complementary Product :: End --}}
+
+            {{-- Control Ranking :: Start --}}
+            <div class="col-span-12 flex items-center justify-around">
+                @if (count($relatedItems))
+                    {{-- Clean Ranking --}}
+                    <button wire:click="cleanRelatedRanking"
+                        class="btn btn-sm bg-info hover:bg-infoDark focus:bg-infoDark active:bg-infoDark font-bold">
+                        <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                sanitizer
+                        </span>
+                        {{ __('admin/productsPages.Clean Ranking') }}
+                    </button>
+
+                    {{-- Reset Ranking --}}
+                    <button wire:click="resetRelatedRank"
+                        class="btn btn-sm bg-warningDark hover:bg-warningDarker focus:bg-warningDarker active:bg-warningDarker font-bold">
+                        <span class="material-icons rtl:ml-1 ltr:mr-1">
+                            restart_alt
+                        </span>
+                        {{ __('admin/productsPages.Reset Ranking') }}
+                    </button>
+                @endif
+            </div>
+            {{-- Control Ranking :: End --}}
 
             {{-- Selected Product :: Start --}}
             @if (count($relatedItems))
@@ -824,14 +870,14 @@
                                             @if ($relatedItem['type'] == 'Product')
                                                 <a href="{{ route('front.products.show', ['id' => $relatedItem['id'], 'slug' => $relatedItem['slug'][session('locale')]]) }}"
                                                     target="_blank" class="font-bold hover:text-current">
-                                                    <span style="max-width: 100%; display: block;">
+                                                    <span class="max-w-full block text-left rtl:text-right">
                                                         {{ $relatedItem['name'][session('locale')] }}
                                                     </span>
                                                 </a>
                                             @elseif($relatedItem['type'] == 'Collection')
                                                 <a href="{{ route('front.collections.show', ['id' => $relatedItem['id'], 'slug' => $relatedItem['slug'][session('locale')]]) }}"
                                                     target="_blank" class="font-bold hover:text-current">
-                                                    <span style="max-width: 100%; display: block;">
+                                                    <span class="max-w-full block text-left rtl:text-right">
                                                         {{ $relatedItem['name'][session('locale')] }}
                                                     </span>
                                                 </a>
@@ -843,16 +889,17 @@
                                         <div class="flex items-center justify-center gap-2">
                                             <label for="" class="m-0 text-xs font-bold">Rank</label>
                                             <input
-                                                class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('relatedItems.' . $key . '.pivot.rank') border-red-900 border-2 @enderror"
-                                                type="number"
-                                                wire:model.lazy="relatedItems.{{ $key }}.pivot.rank">
+                                                class="py-1 w-12 rounded-circle text-center select-none cursor-pointer focus:outline-success focus:ring-success focus:border-success @if ($relatedItems[$key]['pivot']['rank'] == 0) border-danger border-2 @else border-success border-2 @endif"
+                                                type="number" readonly
+                                                wire:click="editRelatedRank({{ $key }})"
+                                                wire:model="relatedItems.{{ $key }}.pivot.rank">
                                         </div>
                                         {{-- Product's Rank :: End --}}
                                     </div>
                                     {{-- Product Info : End --}}
                                 </div>
                             </div>
-                            <div class="absolute top-2 right-2">
+                            <div class="absolute top-2 right-2 rtl:right-auto rtl:left-2">
                                 <button
                                     wire:click="deleteRelatedProduct({{ $relatedItem['id'] }},'{{ $relatedItem['type'] }}')"
                                     class="material-icons bg-red-500 p-1 w-6 h-6 text-white text-xs font-bold shadow-xl rounded-circle"
@@ -863,14 +910,15 @@
                         </div>
                         {{-- Product : End --}}
                     @endforeach
+
+                    {{ $relatedHighestRank }}
                 </div>
                 {{-- Product Info :: End --}}
             @endif
             {{-- Selected Product :: End --}}
 
             @error('relatedItems.*.pivot.rank')
-                <div
-                    class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1 max-w-2xl">
+                <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1 max-w-2xl">
                     {{ $message }}
                 </div>
             @enderror
@@ -1134,22 +1182,34 @@
     {{-- Modals Section Start --}}
     @livewire('admin.products.product-list-popup', [
         'modalName' => 'complementary-items-list',
-        'excludedProducts' => array_column(array_filter($complementaryItems, function ($item) {
-            return $item['type'] == 'Product';
-        }), 'id'),
-        'excludedCollections' => array_column(array_filter($complementaryItems, function ($item) {
-            return $item['type'] == 'Collection';
-        }), 'id'),
+        'excludedProducts' => array_column(
+            array_filter($complementaryItems, function ($item) {
+                return $item['type'] == 'Product';
+            }),
+            'id',
+        ),
+        'excludedCollections' => array_column(
+            array_filter($complementaryItems, function ($item) {
+                return $item['type'] == 'Collection';
+            }),
+            'id',
+        ),
     ])
 
     @livewire('admin.products.product-list-popup', [
         'modalName' => 'related-items-list',
-        'excludedProducts' => array_column(array_filter($relatedItems, function ($item) {
-            return $item['type'] == 'Product';
-        }), 'id'),
-        'excludedCollections' => array_column(array_filter($relatedItems, function ($item) {
-            return $item['type'] == 'Collection';
-        }), 'id'),
+        'excludedProducts' => array_column(
+            array_filter($relatedItems, function ($item) {
+                return $item['type'] == 'Product';
+            }),
+            'id',
+        ),
+        'excludedCollections' => array_column(
+            array_filter($relatedItems, function ($item) {
+                return $item['type'] == 'Collection';
+            }),
+            'id',
+        ),
     ])
     {{-- Modals Section End --}}
 </div>

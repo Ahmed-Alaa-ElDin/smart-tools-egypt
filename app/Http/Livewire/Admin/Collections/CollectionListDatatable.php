@@ -19,6 +19,8 @@ class CollectionListDatatable extends Component
     public $subcategory_id = "%";
     public $brand_id = "%";
     public $excludedCollections = [];
+    public $collectionsIds = [];
+    public $selectAllCollections = false;
 
     protected $listeners = [
         'unselectAll',
@@ -62,13 +64,17 @@ class CollectionListDatatable extends Component
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage, ['*'], 'CollectionsPage');
 
+            $this->collectionsIds = $collections->pluck('id')->toArray();
+
+            $this->checkAllCollectionsSelected();
+        
         return view('livewire.admin.collections.collection-list-datatable', compact('collections'));
     }
 
     // reset pagination after new search
     public function updatingSearch()
     {
-        $this->resetPage();
+        $this->resetPage('CollectionsPage');
     }
 
     // Add conditions of sorting
@@ -94,4 +100,21 @@ class CollectionListDatatable extends Component
     {
         $this->selectedCollections = [];
     }
+
+    public function updatedSelectAllCollections($value)
+    {
+        if ($value) {
+            $this->selectedCollections = array_merge($this->selectedCollections, $this->collectionsIds);
+        } else {
+            $this->selectedCollections = array_diff($this->selectedCollections, $this->collectionsIds);
+        }
+
+        $this->emit('selectedCollectionsUpdated', $this->selectedCollections);
+    }
+
+    private function checkAllCollectionsSelected()
+    {
+        $this->selectAllCollections = count(array_diff($this->collectionsIds, $this->selectedCollections)) == 0 && count($this->collectionsIds) > 0 ? true : false;
+    }
+
 }

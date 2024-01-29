@@ -34,9 +34,11 @@ class ProductForm extends Component
     public $parentCategories;
 
     // Complementary Products
+    public $complementaryHighestRank = 1;
     public $complementaryItems = [];
 
     // Related Products
+    public $relatedHighestRank = 1;
     public $relatedItems = [];
 
     const PRODUCT = 'Product';
@@ -378,6 +380,12 @@ class ProductForm extends Component
                 ]
             ];
         }
+
+        // Calculate Highest Rank in Complementary Products
+        $this->complementaryHighestRank = count($this->complementaryItems) ? max(array_map(fn ($product) => $product['pivot']['rank'], $this->complementaryItems)) + 1 : 1;
+
+        // Calculate Highest Rank in Related Products
+        $this->relatedHighestRank = count($this->relatedItems) ? max(array_map(fn ($product) => $product['pivot']['rank'], $this->relatedItems)) + 1 : 1;
     }
     ######################## Mount :: End ############################
 
@@ -727,6 +735,92 @@ class ProductForm extends Component
         $this->relatedItems = [];
     }
     ######################## Clear Related Products :: End ############################
+
+    ######################## Update Complementary Product Rank :: Start ############################
+    public function editComplementaryRank($key)
+    {
+        $this->complementaryItems[$key]['pivot']['rank'] = $this->complementaryHighestRank++;
+    }
+    ######################## Update Complementary Product Rank :: End ############################
+
+    ######################## Update Related Product Rank :: Start ############################
+    public function editRelatedRank($key)
+    {
+        $this->relatedItems[$key]['pivot']['rank'] = $this->relatedHighestRank++;
+    }
+    ######################## Update Related Product Rank :: End ############################
+
+    ######################## Reset Complementary Products Rank :: Start ############################
+    public function resetComplementaryRank()
+    {
+        $this->complementaryHighestRank = 1;
+
+        $this->complementaryItems = array_map(
+            function ($product) {
+                $product['pivot']['rank'] = 0;
+                return $product;
+            },
+            $this->complementaryItems
+        );
+    }
+    ######################## Reset Complementary Products Rank :: End ############################
+
+    ######################## Reset Related Products Rank :: Start ############################
+    public function resetRelatedRank()
+    {
+        $this->relatedHighestRank = 1;
+
+        $this->relatedItems = array_map(
+            function ($product) {
+                $product['pivot']['rank'] = 0;
+                return $product;
+            },
+            $this->relatedItems
+        );
+    }
+    ######################## Reset Related Products Rank :: End ############################
+
+    ######################## Clean Complementary Ranking :: Start ############################
+    public function cleanComplementaryRanking()
+    {
+        $max = 1;
+
+        // Sort Complementary Products by Rank
+        usort($this->complementaryItems, function ($a, $b) {
+            return $a['pivot']['rank'] <=> $b['pivot']['rank'];
+        });
+
+        // Update Complementary Products Rank
+        foreach ($this->complementaryItems as $key => $complementaryItem) {
+            if($this->complementaryItems[$key]['pivot']['rank'] != 0) {
+                $this->complementaryItems[$key]['pivot']['rank'] = $max++;
+            }
+        }
+
+        $this->complementaryHighestRank = $max;
+    }
+    ######################## Clean Complementary Ranking :: End ############################
+
+    ######################## Clean Related Ranking :: Start ############################
+    public function cleanRelatedRanking()
+    {
+        $max = 1;
+
+        // Sort Related Products by Rank
+        usort($this->relatedItems, function ($a, $b) {
+            return $a['pivot']['rank'] <=> $b['pivot']['rank'];
+        });
+
+        // Update Related Products Rank
+        foreach ($this->relatedItems as $key => $relatedItem) {
+            if($this->relatedItems[$key]['pivot']['rank'] != 0) {
+                $this->relatedItems[$key]['pivot']['rank'] = $max++;
+            }
+        }
+
+        $this->relatedHighestRank = $max;
+    }
+    ######################## Clean Related Ranking :: End ############################
 
     ######################## Fetch Product Or Collection :: Start ############################
     private function fetchProductOrCollection(int $productId, string $productType)

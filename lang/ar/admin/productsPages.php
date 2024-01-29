@@ -357,4 +357,6 @@ return [
     "Product List"                                                          =>      "قائمة المنتجات",
     "Add Products"                                                          =>      "اضافة منتجات",
     "Clear Products"                                                        =>      "ازالة المنتجات",
+    "Clean Ranking"                                                         =>      "تنظيم الترتيب",
+    "Reset Ranking"                                                         =>      "إعادة ترتيب",
 ];

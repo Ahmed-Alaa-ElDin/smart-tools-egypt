@@ -19,6 +19,8 @@ class ProductListDatatable extends Component
     public $subcategory_id = "%";
     public $brand_id = "%";
     public $excludedProducts = [];
+    public $productsIds = [];
+    public $selectAllProducts = false;
 
     protected $listeners = [
         'unselectAll',
@@ -48,7 +50,7 @@ class ProductListDatatable extends Component
             'under_reviewing',
             'brands.name as brand_name'
         ])
-            ->with('subcategories', 'brand', 'thumbnail')
+            ->with('subcategories', 'thumbnail')
             ->leftJoin('brands', 'brand_id', '=', 'brands.id')
             ->where(function ($q) {
                 $q
@@ -63,13 +65,17 @@ class ProductListDatatable extends Component
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage, ['*'], 'ProductsPage');
 
+        $this->productsIds = $products->pluck('id')->toArray();
+
+        $this->checkAllProductsSelected();
+
         return view('livewire.admin.products.product-list-datatable', compact('products'));
     }
 
     // reset pagination after new search
     public function updatingSearch()
     {
-        $this->resetPage();
+        $this->resetPage('ProductsPage');
     }
 
     // Add conditions of sorting
@@ -94,5 +100,21 @@ class ProductListDatatable extends Component
     public function unselectAll()
     {
         $this->selectedProducts = [];
+    }
+
+    public function updatedSelectAllProducts($value)
+    {
+        if ($value) {
+            $this->selectedProducts = array_merge($this->selectedProducts, $this->productsIds);
+        } else {
+            $this->selectedProducts = array_diff($this->selectedProducts, $this->productsIds);
+        }
+
+        $this->emit('selectedProductsUpdated', $this->selectedProducts);
+    }
+
+    private function checkAllProductsSelected()
+    {
+        $this->selectAllProducts = count(array_diff($this->productsIds, $this->selectedProducts)) == 0 && count($this->productsIds) > 0 ? true : false;
     }
 }

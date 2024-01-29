@@ -16,7 +16,7 @@
                                 <span class="material-icons">
                                     search
                                 </span> </span>
-                            <input type="text" wire:model='search'
+                            <input type="text" wire:model.debounce.500ms="search"
                                 class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                                 placeholder="{{ __('admin/productsPages.Search ...') }}">
                         </div>
@@ -51,8 +51,9 @@
                                     <th scope="col"
                                         class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
                                         <div class="min-w-max">
-                                            #
-                                        </div>
+                                            <input type="checkbox" wire:model="selectAllCollections"
+                                            class="appearance-none border-gray-600 rounded-full checked:bg-secondary outline-none ring-0 cursor-pointer">
+                                            </div>
                                     </th>
 
                                     {{-- Name Header --}}

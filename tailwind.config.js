@@ -46,11 +46,17 @@ module.exports = {
                 successDark: "#3d8c40",
                 successDarker: "#2e6930",
 
-                infoLighter: "#4cb2c9",
-                infoLight: "#2ca2c0",
+                infoLighter: "#85c1e9",
+                infoLight: "#3498db",
                 info: "#3498db",
-                infoDark: "#0099ae",
-                infoDarker: "#007a8c",
+                infoDark: "#2f89c5",
+                infoDarker: "#1f5b83",
+
+                warningLighter: "#f4d03f",
+                warningLight: "#f1c40f",
+                warning: "#f1c40f",
+                warningDark: "#d9b00e",
+                warningDarker: "#917609",
 
                 male: "#4cb2c9",
                 female: "#e85591",
