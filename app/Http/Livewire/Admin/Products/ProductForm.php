@@ -645,8 +645,12 @@ class ProductForm extends Component
     ######################## Add Complementary Products :: Start ############################
     public function addComplementaryProducts($selectedProducts)
     {
+        $complementaryProductsIds = array_map(fn ($product) => $product['type'] == self::PRODUCT ? $product['id'] : null, $this->complementaryItems);
+
         foreach ($selectedProducts as $selectedProduct) {
-            $this->addComplementaryProduct($selectedProduct, self::PRODUCT);
+            if (!in_array($selectedProduct, $complementaryProductsIds)) {
+                $this->addComplementaryProduct($selectedProduct, self::PRODUCT);
+            }
         }
     }
     ######################## Add Complementary Products :: End ############################
@@ -654,8 +658,12 @@ class ProductForm extends Component
     ######################## Add Complementary Collections :: Start ############################
     public function addComplementaryCollections($selectedCollections)
     {
+        $complementaryCollectionsIds = array_map(fn ($product) => $product['type'] == self::COLLECTION ? $product['id'] : null, $this->complementaryItems);
+
         foreach ($selectedCollections as $selectedCollection) {
-            $this->addComplementaryProduct($selectedCollection, self::COLLECTION);
+            if (!in_array($selectedCollection, $complementaryCollectionsIds)) {
+                $this->addComplementaryProduct($selectedCollection, self::COLLECTION);
+            }
         }
     }
     ######################## Add Complementary Collections :: End ############################
@@ -663,8 +671,12 @@ class ProductForm extends Component
     ######################## Add Related Products :: Start ############################
     public function addRelatedProducts($selectedProducts)
     {
+        $relatedProductsIds = array_map(fn ($product) => $product['type'] == self::PRODUCT ? $product['id'] : null, $this->relatedItems);
+
         foreach ($selectedProducts as $selectedProduct) {
-            $this->addRelatedProduct($selectedProduct, self::PRODUCT);
+            if (!in_array($selectedProduct, $relatedProductsIds)) {
+                $this->addRelatedProduct($selectedProduct, self::PRODUCT);
+            }
         }
     }
     ######################## Add Related Products :: End ############################
@@ -672,8 +684,12 @@ class ProductForm extends Component
     ######################## Add Related Collections :: Start ############################
     public function addRelatedCollections($selectedCollections)
     {
+        $relatedCollectionsIds = array_map(fn ($product) => $product['type'] == self::COLLECTION ? $product['id'] : null, $this->relatedItems);
+
         foreach ($selectedCollections as $selectedCollection) {
-            $this->addRelatedProduct($selectedCollection, self::COLLECTION);
+            if (!in_array($selectedCollection, $relatedCollectionsIds)) {
+                $this->addRelatedProduct($selectedCollection, self::COLLECTION);
+            }
         }
     }
     ######################## Add Related Collections :: End ############################
@@ -792,7 +808,7 @@ class ProductForm extends Component
 
         // Update Complementary Products Rank
         foreach ($this->complementaryItems as $key => $complementaryItem) {
-            if($this->complementaryItems[$key]['pivot']['rank'] != 0) {
+            if ($this->complementaryItems[$key]['pivot']['rank'] != 0) {
                 $this->complementaryItems[$key]['pivot']['rank'] = $max++;
             }
         }
@@ -813,7 +829,7 @@ class ProductForm extends Component
 
         // Update Related Products Rank
         foreach ($this->relatedItems as $key => $relatedItem) {
-            if($this->relatedItems[$key]['pivot']['rank'] != 0) {
+            if ($this->relatedItems[$key]['pivot']['rank'] != 0) {
                 $this->relatedItems[$key]['pivot']['rank'] = $max++;
             }
         }

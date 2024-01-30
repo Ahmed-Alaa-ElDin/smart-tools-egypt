@@ -910,8 +910,6 @@
                         </div>
                         {{-- Product : End --}}
                     @endforeach
-
-                    {{ $relatedHighestRank }}
                 </div>
                 {{-- Product Info :: End --}}
             @endif
