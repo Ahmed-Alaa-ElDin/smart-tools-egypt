@@ -61,7 +61,7 @@
     </aside>
     {{-- All Categories : End --}}
 
-    <div class="col-span-12 lg:col-span-8 flex flex-col gap-2">
+    <div class="col-span-12 lg:col-span-8 flex flex-col gap-3">
         {{-- Main Slider & top categories : Start --}}
         <div class="overflow-hidden h-48 md:h-56 lg:h-64">
             {{-- Main Slider : Start --}}
