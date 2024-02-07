@@ -8,8 +8,6 @@ class ProductListPopup extends Component
 {
     public $selectedCollections = [];
     public $selectedProducts = [];
-    public $excludedCollections = [];
-    public $excludedProducts = [];
 
     // General Attributes
     public $show = false;

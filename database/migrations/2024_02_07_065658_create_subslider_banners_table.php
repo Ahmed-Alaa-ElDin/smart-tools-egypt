@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('main_slider_banners', function (Blueprint $table) {
+        Schema::create('subslider_banners', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('banner_id');
             $table->tinyInteger('rank')->default(127);
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('main_slider_banners');
+        Schema::dropIfExists('subslider_banners');
     }
 };

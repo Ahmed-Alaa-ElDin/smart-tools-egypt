@@ -77,13 +77,13 @@
                     <div id="default-tab-content">
                         {{-- Products :: Start --}}
                         <div class="@if ($model != 'product') hidden @endif" id="productsTab">
-                            @livewire('admin.products.product-list-datatable', ['excludedProducts' => $excludedProducts])
+                            @livewire('admin.products.product-list-datatable')
                         </div>
                         {{-- Products :: End --}}
 
                         {{-- Collections :: Start --}}
                         <div class="@if ($model != 'collection') hidden @endif" id="collectionsTab">
-                            @livewire('admin.collections.collection-list-datatable', ['excludedCollections' => $excludedCollections])
+                            @livewire('admin.collections.collection-list-datatable')
                         </div>
                         {{-- Collections :: End --}}
                     </div>

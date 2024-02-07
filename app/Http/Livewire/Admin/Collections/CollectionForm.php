@@ -29,22 +29,12 @@ class CollectionForm extends Component
     public $search, $productsList, $products = [];
 
     // Complementary Products
-    public $searchComplementaryProducts = "";
-    public $complementaryList = [];
-
+    public $complementaryHighestRank = 1;
     public $complementaryItems = [];
 
-    public $complementaryProductsIds = [];
-    public $complementaryCollectionsIds = [];
-
     // Related Products
-    public $searchRelatedProducts = "";
-    public $relatedList = [];
-
+    public $relatedHighestRank = 1;
     public $relatedItems = [];
-
-    public $relatedProductsIds = [];
-    public $relatedCollectionsIds = [];
 
     const PRODUCT = 'Product';
     const COLLECTION = 'Collection';
@@ -53,7 +43,8 @@ class CollectionForm extends Component
     protected $listeners = [
         "descriptionAr",
         "descriptionEn",
-        "clearSearch"
+        "clearSearch",
+        "addSelected"
     ];
 
     public function rules()
@@ -82,6 +73,8 @@ class CollectionForm extends Component
 
             'products'              =>          'array|min:1',
             'products.*.id'         =>          'required|exists:products,id',
+            'complementaryItems.*.pivot.rank' => 'required|integer|min:0|max:127',
+            'relatedItems.*.pivot.rank'       => 'required|integer|min:0|max:127'
         ];
     }
 
@@ -237,15 +230,13 @@ class CollectionForm extends Component
             $complementaryProduct = $collection->complementedProducts->toArray();
             $complementaryCollection = $collection->complementedCollections->toArray();
             $this->complementaryItems = array_merge($this->complementaryItems, $complementaryProduct, $complementaryCollection);
-            $this->complementaryProductsIds = array_map(fn ($product) => $product['id'], $complementaryProduct);
-            $this->complementaryCollectionsIds = array_map(fn ($product) => $product['id'], $complementaryCollection);
+            $this->complementaryHighestRank = count($this->complementaryItems) ? max(array_map(fn ($product) => $product['pivot']['rank'], $this->complementaryItems)) + 1 : 1;
 
             // Get Old Related Products
             $relatedProduct = $collection->relatedProducts->toArray();
             $relatedCollection = $collection->relatedCollections->toArray();
             $this->relatedItems = array_merge($this->relatedItems, $relatedProduct, $relatedCollection);
-            $this->relatedProductsIds = array_map(fn ($product) => $product['id'], $relatedProduct);
-            $this->relatedCollectionsIds = array_map(fn ($product) => $product['id'], $relatedCollection);
+            $this->relatedHighestRank = count($this->relatedItems) ? max(array_map(fn ($product) => $product['pivot']['rank'], $this->relatedItems)) + 1 : 1;
         } elseif ($this->old_collection_id) {
             // Get Old Collection's data
             $collection = Collection::with([
@@ -345,15 +336,13 @@ class CollectionForm extends Component
             $complementaryProduct = $collection->complementedProducts->toArray();
             $complementaryCollection = $collection->complementedCollections->toArray();
             $this->complementaryItems = array_merge($this->complementaryItems, $complementaryProduct, $complementaryCollection);
-            $this->complementaryProductsIds = array_map(fn ($product) => $product['id'], $complementaryProduct);
-            $this->complementaryCollectionsIds = array_map(fn ($product) => $product['id'], $complementaryCollection);
+            $this->complementaryHighestRank = count($this->complementaryItems) ? max(array_map(fn ($product) => $product['pivot']['rank'], $this->complementaryItems)) + 1 : 1;
 
             // Get Old Related Products
             $relatedProduct = $collection->relatedProducts->toArray();
             $relatedCollection = $collection->relatedCollections->toArray();
             $this->relatedItems = array_merge($this->relatedItems, $relatedProduct, $relatedCollection);
-            $this->relatedProductsIds = array_map(fn ($product) => $product['id'], $relatedProduct);
-            $this->relatedCollectionsIds = array_map(fn ($product) => $product['id'], $relatedCollection);
+            $this->relatedHighestRank = count($this->relatedItems) ? max(array_map(fn ($product) => $product['pivot']['rank'], $this->relatedItems)) + 1 : 1;
 
             $this->priceUpdate();
         }
@@ -671,27 +660,79 @@ class CollectionForm extends Component
     }
     ######################## Add Specification :: End ############################
 
-    ######################## Updated Search Complementary Products :: Start ############################
-    public function updatedSearchComplementaryProducts()
+    ######################## Update Complementary & Related Products :: Start ############################
+    public function addSelected($model, $selectedCollections, $selectedProducts)
     {
-        if ($this->searchComplementaryProducts != "") {
-            $complementaryProducts = $this->fetchProductsOrCollections($this->searchComplementaryProducts, self::PRODUCT, $this->complementaryProductsIds);
-            $complementaryCollections = $this->fetchProductsOrCollections($this->searchComplementaryProducts, self::COLLECTION, $this->complementaryCollectionsIds);
-
-            $this->complementaryList = $complementaryCollections->union($complementaryProducts)->toArray();
+        if ($model == "complementary-items-list") {
+            $this->addComplementaryProducts($selectedProducts);
+            $this->addComplementaryCollections($selectedCollections);
+        } elseif ($model == "related-items-list") {
+            $this->addRelatedProducts($selectedProducts);
+            $this->addRelatedCollections($selectedCollections);
         }
     }
-    ######################## Updated Search Complementary Products :: End ############################
+    ######################## Update Complementary & Related Products :: End ############################
+
+    ######################## Add Complementary Products :: Start ############################
+    public function addComplementaryProducts($selectedProducts)
+    {
+        $complementaryProductsIds = array_map(fn ($product) => $product['type'] == self::PRODUCT ? $product['id'] : null, $this->complementaryItems);
+
+        foreach ($selectedProducts as $selectedProduct) {
+            if (!in_array($selectedProduct, $complementaryProductsIds)) {
+                $this->addComplementaryProduct($selectedProduct, self::PRODUCT);
+            }
+        }
+    }
+    ######################## Add Complementary Products :: End ############################
+
+    ######################## Add Complementary Collections :: Start ############################
+    public function addComplementaryCollections($selectedCollections)
+    {
+        $complementaryCollectionsIds = array_map(fn ($product) => $product['type'] == self::COLLECTION ? $product['id'] : null, $this->complementaryItems);
+
+        foreach ($selectedCollections as $selectedCollection) {
+            if (!in_array($selectedCollection, $complementaryCollectionsIds)) {
+                $this->addComplementaryProduct($selectedCollection, self::COLLECTION);
+            }
+        }
+    }
+    ######################## Add Complementary Collections :: End ############################
+
+    ######################## Add Related Products :: Start ############################
+    public function addRelatedProducts($selectedProducts)
+    {
+        $relatedProductsIds = array_map(fn ($product) => $product['type'] == self::PRODUCT ? $product['id'] : null, $this->relatedItems);
+
+        foreach ($selectedProducts as $selectedProduct) {
+            if (!in_array($selectedProduct, $relatedProductsIds)) {
+                $this->addRelatedProduct($selectedProduct, self::PRODUCT);
+            }
+        }
+    }
+    ######################## Add Related Products :: End ############################
+
+    ######################## Add Related Collections :: Start ############################
+    public function addRelatedCollections($selectedCollections)
+    {
+        $relatedCollectionsIds = array_map(fn ($product) => $product['type'] == self::COLLECTION ? $product['id'] : null, $this->relatedItems);
+
+        foreach ($selectedCollections as $selectedCollection) {
+            if (!in_array($selectedCollection, $relatedCollectionsIds)) {
+                $this->addRelatedProduct($selectedCollection, self::COLLECTION);
+            }
+        }
+    }
+    ######################## Add Related Collections :: End ############################
 
     ######################## Add Complementary Product :: Start ############################
     public function addComplementaryProduct(int $complementaryProductId, string $complementaryProductType)
     {
         $complementaryProduct = $this->fetchProductOrCollection($complementaryProductId, $complementaryProductType);
+        $complementaryProduct['pivot']['rank'] = 0;
 
         if ($complementaryProduct) {
             $this->complementaryItems[] = $complementaryProduct;
-            $this->addToComplementaryIds($complementaryProductId, $complementaryProductType);
-            $this->searchComplementaryProducts = "";
         }
     }
     ######################## Add Complementary Product :: End ############################
@@ -699,7 +740,6 @@ class CollectionForm extends Component
     ######################## Delete Complementary Product :: Start ############################
     public function deleteComplementaryProduct($complementaryProductId, $complementaryProductType)
     {
-        $this->removeFromComplementaryIds($complementaryProductId, $complementaryProductType);
         $this->complementaryItems = array_filter(
             $this->complementaryItems,
             fn ($product) => $product['id'] != $complementaryProductId || $product['type'] != $complementaryProductType
@@ -711,32 +751,17 @@ class CollectionForm extends Component
     public function clearComplementaryProducts()
     {
         $this->complementaryItems = [];
-        $this->complementaryProductsIds = [];
-        $this->complementaryCollectionsIds = [];
     }
     ######################## Clear Complementary Products :: End ############################
-
-    ######################## Updated Search Related Products :: Start ############################
-    public function updatedSearchRelatedProducts()
-    {
-        if ($this->searchRelatedProducts != "") {
-            $relatedProducts = $this->fetchProductsOrCollections($this->searchRelatedProducts, self::PRODUCT, $this->relatedProductsIds);
-            $relatedCollections = $this->fetchProductsOrCollections($this->searchRelatedProducts, self::COLLECTION, $this->relatedCollectionsIds);
-
-            $this->relatedList = $relatedCollections->union($relatedProducts)->toArray();
-        }
-    }
-    ######################## Updated Search Related Products :: End ############################
 
     ######################## Add Related Product :: Start ############################
     public function addRelatedProduct($relatedProductId, $relatedProductType)
     {
         $relatedProduct = $this->fetchProductOrCollection($relatedProductId, $relatedProductType);
+        $relatedProduct['pivot']['rank'] = 0;
 
         if ($relatedProduct) {
             $this->relatedItems[] = $relatedProduct;
-            $this->addToRelatedIds($relatedProductId, $relatedProductType);
-            $this->searchRelatedProducts = "";
         }
     }
     ######################## Add Related Product :: End ############################
@@ -744,7 +769,6 @@ class CollectionForm extends Component
     ######################## Delete Related Product :: Start ############################
     public function deleteRelatedProduct($relatedProductId, $relatedProductType)
     {
-        $this->removeFromRelatedIds($relatedProductId, $relatedProductType);
         $this->relatedItems = array_filter(
             $this->relatedItems,
             fn ($product) => $product['id'] != $relatedProductId || $product['type'] != $relatedProductType
@@ -756,55 +780,94 @@ class CollectionForm extends Component
     public function clearRelatedProducts()
     {
         $this->relatedItems = [];
-        $this->relatedProductsIds = [];
-        $this->relatedCollectionsIds = [];
     }
     ######################## Clear Related Products :: End ############################
 
-    ######################## Fetch Products Or Collections :: Start ############################
-    private function fetchProductsOrCollections(string $searchTerm, string $type, array $excludeIds = [])
+    ######################## Update Complementary Product Rank :: Start ############################
+    public function editComplementaryRank($key)
     {
-        $searchTerm = strtolower($searchTerm);
-
-        if ($type == self::PRODUCT) {
-            return Product::select([
-                'id',
-                'name',
-                'brand_id',
-            ])
-                ->with([
-                    'brand' => function ($q) {
-                        $q->select('id', 'name');
-                    },
-                    'thumbnail'
-                ])
-                ->whereNotIn('id', $excludeIds)
-                ->where(function ($q) use ($searchTerm) {
-                    $q->whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%'])
-                        ->orWhereHas('brand', function ($q) use ($searchTerm) {
-                            $q->whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%']);
-                        });
-                })
-                ->limit(self::LIMIT)
-                ->get();
-        } elseif ($type == self::COLLECTION) {
-            return Collection::select([
-                'id',
-                'name',
-                DB::raw('NULL as brand_id'),
-            ])
-                ->with([
-                    'thumbnail'
-                ])
-                ->whereNotIn('id', $excludeIds)
-                ->where(function ($q) use ($searchTerm) {
-                    $q->whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%']);
-                })
-                ->limit(self::LIMIT)
-                ->get();
-        }
+        $this->complementaryItems[$key]['pivot']['rank'] = $this->complementaryHighestRank++;
     }
-    ######################## Fetch Products Or Collections :: End ############################
+    ######################## Update Complementary Product Rank :: End ############################
+
+    ######################## Update Related Product Rank :: Start ############################
+    public function editRelatedRank($key)
+    {
+        $this->relatedItems[$key]['pivot']['rank'] = $this->relatedHighestRank++;
+    }
+    ######################## Update Related Product Rank :: End ############################
+
+    ######################## Reset Complementary Products Rank :: Start ############################
+    public function resetComplementaryRank()
+    {
+        $this->complementaryHighestRank = 1;
+
+        $this->complementaryItems = array_map(
+            function ($product) {
+                $product['pivot']['rank'] = 0;
+                return $product;
+            },
+            $this->complementaryItems
+        );
+    }
+    ######################## Reset Complementary Products Rank :: End ############################
+
+    ######################## Reset Related Products Rank :: Start ############################
+    public function resetRelatedRank()
+    {
+        $this->relatedHighestRank = 1;
+
+        $this->relatedItems = array_map(
+            function ($product) {
+                $product['pivot']['rank'] = 0;
+                return $product;
+            },
+            $this->relatedItems
+        );
+    }
+    ######################## Reset Related Products Rank :: End ############################
+
+    ######################## Clean Complementary Ranking :: Start ############################
+    public function cleanComplementaryRanking()
+    {
+        $max = 1;
+
+        // Sort Complementary Products by Rank
+        usort($this->complementaryItems, function ($a, $b) {
+            return $a['pivot']['rank'] <=> $b['pivot']['rank'];
+        });
+
+        // Update Complementary Products Rank
+        foreach ($this->complementaryItems as $key => $complementaryItem) {
+            if ($this->complementaryItems[$key]['pivot']['rank'] != 0) {
+                $this->complementaryItems[$key]['pivot']['rank'] = $max++;
+            }
+        }
+
+        $this->complementaryHighestRank = $max;
+    }
+    ######################## Clean Complementary Ranking :: End ############################
+
+    ######################## Clean Related Ranking :: Start ############################
+    public function cleanRelatedRanking()
+    {
+        $max = 1;
+
+        // Sort Related Products by Rank
+        usort($this->relatedItems, function ($a, $b) {
+            return $a['pivot']['rank'] <=> $b['pivot']['rank'];
+        });
+
+        // Update Related Products Rank
+        foreach ($this->relatedItems as $key => $relatedItem) {
+            if ($this->relatedItems[$key]['pivot']['rank'] != 0) {
+                $this->relatedItems[$key]['pivot']['rank'] = $max++;
+            }
+        }
+
+        $this->relatedHighestRank = $max;
+    }
+    ######################## Clean Related Ranking :: End ############################
 
     ######################## Fetch Product Or Collection :: Start ############################
     private function fetchProductOrCollection(int $productId, string $productType)
@@ -839,64 +902,7 @@ class CollectionForm extends Component
     }
     ######################## Fetch Product Or Collection :: End ############################
 
-    ######################## Add To Complementary Ids :: Start ############################
-    private function addToComplementaryIds(int $complementaryProductId, string $complementaryProductType)
-    {
-        if ($complementaryProductType == self::PRODUCT) {
-            $this->complementaryProductsIds[] = $complementaryProductId;
-        } elseif ($complementaryProductType == self::COLLECTION) {
-            $this->complementaryCollectionsIds[] = $complementaryProductId;
-        }
-    }
-    ######################## Add To Complementary Ids :: End ############################
-
-    ######################## Add To Related Ids :: Start ############################
-    private function addToRelatedIds(int $relatedProductId, string $relatedProductType)
-    {
-        if ($relatedProductType == self::PRODUCT) {
-            $this->relatedProductsIds[] = $relatedProductId;
-        } elseif ($relatedProductType == self::COLLECTION) {
-            $this->relatedCollectionsIds[] = $relatedProductId;
-        }
-    }
-    ######################## Add To Related Ids :: End ############################
-
-    ######################## Remove From Complementary Ids :: Start ############################
-    private function removeFromComplementaryIds(int $complementaryProductId, string $complementaryProductType)
-    {
-        if ($complementaryProductType == self::PRODUCT) {
-            $this->complementaryProductsIds = array_filter(
-                $this->complementaryProductsIds,
-                fn ($id) => $id != $complementaryProductId
-            );
-        } elseif ($complementaryProductType == self::COLLECTION) {
-            $this->complementaryCollectionsIds = array_filter(
-                $this->complementaryCollectionsIds,
-                fn ($id) => $id != $complementaryProductId
-            );
-        }
-    }
-    ######################## Remove From Complementary Ids :: End ############################
-
-    ######################## Remove From Related Ids :: Start ############################
-    private function removeFromRelatedIds(int $relatedProductId, string $relatedProductType)
-    {
-        if ($relatedProductType == self::PRODUCT) {
-            $this->relatedProductsIds = array_filter(
-                $this->relatedProductsIds,
-                fn ($id) => $id != $relatedProductId
-            );
-        } elseif ($relatedProductType == self::COLLECTION) {
-            $this->relatedCollectionsIds = array_filter(
-                $this->relatedCollectionsIds,
-                fn ($id) => $id != $relatedProductId
-            );
-        }
-    }
-    ######################## Remove From Related Ids :: End ############################
-
-
-    ######################## Save New Collection :: Start ############################
+    ######################## Save New Product :: Start ############################
     public function save($new = false)
     {
         $this->validate();
@@ -973,14 +979,36 @@ class CollectionForm extends Component
 
             // Add Complementary Products
             if (count($this->complementaryItems)) {
-                $collection->complementedProducts()->sync($this->complementaryProductsIds);
-                $collection->complementedCollections()->sync($this->complementaryCollectionsIds);
+                $complementaryProducts = [];
+                $complementaryCollections = [];
+
+                foreach ($this->complementaryItems as $key => $complementaryItem) {
+                    if ($complementaryItem['type'] == self::PRODUCT) {
+                        $complementaryProducts[$complementaryItem['id']] = ['rank' => $complementaryItem['pivot']['rank']];
+                    } elseif ($complementaryItem['type'] == self::COLLECTION) {
+                        $complementaryCollections[$complementaryItem['id']] = ['rank' => $complementaryItem['pivot']['rank']];
+                    }
+                }
+
+                $collection->complementedProducts()->sync($complementaryProducts);
+                $collection->complementedCollections()->sync($complementaryCollections);
             }
 
             // Add Related Products
             if (count($this->relatedItems)) {
-                $collection->relatedProducts()->sync($this->relatedProductsIds);
-                $collection->relatedCollections()->sync($this->relatedCollectionsIds);
+                $relatedProducts = [];
+                $relatedCollections = [];
+
+                foreach ($this->relatedItems as $key => $relatedItem) {
+                    if ($relatedItem['type'] == self::PRODUCT) {
+                        $relatedProducts[$relatedItem['id']] = ['rank' => $relatedItem['pivot']['rank']];
+                    } elseif ($relatedItem['type'] == self::COLLECTION) {
+                        $relatedCollections[$relatedItem['id']] = ['rank' => $relatedItem['pivot']['rank']];
+                    }
+                }
+
+                $collection->relatedProducts()->sync($relatedProducts);
+                $collection->relatedCollections()->sync($relatedCollections);
             }
 
             DB::commit();
@@ -999,7 +1027,7 @@ class CollectionForm extends Component
             }
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+            // throw $th;
             Session::flash('error', __("admin/productsPages.Collection hasn't been added"));
             redirect()->route('admin.collections.index');
         }
@@ -1093,14 +1121,36 @@ class CollectionForm extends Component
 
             // Add Complementary Products
             if (count($this->complementaryItems)) {
-                $this->collection->complementedProducts()->sync($this->complementaryProductsIds);
-                $this->collection->complementedCollections()->sync($this->complementaryCollectionsIds);
+                $complementaryProducts = [];
+                $complementaryCollections = [];
+
+                foreach ($this->complementaryItems as $key => $complementaryItem) {
+                    if ($complementaryItem['type'] == self::PRODUCT) {
+                        $complementaryProducts[$complementaryItem['id']] = ['rank' => $complementaryItem['pivot']['rank']];
+                    } elseif ($complementaryItem['type'] == self::COLLECTION) {
+                        $complementaryCollections[$complementaryItem['id']] = ['rank' => $complementaryItem['pivot']['rank']];
+                    }
+                }
+
+                $this->collection->complementedProducts()->sync($complementaryProducts);
+                $this->collection->complementedCollections()->sync($complementaryCollections);
             }
 
             // Add Related Products
             if (count($this->relatedItems)) {
-                $this->collection->relatedProducts()->sync($this->relatedProductsIds);
-                $this->collection->relatedCollections()->sync($this->relatedCollectionsIds);
+                $relatedProducts = [];
+                $relatedCollections = [];
+
+                foreach ($this->relatedItems as $key => $relatedItem) {
+                    if ($relatedItem['type'] == self::PRODUCT) {
+                        $relatedProducts[$relatedItem['id']] = ['rank' => $relatedItem['pivot']['rank']];
+                    } elseif ($relatedItem['type'] == self::COLLECTION) {
+                        $relatedCollections[$relatedItem['id']] = ['rank' => $relatedItem['pivot']['rank']];
+                    }
+                }
+
+                $this->collection->relatedProducts()->sync($relatedProducts);
+                $this->collection->relatedCollections()->sync($relatedCollections);
             }
 
             DB::commit();
@@ -1109,7 +1159,8 @@ class CollectionForm extends Component
             redirect()->route('admin.collections.index');
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+
+            // throw $th;
             Session::flash('error', __("admin/productsPages.Collection hasn't been updated"));
             redirect()->route('admin.collections.index');
         }

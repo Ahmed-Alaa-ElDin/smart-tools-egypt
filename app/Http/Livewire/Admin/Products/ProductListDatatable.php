@@ -18,7 +18,6 @@ class ProductListDatatable extends Component
     public $selectedProducts = [];
     public $subcategory_id = "%";
     public $brand_id = "%";
-    public $excludedProducts = [];
     public $productsIds = [];
     public $selectAllProducts = false;
 
@@ -59,7 +58,6 @@ class ProductListDatatable extends Component
                     ->orWhere('products.base_price', 'like', '%' . $this->search . '%')
                     ->orWhere('products.final_price', 'like', '%' . $this->search . '%');
             })
-            ->whereNotIn('products.id', $this->excludedProducts)
             ->where('publish', 1)
 
             ->orderBy($this->sortBy, $this->sortDirection)

@@ -6,11 +6,12 @@ use Livewire\Component;
 use App\Models\Subcategory;
 use App\Models\Supercategory;
 use App\Models\MainSliderBanner;
+use App\Models\SubsliderBanner;
 
 class MainSlider extends Component
 {
     public $todayDeals;
-    public $banners, $topSupercategories, $topSubcategories, $items;
+    public $banners, $topSupercategories, $subSliders, $items;
 
     public function mount()
     {
@@ -28,7 +29,11 @@ class MainSlider extends Component
             }
         ])->where('top', '>', 0)->orderBy('top')->get();
 
-        $this->topSubcategories = Subcategory::select('id', 'name', 'image_name', 'top')->where('top', '>', 0)->orderBy('top')->take(5)->get();
+        $this->subSliders = SubsliderBanner::with("banner")
+            ->where('rank', "<=", 4)
+            ->orderBy("rank")
+            ->get();
+
 
         $this->items = $this->todayDeals && $this->todayDeals->finalItems ? $this->todayDeals->finalItems->toArray() : [];
     }

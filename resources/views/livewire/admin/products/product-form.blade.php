@@ -602,7 +602,7 @@
                     <button wire:click="cleanComplementaryRanking"
                         class="btn btn-sm bg-info hover:bg-infoDark focus:bg-infoDark active:bg-infoDark font-bold">
                         <span class="material-icons rtl:ml-1 ltr:mr-1">
-                                sanitizer
+                            sanitizer
                         </span>
                         {{ __('admin/productsPages.Clean Ranking') }}
                     </button>
@@ -758,7 +758,7 @@
                 {{ __('admin/productsPages.Related Products') }}
             </div>
 
-            {{-- Add/Clear Complementary Product :: Start --}}
+            {{-- Add/Clear Related Product :: Start --}}
             <div class="col-span-12 flex items-center justify-around">
                 <button wire:click="$emitTo('admin.products.product-list-popup','show','related-items-list')"
                     class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
@@ -778,7 +778,7 @@
                     </button>
                 @endif
             </div>
-            {{-- Add/Clear Complementary Product :: End --}}
+            {{-- Add/Clear Related Product :: End --}}
 
             {{-- Control Ranking :: Start --}}
             <div class="col-span-12 flex items-center justify-around">
@@ -787,7 +787,7 @@
                     <button wire:click="cleanRelatedRanking"
                         class="btn btn-sm bg-info hover:bg-infoDark focus:bg-infoDark active:bg-infoDark font-bold">
                         <span class="material-icons rtl:ml-1 ltr:mr-1">
-                                sanitizer
+                            sanitizer
                         </span>
                         {{ __('admin/productsPages.Clean Ranking') }}
                     </button>
@@ -1180,34 +1180,10 @@
     {{-- Modals Section Start --}}
     @livewire('admin.products.product-list-popup', [
         'modalName' => 'complementary-items-list',
-        'excludedProducts' => array_column(
-            array_filter($complementaryItems, function ($item) {
-                return $item['type'] == 'Product';
-            }),
-            'id',
-        ),
-        'excludedCollections' => array_column(
-            array_filter($complementaryItems, function ($item) {
-                return $item['type'] == 'Collection';
-            }),
-            'id',
-        ),
     ])
 
     @livewire('admin.products.product-list-popup', [
         'modalName' => 'related-items-list',
-        'excludedProducts' => array_column(
-            array_filter($relatedItems, function ($item) {
-                return $item['type'] == 'Product';
-            }),
-            'id',
-        ),
-        'excludedCollections' => array_column(
-            array_filter($relatedItems, function ($item) {
-                return $item['type'] == 'Collection';
-            }),
-            'id',
-        ),
     ])
     {{-- Modals Section End --}}
 </div>

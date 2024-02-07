@@ -206,7 +206,7 @@
             </button>
 
             {{-- Back --}}
-            <a href="{{ route('admin.setting.homepage.sliders.index') }}"
+            <a href="{{ route('admin.setting.homepage.subslider-banners.index') }}"
                 class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">
                 {{ __('admin/sitePages.Back') }}
             </a>

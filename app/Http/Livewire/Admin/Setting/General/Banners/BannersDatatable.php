@@ -32,7 +32,7 @@ class BannersDatatable extends Component
     // Render With each update
     public function render()
     {
-        $banners = Banner::withCount("mainSliderBanner")
+        $banners = Banner::withCount("mainSliderBanner", "subsliderBanner")
             ->where('banner_name', 'like', "%{$this->search}%")
             ->orWhere('description', 'like', "%{$this->search}%")
             ->orWhere('link', 'like', "%{$this->search}%")

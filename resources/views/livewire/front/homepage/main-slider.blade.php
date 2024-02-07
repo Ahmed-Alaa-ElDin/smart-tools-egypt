@@ -61,53 +61,41 @@
     </aside>
     {{-- All Categories : End --}}
 
-    {{-- Main Slider & top categories : Start --}}
-    <div class="col-span-12 lg:col-span-8 overflow-hidden grid grid-rows-3 gap-3 h-72 md:h-80 lg:h-96">
-        {{-- Main Slider : Start --}}
-        <div id="main-slider" class="splide h-full w-full row-span-2 rounded overflow-hidden">
-            <div class="splide__track">
-                <ul class="splide__list shadow">
-                    @foreach ($banners as $banner)
-                        <li class="splide__slide">
-                            <a href="{{ $banner->banner->link }}">
-                                <img src="{{ asset('storage/images/banners/original/' . $banner->banner->banner_name) }}"
-                                    class="" alt="{{ $banner->banner->description }}">
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
+    <div class="col-span-12 lg:col-span-8 flex flex-col gap-2">
+        {{-- Main Slider & top categories : Start --}}
+        <div class="overflow-hidden h-48 md:h-56 lg:h-64">
+            {{-- Main Slider : Start --}}
+            <div id="main-slider" class="splide h-full w-full rounded overflow-hidden">
+                <div class="splide__track">
+                    <ul class="splide__list shadow">
+                        @foreach ($banners as $banner)
+                            <li class="splide__slide">
+                                <a href="{{ $banner->banner->link }}">
+                                    <img src="{{ asset('storage/images/banners/original/' . $banner->banner->banner_name) }}"
+                                        class="" alt="{{ $banner->banner->description }}">
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
             </div>
+            {{-- Main Slider : End --}}
         </div>
-        {{-- Main Slider : End --}}
+        {{-- Main Slider & top categories : End --}}
 
-        {{-- Top Subcategories : Start --}}
-        <div class="row-span-1 grid grid-cols-5 gap-3 justify-between items-center">
-            @foreach ($topSubcategories as $topSubcategory)
-                <a href="{{ route('front.subcategories.show', $topSubcategory->id) }}"
-                    class="shadow rounded overflow-hidden bg-white p-1 text-center">
-                    @if ($topSubcategory->image_name)
-                        <img src="{{ asset('storage/images/subcategories/cropped100/' . $topSubcategory->image_name) }}"
-                            class="m-auto w-14 lg:w-20" alt="{{ $topSubcategory->name }}">
-                    @else
-                        <div class="w-full h-full flex justify-center items-center bg-gray-200">
-                            <div class="flex justify-center items-center">
-                                <span class="block material-icons text-6xl md:text-7xl">
-                                    handyman
-                                </span>
-                            </div>
-                        </div>
-                    @endif
-
-                    <span class="text-xs md:text-sm inline-block font-bold mt-1">
-                        {{ $topSubcategory->name }}
-                    </span>
-                </a>
+        {{-- SubSlider Banners : Start --}}
+        <div class="grid grid-cols-2 gap-3 justify-between items-center overflow-hidden h-48 md:h-56 lg:h-64">
+            @foreach ($subSliders as $subSlider)
+                <div class="shadow rounded overflow-hidden bg-white text-center h-24 md:h-28 lg:h-32">
+                    <a href="{{ $subSlider->banner->link }}">
+                        <img src="{{ asset('storage/images/banners/original/' . $subSlider->banner->banner_name) }}"
+                            class="m-auto " alt="{{ $subSlider->banner->description }}">
+                    </a>
+                </div>
             @endforeach
         </div>
-        {{-- Top Subcategories : End --}}
-
+        {{-- SubSlider Banners : End --}}
     </div>
-    {{-- Main Slider & top categories : End --}}
 
     {{-- Today's Deal : Start --}}
     <aside class="col-span-12 lg:col-span-2 shadow rounded overflow-hidden">
@@ -119,7 +107,7 @@
                 class="text-xs font-bold rounded py-0.5 px-1 bg-red-600 text-white">{{ __('front/homePage.Hot') }}</span>
         </div>
         <div
-            class="overflow-auto scrollbar scrollbar-thumb-secondary scrollbar-track-primary scrollbar-thin lg:h-80 p-2 bg-primary rounded-b">
+            class="overflow-auto scrollbar scrollbar-thumb-secondary scrollbar-track-primary scrollbar-thin lg:h-116 p-2 bg-primary rounded-b">
             <div>
 
                 <ul class="grid grid-cols-2 lg:grid-cols-1 gap-2 ">

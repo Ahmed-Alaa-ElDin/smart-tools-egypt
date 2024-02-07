@@ -18,7 +18,6 @@ class CollectionListDatatable extends Component
     public $selectedCollections = [];
     public $subcategory_id = "%";
     public $brand_id = "%";
-    public $excludedCollections = [];
     public $collectionsIds = [];
     public $selectAllCollections = false;
 
@@ -59,7 +58,6 @@ class CollectionListDatatable extends Component
                     ->orWhere('collections.final_price', 'like', '%' . $this->search . '%');
             })
             ->where('publish', 1)
-            ->whereNotIn('collections.id', $this->excludedCollections)
 
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage, ['*'], 'CollectionsPage');

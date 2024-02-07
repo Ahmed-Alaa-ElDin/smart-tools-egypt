@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Setting\Homepage\Sliders;
+namespace App\Http\Livewire\Admin\Setting\Homepage\SubsliderBanners;
 
-use App\Models\Banner;
-use App\Models\MainSliderBanner;
+use App\Models\SubsliderBanner;
 use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class SliderBannersDatatable extends Component
+class SubsliderBannersDatatable extends Component
 {
     use WithPagination;
 
@@ -21,16 +20,14 @@ class SliderBannersDatatable extends Component
         'deleteBanner'
     ];
 
-    // Render Once
     public function mount()
     {
         $this->perPage = Config::get('constants.constants.PAGINATION');
     }
 
-    // Render With each update
     public function render()
     {
-        $banners = MainSliderBanner::with(["banner"])
+        $banners = SubsliderBanner::with(["banner"])
             ->whereHas('banner', function ($q) {
                 $q->where('description->ar', 'like', '%' . $this->search . '%')
                     ->orWhere('description->en', 'like', '%' . $this->search . '%')
@@ -39,7 +36,7 @@ class SliderBannersDatatable extends Component
             ->orderBy("rank")
             ->paginate($this->perPage);
 
-        return view('livewire.admin.setting.homepage.sliders.slider-banners-datatable', compact('banners'));
+        return view('livewire.admin.setting.homepage.subslider-banners.subslider-banners-datatable', compact('banners'));
     }
 
     // reset pagination after new search
@@ -50,7 +47,7 @@ class SliderBannersDatatable extends Component
 
     public function checkRank($rank, $old_rank)
     {
-        $banner = MainSliderBanner::where('rank', $rank)->first();
+        $banner = SubsliderBanner::where('rank', $rank)->first();
 
         if ($banner) {
             $banner->rank = $old_rank;
@@ -63,12 +60,12 @@ class SliderBannersDatatable extends Component
     ######## Rank UP : Start #########
     public function rankUp($banner_id)
     {
-        $banner = MainSliderBanner::findOrFail($banner_id);
+        $banner = SubsliderBanner::findOrFail($banner_id);
 
         if ($banner->rank > 1) {
             if ($banner->rank == 127) {
-                $this->checkRank(10, $banner->rank);
-                $banner->rank = 10;
+                $this->checkRank(4, $banner->rank);
+                $banner->rank = 4;
             } else {
                 $this->checkRank($banner->rank - 1, $banner->rank);
                 $banner->rank--;
@@ -81,12 +78,12 @@ class SliderBannersDatatable extends Component
     ######## Rank Down : Start #########
     public function rankDown($banner_id)
     {
-        $banner = MainSliderBanner::findOrFail($banner_id);
+        $banner = SubsliderBanner::findOrFail($banner_id);
 
         $this->checkRank($banner->rank + 1, $banner->rank);
 
-        if ($banner->rank < 11) {
-            if ($banner->rank == 10) {
+        if ($banner->rank < 5) {
+            if ($banner->rank == 4) {
                 $banner->rank = 127;
             } else {
                 $banner->rank++;
@@ -126,7 +123,7 @@ class SliderBannersDatatable extends Component
     public function deleteBanner($banner_id)
     {
         try {
-            $banner = MainSliderBanner::findOrFail($banner_id);
+            $banner = SubsliderBanner::findOrFail($banner_id);
 
             $banner->delete();
 

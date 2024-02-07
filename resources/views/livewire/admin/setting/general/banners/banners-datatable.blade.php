@@ -161,6 +161,13 @@
                                                 </span>
                                             @endif
 
+                                            @if ($banner->subslider_banner_count)
+                                                <span
+                                                    class="text-xs bg-secondaryLight text-white px-2 py-1 rounded-full">
+                                                    {{ __('admin/sitePages.Subslider') }}
+                                                </span>
+                                            @endif
+
                                             @if ($banner->top_banner)
                                                 <span
                                                     class="text-xs bg-secondaryLight text-white px-2 py-1 rounded-full">

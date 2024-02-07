@@ -61,6 +61,19 @@
                                 </a>
                                 {{-- Slider : End --}}
 
+                                {{-- SubSlider Banners : Start --}}
+                                <a 
+                                href="{{ route('admin.setting.homepage.subslider-banners.index') }}"
+                                    class="col-span-6 md:col-span-3 bg-gray-100 rounded-xl shadow hover:shadow-lg cursor-pointer p-3 flex flex-col justify-center items-center gap-3">
+                                    <span class="material-icons text-center text-9xl ">
+                                        grid_view
+                                    </span>
+                                    <span class="text-center font-bold">
+                                        {{ __('admin/sitePages.Manage SubSlider Banners') }}
+                                    </span>
+                                </a>
+                                {{-- SubSlider Banners : End --}}
+
                                 {{-- Top Main Categories : Start --}}
                                 <a href="{{ route('admin.setting.homepage.topsupercategories.index') }}"
                                     class="col-span-6 md:col-span-3 bg-gray-100 rounded-xl shadow hover:shadow-lg cursor-pointer p-3 flex flex-col justify-center items-center gap-3">
@@ -88,18 +101,6 @@
                                     </span>
                                 </a>
                                 {{-- Top Categories : End --}}
-
-                                {{-- Top Sub Categories : Start --}}
-                                <a href="{{ route('admin.setting.homepage.topsubcategories.index') }}"
-                                    class="col-span-6 md:col-span-3 bg-gray-100 rounded-xl shadow hover:shadow-lg cursor-pointer p-3 flex flex-col justify-center items-center gap-3">
-                                    <span class="material-icons text-center text-9xl ">
-                                        hub
-                                    </span>
-                                    <span class="text-center font-bold">
-                                        {{ __('admin/sitePages.Manage Top Subcategories') }}
-                                    </span>
-                                </a>
-                                {{-- Top Sub Categories : End --}}
 
                                 {{-- Top Brands : Start --}}
                                 <a href="{{ route('admin.setting.homepage.topbrands.index') }}"

@@ -8,7 +8,7 @@ module.exports = {
         "./vendor/laravel/jetstream/**/*.blade.php",
         "./storage/framework/views/*.php",
         "./resources/views/**/*.blade.php",
-        "./node_modules/flowbite/**/*.js"
+        "./node_modules/flowbite/**/*.js",
     ],
 
     theme: {
@@ -60,6 +60,14 @@ module.exports = {
 
                 male: "#4cb2c9",
                 female: "#e85591",
+            },
+            spacing: {
+                '104': "26rem",
+                '108': "27rem",
+                '112': "28rem",
+                '116': "29rem",
+                '120': "30rem",
+                '128': "32rem",
             },
             fontFamily: {
                 sans: ["Nunito", ...defaultTheme.fontFamily.sans],

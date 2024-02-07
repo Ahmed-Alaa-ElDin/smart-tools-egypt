@@ -381,10 +381,7 @@ class ProductForm extends Component
             ];
         }
 
-        // Calculate Highest Rank in Complementary Products
         $this->complementaryHighestRank = count($this->complementaryItems) ? max(array_map(fn ($product) => $product['pivot']['rank'], $this->complementaryItems)) + 1 : 1;
-
-        // Calculate Highest Rank in Related Products
         $this->relatedHighestRank = count($this->relatedItems) ? max(array_map(fn ($product) => $product['pivot']['rank'], $this->relatedItems)) + 1 : 1;
     }
     ######################## Mount :: End ############################
@@ -1001,9 +998,9 @@ class ProductForm extends Component
             }
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+            // throw $th;
             Session::flash('error', __("admin/productsPages.Product hasn't been added"));
-            // redirect()->route('admin.products.index');
+            redirect()->route('admin.products.index');
         }
     }
     ######################## Save New Product :: End ############################

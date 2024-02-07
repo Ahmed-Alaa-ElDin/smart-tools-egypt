@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\Setting\Homepage\HomepageController;
 use App\Http\Controllers\Admin\Setting\Homepage\TopBrandsController;
 use App\Http\Controllers\Admin\Setting\Homepage\TodayDealsController;
 use App\Http\Controllers\Admin\Setting\General\generalSettingController;
+use App\Http\Controllers\Admin\Setting\Homepage\SubsliderBannerController;
 use App\Http\Controllers\Admin\Setting\Homepage\TopCategoriesController;
 use App\Http\Controllers\Admin\Setting\Homepage\TopSubcategoriesController;
 use App\Http\Controllers\Admin\Setting\Homepage\TopSuperCategoriesController;
@@ -45,10 +46,13 @@ Route::group(['prefix' => 'setting/', 'as' => 'setting.'], function () {
         Route::get('edit/{section_id}', [HomepageController::class, 'edit'])->name('edit');
         // Section : End
 
-
         // Slider : Start
         Route::resource('/sliders', SliderController::class);
         // Slider : End
+
+        // Subslider Banner : Start
+        Route::resource('/subslider-banners', SubsliderBannerController::class);
+        // Subslider Banner : End
 
         // Top Super Categories : Start
         Route::get('/topsupercategories', [TopSuperCategoriesController::class, 'index'])->name('topsupercategories.index');
