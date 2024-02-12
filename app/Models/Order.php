@@ -119,7 +119,7 @@ class Order extends Model
     public function getCanReturnedAttribute()
     {
         if ($this->delivered_at) {
-            return $this->status_id == 45 && Carbon::create($this->delivered_at)->diffInDays() <= config('constants.constants.RETURN_PERIOD');
+            return $this->status_id == 45 && Carbon::create($this->delivered_at)->diffInDays() <= config('settings.return_period');
         }
         return false;
     }

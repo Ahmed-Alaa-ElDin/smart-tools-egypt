@@ -332,7 +332,7 @@ class OrderPaymentSummary extends Component
             $this->balance = $this->total_after_coupon_discount > $this->balance ? $this->balance : $this->total_after_coupon_discount;
 
             $this->points_egp = ($this->total_after_coupon_discount - $this->balance) > $this->points_egp ? $this->points_egp : (($this->total_after_coupon_discount) - $this->balance);
-            $this->points = floor($this->points_egp / config('constants.constants.POINT_RATE'));
+            $this->points = floor($this->points_egp / config('settings.points_conversion_rate'));
 
             // Get the order from database
             $order = Order::with([

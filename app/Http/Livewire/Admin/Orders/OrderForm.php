@@ -543,7 +543,7 @@ class OrderForm extends Component
 
         $this->total = is_null($this->delivery_fees) || $this->delivery_fees == 0 || $this->coupon_free_shipping ? $this->products_best_prices - $this->order_discount - $this->coupon_discount : $this->products_best_prices - $this->order_discount - $this->coupon_discount + $this->delivery_fees;
 
-        $this->points_egp = $this->points * config('constants.constants.POINT_RATE');
+        $this->points_egp = $this->points * config('settings.points_conversion_rate');
 
         $this->total_after_wallet = $this->total - $this->wallet - $this->points_egp;
     }

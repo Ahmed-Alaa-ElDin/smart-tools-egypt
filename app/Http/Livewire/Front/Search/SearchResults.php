@@ -28,7 +28,7 @@ class SearchResults extends Component
 
     public function mount()
     {
-        $this->perPage = config('constants.constants.FRONT_PAGINATION');
+        $this->perPage = config('settings.front_pagination');
     }
 
     public function render()

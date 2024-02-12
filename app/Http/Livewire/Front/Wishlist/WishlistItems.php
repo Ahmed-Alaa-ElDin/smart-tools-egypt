@@ -14,7 +14,7 @@ class WishlistItems extends Component
 
     public function render()
     {
-        $items = Cart::instance('wishlist')->content()->paginate(config('constants.constants.FRONT_PAGINATION'));
+        $items = Cart::instance('wishlist')->content()->paginate(config('settings.front_pagination'));
 
         return view('livewire.front.wishlist.wishlist-items', compact('items'));
     }

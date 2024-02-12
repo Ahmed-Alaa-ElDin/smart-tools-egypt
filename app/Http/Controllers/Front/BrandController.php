@@ -34,7 +34,7 @@ class BrandController extends Controller
 
         $productsIds = $brand->products->pluck('id');
 
-        $products = getBestOfferForProducts($productsIds)->paginate(config('constants.constants.FRONT_PAGINATION'));
+        $products = getBestOfferForProducts($productsIds)->paginate(config('settings.front_pagination'));
 
         return view('front.brands.show', compact(['brand', 'products']));
     }

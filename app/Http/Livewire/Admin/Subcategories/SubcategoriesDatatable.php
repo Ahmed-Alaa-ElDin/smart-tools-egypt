@@ -25,7 +25,7 @@ class SubcategoriesDatatable extends Component
     // Render Once
     public function mount()
     {
-        $this->perPage = Config::get('constants.constants.PAGINATION');
+        $this->perPage = Config::get('settings.back_pagination');
 
         $this->sortBy = 'subcategories.name->' . session('locale');
     }

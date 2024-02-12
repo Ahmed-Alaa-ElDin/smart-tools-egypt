@@ -10,7 +10,7 @@
         {{-- ######################################################### --}}
         {{-- ######################################################### --}}
         {{-- Media Start --}}
-        <div class="grid grid-cols-12 gap-x-4 gap-y-2 items-center bg-gray-100 p-4 text-center  rounded shadow">
+        <div class="grid grid-cols-12 gap-x-4 gap-y-2 items-center bg-gray-100 p-4 text-center rounded shadow">
 
             <div class="col-span-12 font-bold text-black mb-2">{{ __('admin/productsPages.Product Media') }}</div>
 

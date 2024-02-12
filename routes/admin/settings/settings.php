@@ -9,7 +9,8 @@ use App\Http\Controllers\Admin\Setting\Homepage\HomepageController;
 
 use App\Http\Controllers\Admin\Setting\Homepage\TopBrandsController;
 use App\Http\Controllers\Admin\Setting\Homepage\TodayDealsController;
-use App\Http\Controllers\Admin\Setting\General\generalSettingController;
+use App\Http\Controllers\Admin\Setting\General\GeneralSettingController;
+use App\Http\Controllers\Admin\Setting\General\GlobalSettingController;
 use App\Http\Controllers\Admin\Setting\Homepage\SubsliderBannerController;
 use App\Http\Controllers\Admin\Setting\Homepage\TopCategoriesController;
 use App\Http\Controllers\Admin\Setting\Homepage\TopSubcategoriesController;
@@ -18,9 +19,13 @@ use App\Http\Controllers\Admin\Setting\Homepage\TopSuperCategoriesController;
 Route::group(['prefix' => 'setting/', 'as' => 'setting.'], function () {
 
     // General : Start
-    Route::get('/general', [generalSettingController::class, 'index'])->name('general');
+    Route::get('/general', [GeneralSettingController::class, 'index'])->name('general');
 
     Route::group(['prefix' => 'general/', 'as' => 'general.'], function () {
+        // Global Settings : Start
+        Route::get('global-settings', [GlobalSettingController::class, 'edit'])->name('global-settings.edit');
+        Route::put('global-settings', [GlobalSettingController::class, 'update'])->name('global-settings.update');
+        // Global Settings : End 
 
         // Top Banner : Start
         Route::get('/top-banner', [TopBannerController::class, 'index'])->name('topbanner.index');

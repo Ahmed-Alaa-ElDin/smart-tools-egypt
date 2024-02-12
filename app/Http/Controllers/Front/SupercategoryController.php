@@ -18,7 +18,7 @@ class SupercategoryController extends Controller
         $supercategories = Supercategory::without('validOffers')
             ->withCount(['products', 'categories', 'subcategories'])
             ->orderBy('products_count', 'desc')
-            ->paginate(config('constants.constants.FRONT_PAGINATION'));
+            ->paginate(config('settings.front_pagination'));
 
         return view('front.supercategories.index', compact('supercategories'));
     }
@@ -39,7 +39,7 @@ class SupercategoryController extends Controller
             }])
             ->findOrFail($supercategory_id);
 
-        $categories = $supercategory->categories->paginate(config('constants.constants.FRONT_PAGINATION'));
+        $categories = $supercategory->categories->paginate(config('settings.front_pagination'));
 
         return view('front.supercategories.show', compact('supercategory', 'categories'));
     }
@@ -54,7 +54,7 @@ class SupercategoryController extends Controller
             }])
             ->findOrFail($supercategory_id);
 
-        $subcategories = $supercategory->subcategories->paginate(config('constants.constants.FRONT_PAGINATION'));
+        $subcategories = $supercategory->subcategories->paginate(config('settings.front_pagination'));
 
         return view('front.supercategories.subcategories', compact('supercategory', 'subcategories'));
     }
@@ -69,7 +69,7 @@ class SupercategoryController extends Controller
 
         $productsIds = $supercategory->products->pluck('id');
 
-        $products = getBestOfferForProducts($productsIds)->paginate(config('constants.constants.FRONT_PAGINATION'));
+        $products = getBestOfferForProducts($productsIds)->paginate(config('settings.front_pagination'));
 
         return view('front.supercategories.products', compact('supercategory', 'products'));
     }

@@ -35,11 +35,11 @@ class ReviewBlock extends Component
             $user_review = $all_item_reviews->where('user_id', auth()->user()->id)->first();
             $this->user_review = $user_review;
             // get other reviews
-            $all_reviews = $all_item_reviews->where('user_id', '!=', auth()->user()->id)->paginate(config('constants.constants.PAGINATION'));
+            $all_reviews = $all_item_reviews->where('user_id', '!=', auth()->user()->id)->paginate(config('settings.back_pagination'));
         } else {
             $user_review = null;
             $this->user_review = null;
-            $all_reviews = $all_item_reviews->paginate(config('constants.constants.PAGINATION'));
+            $all_reviews = $all_item_reviews->paginate(config('settings.back_pagination'));
         }
 
         // get item's average rating
@@ -121,10 +121,10 @@ class ReviewBlock extends Component
     //         // get user's review
     //         $this->user_review = $this->all_product_reviews->where('user_id', auth()->user()->id)->first();
     //         // get other reviews
-    //         $this->all_reviews = $this->all_product_reviews->where('user_id', '!=', auth()->user()->id)->forPage($currentPage, config('constants.constants.PAGINATION'));
+    //         $this->all_reviews = $this->all_product_reviews->where('user_id', '!=', auth()->user()->id)->forPage($currentPage, config('settings.back_pagination'));
     //     } else {
     //         $this->user_review = null;
-    //         $this->all_reviews = $this->all_product_reviews->forPage($currentPage, config('constants.constants.PAGINATION'));
+    //         $this->all_reviews = $this->all_product_reviews->forPage($currentPage, config('settings.back_pagination'));
     //     }
     // }
     ############# Updated Current Page :: End #############

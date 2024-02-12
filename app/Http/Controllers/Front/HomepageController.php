@@ -212,7 +212,7 @@ class HomepageController extends Controller
         ############ Get Best Offer for all collections :: End ############
 
         ############ Concatenation of best Products & Collections  :: Start ############
-        $items = $collections->concat($products)->paginate(config('constants.constants.FRONT_PAGINATION'));
+        $items = $collections->concat($products)->paginate(config('settings.front_pagination'));
         ############ Concatenation of best Products & Collections  :: End ############
 
         return view('front.sections.section_products', compact('section', 'items'));

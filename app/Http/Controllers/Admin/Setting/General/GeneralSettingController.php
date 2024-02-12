@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin\Setting\General;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class generalSettingController extends Controller
+class GeneralSettingController extends Controller
 {
     /**
      * Display a listing of the resource.

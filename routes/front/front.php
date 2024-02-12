@@ -56,6 +56,13 @@ Route::group([
     ################ Subcategory :: End ##############
 
     ################ Offers :: Start ##############
+    // Last Box Offer
+    Route::get('/offers/last-box-offer', [OfferController::class, 'lastBox'])->name('last-box-offer');
+    // New Arrival Offer
+    Route::get('/offers/new-arrival-offer', [OfferController::class, 'newArrival'])->name('new-arrival-offer');
+    // Max Price Offer
+    Route::get('/offers/max-price-offer', [OfferController::class, 'maxPrice'])->name('max-price-offer');
+    // Custom Offers
     Route::resource('/offers', OfferController::class);
     ################ Offers :: End ##############
 

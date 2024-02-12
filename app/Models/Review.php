@@ -23,11 +23,11 @@ class Review extends Model
         return $this->morphTo();
     }
 
-    // One to many relationship (Inverse) Product --> Reviews
-    // public function product()
-    // {
-    //     return $this->belongsTo(Product::class);
-    // }
+    // TODO:: One to many relationship (Inverse) Product --> Reviews (Apply the same for Collections)
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 
     // One to many relationship (Inverse) User --> Reviews
     public function user()

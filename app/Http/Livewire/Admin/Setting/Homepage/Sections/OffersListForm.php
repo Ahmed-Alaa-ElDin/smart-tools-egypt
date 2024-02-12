@@ -17,7 +17,7 @@ class OffersListForm extends Component
     ######## Fires once in the beginning : Start ########
     public function mount()
     {
-        $this->perPage = Config::get('constants.constants.PAGINATION');
+        $this->perPage = Config::get('settings.back_pagination');
         $this->search = "";
     }
     ######## Fires once in the beginning : End ########

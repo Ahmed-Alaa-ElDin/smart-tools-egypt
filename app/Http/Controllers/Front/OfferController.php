@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Http\Controllers\Controller;
 use App\Models\Offer;
+use App\Models\Product;
+use App\Models\Setting;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class OfferController extends Controller
 {
@@ -15,7 +17,7 @@ class OfferController extends Controller
      */
     public function index()
     {
-        $offers = Offer::paginate(config('constants.constants.FRONT_PAGINATION'));
+        $offers = Offer::paginate(config('settings.front_pagination'));
 
         return view('front.offers.index', compact('offers'));
     }
@@ -82,7 +84,7 @@ class OfferController extends Controller
         ############ Get Best Offer for all collections :: End ############
 
         ############ Concatenation of best Products & Collections  :: Start ############
-        $items = $collections->concat($products)->paginate(config('constants.constants.FRONT_PAGINATION'));
+        $items = $collections->concat($products)->paginate(config('settings.front_pagination'));
         ############ Concatenation of best Products & Collections  :: End ############
 
         return view('front.offers.show', compact('offer', 'items'));
@@ -120,5 +122,90 @@ class OfferController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    /**
+     * Last Box Offer Page
+     */
+    public function lastBox()
+    {
+        $settings = Setting::first();
+
+        $offer = new Offer;
+        $offer->id = 0;
+        $offer->title = $settings->getTranslations("last_box_name");
+        $offer->banner = null;
+        $offer->free_shipping = 0;
+        $offer->start_at = null;
+        $offer->expire_at = null;
+        $offer->value = 0;
+        $offer->type = 0;
+        $offer->on_orders = 0;
+        $offer->created_at = $settings->created_at;
+        $offer->updated_at = $settings->updated_at;
+
+        $productsIds = Product::where('publish', 1)->where('quantity', '>', 0)->where('quantity', '<=', $settings->last_box_quantity)->pluck('id');
+
+        $items = getBestOfferForProducts($productsIds)->paginate(config('settings.front_pagination'));
+
+        return view('front.offers.show', compact('offer', 'items'));
+    }
+
+    /**
+     * New Arrival Offer Page
+     */
+    public function newArrival()
+    {
+        $settings = Setting::first();
+
+        $offer = new Offer;
+        $offer->id = 0;
+        $offer->title = $settings->getTranslations("new_arrival_name");
+        $offer->banner = null;
+        $offer->free_shipping = 0;
+        $offer->start_at = null;
+        $offer->expire_at = null;
+        $offer->value = 0;
+        $offer->type = 0;
+        $offer->on_orders = 0;
+        $offer->created_at = $settings->created_at;
+        $offer->updated_at = $settings->updated_at;
+
+        // get products that created between today and $settings->new_arrival_period days ago
+        $startDate = now()->subDays($settings->new_arrival_period)->startOfDay();
+        $endDate = now();
+
+        $productsIds = Product::where('publish', 1)->where('quantity', '>', 0)->whereBetween("created_at", [$startDate, $endDate])->pluck('id');
+
+        $items = getBestOfferForProducts($productsIds)->paginate(config('settings.front_pagination'));
+
+        return view('front.offers.show', compact('offer', 'items'));
+    }
+
+    /**
+     * Maximum Price Offer
+     */
+    public function maxPrice(){
+        $settings = Setting::first();
+
+        $offer = new Offer;
+        $offer->id = 0;
+        $offer->title = $settings->getTranslations("max_price_offer_name");
+        $offer->banner = null;
+        $offer->free_shipping = 0;
+        $offer->start_at = null;
+        $offer->expire_at = null;
+        $offer->value = 0;
+        $offer->type = 0;
+        $offer->on_orders = 0;
+        $offer->created_at = $settings->created_at;
+        $offer->updated_at = $settings->updated_at;
+
+        $productsIds = Product::where('publish', 1)->where('quantity', '>', 0)->get()->pluck('id');
+
+        $items = getBestOfferForProducts($productsIds)->where("best_price", "<=", $settings->max_price_offer)->paginate(config('settings.front_pagination'));
+
+        return view('front.offers.show', compact('offer', 'items'));
     }
 }

@@ -25,7 +25,7 @@ class OrdersDatatable extends Component
     // Before First Render
     public function mount()
     {
-        $this->perPage = Config::get('constants.constants.PAGINATION');
+        $this->perPage = Config::get('settings.back_pagination');
 
         $this->sortBy = 'orders.id';
 

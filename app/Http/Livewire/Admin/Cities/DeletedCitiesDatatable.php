@@ -22,7 +22,7 @@ class DeletedCitiesDatatable extends Component
     // Render Once
     public function mount()
     {
-        $this->perPage = Config::get('constants.constants.PAGINATION');
+        $this->perPage = Config::get('settings.back_pagination');
 
         $this->sortBy = 'cities.name->' . session('locale');
     }

@@ -18,7 +18,7 @@ class SubcategoryController extends Controller
         $subcategories = Subcategory::without('validOffers')
             ->withCount(['products'])
             ->orderBy('products_count', 'desc')
-            ->paginate(config('constants.constants.FRONT_PAGINATION'));
+            ->paginate(config('settings.front_pagination'));
 
         return view('front.subcategories.index', compact('subcategories'));
     }
@@ -39,7 +39,7 @@ class SubcategoryController extends Controller
 
         $productsIds = $subcategory->products->pluck('id');
 
-        $products = getBestOfferForProducts($productsIds)->paginate(config('constants.constants.FRONT_PAGINATION'));
+        $products = getBestOfferForProducts($productsIds)->paginate(config('settings.front_pagination'));
 
         return view('front.subcategories.show', compact(['subcategory', 'products']));
     }

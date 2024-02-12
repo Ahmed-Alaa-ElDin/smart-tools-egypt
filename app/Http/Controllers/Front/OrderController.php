@@ -470,7 +470,7 @@ class OrderController extends Controller
                     ->where('payment_status', 2)
                     ->first();
                 $old_order_used_points_egp = $old_order_used_points_transaction ? $old_order_used_points_transaction->payment_amount : 0.00;
-                $old_order_used_points =  $old_order_used_points_egp / config('constants.constants.POINT_RATE') ?? 0;
+                $old_order_used_points =  $old_order_used_points_egp / config('settings.points_conversion_rate') ?? 0;
 
                 // Get old transaction done using user's points + balance
                 $old_order_paid = $old_order_used_other + $old_order_used_balance + $old_order_used_points_egp;
@@ -485,7 +485,7 @@ class OrderController extends Controller
 
                     // calculate the points to be returned
                     $returned_points_egp = $returned_other_balance_points_egp >= $old_order_used_points_egp ? $old_order_used_points_egp : $returned_other_balance_points_egp;
-                    $returned_points = $returned_points_egp / config('constants.constants.POINT_RATE');
+                    $returned_points = $returned_points_egp / config('settings.points_conversion_rate');
 
                     $returned_other_balance_points_egp -= $returned_points_egp;
 
@@ -1997,7 +1997,7 @@ class OrderController extends Controller
         $payment_method = $order->payment_method;
         $old_used_balance = $order->used_balance;
         $old_used_points = $order->used_points;
-        $old_used_points_egp = $old_used_points * config('constants.constants.POINT_RATE');
+        $old_used_points_egp = $old_used_points * config('settings.points_conversion_rate');
 
         $old_gift_points = $order->gift_points;
         $old_coupon_points = $order->coupon_products_points + $order->coupon_order_points;
@@ -2021,7 +2021,7 @@ class OrderController extends Controller
         if ($return_subtotal <= 0) {
             // Return the used points to the user's Points
             $returned_to_points_egp = $old_used_points_egp <= abs($return_subtotal) ? $old_used_points_egp : abs($return_subtotal);
-            $returned_to_points =  $returned_to_points_egp / config('constants.constants.POINT_RATE');
+            $returned_to_points =  $returned_to_points_egp / config('settings.points_conversion_rate');
 
             // Returned Order Subtotal (After subtraction of used points only)
             $return_total = $return_subtotal + $returned_to_points_egp;

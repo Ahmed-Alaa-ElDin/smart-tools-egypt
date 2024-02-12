@@ -19,7 +19,7 @@ class CategoryController extends Controller
             ->with('images')
             ->withCount(['products', 'subcategories'])
             ->orderBy('products_count', 'desc')
-            ->paginate(config('constants.constants.FRONT_PAGINATION'));
+            ->paginate(config('settings.front_pagination'));
 
         return view('front.categories.index', compact('categories'));
     }
@@ -39,7 +39,7 @@ class CategoryController extends Controller
             }])
             ->findOrFail($category_id);
 
-        $subcategories = $category->subcategories->paginate(config('constants.constants.FRONT_PAGINATION'));
+        $subcategories = $category->subcategories->paginate(config('settings.front_pagination'));
 
         return view('front.categories.show', compact('category', 'subcategories'));
     }
@@ -54,7 +54,7 @@ class CategoryController extends Controller
 
         $productsIds = $category->products->pluck('id');
 
-        $products = getBestOfferForProducts($productsIds)->paginate(config('constants.constants.FRONT_PAGINATION'));
+        $products = getBestOfferForProducts($productsIds)->paginate(config('settings.front_pagination'));
 
         return view('front.categories.products', compact('category', 'products'));
     }

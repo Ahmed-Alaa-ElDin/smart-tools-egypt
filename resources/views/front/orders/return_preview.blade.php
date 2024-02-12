@@ -230,9 +230,9 @@
                 {!! __('front/homePage.Industrial Defect', [
                     'icon' =>
                         '<a href="https://wa.me/+2' .
-                        config('constants.constants.WHATSAPP_NUMBER') .
+                        config('settings.whatsapp_number') .
                         '" target="_blank" class="inline-flex items-center justify-center gap-1 bg-whatsapp text-white rounded-full px-2 py-1 m-1"> <span class="text-sm">' .
-                        config('constants.constants.WHATSAPP_NUMBER') .
+                        config('settings.whatsapp_number') .
                         ' </a>',
                 ]) !!}
             </span>

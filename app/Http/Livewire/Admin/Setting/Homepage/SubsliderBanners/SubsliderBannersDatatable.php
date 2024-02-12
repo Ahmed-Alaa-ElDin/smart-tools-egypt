@@ -22,7 +22,7 @@ class SubsliderBannersDatatable extends Component
 
     public function mount()
     {
-        $this->perPage = Config::get('constants.constants.PAGINATION');
+        $this->perPage = Config::get('settings.back_pagination');
     }
 
     public function render()

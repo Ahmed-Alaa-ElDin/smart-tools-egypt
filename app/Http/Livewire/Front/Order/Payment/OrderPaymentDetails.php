@@ -47,7 +47,7 @@ class OrderPaymentDetails extends Component
     {
         $this->validateOnly('points');
 
-        $this->points_egp =  $points * config('constants.constants.POINT_RATE');
+        $this->points_egp =  $points * config('settings.points_conversion_rate');
     }
 
     public function updatedBalance()
