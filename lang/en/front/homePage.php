@@ -481,7 +481,7 @@ return [
     "Related Products"                              =>      "Related Products",
     "Complementary Products"                        =>      "Complementary Products",
     "No products in this offer"                     =>      "No products in this offer",
-    "Cart"                                          =>      "Cart",
+    "Opens soon"                                    =>      "Opens soon",
     "Cart"                                          =>      "Cart",
     "Cart"                                          =>      "Cart",
 ];
