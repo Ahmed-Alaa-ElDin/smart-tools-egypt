@@ -121,7 +121,7 @@
                 class="text-xs font-bold rounded py-0.5 px-1 bg-red-600 text-white">{{ __('front/homePage.Hot') }}</span>
         </div>
         <div
-            class="overflow-auto scrollbar scrollbar-thumb-secondary scrollbar-track-primary scrollbar-thin lg:h-116 p-2 bg-primary rounded-b">
+            class="overflow-auto scrollbar scrollbar-thumb-secondary scrollbar-track-primary scrollbar-thin lg:h-156 p-2 bg-primary rounded-b">
             <div>
 
                 <ul class="grid grid-cols-2 lg:grid-cols-1 gap-2 ">

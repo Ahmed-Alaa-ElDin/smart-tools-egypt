@@ -21,6 +21,11 @@ class TopSuperCategories extends Component
             2 => $this->supercategories->where('top', '=', 3)->first()->id ?? 0,
             3 => $this->supercategories->where('top', '=', 4)->first()->id ?? 0,
             4 => $this->supercategories->where('top', '=', 5)->first()->id ?? 0,
+            5 => $this->supercategories->where('top', '=', 6)->first()->id ?? 0,
+            6 => $this->supercategories->where('top', '=', 7)->first()->id ?? 0,
+            7 => $this->supercategories->where('top', '=', 8)->first()->id ?? 0,
+            8 => $this->supercategories->where('top', '=', 9)->first()->id ?? 0,
+            9 => $this->supercategories->where('top', '=', 10)->first()->id ?? 0,
         ];
     }
 
