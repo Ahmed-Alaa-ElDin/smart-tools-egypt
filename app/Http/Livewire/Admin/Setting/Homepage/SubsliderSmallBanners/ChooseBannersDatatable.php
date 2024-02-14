@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Setting\Homepage\SubsliderBanners;
+namespace App\Http\Livewire\Admin\Setting\Homepage\SubsliderSmallBanners;
 
 use App\Models\Banner;
-use App\Models\SubsliderBanner;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Models\SubsliderSmallBanner;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Session;
 
 class ChooseBannersDatatable extends Component
 {
@@ -30,15 +30,15 @@ class ChooseBannersDatatable extends Component
 
     public function render()
     {
-        $banners = Banner::withCount(["mainSliderBanner", "subsliderBanner"])
+        $banners = Banner::withCount(["mainSliderBanner", "subsliderBanner", "subsliderSmallBanner"])
             ->where(fn ($q) => $q->where('banner_name', 'like', "%{$this->search}%")
                 ->orWhere('description', 'like', "%{$this->search}%")
                 ->orWhere('link', 'like', "%{$this->search}%"))
-            ->whereDoesntHave("subSliderBanner")
+            ->whereDoesntHave("subSliderSmallBanner")
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
-        return view('livewire.admin.setting.homepage.subslider-banners.choose-banners-datatable', compact('banners'));
+        return view('livewire.admin.setting.homepage.subslider-small-banners.choose-banners-datatable', compact('banners'));
     }
 
     // reset pagination after new search
@@ -66,17 +66,17 @@ class ChooseBannersDatatable extends Component
             ]);
 
             foreach ($this->selected as $banner_id) {
-                if (SubsliderBanner::count() < 4) {
+                if (SubsliderSmallBanner::count() < 5) {
                     $banner = Banner::find($banner_id);
-                    $banner->subsliderBanner()->create();
+                    $banner->subsliderSmallBanner()->create();
                 }
             }
 
             Session::flash('success', __('admin/sitePages.Banners added successfully'));
-            redirect()->route('admin.setting.homepage.subslider-banners.index');
+            redirect()->route('admin.setting.homepage.subslider-small-banners.index');
         } catch (\Throwable $th) {
             Session::flash('error', __("admin/sitePages.Banners haven't been added"));
-            redirect()->route('admin.setting.homepage.subslider-banners.index');
+            redirect()->route('admin.setting.homepage.subslider-small-banners.index');
         }
     }
 }

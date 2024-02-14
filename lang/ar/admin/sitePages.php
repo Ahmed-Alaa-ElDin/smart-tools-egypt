@@ -187,5 +187,12 @@ return [
     "Facebook Link"                                                         =>      "رابط الفيسبوك",
     "Name (Ar)"                                                             =>      "الاسم بالعربية",
     "Name (En)"                                                             =>      "الاسم بالانجليزية",
-
+    "Manage SubSlider Small Banners"                                        =>      "التحكم بالبنرات الفرعية الصغيرة",
+    "Homepage's Subslider Small Banners Control"                            =>      "التحكم بالبنرات الفرعية الصغيرة",
+    "Here you can manage homepage's subslider small banners"                =>      "من خلال هذه الصفحة يمكنك التحكم بالبنرات الفرعية الصغيرة",
+    "Here you can choose banners for subslider small of homepage"           =>      "من خلال هذه الصفحة يمكنك اختيار البنرات الفرعية الصغيرة",
+    "Big Banner: Use 800x250 sizes image"                                   =>      "البنر الكبير: استخدم صورة أبعادها 800x250",
+    "Small Banner: Use 150x150 sizes image"                                 =>      "البنر الصغير: استخدم صورة أبعادها 150x150",
+    "Top Banner: Use 1300x50 sizes image"                                   =>      "البنر العلوي: استخدم صورة أبعادها 1300x50",
+    "Small Subslider"                                                       =>      "بنر فرعي صغير",
 ];

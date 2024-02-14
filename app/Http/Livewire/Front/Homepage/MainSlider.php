@@ -5,13 +5,14 @@ namespace App\Http\Livewire\Front\Homepage;
 use Livewire\Component;
 use App\Models\Subcategory;
 use App\Models\Supercategory;
-use App\Models\MainSliderBanner;
 use App\Models\SubsliderBanner;
+use App\Models\MainSliderBanner;
+use App\Models\SubsliderSmallBanner;
 
 class MainSlider extends Component
 {
     public $todayDeals;
-    public $banners, $topSupercategories, $subSliders, $items;
+    public $banners, $topSupercategories, $subsliderBanners, $subsliderSmallBanners, $items;
 
     public function mount()
     {
@@ -29,11 +30,15 @@ class MainSlider extends Component
             }
         ])->where('top', '>', 0)->orderBy('top')->get();
 
-        $this->subSliders = SubsliderBanner::with("banner")
+        $this->subsliderBanners = SubsliderBanner::with("banner")
             ->where('rank', "<=", 4)
             ->orderBy("rank")
             ->get();
 
+        $this->subsliderSmallBanners = SubsliderSmallBanner::with("banner")
+            ->where('rank', "<=", 5)
+            ->orderBy("rank")
+            ->get();
 
         $this->items = $this->todayDeals && $this->todayDeals->finalItems ? $this->todayDeals->finalItems->toArray() : [];
     }

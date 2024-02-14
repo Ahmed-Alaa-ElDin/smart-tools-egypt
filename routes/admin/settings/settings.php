@@ -5,16 +5,17 @@ use App\Http\Controllers\Admin\Setting\General\BannerController;
 use App\Http\Controllers\Admin\Setting\General\NavLinkController;
 use App\Http\Controllers\Admin\Setting\Homepage\SliderController;
 use App\Http\Controllers\Admin\Setting\General\TopBannerController;
-use App\Http\Controllers\Admin\Setting\Homepage\HomepageController;
 
+use App\Http\Controllers\Admin\Setting\Homepage\HomepageController;
 use App\Http\Controllers\Admin\Setting\Homepage\TopBrandsController;
 use App\Http\Controllers\Admin\Setting\Homepage\TodayDealsController;
-use App\Http\Controllers\Admin\Setting\General\GeneralSettingController;
 use App\Http\Controllers\Admin\Setting\General\GlobalSettingController;
-use App\Http\Controllers\Admin\Setting\Homepage\SubsliderBannerController;
+use App\Http\Controllers\Admin\Setting\General\GeneralSettingController;
 use App\Http\Controllers\Admin\Setting\Homepage\TopCategoriesController;
+use App\Http\Controllers\Admin\Setting\Homepage\SubsliderBannerController;
 use App\Http\Controllers\Admin\Setting\Homepage\TopSubcategoriesController;
 use App\Http\Controllers\Admin\Setting\Homepage\TopSuperCategoriesController;
+use App\Http\Controllers\Admin\Setting\Homepage\SubsliderSmallBannerController;
 
 Route::group(['prefix' => 'setting/', 'as' => 'setting.'], function () {
 
@@ -58,6 +59,10 @@ Route::group(['prefix' => 'setting/', 'as' => 'setting.'], function () {
         // Subslider Banner : Start
         Route::resource('/subslider-banners', SubsliderBannerController::class);
         // Subslider Banner : End
+
+        // Subslider Small Banner : Start
+        Route::resource('/subslider-small-banners', SubsliderSmallBannerController::class);
+        // Subslider Small Banner : End
 
         // Top Super Categories : Start
         Route::get('/topsupercategories', [TopSuperCategoriesController::class, 'index'])->name('topsupercategories.index');

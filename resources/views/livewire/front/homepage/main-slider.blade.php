@@ -85,16 +85,30 @@
 
         {{-- SubSlider Banners : Start --}}
         <div class="grid grid-cols-2 gap-3 justify-between items-center overflow-hidden h-48 md:h-56 lg:h-64">
-            @foreach ($subSliders as $subSlider)
+            @foreach ($subsliderBanners as $subsliderBanner)
                 <div class="shadow rounded overflow-hidden bg-white text-center h-24 md:h-28 lg:h-32">
-                    <a href="{{ $subSlider->banner->link }}">
-                        <img src="{{ asset('storage/images/banners/original/' . $subSlider->banner->banner_name) }}"
-                            class="m-auto " alt="{{ $subSlider->banner->description }}">
+                    <a href="{{ $subsliderBanner->banner->link }}">
+                        <img src="{{ asset('storage/images/banners/original/' . $subsliderBanner->banner->banner_name) }}"
+                            class="m-auto " alt="{{ $subsliderBanner->banner->description }}">
                     </a>
                 </div>
             @endforeach
         </div>
         {{-- SubSlider Banners : End --}}
+
+        {{-- Subslider Small Banner : Start --}}
+        <div class="flex flex-wrap gap-3 justify-around items-center overflow-hidden">
+            @foreach ($subsliderSmallBanners as $subsliderSmallBanner)
+                <div
+                    class="subslider-small-banner flex justify-center items-center shadow rounded overflow-hidden bg-white text-center">
+                    <a href="{{ $subsliderSmallBanner->banner->link }}">
+                        <img src="{{ asset('storage/images/banners/original/' . $subsliderSmallBanner->banner->banner_name) }}"
+                            class="m-auto " alt="{{ $subsliderSmallBanner->banner->description }}">
+                    </a>
+                </div>
+            @endforeach
+        </div>
+        {{-- Subslider Small Banner : End --}}
     </div>
 
     {{-- Today's Deal : Start --}}
@@ -153,20 +167,19 @@
 
                                         {{-- Product Image : Start --}}
                                         @if ($item['thumbnail'])
-                                            <div class="w-full h-full flex justify-center items-center">
-                                                <img class="img-fit mx-auto lazyloaded"
+                                            <div class="w-full h-full flex justify-center items-center bg-gray-100">
+                                                <img class="img-fit mx-auto lazyloaded construction-placeholder"
+                                                    data-placeholder-size="text-8xl"
                                                     @if ($item['type'] == 'Product') src="{{ asset('storage/images/products/cropped100/' . $item['thumbnail']['file_name']) }}"
                                                 @elseif ($item['type'] == 'Collection')
                                                 src="{{ asset('storage/images/collections/cropped100/' . $item['thumbnail']['file_name']) }}" @endif
                                                     alt="{{ $item['name'][session('locale')] . 'image' }}">
                                             </div>
                                         @else
-                                            <div class="w-full h-full flex justify-center items-center bg-gray-200">
-                                                <div class="flex justify-center items-center">
-                                                    <span class="block material-icons text-8xl">
-                                                        construction
-                                                    </span>
-                                                </div>
+                                            <div class="w-full h-full flex justify-center items-center bg-gray-100">
+                                                <span class="block material-icons text-8xl">
+                                                    construction
+                                                </span>
                                             </div>
                                         @endif
                                         {{-- Product Image : End --}}

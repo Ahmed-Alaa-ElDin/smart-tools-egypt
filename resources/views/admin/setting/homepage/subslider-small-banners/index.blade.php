@@ -1,4 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Site Control', 'activePage' => '', 'titlePage' => __("admin/sitePages.Homepage's Subslider Banners Control")])
+@extends('layouts.admin.admin', ['activeSection' => 'Site Control', 'activePage' => '', 'titlePage' => __("admin/sitePages.Homepage's Subslider Small Banners Control")])
 
 @section('content')
     <div class="content">
@@ -19,7 +19,7 @@
                     </li>
 
                     <li class="breadcrumb-item active" aria-current="page">
-                        {{ __("admin/sitePages.Homepage's Subslider Banners Control") }}
+                        {{ __("admin/sitePages.Homepage's Subslider Small Banners Control") }}
                     </li>
                 </ol>
             </nav>
@@ -35,12 +35,12 @@
                             <div class="flex justify-between items-center">
                                 <div class=" ltr:text-left rtl:text-right font-bold self-center text-gray-100">
                                     <p class="">
-                                        {{ __("admin/sitePages.Here you can manage homepage's subslider banners") }}</p>
+                                        {{ __("admin/sitePages.Here you can manage homepage's subslider small banners") }}</p>
                                 </div>
 
                                 {{-- Choose Banners --}}
                                 <div class="ltr:text-right rtl:text-left">
-                                    <a href="{{ route('admin.setting.homepage.subslider-banners.create') }}"
+                                    <a href="{{ route('admin.setting.homepage.subslider-small-banners.create') }}"
                                         class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
                                         <span class="material-icons rtl:ml-1 ltr:mr-1">
                                             add
@@ -55,7 +55,7 @@
                         <div class="card-body overflow-hidden">
 
                             {{-- Datatable Start --}}
-                            @livewire('admin.setting.homepage.subslider-banners.subslider-banners-datatable')
+                            @livewire('admin.setting.homepage.subslider-small-banners.subslider-small-banners-datatable')
                             {{-- Datatable End --}}
 
                         </div>

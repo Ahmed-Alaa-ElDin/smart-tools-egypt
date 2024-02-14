@@ -49,7 +49,7 @@
                 {{-- Product Image : Start --}}
                 <div class="block max-h-52 overflow-hidden">
                     @if ($item['thumbnail'])
-                        <img class="mx-auto max-h-52 h-full md:h-52 lazyloaded"
+                        <img class="mx-auto max-h-52 h-full md:h-52 lazyloaded construction-placeholder" data-placeholder-size="text-[200px]"
                             @if ($item['type'] == 'Product') src="{{ asset('storage/images/products/original/' . $item['thumbnail']['file_name']) }}"
                             @elseif ($item['type'] == 'Collection') src="{{ asset('storage/images/collections/original/' . $item['thumbnail']['file_name']) }}" @endif>
                     @else

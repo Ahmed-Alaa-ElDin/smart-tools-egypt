@@ -170,6 +170,29 @@
                 }
             })
 
+            $('.construction-placeholder').each(function() {
+                const element = $(this);
+
+                const iconSize = element.data('placeholder-size');
+
+                if (!element[0].complete ||
+                    typeof element[0].naturalWidth === "undefined" ||
+                    element[0].naturalWidth === 0) {
+
+                    const parent = element[0].parentNode;
+
+                    const placeholderHTML = '<div class="flex justify-center items-center bg-gray-100">' +
+                        '<span class="block material-icons ' + iconSize + '">construction</span>' +
+                        '</div>';
+
+                    element.remove();
+
+                    const placeholderElement = document.createElement('div');
+                    placeholderElement.innerHTML = placeholderHTML;
+
+                    parent.appendChild(placeholderElement.firstChild);
+                }
+            });
 
         })
     </script>

@@ -46,6 +46,12 @@ class Banner extends Model
         return $this->hasOne(SubsliderBanner::class);
     }
 
+    // One to many relationship  Banners --> SubSliders Small
+    public function subsliderSmallBanner()
+    {
+        return $this->hasOne(SubsliderSmallBanner::class);
+    }
+
     // Scope Slider
     public function scopeSlider($query)
     {

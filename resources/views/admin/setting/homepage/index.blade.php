@@ -62,8 +62,7 @@
                                 {{-- Slider : End --}}
 
                                 {{-- SubSlider Banners : Start --}}
-                                <a 
-                                href="{{ route('admin.setting.homepage.subslider-banners.index') }}"
+                                <a href="{{ route('admin.setting.homepage.subslider-banners.index') }}"
                                     class="col-span-6 md:col-span-3 bg-gray-100 rounded-xl shadow hover:shadow-lg cursor-pointer p-3 flex flex-col justify-center items-center gap-3">
                                     <span class="material-icons text-center text-9xl ">
                                         grid_view
@@ -73,6 +72,18 @@
                                     </span>
                                 </a>
                                 {{-- SubSlider Banners : End --}}
+
+                                {{-- SubSlider Small Banners : Start --}}
+                                <a href="{{ route('admin.setting.homepage.subslider-small-banners.index') }}"
+                                    class="col-span-6 md:col-span-3 bg-gray-100 rounded-xl shadow hover:shadow-lg cursor-pointer p-3 flex flex-col justify-center items-center gap-3">
+                                    <span class="material-icons text-center text-9xl ">
+                                        calendar_view_week
+                                    </span>
+                                    <span class="text-center font-bold">
+                                        {{ __('admin/sitePages.Manage SubSlider Small Banners') }}
+                                    </span>
+                                </a>
+                                {{-- SubSlider Small Banners : End --}}
 
                                 {{-- Top Main Categories : Start --}}
                                 <a href="{{ route('admin.setting.homepage.topsupercategories.index') }}"
@@ -90,8 +101,9 @@
                                 <a href="{{ route('admin.setting.homepage.topcategories.index') }}"
                                     class="col-span-6 md:col-span-3 bg-gray-100 rounded-xl shadow hover:shadow-lg cursor-pointer p-3 flex flex-col justify-center items-center gap-3">
                                     <span class="material-icons text-center text-9xl ">
-                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
+                                            width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
+                                            viewBox="0 0 256 256">
                                             <path fill="currentColor"
                                                 d="M238.6 78.6A31.6 31.6 0 0 1 216 88a32.2 32.2 0 0 1-7.6-.9l-26.7 49.4l.9.9a31.9 31.9 0 0 1 0 45.2a31.9 31.9 0 0 1-45.2 0a32 32 0 0 1-5-38.9l-20.1-20.1A32.7 32.7 0 0 1 96 128a32.2 32.2 0 0 1-7.6-.9l-26.7 49.4l.9.9a31.9 31.9 0 0 1 0 45.2a31.9 31.9 0 0 1-45.2 0a31.9 31.9 0 0 1 0-45.2a32.1 32.1 0 0 1 30.2-8.5l26.7-49.4l-.9-.9a31.9 31.9 0 0 1 0-45.2a32 32 0 0 1 50.2 38.9l20.1 20.1a32.4 32.4 0 0 1 23.9-3.5l26.7-49.4l-.9-.9a31.9 31.9 0 0 1 0-45.2a32 32 0 0 1 45.2 45.2Z" />
                                         </svg>
@@ -106,8 +118,9 @@
                                 <a href="{{ route('admin.setting.homepage.topbrands.index') }}"
                                     class="col-span-6 md:col-span-3 bg-gray-100 rounded-xl shadow hover:shadow-lg cursor-pointer p-3 flex flex-col justify-center items-center gap-3">
                                     <span class="material-icons text-center text-9xl ">
-                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                            height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 64 64">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
+                                            width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
+                                            viewBox="0 0 64 64">
                                             <path fill="currentColor"
                                                 d="M36.604 23.043c-.623-.342-1.559-.512-2.805-.512h-6.693v7.795h6.525c1.295 0 2.268-.156 2.916-.473c1.146-.551 1.721-1.639 1.721-3.268c0-1.757-.555-2.939-1.664-3.542" />
                                             <path fill="currentColor"
@@ -150,7 +163,6 @@
 
 {{-- Extra Scripts --}}
 @push('js')
-
     <script>
         // #### Section Activation / Deactivation ####
         window.addEventListener('swalSectionActivated', function(e) {

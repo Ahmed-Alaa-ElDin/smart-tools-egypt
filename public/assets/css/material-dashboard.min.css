@@ -18593,6 +18593,10 @@ input[type=number] {
     max-height: 90vh;
 }
 
+.subslider-small-banner{
+    width: 150px;
+    height: 150px;
+}
 /* select:not([size]) {
     text-align: center;
     background-position: center !important;

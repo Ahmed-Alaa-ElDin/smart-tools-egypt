@@ -28,8 +28,7 @@
                         <div class="relative w-25">
                             <span
                                 class="material-icons absolute rounded-circle bg-red-500 w-6 h-6 text-white left-2 top-2 text-sm font-bold cursor-pointer flex items-center justify-center select-none"
-                                wire:click="deleteBanner"
-                                title="{{ __('admin/sitePages.Delete Image') }}">clear</span>
+                                wire:click="deleteBanner" title="{{ __('admin/sitePages.Delete Image') }}">clear</span>
                             <img src="{{ asset('storage/images/banners/original/' . $banner_name) }}"
                                 alt="{{ $banner_name }}" class="rounded-xl m-auto">
                         </div>
@@ -42,7 +41,9 @@
                     class="col-span-12 md:col-span-6 md:col-start-4 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
                     id="banner" type="file" type="image" wire:model.lazy="banner">
                 <span class="col-span-12 text-xs text-gray-400">
-                    {{ __('admin/sitePages.Use 800x250 sizes image') }}</span>
+                    {{ __('admin/sitePages.Big Banner: Use 800x250 sizes image') }} -
+                    {{ __('admin/sitePages.Small Banner: Use 150x150 sizes image') }} -
+                    {{ __('admin/sitePages.Top Banner: Use 1300x50 sizes image') }}</span>
                 @error('banner')
                     <span
                         class="col-span-12 md:col-span-6 md:col-start-4 bg-red-700 rounded text-white shadow px-3 py-1">{{ $message }}</span>
@@ -95,16 +96,15 @@
         {{-- Description End --}}
 
         {{-- Link Start --}}
-        <div
-            class="col-span-12 w-full grid grid-cols-12 gap-x-4 gap-y-2 items-center bg-red-100 rounded text-center">
+        <div class="col-span-12 w-full grid grid-cols-12 gap-x-4 gap-y-2 items-center bg-red-100 rounded text-center">
             <label for="link"
                 class="col-span-12 md:col-span-2 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer">{{ __('admin/sitePages.Link') }}</label>
             {{-- Link --}}
             <div class="col-span-12 md:col-span-10">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('link') border-red-900 border-2 @enderror"
-                    type="url" wire:model.lazy="link" id="link"
-                    placeholder="{{ __('admin/sitePages.Link') }}" dir="ltr">
+                    type="url" wire:model.lazy="link" id="link" placeholder="{{ __('admin/sitePages.Link') }}"
+                    dir="ltr">
                 @error('link')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                         {{ $message }}</div>
