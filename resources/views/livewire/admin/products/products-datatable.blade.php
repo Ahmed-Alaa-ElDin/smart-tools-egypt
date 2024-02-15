@@ -55,7 +55,7 @@
         {{-- Search and Pagination Control --}}
         <div class="py-3 bg-white space-y-3">
 
-            <div class="flex justify-between gap-6 items-center">
+            <div class="flex flex-wrap justify-between gap-6 items-center">
                 {{-- Search Box --}}
                 <div class="col-span-1">
                     <div class="mt-1 flex rounded-md shadow-sm">
@@ -73,7 +73,7 @@
                 {{-- Download --}}
                 <div class="form-inline col-span-1 justify-center">
                     <div class="flex justify-center">
-                        <button class="btn btn-success dropdown-toggle btn-round btn-sm text-white font-bold "
+                        <button class="btn btn-success dropdown-toggle btn-round btn-sm text-white font-bold"
                             type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="material-icons">
                                 file_download
@@ -94,6 +94,17 @@
                                 &nbsp;&nbsp;
                                 {{ __('admin/productsPages.download all pdf') }}</a>
                         </div>
+                    </div>
+                </div>
+
+                {{-- Upload --}}
+                <div class="form-inline col-span-1 justify-center">
+                    <div class="flex justify-center">
+                        <button class="btn btn-success btn-round btn-sm text-white font-bold" type="button" onclick="modal.show()">
+                            <span class="material-icons">
+                                file_upload
+                            </span> &nbsp; {{ __('admin/productsPages.Bulk Products Update') }}
+                        </button>
                     </div>
                 </div>
 
@@ -339,7 +350,7 @@
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- Product Details --}}
-                                        <a href="{{ route('front.products.show', ['id' => $product->id, 'slug' => $product->slug]) }}"
+                                        <a href="{{ route('front.products.show', ['id' => $product->id, 'slug' => $product->slug]) }}" target="_blank"
                                             title="{{ __('admin/productsPages.View') }}" class="m-0">
                                             <span
                                                 class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
@@ -393,4 +404,72 @@
             {{ $products->links() }}
         </div>
     </div>
+
+    {{-- Bulk Update Modal Start --}}
+    <div id="bulk-update-modal" tabindex="-1" wire:ignore.self onclick="modal.hide()"
+        class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full justify-center items-center backdrop-blur cursor-pointer hidden"
+        aria-modal="true" role="dialog">
+        <div class="relative p-4 w-full max-w-2xl" wire:click.stop>
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow">
+                <!-- Modal header -->
+                <div class="flex justify-between items-start p-4 rounded-t border-b">
+                    <h3 class="grow text-xl font-semibold text-gray-900 dark:text-white">
+                        {{ __('admin/productsPages.Bulk Products Update') }}
+                    </h3>
+                    <button type="button" onclick="modal.hide()"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-6 space-y-6">
+                    <div class="flex flex-wrap gap-3 justify-around items-start w-full">
+                        {{-- Upload input --}}
+                        <div class="flex flex-col w-full">
+                            <label for="bulkUpdateFile"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                                {{ __('admin/productsPages.Upload Excel File') }}
+                            </label>
+                            <input type="file" wire:model="bulkUpdateFile" id="bulkUpdateFile"
+                                class="col-span-12 md:col-span-6 md:col-start-4 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300">
+                            @error('bulkUpdateFile')
+                                <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="flex items-center justify-around p-2 space-x-2 rounded-b border-t border-gray-200">
+                    <button type="button" wire:click="bulkUpdate"
+                        class="btn font-bold text-white bg-success hover:bg-successDark hover:text-white focus:outline-none rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 ">
+                        {{ __('admin/productsPages.Update') }}
+                    </button>
+
+                    <button type="button" onclick="modal.hide()"
+                        class="btn font-bold bg-primary focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        {{ __('admin/productsPages.Cancel') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- Bulk Update Modal : End --}}
 </div>
+
+@push('livewire-js')
+    <script>
+        const bulkUpdateModal = document.getElementById('bulk-update-modal');
+        const modal = new Modal (bulkUpdateModal);
+
+        Livewire.on('bulkUpdateCloseModal', () => {
+            modal.hide();
+        });
+    </script>
+@endpush

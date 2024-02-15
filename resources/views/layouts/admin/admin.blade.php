@@ -128,6 +128,10 @@
 
     {{-- Custom Js Files --}}
     @stack('js')
+
+    {{-- Custom Js Files for livewire blade --}}
+    @stack('livewire-js')
+
 </body>
 
 </html>

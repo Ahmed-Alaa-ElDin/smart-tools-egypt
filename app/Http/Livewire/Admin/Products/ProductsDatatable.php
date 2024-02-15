@@ -3,13 +3,17 @@
 namespace App\Http\Livewire\Admin\Products;
 
 use App\Models\Product;
-use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Config;
+use App\Imports\Admin\Products\ProductsImport;
 
 class ProductsDatatable extends Component
 {
     use WithPagination;
+    use WithFileUploads;
 
     public $search = "";
     public $perPage;
@@ -20,6 +24,8 @@ class ProductsDatatable extends Component
 
     public $subcategory_id = "%";
     public $brand_id = "%";
+
+    public $bulkUpdateFile;
 
     protected $listeners = ['softDeleteProduct', 'softDeleteAllProduct', 'publishAllProduct', 'hideAllProduct'];
 
@@ -292,4 +298,26 @@ class ProductsDatatable extends Component
         }
     }
     ######## Hide All Selected Products #########
+
+    ######## Bulk Update #########
+    public function bulkUpdate()
+    {
+        $this->validateOnly("bulkUpdateFile",[
+            'bulkUpdateFile' => 'required|mimes:xlsx,xls'
+        ]);
+        
+        $file = $this->bulkUpdateFile->storeAs('products/bulkUpdate', 'bulkUpdateFile-'. date('Y-m-d-H-i-s') . '.xlsx');
+
+        Excel::import(new ProductsImport, $file);
+
+        $this->dispatchBrowserEvent('swalDone', [
+            "text" => __('admin/productsPages.Products have been updated successfully'),
+            'icon' => 'success'
+        ]);
+
+        $this->reset('bulkUpdateFile');
+
+        $this->emit('bulkUpdateCloseModal');
+    }
+    ######## Bulk Update #########
 }

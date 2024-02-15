@@ -34,6 +34,7 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
             'weight',
             'quantity',
             'low_stock',
+            'original_price',
             'base_price',
             'final_price',
             'points',
@@ -73,6 +74,7 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
         return [
             [__('admin/productsPages.Products Data')],
             [
+                "ID",
                 __('admin/productsPages.Name (En)'),
                 __('admin/productsPages.Name (Ar)'),
                 __('admin/productsPages.Model'),
@@ -82,6 +84,7 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
                 __('admin/productsPages.Subcategory'),
                 __('admin/productsPages.Category'),
                 __('admin/productsPages.Supercategory'),
+                __('admin/productsPages.Original Price'),
                 __('admin/productsPages.Base Price'),
                 __('admin/productsPages.Final Price'),
                 __('admin/productsPages.Discount'),
@@ -104,6 +107,7 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
     public function map($product): array
     {
         return [
+            $product->id,
             $product->getTranslation('name', 'en'),
             $product->getTranslation('name', 'ar'),
             $product->model ?? __('N/A'),
@@ -113,8 +117,9 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
             $product->subcategories->first() ? $product->subcategories->first()->getTranslation('name', session('locale')) : __('N/A'),
             $product->subcategories->first() ? ($product->subcategories->first()->category ? $product->subcategories->first()->category->getTranslation('name', session('locale')) : __('N/A')) : __('N/A'),
             $product->subcategories->first() ? ($product->subcategories->first()->category ? ($product->subcategories->first()->category->supercategory ? $product->subcategories->first()->category->supercategory->getTranslation('name', session('locale')) : __('N/A')) : __('N/A')) : __('N/A'),
-            $product->base_price ??  __('N/A'),
-            $product->final_price ??  __('N/A'),
+            $product->original_price ?? 0.00,
+            $product->base_price ?? 0.00,
+            $product->final_price ?? 0.00,
             $product->final_price && $product->base_price && $product->base_price > 0 ? round((100 * ($product->base_price - $product->final_price)) / $product->base_price, 2) . '%' :  '0%',
             $product->points ?? 0,
             $product->under_reviewing ? __('Yes') :  __('No'),
@@ -133,7 +138,7 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
     // Style Sheet
     public function styles(Worksheet $sheet)
     {
-        $sheet->mergeCells('A1:W1');
+        $sheet->mergeCells('A1:Y1');
         $sheet->getDefaultRowDimension()->setRowHeight(25);
         $sheet->getPageSetup()->setOrientation('landscape');
 
@@ -165,7 +170,142 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
                 ]
             ],
 
-            'A1:W' . ($this->count + 2) => [
+            'B3:B' . ($this->count + 2) => [ // Start from the 3rd row in the 2nd column
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => [
+                        'rgb' => 'ecf0f1', // Specify your desired color here
+                    ]
+                ]
+            ],
+
+            'C3:C' . ($this->count + 2) => [ // Start from the 3rd row in the 2nd column
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => [
+                        'rgb' => 'd4d8d9', // Specify your desired color here
+                    ]
+                ]
+            ],
+
+            'D3:D' . ($this->count + 2) => [ // Start from the 3rd row in the 2nd column
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => [
+                        'rgb' => 'ecf0f1', // Specify your desired color here
+                    ]
+                ]
+            ],
+
+            'E3:E' . ($this->count + 2) => [ // Start from the 3rd row in the 2nd column
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => [
+                        'rgb' => 'd4d8d9', // Specify your desired color here
+                    ]
+                ]
+            ],
+
+            'K3:K' . ($this->count + 2) => [ // Start from the 3rd row in the 2nd column
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => [
+                        'rgb' => 'ecf0f1', // Specify your desired color here
+                    ]
+                ]
+            ],
+
+            'L3:L' . ($this->count + 2) => [ // Start from the 3rd row in the 2nd column
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => [
+                        'rgb' => 'd4d8d9', // Specify your desired color here
+                    ]
+                ]
+            ],
+
+            'M3:M' . ($this->count + 2) => [ // Start from the 3rd row in the 2nd column
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => [
+                        'rgb' => 'ecf0f1', // Specify your desired color here
+                    ]
+                ]
+            ],
+
+            'O3:O' . ($this->count + 2) => [ // Start from the 3rd row in the 2nd column
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => [
+                        'rgb' => 'd4d8d9', // Specify your desired color here
+                    ]
+                ]
+            ],
+
+            'P3:P' . ($this->count + 2) => [ // Start from the 3rd row in the 2nd column
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => [
+                        'rgb' => 'ecf0f1', // Specify your desired color here
+                    ]
+                ]
+            ],
+
+            'Q3:Q' . ($this->count + 2) => [ // Start from the 3rd row in the 2nd column
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => [
+                        'rgb' => 'd4d8d9', // Specify your desired color here
+                    ]
+                ]
+            ],
+
+            'R3:R' . ($this->count + 2) => [ // Start from the 3rd row in the 2nd column
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => [
+                        'rgb' => 'ecf0f1', // Specify your desired color here
+                    ]
+                ]
+            ],
+
+            'S3:S' . ($this->count + 2) => [ // Start from the 3rd row in the 2nd column
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => [
+                        'rgb' => 'd4d8d9', // Specify your desired color here
+                    ]
+                ]
+            ],
+
+            'T3:T' . ($this->count + 2) => [ // Start from the 3rd row in the 2nd column
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => [
+                        'rgb' => 'ecf0f1', // Specify your desired color here
+                    ]
+                ]
+            ],
+
+            'U3:U' . ($this->count + 2) => [ // Start from the 3rd row in the 2nd column
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => [
+                        'rgb' => 'd4d8d9', // Specify your desired color here
+                    ]
+                ]
+            ],
+
+            'V3:V' . ($this->count + 2) => [ // Start from the 3rd row in the 2nd column
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => [
+                        'rgb' => 'ecf0f1', // Specify your desired color here
+                    ]
+                ]
+            ],
+
+            'A1:Y' . ($this->count + 2) => [
                 'alignment' => [
                     'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                     'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER

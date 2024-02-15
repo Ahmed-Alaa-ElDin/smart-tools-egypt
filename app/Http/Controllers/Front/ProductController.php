@@ -74,7 +74,7 @@ class ProductController extends Controller
         $allCollectionsIds = array_merge($relatedCollectionsIds, $complementedCollectionsIds);
 
         // Get the product's Best Offer for all products
-        $productsOffers = getBestOfferForProducts($allProductsIds);
+        $productsOffers = getBestOfferForProducts($allProductsIds, false);
 
         // Get the product's Best Offer for all collections
         $collectionsOffers = getBestOfferForCollections($allCollectionsIds);

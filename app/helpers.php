@@ -55,7 +55,7 @@ function singleImageUpload($photo, $image_f_name, $folder_name)
         $manager->make($photo)->encode('webp')->save('storage/images/' . $folder_name . '/original/' . $image_name);
     } catch (\Throwable $th) {
         // todo :: delete throw
-        throw $th;
+        // throw $th;
     }
 
     return $image_name;
@@ -245,9 +245,9 @@ function getBestOfferForProduct($product_id)
 }
 
 // Get the best offer for a list of products (best price, best points, free shipping)
-function getBestOfferForProducts($products_id)
+function getBestOfferForProducts($products_id, bool $publishedOnly = true)
 {
-    $products = Product::publishedproducts($products_id)->get();
+    $products = $publishedOnly ? Product::publishedproducts($products_id)->get() : Product::productsDetails($products_id)->get();
 
     foreach ($products as $key => $product) {
         ############ Get Best Offer for all products :: Start ############

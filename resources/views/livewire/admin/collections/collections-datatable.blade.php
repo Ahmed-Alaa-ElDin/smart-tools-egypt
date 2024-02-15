@@ -295,7 +295,7 @@
 
                                         {{-- Collection Details --}}
                                         <a href="{{ route('front.collections.show', ['id' => $collection->id, 'slug' => $collection->slug]) }}" title="{{ __('admin/productsPages.View') }}"
-                                            class="m-0">
+                                            class="m-0" target="_blank">
                                             <span
                                                 class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
                                                 visibility
