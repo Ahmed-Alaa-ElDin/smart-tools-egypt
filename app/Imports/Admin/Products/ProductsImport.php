@@ -39,7 +39,8 @@ class ProductsImport implements ToModel
                 'points' => $row[14] ?? 0,
                 'model' => $row[3],
                 'refundable' => $row[19] == 'Yes' ? 1 : 0,
-                'publish' => $row[20] == 'Yes' ? 1 : 0,
+                'free_shipping' => $row[20] == 'Yes' ? 1 : 0,
+                'publish' => $row[21] == 'Yes' ? 1 : 0,
                 'under_reviewing' => $row[15] == 'Yes' ? 1 : 0,
             ]);
         }
