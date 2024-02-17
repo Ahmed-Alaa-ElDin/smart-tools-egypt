@@ -2,19 +2,20 @@
 
 namespace App\Exports\Admin\Products;
 
-use App\Models\Product;
 use Carbon\Carbon;
-use Illuminate\Support\Carbon as SupportCarbon;
+use App\Models\Product;
+use Maatwebsite\Excel\Events\AfterSheet;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithStyles;
-use Maatwebsite\Excel\Events\AfterSheet;
-use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-use PhpOffice\PhpSpreadsheet\Style\Border;
+use Illuminate\Support\Carbon as SupportCarbon;
+use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithMapping, ShouldAutoSize, WithEvents
 {
@@ -63,6 +64,7 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
                 }
             ]
         )->get();
+
         $this->count = $products->count();
 
         return $products;
@@ -72,7 +74,9 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
     public function headings(): array
     {
         return [
-            [__('admin/productsPages.Products Data')],
+            [
+                __('admin/productsPages.Products Data'),
+            ],
             [
                 "ID",
                 __('admin/productsPages.Name (En)'),
@@ -89,17 +93,17 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
                 __('admin/productsPages.Final Price'),
                 __('admin/productsPages.Discount'),
                 __('admin/productsPages.Points'),
-                __('admin/productsPages.Under Reviewing'),
                 __('admin/productsPages.Weight'),
                 __('admin/productsPages.Quantity'),
                 __('admin/productsPages.Low Stock Limit'),
+                __('admin/productsPages.Under Reviewing'),
                 __('admin/productsPages.Refundable'),
                 __('admin/productsPages.Free Shipping'),
                 __('admin/productsPages.Published'),
                 __('admin/productsPages.Created By'),
                 __('admin/productsPages.Created at'),
                 __('admin/productsPages.Updated at'),
-            ]
+            ],
         ];
     }
 
@@ -122,10 +126,10 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
             $product->final_price ?? 0.00,
             $product->final_price && $product->base_price && $product->base_price > 0 ? round((100 * ($product->base_price - $product->final_price)) / $product->base_price, 2) . '%' :  '0%',
             $product->points ?? 0,
-            $product->under_reviewing ? __('Yes') :  __('No'),
             $product->weight ?? 0,
             $product->quantity ?? 0,
             $product->low_stock ?? 0,
+            $product->under_reviewing ? __('Yes') :  __('No'),
             $product->refundable ? __('Yes') :  __('No'),
             $product->free_shipping ? __('Yes') :  __('No'),
             $product->publish ? __('Yes') :  __('No'),
@@ -143,7 +147,7 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
         $sheet->getPageSetup()->setOrientation('landscape');
 
         return [
-            '1:2' => [
+            'A1:Y2' => [
                 'font' => [
                     'bold' => true,
                     'color' => [
@@ -152,7 +156,7 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
                 ]
             ],
 
-            1 => [
+            "A1:Y1" => [
                 'fill' => [
                     'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                     'color' => [
@@ -161,7 +165,7 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
                 ]
             ],
 
-            2 => [
+            "A2:Y2" => [
                 'fill' => [
                     'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                     'color' => [
@@ -325,11 +329,54 @@ class ProductsExports implements FromCollection, WithHeadings, WithStyles, WithM
     {
         if (LaravelLocalization::getCurrentLocale() == 'ar') {
             return [
-                AfterSheet::class    => function (AfterSheet $event) {
+                AfterSheet::class => function (AfterSheet $event) {
                     $event->sheet->getDelegate()->setRightToLeft(true);
+
+                    $this->addFilter($event, ["S", "T", "U", "V"]);
                 },
             ];
         }
-        return [];
+        return [
+            AfterSheet::class => function (AfterSheet $event) {
+                $this->addFilter($event, ["S", "T", "U", "V"]);
+            }
+        ];
+    }
+
+    // Add "Yes"|"No" filter to Yes/No columns (S,T,U & V)
+    private function addFilter(AfterSheet $event, array $columns)
+    {
+        // get layout counts (add 1 to rows for heading row)
+        $row_count = $this->count + 2;
+
+        // set dropdown column
+        $drop_column = $columns[0];
+
+        // set dropdown options
+        $options = [
+            __('Yes'),
+            __('No')
+        ];
+
+        // set dropdown list for first data row
+        $validation = $event->sheet->getCell("{$drop_column}2")->getDataValidation();
+        $validation->setType(DataValidation::TYPE_LIST);
+        $validation->setErrorStyle(DataValidation::STYLE_INFORMATION);
+        $validation->setAllowBlank(false);
+        $validation->setShowInputMessage(true);
+        $validation->setShowErrorMessage(true);
+        $validation->setShowDropDown(true);
+        $validation->setErrorTitle(__('Input error'));
+        $validation->setError(__('Value is not in list.'));
+        $validation->setPromptTitle(__('Pick from list'));
+        $validation->setPrompt(__('Please pick a value from the drop-down list.'));
+        $validation->setFormula1(sprintf('"%s"', implode(',', $options)));
+
+        // clone validation to remaining rows
+        foreach ($columns as $column) {
+            for ($i = 3; $i <= $row_count; $i++) {
+                $event->sheet->getCell("{$column}{$i}")->setDataValidation(clone $validation);
+            }
+        }
     }
 }
