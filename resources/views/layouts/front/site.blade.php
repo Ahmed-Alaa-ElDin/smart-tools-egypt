@@ -88,8 +88,8 @@
 
     </div>
 
-
     <!--   Core JS Files   -->
+    <script src="{{ mix('assets/js/app.js') }}"></script>
     <script src="{{ asset('assets/front/js/core/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/front/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/flowbite/flowbite.js') }}"></script>

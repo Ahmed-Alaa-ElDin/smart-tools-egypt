@@ -121,7 +121,7 @@
                 {{-- Cart Buttons :: Start --}}
                 <div class="flex flex-col justify-center items-center gap-1 m-1 px-2">
                     {{-- Checkout :: Start --}}
-                    <a {{-- TODO:: href="{{ route('front.order.shipping') }}" --}} title="{{ __('front/homePage.Opens soon') }}"
+                    <a href="{{ route('front.order.shipping') }}"
                         class="block w-full btn bg-secondary text-white font-bold">
                         <span class="material-icons">
                             local_shipping
@@ -133,8 +133,7 @@
 
                     <div class="flex justify-center items-center gap-3 w-full">
                         {{-- View & Edit Cart :: Start --}}
-                        <a {{-- TODO:: href="{{ route('front.cart') }}"  --}} class="grow btn bg-primary btn-sm text-white font-bold"
-                            title="{{ __('front/homePage.Opens soon') }}">
+                        <a href="{{ route('front.cart') }}" class="grow btn bg-primary btn-sm text-white font-bold" >
                             <span class="material-icons">
                                 edit
                             </span>
