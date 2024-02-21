@@ -128,6 +128,14 @@
                 timerProgressBar: true,
                 showConfirmButton: false,
             })
+        @elseif (Session::has('warning'))
+            Swal.fire({
+                text: '{{ Session::get('warning') }}',
+                icon: 'warning',
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+            })
         @endif
 
         window.addEventListener('swalDone', function(e) {
