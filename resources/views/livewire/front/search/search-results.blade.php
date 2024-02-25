@@ -1,6 +1,7 @@
 <div class="grid grid-cols-12 gap-4 p-3 items-start">
     {{-- Filters :: Start --}}
-    <div id="filters-dropshadow" class="fixed hidden cursor-pointer w-100 h-100 left- 0 top-0 drop-shadow backdrop-blur z-40 md:hidden">
+    <div id="filters-dropshadow"
+        class="fixed hidden cursor-pointer w-100 h-100 left- 0 top-0 drop-shadow backdrop-blur z-40 md:hidden">
     </div>
     <div id="filters"
         class="col-span-3 overflow-y-auto fixed top-0 ltr:left-0 rtl:right-0 z-50 h-[95vh] ltr:-translate-x-full rtl:translate-x-full transition-transform w-80 md:static md:block md:top-auto md:left-auto md:z-auto md:h-auto ltr:md:translate-x-0 rtl:md:translate-x-0 md:w-auto md:p-0 md:overflow-hidden">
@@ -95,12 +96,12 @@
 
                 <div id="price-body-1" class="hidden" aria-labelledby="price-heading-1" wire:ignore>
                     <div class="p-2 border-0 border-b-1 border-gray-200 overflow-x-scroll scrollbar-thin">
-                        <div class="price-input flex justify-start items-center gap-3 mb-4 w-100">
+                        <div class="price-input flex justify-between items-center gap-3 mb-4 w-100">
                             <div class="field flex items-center justify-center gap-2">
                                 <span class="text-xs font-bold">{{ __('front/homePage.Min') }}</span>
                                 <input type="number" min="{{ $currentMinPrice }}" max="{{ $currentMaxPrice }}"
                                     step="1" dir="ltr"
-                                    class="input-min w-24 text-sm rounded focus:ring-primary focus:border-primary border-gray-300 text-center"
+                                    class="input-min text-sm px-0 rounded focus:ring-primary focus:border-primary border-gray-300 text-center"
                                     value="{{ $currentMinPrice }}" wire:model.live.blur='currentMinPrice'>
                             </div>
                             <div class="text-sm">-</div>
@@ -108,7 +109,7 @@
                                 <span class="text-xs font-bold">{{ __('front/homePage.Max') }}</span>
                                 <input type="number" min="{{ $currentMinPrice }}" max="{{ $currentMaxPrice }}"
                                     step="1" dir="ltr"
-                                    class="input-max w-24 text-sm rounded focus:ring-primary focus:border-primary border-gray-300 text-center"
+                                    class="input-max text-sm px-0 rounded focus:ring-primary focus:border-primary border-gray-300 text-center"
                                     value="{{ $currentMaxPrice }}" wire:model.live.blur='currentMaxPrice'>
                             </div>
                         </div>
@@ -520,19 +521,7 @@
 
                 {{-- Loading Section :: Start --}}
                 <div wire:loading class="absolute w-100 h-100 backdrop-blur z-10">
-                    <div class="flex justify-center items-center flex-col">
-                        <div class="text-[200px] text-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 50 50"
-                                class="animate-spin inline-block">
-                                <path fill="currentColor"
-                                    d="M41.9 23.9c-.3-6.1-4-11.8-9.5-14.4c-6-2.7-13.3-1.6-18.3 2.6c-4.8 4-7 10.5-5.6 16.6c1.3 6 6 10.9 11.9 12.5c7.1 2 13.6-1.4 17.6-7.2c-3.6 4.8-9.1 8-15.2 6.9c-6.1-1.1-11.1-5.7-12.5-11.7c-1.5-6.4 1.5-13.1 7.2-16.4c5.9-3.4 14.2-2.1 18.1 3.7c1 1.4 1.7 3.1 2 4.8c.3 1.4.2 2.9.4 4.3c.2 1.3 1.3 3 2.8 2.1c1.3-.8 1.2-2.5 1.1-3.8c0-.4.1.7 0 0z" />
-                            </svg>
-                        </div>
-                        <div class="text-secondary text-4xl font-bold">
-                            {{ __('front/homePage.Loading ...') }}
-                        </div>
-                    </div>
+                    <x-front.loaders.wholepage-loader />
                 </div>
                 {{-- Loading Section :: End --}}
 
@@ -553,8 +542,9 @@
 
                         {{-- Pagination :: Start --}}
                         @if ($loop->last)
-                            <div class="col-span-4">
-                                {{ $items->links() }}
+                            <div x-data x-intersect="$wire.loadMore()"></div>
+                            <div wire:loading wire:target="loadMore" class="col-span-4 text-center">
+                                <x-front.loaders.load-more />
                             </div>
                         @endif
                         {{-- Pagination :: End --}}

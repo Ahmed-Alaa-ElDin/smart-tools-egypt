@@ -1,5 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Products', 'activePage' => '', 'titlePage'
-=> __("admin/productsPages.'s Products",['name'=>$brand->name])])
+@extends('layouts.admin.admin', ['activeSection' => 'Products', 'activePage' => '', 'titlePage' => __("admin/productsPages.'s Products", ['name' => $brand->name])])
 
 @section('content')
     <div class="content">
@@ -47,7 +46,7 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Datatable Start --}}
-                            @livewire('admin.products.products-datatable',['brand_id' => $brand->id])
+                            @livewire('admin.products.products-datatable', ['brand_id' => $brand->id])
                             {{-- Datatable End --}}
                         </div>
                     </div>
@@ -56,5 +55,3 @@
         </div>
     </div>
 @endsection
-
-

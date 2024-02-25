@@ -2,27 +2,42 @@
 
 namespace App\Livewire\Front\Search;
 
-use App\Models\Collection;
 use App\Models\Product;
 use Livewire\Component;
+use App\Models\Collection;
 use Livewire\WithPagination;
 
 class SearchResults extends Component
 {
     use WithPagination;
 
-
     public $totalItems;
     public $perPage;
-    public $sort_by, $direction, $filters;
+    public $sort_by;
+    public $direction;
+    public $filters;
     public $search;
-    public $brands, $selectedBrands = [];
-    public $subcategories, $selectedSubcategories = [];
-    public $categories, $selectedCategories = [];
-    public $supercategories, $selectedSupercategories = [];
-    public $minPrice, $maxPrice, $currentMinPrice, $currentMaxPrice;
-    public $currentRating, $oneRatingNo, $twoRatingNo, $threeRatingNo, $fourRatingNo, $fiveRatingNo;
-    public $currentFreeShipping, $currentReturnable, $currentAvailable;
+    public $brands;
+    public $selectedBrands = [];
+    public $subcategories;
+    public $selectedSubcategories = [];
+    public $categories;
+    public $selectedCategories = [];
+    public $supercategories;
+    public $selectedSupercategories = [];
+    public $minPrice;
+    public $maxPrice;
+    public $currentMinPrice;
+    public $currentMaxPrice;
+    public $currentRating;
+    public $oneRatingNo;
+    public $twoRatingNo;
+    public $threeRatingNo;
+    public $fourRatingNo;
+    public $fiveRatingNo;
+    public $currentFreeShipping;
+    public $currentReturnable;
+    public $currentAvailable;
 
     protected $queryString = ['search', 'sort_by', 'direction'];
 
@@ -165,27 +180,16 @@ class SearchResults extends Component
     public function search()
     {
         if ($this->search) {
-            $productsIds = Product::select([
-                'id',
-            ])
-                ->with(
-                    'brand',
-                )
-                ->where(
-                    fn ($q) =>
-                    $q->whereRaw(
-                        "MATCH(name,description) AGAINST(?)",
-                        array(trim($this->search))
-                    )
+            $productsIds = Product::select('id')
+                ->with('brand')
+                ->where(function ($query) {
+                    $query->whereRaw("MATCH(name,description) AGAINST(?)", [trim($this->search)])
                         ->orWhere('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('barcode', 'like', '%' . $this->search . '%')
-                        ->orWhere('original_price', 'like', '%' . $this->search . '%')
-                        ->orWhere('base_price', 'like', '%' . $this->search . '%')
-                        ->orWhere('final_price', 'like', '%' . $this->search . '%')
-                        ->orWhere('description', 'like', '%' . $this->search . '%')
-                        ->orWhere('model', 'like', '%' . $this->search . '%')
-                        ->orWhereHas('brand', fn ($q) => $q->where('brands.name', 'like', '%' . $this->search . '%'))
-                )
+                        ->orWhere('model', 'like', '%' . $this->search . '%');
+                })
+                ->orWhereHas('brand', function ($query) {
+                    $query->where('brands.name', 'like', '%' . $this->search . '%');
+                })
                 ->pluck('id');
 
             $products = getBestOfferForProducts($productsIds);
@@ -197,14 +201,9 @@ class SearchResults extends Component
                     fn ($q) =>
                     $q->whereRaw(
                         "MATCH(name,description) AGAINST(?)",
-                        array(trim($this->search))
+                        [trim($this->search)]
                     )
                         ->orWhere('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('barcode', 'like', '%' . $this->search . '%')
-                        ->orWhere('original_price', 'like', '%' . $this->search . '%')
-                        ->orWhere('base_price', 'like', '%' . $this->search . '%')
-                        ->orWhere('final_price', 'like', '%' . $this->search . '%')
-                        ->orWhere('description', 'like', '%' . $this->search . '%')
                         ->orWhere('model', 'like', '%' . $this->search . '%')
                 )
                 ->pluck('id');
@@ -348,5 +347,10 @@ class SearchResults extends Component
         if ($this->currentMaxPrice > $this->maxPrice) {
             $this->currentMaxPrice = $this->maxPrice;
         }
+    }
+
+    public function loadMore()
+    {
+        $this->perPage += config('settings.front_pagination');
     }
 }

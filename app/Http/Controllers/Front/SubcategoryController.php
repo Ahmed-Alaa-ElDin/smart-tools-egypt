@@ -11,7 +11,6 @@ class SubcategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -27,7 +26,6 @@ class SubcategoryController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Subcategory  $subcategory
-     * @return \Illuminate\Http\Response
      */
     public function show($subcategory_id)
     {
