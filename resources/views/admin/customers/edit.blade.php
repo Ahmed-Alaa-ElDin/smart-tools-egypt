@@ -61,7 +61,7 @@ __('admin/usersPages.Edit Customer')])
                 denyButtonText: e.detail.denyButtonText,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit('resetPassword');
+                    Livewire.dispatch('resetPassword');
                 }
             });
         });

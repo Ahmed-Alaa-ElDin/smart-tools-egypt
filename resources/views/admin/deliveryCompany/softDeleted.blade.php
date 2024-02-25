@@ -67,7 +67,7 @@ __('admin/deliveriesPages.Deleted Delivery Companies')])
                 focusDeny: false,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit('restoreDelivery', e.detail.delivery_id);
+                    Livewire.dispatch('restoreDelivery', e.detail.delivery_id);
                 }
             });
         });

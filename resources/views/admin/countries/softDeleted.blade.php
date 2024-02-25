@@ -64,7 +64,7 @@
                 focusDeny: false,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit('restoreCountry', e.detail.country_id);
+                    Livewire.dispatch('restoreCountry', e.detail.country_id);
                 }
             });
         });

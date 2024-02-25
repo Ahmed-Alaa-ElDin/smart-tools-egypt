@@ -25,7 +25,7 @@
                         <div class="flex items-center gap-3">
                             <label for="points"
                                 class="select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('front/homePage.Use') }}</label>
-                            <input type="number" dir="ltr" wire:model.lazy="points"
+                            <input type="number" dir="ltr" wire:model.live.blur="points"
                                 class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('points') border-2 border-primary @enderror"
                                 id="points" min="0" max="{{ auth()->user()->valid_points }}">
                             <span
@@ -48,7 +48,7 @@
                         <div class="flex items-center gap-3">
                             <label for="balance"
                                 class="select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('front/homePage.Use') }}</label>
-                            <input type="number" dir="ltr" wire:model.lazy="balance"
+                            <input type="number" dir="ltr" wire:model.live.blur="balance"
                                 class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('balance') border-2 border-primary @enderror"
                                 id="balance" step="0.1" min="0" max="{{ auth()->user()->balance }}">
                         </div>

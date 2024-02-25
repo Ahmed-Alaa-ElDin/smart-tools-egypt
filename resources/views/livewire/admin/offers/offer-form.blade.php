@@ -41,7 +41,7 @@
                 {{-- Upload New Image --}}
                 <input
                     class="col-span-12 md:col-span-6 md:col-start-4 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                    id="banner" type="file" type="image" wire:model.lazy="banner">
+                    id="banner" type="file" type="image" wire:model.live.blur="banner">
                 <span class="col-span-12 text-xs text-gray-400">
                     {{ __('admin/offersPages.Use 800x250 sizes image') }}</span>
                 @error('banner')
@@ -69,7 +69,7 @@
             <div class="col-span-6 md:col-span-5">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('title.ar') border-red-900 border-2 @enderror"
-                    type="text" wire:model.lazy="title.ar" id="title" dir="rtl"
+                    type="text" wire:model.live.blur="title.ar" id="title" dir="rtl"
                     placeholder="{{ __('admin/offersPages.in Arabic') }}" maxlength="100" required>
                 @error('title.ar')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -80,7 +80,7 @@
             <div class="col-span-6 md:col-span-5 ">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('title.en') border-red-900 border-2 @enderror"
-                    type="text" wire:model.lazy="title.en" placeholder="{{ __('admin/offersPages.in English') }}"
+                    type="text" wire:model.live.blur="title.en" placeholder="{{ __('admin/offersPages.in English') }}"
                     dir="ltr" maxlength="100">
                 @error('title.en')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -153,7 +153,7 @@
                             <input id="items.{{ $item_key }}.product_collection" type="radio"
                                 value="product_collection" wire:change="modelChanged({{ $item_key }})"
                                 class="appearance-none checked:bg-secondary checked:border-white outline-none ring-0 cursor-pointer"
-                                wire:model="items.{{ $item_key }}.item_type">
+                                wire:model.live="items.{{ $item_key }}.item_type">
                         </div>
 
                         <div class="flex gap-x-3 items-center">
@@ -162,7 +162,7 @@
                             <input id="items.{{ $item_key }}.category" type="radio" value="category"
                                 wire:change="modelChanged({{ $item_key }})"
                                 class="appearance-none checked:bg-secondary checked:border-white outline-none ring-0 cursor-pointer"
-                                wire:model="items.{{ $item_key }}.item_type">
+                                wire:model.live="items.{{ $item_key }}.item_type">
                         </div>
 
                         <div class="flex gap-x-3 items-center">
@@ -171,7 +171,7 @@
                             <input id="items.{{ $item_key }}.brand" type="radio" value="brand"
                                 wire:change="modelChanged({{ $item_key }})"
                                 class="appearance-none checked:bg-secondary checked:border-white outline-none ring-0 cursor-pointer"
-                                wire:model="items.{{ $item_key }}.item_type">
+                                wire:model.live="items.{{ $item_key }}.item_type">
                         </div>
 
                         <div class="flex gap-x-3 items-center">
@@ -180,7 +180,7 @@
                             <input id="items.{{ $item_key }}.order" type="radio" value="order"
                                 wire:change="modelChanged({{ $item_key }})"
                                 class="appearance-none checked:bg-secondary checked:border-white outline-none ring-0 cursor-pointer"
-                                wire:model="items.{{ $item_key }}.item_type">
+                                wire:model.live="items.{{ $item_key }}.item_type">
                         </div>
                     </div>
                     {{-- Model Type : :: End --}}
@@ -241,7 +241,7 @@
                                 class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __("admin/offersPages.Discount's Type") }}</label>
                             <div class="col-span-3">
 
-                                <select wire:model="{{ 'items.' . $item_key . '.type' }}"
+                                <select wire:model.live="{{ 'items.' . $item_key . '.type' }}"
                                     id="product_collection-{{ $item_key }}-type"
                                     class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('type') border-red-900 border-2 @enderror">
                                     <option value="0">{{ __('admin/offersPages.Percentage') }}</option>
@@ -267,7 +267,7 @@
                                 <input id="product_collection-{{ $item_key }}-value"
                                     class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('value') border-red-900 border-2 @enderror"
                                     type="number" min="0"
-                                    wire:model.lazy="{{ 'items.' . $item_key . '.value' }}"
+                                    wire:model.live.blur="{{ 'items.' . $item_key . '.value' }}"
                                     placeholder="{{ __('admin/offersPages.Enter Value') }}" maxlength="100">
 
                                 @error('items.' . $item_key . '.value')
@@ -287,12 +287,12 @@
                                         search
                                     </span>
                                 </span>
-                                <input type="text" wire:model="items.{{ $item_key }}.search"
+                                <input type="text" wire:model.live="items.{{ $item_key }}.search"
                                     onblur="setTimeout(() => {
-                                    window.livewire.emit('clearSearch',{{ $item_key }});
+                                    window.livewire.dispatch('clearSearch',{{ $item_key }});
                                 }, 100)"
                                     wire:keyup="searchUpdated('{{ $item_key }}')"
-                                    wire:keydown.escape="$emit('clearSearch',{{ $item_key }})"
+                                    wire:keydown.escape="$dispatch('clearSearch',{{ $item_key }})"
                                     class="searchInput focus:ring-0 flex-1 block rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-200"
                                     placeholder="{{ __('admin/offersPages.Search ...') }}">
                             </div>
@@ -403,7 +403,7 @@
                                             class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($collection['id'], $items[$item_key]['collections_id'])) bg-successLight @endif select-none">
                                             {{ $collection['name'][session('locale')] }}
                                             <input type="checkbox"
-                                                wire:model="items.{{ $item_key }}.collections_id"
+                                                wire:model.live="items.{{ $item_key }}.collections_id"
                                                 wire:key="item-{{ $item_key }}-collection-{{ $collection_key }}-input"
                                                 id="item-{{ $item_key }}-collection-{{ $collection_key }}"
                                                 value="{{ $collection['id'] }}" class="hidden">
@@ -437,7 +437,7 @@
                                             class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($product['id'], $items[$item_key]['products_id'])) bg-successLight @endif select-none">
                                             {{ $product['name'][session('locale')] }}
                                             <input type="checkbox"
-                                                wire:model="items.{{ $item_key }}.products_id"
+                                                wire:model.live="items.{{ $item_key }}.products_id"
                                                 wire:key="item-{{ $item_key }}-product-{{ $product_key }}-input"
                                                 id="item-{{ $item_key }}-product-{{ $product_key }}"
                                                 value="{{ $product['id'] }}" class="hidden">
@@ -470,7 +470,7 @@
                                 class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __("admin/offersPages.Discount's Type") }}</label>
                             <div class="col-span-3">
 
-                                <select wire:model="items.{{ $item_key }}.type"
+                                <select wire:model.live="items.{{ $item_key }}.type"
                                     id="brand-{{ $item_key }}-type"
                                     class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.type') border-red-900 border-2 @enderror">
                                     <option value="0">{{ __('admin/offersPages.Percentage') }}</option>
@@ -495,7 +495,7 @@
                             <div class="col-span-3">
                                 <input id="brand-{{ $item_key }}-value"
                                     class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.value') border-red-900 border-2 @enderror"
-                                    type="number" min="0" wire:model.lazy="items.{{ $item_key }}.value"
+                                    type="number" min="0" wire:model.live.blur="items.{{ $item_key }}.value"
                                     placeholder="{{ __('admin/offersPages.Enter Value') }}" maxlength="100">
 
                                 @error('items.' . $item_key . '.value')
@@ -517,7 +517,7 @@
                             </label>
 
                             <div class="col-span-12 sm:col-span-6 sm:col-start-4 lg:col-span-4 lg:col-start-5">
-                                <select wire:model="items.{{ $item_key }}.brand_id"
+                                <select wire:model.live="items.{{ $item_key }}.brand_id"
                                     wire:change="brandUpdated({{ $item_key }})"
                                     wire:key="brand-{{ $item_key }}-select"
                                     id="item-{{ $item_key }}-brand_id"
@@ -561,7 +561,7 @@
                                             class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($product['id'], $items[$item_key]['products_id'])) bg-successLight @endif select-none">
                                             {{ $product['name'][session('locale')] }}
                                             <input type="checkbox"
-                                                wire:model="items.{{ $item_key }}.products_id"
+                                                wire:model.live="items.{{ $item_key }}.products_id"
                                                 wire:key="item-{{ $item_key }}-product-{{ $product_key }}-input"
                                                 id="item-{{ $item_key }}-product-{{ $product_key }}"
                                                 value="{{ $product['id'] }}" class="hidden">
@@ -594,7 +594,7 @@
                                 class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __("admin/offersPages.Discount's Type") }}</label>
                             <div class="col-span-3">
 
-                                <select wire:model="items.{{ $item_key }}.type"
+                                <select wire:model.live="items.{{ $item_key }}.type"
                                     id="category-{{ $item_key }}-type"
                                     class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.type') border-red-900 border-2 @enderror">
                                     <option value="0">{{ __('admin/offersPages.Percentage') }}</option>
@@ -619,7 +619,7 @@
                             <div class="col-span-3">
                                 <input id="category-{{ $item_key }}-value"
                                     class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.value') border-red-900 border-2 @enderror"
-                                    type="number" min="0" wire:model.lazy="items.{{ $item_key }}.value"
+                                    type="number" min="0" wire:model.live.blur="items.{{ $item_key }}.value"
                                     placeholder="{{ __('admin/offersPages.Enter Value') }}" maxlength="100">
 
                                 @error('items.' . $item_key . '.value')
@@ -638,7 +638,7 @@
                                 wire:key="supercategory-{{ $item_key }}-label"
                                 class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Supercategory') }}</label>
                             <div class="col-span-3" wire:key="supercategory-{{ $item_key }}-select">
-                                <select wire:model="items.{{ $item_key }}.supercategory_id"
+                                <select wire:model.live="items.{{ $item_key }}.supercategory_id"
                                     wire:change="supercategoryUpdated({{ $item_key }})"
                                     id="supercategory-{{ $item_key }}"
                                     class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.supercategory_id') border-red-900 border-2 @enderror">
@@ -673,7 +673,7 @@
                                     wire:key="category-{{ $item_key }}-label"
                                     class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Category') }}</label>
                                 <div class="col-span-3">
-                                    <select wire:model="items.{{ $item_key }}.category_id"
+                                    <select wire:model.live="items.{{ $item_key }}.category_id"
                                         wire:change="categoryUpdated({{ $item_key }})"
                                         id="category-{{ $item_key }}"
                                         class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.category_id') border-red-900 border-2 @enderror">
@@ -705,7 +705,7 @@
                                     wire:key="subcategory-{{ $item_key }}-label"
                                     class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Subcategory') }}</label>
                                 <div class="col-span-3">
-                                    <select wire:model="items.{{ $item_key }}.subcategory_id"
+                                    <select wire:model.live="items.{{ $item_key }}.subcategory_id"
                                         wire:change="subcategoryUpdated({{ $item_key }})"
                                         id="subcategory-{{ $item_key }}"
                                         class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.subcategory_id') border-red-900 border-2 @enderror">
@@ -745,7 +745,7 @@
                                             class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($product['id'], $items[$item_key]['products_id'])) bg-successLight @endif select-none">
                                             {{ $product['name'][session('locale')] }}
                                             <input type="checkbox"
-                                                wire:model="items.{{ $item_key }}.products_id"
+                                                wire:model.live="items.{{ $item_key }}.products_id"
                                                 wire:key="item-{{ $item_key }}-product-{{ $product_key }}-input"
                                                 id="item-{{ $item_key }}-product-{{ $product_key }}"
                                                 value="{{ $product['id'] }}" class="hidden">
@@ -778,7 +778,7 @@
                                 class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __("admin/offersPages.Discount's Type") }}</label>
                             <div class="col-span-3">
 
-                                <select wire:model="type" id="offer-{{ $item_key }}-type"
+                                <select wire:model.live="type" id="offer-{{ $item_key }}-type"
                                     class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('type') border-red-900 border-2 @enderror">
                                     <option value="0">{{ __('admin/offersPages.Percentage') }}</option>
                                     <option value="1">{{ __('admin/offersPages.Fixed Discount') }}</option>
@@ -802,7 +802,7 @@
                             <div class="col-span-3">
                                 <input id="offer-{{ $item_key }}-value"
                                     class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('value') border-red-900 border-2 @enderror"
-                                    type="number" min="0" wire:model.lazy="value"
+                                    type="number" min="0" wire:model.live.blur="value"
                                     placeholder="{{ __('admin/offersPages.Enter Value') }}" maxlength="100">
 
                                 @error('value')
@@ -873,7 +873,7 @@
                                                 </span>
                                                 <br>
 
-                                                <input type="checkbox" wire:model="deleteSupercategories_id"
+                                                <input type="checkbox" wire:model.live="deleteSupercategories_id"
                                                     id="old-supercategory-{{ $supercategory_key }}"
                                                     value="{{ $supercategory['id'] }}" class="hidden">
                                             </label>
@@ -903,7 +903,7 @@
                                                 </span>
                                                 <br>
 
-                                                <input type="checkbox" wire:model="deleteCategories_id"
+                                                <input type="checkbox" wire:model.live="deleteCategories_id"
                                                     id="old-category-{{ $category_key }}"
                                                     value="{{ $category['id'] }}" class="hidden">
                                             </label>
@@ -933,7 +933,7 @@
                                                 </span>
                                                 <br>
 
-                                                <input type="checkbox" wire:model="deleteSubcategories_id"
+                                                <input type="checkbox" wire:model.live="deleteSubcategories_id"
                                                     id="old-subcategory-{{ $subcategory_key }}"
                                                     value="{{ $subcategory['id'] }}" class="hidden">
                                             </label>
@@ -962,7 +962,7 @@
                                                 </span>
                                                 <br>
 
-                                                <input type="checkbox" wire:model="deleteBrands_id"
+                                                <input type="checkbox" wire:model.live="deleteBrands_id"
                                                     id="old-brand-{{ $brand_key }}" value="{{ $brand['id'] }}"
                                                     class="hidden">
                                             </label>
@@ -993,7 +993,7 @@
                                                 </span>
                                                 <br>
 
-                                                <input type="checkbox" wire:model="deleteCollections_id"
+                                                <input type="checkbox" wire:model.live="deleteCollections_id"
                                                     id="old-collection-{{ $collection_key }}"
                                                     value="{{ $collection['id'] }}" class="hidden">
                                             </label>
@@ -1022,7 +1022,7 @@
                                                 </span>
                                                 <br>
 
-                                                <input type="checkbox" wire:model="deleteProducts_id"
+                                                <input type="checkbox" wire:model.live="deleteProducts_id"
                                                     id="old-product-{{ $product_key }}"
                                                     value="{{ $product['id'] }}" class="hidden">
                                             </label>
@@ -1039,7 +1039,7 @@
                                     <div class="flex flex-wrap justify-center gap-3 items-center h-100">
                                         <input
                                             class="appearance-none border-red-900 rounded-full checked:bg-primary outline-none ring-0 cursor-pointer"
-                                            type="checkbox" wire:model="on_orders" value="1">
+                                            type="checkbox" wire:model.live="on_orders" value="1">
                                     </div>
                                 </td>
                             </tr>
@@ -1097,7 +1097,7 @@
                             format: 'YYYY-MM-DD hh:mm A',
                         }
                     }, function(start, end, label) {
-                        Livewire.emit('daterangeUpdated', start.format('YYYY-MM-DD H:mm'), end.format('YYYY-MM-DD H:mm'));
+                        Livewire.dispatch('daterangeUpdated', start.format('YYYY-MM-DD H:mm'), end.format('YYYY-MM-DD H:mm'));
                     });
                 });
             </script>

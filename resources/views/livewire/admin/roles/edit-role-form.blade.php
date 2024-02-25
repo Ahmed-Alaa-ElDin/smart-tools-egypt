@@ -14,7 +14,7 @@
             <div class="col-span-12 sm:col-start-4 sm:col-span-6 md:col-start-auto md:col-span-5">
                 <input
                     class="first_input py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('f_name.ar') border-red-900 border-2 @enderror"
-                    type="text" wire:model.lazy="name" placeholder="{{ __('admin/usersPages.Role Name') }}"
+                    type="text" wire:model.live.blur="name" placeholder="{{ __('admin/usersPages.Role Name') }}"
                     tabindex="1" required>
                 @error('name')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -47,7 +47,7 @@
                                         <label for="{{ $permission->name }}" class="cursor-pointer text-black m-0" >{{ $permission->name }}</label>
                                     </td>
                                     <td class="px-3 py-2 bg-red-100">
-                                        <input type="checkbox" wire:model='selectedPermissions'
+                                        <input type="checkbox" wire:model.live='selectedPermissions'
                                             value="{{ $permission->name }}" id="{{ $permission->name }}"
                                             class="appearance-none border-red-900 rounded-full checked:bg-primary outline-none ring-0 cursor-pointer">
                                     </td>
@@ -56,7 +56,7 @@
                                     <label for="{{ $permission->name }}" class="cursor-pointer text-black m-0" >{{ $permission->name }}</label>
                                 </td>
                                 <td class="px-3 py-2 bg-gray-200">
-                                    <input type="checkbox" wire:model='selectedPermissions'
+                                    <input type="checkbox" wire:model.live='selectedPermissions'
                                         value="{{ $permission->name }}" id="{{ $permission->name }}"
                                         class="appearance-none border-gray-600 rounded-full checked:bg-secondary outline-none ring-0 cursor-pointer">
                                 </td>

@@ -39,7 +39,7 @@
                 {{-- Upload New Image --}}
                 <input
                     class="col-span-12 md:col-span-6 md:col-start-4 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                    id="banner" type="file" type="image" wire:model.lazy="banner">
+                    id="banner" type="file" type="image" wire:model.live.blur="banner">
                 <span class="col-span-12 text-xs text-gray-400">
                     {{ __('admin/sitePages.Big Banner: Use 800x250 sizes image') }} -
                     {{ __('admin/sitePages.Small Banner: Use 150x150 sizes image') }} -
@@ -74,7 +74,7 @@
             <div class="col-span-12 md:col-span-5">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('description.ar') border-red-900 border-2 @enderror"
-                    type="text" wire:model.lazy="description.ar" id="description" dir="rtl"
+                    type="text" wire:model.live.blur="description.ar" id="description" dir="rtl"
                     placeholder="{{ __('admin/sitePages.in Arabic') }}" maxlength="100" required>
                 @error('description.ar')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -85,7 +85,7 @@
             <div class="col-span-12 md:col-span-5 ">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('description.en') border-red-900 border-2 @enderror"
-                    type="text" wire:model.lazy="description.en"
+                    type="text" wire:model.live.blur="description.en"
                     placeholder="{{ __('admin/sitePages.in English') }}" maxlength="100" dir="ltr">
                 @error('description.en')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -103,7 +103,7 @@
             <div class="col-span-12 md:col-span-10">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('link') border-red-900 border-2 @enderror"
-                    type="url" wire:model.lazy="link" id="link" placeholder="{{ __('admin/sitePages.Link') }}"
+                    type="url" wire:model.live.blur="link" id="link" placeholder="{{ __('admin/sitePages.Link') }}"
                     dir="ltr">
                 @error('link')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">

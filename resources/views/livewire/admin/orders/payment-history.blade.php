@@ -180,7 +180,7 @@
             }).then((result) => {
                 // console.log(result);
                 if (result.isConfirmed) {
-                    Livewire.emit(e.detail.method, e.detail.id, result.value);
+                    Livewire.dispatch(e.detail.method, e.detail.id, result.value);
                 }
             });
         });
@@ -206,7 +206,7 @@
             }).then((result) => {
                 // console.log(result);
                 if (result.isConfirmed) {
-                    Livewire.emit(e.detail.method, e.detail.id, result.value);
+                    Livewire.dispatch(e.detail.method, e.detail.id, result.value);
                 }
             });
         });
@@ -231,7 +231,7 @@
             }).then((result) => {
                 // console.log(result);
                 if (result.isConfirmed) {
-                    Livewire.emit(e.detail.method, e.detail.id, result.value);
+                    Livewire.dispatch(e.detail.method, e.detail.id, result.value);
                 }
             });
         });
@@ -255,7 +255,7 @@
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit(e.detail.method, result.value);
+                    Livewire.dispatch(e.detail.method, result.value);
                 }
             });
         });
@@ -280,7 +280,7 @@
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit(e.detail.method, result.value);
+                    Livewire.dispatch(e.detail.method, result.value);
                 }
             });
         });

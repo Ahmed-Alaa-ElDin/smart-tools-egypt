@@ -57,7 +57,7 @@
                             <span class="material-icons">
                                 search
                             </span> </span>
-                        <input type="text"   wire:model='search'
+                        <input type="text"   wire:model.live='search'
                             class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                             placeholder="{{ __('admin/ordersPages.Search ...') }}">
                     </div>
@@ -93,7 +93,7 @@
                 {{-- Pagination Number --}}
                 <div class="form-inline col-span-1 justify-end my-2">
                     {{ __('pagination.Show') }} &nbsp;
-                    <select wire:model='perPage' class="form-control w-auto px-3 cursor-pointer">
+                    <select wire:model.live='perPage' class="form-control w-auto px-3 cursor-pointer">
                         <option>5</option>
                         <option>10</option>
                         <option>25</option>
@@ -119,7 +119,7 @@
                                 <th scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
                                     <div class="min-w-max">
-                                        <input type="checkbox" wire:model="selectAll" value="true"
+                                        <input type="checkbox" wire:model.live="selectAll" value="true"
                                             class="appearance-none border-gray-600 rounded-full checked:bg-secondary outline-none ring-0 cursor-pointer">
                                     </div>
                                 </th>
@@ -219,7 +219,7 @@
                                     {{-- select order Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
                                         <div class="flex items-center content-center">
-                                            <input type="checkbox" wire:model="selectedOrders"
+                                            <input type="checkbox" wire:model.live="selectedOrders"
                                                 value="{{ $order->id }}"
                                                 class="appearance-none border-gray-600 rounded-full checked:bg-secondary outline-none ring-0 cursor-pointer">
                                         </div>

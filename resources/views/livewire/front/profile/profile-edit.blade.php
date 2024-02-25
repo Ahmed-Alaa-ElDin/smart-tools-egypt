@@ -37,7 +37,7 @@
                 @else
                     <input
                         class="col-span-12 md:col-span-10 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                        id="photo" type="file" type="image" wire:model="photo">
+                        id="photo" type="file" type="image" wire:model.live="photo">
 
                     @error('photo')
                         <span class="col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">{{ $message }}</span>
@@ -61,7 +61,7 @@
                     <div class="col-span-6 md:col-span-5">
                         <input
                             class="first_input py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('f_name.ar') border-red-900 border-2 @enderror"
-                            type="text" wire:model.lazy="f_name.ar" dir="rtl"
+                            type="text" wire:model.live.blur="f_name.ar" dir="rtl"
                             placeholder="{{ __('front/homePage.in Arabic') }}" tabindex="1" required>
                         @error('f_name.ar')
                             <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -72,7 +72,7 @@
                     <div class="col-span-6 md:col-span-5 ">
                         <input
                             class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('f_name.en') border-red-900 border-2 @enderror"
-                            type="text" wire:model.lazy="f_name.en" dir="ltr"
+                            type="text" wire:model.live.blur="f_name.en" dir="ltr"
                             placeholder="{{ __('front/homePage.in English') }}" tabindex="3">
                         @error('f_name.en')
                             <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -86,7 +86,7 @@
                     <div class="col-span-6 md:col-span-5 ">
                         <input
                             class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('l_name.ar') border-red-900 border-2 @enderror"
-                            type="text" wire:model.lazy="l_name.ar" dir="rtl"
+                            type="text" wire:model.live.blur="l_name.ar" dir="rtl"
                             placeholder="{{ __('front/homePage.in Arabic') }}" tabindex="2" required>
                         @error('l_name.ar')
                             <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -99,7 +99,7 @@
                     <div class="col-span-6 md:col-span-5 ">
                         <input
                             class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('l_name.en') border-red-900 border-2 @enderror"
-                            type="text" wire:model.lazy="l_name.en" dir="ltr"
+                            type="text" wire:model.live.blur="l_name.en" dir="ltr"
                             placeholder="{{ __('front/homePage.in English') }}" tabindex="4">
                         @error('l_name.en')
                             <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -118,7 +118,7 @@
                     <div class="col-span-12 sm:col-span-8 sm:col-start-3 md:col-span-10 lg:col-span-6">
                         <input
                             class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('email') border-red-900 border-2 @enderror"
-                            type="email" wire:model.lazy="email" dir="ltr"
+                            type="email" wire:model.live.blur="email" dir="ltr"
                             placeholder="{{ __('front/homePage.Email') }}" dir="ltr" tabindex="5">
                         @error('email')
                             <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -146,7 +146,7 @@
                             {{-- phone input field --}}
                             <input
                                 class="@if (count($phones) > 1) col-span-4 @else col-span-5 @endif py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                                type="text" wire:model.lazy="phones.{{ $index }}.phone"
+                                type="text" wire:model.live.blur="phones.{{ $index }}.phone"
                                 placeholder="{{ __('front/homePage.Phone') }}" dir="ltr" tabindex="6">
 
                             {{-- Default Radio Button --}}
@@ -154,7 +154,7 @@
                                 <label for="defaultPhone{{ $index }}"
                                     class="text-xs text-black m-0 cursor-pointer">{{ __('front/homePage.Default') }}</label>
                                 <input type="radio" id="defaultPhone{{ $index }}"
-                                    wire:model.lazy="defaultPhone" value="{{ $index }}"
+                                    wire:model.live.blur="defaultPhone" value="{{ $index }}"
                                     class="appearance-none checked:bg-primary outline-none ring-0 cursor-pointer">
                             </div>
                         @endforeach
@@ -201,7 +201,7 @@
                         <div class="col-span-2 md:col-span-3">
                             <select
                                 class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('gender') border-red-900 border-2 @enderror"
-                                wire:model.lazy="gender" id="gender" tabindex="7">
+                                wire:model.live.blur="gender" id="gender" tabindex="7">
                                 <option value="0">{{ __('front/homePage.Male') }}</option>
                                 <option value="1">{{ __('front/homePage.Female') }}</option>
                             </select>
@@ -219,7 +219,7 @@
                         <div class="col-span-2 md:col-span-3">
                             <input
                                 class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('birth_date') border-red-900 border-2 @enderror"
-                                type="date" wire:model.lazy="birth_date" id="birth_date" tabindex="9" required>
+                                type="date" wire:model.live.blur="birth_date" id="birth_date" tabindex="9" required>
                             @error('birth_date')
                                 <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                                     {{ $message }}</div>
@@ -250,7 +250,7 @@
                                         <label for="defaultAddress{{ $index }}"
                                             class="text-xs text-black m-0 cursor-pointer">{{ __('front/homePage.Default') }}</label>
                                         <input type="radio" id="defaultAddress{{ $index }}"
-                                            wire:model.lazy="defaultAddress" value="{{ $index }}"
+                                            wire:model.live.blur="defaultAddress" value="{{ $index }}"
                                             class="appearance-none checked:bg-primary outline-none ring-0 cursor-pointer">
                                     </div>
 
@@ -277,8 +277,8 @@
                                         for="country{{ $index }}">{{ __('front/homePage.Country') }}</label>
                                     <select
                                         class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                                        wire:model='addresses.{{ $index }}.country_id'
-                                        wire:change='$emit("countryUpdated",{{ $index }})'
+                                        wire:model.live='addresses.{{ $index }}.country_id'
+                                        wire:change='$dispatch("countryUpdated",{{ $index }})'
                                         id="country{{ $index }}">
                                         @forelse ($countries as $country)
                                             <option value="{{ $country->id }}">{{ $country->name }}</option>
@@ -297,9 +297,9 @@
                                         for="governorate{{ $index }}">{{ __('front/homePage.Governorate') }}</label>
                                     <select
                                         class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                                        wire:model='addresses.{{ $index }}.governorate_id'
+                                        wire:model.live='addresses.{{ $index }}.governorate_id'
                                         id="governorate{{ $index }}"
-                                        wire:change='$emit("governorateUpdated",{{ $index }})'>
+                                        wire:change='$dispatch("governorateUpdated",{{ $index }})'>
                                         @forelse ($governorates[$index] as $governorate)
                                             <option value="{{ $governorate['id'] }}">
                                                 {{ $governorate['name'][session('locale')] }}</option>
@@ -325,9 +325,9 @@
 
                                     <select
                                         class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                                        wire:model='addresses.{{ $index }}.city_id'
+                                        wire:model.live='addresses.{{ $index }}.city_id'
                                         id="city{{ $index }}"
-                                        wire:change='$emit("cityUpdated",{{ $index }})'>
+                                        wire:change='$dispatch("cityUpdated",{{ $index }})'>
                                         @forelse ($cities[$index] as $city)
                                             <option value="{{ $city['id'] }}">
                                                 {{ $city['name'][session('locale')] }}
@@ -351,7 +351,7 @@
                                     <label
                                         class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                         for="details{{ $index }}">{{ __('front/homePage.Address Details') }}</label>
-                                    <textarea id="details{{ $index }}" rows="2" wire:model.lazy="addresses.{{ $index }}.details"
+                                    <textarea id="details{{ $index }}" rows="2" wire:model.live.blur="addresses.{{ $index }}.details"
                                         dir="rtl"
                                         placeholder="{{ __('front/homePage.Please mention the details of the address such as street name, building number, ... etc.') }}"
                                         class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 overflow-hidden"></textarea>
@@ -363,7 +363,7 @@
                                         class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                         for="landmarks{{ $index }}">{{ __('front/homePage.Landmarks') }}</label>
                                     <textarea id="landmarks{{ $index }}" rows="2"
-                                        wire:model.lazy="addresses.{{ $index }}.landmarks" dir="rtl"
+                                        wire:model.live.blur="addresses.{{ $index }}.landmarks" dir="rtl"
                                         placeholder="{{ __('front/homePage.Please mention any landmarks such as mosque, grocery, ... etc.') }}"
                                         class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"></textarea>
                                 </div>

@@ -64,7 +64,7 @@
                             <span class="material-icons">
                                 search
                             </span> </span>
-                        <input type="text" wire:model='search'
+                        <input type="text" wire:model.live='search'
                             class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                             placeholder="{{ __('admin/productsPages.Search ...') }}">
                     </div>
@@ -111,7 +111,7 @@
                 {{-- Pagination Number --}}
                 <div class="form-inline col-span-1 justify-end my-2">
                     {{ __('pagination.Show') }} &nbsp;
-                    <select wire:model='perPage' class="form-control w-auto px-3 cursor-pointer">
+                    <select wire:model.live='perPage' class="form-control w-auto px-3 cursor-pointer">
                         <option>5</option>
                         <option>10</option>
                         <option>25</option>
@@ -218,7 +218,7 @@
                                     {{-- select product Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
                                         <div class="flex items-center content-center">
-                                            <input type="checkbox" wire:model="selectedProducts"
+                                            <input type="checkbox" wire:model.live="selectedProducts"
                                                 value="{{ $product->id }}"
                                                 class="appearance-none border-gray-600 rounded-full checked:bg-secondary outline-none ring-0 cursor-pointer">
                                         </div>
@@ -437,7 +437,7 @@
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-200">
                                 {{ __('admin/productsPages.Upload Excel File') }}
                             </label>
-                            <input type="file" wire:model="bulkUpdateFile" id="bulkUpdateFile"
+                            <input type="file" wire:model.live="bulkUpdateFile" id="bulkUpdateFile"
                                 class="col-span-12 md:col-span-6 md:col-start-4 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300">
                             @error('bulkUpdateFile')
                                 <p class="text-red-600 text-xs mt-1">{{ $message }}</p>

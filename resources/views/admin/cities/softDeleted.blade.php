@@ -64,7 +64,7 @@
                 focusDeny: false,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit('restoreCity', e.detail.city_id);
+                    Livewire.dispatch('restoreCity', e.detail.city_id);
                 }
             });
         });

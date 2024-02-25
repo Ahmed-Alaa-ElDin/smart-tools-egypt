@@ -167,7 +167,7 @@ bg-gray-200 @endif select-none"
                 <div class="col-span-12 md:col-span-9">
                     <input
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                        type="text" wire:model.debounce.300ms="searchBanner" onfocus="Livewire.emit('showResults',1);"
+                        type="text" wire:model.live.debounce.300ms="searchBanner" onfocus="Livewire.dispatch('showResults',1);"
                         id="banner_name" placeholder="{{ __("admin/sitePages.Enter Banner's Description") }}"
                         maxlength="100" autocomplete="off" required>
 

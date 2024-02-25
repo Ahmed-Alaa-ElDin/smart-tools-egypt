@@ -81,7 +81,7 @@
 
                                         <select
                                             class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                                            wire:model='address.country_id' id="country">
+                                            wire:model.live='address.country_id' id="country">
                                             @forelse ($countries as $country)
                                                 <option value="{{ $country['id'] }}">
                                                     {{ $country['name'][session('locale')] }}
@@ -101,7 +101,7 @@
                                             for="governorate">{{ __('front/homePage.Governorate') }}</label>
                                         <select
                                             class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                                            wire:model='address.governorate_id' id="governorate">
+                                            wire:model.live='address.governorate_id' id="governorate">
                                             @forelse ($governorates as $governorate)
                                                 <option value="{{ $governorate['id'] }}">
                                                     {{ $governorate['name'][session('locale')] }}</option>
@@ -127,7 +127,7 @@
 
                                         <select
                                             class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                                            wire:model='address.city_id' id="city">
+                                            wire:model.live='address.city_id' id="city">
                                             @forelse ($cities as $city)
                                                 <option value="{{ $city['id'] }}">
                                                     {{ $city['name'][session('locale')] }}
@@ -151,7 +151,7 @@
                                         <label
                                             class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                             for="details">{{ __('front/homePage.Address Details') }}</label>
-                                        <textarea id="details" rows="2" wire:model.lazy="address.details" dir="rtl"
+                                        <textarea id="details" rows="2" wire:model.live.blur="address.details" dir="rtl"
                                             placeholder="{{ __('front/homePage.Please mention the details of the address such as street name, building number, ... etc.') }}"
                                             class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 overflow-hidden"></textarea>
                                     </div>
@@ -161,7 +161,7 @@
                                         <label
                                             class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                             for="landmarks">{{ __('front/homePage.Landmarks') }}</label>
-                                        <textarea id="landmarks" rows="2" wire:model.lazy="address.landmarks" dir="rtl"
+                                        <textarea id="landmarks" rows="2" wire:model.live.blur="address.landmarks" dir="rtl"
                                             placeholder="{{ __('front/homePage.Please mention any landmarks such as mosque, grocery, ... etc.') }}"
                                             class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"></textarea>
                                     </div>
@@ -206,7 +206,7 @@
                                     for="country">{{ __('front/homePage.Country') }}</label>
                                 <select
                                     class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                                    wire:model='address.country_id' id="country">
+                                    wire:model.live='address.country_id' id="country">
                                     @forelse ($countries as $country)
                                         <option value="{{ $country['id'] }}">
                                             {{ $country['name'][session('locale')] }}
@@ -226,7 +226,7 @@
                                     for="governorate">{{ __('front/homePage.Governorate') }}</label>
                                 <select
                                     class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                                    wire:model='address.governorate_id' id="governorate">
+                                    wire:model.live='address.governorate_id' id="governorate">
                                     @forelse ($governorates as $governorate)
                                         <option value="{{ $governorate['id'] }}">
                                             {{ $governorate['name'][session('locale')] }}</option>
@@ -252,7 +252,7 @@
 
                                 <select
                                     class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                                    wire:model='address.city_id' id="city">
+                                    wire:model.live='address.city_id' id="city">
                                     @forelse ($cities as $city)
                                         <option value="{{ $city['id'] }}">
                                             {{ $city['name'][session('locale')] }}
@@ -276,7 +276,7 @@
                                 <label
                                     class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                     for="details">{{ __('front/homePage.Address Details') }}</label>
-                                <textarea id="details" rows="2" wire:model.lazy="address.details" dir="rtl"
+                                <textarea id="details" rows="2" wire:model.live.blur="address.details" dir="rtl"
                                     placeholder="{{ __('front/homePage.Please mention the details of the address such as street name, building number, ... etc.') }}"
                                     class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 overflow-hidden"></textarea>
                             </div>
@@ -286,7 +286,7 @@
                                 <label
                                     class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                     for="landmarks">{{ __('front/homePage.Landmarks') }}</label>
-                                <textarea id="landmarks" rows="2" wire:model.lazy="address.landmarks" dir="rtl"
+                                <textarea id="landmarks" rows="2" wire:model.live.blur="address.landmarks" dir="rtl"
                                     placeholder="{{ __('front/homePage.Please mention any landmarks such as mosque, grocery, ... etc.') }}"
                                     class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"></textarea>
                             </div>
@@ -370,7 +370,7 @@
                             <label
                                 class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                 for="phone">{{ __('front/homePage.Phone') }}</label>
-                            <input id="phone" type="text" wire:model.lazy="phone" dir="ltr"
+                            <input id="phone" type="text" wire:model.live.blur="phone" dir="ltr"
                                 placeholder="{{ __('front/homePage.Please enter your phone number') }}"
                                 class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300">
 
@@ -403,7 +403,7 @@
                 <div class="grid grid-cols-6 gap-x-4 gap-y-2 items-center bg-red-100 p-2 rounded text-center my-2">
                     <label class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
                         for="phone">{{ __('front/homePage.Phone') }}</label>
-                    <input id="phone" type="text" wire:model.lazy="phone" dir="ltr"
+                    <input id="phone" type="text" wire:model.live.blur="phone" dir="ltr"
                         placeholder="{{ __('front/homePage.Please enter your phone number') }}"
                         class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300">
 
@@ -435,7 +435,7 @@
             {{ __('front/homePage.Notes') }}
         </h2>
         <div class="notes col-span-4">
-            <textarea id="notes" rows="3" wire:model.lazy="notes" dir="rtl"
+            <textarea id="notes" rows="3" wire:model.live.blur="notes" dir="rtl"
                 placeholder="{{ __('front/homePage.Please mention any note related to the order') }}"
                 class="w-full py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 overflow-hidden"></textarea>
         </div>

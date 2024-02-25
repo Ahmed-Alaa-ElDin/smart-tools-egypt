@@ -62,7 +62,7 @@
             const element = searchInputs[i];
             element.addEventListener('blur', function(event) {
                 setTimeout(() => {
-                    window.livewire.emitTo(`admin.orders.${element.dataset.name}`, 'clearSearch');
+                    window.livewire.dispatchTo(`admin.orders.${element.dataset.name}`, 'clearSearch');
                 }, 200);
             })
         }

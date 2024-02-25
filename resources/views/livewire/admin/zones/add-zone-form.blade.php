@@ -12,13 +12,13 @@
             <div class="col-span-6 md:col-span-5">
                 <input
                     class="py-1 w-full rounded text-center border-gray-300 text-gray-500 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                    type="text" wire:model.lazy="name.ar" disabled>
+                    type="text" wire:model.live.blur="name.ar" disabled>
             </div>
             {{-- Name En --}}
             <div class="col-span-6 md:col-span-5 ">
                 <input
                     class="py-1 w-full rounded text-center border-gray-300 text-gray-500 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                    type="text" wire:model.lazy="name.en" disabled>
+                    type="text" wire:model.live.blur="name.en" disabled>
             </div>
         </div>
 
@@ -99,7 +99,7 @@
                                 <div class="col-span-6 md:col-span-5">
                                     <input
                                         class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                                        type="text" wire:model.lazy="zones.{{ $zone_index }}.name.ar"
+                                        type="text" wire:model.live.blur="zones.{{ $zone_index }}.name.ar"
                                         placeholder="{{ __('admin/usersPages.in Arabic') }}">
                                     @error('zones.*.name.ar')
                                         <div
@@ -111,7 +111,7 @@
                                 <div class="col-span-6 md:col-span-5 ">
                                     <input
                                         class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                                        type="text" wire:model.lazy="zones.{{ $zone_index }}.name.en"
+                                        type="text" wire:model.live.blur="zones.{{ $zone_index }}.name.en"
                                         placeholder="{{ __('admin/usersPages.in English') }}">
                                     @error('zones.*.name.en')
                                         <div
@@ -131,7 +131,7 @@
                                 <div class="col-span-12 sm:col-span-4 md:col-span-3">
                                     <input
                                         class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                                        type="text" wire:model.lazy="zones.{{ $zone_index }}.min_charge"
+                                        type="text" wire:model.live.blur="zones.{{ $zone_index }}.min_charge"
                                         placeholder="{{ __('admin/deliveriesPages.Base Fees (EGP)') }}">
                                     @error('zones.*.min_charge')
                                         <div
@@ -144,7 +144,7 @@
                                 <div class="col-span-6 sm:col-span-4 md:col-span-3">
                                     <input
                                         class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                                        type="text" wire:model.lazy="zones.{{ $zone_index }}.min_weight"
+                                        type="text" wire:model.live.blur="zones.{{ $zone_index }}.min_weight"
                                         placeholder="{{ __('admin/deliveriesPages.Base Weight (Kg)') }}">
                                     @error('zones.*.min_weight')
                                         <div
@@ -158,7 +158,7 @@
                                 <div class="col-span-6 sm:col-span-4 md:col-span-3">
                                     <input
                                         class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                                        type="text" wire:model.lazy="zones.{{ $zone_index }}.kg_charge"
+                                        type="text" wire:model.live.blur="zones.{{ $zone_index }}.kg_charge"
                                         placeholder="{{ __('admin/deliveriesPages.Fees by Kg') }}">
                                     @error('zones.*.kg_charge')
                                         <div
@@ -231,7 +231,7 @@
                                                 for="destination_{{ $zone_index }}_country_{{ $des_index }}">{{ __('admin/usersPages.Country') }}</label>
                                             <select
                                                 class="col-span-2 w-full py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                                                wire:model='zones.{{ $zone_index }}.destinations.{{ $des_index }}.country_id'
+                                                wire:model.live='zones.{{ $zone_index }}.destinations.{{ $des_index }}.country_id'
                                                 id="destination_{{ $zone_index }}_country_{{ $des_index }}"
                                                 wire:change='countryUpdated({{ $zone_index }},{{ $des_index }})'>
                                                 <option value="">
@@ -258,7 +258,7 @@
                                                     for="destination_{{ $zone_index }}_governorate_{{ $des_index }}">{{ __('admin/usersPages.Governorate') }}</label>
                                                 <select
                                                     class="col-span-2 w-full py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                                                    wire:model='zones.{{ $zone_index }}.destinations.{{ $des_index }}.governorate_id'
+                                                    wire:model.live='zones.{{ $zone_index }}.destinations.{{ $des_index }}.governorate_id'
                                                     id="destination_{{ $zone_index }}_governorate_{{ $des_index }}"
                                                     wire:change='governorateUpdated({{ $zone_index }},{{ $des_index }})'>
                                                     <option value="">
@@ -292,7 +292,7 @@
                                                         class="bg-red-200 px-3 py-1 min-w-max rounded-full text-black shadow cursor-pointer @if (in_array($city['id'], $zones[$zone_index]['destinations'][$des_index]['cities'])) bg-successLighter @endif select-none">
                                                         {{ $city['name'][session('locale')] }}
                                                         <input type="checkbox"
-                                                            wire:model="zones.{{ $zone_index }}.destinations.{{ $des_index }}.cities"
+                                                            wire:model.live="zones.{{ $zone_index }}.destinations.{{ $des_index }}.cities"
                                                             id="zone_{{ $zone_index }}_destination_{{ $des_index }}_city_{{ $city_index }}"
                                                             value="{{ $city['id'] }}" class="hidden">
                                                     </label>

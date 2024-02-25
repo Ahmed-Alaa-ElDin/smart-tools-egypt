@@ -87,7 +87,7 @@
             selector: '#seo_description',
             setup: function(editor) {
                 editor.on('blur', function(e) {
-                    window.livewire.emit('descriptionSeo', tinymce.get(e.target.id).getContent())
+                    window.livewire.dispatch('descriptionSeo', tinymce.get(e.target.id).getContent())
                 });
             }
         });

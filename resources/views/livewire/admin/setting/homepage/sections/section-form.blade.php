@@ -12,7 +12,7 @@
             <div class="col-span-6 md:col-span-5">
                 <input
                     class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('title.ar') border-red-900 border-2 @enderror"
-                    type="text" wire:model.lazy="title.ar" id="title" dir="rtl"
+                    type="text" wire:model.live.blur="title.ar" id="title" dir="rtl"
                     placeholder="{{ __('admin/sitePages.in Arabic') }}" maxlength="100" required>
                 @error('title.ar')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -23,7 +23,7 @@
             <div class="col-span-6 md:col-span-5 ">
                 <input
                     class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('title.en') border-red-900 border-2 @enderror"
-                    type="text" wire:model.lazy="title.en" placeholder="{{ __('admin/sitePages.in English') }}"
+                    type="text" wire:model.live.blur="title.en" placeholder="{{ __('admin/sitePages.in English') }}"
                     dir="ltr" maxlength="100" required>
                 @error('title.en')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -41,7 +41,7 @@
             {{-- Active --}}
             <div class="col-span-6 md:col-span-2 text-center flex items-center justify-center">
                 <input class="appearance-none rounded-full checked:bg-secondary outline-none ring-0 cursor-pointer"
-                    type="checkbox" id="active" wire:model.lazy="active" value="1">
+                    type="checkbox" id="active" wire:model.live.blur="active" value="1">
             </div>
 
             @error('active')
@@ -63,7 +63,7 @@
                         {{ __('admin/sitePages.Products & Collections List') }}
                     </span>
                     <input class="appearance-none checked:bg-secondary outline-none ring-0 cursor-pointer"
-                        id="products_list" type="radio" name="type" wire:model="type" value="0">
+                        id="products_list" type="radio" name="type" wire:model.live="type" value="0">
                 </label>
                 {{-- Products & Collections List : End --}}
 
@@ -73,7 +73,7 @@
                         {{ __('admin/sitePages.Offer') }}
                     </span>
                     <input class="appearance-none checked:bg-secondary outline-none ring-0 cursor-pointer" id="offer"
-                        type="radio" name="type" wire:model="type" value="1">
+                        type="radio" name="type" wire:model.live="type" value="1">
                 </label>
                 {{-- Offers : End --}}
 
@@ -83,7 +83,7 @@
                         {{ __('admin/sitePages.Flash Sale') }}
                     </span>
                     <input class="appearance-none checked:bg-secondary outline-none ring-0 cursor-pointer"
-                        id="flash_sale" type="radio" name="type" wire:model="type" value="2">
+                        id="flash_sale" type="radio" name="type" wire:model.live="type" value="2">
                 </label>
                 {{-- Flash Sale : End --}}
 
@@ -93,7 +93,7 @@
                         {{ __('admin/sitePages.Banners List') }}
                     </span>
                     <input class="appearance-none checked:bg-secondary outline-none ring-0 cursor-pointer"
-                        id="banners_list" type="radio" name="type" wire:model="type" value="3">
+                        id="banners_list" type="radio" name="type" wire:model.live="type" value="3">
                 </label>
                 {{-- Banners List : End --}}
 
