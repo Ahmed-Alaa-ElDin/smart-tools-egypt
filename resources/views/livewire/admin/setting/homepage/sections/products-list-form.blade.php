@@ -13,11 +13,11 @@
                         search
                     </span>
                 </span>
-                <input type="text" wire:model="search"
+                <input type="text" wire:model.live="search"
                     onblur="setTimeout(() => {
-                    window.livewire.emit('clearSearch');
+                    window.livewire.dispatch('clearSearch');
                 }, 100)"
-                    wire:keydown.escape="$emit('clearSearch')"
+                    wire:keydown.escape="$dispatch('clearSearch')"
                     class="searchInput focus:ring-0 flex-1 block rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-200"
                     placeholder="{{ __('admin/offersPages.Search ...') }}">
             </div>

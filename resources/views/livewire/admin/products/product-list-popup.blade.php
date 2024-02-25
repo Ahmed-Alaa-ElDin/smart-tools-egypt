@@ -37,7 +37,7 @@
                                 {{ trans_choice('admin/productsPages.Item Selected', $totalSelected, ['Item' => $totalSelected]) }}
                                 <span
                                     class="material-icons w-4 h-4 bg-white text-black p-2 rounded-full flex justify-center items-center text-xs font-bold text-red-800 cursor-pointer"
-                                    wire:click="$emit('unselectAll')"
+                                    wire:click="$dispatch('unselectAll')"
                                     title="{{ __('admin/productsPages.Unselect All') }}">close</span>
                             </div>
 

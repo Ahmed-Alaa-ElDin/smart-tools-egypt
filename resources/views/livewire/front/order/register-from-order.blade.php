@@ -20,7 +20,7 @@
                                     </span>
                                     <span class="text-red-600">*</span>
                                 </label>
-                                <input type="text" id="f_name" wire:model="f_name"
+                                <input type="text" id="f_name" wire:model.live="f_name"
                                     class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('f_name') border-red-500 @enderror"
                                     placeholder="{{ __('auth/authentication.Enter Your First Name') }}" required>
 
@@ -38,7 +38,7 @@
                                     </span>
                                     <span class="text-red-600">*</span>
                                 </label>
-                                <input type="text" id="l_name" wire:model="l_name"
+                                <input type="text" id="l_name" wire:model.live="l_name"
                                     class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('l_name') border-red-500 @enderror"
                                     placeholder="{{ __('auth/authentication.Enter Your Last Name') }}">
 
@@ -56,7 +56,7 @@
                                     </span>
                                     <span class="text-red-600">*</span>
                                 </label>
-                                <input type="text" id="phone" wire:model="phone" dir='ltr'
+                                <input type="text" id="phone" wire:model.live="phone" dir='ltr'
                                     class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('phone') border-red-500 @enderror"
                                     placeholder="{{ __('auth/authentication.Enter Your Phone Number') }}" required>
 
@@ -73,7 +73,7 @@
                                         {{ __('auth/authentication.Email') }}
                                     </span>
                                 </label>
-                                <input type="email" id="email" wire:model="email" dir='ltr'
+                                <input type="email" id="email" wire:model.live="email" dir='ltr'
                                     class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('email') border-red-500 @enderror"
                                     placeholder="{{ __('auth/authentication.Enter Your Email') }}">
 
@@ -91,7 +91,7 @@
                                     </span>
                                     <span class="text-red-600">*</span>
                                 </label>
-                                <input type="password" id="password" wire:model="password"
+                                <input type="password" id="password" wire:model.live="password"
                                     class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('password') border-red-500 @enderror"
                                     placeholder="{{ __('auth/authentication.Enter Your Password') }}" required>
 
@@ -110,7 +110,7 @@
                                     </span>
                                     <span class="text-red-600">*</span>
                                 </label>
-                                <input type="password" id="password_confirmation" wire:model="password_confirmation"
+                                <input type="password" id="password_confirmation" wire:model.live="password_confirmation"
                                     class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('password_confirmation') border-red-500 @enderror"
                                     placeholder="{{ __('auth/authentication.Enter Your Password Again') }}" required>
                             </div>
@@ -129,7 +129,7 @@
                                                 for="country">{{ __('front/homePage.Country') }}</label>
                                             <select
                                                 class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                                                wire:model='address.country_id' id="country">
+                                                wire:model.live='address.country_id' id="country">
                                                 @forelse ($countries as $country)
                                                     <option value="{{ $country->id }}">{{ $country->name }}
                                                     </option>
@@ -148,7 +148,7 @@
                                                 for="governorate">{{ __('front/homePage.Governorate') }}</label>
                                             <select
                                                 class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                                                wire:model='address.governorate_id' id="governorate">
+                                                wire:model.live='address.governorate_id' id="governorate">
                                                 @forelse ($governorates as $governorate)
                                                     <option value="{{ $governorate['id'] }}">
                                                         {{ $governorate['name'][session('locale')] }}</option>
@@ -174,7 +174,7 @@
 
                                             <select
                                                 class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                                                wire:model='address.city_id' id="city">
+                                                wire:model.live='address.city_id' id="city">
                                                 @forelse ($cities as $city)
                                                     <option value="{{ $city['id'] }}">
                                                         {{ $city['name'][session('locale')] }}
@@ -199,7 +199,7 @@
                                             <label
                                                 class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                                 for="details">{{ __('front/homePage.Address Details') }}</label>
-                                            <textarea id="details" rows="2" wire:model.lazy="address.details" dir="rtl"
+                                            <textarea id="details" rows="2" wire:model.live.blur="address.details" dir="rtl"
                                                 placeholder="{{ __('front/homePage.Please mention the details of the address such as street name, building number, ... etc.') }}"
                                                 class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 overflow-hidden"></textarea>
                                         </div>
@@ -210,7 +210,7 @@
                                             <label
                                                 class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                                 for="landmarks">{{ __('front/homePage.Landmarks') }}</label>
-                                            <textarea id="landmarks" rows="2" wire:model.lazy="address.landmarks" dir="rtl"
+                                            <textarea id="landmarks" rows="2" wire:model.live.blur="address.landmarks" dir="rtl"
                                                 placeholder="{{ __('front/homePage.Please mention any landmarks such as mosque, grocery, ... etc.') }}"
                                                 class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"></textarea>
                                         </div>

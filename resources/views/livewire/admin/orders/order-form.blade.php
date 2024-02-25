@@ -26,7 +26,7 @@
                 {{ __('front/homePage.Notes') }}
             </h2>
             <div class="col-span-4">
-                <textarea id="notes" rows="2" wire:model.lazy="notes" dir="rtl"
+                <textarea id="notes" rows="2" wire:model.live.blur="notes" dir="rtl"
                     placeholder="{{ __('front/homePage.Please mention any note related to the order') }}"
                     class="w-full py-1 rounded text-center border-red-300 focus:outline-0 focus:ring-0 focus:border-primary overflow-hidden">
                 </textarea>

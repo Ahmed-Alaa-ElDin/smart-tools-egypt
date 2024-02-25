@@ -16,7 +16,7 @@
                         <div class="flex justify-center items-center">
                             <input type="text" id="coupon"
                                 placeholder="{{ __('admin/ordersPages.Enter Coupon Code') }}" dir="ltr"
-                                wire:keydown.enter="couponCheck" wire:model='code'
+                                wire:keydown.enter="couponCheck" wire:model.live='code'
                                 class="text-sm rounded-l rtl:rounded-r rtl:rounded-l-none text-center border border-gray-300 focus:outline-0 focus:ring-0 focus:border-secondary">
                             <button wire:click="couponCheck"
                                 class="px-3 py-2 bg-secondary text-white font-bold rounded-r rtl:rounded-l rtl:rounded-r-none border-2 border-secondary text-xs">
@@ -52,7 +52,7 @@
                             {{ __('admin/ordersPages.Wallet') }}
                         </label>
                         <input type="number" id="wallet" min="0" max="{{ $customer->balance }}" step="0.01" value="0"
-                            wire:model.lazy="wallet"
+                            wire:model.live.blur="wallet"
                             class="text-sm rounded text-center border-gray-300 focus:outline-0 focus:ring-secondary focus:border-gray-300">
                     </div>
                 @endif
@@ -64,7 +64,7 @@
                             {{ __('admin/ordersPages.Points') }}
                         </label>
                         <input type="number" id="points" min="0" max="{{ $customer->points }}" step="1" value="0"
-                            wire:model.lazy="points"
+                            wire:model.live.blur="points"
                             class="text-sm rounded text-center border-gray-300 focus:outline-0 focus:ring-secondary focus:border-gray-300">
                     </div>
                 @endif

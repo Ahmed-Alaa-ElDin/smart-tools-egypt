@@ -9,7 +9,7 @@
             class="col-span-12 md:col-span-6 rounded-xl p-3 bg-red-100 grid grid-cols-12 items-center justify-center gap-3">
             <label class="col-span-12 md:col-span-3 text-black font-bold m-0 text-center"
                 for="country">{{ __('admin/sitePages.Number 1') }}</label>
-            <select wire:model="selectedSupercategories.0" wire:key="selectedSupercategories.0"
+            <select wire:model.live="selectedSupercategories.0" wire:key="selectedSupercategories.0"
                 class="col-span-12 md:col-span-9 rounded w-full cursor-pointer py-1 text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('selectedSupercategories.0') border-red-900 border-2 @enderror">
                 <option value="0">
                     {{ __('admin/sitePages.Choose a supercategory') }}
@@ -37,7 +37,7 @@
             class="col-span-12 md:col-span-6 rounded-xl p-3 bg-gray-100 grid grid-cols-12 items-center justify-center gap-3">
             <label class="col-span-12 md:col-span-3 text-black font-bold m-0 text-center"
                 for="country">{{ __('admin/sitePages.Number 2') }}</label>
-            <select wire:model="selectedSupercategories.1" wire:key="selectedSupercategories.1"
+            <select wire:model.live="selectedSupercategories.1" wire:key="selectedSupercategories.1"
                 class="col-span-12 md:col-span-9 rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('selectedSupercategories.1') border-red-900 border-2 @enderror">
                 <option value="0">
                     {{ __('admin/sitePages.Choose a supercategory') }}
@@ -65,7 +65,7 @@
             class="col-span-12 md:col-span-6 rounded-xl p-3 bg-red-100 grid grid-cols-12 items-center justify-center gap-3">
             <label class="col-span-12 md:col-span-3 text-black font-bold m-0 text-center"
                 for="country">{{ __('admin/sitePages.Number 3') }}</label>
-            <select wire:model="selectedSupercategories.2" wire:key="selectedSupercategories.2"
+            <select wire:model.live="selectedSupercategories.2" wire:key="selectedSupercategories.2"
                 class="col-span-12 md:col-span-9 rounded w-full cursor-pointer py-1 text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('selectedSupercategories.2') border-red-900 border-2 @enderror">
                 <option value="0">
                     {{ __('admin/sitePages.Choose a supercategory') }}
@@ -93,7 +93,7 @@
             class="col-span-12 md:col-span-6 rounded-xl p-3 bg-gray-100 grid grid-cols-12 items-center justify-center gap-3">
             <label class="col-span-12 md:col-span-3 text-black font-bold m-0 text-center"
                 for="country">{{ __('admin/sitePages.Number 4') }}</label>
-            <select wire:model="selectedSupercategories.3" wire:key="selectedSupercategories.3"
+            <select wire:model.live="selectedSupercategories.3" wire:key="selectedSupercategories.3"
                 class="col-span-12 md:col-span-9 rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('selectedSupercategories.3') border-red-900 border-2 @enderror">
                 <option value="0">
                     {{ __('admin/sitePages.Choose a supercategory') }}
@@ -121,7 +121,7 @@
             class="col-span-12 md:col-span-6 rounded-xl p-3 bg-red-100 grid grid-cols-12 items-center justify-center gap-3">
             <label class="col-span-12 md:col-span-3 text-black font-bold m-0 text-center"
                 for="country">{{ __('admin/sitePages.Number 5') }}</label>
-            <select wire:model="selectedSupercategories.4" wire:key="selectedSupercategories.4"
+            <select wire:model.live="selectedSupercategories.4" wire:key="selectedSupercategories.4"
                 class="col-span-12 md:col-span-9 rounded w-full cursor-pointer py-1 text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('selectedSupercategories.4') border-red-900 border-2 @enderror">
                 <option value="0">
                     {{ __('admin/sitePages.Choose a supercategory') }}
@@ -149,7 +149,7 @@
             class="col-span-12 md:col-span-6 rounded-xl p-3 bg-gray-100 grid grid-cols-12 items-center justify-center gap-3">
             <label class="col-span-12 md:col-span-3 text-black font-bold m-0 text-center"
                 for="country">{{ __('admin/sitePages.Number 6') }}</label>
-            <select wire:model="selectedSupercategories.5" wire:key="selectedSupercategories.5"
+            <select wire:model.live="selectedSupercategories.5" wire:key="selectedSupercategories.5"
                 class="col-span-12 md:col-span-9 rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('selectedSupercategories.5') border-red-900 border-2 @enderror">
                 <option value="0">
                     {{ __('admin/sitePages.Choose a supercategory') }}
@@ -177,7 +177,7 @@
             class="col-span-12 md:col-span-6 rounded-xl p-3 bg-red-100 grid grid-cols-12 items-center justify-center gap-3">
             <label class="col-span-12 md:col-span-3 text-black font-bold m-0 text-center"
                 for="country">{{ __('admin/sitePages.Number 7') }}</label>
-            <select wire:model="selectedSupercategories.6" wire:key="selectedSupercategories.6"
+            <select wire:model.live="selectedSupercategories.6" wire:key="selectedSupercategories.6"
                 class="col-span-12 md:col-span-9 rounded w-full cursor-pointer py-1 text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('selectedSupercategories.6') border-red-900 border-2 @enderror">
                 <option value="0">
                     {{ __('admin/sitePages.Choose a supercategory') }}
@@ -205,7 +205,7 @@
             class="col-span-12 md:col-span-6 rounded-xl p-3 bg-gray-100 grid grid-cols-12 items-center justify-center gap-3">
             <label class="col-span-12 md:col-span-3 text-black font-bold m-0 text-center"
                 for="country">{{ __('admin/sitePages.Number 4') }}</label>
-            <select wire:model="selectedSupercategories.7" wire:key="selectedSupercategories.7"
+            <select wire:model.live="selectedSupercategories.7" wire:key="selectedSupercategories.7"
                 class="col-span-12 md:col-span-9 rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('selectedSupercategories.7') border-red-900 border-2 @enderror">
                 <option value="0">
                     {{ __('admin/sitePages.Choose a supercategory') }}
@@ -233,7 +233,7 @@
             class="col-span-12 md:col-span-6 rounded-xl p-3 bg-red-100 grid grid-cols-12 items-center justify-center gap-3">
             <label class="col-span-12 md:col-span-3 text-black font-bold m-0 text-center"
                 for="country">{{ __('admin/sitePages.Number 9') }}</label>
-            <select wire:model="selectedSupercategories.8" wire:key="selectedSupercategories.8"
+            <select wire:model.live="selectedSupercategories.8" wire:key="selectedSupercategories.8"
                 class="col-span-12 md:col-span-9 rounded w-full cursor-pointer py-1 text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('selectedSupercategories.8') border-red-900 border-2 @enderror">
                 <option value="0">
                     {{ __('admin/sitePages.Choose a supercategory') }}
@@ -261,7 +261,7 @@
             class="col-span-12 md:col-span-6 rounded-xl p-3 bg-gray-100 grid grid-cols-12 items-center justify-center gap-3">
             <label class="col-span-12 md:col-span-3 text-black font-bold m-0 text-center"
                 for="country">{{ __('admin/sitePages.Number 10') }}</label>
-            <select wire:model="selectedSupercategories.9" wire:key="selectedSupercategories.9"
+            <select wire:model.live="selectedSupercategories.9" wire:key="selectedSupercategories.9"
                 class="col-span-12 md:col-span-9 rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('selectedSupercategories.9') border-red-900 border-2 @enderror">
                 <option value="0">
                     {{ __('admin/sitePages.Choose a supercategory') }}

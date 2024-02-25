@@ -11,7 +11,7 @@
                     <div class="col-span-6 md:col-span-5">
                         <input dir="rtl"
                             class="py-1 w-full rounded text-center {{ $i % 2 == 0 ? 'border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300' : 'border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300' }} @error('f_name.ar') border-red-900 border-2 @enderror"
-                            type="text" wire:model.lazy="nav_links.{{ $i }}.name.ar"
+                            type="text" wire:model.live.blur="nav_links.{{ $i }}.name.ar"
                             placeholder="{{ __('admin/sitePages.in Arabic') }}" tabindex="{{ $i + 1 }}" required>
                         @error("nav_links.$i.name.ar")
                             <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -22,7 +22,7 @@
                     <div class="col-span-6 md:col-span-5">
                         <input dir="ltr"
                             class="py-1 w-full rounded text-center {{ $i % 2 == 0 ? 'border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300' : 'border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300' }} @error('f_name.en') border-red-900 border-2 @enderror"
-                            type="text" wire:model.lazy="nav_links.{{ $i }}.name.en"
+                            type="text" wire:model.live.blur="nav_links.{{ $i }}.name.en"
                             placeholder="{{ __('admin/sitePages.in English') }}" tabindex="{{ $i + 1 }}">
                         @error("nav_links.$i.name.en")
                             <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -40,7 +40,7 @@
                     <div class="col-span-12 md:col-span-10">
                         <input dir="ltr"
                             class="py-1 w-full rounded text-center {{ $i % 2 == 0 ? 'border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300' : 'border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300' }} @error('f_name.ar') border-red-900 border-2 @enderror"
-                            type="text" wire:model.lazy="nav_links.{{ $i }}.url"
+                            type="text" wire:model.live.blur="nav_links.{{ $i }}.url"
                             placeholder="{{ __('admin/sitePages.Enter URL') }}" tabindex="{{ $i + 1 }}"
                             required>
                             @error("nav_links.$i.url")

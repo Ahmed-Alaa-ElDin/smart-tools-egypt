@@ -14,7 +14,7 @@
                         <span class="material-icons">
                             search
                         </span> </span>
-                    <input type="text" wire:model='search'
+                    <input type="text" wire:model.live='search'
                         class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                         placeholder="{{ __('admin/deliveriesPages.Search ...') }}">
                 </div>
@@ -32,7 +32,7 @@
                 {{-- Pagination Number --}}
                 <div class="form-inline justify-end">
                     {{ __('pagination.Show') }} &nbsp;
-                    <select wire:model='perPage' class="form-control w-auto px-3 cursor-pointer">
+                    <select wire:model.live='perPage' class="form-control w-auto px-3 cursor-pointer">
                         <option>5</option>
                         <option>10</option>
                         <option>25</option>

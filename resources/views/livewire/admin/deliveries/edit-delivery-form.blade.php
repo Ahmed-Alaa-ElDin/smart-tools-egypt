@@ -32,7 +32,7 @@
                     {{ __('admin/deliveriesPages.Logo') }} </label>
                 <input
                     class="form-control block w-full md:w-50 px-2 py-1 text-sm font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none col-span-12 md:col-span-10 py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                    id="photo" type="file" type="image" wire:model="photo">
+                    id="photo" type="file" type="image" wire:model.live="photo">
 
                 @error('photo')
                     <span class="col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">{{ $message }}</span>
@@ -49,7 +49,7 @@
             <div class="col-span-6 md:col-span-5">
                 <input
                     class="first_input py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('name.ar') border-red-900 border-2 @enderror"
-                    type="text" wire:model.lazy="name.ar" placeholder="{{ __('admin/deliveriesPages.in Arabic') }}"
+                    type="text" wire:model.live.blur="name.ar" placeholder="{{ __('admin/deliveriesPages.in Arabic') }}"
                     required>
                 @error('name.ar')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -60,7 +60,7 @@
             <div class="col-span-6 md:col-span-5 ">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('name.en') border-red-900 border-2 @enderror"
-                    type="text" wire:model.lazy="name.en" placeholder="{{ __('admin/deliveriesPages.in English') }}">
+                    type="text" wire:model.live.blur="name.en" placeholder="{{ __('admin/deliveriesPages.in English') }}">
                 @error('name.en')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                         {{ $message }}</div>
@@ -77,7 +77,7 @@
             <div class="col-span-12 sm:col-span-8 sm:col-start-3 md:col-span-5">
                 <input
                     class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('email') border-red-900 border-2 @enderror"
-                    type="email" wire:model.lazy="email" placeholder="{{ __('admin/deliveriesPages.Email') }}"
+                    type="email" wire:model.live.blur="email" placeholder="{{ __('admin/deliveriesPages.Email') }}"
                     dir="ltr">
                 @error('email')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -105,14 +105,14 @@
                     {{-- phone input field --}}
                     <input
                         class="@if (count($phones) > 1) col-span-4 @else col-span-5 @endif py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                        type="text" wire:model.lazy="phones.{{ $index }}.phone"
+                        type="text" wire:model.live.blur="phones.{{ $index }}.phone"
                         placeholder="{{ __('admin/deliveriesPages.Phone') }}" dir="ltr">
 
                     {{-- Default Radio Button --}}
                     <div class="col-span-1  flex flex-column justify-center items-center gap-1">
                         <label for="defaultPhone{{ $index }}"
                             class="text-xs text-black m-0 cursor-pointer">{{ __('admin/deliveriesPages.Default') }}</label>
-                        <input type="radio" id="defaultPhone{{ $index }}" wire:model.lazy="defaultPhone"
+                        <input type="radio" id="defaultPhone{{ $index }}" wire:model.live.blur="defaultPhone"
                             value="{{ $index }}"
                             class="appearance-none checked:bg-secondary outline-none ring-0 cursor-pointer">
                     </div>
@@ -151,7 +151,7 @@
                 {{-- Active --}}
                 <div class="col-span-6 md:col-span-2 text-center flex items-center justify-center">
                     <input class="appearance-none rounded-full checked:bg-primary outline-none ring-0 cursor-pointer"
-                        type="checkbox" wire:model.lazy="active" value="1">
+                        type="checkbox" wire:model.live.blur="active" value="1">
                 </div>
                 @error('active')
                     <div class="inline-block mt-2 col-span-6 md:col-span-4 bg-red-700 rounded text-white shadow px-3 py-1">

@@ -28,7 +28,7 @@
             <hr>
 
             <div id="accordion-collapse" data-accordion="open" data-active-classes="bg-transperant">
-                <input type="hidden" wire:model="perPage">
+                <input type="hidden" wire:model.live="perPage">
                 {{-- Brands :: Start --}}
                 @if (count($brands))
                     <h2 id="brand-heading-1">
@@ -50,7 +50,7 @@
                                 <label for="brand-{{ $brand['id'] }}"
                                     class="flex justify-start items-center gap-2 text-sm m-0 text-gray-900 cursor-pointer">
                                     <input type="checkbox" id="brand-{{ $brand['id'] }}" value="{{ $brand['id'] }}"
-                                        wire:model="selectedBrands"
+                                        wire:model.live="selectedBrands"
                                         class="rounded-circle cursor-pointer focus:ring-0 checked:bg-secondary">
                                     <span class="inline-block">
                                         <span>
@@ -101,7 +101,7 @@
                                 <input type="number" min="{{ $currentMinPrice }}" max="{{ $currentMaxPrice }}"
                                     step="1" dir="ltr"
                                     class="input-min w-24 text-sm rounded focus:ring-primary focus:border-primary border-gray-300 text-center"
-                                    value="{{ $currentMinPrice }}" wire:model.lazy='currentMinPrice'>
+                                    value="{{ $currentMinPrice }}" wire:model.live.blur='currentMinPrice'>
                             </div>
                             <div class="text-sm">-</div>
                             <div class="field flex items-center justify-center gap-2">
@@ -109,7 +109,7 @@
                                 <input type="number" min="{{ $currentMinPrice }}" max="{{ $currentMaxPrice }}"
                                     step="1" dir="ltr"
                                     class="input-max w-24 text-sm rounded focus:ring-primary focus:border-primary border-gray-300 text-center"
-                                    value="{{ $currentMaxPrice }}" wire:model.lazy='currentMaxPrice'>
+                                    value="{{ $currentMaxPrice }}" wire:model.live.blur='currentMaxPrice'>
                             </div>
                         </div>
                     </div>
@@ -142,7 +142,7 @@
                                 <label for="supercategory-{{ $supercategory['id'] }}"
                                     class="flex justify-start items-center gap-2 text-sm m-0 text-gray-900 cursor-pointer">
                                     <input type="checkbox" id="supercategory-{{ $supercategory['id'] }}"
-                                        value="{{ $supercategory['id'] }}" wire:model="selectedSupercategories"
+                                        value="{{ $supercategory['id'] }}" wire:model.live="selectedSupercategories"
                                         class="rounded-circle cursor-pointer focus:ring-0 checked:bg-secondary">
                                     <span class="inline-block">
                                         {{ $supercategory['name'][session('locale')] }}
@@ -190,7 +190,7 @@
                                 <label for="category-{{ $category['id'] }}"
                                     class="flex justify-start items-center gap-2 text-sm m-0 text-gray-900 cursor-pointer">
                                     <input type="checkbox" id="category-{{ $category['id'] }}"
-                                        value="{{ $category['id'] }}" wire:model="selectedCategories"
+                                        value="{{ $category['id'] }}" wire:model.live="selectedCategories"
                                         class="rounded-circle cursor-pointer focus:ring-0 checked:bg-secondary">
                                     <span class="inline-block">
                                         {{ $category['name'][session('locale')] }}
@@ -239,7 +239,7 @@
                                 <label for="subcategory-{{ $subcategory['id'] }}"
                                     class="flex justify-start items-center gap-2 text-sm m-0 text-gray-900 cursor-pointer">
                                     <input type="checkbox" id="subcategory-{{ $subcategory['id'] }}"
-                                        value="{{ $subcategory['id'] }}" wire:model="selectedSubcategories"
+                                        value="{{ $subcategory['id'] }}" wire:model.live="selectedSubcategories"
                                         class="rounded-circle cursor-pointer focus:ring-0 checked:bg-secondary">
                                     <span class="inline-block">
                                         {{ $subcategory['name'][session('locale')] }}
@@ -302,7 +302,7 @@
                                 up</span>
                             <span
                                 class="text-sm @if ($currentRating == 5) text-black @else text-gray-400 @endif font-bold">({{ $fiveRatingNo }})</span>
-                            <input type="radio" wire:model="currentRating" value="5" class="hidden">
+                            <input type="radio" wire:model.live="currentRating" value="5" class="hidden">
                         </label>
                         <label class="flex gap-1 items-center m-0 cursor-pointer">
 
@@ -326,7 +326,7 @@
                                 up</span>
                             <span
                                 class="text-sm @if ($currentRating == 4) text-black @else text-gray-400 @endif font-bold">({{ $fourRatingNo }})</span>
-                            <input type="radio" wire:model="currentRating" value="4" class="hidden">
+                            <input type="radio" wire:model.live="currentRating" value="4" class="hidden">
                         </label>
                         <label class="flex gap-1 items-center m-0 cursor-pointer">
                             <span
@@ -349,7 +349,7 @@
                                 up</span>
                             <span
                                 class="text-sm @if ($currentRating == 3) text-black @else text-gray-400 @endif font-bold">({{ $threeRatingNo }})</span>
-                            <input type="radio" wire:model="currentRating" value="3" class="hidden">
+                            <input type="radio" wire:model.live="currentRating" value="3" class="hidden">
                         </label>
                         <label class="flex gap-1 items-center m-0 cursor-pointer">
                             <span
@@ -372,7 +372,7 @@
                                 up</span>
                             <span
                                 class="text-sm @if ($currentRating == 2) text-black @else text-gray-400 @endif font-bold">({{ $twoRatingNo }})</span>
-                            <input type="radio" wire:model="currentRating" value="2" class="hidden">
+                            <input type="radio" wire:model.live="currentRating" value="2" class="hidden">
                         </label>
                         <label class="flex gap-1 items-center m-0 cursor-pointer">
                             <span
@@ -395,7 +395,7 @@
                                 up</span>
                             <span
                                 class="text-sm @if ($currentRating == 1) text-black @else text-gray-400 @endif font-bold">({{ $oneRatingNo }})</span>
-                            <input type="radio" wire:model="currentRating" value="1" class="hidden">
+                            <input type="radio" wire:model.live="currentRating" value="1" class="hidden">
                         </label>
                     </div>
                 </div>
@@ -425,7 +425,7 @@
                         <label
                             class="relative inline-flex items-center cursor-pointer items-center justify-center gap-2 m-0">
                             <span class="text-gray-800 text-xs font-bold">{{ __('front/homePage.Available') }}</span>
-                            <input type="checkbox" wire:model="currentAvailable" value="true"
+                            <input type="checkbox" wire:model.live="currentAvailable" value="true"
                                 class="sr-only peer">
                             <div
                                 class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-secondaryLighter rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-secondary after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary">
@@ -437,7 +437,7 @@
                             class="relative inline-flex items-center cursor-pointer items-center justify-center gap-2 m-0">
                             <span
                                 class="text-gray-800 text-xs font-bold">{{ __('front/homePage.Free Shipping') }}</span>
-                            <input type="checkbox" wire:model="currentFreeShipping" value="true"
+                            <input type="checkbox" wire:model.live="currentFreeShipping" value="true"
                                 class="sr-only peer">
                             <div
                                 class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-secondaryLighter rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-secondary after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary">
@@ -448,7 +448,7 @@
                         <label
                             class="relative inline-flex items-center cursor-pointer items-center justify-center gap-2 m-0">
                             <span class="text-gray-800 text-xs font-bold">{{ __('front/homePage.Returnable') }}</span>
-                            <input type="checkbox" wire:model="currentReturnable" value="true"
+                            <input type="checkbox" wire:model.live="currentReturnable" value="true"
                                 class="sr-only peer">
                             <div
                                 class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-secondaryLighter rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-secondary after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary">
@@ -491,7 +491,7 @@
                         {{ __('front/homePage.Sort by') }}
                     </span>
 
-                    <select wire:model="sort_by"
+                    <select wire:model.live="sort_by"
                         class="text-xs font-bold rounded text-center w-24 text-secondary py-2 rtl:pr-7 truncate border-1 border-gray-200 cursor-pointer focus:ring-primary">
                         <option value="">{{ __('front/homePage.Default') }}</option>
                         <option value="name">{{ __('front/homePage.Name') }}</option>

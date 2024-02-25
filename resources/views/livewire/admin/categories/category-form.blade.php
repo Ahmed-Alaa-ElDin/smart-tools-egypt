@@ -44,7 +44,7 @@
                     {{-- Upload New Image --}}
                     <input
                         class="col-span-12 md:col-span-6 md:col-start-4 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                        id="image" type="file" type="image" wire:model.lazy="image">
+                        id="image" type="file" type="image" wire:model.live.blur="image">
                     <span class="col-span-12 text-xs text-gray-400">
                         {{ __('admin/productsPages.Use 300x300 sizes image') }}</span>
                     @error('image')
@@ -75,7 +75,7 @@
                 <div class="col-span-6 md:col-span-5">
                     <input
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('name.ar') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="name.ar" id="name"
+                        type="text" wire:model.live.blur="name.ar" id="name"
                         placeholder="{{ __('admin/productsPages.in Arabic') }}" maxlength="100" required>
                     @error('name.ar')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -86,7 +86,7 @@
                 <div class="col-span-6 md:col-span-5 ">
                     <input
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('name.en') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="name.en"
+                        type="text" wire:model.live.blur="name.en"
                         placeholder="{{ __('admin/productsPages.in English') }}" maxlength="100">
                     @error('name.en')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -103,7 +103,7 @@
                 <div class="col-span-12 md:col-span-10">
                     <select
                         class="rounded w-full cursor-pointer py-1 text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('supercategory_id') border-red-900 border-2 @enderror"
-                        wire:model.lazy="supercategory_id" id="supercategory_id" required>
+                        wire:model.live.blur="supercategory_id" id="supercategory_id" required>
                         @if ($supercategories->count())
                             <option value="">
                                 {{ __('admin/productsPages.Choose a supercategory') }}
@@ -151,7 +151,7 @@
                 <div class="col-span-12 sm:col-span-10 md:col-span-6 lg:col-span-12">
                     <input
                         class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('title') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="title" id="title">
+                        type="text" wire:model.live.blur="title" id="title">
                     @error('title')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                             {{ $message }}</div>

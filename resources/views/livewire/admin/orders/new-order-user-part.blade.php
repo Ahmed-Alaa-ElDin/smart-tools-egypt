@@ -15,7 +15,7 @@
                         search
                     </span>
                 </span>
-                <input type="text" wire:model.debounce.500ms='search' wire:keydown.Escape="$set('search','')"
+                <input type="text" wire:model.live.debounce.500ms='search' wire:keydown.Escape="$set('search','')"
                     data-name="new-order-user-part"
                     class="searchInput focus:ring-0 flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-700"
                     placeholder="{{ __('admin/ordersPages.Search ...') }}">
@@ -138,7 +138,7 @@
                 </span>
 
                 <span class="p-1 w-full text-center font-bold bg-white rounded" dir="ltr">
-                    {{ number_format($selectedCustomer->points, 2, '.', '\'') }}
+                    {{-- {{ number_format($selectedCustomer->points, 2, '.', '\'') }} --}}
                 </span>
             </div>
 
@@ -233,7 +233,7 @@
 
                                         <select
                                             class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                                            wire:model='newAddress.country_id' id="country">
+                                            wire:model.live='newAddress.country_id' id="country">
                                             @forelse ($countries as $country)
                                                 <option value="{{ $country['id'] }}">
                                                     {{ $country['name'][session('locale')] }}
@@ -253,7 +253,7 @@
                                             for="governorate">{{ __('admin/ordersPages.Governorate') }}</label>
                                         <select
                                             class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                                            wire:model='newAddress.governorate_id' id="governorate">
+                                            wire:model.live='newAddress.governorate_id' id="governorate">
                                             @forelse ($newAddress['governorates'] as $governorate)
                                                 <option value="{{ $governorate['id'] }}">
                                                     {{ $governorate['name'][session('locale')] }}</option>
@@ -279,7 +279,7 @@
 
                                         <select
                                             class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                                            wire:model='newAddress.city_id' id="city">
+                                            wire:model.live='newAddress.city_id' id="city">
                                             @forelse ($newAddress['cities'] as $city)
                                                 <option value="{{ $city['id'] }}">
                                                     {{ $city['name'][session('locale')] }}
@@ -303,7 +303,7 @@
                                         <label
                                             class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                             for="details">{{ __('admin/ordersPages.Address Details') }}</label>
-                                        <textarea id="details" rows="2" wire:model.lazy="newAddress.details" dir="rtl"
+                                        <textarea id="details" rows="2" wire:model.live.blur="newAddress.details" dir="rtl"
                                             placeholder="{{ __('admin/ordersPages.Please mention the details of the address such as street name, building number, ... etc.') }}"
                                             class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 overflow-hidden"></textarea>
                                     </div>
@@ -313,7 +313,7 @@
                                         <label
                                             class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                             for="landmarks">{{ __('admin/ordersPages.Landmarks') }}</label>
-                                        <textarea id="landmarks" rows="2" wire:model.lazy="newAddress.landmarks" dir="rtl"
+                                        <textarea id="landmarks" rows="2" wire:model.live.blur="newAddress.landmarks" dir="rtl"
                                             placeholder="{{ __('admin/ordersPages.Please mention any landmarks such as mosque, grocery, ... etc.') }}"
                                             class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"></textarea>
                                     </div>
@@ -393,7 +393,7 @@
                                     <label
                                         class="col-span-3 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                         for="phone">{{ __('admin/ordersPages.Phone') }}</label>
-                                    <input type="text" id="phone" wire:model.lazy="newPhone"
+                                    <input type="text" id="phone" wire:model.live.blur="newPhone"
                                         wire:keydown.enter="savePhone" dir="ltr"
                                         placeholder="{{ __('admin/ordersPages.Enter the phone number') }}"
                                         class="col-span-3 w-full py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300">

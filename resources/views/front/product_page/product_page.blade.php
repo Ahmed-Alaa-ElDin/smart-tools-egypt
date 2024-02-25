@@ -777,7 +777,7 @@
                     selector: '#comment',
                     setup: function(editor) {
                         editor.on('blur', function(e) {
-                            window.livewire.emit('updatedComment', tinymce.get(e.target.id)
+                            window.livewire.dispatch('updatedComment', tinymce.get(e.target.id)
                                 .getContent())
                         });
                     }
@@ -790,7 +790,7 @@
                         selector: '#comment',
                         setup: function(editor) {
                             editor.on('blur', function(e) {
-                                window.livewire.emit('updatedComment', tinymce.get(e.target
+                                window.livewire.dispatch('updatedComment', tinymce.get(e.target
                                         .id)
                                     .getContent())
                             });

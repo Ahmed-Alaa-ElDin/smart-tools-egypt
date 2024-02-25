@@ -73,7 +73,7 @@
 
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit('addPoints', e.detail.user_id, result.value);
+                    Livewire.dispatch('addPoints', e.detail.user_id, result.value);
                 }
             });
         });

@@ -30,14 +30,13 @@
     @if (LaravelLocalization::getCurrentLocale() == 'ar')
         <link href="{{ mix('assets/css/material-dashboard-rtl.css') }}" rel="stylesheet" />
     @endif
-    @livewireStyles
 
     @stack('css')
 
 </head>
 
 <body class="{{ $class ?? '' }}">
-    @auth()
+    @auth
         <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
             @csrf
         </form>
@@ -56,7 +55,6 @@
     <script src="{{ asset('assets/admin/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/flowbite/flowbite.js') }}"></script>
     <script src="{{ asset('assets/admin/js/core/bootstrap-material-design.min.js') }}"></script>
-    @livewireScripts
 
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="{{ asset('assets/admin/js/material-dashboard.min.js') }}" type="text/javascript"></script>
@@ -103,7 +101,7 @@
                 focusDeny: e.detail.focusDeny,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit(e.detail.method, e.detail.id, e.detail.details || []);
+                    Livewire.dispatch(e.detail.method, {id: e.detail.id}, e.detail.details || []);
                 }
             });
         });

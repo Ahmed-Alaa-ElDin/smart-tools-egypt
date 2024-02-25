@@ -11,7 +11,7 @@
         <div class="col-span-6 md:col-span-5">
             <input
                 class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                type="text" wire:model.lazy="name.ar" placeholder="{{ __('admin/deliveriesPages.in Arabic') }}"
+                type="text" wire:model.live.blur="name.ar" placeholder="{{ __('admin/deliveriesPages.in Arabic') }}"
                 required>
             @error('name.ar')
                 <div class="inline-block mt-2 col-span-12 w-full text-center bg-red-700 rounded text-white shadow px-3 py-1">
@@ -22,7 +22,7 @@
         <div class="col-span-6 md:col-span-5 ">
             <input
                 class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                type="text" wire:model.lazy="name.en" placeholder="{{ __('admin/deliveriesPages.in English') }}">
+                type="text" wire:model.live.blur="name.en" placeholder="{{ __('admin/deliveriesPages.in English') }}">
             @error('name.en')
                 <div class="inline-block mt-2 col-span-12 w-full text-center bg-red-700 rounded text-white shadow px-3 py-1">
                     {{ $message }}</div>
@@ -39,7 +39,7 @@
         <div class="col-span-12 md:col-span-5">
             <select
                 class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('role') border-red-900 border-2 @enderror"
-                wire:model.lazy="country_id" id="country" tabindex="8">
+                wire:model.live.blur="country_id" id="country" tabindex="8">
                 @if ($countries->count())
                     <option value="">{{ __('admin/deliveriesPages.Choose a country') }}</option>
                     @foreach ($countries as $country)
@@ -64,7 +64,7 @@
             <div class="col-span-12 md:col-span-5">
                 <select
                     class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('role') border-red-900 border-2 @enderror"
-                    wire:model.lazy="governorate_id" id="governorate" tabindex="8">
+                    wire:model.live.blur="governorate_id" id="governorate" tabindex="8">
                     @if ($governorates->count())
                         <option value="">{{ __('admin/deliveriesPages.Choose a governorate') }}</option>
                         @foreach ($governorates as $governorate)

@@ -67,7 +67,7 @@ __('admin/deliveriesPages.Deleted Governorates')])
                 focusDeny: false,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit('restoreGovernorate', e.detail.governorate_id);
+                    Livewire.dispatch('restoreGovernorate', e.detail.governorate_id);
                 }
             });
         });

@@ -63,7 +63,7 @@ __('admin/usersPages.Deleted Users')])
                 focusDeny: false,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit('restoreUser', e.detail.user_id);
+                    Livewire.dispatch('restoreUser', e.detail.user_id);
                 }
             });
         });

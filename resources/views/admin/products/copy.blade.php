@@ -93,7 +93,7 @@
             selector: '#description_ar',
             setup: function(editor) {
                 editor.on('blur', function(e) {
-                    window.livewire.emit('descriptionAr', tinymce.get(e.target.id).getContent())
+                    window.livewire.dispatch('descriptionAr', tinymce.get(e.target.id).getContent())
                 });
             }
         });
@@ -105,7 +105,7 @@
             selector: '#description_en',
             setup: function(editor) {
                 editor.on('blur', function(e) {
-                    window.livewire.emit('descriptionEn', tinymce.get(e.target.id).getContent())
+                    window.livewire.dispatch('descriptionEn', tinymce.get(e.target.id).getContent())
                 });
             }
         });

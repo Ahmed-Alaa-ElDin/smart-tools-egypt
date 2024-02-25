@@ -15,7 +15,7 @@
                 @livewire('front.order.general.order-steps', ['step' => 3])
                 {{-- ############## Order Steps :: End ############## --}}
 
-                @auth()
+                @auth
                     {{-- ############## Order Billing Details :: Start ############## --}}
                     <div class="bg-white rounded overflow-hidden">
                         {{-- ############## Title :: Start ############## --}}

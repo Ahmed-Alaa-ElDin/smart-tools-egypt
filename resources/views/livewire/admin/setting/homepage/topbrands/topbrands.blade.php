@@ -18,7 +18,7 @@
                         <select
                             class="rounded w-full cursor-pointer py-1 text-center
                             @if ($loop->odd) border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @else border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @endif  @error('items.' . $loop->index . 'brand_id') border-red-900 border-2 @enderror"
-                            wire:model.lazy="items.{{ $loop->index }}.brand_id" required>
+                            wire:model.live.blur="items.{{ $loop->index }}.brand_id" required>
                             @if ($item['brands'])
                                 <option value="0">
                                     {{ __('admin/sitePages.Choose a brand') }}

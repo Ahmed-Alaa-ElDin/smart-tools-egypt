@@ -44,7 +44,7 @@
                     {{-- Upload New Image --}}
                     <input
                         class="col-span-12  block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                        id="logo" type="file" type="image" wire:model.lazy="logo">
+                        id="logo" type="file" type="image" wire:model.live.blur="logo" accept="image/jpeg, image/png, image/jpg, image/webp">
                     <span class="col-span-12 text-xs text-gray-400">
                         {{ __('admin/productsPages.Use 300x300 sizes image') }}</span>
                     @error('logo')
@@ -76,7 +76,7 @@
                 <div class="col-span-12">
                     <input
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('name') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="name" id="name"
+                        type="text" wire:model.live.blur="name" id="name"
                         placeholder="{{ __('admin/productsPages.Brand Name') }}" maxlength="100" required>
                     @error('name')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -93,7 +93,7 @@
                 <div class="col-span-12 sm:col-span-12">
                     <select
                         class="rounded w-full cursor-pointer py-1 text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('country_id') border-red-900 border-2 @enderror"
-                        wire:model.lazy="country_id" id="country_id" required>
+                        wire:model.live.blur="country_id" id="country_id" required>
                         @if ($countries->count())
                             <option value="">
                                 {{ __('admin/productsPages.Choose a country') }}
@@ -141,7 +141,7 @@
                 <div class="col-span-12 sm:col-span-10 md:col-span-6 lg:col-span-12">
                     <input
                         class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('title') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="title" id="title">
+                        type="text" wire:model.live.blur="title" id="title">
                     @error('title')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                             {{ $message }}</div>

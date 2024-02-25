@@ -76,7 +76,7 @@
 
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit('editRoles', e.detail.user_id, result.value);
+                    Livewire.dispatch('editRoles', e.detail.user_id, result.value);
                 }
             });
         });

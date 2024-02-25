@@ -71,7 +71,7 @@
                 focusDeny: true,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit('deleteRole', e.detail.role_id);
+                    Livewire.dispatch('deleteRole', e.detail.role_id);
                 }
             });
         });

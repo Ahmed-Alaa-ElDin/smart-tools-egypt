@@ -330,7 +330,7 @@
 
         <div class="flex gap-2 justify-around items-center p-2">
             <button class="btn bg-success max-w-max font-bold"
-                wire:click="$emitTo('front.order.payment.order-payment-details','submit')">
+                wire:click="$dispatchTo('front.order.payment.order-payment-details','submit')">
                 {{ __('front/homePage.Submit & Confirm Order') }}
                 &nbsp;
                 <span class="material-icons">
@@ -343,7 +343,7 @@
 
         <div class="flex gap-2 justify-around items-center p-2">
             <button class="btn bg-success max-w-max font-bold"
-                wire:click="$emitTo('front.order.payment.order-payment-details','submit')">
+                wire:click="$dispatchTo('front.order.payment.order-payment-details','submit')">
                 {{ __('front/homePage.Go to payment') }}
                 &nbsp;
                 <span class="material-icons">
@@ -356,7 +356,7 @@
 
         <div class="flex gap-2 justify-around items-center p-2">
             <button class="btn bg-success max-w-max font-bold"
-                wire:click="$emitTo('front.order.payment.order-payment-details','submit')">
+                wire:click="$dispatchTo('front.order.payment.order-payment-details','submit')">
                 {{ __('front/homePage.Submit & Confirm Order') }}
                 &nbsp;
                 <span class="material-icons">

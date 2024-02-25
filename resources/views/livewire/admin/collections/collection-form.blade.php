@@ -60,7 +60,7 @@
 
                         <input
                             class="col-span-1 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                            id="gallery_images" type="file" type="image" wire:model.lazy="gallery_images" multiple>
+                            id="gallery_images" type="file" type="image" wire:model.live.blur="gallery_images" multiple>
                         <span class="col-span-1 text-xs text-gray-400">
                             {{ __('admin/productsPages.Use 600x600 sizes images') }}</span>
                         @error('gallery_images.*')
@@ -77,7 +77,7 @@
                     {{-- Upload New Image --}}
                     <input
                         class="col-span-12 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                        id="gallery_images" type="file" type="image" wire:model.lazy="gallery_images" multiple>
+                        id="gallery_images" type="file" type="image" wire:model.live.blur="gallery_images" multiple>
                     <span class="col-span-12 text-xs text-gray-400">
                         {{ __('admin/productsPages.Use 600x600 sizes images') }}</span>
                     @error('gallery_images.*')
@@ -127,7 +127,7 @@
                     {{-- Upload New Image --}}
                     <input
                         class="col-span-12 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                        id="thumbnail_image" type="file" type="image" wire:model.lazy="thumbnail_image">
+                        id="thumbnail_image" type="file" type="image" wire:model.live.blur="thumbnail_image">
                     <span class="col-span-12 text-xs text-gray-400">
                         {{ __('admin/productsPages.Use 300x300 sizes image') }}</span>
                     @error('thumbnail_image')
@@ -146,7 +146,7 @@
                 <div class="col-span-6 sm:col-span-5">
                     <input id="video" dir="ltr"
                         class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('video') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="video"
+                        type="text" wire:model.live.blur="video"
                         placeholder="{{ __('admin/productsPages.Youtube Link') }}">
 
                     @error('video')
@@ -179,7 +179,7 @@
                             search
                         </span>
                     </span>
-                    <input type="text" wire:model.debounce.500ms='search' wire:keydown.Escape="$set('search','')"
+                    <input type="text" wire:model.live.debounce.500ms='search' wire:keydown.Escape="$set('search','')"
                         data-name="collection-form"
                         class="searchInput flex-1 block rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm py-1 w-full border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
                         placeholder="{{ __('admin/ordersPages.Search ...') }}">
@@ -517,7 +517,7 @@
                 <div class="col-span-6 md:col-span-5">
                     <input
                         class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('name.ar') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="name.ar" id="name" dir="rtl"
+                        type="text" wire:model.live.blur="name.ar" id="name" dir="rtl"
                         placeholder="{{ __('admin/productsPages.in Arabic') }}" maxlength="100" required>
                     @error('name.ar')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -528,7 +528,7 @@
                 <div class="col-span-6 md:col-span-5 ">
                     <input
                         class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('name.en') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="name.en" dir="ltr"
+                        type="text" wire:model.live.blur="name.en" dir="ltr"
                         placeholder="{{ __('admin/productsPages.in English') }}" maxlength="100">
                     @error('name.en')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -545,7 +545,7 @@
                 <div class="col-span-3 sm:col-span-2">
                     <input id="model"
                         class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('model') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="model" placeholder="{{ __('admin/productsPages.Model') }}"
+                        type="text" wire:model.live.blur="model" placeholder="{{ __('admin/productsPages.Model') }}"
                         maxlength="100">
 
                     @error('model')
@@ -563,7 +563,7 @@
                 <div class="col-span-3 sm:col-span-2">
                     <input id="barcode"
                         class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('barcode') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="barcode"
+                        type="text" wire:model.live.blur="barcode"
                         placeholder="{{ __('admin/productsPages.Barcode') }}" maxlength="200">
 
                     @error('barcode')
@@ -581,7 +581,7 @@
                 <div class="col-span-3 sm:col-span-2">
                     <input
                         class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('weight') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="weight" id="weight"
+                        type="text" wire:model.live.blur="weight" id="weight"
                         placeholder="{{ __('admin/productsPages.Weight in Kg.') }}">
 
                     @error('weight')
@@ -686,19 +686,19 @@
                     <div class="grid grid-cols-12 gap-2 bg-gray-300 rounded-xl p-2" wire:key="{{ 'spec-' . $key }}">
                         <div class="col-span-11 flex flex-col gap-1">
                             <div class="grid grid-cols-6 justify-center items-center gap-1">
-                                <input wire:model.lazy="specs.{{ $key }}.ar.title"
+                                <input wire:model.live.blur="specs.{{ $key }}.ar.title"
                                     placeholder="{{ __('admin/productsPages.Title (ar)') }}" type="text"
                                     class="col-span-2 py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('') border-red-900 border-2 @enderror">
-                                <input wire:model.lazy="specs.{{ $key }}.ar.value"
+                                <input wire:model.live.blur="specs.{{ $key }}.ar.value"
                                     placeholder="{{ __('admin/productsPages.Value (ar)') }}" type="text"
                                     class="col-span-4 py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('') border-red-900 border-2 @enderror">
                             </div>
                             <div class="grid grid-cols-6 justify-center items-center gap-1">
-                                <input wire:model.lazy="specs.{{ $key }}.en.title"
+                                <input wire:model.live.blur="specs.{{ $key }}.en.title"
                                     placeholder="{{ __('admin/productsPages.Title (en)') }}" type="text"
                                     dir="ltr"
                                     class="col-span-2 py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('') border-red-900 border-2 @enderror">
-                                <input wire:model.lazy="specs.{{ $key }}.en.value"
+                                <input wire:model.live.blur="specs.{{ $key }}.en.value"
                                     placeholder="{{ __('admin/productsPages.Value (en)') }}" type="text"
                                     dir="ltr"
                                     class="col-span-4 py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('') border-red-900 border-2 @enderror">
@@ -743,7 +743,7 @@
 
             {{-- Add/Clear Complementary Product :: Start --}}
             <div class="col-span-12 flex items-center justify-around">
-                <button wire:click="$emitTo('admin.products.product-list-popup','show','complementary-items-list')"
+                <button wire:click="$dispatchTo('admin.products.product-list-popup','show',{modalName:'complementary-items-list'})"
                     class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
                     <span class="material-icons rtl:ml-1 ltr:mr-1">
                         add
@@ -875,7 +875,7 @@
                                                 class="py-1 w-12 rounded-circle text-center select-none cursor-pointer focus:outline-success focus:ring-success focus:border-success @if ($complementaryItems[$key]['pivot']['rank'] == 0) border-danger border-2 @else border-success border-2 @endif"
                                                 type="number" readonly
                                                 wire:click="editComplementaryRank({{ $key }})"
-                                                wire:model="complementaryItems.{{ $key }}.pivot.rank">
+                                                wire:model.live="complementaryItems.{{ $key }}.pivot.rank">
                                         </div>
                                         {{-- Product's Rank :: End --}}
 
@@ -928,7 +928,7 @@
 
             {{-- Add/Clear Related Product :: Start --}}
             <div class="col-span-12 flex items-center justify-around">
-                <button wire:click="$emitTo('admin.products.product-list-popup','show','related-items-list')"
+                <button wire:click="$dispatchTo('admin.products.product-list-popup','show',{modalName:'related-items-list'})"
                     class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
                     <span class="material-icons rtl:ml-1 ltr:mr-1">
                         add
@@ -1060,7 +1060,7 @@
                                                 class="py-1 w-12 rounded-circle text-center select-none cursor-pointer focus:outline-success focus:ring-success focus:border-success @if ($relatedItems[$key]['pivot']['rank'] == 0) border-danger border-2 @else border-success border-2 @endif"
                                                 type="number" readonly
                                                 wire:click="editRelatedRank({{ $key }})"
-                                                wire:model="relatedItems.{{ $key }}.pivot.rank">
+                                                wire:model.live="relatedItems.{{ $key }}.pivot.rank">
                                         </div>
                                         {{-- Product's Rank :: End --}}
                                     </div>
@@ -1122,7 +1122,7 @@
                 <div class="col-span-3">
                     <input dir="ltr"
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('original_price') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="original_price" id="original_price"
+                        type="text" wire:model.live.blur="original_price" id="original_price"
                         placeholder="{{ __('admin/productsPages.EGP') }}" required disabled>
                     @error('original_price')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -1141,7 +1141,7 @@
                 <div class="col-span-3">
                     <input dir="ltr"
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('profit_margin') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="profit_margin" id="profit_margin"
+                        type="text" wire:model.live.blur="profit_margin" id="profit_margin"
                         placeholder="{{ __('admin/productsPages.EGP') }}" required disabled>
                     @error('profit_margin')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -1160,7 +1160,7 @@
                 <div class="col-span-3">
                     <input dir="ltr"
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('base_price') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="base_price" id="base_price"
+                        type="text" wire:model.live.blur="base_price" id="base_price"
                         placeholder="{{ __('admin/productsPages.EGP') }}" required disabled>
                     @error('base_price')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -1179,7 +1179,7 @@
                 <div class="col-span-3">
                     <input dir="ltr"
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('discount') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="discount" id="discount"
+                        type="text" wire:model.live.blur="discount" id="discount"
                         placeholder="{{ __('admin/productsPages.Percentage') }}">
                     @error('discount')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -1198,7 +1198,7 @@
                 <div class="col-span-3">
                     <input dir="ltr"
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('final_price') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="final_price" id="final_price"
+                        type="text" wire:model.live.blur="final_price" id="final_price"
                         placeholder="{{ __('admin/productsPages.EGP') }}">
                     @error('final_price')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -1217,7 +1217,7 @@
                 <div class="col-span-3">
                     <input
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('points') border-red-900 border-2 @enderror"
-                        type="text" wire:model.lazy="points" id="points"
+                        type="text" wire:model.live.blur="points" id="points"
                         placeholder="{{ __('admin/productsPages.Points') }}">
                     @error('points')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -1286,7 +1286,7 @@
                 </label>
 
                 <div class="col-span-12 sm:col-span-10 md:col-span-6 lg:col-span-12">
-                    <textarea wire:model.lazy="seo_keywords" placeholder="{{ __('admin/productsPages.Keywords ("Comma Separated")') }}"
+                    <textarea wire:model.live.blur="seo_keywords" placeholder="{{ __('admin/productsPages.Keywords ("Comma Separated")') }}"
                         class="py-1 w-full px-6 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 cursor-text @error('seo_keywords') border-red-900 border-2 @enderror"
                         type="text" id="seo_keywords">
                     </textarea>

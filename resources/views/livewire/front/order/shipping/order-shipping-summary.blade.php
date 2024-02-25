@@ -265,7 +265,7 @@
         {{-- Submit :: Start --}}
         <div class="flex justify-center items-center gap-3 p-3">
             <button class="btn bg-primary font-bold self-stretch"
-                wire:click="$emitTo('front.order.shipping.order-shipping-details','submit')">
+                wire:click="$dispatchTo('front.order.shipping.order-shipping-details','submit')">
                 {{ __('front/homePage.Submit & Go to payment') }}
                 &nbsp;
                 <span class="material-icons">

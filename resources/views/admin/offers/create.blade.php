@@ -75,7 +75,7 @@
                     format: 'YYYY-MM-DD hh:mm A',
                 }
             }, function(start, end, label) {
-                Livewire.emit('daterangeUpdated', start.format('YYYY-MM-DD H:mm'), end.format('YYYY-MM-DD H:mm'));
+                Livewire.dispatch('daterangeUpdated', start.format('YYYY-MM-DD H:mm'), end.format('YYYY-MM-DD H:mm'));
             });
         });
     </script>

@@ -71,7 +71,7 @@
 
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit(e.detail.method, e.detail.id, result.value);
+                    Livewire.dispatch(e.detail.method, e.detail.id, result.value);
                 }
             });
         });

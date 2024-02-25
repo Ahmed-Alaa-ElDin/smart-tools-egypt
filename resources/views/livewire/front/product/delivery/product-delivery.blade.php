@@ -16,7 +16,7 @@
                 <div class="w-full">
                     <label for="counries" class="text-sm font-bold text-center w-full text-gray-700">
                         {{ __('front/homePage.Country') }} </label>
-                    <select id="counries" wire:model='selected_country_id'
+                    <select id="counries" wire:model.live='selected_country_id'
                         class="w-full cursor-pointer py-1 text-center rounded-xl shadow border border-gray-400 focus:outline-none active:outline-none focus:border-2 focus:border-gray-600 active:border-2 active:border-gray-600 focus:ring-0 active:ring-0">
                         <option value="0">{{ __('front/homePage.Please Choose the Country') }}</option>
                         @foreach ($countries as $country)
@@ -31,7 +31,7 @@
                     <div class="w-full">
                         <label for="governorates" class="text-sm font-bold text-center w-full text-gray-700">
                             {{ __('front/homePage.Governorate') }} </label>
-                        <select id="governorates" wire:model='selected_governorate_id'
+                        <select id="governorates" wire:model.live='selected_governorate_id'
                             class="w-full cursor-pointer py-1 text-center rounded-xl shadow border border-gray-400 focus:outline-none active:outline-none focus:border-2 focus:border-gray-600 active:border-2 active:border-gray-600 focus:ring-0 active:ring-0">
                             <option value="0">{{ __('front/homePage.Please Choose the Governorate') }}</option>
                             @foreach ($governorates as $governorate)
@@ -47,7 +47,7 @@
                     <div class="w-full">
                         <label for="cities" class="text-sm font-bold text-center w-full text-gray-700">
                             {{ __('front/homePage.City') }} </label>
-                        <select id="cities" wire:model='selected_city_id'
+                        <select id="cities" wire:model.live='selected_city_id'
                             class="w-full cursor-pointer py-1 text-center rounded-xl shadow border border-gray-400 focus:outline-none active:outline-none focus:border-2 focus:border-gray-600 active:border-2 active:border-gray-600 focus:ring-0 active:ring-0">
                             <option value="0">{{ __('front/homePage.Please Choose the City') }}</option>
                             @foreach ($cities as $city)

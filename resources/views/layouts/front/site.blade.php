@@ -43,10 +43,6 @@
     {{-- Splide --}}
     <link href="{{ mix('assets/css/splide.min.css') }}" rel="stylesheet" />
 
-    {{-- Livewire Styles :: Start --}}
-    @livewireStyles
-    {{-- Livewire Styles :: End --}}
-
     {{-- Custom CSS :: Start --}}
     @stack('css')
     {{-- Custom CSS :: End --}}
@@ -202,9 +198,6 @@
 
     {{-- Custom Js Files for livewire blade --}}
     @stack('livewire-js')
-
-    <!--  Plugin for the Livewire -->
-    @livewireScripts
 
 </body>
 
