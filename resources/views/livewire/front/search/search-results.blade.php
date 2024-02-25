@@ -520,7 +520,7 @@
             <div class="relative">
 
                 {{-- Loading Section :: Start --}}
-                <div wire:loading class="absolute w-100 h-100 z-10">
+                <div wire:loading class="absolute w-100 h-100 z-10 pointer-events-none">
                     <x-front.loaders.wholepage-loader />
                 </div>
                 {{-- Loading Section :: End --}}
