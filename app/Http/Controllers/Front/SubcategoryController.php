@@ -35,10 +35,9 @@ class SubcategoryController extends Controller
             ->without('validOffers')
             ->findOrFail($subcategory_id);
 
-        $productsIds = $subcategory->products->pluck('id');
+        $productsIds = $subcategory->products->pluck('id')->toArray();
 
-        $products = getBestOfferForProducts($productsIds)->paginate(config('settings.front_pagination'));
 
-        return view('front.subcategories.show', compact(['subcategory', 'products']));
+        return view('front.subcategories.show', compact(['subcategory', 'productsIds']));
     }
 }

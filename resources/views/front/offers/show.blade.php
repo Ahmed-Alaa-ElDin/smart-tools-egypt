@@ -7,7 +7,7 @@
 
 @php
     $now = Carbon\Carbon::now('Africa/Cairo');
-    $date = $offer->expire_at? Carbon\Carbon::parse($offer->expire_at, 'Africa/Cairo') : Carbon\Carbon::now('Africa/Cairo');
+    $date = $offer->expire_at ? Carbon\Carbon::parse($offer->expire_at, 'Africa/Cairo') : Carbon\Carbon::now('Africa/Cairo');
 
     $diff = $now->diffInSeconds($date, false);
     $diffDays = floor($diff / (60 * 60 * 24));
@@ -68,20 +68,14 @@
             {{-- Offer Header :: End  --}}
 
             {{-- Offer's Items :: Start --}}
-            <div class="grid grid-cols-12 justify-center items-start align-top gap-3">
-                @forelse ($items as $item)
-                    <div class="mt-2 col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3">
-                        <x-front.product-box-small :item="$item->toArray()" wire:key="product-{{ rand() }}" />
-                    </div>
-                    @empty
-                    <div class="mt-5 mb-3 col-span-12 text-center text-lg font-bold text-gray-600">
+            <div class="p-3">
+                @if (count($productsIds) || count($collectionsIds))
+                    @livewire('front.products.general-products-list', ['productsIds' => $productsIds, 'collectionsIds' => $collectionsIds])
+                @else
+                    <div class="mt-5 mb-3 text-center text-lg font-bold text-gray-600">
                         {{ __('front/homePage.No products in this offer') }}
                     </div>
-                @endforelse
-
-                <div class="col-span-12">
-                    {{ $items->links() }}
-                </div>
+                @endif
             </div>
             {{-- Offer's Items :: End --}}
 

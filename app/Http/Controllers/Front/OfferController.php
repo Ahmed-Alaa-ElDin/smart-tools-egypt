@@ -64,30 +64,12 @@ class OfferController extends Controller
 
         ############ Extract of products & Collection From Offers :: Start ############
         $offer->directProducts->push(...$offer->supercategoryProducts, ...$offer->categoryProducts, ...$offer->subcategoryProducts, ...$offer->brandProducts);
-        $uniqueProducts = $offer->directProducts->unique('id')->pluck('id');
+        $productsIds = $offer->directProducts->unique('id')->pluck('id');
 
-        $uniqueCollections = $offer->directCollections->pluck('id');
+        $collectionsIds = $offer->directCollections->pluck('id');
         ############ Extract of products & Collection From Offers :: End ############
 
-        ############ Get Best Offer for all products :: Start ############
-        $products = getBestOfferForProducts($uniqueProducts)->map(function ($product) {
-            $product->type = "Product";
-            return $product;
-        });
-        ############ Get Best Offer for all products :: End ############
-
-        ############ Get Best Offer for all collections :: Start ############
-        $collections = getBestOfferForCollections($uniqueCollections)->map(function ($collection) {
-            $collection->type = "Collection";
-            return $collection;
-        });
-        ############ Get Best Offer for all collections :: End ############
-
-        ############ Concatenation of best Products & Collections  :: Start ############
-        $items = $collections->concat($products)->paginate(config('settings.front_pagination'));
-        ############ Concatenation of best Products & Collections  :: End ############
-
-        return view('front.offers.show', compact('offer', 'items'));
+        return view('front.offers.show', compact('offer', 'productsIds', 'collectionsIds'));
     }
 
     /**
@@ -145,11 +127,10 @@ class OfferController extends Controller
         $offer->created_at = $settings->created_at;
         $offer->updated_at = $settings->updated_at;
 
-        $productsIds = Product::where('publish', 1)->where('quantity', '>', 0)->where('quantity', '<=', $settings->last_box_quantity)->pluck('id');
+        $productsIds = Product::where('publish', 1)->where('quantity', '>', 0)->where('quantity', '<=', $settings->last_box_quantity)->pluck('id')->toArray();
+        $collectionsIds = [];
 
-        $items = getBestOfferForProducts($productsIds)->paginate(config('settings.front_pagination'));
-
-        return view('front.offers.show', compact('offer', 'items'));
+        return view('front.offers.show', compact('offer', 'productsIds', 'collectionsIds'));
     }
 
     /**
@@ -178,9 +159,9 @@ class OfferController extends Controller
 
         $productsIds = Product::where('publish', 1)->where('quantity', '>', 0)->whereBetween("created_at", [$startDate, $endDate])->pluck('id');
 
-        $items = getBestOfferForProducts($productsIds)->paginate(config('settings.front_pagination'));
+        $collectionsIds = [];
 
-        return view('front.offers.show', compact('offer', 'items'));
+        return view('front.offers.show', compact('offer', 'productsIds', 'collectionsIds'));
     }
 
     /**
@@ -204,8 +185,8 @@ class OfferController extends Controller
 
         $productsIds = Product::where('publish', 1)->where('quantity', '>', 0)->get()->pluck('id');
 
-        $items = getBestOfferForProducts($productsIds)->where("best_price", "<=", $settings->max_price_offer)->paginate(config('settings.front_pagination'));
+        $collectionsIds = [];
 
-        return view('front.offers.show', compact('offer', 'items'));
+        return view('front.offers.show', compact('offer', 'productsIds', 'collectionsIds'));
     }
 }

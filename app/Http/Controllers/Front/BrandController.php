@@ -32,10 +32,8 @@ class BrandController extends Controller
             'products' => fn ($q) => $q->select('id', 'brand_id'),
         ])->without('validOffers')->findOrFail($brand_id);
 
-        $productsIds = $brand->products->pluck('id');
+        $productsIds = $brand->products->pluck('id')->toArray();
 
-        $products = getBestOfferForProducts($productsIds)->paginate(config('settings.front_pagination'));
-
-        return view('front.brands.show', compact(['brand', 'products']));
+        return view('front.brands.show', compact(['brand', 'productsIds']));
     }
 }

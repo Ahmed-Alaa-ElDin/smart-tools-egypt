@@ -57,25 +57,13 @@
 
             <div class="p-3">
                 {{-- Products :: Start --}}
-                <div class="p-3 w-full grid grid-cols-4 gap-3 items-start">
-                    @forelse ($products as $product)
-                        <div class="col-span-2 lg:col-span-1">
-                            <x-front.product-box-small :item="$product->toArray()" wire:key="product-{{ rand() }}" />
-                        </div>
-
-                        {{-- Pagination :: Start --}}
-                        @if ($loop->last)
-                            <div class="col-span-4">
-                                {{ $products->links() }}
-                            </div>
-                        @endif
-                        {{-- Pagination :: End --}}
-                    @empty
-                        <div class="col-span-4 text-center font-bold p-2 text-lg">
-                            {{ __('front/homePage.No Products belongs to Subcategory', ['subcategory' => $subcategory->name]) }}
-                        </div>
-                    @endforelse
-                </div>
+                @if (count($productsIds))
+                    @livewire('front.products.general-products-list', ['productsIds' => $productsIds, 'collectionsIds' => []])
+                @else
+                    <div class="mt-5 mb-3 text-center text-lg font-bold text-gray-600">
+                        {{ __('front/homePage.No Products belongs to Subcategory', ['subcategory' => $subcategory->name]) }}
+                    </div>
+                @endif
                 {{-- Products :: End --}}
             </div>
 
