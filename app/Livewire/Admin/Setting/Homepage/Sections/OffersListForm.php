@@ -13,6 +13,9 @@ class OffersListForm extends Component
     use WithPagination;
 
     public $selected_offer;
+    public $perPage;
+    public $search;
+
 
     ######## Fires once in the beginning : Start ########
     public function mount()

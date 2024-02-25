@@ -9,4 +9,6 @@
             close
         </span>
     </div>
+@else
+    <div></div>
 @endif
