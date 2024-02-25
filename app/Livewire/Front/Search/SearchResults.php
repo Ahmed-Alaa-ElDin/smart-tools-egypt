@@ -11,7 +11,6 @@ class SearchResults extends Component
 {
     use WithPagination;
 
-    public $totalItems;
     public $perPage;
     public $sort_by;
     public $direction;

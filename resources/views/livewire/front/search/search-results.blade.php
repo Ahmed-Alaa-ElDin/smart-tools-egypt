@@ -520,7 +520,7 @@
             <div class="relative">
 
                 {{-- Loading Section :: Start --}}
-                <div wire:loading class="absolute w-100 h-100 backdrop-blur z-10">
+                <div wire:loading class="absolute w-100 h-100 z-10">
                     <x-front.loaders.wholepage-loader />
                 </div>
                 {{-- Loading Section :: End --}}
@@ -541,7 +541,7 @@
                         </div>
 
                         {{-- Pagination :: Start --}}
-                        @if ($loop->last)
+                        @if ($loop->last && $items->hasMorePages())
                             <div x-data x-intersect="$wire.loadMore()"></div>
                             <div wire:loading wire:target="loadMore" class="col-span-4 text-center">
                                 <x-front.loaders.load-more />
