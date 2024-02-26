@@ -27,7 +27,6 @@
             <div class="grow flex flex-col justify-start gap-2 w-full">
                 {{-- Product's Brand :: Start --}}
                 @if (isset($item['brand']))
-                    {{-- todo :: brand link --}}
                     <div class="flex items-center">
                         <a href="{{ route('front.brands.show', ['brand' => $item['brand']['id']]) }}" class="text-sm font-bold text-gray-400 hover:text-current">
                             {{ $item['brand'] ? $item['brand']['name'] : '' }}
