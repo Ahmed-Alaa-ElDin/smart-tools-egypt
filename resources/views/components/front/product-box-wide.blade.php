@@ -24,7 +24,7 @@
 
         <div class="flex flex-wrap gap-6 justify-between items-center w-full max-w-100 md:flex-nowrap">
             {{-- Product Info : Start --}}
-            <div class="grow flex flex-col justify-start gap-2">
+            <div class="grow flex flex-col justify-start gap-2 w-full">
                 {{-- Product's Brand :: Start --}}
                 @if (isset($item['brand']))
                     {{-- todo :: brand link --}}
