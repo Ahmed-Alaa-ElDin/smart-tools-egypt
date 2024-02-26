@@ -22,14 +22,14 @@
         </a>
         {{-- Thumnail :: End --}}
 
-        <div class="flex flex-wrap gap-6 justify-between items-center w-full max-w-100">
+        <div class="flex flex-wrap gap-6 justify-between items-center w-full max-w-100 md:flex-nowrap">
             {{-- Product Info : Start --}}
             <div class="grow flex flex-col justify-start gap-2">
                 {{-- Product's Brand :: Start --}}
                 @if (isset($item['brand']))
                     {{-- todo :: brand link --}}
                     <div class="flex items-center">
-                        <a href="#" class="text-sm font-bold text-gray-400 hover:text-current">
+                        <a href="{{ route('front.brands.show', ['brand' => $item['brand']['id']]) }}" class="text-sm font-bold text-gray-400 hover:text-current">
                             {{ $item['brand'] ? $item['brand']['name'] : '' }}
                         </a>
                     </div>
@@ -116,7 +116,7 @@
             {{-- Product Info : End --}}
 
             {{-- Product Price : Start --}}
-            <div class="flex flex-col items-center justify-center gap-2 w-full">
+            <div class="flex flex-col items-center justify-center gap-2 w-full md:items-end">
                 @if ($item['under_reviewing'])
                     <span class="text-yellow-600 font-bold text-sm">
                         {{ __('front/homePage.Under Reviewing') }}
