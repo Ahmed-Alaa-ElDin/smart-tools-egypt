@@ -22,7 +22,7 @@
         </a>
         {{-- Thumnail :: End --}}
 
-        <div class="flex gap-6 justify-between items-center w-full max-w-100">
+        <div class="flex flex-wrap gap-6 justify-between items-center w-full max-w-100">
             {{-- Product Info : Start --}}
             <div class="grow flex flex-col justify-start gap-2">
                 {{-- Product's Brand :: Start --}}
@@ -116,13 +116,13 @@
             {{-- Product Info : End --}}
 
             {{-- Product Price : Start --}}
-            <div class="flex flex-col items-end justify-center gap-2">
+            <div class="flex flex-col items-center justify-center gap-2 w-full">
                 @if ($item['under_reviewing'])
                     <span class="text-yellow-600 font-bold text-sm">
                         {{ __('front/homePage.Under Reviewing') }}
                     </span>
                 @else
-                    <div class="flex flex-col md:flex-row-reverse gap-3">
+                    <div class="flex flex-row-reverse gap-3">
                         {{-- Base Price : Start --}}
                         <del class="flex rtl:flex-row-reverse gap-1 font-bold text-gray-400">
                             <span class="text-xs">
