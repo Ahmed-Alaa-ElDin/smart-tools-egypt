@@ -20,6 +20,8 @@ class SubcategoryForm extends Component
     public $image_name;
     public $deletedImages = [];
 
+    public $supercategories, $categories, $subcategory;
+
     public $name = ['ar' => '', 'en' => ''];
     public $supercategory_id, $category_id;
     public $title, $description_seo;

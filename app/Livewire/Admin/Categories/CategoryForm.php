@@ -17,6 +17,9 @@ class CategoryForm extends Component
     public $name = ['ar' => '', 'en' => ''], $supercategory_id;
     public $title, $description_seo;
 
+    public $supercategories;
+    public $category;
+
     public $image;
     public $image_name;
     public $deletedImages = [];
@@ -184,7 +187,7 @@ class CategoryForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            throw $th;
+            // throw $th;
 
             Session::flash('error', __("admin/productsPages.Category hasn't been updated"));
             redirect()->route('admin.categories.index');
