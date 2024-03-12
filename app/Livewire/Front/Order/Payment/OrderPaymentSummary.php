@@ -2,15 +2,20 @@
 
 namespace App\Livewire\Front\Order\Payment;
 
-use App\Models\Coupon;
+use Carbon\Carbon;
+use App\Models\Zone;
 use App\Models\Offer;
 use App\Models\Order;
-use App\Models\Zone;
-use Carbon\Carbon;
-use Gloudemans\Shoppingcart\Facades\Cart;
+use App\Models\Coupon;
+use Livewire\Component;
+use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
+use App\Enums\PaymentStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use Livewire\Component;
+use Gloudemans\Shoppingcart\Facades\Cart;
+use App\Services\Front\Payments\Gateways\CardGateway;
+use App\Services\Front\Payments\PaymentService;
 
 class OrderPaymentSummary extends Component
 {
@@ -61,7 +66,10 @@ class OrderPaymentSummary extends Component
         'value' => 0,
     ];
 
-    public $payment_method = null, $balance = 0, $points = 0, $points_egp = 0;
+    public $payment_method = null;
+    public $balance = 0;
+    public $points = 0;
+    public $points_egp = 0;
 
     protected $listeners = [
         'couponApplied',
@@ -337,16 +345,16 @@ class OrderPaymentSummary extends Component
             // Get the order from database
             $order = Order::with([
                 'status',
-                'payment',
+                'invoice',
                 'transactions',
                 'address'
-            ])->whereIn('status_id', [201, 202])
+            ])->where('status_id', OrderStatus::UnderProcessing->value)
                 ->where('user_id', auth()->user()->id)
                 ->firstOrFail();
 
             // Update the Order
             $order->update([
-                'status_id'             =>      202,
+                'status_id'             =>      OrderStatus::Created->value,
                 'num_of_items'          =>      $this->items_total_quantities,
                 'allow_opening'         =>      1,
                 'zone_id'               =>      $this->best_zone_id,
@@ -361,12 +369,12 @@ class OrderPaymentSummary extends Component
             ]);
 
             // Change the state of the order
-            if ($order->statuses()->count() == 0 || $order->statuses()->orderBy('pivot_created_at', 'desc')->first()->id != 202) {
-                $order->statuses()->attach(202);
+            if ($order->statuses()->count() == 0) {
+                $order->statuses()->attach(OrderStatus::Created->value);
             }
 
             // Add the payment to the order
-            $payment = $order->payment()->updateOrCreate([
+            $invoice = $order->invoice()->updateOrCreate([
                 'order_id' => $order->id
             ], [
                 'subtotal_base' => $this->items_total_base_prices,
@@ -381,11 +389,11 @@ class OrderPaymentSummary extends Component
 
             // Update user balance if used
             if ($this->balance > 0) {
-                $payment->transactions()->updateOrCreate([
+                $invoice->transactions()->updateOrCreate([
                     'order_id' => $order->id,
                     'user_id' => $order->user_id,
-                    'payment_method' => 10,
-                    'payment_status' => 2,
+                    'payment_method_id' => PaymentMethod::Wallet->value,
+                    'payment_status_id' => PaymentStatus::Paid->value,
                 ], [
                     'payment_amount' => $this->balance,
                     'payment_details' => json_encode([
@@ -405,11 +413,11 @@ class OrderPaymentSummary extends Component
             if ($this->points_egp > 0) {
                 $used_points = $this->points;
 
-                $payment->transactions()->updateOrCreate([
+                $invoice->transactions()->updateOrCreate([
                     'order_id' => $order->id,
                     'user_id' => $order->user_id,
-                    'payment_method' => 11,
-                    'payment_status' => 2,
+                    'payment_method_id' => PaymentMethod::Points->value,
+                    'payment_status_id' => PaymentStatus::Paid->value,
                 ], [
                     'payment_amount' => $this->points_egp,
                     'payment_details' => json_encode([
@@ -456,13 +464,13 @@ class OrderPaymentSummary extends Component
             $should_pay = $this->total_after_coupon_discount - $this->balance - $this->points_egp;
 
             if ($should_pay > 0) {
-                $transaction = $payment->transactions()->updateOrCreate([
+                $transaction = $invoice->transactions()->updateOrCreate([
                     'order_id' => $order->id,
                     'user_id' => $order->user_id,
-                    'payment_status' => 1,
+                    'payment_status_id' => PaymentStatus::Pending->value,
                 ], [
+                    'payment_method_id' => $this->payment_method,
                     'payment_amount' => $should_pay,
-                    'payment_method' => $this->payment_method,
                     'payment_details' => json_encode([
                         "amount_cents" => number_format($should_pay * 100, 0, '', ''),
                         "points" => 0,
@@ -471,10 +479,10 @@ class OrderPaymentSummary extends Component
                     ]),
                 ]);
             } else {
-                $payment->transactions()->where([
+                $invoice->transactions()->where([
                     'order_id' => $order->id,
                     'user_id' => $order->user_id,
-                    'payment_status' => 1
+                    'payment_status_id' => PaymentStatus::Paid->value
                 ])->delete();
             }
 
@@ -574,65 +582,49 @@ class OrderPaymentSummary extends Component
                 ]);
             }
 
-            if ($should_pay <= 0 || $this->payment_method == 1) {
+            if ($should_pay <= 0 || $this->payment_method == PaymentMethod::Cash->value) {
+                $order->update([
+                    'status_id' => OrderStatus::WaitingForApproval->value
+                ]);
 
-                $order->statuses()->attach(203);
+                $order->statuses()->attach(OrderStatus::WaitingForApproval->value);
 
-                $bosta_order = createBostaOrder($order, $this->payment_method);
+                // Clear Cart
+                Cart::instance('cart')->destroy();
+                Cart::instance('cart')->store($order->user->id);
 
-                if ($bosta_order['status']) {
+                DB::commit();
 
-                    if ($should_pay <= 0) {
-                        $order->points()->update([
-                            'status' => 1
-                        ]);
-                    }
+                // redirect to done page
+                Session::flash('success', __('front/homePage.Order Created Successfully'));
+                redirect()->route('front.orders.done')->with('order_id', $order->id);
+            } elseif ($this->payment_method == PaymentMethod::Card->value) {
+                $order->update([
+                    'status_id' => OrderStatus::WaitingForPayment->value
+                ]);
 
-                    // Clear Cart
-                    Cart::instance('cart')->destroy();
-                    Cart::instance('cart')->store($order->user->id);
+                $order->statuses()->attach(OrderStatus::WaitingForPayment->value);
 
-                    DB::commit();
+                $cardGateway = new CardGateway();
 
-                    // redirect to done page
-                    Session::flash('success', __('front/homePage.Order Created Successfully'));
-                    redirect()->route('front.orders.done')->with('order_id', $order->id);
-                } else {
-                    $this->dispatch(
-                        'swalDone',
-                        text: __("front/homePage.Order hasn't been created"),
-                        icon: 'error'
-                    );
-                }
-            } elseif ($this->payment_method == 2) {
-                $payment_key = payByPaymob($order, $transaction);
+                $Payment = new PaymentService($cardGateway);
 
-                if ($payment_key) {
-                    $order->update([
-                        'status_id' => 203,
-                    ]);
+                $clientSecret = $Payment->prepare($order, $transaction);
 
-                    $order->statuses()->attach(203);
-
-                    // Clear Cart
-                    Cart::instance('cart')->destroy();
-                    Cart::instance('cart')->store($order->user->id);
-
-                    DB::commit();
-
-                    return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . env('PAYMOB_IFRAM_ID_CARD') . "?payment_token=$payment_key");
+                if ($clientSecret) {
+                    return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_IFRAM_ID_CARD_TEST") . "&clientSecret={$clientSecret}");
                 } else {
                     return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }
-            } elseif ($this->payment_method == 3) {
+            } elseif ($this->payment_method == PaymentMethod::Installments->value) {
                 $payment_key = payByPaymob($order, $transaction);
 
                 if ($payment_key) {
                     $order->update([
-                        'status_id' => 203,
+                        'status_id' => OrderStatus::WaitingForPayment->value,
                     ]);
 
-                    $order->statuses()->attach(203);
+                    $order->statuses()->attach(OrderStatus::WaitingForPayment->value);
 
                     // Clear Cart
                     Cart::instance('cart')->destroy();
@@ -643,12 +635,12 @@ class OrderPaymentSummary extends Component
                 } else {
                     return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }
-            } elseif ($this->payment_method == 4) {
+            } elseif ($this->payment_method == PaymentMethod::VodafoneCash->value) {
                 $order->update([
-                    'status_id' => 203,
+                    'status_id' => OrderStatus::WaitingForPayment->value,
                 ]);
 
-                $order->statuses()->attach(203);
+                $order->statuses()->attach(OrderStatus::WaitingForPayment->value);
 
                 // Clear Cart
                 Cart::instance('cart')->destroy();
@@ -661,6 +653,7 @@ class OrderPaymentSummary extends Component
             }
         } catch (\Throwable $th) {
             DB::rollback();
+            throw $th;
         }
     }
 }

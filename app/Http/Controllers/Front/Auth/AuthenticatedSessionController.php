@@ -133,8 +133,6 @@ class AuthenticatedSessionController extends Controller
     {
         $user = Socialite::driver('google')->user();
 
-        // dd($user);
-
         $createdUser = User::updateOrCreate(
             ['auth_id' => $user->id],
             [
@@ -183,8 +181,6 @@ class AuthenticatedSessionController extends Controller
     public function twitterCallback()
     {
         $user = Socialite::driver('twitter')->user();
-
-        dd($user);
 
         $createdUser = User::updateOrCreate(
             ['auth_id' => $user->id],

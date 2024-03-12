@@ -19,7 +19,7 @@ class AddDeliveryForm extends Component
     public $photo;
     public $temp_path;
     public $image_name;
-
+    public $phones = [];
     public $defaultPhone = 0;
 
     public $name = ['ar' => '', 'en' => ''], $email, $active = 1;

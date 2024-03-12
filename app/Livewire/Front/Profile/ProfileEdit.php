@@ -31,9 +31,19 @@ class ProfileEdit extends Component
     public $defaultPhone = 0;
     public $defaultAddress = 0;
 
-    public $f_name = ['ar' => '', 'en' => ''], $l_name = ['ar' => '', 'en' => ''], $email, $phone, $gender = '0', $birth_date;
+    public $f_name = ['ar' => '', 'en' => ''];
+    public $l_name = ['ar' => '', 'en' => ''];
+    public $email;
+    public $phone;
+    public $gender = '0';
+    public $birth_date;
+    public $countries = [];
+    public $governorates = [];
+    public  $cities = [];
 
-    public $countries = [], $governorates = [],  $cities = [];
+    public $phones = [];
+
+    public $addresses = [];
 
     protected $listeners = ['countryUpdated', 'governorateUpdated'];
 

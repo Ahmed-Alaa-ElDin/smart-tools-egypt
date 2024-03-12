@@ -36,9 +36,11 @@
                         {{ $address->city ? $address->city->name : '' }}
                     </p>
                 </div>
-                <p class="text-sm font-bold text-gray-600">
-                    {{ $address->details ?? $address->details }}
-                </p>
+                @if ($address->details)
+                    <p class="text-sm font-bold text-gray-600">
+                        {{ $address->details }}
+                    </p>
+                @endif
             </div>
 
             @if ($loop->last)

@@ -19,6 +19,7 @@ class EditDeliveryForm extends Component
     public $temp_path;
     public $image_name;
     public $oldImage;
+    public $phones = [];
 
     public $delivery_id;
     public $delivery;

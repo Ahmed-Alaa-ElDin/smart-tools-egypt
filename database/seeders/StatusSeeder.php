@@ -52,8 +52,8 @@ class StatusSeeder extends Seeder
         Status::updateOrCreate([
             'id' => 206,
             'name' => [
-                'en' => 'Under Reviewing',
-                'ar' => 'جاري الفحص والمراجعة',
+                'en' => 'Waiting For Quality Check',
+                'ar' => 'في انتظار فحص الجودة',
             ],
         ]);
         Status::updateOrCreate([
@@ -61,6 +61,20 @@ class StatusSeeder extends Seeder
             'name' => [
                 'en' => 'Shipped',
                 'ar' => 'تم التسليم لشركة الشحن',
+            ],
+        ]);
+        Status::updateOrCreate([
+            'id' => 208,
+            'name' => [
+                'en' => 'Waiting For Approval',
+                'ar' => 'في انتظار الموافقة',
+            ],
+        ]);
+        Status::updateOrCreate([
+            'id' => 209,
+            'name' => [
+                'en' => 'Prepared',
+                'ar' => 'تم التجهيز',
             ],
         ]);
         Status::updateOrCreate([

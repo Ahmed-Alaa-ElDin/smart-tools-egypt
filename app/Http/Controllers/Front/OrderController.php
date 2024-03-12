@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Front;
 use ErrorException;
 use App\Models\Offer;
 use App\Models\Order;
+use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -46,17 +48,15 @@ class OrderController extends Controller
                 ]);
             },
             'status',
-            'payment',
+            'invoice',
             'transactions',
         ])
             ->where('user_id', auth()->user()->id)
             ->whereHas('status', function ($query) {
-                $query->whereNotIn('id', [201, 15]);
+                $query->whereNotIn('id', [OrderStatus::UnderProcessing]);
             })
             ->orderBy('id', 'desc')
             ->paginate(5);
-
-        // dd($orders);
 
         return view('front.orders.index', compact('orders'));
     }
@@ -116,7 +116,7 @@ class OrderController extends Controller
 
         // Get Order data
         $order = Order::with([
-            'payment',
+            'invoice',
             'coupon' => fn ($q) => $q->with([
                 'supercategories' => function ($q) {
                     $q->with(['products']);
@@ -346,8 +346,8 @@ class OrderController extends Controller
         // Get Paid Money
         $payment_methods = $order->payment_methods;
         $main_payment_method = $order->payment->main_payment_method;
-        $paid = $order->payment->paid;
-        $old_price = $order->payment->total;
+        $paid = $order->invoice->paid;
+        $old_price = $order->invoice->total;
         $should_pay = $total_order > $paid ? round($total_order - $paid, 2) : 0.00;
         $should_get = $total_order < $paid ? round($paid - $total_order, 2) : 0.00;
         $difference = round($total_order - $paid, 2);
@@ -387,7 +387,7 @@ class OrderController extends Controller
             $temp_order->statuses()->attach(304);
 
             // Add the payment to the order
-            $payment = $temp_order->payment()->updateOrCreate([
+            $invoice = $temp_order->invoice()->updateOrCreate([
                 'order_id' => $temp_order->id,
             ], [
                 'subtotal_base' => $items_total_base_prices,
@@ -407,15 +407,15 @@ class OrderController extends Controller
 
                 // Extract paid transactions
                 $paid_transactions = [];
-                foreach ($order->transactions()->where('payment_status', 2)->get() as $transaction) {
+                foreach ($order->transactions()->where('payment_status_id', 2)->get() as $transaction) {
                     $paid_transactions[] = [
-                        'payment_id' => $payment->id,
+                        'invoice_id' => $invoice->id,
                         'order_id' => $temp_order->id,
                         'old_order_id' => $order->id,
                         'user_id' => $temp_order->user_id,
-                        'payment_method' => $transaction->payment_method,
+                        'payment_method_id' => $transaction->payment_method,
                         'payment_amount' => $transaction->payment_amount,
-                        'payment_status' => $transaction->payment_status,
+                        'payment_status_id' => $transaction->payment_status,
                         'paymob_order_id' => $transaction->paymob_order_id,
                         'payment_details' => $transaction->payment_details,
                     ];
@@ -428,13 +428,13 @@ class OrderController extends Controller
 
                 // Add the main payment method transaction
                 $temp_order->transactions()->create([
-                    'payment_id' => $payment->id,
+                    'invoice_id' => $invoice->id,
                     'order_id' => $temp_order->id,
                     'old_order_id' => $order->id,
                     'user_id' => $temp_order->user_id,
-                    'payment_method' => $main_payment_method ?? 1,
+                    'payment_method_id' => $main_payment_method ?? 1,
                     'payment_amount' => $should_pay,
-                    'payment_status' => 1,
+                    'payment_status_id' => 1,
                     'payment_details' => json_encode([
                         "amount_cents" => number_format($should_pay * 100, 0, '', ''),
                         "points" => 0,
@@ -451,23 +451,23 @@ class OrderController extends Controller
                 // todo
                 // Get old transaction done using user's Card or Vodafone Cash
                 $old_order_used_other_transaction = $order->transactions
-                    ->whereNotIn('payment_method', [10, 11])
-                    ->where('payment_status', 2);
+                    ->whereNotIn('payment_method_id', [10, 11])
+                    ->where('payment_status_id', 2);
                 // ->first();
                 $old_order_used_other = $old_order_used_other_transaction ? $old_order_used_other_transaction->sum('payment_amount') : 0.00;
                 // $old_order_used_other_transaction_payment_details = $old_order_used_other_transaction ? json_decode($old_order_used_other_transaction->payment_details) : null;
 
                 // Get old transaction done using user's balance
                 $old_order_used_balance_transaction = $order->transactions
-                    ->where('payment_method', 10)
-                    ->where('payment_status', 2)
+                    ->where('payment_method_id', 10)
+                    ->where('payment_status_id', 2)
                     ->first();
                 $old_order_used_balance = $old_order_used_balance_transaction ? $old_order_used_balance_transaction->payment_amount : 0.00;
 
                 // Get old transaction done using user's points
                 $old_order_used_points_transaction = $order->transactions
-                    ->where('payment_method', 11)
-                    ->where('payment_status', 2)
+                    ->where('payment_method_id', 11)
+                    ->where('payment_status_id', 2)
                     ->first();
                 $old_order_used_points_egp = $old_order_used_points_transaction ? $old_order_used_points_transaction->payment_amount : 0.00;
                 $old_order_used_points =  $old_order_used_points_egp / config('settings.points_conversion_rate') ?? 0;
@@ -514,13 +514,13 @@ class OrderController extends Controller
                     // Transactions to be Refunded 
                     if ($refund_amount > 0) {
                         $temp_order->transactions()->create([
-                            'payment_id' => $payment->id,
+                            'invoice_id' => $invoice->id,
                             'order_id' => $temp_order->id,
                             'old_order_id' => $order->id,
                             'user_id' => $temp_order->user_id,
                             'payment_amount' => $refund_amount,
-                            'payment_method' => $temp_transaction->payment_method,
-                            'payment_status' => 4,
+                            'payment_method_id' => $temp_transaction->payment_method,
+                            'payment_status_id' => 4,
                             'paymob_order_id' => $temp_transaction->paymob_order_id,
                             'payment_details' => json_encode([
                                 "amount_cents" => number_format($refund_amount * 100, 0, '', ''),
@@ -536,13 +536,13 @@ class OrderController extends Controller
                     // Remaining Transactions
                     if ($payment_amount > 0) {
                         $temp_order->transactions()->create([
-                            'payment_id' => $payment->id,
+                            'invoice_id' => $invoice->id,
                             'order_id' => $temp_order->id,
                             'old_order_id' => $order->id,
                             'user_id' => $temp_order->user_id,
                             'payment_amount' => $payment_amount,
-                            'payment_method' => $temp_transaction->payment_method,
-                            'payment_status' => 2,
+                            'payment_method_id' => $temp_transaction->payment_method,
+                            'payment_status_id' => 2,
                             'paymob_order_id' => $temp_transaction->paymob_order_id,
                             'payment_details' => json_encode([
                                 "amount_cents" => number_format($payment_amount * 100, 0, '', ''),
@@ -557,13 +557,13 @@ class OrderController extends Controller
 
                 if ($returned_balance > 0) {
                     $temp_order->transactions()->create([
-                        'payment_id' => $payment->id,
+                        'invoice_id' => $invoice->id,
                         'order_id' => $temp_order->id,
                         'old_order_id' => $order->id,
                         'user_id' => $temp_order->user_id,
                         'payment_amount' => $returned_balance,
-                        'payment_method' => 10,
-                        'payment_status' => 4,
+                        'payment_method_id' => 10,
+                        'payment_status_id' => 4,
                         'payment_details' => json_encode([
                             "amount_cents" => number_format($returned_balance * 100, 0, '', ''),
                             "points" => 0,
@@ -575,13 +575,13 @@ class OrderController extends Controller
 
                 if ($returned_points > 0) {
                     $temp_order->transactions()->create([
-                        'payment_id' => $payment->id,
+                        'invoice_id' => $invoice->id,
                         'order_id' => $temp_order->id,
                         'old_order_id' => $order->id,
                         'user_id' => $temp_order->user_id,
                         'payment_amount' => $returned_points_egp,
-                        'payment_method' => 11,
-                        'payment_status' => 4,
+                        'payment_method_id' => 11,
+                        'payment_status_id' => 4,
                         'payment_details' => json_encode([
                             "amount_cents" => number_format($returned_points_egp * 100, 0, '', ''),
                             "points" => $returned_points,
@@ -593,13 +593,13 @@ class OrderController extends Controller
 
                 if ($remaining_balance > 0) {
                     $temp_order->transactions()->create([
-                        'payment_id' => $payment->id,
+                        'invoice_id' => $invoice->id,
                         'order_id' => $temp_order->id,
                         'old_order_id' => $order->id,
                         'user_id' => $temp_order->user_id,
                         'payment_amount' => $remaining_balance,
-                        'payment_method' => 10,
-                        'payment_status' => 2,
+                        'payment_method_id' => 10,
+                        'payment_status_id' => 2,
                         'payment_details' => json_encode([
                             "amount_cents" => number_format($remaining_balance * 100, 0, '', ''),
                             "points" => 0,
@@ -611,13 +611,13 @@ class OrderController extends Controller
 
                 if ($remaining_points > 0) {
                     $temp_order->transactions()->create([
-                        'payment_id' => $payment->id,
+                        'invoice_id' => $invoice->id,
                         'order_id' => $temp_order->id,
                         'old_order_id' => $order->id,
                         'user_id' => $temp_order->user_id,
                         'payment_amount' => $remaining_points_egp,
-                        'payment_method' => 11,
-                        'payment_status' => 2,
+                        'payment_method_id' => 11,
+                        'payment_status_id' => 2,
                         'payment_details' => json_encode([
                             "amount_cents" => number_format($remaining_points_egp * 100, 0, '', ''),
                             "points" => $remaining_points,
@@ -632,15 +632,15 @@ class OrderController extends Controller
 
                 // Extract old order transactions
                 $transactions = [];
-                foreach ($order->transactions->whereNotIn('payment_status',[4,5,6]) as $transaction) {
+                foreach ($order->transactions->whereNotIn('payment_status_id', [4, 5, 6]) as $transaction) {
                     $transactions[] = [
-                        'payment_id' => $payment->id,
+                        'invoice_id' => $invoice->id,
                         'order_id' => $temp_order->id,
                         'old_order_id' => $order->id,
                         'user_id' => $temp_order->user_id,
-                        'payment_method' => $transaction->payment_method,
+                        'payment_method_id' => $transaction->payment_method,
                         'payment_amount' => $transaction->payment_amount,
-                        'payment_status' => $transaction->payment_status,
+                        'payment_status_id' => $transaction->payment_status,
                         'paymob_order_id' => $transaction->paymob_order_id,
                         'payment_details' => $transaction->payment_details,
                     ];
@@ -701,7 +701,6 @@ class OrderController extends Controller
 
             DB::commit();
         } catch (\Throwable $th) {
-            throw $th;
             DB::rollBack();
             return redirect()->back();
         }
@@ -732,7 +731,7 @@ class OrderController extends Controller
             'paid' => $paid ?? 0,
             'difference' => $difference ?? 0,
             'payment_methods' => $payment_methods ?? [],
-            'main_payment_method' => $main_payment_method ?? null,
+            'main_payment_method_id' => $main_payment_method ?? null,
             'should_pay' => $should_pay ?? 0,
             'should_get' => $should_get ?? 0,
         ];
@@ -747,10 +746,10 @@ class OrderController extends Controller
     {
         $old_order = Order::with(['products', 'collections', 'user', 'payment', 'transactions', 'points'])->findOrFail($old_order_id);
         $temp_order = Order::with(['products', 'collections', 'payment', 'transactions', 'points'])->findOrFail($temp_order_id);
-        $pended_balance_refund = $temp_order->transactions()->where('payment_method', 10)->where('payment_status', 4)->sum('payment_amount') ?? 0;
-        $pended_points_refund = $temp_order->transactions()->where('payment_method', 11)->where('payment_status', 4)->sum('payment_details->points') ?? 0;
-        $should_get = $temp_order->transactions()->where('payment_status', 4)->count() ? true : false;
-        $should_pay = $temp_order->transactions()->where('payment_status', 1)->count() ? true : false;
+        $pended_balance_refund = $temp_order->transactions()->where('payment_method_id', 10)->where('payment_status_id', 4)->sum('payment_amount') ?? 0;
+        $pended_points_refund = $temp_order->transactions()->where('payment_method_id', 11)->where('payment_status_id', 4)->sum('payment_details->points') ?? 0;
+        $should_get = $temp_order->transactions()->where('payment_status_id', 4)->count() ? true : false;
+        $should_pay = $temp_order->transactions()->where('payment_status_id', 1)->count() ? true : false;
 
         // New Products Data
         $new_products = [];
@@ -808,16 +807,16 @@ class OrderController extends Controller
                     $old_order->statuses()->attach([305, 306]);
 
                     // Update Transactions
-                    $old_order->transactions()->whereNotIn('payment_status', [4, 5, 6])->delete();
+                    $old_order->transactions()->whereNotIn('payment_status_id', [4, 5, 6])->delete();
                     $temp_order->transactions()->update([
-                        'payment_id' => $temp_order->payment->id,
+                        'invoice_id' => $temp_order->invoice->id,
                         'order_id' => $old_order->id,
                         'old_order_id' => Null,
                     ]);
 
-                    // Update Payment
-                    $old_order->payment()->delete();
-                    $temp_order->payment()->update([
+                    // Update invoice
+                    $old_order->invoice()->delete();
+                    $temp_order->invoice()->update([
                         'order_id' => $old_order->id,
                     ]);
 
@@ -862,8 +861,8 @@ class OrderController extends Controller
                             'balance' => $old_order->user->balance + $pended_balance_refund,
                         ]);
 
-                        $old_order->transactions()->where('payment_method', 10)->where('payment_status', 4)->update([
-                            'payment_status' => 5
+                        $old_order->transactions()->where('payment_method_id', 10)->where('payment_status_id', 4)->update([
+                            'payment_status_id' => 5
                         ]);
                     }
 
@@ -875,8 +874,8 @@ class OrderController extends Controller
                             'status' => 1
                         ]);
 
-                        $old_order->transactions()->where('payment_method', 11)->where('payment_status', 4)->update([
-                            'payment_status' => 5
+                        $old_order->transactions()->where('payment_method_id', 11)->where('payment_status_id', 4)->update([
+                            'payment_status_id' => 5
                         ]);
                     }
 
@@ -903,7 +902,7 @@ class OrderController extends Controller
             // Card or installment
             elseif ($old_order->mainPaymentMethod == 2 || $old_order->mainPaymentMethod == 3) {
                 if ($should_get && $request->type == 'wallet') {
-                    $pended_card_refund = $temp_order->transactions()->whereIn('payment_method', [2, 3])->where('payment_status', 4);
+                    $pended_card_refund = $temp_order->transactions()->whereIn('payment_method_id', [2, 3])->where('payment_status_id', 4);
                     $pended_card_refund_amount = $pended_card_refund->sum('payment_amount') ?? 0;
                     $pended_card_refund_count = $pended_card_refund->count() ? true : false;
 
@@ -926,19 +925,19 @@ class OrderController extends Controller
                         $old_order->statuses()->attach([305, 306]);
 
                         // Update Transactions
-                        $old_order->transactions()->where('payment_status', 2)->delete();
+                        $old_order->transactions()->where('payment_status_id', 2)->delete();
                         $old_order->transactions()->update([
-                            'payment_id' => $temp_order->payment->id,
+                            'invoice_id' => $temp_order->invoice->id,
                         ]);
                         $temp_order->transactions()->update([
-                            'payment_id' => $temp_order->payment->id,
+                            'invoice_id' => $temp_order->invoice->id,
                             'order_id' => $old_order->id,
                             'old_order_id' => Null,
                         ]);
 
-                        // Update Payment
-                        $old_order->payment()->delete();
-                        $temp_order->payment()->update([
+                        // Update invoice
+                        $old_order->invoice()->delete();
+                        $temp_order->invoice()->update([
                             'order_id' => $old_order->id,
                         ]);
 
@@ -982,8 +981,8 @@ class OrderController extends Controller
                                 'balance' => $old_order->user->balance + $pended_balance_refund,
                             ]);
 
-                            $old_order->transactions()->where('payment_method', 10)->where('payment_status', 4)->update([
-                                'payment_status' => 5
+                            $old_order->transactions()->where('payment_method_id', 10)->where('payment_status_id', 4)->update([
+                                'payment_status_id' => 5
                             ]);
                         }
 
@@ -995,8 +994,8 @@ class OrderController extends Controller
                                 'status' => 1
                             ]);
 
-                            $old_order->transactions()->where('payment_method', 11)->where('payment_status', 4)->update([
-                                'payment_status' => 5
+                            $old_order->transactions()->where('payment_method_id', 11)->where('payment_status_id', 4)->update([
+                                'payment_status_id' => 5
                             ]);
                         }
 
@@ -1016,9 +1015,9 @@ class OrderController extends Controller
                                 'balance' => $old_order->user->balance + $pended_card_refund_amount,
                             ]);
 
-                            $old_order->transactions()->whereIn('payment_method', [2, 3])->where('payment_status', 4)->update([
-                                'payment_method' => 10,
-                                'payment_status' => 5,
+                            $old_order->transactions()->whereIn('payment_method_id', [2, 3])->where('payment_status_id', 4)->update([
+                                'payment_method_id' => 10,
+                                'payment_status_id' => 5,
                             ]);
                         }
 
@@ -1031,14 +1030,14 @@ class OrderController extends Controller
                         return redirect()->route('front.orders.index');
                     }
                 } elseif ($should_get && $request->type == 'card') {
-                    $pended_card_refund = $temp_order->transactions()->whereIn('payment_method', [2, 3])->where('payment_status', 4);
+                    $pended_card_refund = $temp_order->transactions()->whereIn('payment_method_id', [2, 3])->where('payment_status_id', 4);
                     $pended_card_refund_count = $pended_card_refund->count() ? true : false;
 
                     if ($pended_card_refund_count) {
                         $pended_card_refund->each(function ($transaction) {
                             if (refundRequestPaymob(json_decode($transaction->payment_details)->transaction_id, json_decode($transaction->payment_details)->amount_cents)) {
                                 $transaction->update([
-                                    'payment_status' => 5,
+                                    'payment_status_id' => 5,
                                 ]);
                             } else {
                                 throw new ErrorException('Refund Failed');
@@ -1064,19 +1063,19 @@ class OrderController extends Controller
                         $old_order->statuses()->attach([305, 306]);
 
                         // Update Transactions
-                        $old_order->transactions()->where('payment_status', 2)->delete();
+                        $old_order->transactions()->where('payment_status_id', 2)->delete();
                         $old_order->transactions()->update([
-                            'payment_id' => $temp_order->payment->id,
+                            'invoice_id' => $temp_order->invoice->id,
                         ]);
                         $temp_order->transactions()->update([
-                            'payment_id' => $temp_order->payment->id,
+                            'invoice_id' => $temp_order->invoice->id,
                             'order_id' => $old_order->id,
                             'old_order_id' => Null,
                         ]);
 
-                        // Update Payment
-                        $old_order->payment()->delete();
-                        $temp_order->payment()->update([
+                        // Update invoice
+                        $old_order->invoice()->delete();
+                        $temp_order->invoice()->update([
                             'order_id' => $old_order->id,
                         ]);
 
@@ -1120,8 +1119,8 @@ class OrderController extends Controller
                                 'balance' => $old_order->user->balance + $pended_balance_refund,
                             ]);
 
-                            $old_order->transactions()->where('payment_method', 10)->where('payment_status', 4)->update([
-                                'payment_status' => 5
+                            $old_order->transactions()->where('payment_method_id', 10)->where('payment_status_id', 4)->update([
+                                'payment_status_id' => 5
                             ]);
                         }
 
@@ -1133,8 +1132,8 @@ class OrderController extends Controller
                                 'status' => 1
                             ]);
 
-                            $old_order->transactions()->where('payment_method', 11)->where('payment_status', 4)->update([
-                                'payment_status' => 5
+                            $old_order->transactions()->where('payment_method_id', 11)->where('payment_status_id', 4)->update([
+                                'payment_status_id' => 5
                             ]);
                         }
 
@@ -1228,7 +1227,7 @@ class OrderController extends Controller
                         return redirect()->route('front.orders.index');
                     }
                 } elseif ($should_pay && $request->type == 'pay') {
-                    $pended_card_payment = $temp_order->transactions()->whereIn('payment_method', [2, 3])->where('payment_status', 1);
+                    $pended_card_payment = $temp_order->transactions()->whereIn('payment_method_id', [2, 3])->where('payment_status_id', 1);
                     $pended_card_payment_count = $pended_card_payment->count() ? true : false;
 
                     if ($pended_card_payment_count) {
@@ -1250,7 +1249,7 @@ class OrderController extends Controller
             // Vodafone Cash
             elseif ($old_order->mainPaymentMethod == 4) {
                 if ($should_get && $request->type == 'wallet') {
-                    $pended_vodafone_refund = $temp_order->transactions()->where('payment_method', 4)->where('payment_status', 4);
+                    $pended_vodafone_refund = $temp_order->transactions()->where('payment_method_id', 4)->where('payment_status_id', 4);
                     $pended_vodafone_refund_amount = $pended_vodafone_refund->sum('payment_amount') ?? 0;
                     $pended_vodafone_refund_count = $pended_vodafone_refund->count() ? true : false;
 
@@ -1279,19 +1278,19 @@ class OrderController extends Controller
                         $old_order->statuses()->attach([305, 306]);
 
                         // Update Transactions
-                        $old_order->transactions()->whereNotIn('payment_status', [4, 5, 6])->delete();
+                        $old_order->transactions()->whereNotIn('payment_status_id', [4, 5, 6])->delete();
                         $old_order->transactions()->update([
-                            'payment_id' => $temp_order->payment->id,
+                            'invoice_id' => $temp_order->invoice->id,
                         ]);
                         $temp_order->transactions()->update([
-                            'payment_id' => $temp_order->payment->id,
+                            'invoice_id' => $temp_order->invoice->id,
                             'order_id' => $old_order->id,
                             'old_order_id' => Null,
                         ]);
 
-                        // Update Payment
-                        $old_order->payment()->delete();
-                        $temp_order->payment()->update([
+                        // Update invoice
+                        $old_order->invoice()->delete();
+                        $temp_order->invoice()->update([
                             'order_id' => $old_order->id,
                         ]);
 
@@ -1335,8 +1334,8 @@ class OrderController extends Controller
                                 'balance' => $old_order->user->balance + $pended_balance_refund,
                             ]);
 
-                            $old_order->transactions()->where('payment_method', 10)->where('payment_status', 4)->update([
-                                'payment_status' => 5
+                            $old_order->transactions()->where('payment_method_id', 10)->where('payment_status_id', 4)->update([
+                                'payment_status_id' => 5
                             ]);
                         }
 
@@ -1348,8 +1347,8 @@ class OrderController extends Controller
                                 'status' => 1
                             ]);
 
-                            $old_order->transactions()->where('payment_method', 11)->where('payment_status', 4)->update([
-                                'payment_status' => 5
+                            $old_order->transactions()->where('payment_method_id', 11)->where('payment_status_id', 4)->update([
+                                'payment_status_id' => 5
                             ]);
                         }
 
@@ -1369,9 +1368,9 @@ class OrderController extends Controller
                                 'balance' => $old_order->user->balance + $pended_vodafone_refund_amount,
                             ]);
 
-                            $old_order->transactions()->where('payment_method', 4)->where('payment_status', 4)->update([
-                                'payment_method' => 10,
-                                'payment_status' => 5,
+                            $old_order->transactions()->where('payment_method_id', 4)->where('payment_status_id', 4)->update([
+                                'payment_method_id' => 10,
+                                'payment_status_id' => 5,
                             ]);
                         }
 
@@ -1384,7 +1383,7 @@ class OrderController extends Controller
                         return redirect()->route('front.orders.index');
                     }
                 } elseif ($should_get && $request->type == 'vodafone') {
-                    $pended_vodafone_refund = $temp_order->transactions()->where('payment_method', 4)->where('payment_status', 4);
+                    $pended_vodafone_refund = $temp_order->transactions()->where('payment_method_id', 4)->where('payment_status_id', 4);
                     $pended_vodafone_refund_amount = $pended_vodafone_refund->sum('payment_amount') ?? 0;
                     $pended_vodafone_refund_count = $pended_vodafone_refund->count() ? true : false;
 
@@ -1413,19 +1412,19 @@ class OrderController extends Controller
                         $old_order->statuses()->attach([305, 306]);
 
                         // Update Transactions
-                        $old_order->transactions()->whereNotIn('payment_status', [4, 5, 6])->delete();
+                        $old_order->transactions()->whereNotIn('payment_status_id', [4, 5, 6])->delete();
                         $old_order->transactions()->update([
-                            'payment_id' => $temp_order->payment->id,
+                            'invoice_id' => $temp_order->invoice->id,
                         ]);
                         $temp_order->transactions()->update([
-                            'payment_id' => $temp_order->payment->id,
+                            'invoice_id' => $temp_order->invoice->id,
                             'order_id' => $old_order->id,
                             'old_order_id' => Null,
                         ]);
 
-                        // Update Payment
-                        $old_order->payment()->delete();
-                        $temp_order->payment()->update([
+                        // Update invoice
+                        $old_order->invoice()->delete();
+                        $temp_order->invoice()->update([
                             'order_id' => $old_order->id,
                         ]);
 
@@ -1469,8 +1468,8 @@ class OrderController extends Controller
                                 'balance' => $old_order->user->balance + $pended_balance_refund,
                             ]);
 
-                            $old_order->transactions()->where('payment_method', 10)->where('payment_status', 4)->update([
-                                'payment_status' => 5
+                            $old_order->transactions()->where('payment_method_id', 10)->where('payment_status_id', 4)->update([
+                                'payment_status_id' => 5
                             ]);
                         }
 
@@ -1482,8 +1481,8 @@ class OrderController extends Controller
                                 'status' => 1
                             ]);
 
-                            $old_order->transactions()->where('payment_method', 11)->where('payment_status', 4)->update([
-                                'payment_status' => 5
+                            $old_order->transactions()->where('payment_method_id', 11)->where('payment_status_id', 4)->update([
+                                'payment_status_id' => 5
                             ]);
                         }
 
@@ -1506,7 +1505,7 @@ class OrderController extends Controller
                         return redirect()->route('front.orders.index');
                     }
                 } elseif (!$should_pay && !$should_get && $request->type == 'equal') {
-                    $pended_vodafone_refund = $temp_order->transactions()->where('payment_method', 4)->where('payment_status', 4);
+                    $pended_vodafone_refund = $temp_order->transactions()->where('payment_method_id', 4)->where('payment_status_id', 4);
                     $pended_vodafone_refund_amount = $pended_vodafone_refund->sum('payment_amount') ?? 0;
                     $pended_vodafone_refund_count = $pended_vodafone_refund->count() ? true : false;
 
@@ -1533,19 +1532,19 @@ class OrderController extends Controller
                         $old_order->statuses()->attach([305, 306]);
 
                         // Update Transactions
-                        $old_order->transactions()->whereNotIn('payment_status', [4, 5, 6])->delete();
+                        $old_order->transactions()->whereNotIn('payment_status_id', [4, 5, 6])->delete();
                         $old_order->transactions()->update([
-                            'payment_id' => $temp_order->payment->id,
+                            'invoice_id' => $temp_order->invoice->id,
                         ]);
                         $temp_order->transactions()->update([
-                            'payment_id' => $temp_order->payment->id,
+                            'invoice_id' => $temp_order->invoice->id,
                             'order_id' => $old_order->id,
                             'old_order_id' => Null,
                         ]);
 
-                        // Update Payment
-                        $old_order->payment()->delete();
-                        $temp_order->payment()->update([
+                        // Update invoice
+                        $old_order->invoice()->delete();
+                        $temp_order->invoice()->update([
                             'order_id' => $old_order->id,
                         ]);
 
@@ -1589,8 +1588,8 @@ class OrderController extends Controller
                                 'balance' => $old_order->user->balance + $pended_balance_refund,
                             ]);
 
-                            $old_order->transactions()->where('payment_method', 10)->where('payment_status', 4)->update([
-                                'payment_status' => 5
+                            $old_order->transactions()->where('payment_method_id', 10)->where('payment_status_id', 4)->update([
+                                'payment_status_id' => 5
                             ]);
                         }
 
@@ -1602,8 +1601,8 @@ class OrderController extends Controller
                                 'status' => 1
                             ]);
 
-                            $old_order->transactions()->where('payment_method', 11)->where('payment_status', 4)->update([
-                                'payment_status' => 5
+                            $old_order->transactions()->where('payment_method_id', 11)->where('payment_status_id', 4)->update([
+                                'payment_status_id' => 5
                             ]);
                         }
 
@@ -1648,16 +1647,16 @@ class OrderController extends Controller
                     $old_order->statuses()->attach([305, 306]);
 
                     // Update Transactions
-                    $old_order->transactions()->whereNotIn('payment_status', [4, 5, 6])->delete();
+                    $old_order->transactions()->whereNotIn('payment_status_id', [4, 5, 6])->delete();
                     $temp_order->transactions()->update([
-                        'payment_id' => $temp_order->payment->id,
+                        'invoice_id' => $temp_order->invoice->id,
                         'order_id' => $old_order->id,
                         'old_order_id' => Null,
                     ]);
 
-                    // Update Payment
-                    $old_order->payment()->delete();
-                    $temp_order->payment()->update([
+                    // Update invoice
+                    $old_order->invoice()->delete();
+                    $temp_order->invoice()->update([
                         'order_id' => $old_order->id,
                     ]);
 
@@ -1702,8 +1701,8 @@ class OrderController extends Controller
                             'balance' => $old_order->user->balance + $pended_balance_refund,
                         ]);
 
-                        $old_order->transactions()->where('payment_method', 10)->where('payment_status', 4)->update([
-                            'payment_status' => 5
+                        $old_order->transactions()->where('payment_method_id', 10)->where('payment_status_id', 4)->update([
+                            'payment_status_id' => 5
                         ]);
                     }
 
@@ -1715,8 +1714,8 @@ class OrderController extends Controller
                             'status' => 1
                         ]);
 
-                        $old_order->transactions()->where('payment_method', 11)->where('payment_status', 4)->update([
-                            'payment_status' => 5
+                        $old_order->transactions()->where('payment_method_id', 11)->where('payment_status_id', 4)->update([
+                            'payment_status_id' => 5
                         ]);
                     }
 
@@ -1754,7 +1753,7 @@ class OrderController extends Controller
         try {
             $order = Order::with('payment', 'transactions')->findOrFail($order_id);
 
-            $transactions = $order->transactions->where('payment_status', 2);
+            $transactions = $order->transactions->where('payment_status_id', 2);
 
             // Return the Order
             if (returnTotalOrder($order)) {
@@ -1766,35 +1765,35 @@ class OrderController extends Controller
                 foreach ($transactions as $transaction) {
                     if ($transaction->payment_method == 1) {
                         $transaction->update([
-                            'payment_status' => 3
+                            'payment_status_id' => 3
                         ]);
                     } elseif ($transaction->payment_method == 2 || $transaction->payment_method == 3) {
                         // Void within 24 h
                         if ($transaction->created_at->diffInDays() < 1) {
                             $transaction->update([
-                                'payment_status' => 4,
+                                'payment_status_id' => 4,
                             ]);
 
                             $refund_status = voidRequestPaymob(json_decode($transaction->payment_details)->transaction_id);
 
                             if ($refund_status) {
                                 $transaction->update([
-                                    'payment_status' => 5,
+                                    'payment_status_id' => 5,
                                 ]);
                             } else {
                                 $order->transactions()->create([
-                                    'payment_id' => $transaction->payment_id,
+                                    'invoice_id' => $transaction->invoice_id,
                                     'order_id' => $transaction->order_id,
                                     'user_id' => $transaction->user_id,
                                     'payment_amount' => $transaction->payment_amount,
-                                    'payment_method' => $transaction->payment_method,
-                                    'payment_status' => 6,
+                                    'payment_method_id' => $transaction->payment_method,
+                                    'payment_status_id' => 6,
                                     'paymob_order_id' => $transaction->paymob_order_id,
                                     'payment_details' => $transaction->payment_details,
                                 ]);
 
                                 $transaction->update([
-                                    'payment_status' => 2,
+                                    'payment_status_id' => 2,
                                 ]);
 
                                 $order->update(['status_id' => 405]);
@@ -1805,29 +1804,29 @@ class OrderController extends Controller
                         // Refund after 24 h
                         else {
                             $transaction->update([
-                                'payment_status' => 4,
+                                'payment_status_id' => 4,
                             ]);
 
                             $refund_status = refundRequestPaymob(json_decode($transaction->payment_details)->transaction_id, json_decode($transaction->payment_details)->amount_cents);
 
                             if ($refund_status) {
                                 $transaction->update([
-                                    'payment_status' => 5,
+                                    'payment_status_id' => 5,
                                 ]);
                             } else {
                                 $order->transactions()->create([
-                                    'payment_id' => $transaction->payment_id,
+                                    'invoice_id' => $transaction->invoice_id,
                                     'order_id' => $transaction->order_id,
                                     'user_id' => $transaction->user_id,
                                     'payment_amount' => $transaction->payment_amount,
-                                    'payment_method' => $transaction->payment_method,
-                                    'payment_status' => 6,
+                                    'payment_method_id' => $transaction->payment_method,
+                                    'payment_status_id' => 6,
                                     'paymob_order_id' => $transaction->paymob_order_id,
                                     'payment_details' => $transaction->payment_details,
                                 ]);
 
                                 $transaction->update([
-                                    'payment_status' => 2,
+                                    'payment_status_id' => 2,
                                 ]);
 
                                 $order->update(['status_id' => 405]);
@@ -1836,7 +1835,7 @@ class OrderController extends Controller
                         }
                     } elseif ($transaction->payment_method == 4) {
                         $transaction->update([
-                            'payment_status' => 4,
+                            'payment_status_id' => 4,
                         ]);
                     } elseif ($transaction->payment_method == 10) {
                         // Return balance to user
@@ -1845,7 +1844,7 @@ class OrderController extends Controller
 
                         // Update transaction status :: Refunded
                         $transaction->update([
-                            'payment_status' => 5,
+                            'payment_status_id' => 5,
                         ]);
                     } elseif ($transaction->payment_method == 11) {
                         $order->points()->create([
@@ -2076,7 +2075,7 @@ class OrderController extends Controller
                 'gift_points' => -1 * $returned_points,
                 'delivery_fees' => $returning_fees,
                 'total_weight' => $returned_weight,
-                'payment_method' => $payment_method,
+                'payment_method_id' => $payment_method,
                 'notes' => $order->notes,
                 'old_order_id' => $order->id
             ]);
@@ -2141,7 +2140,7 @@ class OrderController extends Controller
         $order = Order::findOrFail($order_id);
 
         $order->update([
-            'payment_method' => $request->type == "cod" ? 1 : ($request->type == "card" ? 2 : ($request->type == "vodafone" ? 4 : ($request->type == "wallet" ? 10 : 0))),
+            'payment_method_id' => $request->type == "cod" ? 1 : ($request->type == "card" ? 2 : ($request->type == "vodafone" ? 4 : ($request->type == "wallet" ? 10 : 0))),
             'status_id' => 17
         ]);
 
@@ -2239,6 +2238,7 @@ class OrderController extends Controller
     {
         $data = $request->all();
 
+        dd($data);
         ksort($data);
 
         $hmac = $data['hmac'];
@@ -2281,8 +2281,6 @@ class OrderController extends Controller
         if ($generated_hmac == $hmac && $data['success'] == 'true') {
             DB::beginTransaction();
 
-            DB::rollBack();
-
             try {
                 // get payment data
                 $transaction = Transaction::with(['order' => function ($query) {
@@ -2293,7 +2291,7 @@ class OrderController extends Controller
 
                 // update transaction status
                 $transaction->update([
-                    'payment_status' => 2,
+                    'payment_status_id' => PaymentStatus::Paid->value,
                     'payment_details' => json_encode([
                         "amount_cents" => $data['amount_cents'],
                         "points" => 0,
@@ -2301,6 +2299,14 @@ class OrderController extends Controller
                         "source_data_sub_type" => $data['source_data_sub_type']
                     ])
                 ]);
+
+                // update order status
+                $transaction->order->update([
+                    'status_id' => OrderStatus::WaitingForApproval->value
+                ]);
+
+                // add status to order
+                $transaction->order->statuses()->attach(OrderStatus::WaitingForApproval->value);
 
                 // get order from transaction
 
@@ -2357,16 +2363,16 @@ class OrderController extends Controller
                         $old_order->statuses()->attach([305, 306]);
 
                         // Update Transactions
-                        $old_order->transactions()->where('payment_status', 2)->delete();
+                        $old_order->transactions()->where('payment_status_id', 2)->delete();
                         $temp_order->transactions()->update([
-                            'payment_id' => $temp_order->payment->id,
+                            'invoice_id' => $temp_order->invoice->id,
                             'order_id' => $old_order->id,
                             'old_order_id' => Null,
                         ]);
 
                         // Update Payment
-                        $old_order->payment()->delete();
-                        $temp_order->payment()->update([
+                        $old_order->invoice()->delete();
+                        $temp_order->invoice()->update([
                             'order_id' => $old_order->id,
                         ]);
 
@@ -2437,56 +2443,24 @@ class OrderController extends Controller
 
                 // New Orders
                 else {
-                    $order = $transaction->order;
+                    DB::commit();
 
-                    // Order ==> New Order
-                    $bosta_order = createBostaOrder($order, $transaction->payment_method);
+                    // todo :: Send Email To User
 
-                    if ($bosta_order['status']) {
-
-                        // update user's Points
-                        $order->points()->update([
-                            'status' => 1
-                        ]);
-
-                        DB::commit();
-
-                        // todo :: Send Email To User
-
-                        // todo :: Send SMS To User
-
-                        // redirect to done page
-                        Session::flash('success', __('front/homePage.Order Created Successfully'));
-                        return redirect()->route('front.orders.done')->with('order_id', $order->id);
-                    } else {
-                        DB::rollBack();
-
-                        Session::flash('error', __('front/homePage.Order Creation Failed, Please Try Again'));
-                        return redirect()->route('front.orders.payment');
-                    }
+                    // todo :: Send SMS To User
+                    
+                    Session::flash('success', __('front/homePage.Order Created Successfully'));
+                    return redirect()->route('front.orders.done')->with('order_id', $transaction->order->id);
                 }
             } catch (\Throwable $th) {
                 DB::rollBack();
 
-                throw $th;
-
                 $transaction = Transaction::where('paymob_order_id', $data['order'])
                     ->first();
 
-                $new_transaction = Transaction::create([
-                    'order_id' => $transaction->order_id,
-                    'old_order_id' => $transaction->old_order_id,
-                    'user_id' => $transaction->user_id,
-                    'payment_amount' => $transaction->payment_amount,
-                    'payment_method' => $transaction->payment_method,
-                    'payment_status' => $transaction->payment_status,
-                    'paymob_order_id' => $transaction->paymob_order_id,
-                    'payment_details' => $transaction->payment_details,
-                ]);
-
                 $transaction->update([
                     'order_id' => $transaction->order_id,
-                    'payment_status' => 3,
+                    'payment_status_id' => PaymentStatus::PaymentFailed->value,
                     'payment_details' => $data['data_message']
                 ]);
 
@@ -2496,20 +2470,9 @@ class OrderController extends Controller
             $transaction = Transaction::where('paymob_order_id', $data['order'])
                 ->first();
 
-            $new_transaction = Transaction::create([
-                'order_id' => $transaction->order_id,
-                'old_order_id' => $transaction->old_order_id,
-                'user_id' => $transaction->user_id,
-                'payment_amount' => $transaction->payment_amount,
-                'payment_method' => $transaction->payment_method,
-                'payment_status' => $transaction->payment_status,
-                'paymob_order_id' => $transaction->paymob_order_id,
-                'payment_details' => $transaction->payment_details,
-            ]);
-
             $transaction->update([
                 'order_id' => $transaction->order_id,
-                'payment_status' => 3,
+                'payment_status_id' => PaymentStatus::PaymentFailed->value,
                 'payment_details' => $data['data_message']
             ]);
 
@@ -2532,7 +2495,7 @@ class OrderController extends Controller
     {
         $order = Order::with(['user', 'products', 'address', 'transactions'])->findOrFail($order_id);
 
-        $transaction = $order->transactions->where('payment_status', 1)->first();
+        $transaction = $order->transactions->where('payment_status_id', 1)->first();
 
         if ($transaction && ($transaction->payment_method == 2 || $transaction->payment_method == 3)) {
             $payment_key = payByPaymob($order, $transaction);
@@ -2553,33 +2516,33 @@ class OrderController extends Controller
     {
         $order = Order::with(['user', 'products', 'address', 'transactions'])->findOrFail($order_id);
 
-        $transaction = $order->transactions->whereIn('payment_method', [2, 3])->where('payment_status', 2)->first();
+        $transaction = $order->transactions->whereIn('payment_method_id', [2, 3])->where('payment_status_id', 2)->first();
 
         DB::beginTransaction();
 
         try {
             $transaction->update([
-                'payment_status' => 4,
+                'payment_status_id' => 4,
             ]);
 
             $refund_status = refundRequestPaymob(json_decode($transaction->payment_details)->transaction_id, json_decode($transaction->payment_details)->amount_cents);
 
             if ($refund_status) {
                 $transaction->update([
-                    'payment_status' => 5,
+                    'payment_status_id' => 5,
                 ]);
             } else {
                 $transaction->update([
-                    'payment_status' => 2,
+                    'payment_status_id' => 2,
                 ]);
 
                 $order->transactions()->create([
-                    'payment_id' => $transaction->payment_id,
+                    'invoice_id' => $transaction->invoice_id,
                     'order_id' => $transaction->order_id,
                     'user_id' => $transaction->user_id,
                     'payment_amount' => $transaction->payment_amount,
-                    'payment_method' => $transaction->payment_method,
-                    'payment_status' => 6,
+                    'payment_method_id' => $transaction->payment_method,
+                    'payment_status_id' => 6,
                     'paymob_order_id' => $transaction->paymob_order_id,
                     'payment_details' => $transaction->payment_details,
                 ]);
@@ -2592,7 +2555,7 @@ class OrderController extends Controller
 
 
             // todo
-            $transaction = $order->transactions->where('payment_status', 1)->first();
+            $transaction = $order->transactions->where('payment_status_id', 1)->first();
 
             if ($transaction && ($transaction->payment_method == 2 || $transaction->payment_method == 3)) {
                 $payment_key = payByPaymob($order, $transaction);

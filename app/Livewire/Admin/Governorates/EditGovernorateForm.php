@@ -14,6 +14,7 @@ class EditGovernorateForm extends Component
         'ar' => '',
         'en' => ''
     ], $country_id, $governorate_id;
+    public $countries, $governorate;
 
     // validation rules
     public function rules()

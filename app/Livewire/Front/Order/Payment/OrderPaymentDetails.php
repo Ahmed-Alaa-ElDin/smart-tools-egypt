@@ -2,18 +2,12 @@
 
 namespace App\Livewire\Front\Order\Payment;
 
-use App\Models\Coupon;
-use App\Models\Order;
-use App\Models\Payment;
-use App\Models\User;
-use Gloudemans\Shoppingcart\Facades\Cart;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 
 class OrderPaymentDetails extends Component
 {
-    public $points, $points_egp;
+    public $points;
+    public $points_egp;
     public $balance;
     public $payment_method;
     public $iframe;

@@ -16,6 +16,8 @@ class TodayDealsList extends Component
 
     public $search = "", $list = [];
 
+    public $section;
+
     protected $listeners = ['clearSearch'];
 
     public function mount()

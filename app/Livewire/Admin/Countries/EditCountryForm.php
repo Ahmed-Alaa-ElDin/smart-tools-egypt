@@ -10,6 +10,8 @@ use Livewire\Component;
 class EditCountryForm extends Component
 {
     public $country_id;
+    public $name = ['ar' => '', 'en' => ''];
+    public $country;
 
     // validation rules
     public function rules()

@@ -210,7 +210,7 @@ return [
     <br>- There is also an installment plan for all Egyptian banks.
     <br>- Vodafone Cash by communicating with customer service :icon.",
     "Shipping Details Saved Successfully"       =>      "Shipping Details Saved Successfully",
-    "Shipping Details Haven't Saved"            =>      "Shipping Details Haven't Saved",
+    "Shipping Details Haven't Saved"            =>      "Shipping Details Have not Saved",
     "Order Billing Details"     =>      "Order Billing Details",
     "Please select a shipping address & contact phone & ensure that we can deliver to your address"         =>      "Please select a shipping address & contact phone & ensure that we can deliver to your address",
     "You will get:"             =>      "You will get:",

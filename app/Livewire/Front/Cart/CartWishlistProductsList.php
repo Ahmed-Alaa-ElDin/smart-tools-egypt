@@ -2,9 +2,10 @@
 
 namespace App\Livewire\Front\Cart;
 
-use Gloudemans\Shoppingcart\Facades\Cart;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Product;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 class CartWishlistProductsList extends Component
 {

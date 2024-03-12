@@ -65,9 +65,9 @@ class Order extends Model
         return $this->belongsToMany(Status::class)->withPivot('id', 'notes')->withTimestamps();
     }
 
-    public function payment()
+    public function invoice()
     {
-        return $this->hasOne(Payment::class);
+        return $this->hasOne(Invoice::class);
     }
 
     public function points()

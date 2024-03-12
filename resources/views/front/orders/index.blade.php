@@ -31,7 +31,7 @@
                     <div class="p-7 flex flex-col justify-center items-center gap-3">
                         {{-- Order List :: Start --}}
                         @forelse ($orders as $order)
-                            @if (!in_array($order->status_id, [201, 301, 303, 304, 15]))
+                            @if (!in_array($order->status_id, [201, 301, 303, 304]))
                                 {{-- Order :: Start --}}
                                 <div class="rounded overflow-hidden shadow-lg border border-gray-200 w-full">
                                     {{-- Order Header --}}
@@ -62,7 +62,7 @@
                                                 <div class="flex rtl:flex-row-reverse gap-1 text-sm">
                                                     <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
                                                     <span class=""
-                                                        dir="ltr">{{ number_format(abs($order->payment->total), 2, '.', '\'') }}</span>
+                                                        dir="ltr">{{ number_format(abs($order->invoice->total), 2, '.', '\'') }}</span>
                                                 </div>
                                             </div>
 
@@ -96,7 +96,7 @@
                                             {{-- Order Status --}}
                                             <div class="flex flex-col justify-center items-center gap-1 min-w-max">
                                                 <span
-                                                    class="text-xs py-1 px-2 shadow-inner rounded-xl font-bold {{ in_array($order->status_id, [1, 2, 14, 15, 16])
+                                                    class="text-xs py-1 px-2 shadow-inner rounded-xl font-bold {{ in_array($order->status_id, [1, 2, 14, 16])
                                                         ? 'bg-yellow-100 text-yellow-900'
                                                         : (in_array($order->status_id, [3, 45, 12])
                                                             ? 'bg-green-100 text-green-900'

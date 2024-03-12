@@ -21,11 +21,31 @@ class OfferForm extends Component
 
     public $offer_id;
 
-    public $banner, $banner_name, $deletedImages = [];
+    public $banner;
+    public $banner_name;
+    public $deletedImages = [];
     public $date_range = ['start' => '', 'end' => ''];
-    public $title = ['en' => '', 'ar' => ''], $free_shipping = false, $on_orders = 0, $type, $value = 0;
-
-    public $search1;
+    public $title = ['en' => '', 'ar' => ''];
+    public $free_shipping = false;
+    public $on_orders = 0;
+    public $type;
+    public $value = 0;
+    public $brands;
+    public $supercategories;
+    public $oldSupercategories = [];
+    public $oldCategories = [];
+    public $oldSubcategories = [];
+    public $oldBrands = [];
+    public $oldProducts = [];
+    public $oldCollections = [];
+    public $deleteSupercategories_id = [];
+    public $deleteCategories_id = [];
+    public $deleteSubcategories_id = [];
+    public $deleteBrands_id = [];
+    public $deleteProducts_id = [];
+    public $deleteCollections_id = [];
+    public $items = [];
+    public $offer;
 
     protected $listeners = [
         "daterangeUpdated",
@@ -516,7 +536,6 @@ class OfferForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            dd($th);
             Session::flash('error', __("admin/offersPages.Offer hasn't been added"));
             redirect()->route('admin.offers.index');
         }
@@ -639,7 +658,7 @@ class OfferForm extends Component
             redirect()->route('admin.offers.index');
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+            // throw $th;
             Session::flash('error', __("admin/offersPages.Offer hasn't been updated"));
             redirect()->route('admin.offers.index');
         }

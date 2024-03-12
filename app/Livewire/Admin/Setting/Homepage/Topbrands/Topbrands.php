@@ -11,6 +11,8 @@ class Topbrands extends Component
 {
     public $items;
 
+    public $brands;
+
     public function rules()
     {
         return [

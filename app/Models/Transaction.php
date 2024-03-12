@@ -10,14 +10,14 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'payment_id',
+        'invoice_id',
         'order_id',
         'old_order_id',
         'user_id',
         'payment_amount',
-        'payment_method',
-        'payment_status',
-        'paymob_order_id',
+        'payment_method_id',
+        'payment_status_id',
+        'service_provider_transaction_id',
         'payment_details',
     ];
 
@@ -31,9 +31,19 @@ class Transaction extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function payment()
+    public function invoice()
     {
-        return $this->belongsTo(Payment::class);
+        return $this->belongsTo(Invoice::class);
+    }
+
+    public function paymentStatus()
+    {
+        return $this->belongsTo(PaymentStatus::class);
+    }
+    
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class);
     }
 
     public function scopePending($query)

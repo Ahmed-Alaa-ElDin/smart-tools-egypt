@@ -17,8 +17,35 @@ use Livewire\Component;
 class CouponForm extends Component
 {
     public $coupon_id;
-
-    public $code, $type = 0, $value = 0, $expire_at, $number, $on_orders = 0, $free_shipping = 0;
+    public $coupon;
+    public $code;
+    public $type = 0;
+    public $value = 0;
+    public $expire_at;
+    public $number;
+    public $on_orders = 0;
+    public $free_shipping = 0;
+    public $brands;
+    public $supercategories;
+    public $items = [];
+    public $oldSupercategories;
+    public $oldCategories;
+    public $oldSubcategories;
+    public $oldBrands;
+    public $oldProducts;
+    public $oldCollections;
+    public $oldSupercategories_id;
+    public $oldCategories_id;
+    public $oldSubcategories_id;
+    public $oldBrands_id;
+    public $oldProducts_id;
+    public $oldCollections_id;
+    public $deleteSupercategories_id;
+    public $deleteCategories_id;
+    public $deleteSubcategories_id;
+    public $deleteBrands_id;
+    public $deleteProducts_id;
+    public $deleteCollections_id;
 
     protected $listeners = [
         "brandUpdated",
@@ -471,7 +498,7 @@ class CouponForm extends Component
             }
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+            // throw $th;
             Session::flash('error', __("admin/offersPages.Coupon hasn't been added"));
             redirect()->route('admin.coupons.index');
         }
@@ -581,7 +608,7 @@ class CouponForm extends Component
             redirect()->route('admin.coupons.index');
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+            // throw $th;
             Session::flash('error', __("admin/offersPages.Coupon hasn't been updated"));
             redirect()->route('admin.coupons.index');
         }

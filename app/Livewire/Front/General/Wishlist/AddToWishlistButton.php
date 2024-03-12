@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Front\General\Wishlist;
 
-use Gloudemans\Shoppingcart\Facades\Cart;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Product;
 use Livewire\Component;
+use App\Models\Collection;
+use Illuminate\Support\Facades\Auth;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 class AddToWishlistButton extends Component
 {

@@ -30,6 +30,12 @@ class OrderShippingSummary extends Component
     public $best_zone_id = null;
     public $city_name = null;
     public $address = null;
+    public $items_total_quantities = 0;
+    public $items_total_weights = 0;
+    public $items_total_points = 0;
+    public $offers_total_points = 0;
+    public $after_offers_total_points = 0;
+    public $total_points_after_order_points = 0;
 
     protected $listeners = [
         'AddressUpdated' => 'render',

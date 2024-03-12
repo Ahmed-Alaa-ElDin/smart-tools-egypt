@@ -15,7 +15,16 @@ use Livewire\Component;
 class AddZoneForm extends Component
 {
     // public Properties
-    public $delivery_id, $delivery, $countries, $governorates, $cities, $zones;
+    public $delivery_id;
+    public $delivery;
+    public $countries;
+    public $governorates;
+    public $cities;
+    public $zones;
+    public $name = [
+        'ar' => '',
+        'en' => ''
+    ];
 
 
     // Validation Rules

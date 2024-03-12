@@ -488,8 +488,6 @@ function editBostaOrder($order, $old_order)
         'Accept'            =>  'application/json'
     ])->patch('https://app.bosta.co/api/v0/deliveries/' . $order->order_delivery_id, $order_data);
 
-    // dd($decoded_bosta_response = $bosta_response->json());
-
     if ($bosta_response->successful()) {
         return true;
     } else {
@@ -527,7 +525,7 @@ function payByPaymob($order, $transaction)
     try {
         // create paymob auth token
         $first_step = Http::acceptJson()->post('https://accept.paymob.com/api/auth/tokens', [
-            "api_key" => env('PAYMOB_TOKEN')
+            "api_key" => env('PAYMOB_API_KEY')
         ])->json();
 
         $auth_token = $first_step['token'];
@@ -576,7 +574,7 @@ function payByPaymob($order, $transaction)
 
         return $payment_key;
     } catch (\Throwable $th) {
-        return false;
+        return '';
     }
 }
 
@@ -585,7 +583,7 @@ function voidRequestPaymob($transaction_id)
 {
     try {
         $first_step = Http::acceptJson()->post('https://accept.paymob.com/api/auth/tokens', [
-            "api_key" => env('PAYMOB_TOKEN')
+            "api_key" => env('PAYMOB_API_KEY')
         ])->json();
 
         $auth_token = $first_step['token'];
@@ -608,7 +606,7 @@ function refundRequestPaymob($transaction_id, $refund)
 {
     try {
         $first_step = Http::acceptJson()->post('https://accept.paymob.com/api/auth/tokens', [
-            "api_key" => env('PAYMOB_TOKEN')
+            "api_key" => env('PAYMOB_API_KEY')
         ])->json();
 
         $auth_token = $first_step['token'];

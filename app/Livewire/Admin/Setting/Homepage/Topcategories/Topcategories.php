@@ -12,6 +12,9 @@ class Topcategories extends Component
 {
     public $items;
 
+    public $supercategories;
+    public $categories;
+
     public function rules()
     {
         return [

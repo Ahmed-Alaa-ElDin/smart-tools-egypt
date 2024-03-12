@@ -16,17 +16,26 @@ use Livewire\Component;
 
 class RegisterFromOrder extends Component
 {
-    public $f_name, $l_name, $phone, $email, $password, $password_confirmation,
-        $address = [
-            'country_id' => null,
-            'governorate_id' => null,
-            'city_id' => null,
-            'details' => null,
-            'landmarks' => null,
-        ];
-
-    public $countries = [], $governorates = [], $cities = [];
-    public $country = null, $governorate = null, $city = null;
+    public $f_name;
+    public $l_name;
+    public $phone;
+    public $email;
+    public $password;
+    public $password_confirmation;
+    public $address = [
+        'country_id' => null,
+        'governorate_id' => null,
+        'city_id' => null,
+        'details' => null,
+        'landmarks' => null,
+    ];
+    public $countries = [];
+    public $governorates = [];
+    public $cities = [];
+    public $country = null;
+    public $governorate = null;
+    public $city = null;
+    public $cart;
 
     // Validation Rules
     public function rules()

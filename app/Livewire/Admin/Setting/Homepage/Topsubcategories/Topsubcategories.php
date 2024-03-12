@@ -13,6 +13,10 @@ class Topsubcategories extends Component
 {
     public $items;
 
+    public $supercategories;
+
+    public $subcategories;
+
     public function rules()
     {
         return [

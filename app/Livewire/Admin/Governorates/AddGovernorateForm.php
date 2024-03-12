@@ -14,6 +14,7 @@ class AddGovernorateForm extends Component
         'ar' => '',
         'en' => ''
     ], $country_id;
+    public $countries;
 
     // validation rules
     public function rules()

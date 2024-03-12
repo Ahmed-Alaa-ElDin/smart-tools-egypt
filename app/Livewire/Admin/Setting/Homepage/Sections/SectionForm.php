@@ -13,6 +13,7 @@ class SectionForm extends Component
         'ar' => '',
         'en' => ''
     ];
+    public $section;
 
     public $selected_offer, $selected_products, $selected_banners;
 

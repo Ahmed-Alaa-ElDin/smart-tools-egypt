@@ -16,6 +16,8 @@ class EditCityForm extends Component
         'en' => ''
     ], $country_id, $governorate_id, $city_id;
 
+    public $countries, $governorates, $city;
+
     // validation rules
     public function rules()
     {

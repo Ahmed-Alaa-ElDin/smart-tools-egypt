@@ -2,11 +2,10 @@
 
 namespace App\Livewire\Admin\Orders;
 
-use App\Models\Coupon;
 use App\Models\Order;
-use App\Models\Payment;
-use Illuminate\Support\Facades\DB;
+use App\Models\Invoice;
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 
 class PaymentHistory extends Component
 {
@@ -92,7 +91,7 @@ class PaymentHistory extends Component
     ############## Pop-up Payment Confirmed and Database updates :: Start ##############
     public function paymentConfirmed($id, $value)
     {
-        $payment = Payment::with('order')->findOrFail($id);
+        $payment = Invoice::with('order')->findOrFail($id);
         $payment_amount = $value[0] <= $payment->payment_amount ? $value[0] : $payment->payment_amount;
         $transaction_id = $value[1];
         $order = $payment->order;
@@ -194,7 +193,7 @@ class PaymentHistory extends Component
     ############## Pop-up Refund Destination Choices :: Start ##############
     public function refundDestination($payment_id)
     {
-        $payment = Payment::findOrFail($payment_id);
+        $payment = Invoice::findOrFail($payment_id);
         $disabled = in_array($payment->payment_method, [2, 3]) ? 'disabled' : '';
         $transaction_id = in_array($payment->payment_method, [2, 3]) ? json_decode($payment->payment_details)->transaction_id : "";
 
@@ -244,7 +243,7 @@ class PaymentHistory extends Component
     ############## Refund Confirmed :: Start ##############
     public function refundConfirmed($id, $value)
     {
-        $payment = Payment::with('order', 'user')->findOrFail($id);
+        $payment = Invoice::with('order', 'user')->findOrFail($id);
         $payment_amount = $value[0] <= abs($payment->payment_amount) ? $value[0] : abs($payment->payment_amount);
         $transaction_id = $value[1];
         $type = $value[2];
@@ -261,7 +260,7 @@ class PaymentHistory extends Component
         // return to customer By Card
         elseif (in_array($type, [2, 3])) {
             try {
-                $old_payment = Payment::where('payment_details->transaction_id', $transaction_id)
+                $old_payment = Invoice::where('payment_details->transaction_id', $transaction_id)
                     ->where('payment_status', 2)
                     ->firstOrFail();
             } catch (\Throwable $th) {

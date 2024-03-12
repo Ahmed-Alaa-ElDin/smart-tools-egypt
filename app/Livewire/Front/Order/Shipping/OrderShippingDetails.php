@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Front\Order\Shipping;
 
+use App\Enums\OrderStatus;
 use App\Models\Address;
 use App\Models\City;
 use App\Models\Country;
@@ -249,11 +250,13 @@ class OrderShippingDetails extends Component
 
     public function checkDefaults()
     {
-        $zones_count = auth()->user()->addresses->where('default', 1)->count() ? Zone::with(['destinations'])
+        $zones_count = auth()->user()->addresses->where('default', 1)->count() ?
+            Zone::with(['destinations'])
             ->where('is_active', 1)
             ->whereHas('destinations', fn ($q) => $q->where('city_id', auth()->user()->addresses->where('default', 1)->first()->city->id))
             ->whereHas('delivery', fn ($q) => $q->where('is_active', 1))
-            ->count() : 0;
+            ->count() :
+            0;
 
         if (auth()->user()->addresses->where('default', 1)->count() && auth()->user()->phones->where('default', 1)->count() && $zones_count) {
             $this->billing = true;
@@ -274,11 +277,11 @@ class OrderShippingDetails extends Component
             DB::beginTransaction();
 
             try {
-                $order = Order::where('user_id', auth()->user()->id)->whereIn('status_id', [201, 202])->first() ?? new Order;
+                $order = Order::where('user_id', auth()->user()->id)->whereIn('status_id', [OrderStatus::UnderProcessing->value, OrderStatus::Created->value])->first() ?? new Order;
 
                 $order->fill([
                     'user_id' => auth()->user()->id,
-                    'status_id' => 201,
+                    'status_id' => OrderStatus::UnderProcessing->value,
                     'address_id' => $address->id,
                     'phone1' => $phones->where('default', 1)->first()->phone,
                     'phone2' => $phones->where('default', 0)->count() ? implode("-", $phones->where('default', 0)->pluck('phone')->toArray()) : null,
@@ -291,8 +294,8 @@ class OrderShippingDetails extends Component
 
                 $order->save();
 
-                if ($order->statuses()->count() == 0 || $order->statuses()->orderBy('pivot_created_at', 'desc')->first()->id != 201) {
-                    $order->statuses()->attach(201);
+                if ($order->statuses()->count() == 0 || $order->statuses()->orderBy('pivot_created_at', 'desc')->first()->id != OrderStatus::UnderProcessing->value) {
+                    $order->statuses()->attach(OrderStatus::UnderProcessing->value);
                 }
 
                 DB::commit();
