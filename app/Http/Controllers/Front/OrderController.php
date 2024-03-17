@@ -2249,7 +2249,7 @@ class OrderController extends Controller
 
         $hmac = $data['hmac'] ?? '';
 
-        Log::channel('payments')->info("source_hmac ".json_encode($hmac));
+        Log::channel('payments')->info("source_hmac " . json_encode($hmac));
 
         if (isset($data["transaction"])) {
             $data = $data["transaction"];
@@ -2515,8 +2515,45 @@ class OrderController extends Controller
     public function paymentCheckResponse(Request $request)
     {
         $data = $request->all();
+        $hmac = $data['hmac'] ?? '';
 
-        dd($data);
+        $array = [
+            'amount_cents',
+            'created_at',
+            'currency',
+            'error_occured',
+            'has_parent_transaction',
+            'id',
+            'integration_id',
+            'is_3d_secure',
+            'is_auth',
+            'is_capture',
+            'is_refunded',
+            'is_standalone_payment',
+            'is_voided',
+            'order',
+            'owner',
+            'pending',
+            'source_data_pan',
+            'source_data_sub_type',
+            'source_data_type',
+            'success'
+        ];
+
+        $concat_data = '';
+
+        foreach ($array as $key) {
+            if (isset($data[$key])) {
+                $concat_data .= $data[$key];
+            }
+        }
+
+        $secret = env('PAYMOB_HMAC');
+
+        $generated_hmac = hash_hmac('SHA512', $concat_data, $secret);
+
+
+        dd($data, $generated_hmac, $hmac);
 
         $cardGateway = new CardGateway();
 
