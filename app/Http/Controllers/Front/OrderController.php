@@ -2248,7 +2248,9 @@ class OrderController extends Controller
         $Payment = new PaymentService($cardGateway);
 
         if ($Payment->validateHmacProcessed($data) && $data['success'] == 'true') {
+            Log::channel('payments')->info('HMAC is valid');
         } else {
+            Log::channel('payments')->info('HMAC is not valid');
         }
 
 
