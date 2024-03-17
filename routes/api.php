@@ -14,8 +14,12 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+// Bosta Webhook
 Route::post('/orders/update-status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
 
+// Paymob Webhook
+Route::post('/orders/payment/check-processed', 'paymentCheckProcessed')->name('payment.check-processed');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->state;
