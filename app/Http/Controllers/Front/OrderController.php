@@ -2241,7 +2241,7 @@ class OrderController extends Controller
     {
         $data = $request->all();
 
-        Log::channel('payments')->info(json_encode($data));
+        Log::channel('daily')->info(json_encode($data));
 
         $cardGateway = new CardGateway();
 
