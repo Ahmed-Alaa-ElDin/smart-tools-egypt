@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use App\Services\Front\Payments\PaymentService;
 use App\Services\Front\Payments\Gateways\CardGateway;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -2240,6 +2241,8 @@ class OrderController extends Controller
     {
         $data = $request->all();
 
+        Log::info($data);
+
         dd($data);
         ksort($data);
 
@@ -2485,6 +2488,8 @@ class OrderController extends Controller
     public function paymentCheckResponse(Request $request)
     {
         $data = $request->all();
+
+        dd($data);
 
         $cardGateway = new CardGateway();
 
