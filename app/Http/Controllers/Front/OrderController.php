@@ -2241,7 +2241,7 @@ class OrderController extends Controller
     {
         $data = $request->all();
 
-        Log::info($request->getContent());
+        // Log::info($request->getContent());
 
         dd($data);
         ksort($data);
