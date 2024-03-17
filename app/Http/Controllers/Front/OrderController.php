@@ -2249,7 +2249,7 @@ class OrderController extends Controller
 
         $hmac = $data['hmac'] ?? '';
 
-        Log::channel('payments')->info("source_hmac".json_encode($hmac));
+        Log::channel('payments')->info("source_hmac ".json_encode($hmac));
 
         if (isset($data["transaction"])) {
             $data = $data["transaction"];
@@ -2281,7 +2281,7 @@ class OrderController extends Controller
 
             foreach ($array as $key) {
                 if (isset($data[$key])) {
-                    $concat_data .= $data[$key];
+                    $concat_data .= (string)$data[$key];
                 }
             }
 
