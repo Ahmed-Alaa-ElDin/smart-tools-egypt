@@ -18,9 +18,6 @@ use Illuminate\Support\Facades\Route;
 // Bosta Webhook
 Route::post('/orders/update-status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
 
-// Paymob Webhook
-Route::post('/orders/payment/check-processed', [OrderController::class, 'paymentCheckProcessed'])->name('payment.check-processed');
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->state;
 });
