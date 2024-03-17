@@ -2489,6 +2489,8 @@ class OrderController extends Controller
     {
         $data = $request->all();
 
+        Log::info($data);
+
         dd($data);
 
         $cardGateway = new CardGateway();
