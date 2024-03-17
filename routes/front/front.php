@@ -77,7 +77,7 @@ Route::group([
 
         // Check the paymob response
         Route::post('/payment/check-processed', 'paymentCheckProcessed')->name('payment.check-processed');
-        Route::get('/payment/check-response', 'paymentCheckResponse')->name('payment.check-response')->withoutMiddleware(['verifyCsrf', 'auth', 'under_construction']);
+        Route::get('/payment/check-response', 'paymentCheckResponse')->name('payment.check-response')->withoutMiddleware(['auth', 'under_construction']);
 
         // Confirm the order
         Route::get('/done', 'done')->name('done');
