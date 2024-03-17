@@ -2280,8 +2280,16 @@ class OrderController extends Controller
             $concat_data = '';
 
             foreach ($array as $key) {
-                if (isset($data[$key])) {
-                    $concat_data .= is_bool($data[$key]) ? ($data[$key] ? 'true' : 'false') : $data[$key];
+                $explodedKey = explode('.', $key);
+
+                if (count($explodedKey) > 1) {
+                    if (isset($data[$explodedKey[0]][$explodedKey[1]])) {
+                        $concat_data .= is_bool($data[$explodedKey[0]][$explodedKey[1]]) ? ($data[$explodedKey[0]][$explodedKey[1]] ? 'true' : 'false') : $data[$explodedKey[0]][$explodedKey[1]];
+                    }
+                } else {
+                    if (isset($data[$key])) {
+                        $concat_data .= is_bool($data[$key]) ? ($data[$key] ? 'true' : 'false') : $data[$key];
+                    }
                 }
             }
 
