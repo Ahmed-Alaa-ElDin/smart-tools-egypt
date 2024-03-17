@@ -2247,60 +2247,62 @@ class OrderController extends Controller
 
         $Payment = new PaymentService($cardGateway);
 
-        $hmac = $data['hmac'] ?? '';
+        // $hmac = $data['hmac'] ?? '';
 
-        Log::channel('payments')->info("source_hmac " . json_encode($hmac));
+        // Log::channel('payments')->info("source_hmac ".json_encode($hmac));
 
-        if (isset($data["transaction"])) {
-            $data = $data["transaction"];
+        // if (isset($data["transaction"])) {
+        //     $data = $data["transaction"];
 
-            $array = [
-                'amount_cents',
-                'created_at',
-                'currency',
-                'error_occured',
-                'has_parent_transaction',
-                'id',
-                'integration_id',
-                'is_3d_secure',
-                'is_auth',
-                'is_capture',
-                'is_refunded',
-                'is_standalone_payment',
-                'is_voided',
-                'order.id',
-                'owner',
-                'pending',
-                'source_data.pan',
-                'source_data.sub_type',
-                'source_data.type',
-                'success'
-            ];
+        //     $array = [
+        //         'amount_cents',
+        //         'created_at',
+        //         'currency',
+        //         'error_occured',
+        //         'has_parent_transaction',
+        //         'id',
+        //         'integration_id',
+        //         'is_3d_secure',
+        //         'is_auth',
+        //         'is_capture',
+        //         'is_refunded',
+        //         'is_standalone_payment',
+        //         'is_voided',
+        //         'order.id',
+        //         'owner',
+        //         'pending',
+        //         'source_data.pan',
+        //         'source_data.sub_type',
+        //         'source_data.type',
+        //         'success'
+        //     ];
 
-            $concat_data = '';
+        //     $concat_data = '';
 
-            foreach ($array as $key) {
-                $explodedKey = explode('.', $key);
+        //     foreach ($array as $key) {
+        //         $explodedKey = explode('.', $key);
 
-                if (count($explodedKey) > 1) {
-                    if (isset($data[$explodedKey[0]][$explodedKey[1]])) {
-                        $concat_data .= is_bool($data[$explodedKey[0]][$explodedKey[1]]) ? ($data[$explodedKey[0]][$explodedKey[1]] ? 'true' : 'false') : $data[$explodedKey[0]][$explodedKey[1]];
-                    }
-                } else {
-                    if (isset($data[$key])) {
-                        $concat_data .= is_bool($data[$key]) ? ($data[$key] ? 'true' : 'false') : $data[$key];
-                    }
-                }
-            }
+        //         if (count($explodedKey) > 1) {
+        //             if (isset($data[$explodedKey[0]][$explodedKey[1]])) {
+        //                 $concat_data .= is_bool($data[$explodedKey[0]][$explodedKey[1]]) ? ($data[$explodedKey[0]][$explodedKey[1]] ? 'true' : 'false') : $data[$explodedKey[0]][$explodedKey[1]];
+        //             }
+        //         } else {
+        //             if (isset($data[$key])) {
+        //                 $concat_data .= is_bool($data[$key]) ? ($data[$key] ? 'true' : 'false') : $data[$key];
+        //             }
+        //         }
+        //     }
 
-            Log::channel('payments')->info("concat_data " . json_encode($concat_data));
+        //     Log::channel('payments')->info("concat_data " . json_encode($concat_data));
 
-            $secret = env('PAYMOB_HMAC');
+        //     $secret = env('PAYMOB_HMAC');
 
-            $generated_hmac = hash_hmac('SHA512', $concat_data, $secret);
+        //     $generated_hmac = hash_hmac('SHA512', $concat_data, $secret);
 
-            Log::channel('payments')->info("generated_hmac " . json_encode($generated_hmac));
-        }
+        //     Log::channel('payments')->info("generated_hmac " . json_encode($generated_hmac));
+
+        //     return $generated_hmac == $hmac;
+        // }
 
 
         if ($Payment->validateHmacProcessed($data) && $data['success'] == 'true') {
@@ -2515,45 +2517,6 @@ class OrderController extends Controller
     public function paymentCheckResponse(Request $request)
     {
         $data = $request->all();
-        $hmac = $data['hmac'] ?? '';
-
-        $array = [
-            'amount_cents',
-            'created_at',
-            'currency',
-            'error_occured',
-            'has_parent_transaction',
-            'id',
-            'integration_id',
-            'is_3d_secure',
-            'is_auth',
-            'is_capture',
-            'is_refunded',
-            'is_standalone_payment',
-            'is_voided',
-            'order',
-            'owner',
-            'pending',
-            'source_data_pan',
-            'source_data_sub_type',
-            'source_data_type',
-            'success'
-        ];
-
-        $concat_data = '';
-
-        foreach ($array as $key) {
-            if (isset($data[$key])) {
-                $concat_data .= $data[$key];
-            }
-        }
-
-        $secret = env('PAYMOB_HMAC');
-
-        $generated_hmac = hash_hmac('SHA512', $concat_data, $secret);
-
-
-        dd($data, $concat_data, $generated_hmac, $hmac);
 
         $cardGateway = new CardGateway();
 
@@ -2561,209 +2524,12 @@ class OrderController extends Controller
 
         if ($Payment->validateHmacResponse($data) && $data['success'] == 'true') {
 
-            DB::beginTransaction();
+            // todo :: Send Email To User
 
-            try {
-                // get transaction data
-                $transaction = Transaction::with(
-                    ['order' => function ($query) {
-                        $query->with(['user', 'products', 'address']);
-                    }]
-                )
-                    ->where([
-                        'id' => $data['merchant_txn_ref'],
-                        'payment_status_id' => PaymentStatus::Pending->value,
-                        'payment_amount' => $data['amount']
-                    ])
-                    ->first();
+            // todo :: Send SMS To User
 
-                // update transaction status
-                $transaction->update([
-                    'payment_status_id' => PaymentStatus::Paid->value,
-                    'payment_details' => json_encode([
-                        "amount_cents" => $data['amount_cents'],
-                        "points" => 0,
-                        "transaction_id" => $data['id'],
-                        "source_data_sub_type" => $data['source_data_sub_type']
-                    ])
-                ]);
-
-                // update order status
-                $transaction->order->update([
-                    'status_id' => OrderStatus::WaitingForApproval->value
-                ]);
-
-                // add status to order
-                $transaction->order->statuses()->attach(OrderStatus::WaitingForApproval->value);
-
-                // get order from transaction
-
-                // Old Orders
-                if ($transaction->old_order_id != null) {
-                    $old_order = Order::with(['products', 'collections', 'user', 'payment', 'transactions', 'points'])->findOrFail($transaction->old_order_id);
-                    $temp_order = Order::with(['products', 'collections', 'payment', 'transactions', 'points'])->findOrFail($transaction->order_id);
-
-                    // New Products Data
-                    $new_products = [];
-                    if ($temp_order->products->count()) {
-                        foreach ($temp_order->products as $product) {
-                            $new_products[$product['id']] = [
-                                'quantity' => $product->pivot->quantity,
-                                'original_price' => $product->pivot->original_price,
-                                'price' => $product->pivot->price,
-                                'points' => $product->pivot->points,
-                                'coupon_discount' => $product->pivot->coupon_discount,
-                                'coupon_points' => $product->pivot->coupon_points,
-                            ];
-                        }
-                    }
-
-                    // New Collections Data
-                    $new_collections = [];
-                    if ($temp_order->collections->count()) {
-                        foreach ($temp_order->collections as $collection) {
-                            $new_collections[$collection['id']] = [
-                                'quantity' => $collection->pivot->quantity,
-                                'original_price' => $collection->pivot->original_price,
-                                'price' => $collection->pivot->price,
-                                'points' => $collection->pivot->points,
-                                'coupon_discount' => $collection->pivot->coupon_discount,
-                                'coupon_points' => $collection->pivot->coupon_points,
-                            ];
-                        }
-                    }
-
-                    if (editBostaOrder($temp_order, $old_order)) {
-                        // Update Order Data
-                        $old_order->update([
-                            'status_id' => 306,
-                            'num_of_items' => $temp_order->num_of_items,
-                            'items_points' => $temp_order->items_points,
-                            'offers_items_points' => $temp_order->offers_items_points,
-                            'offers_order_points' => $temp_order->offers_order_points,
-                            'coupon_items_points' => $temp_order->coupon_items_points,
-                            'coupon_order_points' => $temp_order->coupon_order_points,
-                            'gift_points' => $temp_order->gift_points,
-                            'total_weight' => $temp_order->total_weight,
-                        ]);
-
-                        // Update order status
-                        $old_order->statuses()->attach([305, 306]);
-
-                        // Update Transactions
-                        $old_order->transactions()->where('payment_status_id', 2)->delete();
-                        $temp_order->transactions()->update([
-                            'invoice_id' => $temp_order->invoice->id,
-                            'order_id' => $old_order->id,
-                            'old_order_id' => Null,
-                        ]);
-
-                        // Update Payment
-                        $old_order->invoice()->delete();
-                        $temp_order->invoice()->update([
-                            'order_id' => $old_order->id,
-                        ]);
-
-                        // Return Old Products
-                        // Direct Products
-                        $old_order->products()->each(function ($product) {
-                            $product->quantity += $product->pivot->quantity;
-                            $product->save();
-                        });
-                        $old_order->products()->detach();
-
-                        // Through Collections
-                        $old_order->collections()->each(function ($collection) {
-                            $collection->products()->each(function ($product) use (&$collection) {
-                                $product->quantity += $collection->pivot->quantity * $product->pivot->quantity;
-                                $product->save();
-                            });
-                        });
-                        $old_order->collections()->detach();
-
-                        // Subtract New Products
-                        // Direct Products
-                        $temp_order->products()->each(function ($product) {
-                            $product->quantity -= $product->pivot->quantity;
-                            $product->save();
-                        });
-                        $old_order->products()->attach($new_products);
-
-                        // Through Collections
-                        $temp_order->collections()->each(function ($collection) {
-                            $collection->products()->each(function ($product) use (&$collection) {
-                                $product->quantity -= ($collection->pivot->quantity * $product->pivot->quantity);
-                                $product->save();
-                            });
-                        });
-                        $old_order->collections()->attach($new_collections);
-
-                        // Add gift points
-                        // Add Points to the user if present
-                        if ($temp_order->gift_points) {
-                            $old_order->user->points()->create([
-                                'order_id' => $old_order->id,
-                                'value' => $temp_order->gift_points,
-                                'status' => 0
-                            ]);
-                        }
-
-                        // Delete Temporary Order
-                        $temp_order->forceDelete();
-
-                        DB::commit();
-
-                        // todo :: Send Email To User
-
-                        // todo :: Send SMS To User
-
-                        // redirect to done page
-                        Session::flash('success', __('front/homePage.Order Edited Successfully'));
-
-                        return redirect()->route('front.orders.index');
-                    } else {
-                        DB::rollback();
-
-                        Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
-                        return redirect()->route('front.orders.index');
-                    }
-                }
-
-                // New Orders
-                else {
-                    DB::commit();
-
-                    // todo :: Send Email To User
-
-                    // todo :: Send SMS To User
-
-                    Session::flash('success', __('front/homePage.Order Created Successfully'));
-                    return redirect()->route('front.orders.done')->with('order_id', $transaction->order->id);
-                }
-            } catch (\Throwable $th) {
-                DB::rollBack();
-
-                $transaction = Transaction::where('paymob_order_id', $data['order'])
-                    ->first();
-
-                $transaction->update([
-                    'order_id' => $transaction->order_id,
-                    'payment_status_id' => PaymentStatus::PaymentFailed->value,
-                    'payment_details' => $data['data_message']
-                ]);
-
-                return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
-            }
+            return redirect()->route('front.orders.index')->with('success', __('front/homePage.Payment Done Successfully'));
         } else {
-            $transaction = Transaction::where('paymob_order_id', $data['order'])
-                ->first();
-
-            $transaction->update([
-                'order_id' => $transaction->order_id,
-                'payment_status_id' => PaymentStatus::PaymentFailed->value,
-                'payment_details' => $data['data_message']
-            ]);
-
             return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
         }
     }
