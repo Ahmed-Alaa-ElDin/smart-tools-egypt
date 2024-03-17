@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use App\Services\Front\Payments\Gateways\CardGateway;
+use App\Services\Front\Payments\Gateways\InstallmentGateway;
 use App\Services\Front\Payments\PaymentService;
 
 class OrderPaymentSummary extends Component
@@ -582,6 +583,10 @@ class OrderPaymentSummary extends Component
                 ]);
             }
 
+            // Clear Cart
+            Cart::instance('cart')->destroy();
+            Cart::instance('cart')->store($order->user->id);
+
             if ($should_pay <= 0 || $this->payment_method == PaymentMethod::Cash->value) {
                 $order->update([
                     'status_id' => OrderStatus::WaitingForApproval->value
@@ -589,9 +594,6 @@ class OrderPaymentSummary extends Component
 
                 $order->statuses()->attach(OrderStatus::WaitingForApproval->value);
 
-                // Clear Cart
-                Cart::instance('cart')->destroy();
-                Cart::instance('cart')->store($order->user->id);
 
                 DB::commit();
 
@@ -605,33 +607,36 @@ class OrderPaymentSummary extends Component
 
                 $order->statuses()->attach(OrderStatus::WaitingForPayment->value);
 
+                DB::commit();
+
                 $cardGateway = new CardGateway();
 
                 $Payment = new PaymentService($cardGateway);
 
-                $clientSecret = $Payment->prepare($order, $transaction);
+                $clientSecret = $Payment->getClientSecret($order, $transaction);
 
                 if ($clientSecret) {
-                    return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_IFRAM_ID_CARD_TEST") . "&clientSecret={$clientSecret}");
+                    return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY_TEST") . "&clientSecret={$clientSecret}");
                 } else {
                     return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }
             } elseif ($this->payment_method == PaymentMethod::Installments->value) {
-                $payment_key = payByPaymob($order, $transaction);
+                $order->update([
+                    'status_id' => OrderStatus::WaitingForPayment->value
+                ]);
 
-                if ($payment_key) {
-                    $order->update([
-                        'status_id' => OrderStatus::WaitingForPayment->value,
-                    ]);
+                $order->statuses()->attach(OrderStatus::WaitingForPayment->value);
 
-                    $order->statuses()->attach(OrderStatus::WaitingForPayment->value);
+                DB::commit();
 
-                    // Clear Cart
-                    Cart::instance('cart')->destroy();
-                    Cart::instance('cart')->store($order->user->id);
+                $installmentGateway = new InstallmentGateway();
 
-                    DB::commit();
-                    return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . env('PAYMOB_IFRAM_ID_INSTALLMENTS')  . "?payment_token=$payment_key");
+                $Payment = new PaymentService($installmentGateway);
+
+                $clientSecret = $Payment->getClientSecret($order, $transaction);
+
+                if ($clientSecret) {
+                    return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY_TEST") . "&clientSecret={$clientSecret}");
                 } else {
                     return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }
@@ -641,10 +646,6 @@ class OrderPaymentSummary extends Component
                 ]);
 
                 $order->statuses()->attach(OrderStatus::WaitingForPayment->value);
-
-                // Clear Cart
-                Cart::instance('cart')->destroy();
-                Cart::instance('cart')->store($order->user->id);
 
                 DB::commit();
                 // redirect to done page

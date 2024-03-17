@@ -5,12 +5,15 @@ namespace App\Services\Front\Payments\Gateways;
 use App\Models\Order;
 use App\Models\Transaction;
 use App\Enums\PaymentMethod;
+use App\Traits\Front\Payments\HasPaymobHmac;
 use Illuminate\Support\Facades\Http;
 use App\Interfaces\Front\Payments\PaymentGateway;
-use App\Interfaces\Front\Payments\ThirdPartyGateway;
+use App\Interfaces\Front\Payments\PaymobGateway;
 
-class CardGateway implements PaymentGateway, ThirdPartyGateway
+class CardGateway implements PaymentGateway, PaymobGateway
 {
+    use HasPaymobHmac;
+    
     public function __construct(private int $paymentMethodId = PaymentMethod::Card->value)
     {
     }
@@ -20,7 +23,7 @@ class CardGateway implements PaymentGateway, ThirdPartyGateway
         return 'CardGateway: $' . $amount;
     }
 
-    public function prepare(Order $order, Transaction $transaction): string
+    public function getClientSecret(Order $order, Transaction $transaction,string $orderType): string
     {
         $data = [
             "amount" => number_format(($transaction->payment_amount) * 100, 0, '', ''),
@@ -47,6 +50,7 @@ class CardGateway implements PaymentGateway, ThirdPartyGateway
             ],
             "extras" => [
                 "order_id" => $order->id,
+                "type" => $orderType
             ]
         ];
 
@@ -56,4 +60,5 @@ class CardGateway implements PaymentGateway, ThirdPartyGateway
 
         return $intentionRequest['client_secret'] ?? "";
     }
+
 }

@@ -277,7 +277,7 @@ class OrderShippingDetails extends Component
             DB::beginTransaction();
 
             try {
-                $order = Order::where('user_id', auth()->user()->id)->whereIn('status_id', [OrderStatus::UnderProcessing->value, OrderStatus::Created->value])->first() ?? new Order;
+                $order = Order::where('user_id', auth()->user()->id)->where('status_id', OrderStatus::UnderProcessing->value)->first() ?? new Order;
 
                 $order->fill([
                     'user_id' => auth()->user()->id,

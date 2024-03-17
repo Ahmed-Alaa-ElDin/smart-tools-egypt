@@ -76,7 +76,8 @@ Route::group([
         Route::get('/payment', 'payment')->name('payment')->middleware(['can_deliver', 'cart_not_empty']);
 
         // Check the paymob response
-        Route::get('/payment/check', 'paymentCheck')->name('payment.check');
+        Route::post('/payment/check', 'paymentCheckProcessed')->name('payment.check-processed');
+        Route::get('/payment/check2', 'paymentCheckResponse')->name('payment.check-response');
 
         // Confirm the order
         Route::get('/done', 'done')->name('done');
