@@ -2241,7 +2241,7 @@ class OrderController extends Controller
     {
         $data = $request->all();
 
-        Log::info($data);
+        Log::info($request->getContent());
 
         dd($data);
         ksort($data);
@@ -2488,8 +2488,6 @@ class OrderController extends Controller
     public function paymentCheckResponse(Request $request)
     {
         $data = $request->all();
-
-        Log::info($data);
 
         dd($data);
 
