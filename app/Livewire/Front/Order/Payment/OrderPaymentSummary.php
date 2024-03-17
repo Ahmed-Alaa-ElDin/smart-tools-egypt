@@ -613,7 +613,7 @@ class OrderPaymentSummary extends Component
 
                 $Payment = new PaymentService($cardGateway);
 
-                $clientSecret = $Payment->getClientSecret($order, $transaction);
+                $clientSecret = $Payment->getClientSecret($order, $transaction,"New");
 
                 if ($clientSecret) {
                     return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY_TEST") . "&clientSecret={$clientSecret}");
@@ -633,7 +633,7 @@ class OrderPaymentSummary extends Component
 
                 $Payment = new PaymentService($installmentGateway);
 
-                $clientSecret = $Payment->getClientSecret($order, $transaction);
+                $clientSecret = $Payment->getClientSecret($order, $transaction,"New");
 
                 if ($clientSecret) {
                     return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY_TEST") . "&clientSecret={$clientSecret}");

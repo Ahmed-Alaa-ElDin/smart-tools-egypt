@@ -18,10 +18,10 @@ class PaymentService
         return $this->paymentGateway->processPayment($amount);
     }
 
-    public function getClientSecret(Order $order, Transaction $transaction): ?string
+    public function getClientSecret(Order $order, Transaction $transaction, string $orderType): ?string
     {
         if (method_exists($this->paymentGateway, 'getClientSecret')) {
-            return $this->paymentGateway->getClientSecret($order, $transaction);
+            return $this->paymentGateway->getClientSecret($order, $transaction, $orderType);
         }
     }
 
