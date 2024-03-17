@@ -2241,11 +2241,61 @@ class OrderController extends Controller
     {
         $data = $request->all();
 
-        Log::channel('payments')->info(json_encode($data["intention"]));
+        Log::channel('payments')->info(json_encode($data));
 
         $cardGateway = new CardGateway();
 
         $Payment = new PaymentService($cardGateway);
+
+        $hmac = $data['hmac'] ?? '';
+
+        Log::channel('payments')->info("source_hmac".json_encode($hmac));
+
+        if (isset($data["transaction"])) {
+            $data = $data["transaction"];
+
+            $array = [
+                'amount_cents',
+                'created_at',
+                'currency',
+                'error_occured',
+                'has_parent_transaction',
+                'id',
+                'integration_id',
+                'is_3d_secure',
+                'is_auth',
+                'is_capture',
+                'is_refunded',
+                'is_standalone_payment',
+                'is_voided',
+                'order.id',
+                'owner',
+                'pending',
+                'source_data.pan',
+                'source_data.sub_type',
+                'source_data.type',
+                'success'
+            ];
+
+            $concat_data = '';
+
+            foreach ($array as $key) {
+                if (isset($data[$key])) {
+                    $concat_data .= $data[$key];
+                }
+            }
+
+            Log::channel('payments')->info("concat_data " . $concat_data);
+
+            $secret = env('PAYMOB_HMAC');
+
+            $generated_hmac = hash_hmac('SHA512', $concat_data, $secret);
+
+            Log::channel('payments')->info("generated_hmac" . $generated_hmac);
+
+            return $generated_hmac == $hmac;
+        }
+
 
         if ($Payment->validateHmacProcessed($data) && $data['success'] == 'true') {
             Log::channel('payments')->info('HMAC is valid');
