@@ -2553,7 +2553,7 @@ class OrderController extends Controller
         $generated_hmac = hash_hmac('SHA512', $concat_data, $secret);
 
 
-        dd($data, $generated_hmac, $hmac);
+        dd($data, $concat_data, $generated_hmac, $hmac);
 
         $cardGateway = new CardGateway();
 
