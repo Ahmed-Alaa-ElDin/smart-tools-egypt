@@ -32,7 +32,8 @@ trait HasPaymobHmac
                 'source_data.pan',
                 'source_data.sub_type',
                 'source_data.type',
-                'success'
+                'success',
+                'receipt'
             ];
 
             $concat_data = '';

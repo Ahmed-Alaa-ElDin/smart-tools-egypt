@@ -1742,8 +1742,8 @@ class OrderController extends Controller
             Session::flash('success', __('front/homePage.Order edit request sent successfully'));
             return redirect()->route('front.orders.index');
         } catch (\Throwable $th) {
-            throw $th;
             DB::rollback();
+            throw $th;
         }
     }
     ##################### Save Order's Edits :: End #####################
@@ -2080,7 +2080,6 @@ class OrderController extends Controller
                 'total_weight' => $returned_weight,
                 'payment_method_id' => $payment_method,
                 'notes' => $order->notes,
-                'old_order_id' => $order->id
             ]);
 
             $new_order->save();

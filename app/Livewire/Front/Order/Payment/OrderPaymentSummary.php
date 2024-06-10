@@ -587,6 +587,7 @@ class OrderPaymentSummary extends Component
             Cart::instance('cart')->destroy();
             Cart::instance('cart')->store($order->user->id);
 
+            // Order is paid or will be paid on delivery
             if ($should_pay <= 0 || $this->payment_method == PaymentMethod::Cash->value) {
                 $order->update([
                     'status_id' => OrderStatus::WaitingForApproval->value
@@ -594,13 +595,15 @@ class OrderPaymentSummary extends Component
 
                 $order->statuses()->attach(OrderStatus::WaitingForApproval->value);
 
-
                 DB::commit();
 
                 // redirect to done page
                 Session::flash('success', __('front/homePage.Order Created Successfully'));
                 redirect()->route('front.orders.done')->with('order_id', $order->id);
-            } elseif ($this->payment_method == PaymentMethod::Card->value) {
+            } 
+            
+            // Order will be paid by card
+            elseif ($this->payment_method == PaymentMethod::Card->value) {
                 $order->update([
                     'status_id' => OrderStatus::WaitingForPayment->value
                 ]);
@@ -620,7 +623,10 @@ class OrderPaymentSummary extends Component
                 } else {
                     return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }
-            } elseif ($this->payment_method == PaymentMethod::Installments->value) {
+            } 
+            
+            // Order will be paid by installments
+            elseif ($this->payment_method == PaymentMethod::Installments->value) {
                 $order->update([
                     'status_id' => OrderStatus::WaitingForPayment->value
                 ]);
@@ -640,7 +646,10 @@ class OrderPaymentSummary extends Component
                 } else {
                     return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }
-            } elseif ($this->payment_method == PaymentMethod::VodafoneCash->value) {
+            } 
+            
+            // Order will be paid by Vodafone Cash
+            elseif ($this->payment_method == PaymentMethod::VodafoneCash->value) {
                 $order->update([
                     'status_id' => OrderStatus::WaitingForPayment->value,
                 ]);
