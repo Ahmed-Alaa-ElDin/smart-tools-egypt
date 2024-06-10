@@ -2304,7 +2304,7 @@ class OrderController extends Controller
         // }
 
 
-        if ($Payment->validateHmacProcessed($data) && $data['success'] == 'true') {
+        if ($Payment->validateHmacProcessed($data) && isset($data['obj'], $data['obj']['success']) && $data['obj']['success'] == 'true') {
             Log::channel('payments')->info('HMAC is valid');
         } else {
             Log::channel('payments')->info('HMAC is not valid');

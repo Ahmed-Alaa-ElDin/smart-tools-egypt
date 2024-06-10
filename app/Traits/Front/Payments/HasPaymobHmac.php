@@ -58,9 +58,6 @@ trait HasPaymobHmac
 
             $generated_hmac = hash_hmac('SHA512', $concat_data, $secret);
 
-            Log::channel('payments')->info($concat_data);
-            Log::channel('payments')->info($generated_hmac);
-
             return $generated_hmac == $hmac;
         }
 
