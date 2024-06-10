@@ -11,8 +11,8 @@ trait HasPaymobHmac
     {
         $hmac = $data['hmac'] ?? '';
 
-        if (isset($data["transaction"])) {
-            $data = $data["transaction"];
+        if (isset($data["obj"])) {
+            $data = $data["obj"];
 
             $array = [
                 'amount_cents',
