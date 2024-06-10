@@ -2,6 +2,8 @@
 
 namespace App\Traits\Front\Payments;
 
+use Illuminate\Support\Facades\Log;
+
 trait HasPaymobHmac
 {
     // Back Request
@@ -47,13 +49,14 @@ trait HasPaymobHmac
             $secret = env('PAYMOB_HMAC');
 
             $generated_hmac = hash_hmac('SHA512', $concat_data, $secret);
+            Log::channel('payments')->info($generated_hmac);
 
             return $generated_hmac == $hmac;
         }
 
         return false;
     }
-    
+
     // Front Request
     public function validateHmacResponse(array $data): bool
     {
