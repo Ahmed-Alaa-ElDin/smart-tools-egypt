@@ -34,8 +34,7 @@ trait HasPaymobHmac
                 'source_data.pan',
                 'source_data.sub_type',
                 'source_data.type',
-                'success',
-                'receipt'
+                'success'
             ];
 
             $concat_data = '';
@@ -49,6 +48,8 @@ trait HasPaymobHmac
             $secret = env('PAYMOB_HMAC');
 
             $generated_hmac = hash_hmac('SHA512', $concat_data, $secret);
+            
+            Log::channel('payments')->info($concat_data);
             Log::channel('payments')->info($generated_hmac);
 
             return $generated_hmac == $hmac;
