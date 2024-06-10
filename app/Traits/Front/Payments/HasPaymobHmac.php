@@ -40,10 +40,18 @@ trait HasPaymobHmac
             $concat_data = '';
 
             foreach ($array as $key) {
-                if (isset($data[$key])) {
-                    $concat_data .= is_bool($data[$key]) ?
-                        ($data[$key] ? 'true' : 'false') : $data[$key];
+                // handle nested keys
+                if (strpos($key, '.') !== false) {
+                    $parts = explode('.', $key);
+                    $value = $data;
+                    foreach ($parts as $part) {
+                        $value = isset($value[$part]) ? $value[$part] : '';
+                    }
+                } else {
+                    $value = isset($data[$key]) ? ($data[$key]) : '';
                 }
+
+                $concat_data .= is_bool($value) ? ($value ? 'true' : 'false') : $value;
             }
 
             $secret = env('PAYMOB_HMAC');
