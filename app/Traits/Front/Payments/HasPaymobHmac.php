@@ -41,7 +41,8 @@ trait HasPaymobHmac
 
             foreach ($array as $key) {
                 if (isset($data[$key])) {
-                    $concat_data .= (string) $data[$key];
+                    $concat_data .= is_bool($data[$key]) ?
+                        ($data[$key] ? 'true' : 'false') : $data[$key];
                 }
             }
 
