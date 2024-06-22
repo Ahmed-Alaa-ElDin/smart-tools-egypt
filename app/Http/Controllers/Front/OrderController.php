@@ -2240,33 +2240,34 @@ class OrderController extends Controller
     {
         $data = $request->all();
 
-        Log::channel('payments')->info(json_encode($data));
-
         $cardGateway = new CardGateway();
 
         $Payment = new PaymentService($cardGateway);
 
-        if ($Payment->validateHmacProcessed($data) && isset($data['obj'], $data['obj']['success']) && $data['obj']['success'] == 'true') {
-            Log::channel('payments')->info('HMAC is valid');
+        // Smart transaction id 
+        $smartTransactionId = $data['obj']['order']['shipping_data']['street'] ?? null;
 
-            DB::beginTransaction();
+        // Paymob transaction id 
+        $paymobTransactionId = $data['obj']['id'];
 
-            try {
-                // get payment data
+        try {
+            // Valid HMAC
+            if ($Payment->validateHmacProcessed($data) && isset($data['obj'], $data['obj']['success']) && $data['obj']['success'] == 'true') {
+                DB::beginTransaction();
+
+                // get transaction
                 $transaction = Transaction::with(['order' => function ($query) {
                     $query->with(['user', 'products', 'address']);
                 }])
-                    ->where('paymob_order_id', $data['order'])
-                    ->first();
+                    ->find($smartTransactionId);
 
                 // update transaction status
                 $transaction->update([
                     'payment_status_id' => PaymentStatus::Paid->value,
+                    'service_provider_transaction_id' => $paymobTransactionId,
                     'payment_details' => json_encode([
-                        "amount_cents" => $data['amount_cents'],
+                        "amount_cents" => $data['obj']['amount_cents'],
                         "points" => 0,
-                        "transaction_id" => $data['id'],
-                        "source_data_sub_type" => $data['source_data_sub_type']
                     ])
                 ]);
 
@@ -2421,231 +2422,29 @@ class OrderController extends Controller
                 Session::flash('success', __('front/homePage.Order Created Successfully'));
                 return redirect()->route('front.orders.done')->with('order_id', $transaction->order->id);
                 // }
-            } catch (\Throwable $th) {
-                DB::rollBack();
-
-                // Change the Transaction Status to Failed and Create a new Transaction
-                $transaction = Transaction::where('paymob_order_id', $data['order'])
-                    ->first();
-
-                $newTransaction = $transaction->replicate();
-                $newTransaction->save();
-
-                // Add the transaction's relations to the new transaction
-
-                $transaction->update([
-                    'order_id' => $transaction->order_id,
-                    'payment_status_id' => PaymentStatus::PaymentFailed->value,
-                    'payment_details' => $data['data_message']
-                ]);
-
-                return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
             }
-        } else {
-            Log::channel('payments')->info('HMAC is not valid');
+
+            // Invalid HMAC
+            else {
+                throw new \Exception('Invalid HMAC');
+            }
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            // Change the Transaction Status to Failed and Create a new Transaction
+            $transaction = Transaction::find($smartTransactionId);
+
+            $newTransaction = $transaction->replicate();
+            $newTransaction->save();
+
+            // Add the transaction's relations to the new transaction
+
+            $transaction->update([
+                'payment_status_id' => PaymentStatus::PaymentFailed->value,
+            ]);
+
+            return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
         }
-
-
-        // if ($generated_hmac == $hmac && $data['success'] == 'true') {
-        //     DB::beginTransaction();
-
-        //     try {
-        //         // get payment data
-        //         $transaction = Transaction::with(['order' => function ($query) {
-        //             $query->with(['user', 'products', 'address']);
-        //         }])
-        //             ->where('paymob_order_id', $data['order'])
-        //             ->first();
-
-        //         // update transaction status
-        //         $transaction->update([
-        //             'payment_status_id' => PaymentStatus::Paid->value,
-        //             'payment_details' => json_encode([
-        //                 "amount_cents" => $data['amount_cents'],
-        //                 "points" => 0,
-        //                 "transaction_id" => $data['id'],
-        //                 "source_data_sub_type" => $data['source_data_sub_type']
-        //             ])
-        //         ]);
-
-        //         // update order status
-        //         $transaction->order->update([
-        //             'status_id' => OrderStatus::WaitingForApproval->value
-        //         ]);
-
-        //         // add status to order
-        //         $transaction->order->statuses()->attach(OrderStatus::WaitingForApproval->value);
-
-        //         // get order from transaction
-
-        //         // Old Orders
-        //         if ($transaction->old_order_id != null) {
-        //             $old_order = Order::with(['products', 'collections', 'user', 'payment', 'transactions', 'points'])->findOrFail($transaction->old_order_id);
-        //             $temp_order = Order::with(['products', 'collections', 'payment', 'transactions', 'points'])->findOrFail($transaction->order_id);
-
-        //             // New Products Data
-        //             $new_products = [];
-        //             if ($temp_order->products->count()) {
-        //                 foreach ($temp_order->products as $product) {
-        //                     $new_products[$product['id']] = [
-        //                         'quantity' => $product->pivot->quantity,
-        //                         'original_price' => $product->pivot->original_price,
-        //                         'price' => $product->pivot->price,
-        //                         'points' => $product->pivot->points,
-        //                         'coupon_discount' => $product->pivot->coupon_discount,
-        //                         'coupon_points' => $product->pivot->coupon_points,
-        //                     ];
-        //                 }
-        //             }
-
-        //             // New Collections Data
-        //             $new_collections = [];
-        //             if ($temp_order->collections->count()) {
-        //                 foreach ($temp_order->collections as $collection) {
-        //                     $new_collections[$collection['id']] = [
-        //                         'quantity' => $collection->pivot->quantity,
-        //                         'original_price' => $collection->pivot->original_price,
-        //                         'price' => $collection->pivot->price,
-        //                         'points' => $collection->pivot->points,
-        //                         'coupon_discount' => $collection->pivot->coupon_discount,
-        //                         'coupon_points' => $collection->pivot->coupon_points,
-        //                     ];
-        //                 }
-        //             }
-
-        //             if (editBostaOrder($temp_order, $old_order)) {
-        //                 // Update Order Data
-        //                 $old_order->update([
-        //                     'status_id' => 306,
-        //                     'num_of_items' => $temp_order->num_of_items,
-        //                     'items_points' => $temp_order->items_points,
-        //                     'offers_items_points' => $temp_order->offers_items_points,
-        //                     'offers_order_points' => $temp_order->offers_order_points,
-        //                     'coupon_items_points' => $temp_order->coupon_items_points,
-        //                     'coupon_order_points' => $temp_order->coupon_order_points,
-        //                     'gift_points' => $temp_order->gift_points,
-        //                     'total_weight' => $temp_order->total_weight,
-        //                 ]);
-
-        //                 // Update order status
-        //                 $old_order->statuses()->attach([305, 306]);
-
-        //                 // Update Transactions
-        //                 $old_order->transactions()->where('payment_status_id', 2)->delete();
-        //                 $temp_order->transactions()->update([
-        //                     'invoice_id' => $temp_order->invoice->id,
-        //                     'order_id' => $old_order->id,
-        //                     'old_order_id' => Null,
-        //                 ]);
-
-        //                 // Update Payment
-        //                 $old_order->invoice()->delete();
-        //                 $temp_order->invoice()->update([
-        //                     'order_id' => $old_order->id,
-        //                 ]);
-
-        //                 // Return Old Products
-        //                 // Direct Products
-        //                 $old_order->products()->each(function ($product) {
-        //                     $product->quantity += $product->pivot->quantity;
-        //                     $product->save();
-        //                 });
-        //                 $old_order->products()->detach();
-
-        //                 // Through Collections
-        //                 $old_order->collections()->each(function ($collection) {
-        //                     $collection->products()->each(function ($product) use (&$collection) {
-        //                         $product->quantity += $collection->pivot->quantity * $product->pivot->quantity;
-        //                         $product->save();
-        //                     });
-        //                 });
-        //                 $old_order->collections()->detach();
-
-        //                 // Subtract New Products
-        //                 // Direct Products
-        //                 $temp_order->products()->each(function ($product) {
-        //                     $product->quantity -= $product->pivot->quantity;
-        //                     $product->save();
-        //                 });
-        //                 $old_order->products()->attach($new_products);
-
-        //                 // Through Collections
-        //                 $temp_order->collections()->each(function ($collection) {
-        //                     $collection->products()->each(function ($product) use (&$collection) {
-        //                         $product->quantity -= ($collection->pivot->quantity * $product->pivot->quantity);
-        //                         $product->save();
-        //                     });
-        //                 });
-        //                 $old_order->collections()->attach($new_collections);
-
-        //                 // Add gift points
-        //                 // Add Points to the user if present
-        //                 if ($temp_order->gift_points) {
-        //                     $old_order->user->points()->create([
-        //                         'order_id' => $old_order->id,
-        //                         'value' => $temp_order->gift_points,
-        //                         'status' => 0
-        //                     ]);
-        //                 }
-
-        //                 // Delete Temporary Order
-        //                 $temp_order->forceDelete();
-
-        //                 DB::commit();
-
-        //                 // todo :: Send Email To User
-
-        //                 // todo :: Send SMS To User
-
-        //                 // redirect to done page
-        //                 Session::flash('success', __('front/homePage.Order Edited Successfully'));
-
-        //                 return redirect()->route('front.orders.index');
-        //             } else {
-        //                 DB::rollback();
-
-        //                 Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
-        //                 return redirect()->route('front.orders.index');
-        //             }
-        //         }
-
-        //         // New Orders
-        //         else {
-        //             DB::commit();
-
-        //             // todo :: Send Email To User
-
-        //             // todo :: Send SMS To User
-
-        //             Session::flash('success', __('front/homePage.Order Created Successfully'));
-        //             return redirect()->route('front.orders.done')->with('order_id', $transaction->order->id);
-        //         }
-        //     } catch (\Throwable $th) {
-        //         DB::rollBack();
-
-        //         $transaction = Transaction::where('paymob_order_id', $data['order'])
-        //             ->first();
-
-        //         $transaction->update([
-        //             'order_id' => $transaction->order_id,
-        //             'payment_status_id' => PaymentStatus::PaymentFailed->value,
-        //             'payment_details' => $data['data_message']
-        //         ]);
-
-        //         return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
-        //     }
-        // } else {
-        //     $transaction = Transaction::where('paymob_order_id', $data['order'])
-        //         ->first();
-
-        //     $transaction->update([
-        //         'order_id' => $transaction->order_id,
-        //         'payment_status_id' => PaymentStatus::PaymentFailed->value,
-        //         'payment_details' => $data['data_message']
-        //     ]);
-
-        //     return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
-        // }
     }
 
     public function paymentCheckResponse(Request $request)
