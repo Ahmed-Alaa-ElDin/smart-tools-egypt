@@ -32,14 +32,14 @@ class CardGateway implements PaymentGateway, PaymobGateway
                 intval(env("PAYMOB_CLIENT_ID_CARD_TEST_FLASH"))
             ],
             "billing_data" => [
-                "apartment" => "NA",
                 "first_name" => $order->user->f_name,
                 "last_name" => $order->user->l_name ?? $order->user->f_name,
-                "street" => "NA",
-                "building" => "NA",
                 "phone_number" => $order->phone1,
-                "country" => "NA",
                 "email" => $order->user->email ?? 'test@smarttoolsegypt.com',
+                "apartment" => $order->id, // order_id
+                "street" => $transaction->id, // transaction_id
+                "building" => $orderType, // type
+                "country" => "NA",
                 "floor" => "NA",
                 "state" => "NA",
             ],
@@ -47,10 +47,6 @@ class CardGateway implements PaymentGateway, PaymobGateway
                 "first_name" => $order->user->f_name,
                 "last_name" => $order->user->l_name ?? $order->user->f_name,
                 "email" => $order->user->email ?? 'test@smarttoolsegypt.com',
-            ],
-            "extras" => [
-                "order_id" => $order->id,
-                "type" => $orderType
             ]
         ];
 
