@@ -468,7 +468,8 @@
         const bulkUpdateModal = document.getElementById('bulk-update-modal');
         const modal = new Modal (bulkUpdateModal);
 
-        Livewire.on('bulkUpdateCloseModal', () => {
+        // Hide the modal the livewire dispatches the event "bulkUpdateCloseModal"
+        window.addEventListener('bulkUpdateCloseModal', event => {
             modal.hide();
         });
     </script>

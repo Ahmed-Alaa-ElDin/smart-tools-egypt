@@ -278,7 +278,7 @@
                                     {{-- Total Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
                                         <div class="flex items-center content-center justify-center" dir="ltr">
-                                            {{ number_format($order->total, 2, '.', '\'') }}
+                                            {{ number_format($order->invoice->total, 2, '.', '\'') }}
                                         </div>
                                     </td>
 
@@ -303,6 +303,8 @@
                                                 ,
                                                 {{ Carbon\Carbon::parse($order->updated_at)->format('d') }}
                                                 {{ __('admin/ordersPages.' . Carbon\Carbon::parse($order->updated_at)->format('M')) }}
+
+                                                {{ Carbon\Carbon::parse($order->updated_at)->format('Y') }}
                                             </span>
                                             <span class="text-gray-500">
                                                 {{ Carbon\Carbon::parse($order->updated_at)->format('h:i') }}

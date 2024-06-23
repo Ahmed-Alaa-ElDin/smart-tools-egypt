@@ -58,15 +58,16 @@ class OrdersDatatable extends Component
                 'governorate' => fn ($q) => $q->select('id', 'name'),
                 'city' => fn ($q) => $q->select('id', 'name'),
             ]),
+            'invoice' => fn ($q) => $q->select('id', 'order_id', 'total'),
+            'transactions',
             'status',
         ])->select([
             'orders.id as id',
             'orders.user_id',
             'orders.address_id',
             'orders.status_id',
-            'orders.total',
-            'orders.should_pay',
-            'orders.should_get',
+            // 'orders.should_pay',
+            // 'orders.should_get',
             'orders.updated_at',
             'users.f_name',
             'users.l_name',
@@ -116,7 +117,14 @@ class OrdersDatatable extends Component
             ->paginate($this->perPage + count($this->selectedOrders));
 
         $this->orders_ids = $orders->pluck('id')->toArray();
-        // dd($orders);
+
+        $order = $orders->map(function ($order) {
+            $order->should_pay =  $order->transactions->whereIn('payment_status_id', [1, 3])->sum('payment_amount');
+            // TODO :: Should Get
+            return $order;
+        });
+
+        // dd($order);
 
         return view('livewire.admin.orders.orders-datatable', compact('orders'));
     }
