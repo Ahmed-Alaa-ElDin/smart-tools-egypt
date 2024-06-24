@@ -15,7 +15,7 @@ class UnderConstruction
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (in_array(auth()->id(), [501, 502])) {
+        if (in_array(auth()->id(), [501, 502, 544])) {
             return $next($request);
         }
 
