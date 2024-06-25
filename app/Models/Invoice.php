@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\PaymentMethod;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Invoice extends Model
 {
@@ -33,15 +34,26 @@ class Invoice extends Model
 
     public function getPaymentMethodsAttribute()
     {
-        return $this->transactions()->pluck('payment_method');
+        return $this->transactions()->pluck('payment_method_id');
     }
 
     public function getMainPaymentMethodAttribute()
     {
-        return $this->transactions()->whereIn('payment_method',[1,2,3,4])->count() ? $this->transactions()->whereIn('payment_method',[1,2,3,4])->first()->payment_method : null;
+        return $this->transactions()->whereIn('payment_method_id', [
+            PaymentMethod::Cash->value,
+            PaymentMethod::Card->value,
+            PaymentMethod::Installments->value,
+            PaymentMethod::VodafoneCash->value,
+        ])->count() ?
+            $this->transactions()->whereIn('payment_method_id', [
+                PaymentMethod::Cash->value,
+                PaymentMethod::Card->value,
+                PaymentMethod::Installments->value,
+                PaymentMethod::VodafoneCash->value,
+            ])->first()->payment_method_id : null;
     }
 
     public function getPaidAttribute(){
-        return $this->transactions()->where('payment_status',2)->sum('payment_amount');
+        return $this->transactions()->where('payment_status_id',2)->sum('payment_amount');
     }
 }

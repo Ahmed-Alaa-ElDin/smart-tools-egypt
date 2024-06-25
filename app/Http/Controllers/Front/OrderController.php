@@ -7,15 +7,17 @@ use App\Models\Offer;
 use App\Models\Order;
 use App\Enums\OrderStatus;
 use App\Models\Transaction;
+use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use App\Services\Front\Payments\PaymentService;
 use App\Services\Front\Payments\Gateways\CardGateway;
-use Illuminate\Support\Facades\Log;
+use App\Services\Front\Payments\Gateways\InstallmentGateway;
 
 class OrderController extends Controller
 {
@@ -348,7 +350,7 @@ class OrderController extends Controller
 
         // Get Paid Money
         $payment_methods = $order->payment_methods;
-        $main_payment_method = $order->payment->main_payment_method;
+        $main_payment_method = $order->main_payment_method;
         $paid = $order->invoice->paid;
         $old_price = $order->invoice->total;
         $should_pay = $total_order > $paid ? round($total_order - $paid, 2) : 0.00;
@@ -418,7 +420,7 @@ class OrderController extends Controller
                         'user_id' => $temp_order->user_id,
                         'payment_method_id' => $transaction->payment_method,
                         'payment_amount' => $transaction->payment_amount,
-                        'payment_status_id' => $transaction->payment_status,
+                        'payment_status_id' => $transaction->payment_status_id,
                         'paymob_order_id' => $transaction->paymob_order_id,
                         'payment_details' => $transaction->payment_details,
                     ];
@@ -734,7 +736,7 @@ class OrderController extends Controller
             'paid' => $paid ?? 0,
             'difference' => $difference ?? 0,
             'payment_methods' => $payment_methods ?? [],
-            'main_payment_method_id' => $main_payment_method ?? null,
+            'main_payment_method_id' => $main_payment_method_id ?? null,
             'should_pay' => $should_pay ?? 0,
             'should_get' => $should_get ?? 0,
         ];
@@ -2484,11 +2486,23 @@ class OrderController extends Controller
 
         $transaction = $order->transactions->where('payment_status_id', 1)->first();
 
-        if ($transaction && ($transaction->payment_method == 2 || $transaction->payment_method == 3)) {
-            $payment_key = payByPaymob($order, $transaction);
+        if ($transaction) {
+            if ($transaction->payment_method_id == PaymentMethod::Card->value) {
+                $cardGateway = new CardGateway();
 
-            if ($payment_key) {
-                return redirect()->away("https://accept.paymobsolutions.com/api/acceptance/iframes/" . ($transaction->payment_method == 3 ? env('PAYMOB_IFRAM_ID_INSTALLMENTS') : env('PAYMOB_IFRAM_ID_CARD')) . "?payment_token=$payment_key");
+                $Payment = new PaymentService($cardGateway);
+
+                $clientSecret = $Payment->getClientSecret($order, $transaction, "New");
+            } elseif ($transaction->payment_method_id == PaymentMethod::Installments->value) {
+                $InstallmentGateway = new InstallmentGateway();
+
+                $Payment = new PaymentService($InstallmentGateway);
+
+                $clientSecret = $Payment->getClientSecret($order, $transaction, "New");
+            }
+
+            if ($clientSecret) {
+                return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
             } else {
                 return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
             }

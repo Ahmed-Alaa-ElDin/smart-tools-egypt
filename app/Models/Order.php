@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
+use App\Enums\PaymentStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
 {
@@ -119,23 +122,36 @@ class Order extends Model
     public function getCanReturnedAttribute()
     {
         if ($this->delivered_at) {
-            return $this->status_id == 45 && Carbon::create($this->delivered_at)->diffInDays() <= config('settings.return_period');
+            return $this->status_id == OrderStatus::Delivered->value && Carbon::create($this->delivered_at)->diffInDays() <= config('settings.return_period');
         }
         return false;
     }
 
     public function getPaymentMethodsAttribute()
     {
-        return $this->transactions->whereIn('payment_status',  [1, 2])->pluck('payment_method');
+        return $this->transactions->whereIn('payment_status_id',  [PaymentStatus::Pending->value, PaymentStatus::Paid->value])->pluck('payment_method_id');
     }
 
     public function getUnpaidPaymentMethodAttribute()
     {
-        return $this->transactions->where('payment_status', 1)->count() ? $this->transactions->where('payment_status', 1)->first()->payment_method : null;
+        return $this->transactions->where('payment_status_id', PaymentStatus::Pending->value)->count() ?
+            $this->transactions->where('payment_status_id', PaymentStatus::Pending->value)->first()->payment_method_id
+            : null;
     }
 
     public function getMainPaymentMethodAttribute()
     {
-        return $this->transactions()->whereIn('payment_method', [1, 2, 3, 4])->count() ? $this->transactions()->whereIn('payment_method', [1, 2, 3, 4])->first()->payment_method : null;
+        return $this->transactions()->whereIn('payment_method_id', [
+            PaymentMethod::Cash->value,
+            PaymentMethod::Card->value,
+            PaymentMethod::Installments->value,
+            PaymentMethod::VodafoneCash->value,
+        ])->count() ?
+            $this->transactions()->whereIn('payment_method_id', [
+                PaymentMethod::Cash->value,
+                PaymentMethod::Card->value,
+                PaymentMethod::Installments->value,
+                PaymentMethod::VodafoneCash->value,
+            ])->first()->payment_method_id : null;
     }
 }

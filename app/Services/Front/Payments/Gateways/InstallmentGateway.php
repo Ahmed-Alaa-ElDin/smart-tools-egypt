@@ -2,11 +2,13 @@
 
 namespace App\Services\Front\Payments\Gateways;
 
-use App\Enums\PaymentMethod;
 use App\Models\Order;
 use App\Models\Transaction;
-use App\Interfaces\Front\Payments\PaymentGateway;
+use App\Enums\PaymentMethod;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 use App\Interfaces\Front\Payments\PaymobGateway;
+use App\Interfaces\Front\Payments\PaymentGateway;
 
 class InstallmentGateway implements PaymentGateway, PaymobGateway
 {
@@ -19,8 +21,43 @@ class InstallmentGateway implements PaymentGateway, PaymobGateway
         return 'InstallmentGateway: $' . $amount;
     }
 
-    public function getClientSecret(Order $order, Transaction $transaction, string $orderType): string
+    public function getClientSecret(Order $order, Transaction $transaction,string $orderType): string
     {
-        return 'InstallmentGateway: Redirecting to payment page';
+        $data = [
+            "amount" => number_format(($transaction->payment_amount) * 100, 0, '', ''),
+            "currency" => "EGP",
+            "payment_methods" => [
+                intval(env("PAYMOB_CLIENT_ID_INSTALLMENTS"))
+            ],
+            "billing_data" => [
+                "first_name" => $order->user->f_name,
+                "last_name" => $order->user->l_name ?? $order->user->f_name,
+                "phone_number" => $order->phone1,
+                "email" => $order->user->email ?? 'test@smarttoolsegypt.com',
+                "apartment" => $order->id, // order_id
+                "street" => $transaction->id, // transaction_id
+                "building" => $orderType, // type
+                "country" => "NA",
+                "floor" => "NA",
+                "state" => "NA",
+            ],
+            "customer" => [
+                "first_name" => $order->user->f_name,
+                "last_name" => $order->user->l_name ?? $order->user->f_name,
+                "email" => $order->user->email ?? 'test@smarttoolsegypt.com',
+            ]
+        ];
+
+        $intentionRequest = Http::acceptJson()->withHeaders([
+            'Authorization' => 'Token ' . env('PAYMOB_SECRET_KEY')
+        ])->post('https://accept.paymob.com/v1/intention/', $data)->json();
+
+            Log::channel('payments')->info('InstallmentGateway: getClientSecret', [
+                'data' => $data,
+                'intentionRequest' => $intentionRequest
+            ]);
+
+        return $intentionRequest['client_secret'] ?? "";
     }
+
 }

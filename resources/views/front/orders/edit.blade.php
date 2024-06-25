@@ -56,7 +56,7 @@
                                 {{-- Order Delivery Fees --}}
                                 <div class="flex justify-center items-center gap-1">
                                     <span class="text-sm font-bold"> {{ __('front/homePage.Shipping:') }} </span>
-                                    @if ($order->delivery_fees == 0)
+                                    @if ($order->invoice->delivery_fees == 0)
                                         <div class="text-successDark font-bold">
                                             {{ __('front/homePage.Free Shipping') }}
                                         </div>
@@ -64,7 +64,7 @@
                                         <div class="flex rtl:flex-row-reverse gap-1">
                                             <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
                                             <span class="font-bold"
-                                                dir="ltr">{{ number_format($order->delivery_fees, 2, '.', '\'') }}</span>
+                                                dir="ltr">{{ number_format($order->invoice->delivery_fees, 2, '.', '\'') }}</span>
                                         </div>
                                     @endif
                                 </div>
@@ -75,7 +75,7 @@
                                     <div class="flex rtl:flex-row-reverse gap-1 text-successDark">
                                         <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
                                         <span dir="ltr"
-                                            class="font-bold">{{ number_format($order->payment->total, 2, '.', '\'') }}</span>
+                                            class="font-bold">{{ number_format($order->invoice->total, 2, '.', '\'') }}</span>
                                     </div>
                                 </div>
                             </div>

@@ -407,7 +407,7 @@
                             {{ __('front/homePage.Cancel Order') }}
                         </button>
                     </form>
-                @elseif (is_null($order_data['main_payment_method']) || $order_data['main_payment_method'] == 1)
+                @elseif (is_null($order_data['main_payment_method_id']) || $order_data['main_payment_method_id'] == 1)
                     <form
                         action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['temp_order_id']]) }}"
                         method="POST" class="m-0">
@@ -418,9 +418,9 @@
                             {{ __('front/homePage.Save Edits') }}
                         </button>
                     </form>
-                @elseif($order_data['main_payment_method'] == 2 ||
-                    $order_data['main_payment_method'] == 3 ||
-                    $order_data['main_payment_method'] == 4)
+                @elseif($order_data['main_payment_method_id'] == 2 ||
+                    $order_data['main_payment_method_id'] == 3 ||
+                    $order_data['main_payment_method_id'] == 4)
                     @if ($order_data['difference'] < 0)
                         <button type="button" data-modal-toggle="card-confirm" class="btn bg-successDark font-bold">
                             {{ __('front/homePage.Save Edits and Get Difference') }}
@@ -502,7 +502,7 @@
                         </button>
                     </form>
 
-                    @if ($order_data['main_payment_method'] == 4)
+                    @if ($order_data['main_payment_method_id'] == 4)
                         <form
                             action="{{ route('front.orders.update', [$order_data['order_id'], $order_data['temp_order_id']]) }}"
                             method="POST" class="m-0">

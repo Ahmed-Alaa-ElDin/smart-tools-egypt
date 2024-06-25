@@ -620,7 +620,7 @@ class OrderPaymentSummary extends Component
                 $clientSecret = $Payment->getClientSecret($order, $transaction, "New");
 
                 if ($clientSecret) {
-                    return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY_TEST") . "&clientSecret={$clientSecret}");
+                    return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
                 } else {
                     return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }
@@ -643,7 +643,7 @@ class OrderPaymentSummary extends Component
                 $clientSecret = $Payment->getClientSecret($order, $transaction, "New");
 
                 if ($clientSecret) {
-                    return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY_TEST") . "&clientSecret={$clientSecret}");
+                    return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
                 } else {
                     return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }

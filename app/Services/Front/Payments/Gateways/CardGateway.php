@@ -29,7 +29,7 @@ class CardGateway implements PaymentGateway, PaymobGateway
             "amount" => number_format(($transaction->payment_amount) * 100, 0, '', ''),
             "currency" => "EGP",
             "payment_methods" => [
-                intval(env("PAYMOB_CLIENT_ID_CARD_TEST_FLASH"))
+                intval(env("PAYMOB_CLIENT_ID_CARD"))
             ],
             "billing_data" => [
                 "first_name" => $order->user->f_name,
@@ -51,7 +51,7 @@ class CardGateway implements PaymentGateway, PaymobGateway
         ];
 
         $intentionRequest = Http::acceptJson()->withHeaders([
-            'Authorization' => 'Token ' . env('PAYMOB_SECRET_KEY_TEST')
+            'Authorization' => 'Token ' . env('PAYMOB_SECRET_KEY')
         ])->post('https://accept.paymob.com/v1/intention/', $data)->json();
 
         return $intentionRequest['client_secret'] ?? "";
