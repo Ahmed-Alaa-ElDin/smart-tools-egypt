@@ -620,7 +620,7 @@ class OrderPaymentSummary extends Component
                 $clientSecret = $payment->getClientSecret($order, $transaction, "New");
 
                 if ($clientSecret) {
-                    return $payment->redirectToPaymob($clientSecret);
+                    $payment->redirectToPaymob($clientSecret);
                 } else {
                     return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }
@@ -643,7 +643,7 @@ class OrderPaymentSummary extends Component
                 $clientSecret = $payment->getClientSecret($order, $transaction, "New");
 
                 if ($clientSecret) {
-                    return $payment->redirectToPaymob($clientSecret);
+                    $payment->redirectToPaymob($clientSecret);
                 } else {
                     return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }

@@ -17,5 +17,5 @@ interface PaymobGateway
     /** Redirect to Paymob
      * @param string $clientSecret
      */
-    public function redirectToPaymob(string $clientSecret): void;
+    public function redirectToPaymob(string $clientSecret);
 }

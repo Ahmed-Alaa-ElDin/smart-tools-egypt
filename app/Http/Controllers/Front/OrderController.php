@@ -2502,7 +2502,7 @@ class OrderController extends Controller
             }
 
             if ($clientSecret) {
-                return $payment->redirectToPaymob($clientSecret);
+                $payment->redirectToPaymob($clientSecret);
             } else {
                 return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
             }
