@@ -2490,19 +2490,19 @@ class OrderController extends Controller
             if ($transaction->payment_method_id == PaymentMethod::Card->value) {
                 $cardGateway = new CardGateway();
 
-                $Payment = new PaymentService($cardGateway);
+                $payment = new PaymentService($cardGateway);
 
-                $clientSecret = $Payment->getClientSecret($order, $transaction, "New");
+                $clientSecret = $payment->getClientSecret($order, $transaction, "New");
             } elseif ($transaction->payment_method_id == PaymentMethod::Installments->value) {
                 $InstallmentGateway = new InstallmentGateway();
 
-                $Payment = new PaymentService($InstallmentGateway);
+                $payment = new PaymentService($InstallmentGateway);
 
-                $clientSecret = $Payment->getClientSecret($order, $transaction, "New");
+                $clientSecret = $payment->getClientSecret($order, $transaction, "New");
             }
 
             if ($clientSecret) {
-                return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
+                return $payment->redirectToPaymob($clientSecret);
             } else {
                 return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
             }
