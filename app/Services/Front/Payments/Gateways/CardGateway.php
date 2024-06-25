@@ -63,6 +63,6 @@ class CardGateway implements PaymentGateway, PaymobGateway
      */
     public function redirectToPaymob(string $clientSecret)
     {
-        return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
+        redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
     }
 }
