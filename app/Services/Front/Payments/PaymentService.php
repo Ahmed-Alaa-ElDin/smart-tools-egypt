@@ -25,7 +25,7 @@ class PaymentService
         }
     }
 
-    public function redirectToPaymob(string $clientSecret): void
+    public function redirectToPaymob(string $clientSecret)
     {
         if (method_exists($this->paymentGateway, 'redirectToPaymob')) {
             return $this->paymentGateway->redirectToPaymob($clientSecret);
