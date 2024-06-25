@@ -54,13 +54,4 @@ class InstallmentGateway implements PaymentGateway, PaymobGateway
 
         return $intentionRequest['client_secret'] ?? "";
     }
-
-    /**
-     * Redirect to Paymob
-     * @param string $clientSecret
-     */
-    public function redirectToPaymob(string $clientSecret)
-    {
-        redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
-    }
 }
