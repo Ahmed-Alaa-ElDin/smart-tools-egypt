@@ -2502,7 +2502,7 @@ class OrderController extends Controller
             }
 
             if ($clientSecret) {
-                $payment->redirectToPaymob($clientSecret);
+                return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
             } else {
                 return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
             }
