@@ -13,7 +13,7 @@ use App\Interfaces\Front\Payments\PaymobGateway;
 class CardGateway implements PaymentGateway, PaymobGateway
 {
     use HasPaymobHmac;
-    
+
     public function __construct(private int $paymentMethodId = PaymentMethod::Card->value)
     {
     }
@@ -23,7 +23,7 @@ class CardGateway implements PaymentGateway, PaymobGateway
         return 'CardGateway: $' . $amount;
     }
 
-    public function getClientSecret(Order $order, Transaction $transaction,string $orderType): string
+    public function getClientSecret(Order $order, Transaction $transaction, string $orderType): string
     {
         $data = [
             "amount" => number_format(($transaction->payment_amount) * 100, 0, '', ''),
@@ -57,4 +57,12 @@ class CardGateway implements PaymentGateway, PaymobGateway
         return $intentionRequest['client_secret'] ?? "";
     }
 
+    /**
+     * Redirect to Paymob
+     * @param string $clientSecret
+     */
+    public function redirectToPaymob(string $clientSecret): void
+    {
+        redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
+    }
 }

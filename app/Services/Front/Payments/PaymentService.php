@@ -25,6 +25,13 @@ class PaymentService
         }
     }
 
+    public function redirectToPaymob(string $clientSecret): void
+    {
+        if (method_exists($this->paymentGateway, 'redirectToPaymob')) {
+            return $this->paymentGateway->redirectToPaymob($clientSecret);
+        }
+    }
+
     public function validateHmacProcessed(array $data): bool
     {
         if (method_exists($this->paymentGateway, 'validateHmacProcessed')) {

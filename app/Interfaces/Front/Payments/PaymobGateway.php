@@ -13,4 +13,9 @@ interface PaymobGateway
      * @param string $orderType
      */ 
     public function getClientSecret(Order $order, Transaction $transaction, string $orderType): string;
+
+    /** Redirect to Paymob
+     * @param string $clientSecret
+     */
+    public function redirectToPaymob(string $clientSecret): void;
 }

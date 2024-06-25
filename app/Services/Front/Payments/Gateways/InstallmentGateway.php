@@ -21,7 +21,7 @@ class InstallmentGateway implements PaymentGateway, PaymobGateway
         return 'InstallmentGateway: $' . $amount;
     }
 
-    public function getClientSecret(Order $order, Transaction $transaction,string $orderType): string
+    public function getClientSecret(Order $order, Transaction $transaction, string $orderType): string
     {
         $data = [
             "amount" => number_format(($transaction->payment_amount) * 100, 0, '', ''),
@@ -52,12 +52,15 @@ class InstallmentGateway implements PaymentGateway, PaymobGateway
             'Authorization' => 'Token ' . env('PAYMOB_SECRET_KEY')
         ])->post('https://accept.paymob.com/v1/intention/', $data)->json();
 
-            Log::channel('payments')->info('InstallmentGateway: getClientSecret', [
-                'data' => $data,
-                'intentionRequest' => $intentionRequest
-            ]);
-
         return $intentionRequest['client_secret'] ?? "";
     }
 
+    /**
+     * Redirect to Paymob
+     * @param string $clientSecret
+     */
+    public function redirectToPaymob(string $clientSecret): void
+    {
+        redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
+    }
 }

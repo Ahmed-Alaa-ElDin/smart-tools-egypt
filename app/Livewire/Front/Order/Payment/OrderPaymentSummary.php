@@ -615,12 +615,12 @@ class OrderPaymentSummary extends Component
 
                 $cardGateway = new CardGateway();
 
-                $Payment = new PaymentService($cardGateway);
+                $payment = new PaymentService($cardGateway);
 
-                $clientSecret = $Payment->getClientSecret($order, $transaction, "New");
+                $clientSecret = $payment->getClientSecret($order, $transaction, "New");
 
                 if ($clientSecret) {
-                    return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
+                    return $payment->redirectToPaymob($clientSecret);
                 } else {
                     return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }
@@ -638,12 +638,12 @@ class OrderPaymentSummary extends Component
 
                 $installmentGateway = new InstallmentGateway();
 
-                $Payment = new PaymentService($installmentGateway);
+                $payment = new PaymentService($installmentGateway);
 
-                $clientSecret = $Payment->getClientSecret($order, $transaction, "New");
+                $clientSecret = $payment->getClientSecret($order, $transaction, "New");
 
                 if ($clientSecret) {
-                    return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
+                    return $payment->redirectToPaymob($clientSecret);
                 } else {
                     return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
                 }
