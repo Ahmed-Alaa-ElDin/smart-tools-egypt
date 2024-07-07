@@ -49,12 +49,12 @@
                 {{-- Reviews : Start --}}
                 <div class="my-1 flex justify-start items-center gap-2 select-none">
                     <div class="rating flex">
-                        @for ($i = 1; $i <= 5; $i++)
+                        {{-- @for ($i = 1; $i <= 5; $i++)
                             <span
                                 class="material-icons inline-block @if ($i <= ceil($item['avg_rating'])) text-yellow-300 @else text-gray-400 @endif">
                                 star
                             </span>
-                        @endfor
+                        @endfor --}}
                     </div>
 
                     <span class="text-sm text-gray-600">({{ $item['reviews_count'] ?? 0 }})</span>
