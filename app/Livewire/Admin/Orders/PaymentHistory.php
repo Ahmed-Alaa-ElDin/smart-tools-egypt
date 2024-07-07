@@ -5,7 +5,13 @@ namespace App\Livewire\Admin\Orders;
 use App\Models\Order;
 use App\Models\Invoice;
 use Livewire\Component;
+use App\Models\Transaction;
+use App\Enums\PaymentMethod;
+use App\Enums\PaymentStatus;
 use Illuminate\Support\Facades\DB;
+use App\Services\Front\Payments\PaymentService;
+use App\Services\Front\Payments\Gateways\CardGateway;
+use App\Services\Front\Payments\Gateways\InstallmentGateway;
 
 class PaymentHistory extends Component
 {
@@ -17,23 +23,20 @@ class PaymentHistory extends Component
         'paymentDetails',
         'refundConfirmed',
         'paymentAddingConfirmed',
-        'refundAddingConfirmed'
+        'refundAddingConfirmed',
+        'removeTransaction',
     ];
 
     ############## Render :: Start ##############
     public function render()
     {
         $this->order = Order::with([
-            'payments' => fn ($q) => $q->orderBy('updated_at', 'desc'),
+            'transactions' => fn ($q) => $q->orderBy('updated_at', 'desc')->withTrashed(),
+            'invoice',
             'user' => fn ($q) => $q->with([
                 'phones' => fn ($q) => $q->where('default', 1)
             ])->select('id', 'f_name', 'l_name')
         ])->findOrFail($this->order_id);
-
-        $this->order->unpaid = $this->order->payments->where('payment_status', 1)->sum('payment_amount');
-        $this->order->paid = $this->order->payments->where('payment_status', 2)->sum('payment_amount');
-        $this->order->refund = $this->order->payments->where('payment_status', 5)->sum('payment_amount');
-        $this->order->refunded = $this->order->payments->where('payment_status', 4)->sum('payment_amount');
 
         return view('livewire.admin.orders.payment-history');
     }
@@ -42,7 +45,9 @@ class PaymentHistory extends Component
     ############## Pop-up Payment confirm message :: Start ##############
     public function paymentConfirm($payment_id, $payment_amount)
     {
-        $this->dispatch('swalConfirm', text: __('admin/ordersPages.Are you sure, you want to mark this transaction as done?'),
+        $this->dispatch(
+            'swalConfirm',
+            text: __('admin/ordersPages.Are you sure, you want to mark this transaction as done?'),
             confirmButtonText: __('admin/ordersPages.Yes'),
             denyButtonText: __('admin/ordersPages.No'),
             denyButtonColor: 'red',
@@ -61,7 +66,9 @@ class PaymentHistory extends Component
     ############## Pop-up Payment Details Modal :: Start ##############
     public function paymentDetails($id, $details)
     {
-        $this->dispatch('swalGetPaymentData', title: __('admin/ordersPages.Enter the payment details'),
+        $this->dispatch(
+            'swalGetPaymentData',
+            title: __('admin/ordersPages.Enter the payment details'),
             html: '<div class="flex flex-col p-2 gap-3">
                     <div>
                         <label class="text-gray-600" for="amount">' . __("admin/ordersPages.Payment amount") . '</label>
@@ -89,79 +96,78 @@ class PaymentHistory extends Component
     ############## Pop-up Payment Details Modal :: End ##############
 
     ############## Pop-up Payment Confirmed and Database updates :: Start ##############
-    public function paymentConfirmed($id, $value)
+    public function paymentConfirmed($id, $payment_amount, $transaction_id)
     {
-        $payment = Invoice::with('order')->findOrFail($id);
-        $payment_amount = $value[0] <= $payment->payment_amount ? $value[0] : $payment->payment_amount;
-        $transaction_id = $value[1];
-        $order = $payment->order;
+        $transaction = Transaction::with('order')->findOrFail($id);
+        // Check if the paid amount is larger that the transaction payment_amount
+        $payment_amount = $payment_amount <= $transaction->payment_amount ? $payment_amount : $transaction->payment_amount;
+
+        $order = $transaction->order;
 
         DB::beginTransaction();
 
         try {
             // Check if transaction in pending state and there is a money to be paid
-            if ($payment->payment_status == 1 && $payment->payment_amount >= 0) {
+            if ($transaction->payment_status_id == PaymentStatus::Pending->value && $transaction->payment_amount >= 0) {
 
-                // Check if payment amount equal to the total transaction amount
-                if ($payment_amount == $payment->payment_amount) {
-                    $payment->update([
-                        'payment_status' => 2,
-                        'payment_details' => json_encode([
-                            "amount_cents" => $payment_amount * 100,
-                            "transaction_id" => $transaction_id ?? null,
-                            "source_data_sub_type" => auth()->user()->f_name . " " . auth()->user()->l_name
-                        ])
-                    ]);
-
-                    $order->update([
-                        'should_pay' => $order->should_pay - $payment->payment_amount
-                    ]);
-                } else {
-                    $order->payments()->create([
-                        'order_id' => $order->id,
-                        'user_id' => $payment->user_id,
-                        'payment_amount' => $payment_amount,
-                        'payment_method' => $payment->payment_method,
-                        'payment_status' => 2,
-                        'payment_details' => json_encode([
-                            "amount_cents" => $payment_amount * 100,
-                            "transaction_id" => $transaction_id ?? null,
-                            "source_data_sub_type" => auth()->user()->f_name . " " . auth()->user()->l_name
-                        ]),
-                    ]);
-
-                    $payment->update([
-                        "payment_amount" => $payment->payment_amount - $payment_amount
-                    ]);
-
-                    $order->update([
-                        'should_pay' => $order->should_pay - $payment_amount
-                    ]);
-                }
-
-                if ($payment->payment_method == 10) {
-                    if ($payment->user->balance - $payment_amount >= 0) {
-                        $payment->user->update([
-                            'balance' => $payment->user->balance - $payment_amount,
+                if ($transaction->payment_method_id == PaymentMethod::Wallet->value) {
+                    // Check if user has enough balance to pay from his wallet
+                    if ($transaction->user->balance - $payment_amount >= 0) {
+                        $transaction->user->update([
+                            'balance' => $transaction->user->balance - $payment_amount,
                         ]);
                     } else {
-                        $payment->user->update([
+                        $transaction->user->update([
                             'balance' => 0,
                         ]);
 
-                        $order->payments()->create([
+                        $order->transactions()->create([
                             'order_id' => $order->id,
-                            'user_id' => $payment->user_id,
-                            'payment_amount' => -1 * ($payment->user->balance - $payment_amount),
-                            'payment_method' => $payment->payment_method,
-                            'payment_status' => 1,
+                            'invoice_id' => $order->invoice->id,
+                            'user_id' => $transaction->user_id,
+                            'payment_amount' => -1 * ($transaction->user->balance - $payment_amount),
+                            'payment_method_id' => $transaction->payment_method_id,
+                            'payment_status_id' => PaymentStatus::Pending->value,
                             'payment_details' => json_encode([
-                                "amount_cents" => ($payment->user->balance - $payment_amount) * 100,
+                                "amount_cents" => ($transaction->user->balance - $payment_amount) * 100,
                                 "transaction_id" => null,
                                 "source_data_sub_type" => auth()->user()->f_name . " " . auth()->user()->l_name
                             ]),
                         ]);
+
+                        // Edit the payment amount
+                        $payment_amount = $transaction->user->balance;
                     }
+                }
+
+                // Check if payment amount equal to the total transaction amount
+                if ($payment_amount == $transaction->payment_amount) {
+                    $transaction->update([
+                        'payment_status_id' => PaymentStatus::Paid->value,
+                        'service_provider_transaction_id' => $transaction_id ?? null,
+                        'payment_details' => json_encode([
+                            "amount_cents" => $payment_amount * 100,
+                            "source_data_sub_type" => auth()->user()->f_name . " " . auth()->user()->l_name
+                        ])
+                    ]);
+                } else {
+                    $order->transactions()->create([
+                        'order_id' => $order->id,
+                        'invoice_id' => $order->invoice->id,
+                        'user_id' => $transaction->user_id,
+                        'payment_amount' => $payment_amount,
+                        'payment_method_id' => $transaction->payment_method_id,
+                        'payment_status_id' => PaymentStatus::Paid->value,
+                        'service_provider_transaction_id' => $transaction_id ?? null,
+                        'payment_details' => json_encode([
+                            "amount_cents" => $payment_amount * 100,
+                            "source_data_sub_type" => auth()->user()->f_name . " " . auth()->user()->l_name
+                        ]),
+                    ]);
+
+                    $transaction->update([
+                        "payment_amount" => $transaction->payment_amount - $payment_amount
+                    ]);
                 }
 
                 $this->dispatch(
@@ -191,41 +197,45 @@ class PaymentHistory extends Component
     ############## Pop-up Payment Confirmed and Database updates :: End ##############
 
     ############## Pop-up Refund Destination Choices :: Start ##############
-    public function refundDestination($payment_id)
+    public function refundConfirm($transaction_id)
     {
-        $payment = Invoice::findOrFail($payment_id);
-        $disabled = in_array($payment->payment_method, [2, 3]) ? 'disabled' : '';
-        $transaction_id = in_array($payment->payment_method, [2, 3]) ? json_decode($payment->payment_details)->transaction_id : "";
+        $transaction = Transaction::findOrFail($transaction_id);
+        $disabled = in_array($transaction->payment_method_id, [PaymentMethod::Card->value, PaymentMethod::Installments->value]) ? 'disabled' : '';
+        $serviceProviderTransactionId = json_decode($transaction->payment_details)->transaction_id ?? "";
 
-        $this->dispatch('swalGetRefundData', title: __('admin/ordersPages.Enter the payment details'),
+        $this->dispatch(
+            'swalGetRefundData',
+            title: __('admin/ordersPages.Enter the payment details'),
             html: '
                 <div class="flex flex-col p-2 gap-3">
                     <div>
                         <label class="text-gray-600" for="amount">' . __("admin/ordersPages.Payment amount") . '</label>
                         <input type="number" id="amount" placeholder="' . __("admin/ordersPages.Enter the payment amount") . '"
-                        dir="ltr" step="0.01" min="0" max="' . abs($payment->payment_amount) . '" value="' . abs($payment->payment_amount) . '"
+                        dir="ltr" step="0.01" min="0" max="' . abs($transaction->payment_amount) . '" value="' . abs($transaction->payment_amount) . '"
                         class="text-center focus:ring-primary focus:border-primary flex-1 block w-full rounded-md sm:text-sm border-gray-300">
                     </div>
                     <div>
                         <label class="text-gray-600" for="transaction_id">' . __("admin/ordersPages.Transaction id") . '</label>
                         <input type="text" id="transaction_id" dir="ltr"  placeholder="' . __("admin/ordersPages.Enter the transaction id") . '"
                         class="text-center focus:ring-primary focus:border-primary flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-                        value =' . $transaction_id . ' ' . $disabled . '>
+                        value ="' . $serviceProviderTransactionId . '" ' . $disabled . '>
                     </div>
                     <div class="flex items-center justify-around p-2">
                         <div class="flex items-center Justify-center gap-2">
                             <label class="text-gray-600 text-sm font-bold select-none cursor-pointer m-0" for="wallet">' . __("admin/ordersPages.Customer's Wallet") . '</label>
                             <input
                             class="appearance-none checked:bg-secondary checked:border-white outline-none ring-0 cursor-pointer"
-                            type="radio" id="wallet" name="type" value="10" checked/>
-                        </div>
+                            type="radio" id="wallet" name="type" value="' . PaymentMethod::Wallet->value . '" checked/>
+                        </div>' .
+                ($transaction->payment_method_id == PaymentMethod::Wallet->value ? "" : '
                         <div class="flex items-center Justify-center gap-2">
-                            <label class="text-gray-600 text-sm font-bold select-none cursor-pointer m-0" for="other">' . ($payment->payment_method == 1 ? __("admin/ordersPages.COD") : ($payment->payment_method == 2 || $payment->payment_method == 3 ? __("admin/ordersPages.Customer's Card") : ($payment->payment_method == 4 ? __("admin/ordersPages.Customer's Vodafone Wallet") : (__('N/A'))))) . '</label>
+                            <label class="text-gray-600 text-sm font-bold select-none cursor-pointer m-0" for="other">' . (__("admin/ordersPages." . PaymentMethod::getKeyFromValue($transaction->payment_method_id)) ?? __('N/A')) . '</label>
                             <input
                             class="appearance-none checked:bg-secondary checked:border-white outline-none ring-0 cursor-pointer"
-                            type="radio" id="other" name="type" value="' . $payment->payment_method . '"/>
+                            type="radio" id="other" name="type" value="' . $transaction->payment_method_id . '"/>
                         </div>
-                    </div>
+                        ') .
+                '</div>
                 </div>
                 ',
             confirmButtonText: __('admin/ordersPages.Confirm'),
@@ -235,56 +245,62 @@ class PaymentHistory extends Component
             focusDeny: true,
             icon: 'warning',
             method: 'refundConfirmed',
-            id: $payment_id,
-    );
+            id: $transaction_id,
+        );
     }
     ############## Pop-up Refund Destination Choices :: End ##############
 
     ############## Refund Confirmed :: Start ##############
-    public function refundConfirmed($id, $value)
+    public function refundConfirmed($id, $payment_amount, $transaction_id, $type)
     {
-        $payment = Invoice::with('order', 'user')->findOrFail($id);
-        $payment_amount = $value[0] <= abs($payment->payment_amount) ? $value[0] : abs($payment->payment_amount);
-        $transaction_id = $value[1];
-        $type = $value[2];
-        $order = $payment->order;
-        $user = $payment->user;
-        $partial_payment = $payment_amount != abs($payment->payment_amount);
-        $return_to_wallet = $type == 10;
+        $transaction = Transaction::with('order', 'user')->findOrFail($id);
+        $order = $transaction->order;
+        $user = $transaction->user;
+        $partial_payment = $payment_amount != abs($transaction->payment_amount);
+        $return_to_wallet = $type == PaymentMethod::Wallet->value;
+
+        // Check if transaction $payment_amount is not greater than the total transaction amount
+        if ($payment_amount > abs($transaction->payment_amount)) {
+            $this->dispatch(
+                'swalDone',
+                text: __("admin/ordersPages.The refund amount is greater than the total transaction amount"),
+                icon: 'error'
+            );
+            return;
+        }
 
         // return to customer by delivery, vodafone cash or customer's wallet
-        if (in_array($type, [1, 4, 10])) {
-            $this->refundSuccess($payment, $type, $payment_amount, $transaction_id, $order, $user, $partial_payment, $return_to_wallet);
+        if (in_array($type, [PaymentMethod::Cash->value, PaymentMethod::VodafoneCash->value, PaymentMethod::Wallet->value])) {
+            $this->refundSuccess($transaction, $type, $payment_amount, $transaction_id, $order, $user, $partial_payment, $return_to_wallet);
         }
 
         // return to customer By Card
-        elseif (in_array($type, [2, 3])) {
-            try {
-                $old_payment = Invoice::where('payment_details->transaction_id', $transaction_id)
-                    ->where('payment_status', 2)
-                    ->firstOrFail();
-            } catch (\Throwable $th) {
-                $this->dispatch(
-                    'swalDone',
-                    text: __("admin/ordersPages.Wrong transaction id, please try again"),
-                    icon: 'error'
-                );
-            }
+        elseif (in_array($type, [PaymentMethod::Card->value, PaymentMethod::Installments->value])) {
+            $old_transaction_id = json_decode($transaction->payment_details)->transaction_id ?? null;
 
-            if (refundRequestPaymob($transaction_id, $payment_amount)) {
-                $this->refundSuccess($payment, $type, $payment_amount, $transaction_id, $order, $user, $partial_payment, $return_to_wallet, $old_payment);
+            $old_transaction = Transaction::where('service_provider_transaction_id', $old_transaction_id)->first();
+
+            $paymentGateway = $type == PaymentMethod::Card->value ? new CardGateway() : new InstallmentGateway();
+
+            $paymentService = new PaymentService($paymentGateway);
+
+            $new_transaction_id = $paymentService->refundOrVoid($old_transaction, $payment_amount);
+
+            if ($new_transaction_id) {
+                $this->refundSuccess($transaction, $type, $new_transaction_id, $new_transaction_id, $order, $user, $partial_payment, $return_to_wallet);
             } else {
-                $payment->update([
-                    'payment_status' => 3,
+                $transaction->update([
+                    'payment_status_id' => PaymentStatus::RefundFailed->value,
                 ]);
 
-                $order->payments()->create([
-                    'order_id' => $payment->order_id,
-                    'user_id' => $payment->user_id,
-                    'payment_amount' => $payment->payment_amount,
-                    'payment_method' => $payment->payment_method,
-                    'payment_status' => 5,
-                    'payment_details' => $payment->payment_details,
+                $order->transactions()->create([
+                    'order_id' => $transaction->order_id,
+                    'invoice_id' => $transaction->invoice_id,
+                    'user_id' => $transaction->user_id,
+                    'payment_amount' => $transaction->payment_amount,
+                    'payment_method_id' => $transaction->payment_method_id,
+                    'payment_status_id' => PaymentStatus::Refundable->value,
+                    'payment_details' => $transaction->payment_details,
                 ]);
             }
         }
@@ -293,7 +309,7 @@ class PaymentHistory extends Component
 
     ############## Refund Steps :: Start ##############
     public function refundSuccess(
-        $payment,
+        $transaction,
         $type,
         $payment_amount,
         $transaction_id,
@@ -301,31 +317,33 @@ class PaymentHistory extends Component
         $user,
         $partial_payment = false,
         $return_to_wallet = false,
-        $old_payment = null
     ) {
         DB::beginTransaction();
 
         try {
             if ($partial_payment) {
                 // edit order's payments
-                $order->payments()->create([
-                    'order_id' => $payment->order_id,
-                    'user_id' => $payment->user_id,
-                    'payment_amount' => $payment->payment_amount + $payment_amount,
-                    'payment_method' => $payment->payment_method,
-                    'payment_status' => 5,
-                    'payment_details' => null,
+                $order->transactions()->create([
+                    'order_id' => $transaction->order_id,
+                    'invoice_id' => $transaction->invoice_id,
+                    'user_id' => $transaction->user_id,
+                    'payment_amount' => $transaction->payment_amount + $payment_amount,
+                    'payment_method_id' => $transaction->payment_method_id,
+                    'payment_status_id' => PaymentStatus::Refundable->value,
+                    'service_provider_transaction_id' => $transaction->service_provider_transaction_id,
+                    'payment_details' => $transaction->payment_details,
                 ]);
             }
 
-            // edit payment
-            $payment->update([
+            // edit transaction
+            $transaction->update([
                 'payment_amount' => -1 * $payment_amount,
-                'payment_method' => $type,
-                'payment_status' => 4,
+                'payment_method_id' => $type,
+                'payment_status_id' => PaymentStatus::Refunded->value,
+                'service_provider_transaction_id' => $transaction_id ?? null,
                 'payment_details' => json_encode([
                     "amount_cents" => $payment_amount * 100,
-                    "transaction_id" => $transaction_id,
+                    "transaction_id" => json_decode($transaction->payment_details)->transaction_id ?? null,
                     "source_data_sub_type" => auth()->user()->f_name . " " . auth()->user()->l_name
                 ])
             ]);
@@ -334,17 +352,6 @@ class PaymentHistory extends Component
             if ($return_to_wallet) {
                 $user->update([
                     'balance' => $user->balance + $payment_amount
-                ]);
-            }
-
-            // update Order
-            $order->update([
-                'should_get' => $order->should_get - $payment_amount,
-            ]);
-
-            if ($old_payment) {
-                $old_payment->update([
-                    'payment_amount' => $old_payment->payment_amount - $payment_amount
                 ]);
             }
 
@@ -359,17 +366,18 @@ class PaymentHistory extends Component
             //throw $th;
             DB::rollBack();
 
-            $payment->update([
-                'payment_status' => 3,
+            $transaction->update([
+                'payment_status_id' => PaymentStatus::RefundFailed->value,
             ]);
 
-            $order->payments()->create([
-                'order_id' => $payment->order_id,
-                'user_id' => $payment->user_id,
-                'payment_amount' => $payment->payment_amount,
-                'payment_method' => $payment->payment_method,
-                'payment_status' => 5,
-                'payment_details' => $payment->payment_details,
+            $order->transactions()->create([
+                'order_id' => $transaction->order_id,
+                'invoice_id' => $transaction->invoice_id,
+                'user_id' => $transaction->user_id,
+                'payment_amount' => $transaction->payment_amount,
+                'payment_method_id' => $transaction->payment_method_id,
+                'payment_status_id' => PaymentStatus::Refundable->value,
+                'payment_details' => $transaction->payment_details,
             ]);
 
             $this->dispatch(
@@ -381,9 +389,57 @@ class PaymentHistory extends Component
     }
     ############## Refund Steps :: End ##############
 
+    ############## pop-up remove transaction confirm :: Start ##############
+    public function removeTransactionConfirm($transaction_id)
+    {
+        $this->dispatch(
+            'swalConfirm',
+            text: __('admin/ordersPages.Are you sure, you want to remove this transaction?'),
+            confirmButtonText: __('admin/ordersPages.Yes'),
+            denyButtonText: __('admin/ordersPages.No'),
+            denyButtonColor: 'red',
+            confirmButtonColor: 'green',
+            focusDeny: true,
+            icon: 'warning',
+            method: 'removeTransaction',
+            id: $transaction_id,
+        );
+    }
+    ############## pop-up remove transaction confirm :: End ##############
+
+    ############## Remove Transaction :: Start ##############
+    public function removeTransaction($id)
+    {
+        $transaction = Transaction::findOrFail($id);
+        DB::beginTransaction();
+
+        try {
+            $transaction->delete();
+
+            DB::commit();
+
+            $this->dispatch(
+                'swalDone',
+                text: __("admin/ordersPages.This transaction has been removed successfully"),
+                icon: 'success'
+            );
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            $this->dispatch(
+                'swalDone',
+                text: __("admin/ordersPages.Unexpected error occurred, please try again"),
+                icon: 'error'
+            );
+        }
+    }
+
+
     public function addPayment()
     {
-        $this->dispatch('swalGetNewPaymentData', title: __('admin/ordersPages.Enter the payment details'),
+        $this->dispatch(
+            'swalGetNewPaymentData',
+            title: __('admin/ordersPages.Enter the payment details'),
             html: '
                 <div class="flex flex-col p-2 gap-3">
                     <div>
@@ -436,22 +492,22 @@ class PaymentHistory extends Component
         );
     }
 
-    public function paymentAddingConfirmed($value)
-    {
-        $payment_amount = $value[0];
-        $type = $value[1];
+    public function paymentAddingConfirmed(
+        $payment_amount,
+        $type
+    ) {
         $order = $this->order;
 
         if ($payment_amount > 0) {
-            $order->payments()->create([
+            $order->transactions()->create([
+                'invoice_id' => $order->invoice->id,
                 'order_id' => $order->order_id,
                 'user_id' => $order->user_id,
                 'payment_amount' => $payment_amount,
-                'payment_method' => $type,
-                'payment_status' => 1,
+                'payment_method_id' => $type,
+                'payment_status_id' => PaymentStatus::Pending->value,
                 'payment_details' =>  json_encode([
                     "amount_cents" => $payment_amount * 100,
-                    "transaction_id" => null,
                     "source_data_sub_type" => auth()->user()->f_name . " " . auth()->user()->l_name
                 ])
             ]);
@@ -472,7 +528,9 @@ class PaymentHistory extends Component
 
     public function addRefund()
     {
-        $this->dispatch('swalGetNewRefundData', title: __('admin/ordersPages.Enter the payment details'),
+        $this->dispatch(
+            'swalGetNewRefundData',
+            title: __('admin/ordersPages.Enter the payment details'),
             html: '
                 <div class="flex flex-col p-2 gap-3">
                     <div>
@@ -530,22 +588,35 @@ class PaymentHistory extends Component
         );
     }
 
-    public function refundAddingConfirmed($value)
+    public function refundAddingConfirmed($payment_amount, $transaction_id, $type)
     {
-        $payment_amount = $value[0];
-        $transaction_id = $value[1];
-        $type = $value[2];
         $order = $this->order;
 
-        if ($payment_amount > 0) {
-            $order->payments()->create([
+        if ($payment_amount > 0 && $payment_amount <= $order->invoice->paid) {
+            if (in_array($type, [PaymentMethod::Card->value, PaymentMethod::Installments->value])) {
+                $orderTransactionsIds = $order->transactions()->where([
+                    'payment_status_id' => PaymentStatus::Paid->value, 'payment_method_id' => $type
+                ])->pluck('service_provider_transaction_id')->toArray();
+
+                if (!in_array($transaction_id, $orderTransactionsIds)) {
+                    $this->dispatch(
+                        'swalDone',
+                        text: __("admin/ordersPages.Wrong transaction id, please try again"),
+                        icon: 'error'
+                    );
+                    return;
+                }
+            }
+
+            $order->transactions()->create([
+                'invoice_id' => $order->invoice->id,
                 'order_id' => $order->order_id,
                 'user_id' => $order->user_id,
                 'payment_amount' => -1 * $payment_amount,
-                'payment_method' => $type,
-                'payment_status' => 5,
+                'payment_method_id' => $type,
+                'payment_status_id' => PaymentStatus::Refundable->value,
                 'payment_details' =>  json_encode([
-                    "amount_cents" => $payment_amount * 100,
+                    "amount_cents" => -1 * $payment_amount * 100,
                     "transaction_id" => $transaction_id,
                     "source_data_sub_type" => auth()->user()->f_name . " " . auth()->user()->l_name
                 ])
@@ -565,26 +636,13 @@ class PaymentHistory extends Component
         }
     }
 
-    public function createEditDelivery()
+    public function createDelivery()
     {
+        
         $order = $this->order;
-
-        if ($order->order_delivery_id) {
-            if (editBostaOrder($order, $order->id)) {
-                $this->dispatch(
-                    'swalDone',
-                    text: __("admin/ordersPages.The delivery has been edited successfully"),
-                    icon: 'success'
-                );
-            } else {
-                $this->dispatch(
-                    'swalDone',
-                    text: __("admin/ordersPages.The delivery hasn't been edited"),
-                    icon: 'error'
-                );
-            }
-        } else {
-            $bosta_order = createBostaOrder($order, 1);
+        
+        if (!$order->order_delivery_id) {
+            $bosta_order = createBostaOrder($order);
 
             if ($bosta_order['status']) {
                 $this->dispatch(
@@ -596,7 +654,6 @@ class PaymentHistory extends Component
                 $order->update([
                     'tracking_number' => $bosta_order['data']['trackingNumber'],
                     'order_delivery_id' => $bosta_order['data']['_id'],
-                    'status_id' => 3,
                 ]);
             } else {
                 $this->dispatch(
@@ -605,6 +662,12 @@ class PaymentHistory extends Component
                     icon: 'error'
                 );
             }
+        } else {
+            $this->dispatch(
+                'swalDone',
+                text: __("admin/ordersPages.The delivery has been created before"),
+                icon: 'error'
+            );
         }
     }
 }

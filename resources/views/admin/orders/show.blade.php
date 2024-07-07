@@ -59,7 +59,8 @@
                             <hr class="my-2">
 
                             {{-- Order's Products :: Start --}}
-                            <x-admin.orders.order-products-list :products="$order->products" />
+                            {{-- @dd($order->transactions) --}}
+                            <x-admin.orders.order-products-list :items="$order->items" />
                             {{-- Order's Products :: End --}}
 
                             <hr class="my-2">
@@ -73,7 +74,7 @@
 
                                 {{-- Order's Transactions :: Start --}}
                                 <div class="overflow-auto md:col-span-2">
-                                    <x-admin.orders.order-payment-history-view :payments="$order->payments" />
+                                    <x-admin.orders.order-payment-history-view :transactions="$order->transactions" />
                                     {{-- Order's Transactions :: End --}}
                                 </div>
                             </div>

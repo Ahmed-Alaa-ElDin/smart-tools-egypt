@@ -6,15 +6,16 @@ use Illuminate\View\Component;
 
 class OrderPaymentHistoryView extends Component
 {
-    public $payments;
+    public $transactions;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($payments)
+    public function __construct($transactions)
     {
-        $this->payments = $payments;
+        // dd($transactions);
+        $this->transactions = $transactions;
     }
 
     /**

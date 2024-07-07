@@ -11,7 +11,6 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -21,7 +20,6 @@ class OrderController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -32,7 +30,6 @@ class OrderController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -43,15 +40,18 @@ class OrderController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
      */
     public function show($order_id)
     {
         $order = Order::with([
             'products' => fn ($q) => $q->with('thumbnail'),
+            'collections' => fn ($q) => $q->with('thumbnail'),
             "statuses",
-            "payments",
+            "invoice",
+            "transactions"
         ])->findOrFail($order_id);
+
+        $order->items = $order->products->merge($order->collections)->toArray();
 
         return view('admin.orders.show', compact('order'));
     }
@@ -60,7 +60,6 @@ class OrderController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
      */
     public function edit(Order $order)
     {
@@ -72,7 +71,6 @@ class OrderController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Order $order)
     {
@@ -83,7 +81,6 @@ class OrderController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
      */
     public function destroy(Order $order)
     {
@@ -93,5 +90,10 @@ class OrderController extends Controller
     public function paymentHistory($order_id)
     {
         return view('admin.orders.payment_history', compact('order_id'));
+    }
+
+    public function softDeletedOrders()
+    {
+        return view('admin.orders.softDeleted');
     }
 }

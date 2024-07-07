@@ -57,7 +57,7 @@
                             <span class="material-icons">
                                 search
                             </span> </span>
-                        <input type="text"   wire:model.live='search'
+                        <input type="text" wire:model.live='search'
                             class="focus:ring-primary focus:border-primary flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-300"
                             placeholder="{{ __('admin/ordersPages.Search ...') }}">
                     </div>
@@ -266,9 +266,9 @@
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
                                         <div class="flex flex-col items-center content-center justify-center">
                                             @if ($order->address_id)
-                                                <span>{{ $order->address->governorate->name }}</span>
                                                 <span
-                                                    class="text-xs font-bold">{{ $order->address->city->name }}</span>
+                                                    class="font-bold">{{ $order->address->city->name }}</span>
+                                                <span class="text-xs ">{{ $order->address->governorate->name }}</span>
                                             @else
                                                 {{ __('N/A') }}
                                             @endif

@@ -42,4 +42,13 @@ class PaymentService
 
         return false;
     }
+
+    public function refundOrVoid(Transaction $transaction, float $amount): string
+    {
+        if (method_exists($this->paymentGateway, 'refundOrVoid')) {
+            return $this->paymentGateway->refundOrVoid($transaction, $amount);
+        }
+
+        return '';
+    }
 }

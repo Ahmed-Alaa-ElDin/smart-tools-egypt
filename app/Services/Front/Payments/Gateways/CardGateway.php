@@ -56,4 +56,51 @@ class CardGateway implements PaymentGateway, PaymobGateway
 
         return $intentionRequest['client_secret'] ?? "";
     }
+
+    public function refundOrVoid(Transaction $transaction, float $amount): string
+    {
+        // Check if the transaction made at the same day
+        if ($transaction->created_at->isToday() && $transaction->payment_amount == $amount) {
+            $newTransactionId = $this->void($transaction);
+
+            // Return the new transaction ID if void was successful
+            if ($newTransactionId) {
+                return $newTransactionId;
+            }
+        }
+
+        // Refund the transaction if it wasn't made today or voiding failed
+        return $this->refund($transaction, $amount);
+    }
+
+    public function refund(Transaction $transaction, float $amount): string
+    {
+        $refundRequest = Http::acceptJson()->withHeaders([
+            'Authorization' => 'Token ' . env('PAYMOB_SECRET_KEY')
+        ])->post('https://accept.paymob.com/api/acceptance/void_refund/refund', [
+            'transaction_id' => $transaction->service_provider_transaction_id,
+            'amount_cents' => number_format($amount * 100, 0, '', ''),
+        ])->json();
+
+        if (isset($refundRequest['success']) && $refundRequest['success'] && $refundRequest['parent_transaction_id'] == $transaction->id) {
+            return $refundRequest['id'];
+        } else {
+            return "";
+        }
+    }
+
+    public function void(Transaction $transaction): string
+    {
+        $voidRequest = Http::acceptJson()->withHeaders([
+            'Authorization' => 'Token ' . env('PAYMOB_SECRET_KEY')
+        ])->post('https://accept.paymob.com/api/acceptance/void_refund/void', [
+            'transaction_id' => $transaction->service_provider_transaction_id,
+        ])->json();
+
+        if (isset($refundRequest['success']) && $voidRequest['success'] && $voidRequest['parent_transaction_id'] == $transaction->id) {
+            return $voidRequest['id'];
+        } else {
+            return "";
+        }
+    }
 }

@@ -4,9 +4,10 @@ namespace App\Livewire\Admin\Orders;
 
 use App\Models\Order;
 use App\Models\Status;
-use Illuminate\Support\Facades\Config;
 use Livewire\Component;
+use App\Enums\OrderStatus;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Config;
 
 class OrdersDatatable extends Component
 {
@@ -276,7 +277,7 @@ class OrdersDatatable extends Component
 
             $order->update([
                 'status_id' => $status_id,
-                'delivered_at' => $status_id == 45 ? now() : null
+                'delivered_at' => $status_id == OrderStatus::Delivered->value ? now() : null
             ]);
 
             $this->dispatch(

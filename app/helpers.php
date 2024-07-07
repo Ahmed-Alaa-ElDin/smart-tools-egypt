@@ -1,15 +1,18 @@
 <?php
 
-use App\Models\Collection;
-use App\Models\Coupon;
-use App\Models\Product;
-use App\Models\Review;
 use App\Models\User;
+use App\Models\Coupon;
+use App\Models\Review;
+use App\Models\Product;
+use App\Models\Collection;
+use App\Enums\PaymentMethod;
+use App\Enums\PaymentStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
+use Illuminate\Support\Facades\Storage;
+use App\Enums\OrderStatus;
 
 // todo :: compare between this function and lower one
 // Upload single photo and get link
@@ -387,8 +390,12 @@ function get_item_rating($product_id, $type = 'Product')
 
 ################ BOSTA :: START ##################
 // create bosta Order
-function createBostaOrder($order, $payment_method)
+function createBostaOrder($order)
 {
+    $unpaidTransactions = $order->transactions()->where('payment_status_id', PaymentStatus::Pending->value)->get();
+
+    $paymentAmount = $unpaidTransactions->where('payment_method_id', PaymentMethod::Cash->value)->sum('payment_amount') ?? 0;
+
     $order_data = [
         "specs" => [
             "packageDetails"    =>      [
@@ -414,7 +421,7 @@ function createBostaOrder($order, $payment_method)
         "businessReference" => "$order->id",
         "type"      =>      10,
         "notes"     =>      $order->notes ? $order->notes . ($order->user->phones->where('default', 0)->count() > 1 ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : '') : ($order->user->phones->where('default', 0)->count() > 1 ? implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : ''),
-        "cod"       =>      $payment_method == 1 ? ceil($order->transactions()->where('payment_method', 1)->where('payment_status', 1)->sum('payment_amount')) : 0.00,
+        "cod"       =>      $paymentAmount ? ceil($paymentAmount) : 0.00,
         "allowToOpenPackage" => true,
         "webhookUrl" => "https://www.smarttoolsegypt.com/api/orders/update-status",
     ];
@@ -434,11 +441,11 @@ function createBostaOrder($order, $payment_method)
         $order->update([
             'tracking_number' => $decoded_bosta_response['trackingNumber'],
             'order_delivery_id' => $decoded_bosta_response['_id'],
-            'status_id' => 204,
+            'status_id' => OrderStatus::PickupRequested->value,
         ]);
 
-        $order->statuses()->attach(204);
-
+        $order->statuses()->attach(OrderStatus::PickupRequested->value);
+        
         return [
             'status'    =>  true,
             'data'      =>  $decoded_bosta_response,
@@ -477,7 +484,7 @@ function editBostaOrder($order, $old_order)
         ],
         "businessReference" => "$old_order->id",
         "notes"     =>      $order->notes ? $order->notes . ($order->user->phones->where('default', 0)->count() > 1 ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : '') : ($order->user->phones->where('default', 0)->count() > 1 ? implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : ''),
-        "cod"       =>      $old_order->unpaid_payment_method == 1 ? ceil($order->transactions()->where('payment_method', 1)->where('payment_status', 1)->sum('payment_amount')) : 0.00,
+        "cod"       =>      $old_order->unpaid_payment_method == PaymentMethod::Cash->value ? ceil($order->transactions()->where('payment_method_id', PaymentMethod::Cash->value)->where('payment_status_id', PaymentStatus::Pending->value)->sum('payment_amount')) : 0.00,
         "allowToOpenPackage" => true,
     ];
 

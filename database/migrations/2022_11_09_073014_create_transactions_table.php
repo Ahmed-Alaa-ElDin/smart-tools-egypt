@@ -24,6 +24,7 @@ return new class extends Migration
             $table->tinyInteger('payment_status_id')->unsigned();
             $table->string('service_provider_transaction_id', 20)->nullable();
             $table->text('payment_details')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('invoice_id')->references('id')->on('invoices')->onUpdate('cascade')->nullOnDelete();

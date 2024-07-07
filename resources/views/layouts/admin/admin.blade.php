@@ -101,7 +101,10 @@
                 focusDeny: e.detail.focusDeny,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.dispatch(e.detail.method, {id: e.detail.id}, e.detail.details || []);
+                    Livewire.dispatch(e.detail.method, {
+                        id: e.detail.id,
+                        details: e.detail.details || []
+                    });
                 }
             });
         });

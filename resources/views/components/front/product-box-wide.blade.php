@@ -174,7 +174,7 @@
                             {{ __('front/homePage.Quantity') }}
                         </div>
                         <div class="bg-white text-gray-900 p-1 rounded-circle w-7 h-7 font-bold text-center">
-                            {{ $item->pivot->quantity }}
+                            {{ $item['pivot']['quantity'] }}
                         </div>
                     </div>
                 @endif

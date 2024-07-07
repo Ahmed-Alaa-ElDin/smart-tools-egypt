@@ -2,8 +2,7 @@
     <div class="h4 text-center font-bold text-red-800">
         {{ __('admin/ordersPages.Order Summary') }}
     </div>
-    <div
-        class="overflow-x-auto scrollbar scrollbar-thin scrollbar-thumb-red-100 border-b border-red-200 sm:rounded-lg">
+    <div class="overflow-x-auto scrollbar scrollbar-thin scrollbar-thumb-red-100 border-b border-red-200 sm:rounded-lg">
         <table class="min-w-full divide-y divide-red-200">
             <thead class="bg-red-50">
                 <tr>
@@ -56,7 +55,7 @@
                                 {{ $order->user->f_name . ' ' . $order->user->l_name }}
                             </span>
                             <span>
-                                {{ $order->user->phones()->first()->phone }}
+                                {{ $order->user->phones->first()->phone }}
                             </span>
                         </div>
                     </td>
@@ -64,32 +63,31 @@
                         {{ $order->num_of_items }}
                     </td>
                     <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format($order->total, 2, '.', '\'') }}
+                        {{ number_format($order->invoice->total, 2, '.', '\'') }}
                     </td>
                     <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format($order->unpaid, 2, '.', '\'') }}
+                        {{ number_format($order->invoice->unpaid, 2, '.', '\'') }}
                     </td>
                     <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format($order->paid, 2, '.', '\'') }}
+                        {{ number_format($order->invoice->paid, 2, '.', '\'') }}
                     </td>
                     <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format(abs($order->refund), 2, '.', '\'') }}
+                        {{ number_format(abs($order->invoice->refundable), 2, '.', '\'') }}
                     </td>
                     <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format(abs($order->refunded), 2, '.', '\'') }}
+                        {{ number_format(abs($order->invoice->refunded), 2, '.', '\'') }}
                     </td>
-                    <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ $order->payment_method == 1
-                            ? __('admin/ordersPages.Cash on delivery (COD)')
-                            : ($order->payment_method == 2
-                                ? __('admin/ordersPages.Credit / Debit Card')
-                                : ($order->payment_method == 3
-                                    ? __('admin/ordersPages.Installment')
-                                    : ($order->payment_method == 4
-                                        ? __('admin/ordersPages.Vodafone Cash')
-                                        : ($order->payment_method == 10
-                                            ? __('admin/ordersPages.Wallet')
-                                            : '')))) }}
+                    <td class="px-6 py-2 text-center">
+                        <div class="flex flex-wrap justify-center">
+                            @foreach ($order->payment_methods->unique() as $payment_method)
+                                <span class="text-sm">
+                                    {{ __('admin/ordersPages.' . App\Enums\PaymentMethod::getKeyFromValue($payment_method)) }}
+                                    @if(!$loop->last)
+                                        ,
+                                    @endif
+                                </span>
+                            @endforeach
+                        </div>
                     </td>
                 </tr>
             </tbody>

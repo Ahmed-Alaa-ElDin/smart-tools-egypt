@@ -1,4 +1,4 @@
-@extends('layouts.admin.admin', ['activeSection' => 'Orders', 'activePage' => 'All Orders', 'titlePage' => __('admin/ordersPages.All Orders')])
+@extends('layouts.admin.admin', ['activeSection' => 'Orders', 'activePage' => 'Deleted Orders', 'titlePage' => __('admin/ordersPages.Deleted Orders')])
 
 @section('content')
     <div class="content">
@@ -8,7 +8,12 @@
                 <ol class="breadcrumb text-sm">
                     <li class="breadcrumb-item hover:text-primary"><a
                             href="{{ route('admin.dashboard') }}">{{ __('admin/ordersPages.Dashboard') }}</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/ordersPages.All Orders') }}</li>
+                    <li class="breadcrumb-item hover:text-primary"><a
+                            href="{{ route('admin.orders.index') }}">{{ __('admin/ordersPages.All Orders') }}</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        {{ __('admin/ordersPages.Deleted Orders') }}
+                    </li>
                 </ol>
             </nav>
 
@@ -22,18 +27,8 @@
                         <div class="card-header card-header-primary">
                             <div class="flex justify-between">
                                 <div class=" ltr:text-left rtl:text-right font-bold self-center text-gray-100">
-                                    <p class=""> {{ __('admin/ordersPages.Here you can manage orders') }}</p>
-                                </div>
-
-                                {{-- Create New Order --}}
-                                <div class="ltr:text-right rtl:text-left">
-                                    <a href="{{ route('admin.orders.create') }}"
-                                        class="btn btn-sm bg-success hover:bg-successDark focus:bg-success active:bg-success font-bold">
-                                        <span class="material-icons rtl:ml-1 ltr:mr-1">
-                                            add
-                                        </span>
-                                        {{ __('admin/ordersPages.Add Order') }}
-                                    </a>
+                                    <p class="">
+                                        {{ __('admin/ordersPages.Here you can Restore / Permanently delete orders') }}</p>
                                 </div>
                             </div>
                         </div>

@@ -333,7 +333,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td class="text-center py-2 font-bold" colspan="6">
+                                    <td class="text-center py-2 font-bold" colspan="8">
                                         {{ $search == '' ? __('admin/productsPages.No data in this table') : __('admin/productsPages.No data available according to your search') }}
                                     </td>
                                 </tr>

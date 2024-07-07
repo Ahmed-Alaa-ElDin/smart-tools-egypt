@@ -749,8 +749,8 @@ class OrderController extends Controller
     ##################### Save Order's Edits :: Start #####################
     public function update(Request $request, $old_order_id, $temp_order_id)
     {
-        $old_order = Order::with(['products', 'collections', 'user', 'payment', 'transactions', 'points'])->findOrFail($old_order_id);
-        $temp_order = Order::with(['products', 'collections', 'payment', 'transactions', 'points'])->findOrFail($temp_order_id);
+        $old_order = Order::with(['products', 'collections', 'user', 'invoice', 'transactions', 'points'])->findOrFail($old_order_id);
+        $temp_order = Order::with(['products', 'collections', 'invoice', 'transactions', 'points'])->findOrFail($temp_order_id);
         $pended_balance_refund = $temp_order->transactions()->where('payment_method_id', 10)->where('payment_status_id', 4)->sum('payment_amount') ?? 0;
         $pended_points_refund = $temp_order->transactions()->where('payment_method_id', 11)->where('payment_status_id', 4)->sum('payment_details->points') ?? 0;
         $should_get = $temp_order->transactions()->where('payment_status_id', 4)->count() ? true : false;

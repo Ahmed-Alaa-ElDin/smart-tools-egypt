@@ -141,13 +141,13 @@ class Order extends Model
 
     public function getMainPaymentMethodAttribute()
     {
-        return $this->transactions()->whereIn('payment_method_id', [
+        return $this->transactions->whereIn('payment_method_id', [
             PaymentMethod::Cash->value,
             PaymentMethod::Card->value,
             PaymentMethod::Installments->value,
             PaymentMethod::VodafoneCash->value,
         ])->count() ?
-            $this->transactions()->whereIn('payment_method_id', [
+            $this->transactions->whereIn('payment_method_id', [
                 PaymentMethod::Cash->value,
                 PaymentMethod::Card->value,
                 PaymentMethod::Installments->value,
