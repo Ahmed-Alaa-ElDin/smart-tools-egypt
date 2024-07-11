@@ -78,6 +78,27 @@ class StatusSeeder extends Seeder
             ],
         ]);
         Status::updateOrCreate([
+            'id' => 210,
+            'name' => [
+                'en' => 'Approved',
+                'ar' => 'تمت الموافقة',
+            ],
+        ]);
+        Status::updateOrCreate([
+            'id' => 211,
+            'name' => [
+                'en' => 'Rejected',
+                'ar' => 'تم الرفض',
+            ],
+        ]);
+        Status::updateOrCreate([
+            'id' => 212,
+            'name' => [
+                'en' => 'Waiting For Contact',
+                'ar' => 'في انتظار التواصل',
+            ],
+        ]);
+        Status::updateOrCreate([
             'id' => 301,
             'name' => [
                 'en' => 'Cancellation Requested',

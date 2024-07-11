@@ -41,7 +41,9 @@
                         {{-- Card Body --}}
                         <div class="card-body overflow-hidden">
                             {{-- Datatable Start --}}
-                            @livewire('admin.orders.orders-datatable')
+                            @livewire('admin.orders.orders-datatable',[
+                                'type' => 'all_orders'
+                            ])
                             {{-- Datatable End --}}
                         </div>
                     </div>

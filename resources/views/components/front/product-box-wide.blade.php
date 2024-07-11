@@ -7,7 +7,8 @@
                 href="{{ route('front.collections.show', ['id' => $item['id'], 'slug' => $item['slug'][session('locale')]]) }}" @endif
             class="min-w-max block hover:text-current">
             @if ($item['thumbnail'])
-                <img class="w-full h-full flex justify-center items-center bg-gray-200"
+                <img class="w-full h-full flex justify-center items-center bg-gray-200 construction-placeholder"
+                data-placeholder-size="text-8xl"
                     @if ($item['type'] == 'Product') src="{{ asset('storage/images/products/cropped100/' . $item['thumbnail']['file_name']) }}"
                 @elseif ($item['type'] == 'Collection')
                 src="{{ asset('storage/images/collections/cropped100/' . $item['thumbnail']['file_name']) }}" @endif
@@ -49,12 +50,12 @@
                 {{-- Reviews : Start --}}
                 <div class="my-1 flex justify-start items-center gap-2 select-none">
                     <div class="rating flex">
-                        {{-- @for ($i = 1; $i <= 5; $i++)
+                        @for ($i = 1; $i <= 5; $i++)
                             <span
                                 class="material-icons inline-block @if ($i <= ceil($item['avg_rating'])) text-yellow-300 @else text-gray-400 @endif">
                                 star
                             </span>
-                        @endfor --}}
+                        @endfor
                     </div>
 
                     <span class="text-sm text-gray-600">({{ $item['reviews_count'] ?? 0 }})</span>

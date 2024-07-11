@@ -11,7 +11,7 @@ use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 
-class OrdersDatatable extends Component
+class DeletedOrdersDatatable extends Component
 {
     use WithPagination;
 
@@ -25,13 +25,10 @@ class OrdersDatatable extends Component
     public $selectedProducts;
 
     protected $listeners = [
-        'archiveOrder',
-        'statusUpdate',
-        'archiveAll',
-        'statusesUpdate',
-        // 'softDeleteAllProduct',
-        // 'publishAllProduct',
-        // 'hideAllProduct'
+        'deleteOrder',
+        'restoreOrder',
+        'deleteAll',
+        'restoreAll',
     ];
 
     // Before First Render
@@ -69,8 +66,6 @@ class OrdersDatatable extends Component
             'orders.user_id',
             'orders.address_id',
             'orders.status_id',
-            // 'orders.should_pay',
-            // 'orders.should_get',
             'orders.updated_at',
             'users.f_name',
             'users.l_name',
@@ -113,6 +108,7 @@ class OrdersDatatable extends Component
                     ->orWhereIn('orders.id', $this->selectedOrders)
             )
             ->orderBy($this->sortBy, $this->sortDirection)
+            ->onlyTrashed()
             ->paginate($this->perPage);
 
         $this->orders_ids = $orders->pluck('id')->toArray();
@@ -123,7 +119,7 @@ class OrdersDatatable extends Component
             return $order;
         });
 
-        return view('livewire.admin.orders.orders-datatable', compact('orders'));
+        return view('livewire.admin.orders.deleted-orders-datatable', compact('orders'));
     }
 
     // Add conditions of sorting
@@ -164,28 +160,28 @@ class OrdersDatatable extends Component
         $this->selectedOrders = [];
         $this->selectAll = [];
     }
-    ######## Archive #########
-    public function archiveConfirm($order_id)
+    ######## Force Delete #########
+    public function deleteConfirm($order_id)
     {
         $this->dispatch(
             'swalConfirm',
-            text: __('admin/ordersPages.Are you sure, you want to archive this order?'),
+            text: __('admin/ordersPages.Are you sure, you want to delete this order?'),
             confirmButtonText: __('admin/ordersPages.Yes'),
             denyButtonText: __('admin/ordersPages.No'),
             denyButtonColor: 'green',
             confirmButtonColor: 'red',
             focusDeny: true,
             icon: 'warning',
-            method: 'archiveOrder',
+            method: 'deleteOrder',
             id: $order_id
         );
     }
 
-    public function archiveOrder($id)
+    public function deleteOrder($id)
     {
         try {
-            $order = Order::findOrFail($id);
-            $order->delete();
+            $order = Order::onlyTrashed()->findOrFail($id);
+            $order->forceDelete();
 
             if (($key = array_search($id, $this->selectedOrders)) !== false) {
                 unset($this->selectedOrders[$key]);
@@ -193,7 +189,7 @@ class OrdersDatatable extends Component
 
             $this->dispatch(
                 'swalDone',
-                text: __('admin/ordersPages.Order has been archived successfully'),
+                text: __('admin/ordersPages.Order has been deleted successfully'),
                 icon: 'success'
             );
 
@@ -201,145 +197,130 @@ class OrdersDatatable extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: __("admin/ordersPages.Order hasn't been archived"),
+                text: __("admin/ordersPages.Order hasn't been deleted"),
                 icon: 'error'
             );
         }
     }
 
-    public function archiveAllConfirm()
+    public function deleteAllConfirm()
     {
         $this->dispatch(
             'swalConfirm',
-            text: __('admin/ordersPages.Are you sure, you want to archive these orders?'),
+            text: __('admin/ordersPages.Are you sure, you want to delete these orders?'),
             confirmButtonText: __('admin/ordersPages.Yes'),
             denyButtonText: __('admin/ordersPages.No'),
             denyButtonColor: 'green',
             confirmButtonColor: 'red',
             focusDeny: true,
             icon: 'warning',
-            method: 'archiveAll',
+            method: 'deleteAll',
             id: ''
         );
     }
 
-    public function archiveAll()
+    public function deleteAll()
     {
         try {
-            Order::whereIn('id', $this->selectedOrders)->delete();
-
+            Order::whereIn('id', $this->selectedOrders)->onlyTrashed()->forceDelete();
             $this->selectedOrders = [];
 
             $this->dispatch(
                 'swalDone',
-                text: __('admin/ordersPages.Orders have been archived successfully'),
+                text: __('admin/ordersPages.Orders have been deleted successfully'),
                 icon: 'success'
             );
         } catch (\Throwable $th) {
             // throw $th;
             $this->dispatch(
                 'swalDone',
-                text: __("admin/ordersPages.Orders haven't been archived"),
+                text: __("admin/ordersPages.Orders haven't been deleted"),
                 icon: 'error'
             );
         }
     }
     ######## Archive #########
 
-    ######## Status #########
-    public function statusUpdateSelect($order_id)
+    ######## Restore #########
+    public function restoreConfirm($order_id)
     {
-        $currentStatus = Order::findOrFail($order_id)->statuses()->orderBy('pivot_created_at', 'desc')->first()->id ?? null;
-
         $this->dispatch(
-            'swalSelectBox',
-            title: __('admin/ordersPages.Select Order Status'),
-            confirmButtonText: __('admin/ordersPages.Update'),
-            denyButtonText: __('admin/ordersPages.Cancel'),
-            data: json_encode(Status::whereIn('id', Config::get('constants.order_status_type.for_all_orders'))->orWhere('id', $currentStatus)
-                ->get()
-                ->pluck('name', 'id')),
-            selected: $currentStatus,
+            'swalConfirm',
+            text: __('admin/ordersPages.Are you sure, you want to restore this order?'),
+            confirmButtonText: __('admin/ordersPages.Yes'),
+            denyButtonText: __('admin/ordersPages.No'),
             denyButtonColor: 'red',
             confirmButtonColor: 'green',
             focusDeny: false,
-            method: 'statusUpdate',
+            icon: 'warning',
+            method: 'restoreOrder',
             id: $order_id
         );
     }
 
-    public function statusUpdate($id, $status_id)
+    public function restoreOrder($id)
     {
         try {
-            $order = Order::findOrFail($id);
+            $order = Order::onlyTrashed()->findOrFail($id);
+            $order->restore();
 
-            $order->statuses()->attach($status_id);
-
-            $order->update([
-                'status_id' => $status_id,
-                'delivered_at' => $status_id == OrderStatus::Delivered->value ? now() : null
-            ]);
+            if (($key = array_search($id, $this->selectedOrders)) !== false) {
+                unset($this->selectedOrders[$key]);
+            }
 
             $this->dispatch(
                 'swalDone',
-                text: __("admin/ordersPages.Order's status has been updated successfully"),
+                text: __('admin/ordersPages.Order has been restored successfully'),
                 icon: 'success'
             );
+
+            $this->selectedProducts = [];
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: __("admin/ordersPages.Order's status hasn't been updated"),
+                text: __("admin/ordersPages.Order hasn't been restored"),
                 icon: 'error'
             );
         }
     }
 
-    public function statusesUpdateSelect()
+    public function restoreAllConfirm()
     {
         $this->dispatch(
-            'swalSelectBox',
-            title: __('admin/ordersPages.Select Order Status'),
-            confirmButtonText: __('admin/ordersPages.Update'),
-            denyButtonText: __('admin/ordersPages.Cancel'),
-            data: json_encode(Status::whereIn('id', Config::get('constants.order_status_type.for_all_orders'))
-                ->get()
-                ->pluck('name', 'id')),
-            selected: null,
+            'swalConfirm',
+            text: __('admin/ordersPages.Are you sure, you want to restore these orders?'),
+            confirmButtonText: __('admin/ordersPages.Yes'),
+            denyButtonText: __('admin/ordersPages.No'),
             denyButtonColor: 'red',
             confirmButtonColor: 'green',
             focusDeny: false,
-            method: 'statusesUpdate',
+            icon: 'warning',
+            method: 'restoreAll',
             id: ''
         );
     }
 
-    public function statusesUpdate($id, $status_id)
+    public function restoreAll()
     {
         try {
-            $orders = Order::whereIn('id', $this->selectedOrders);
+            Order::whereIn('id', $this->selectedOrders)->onlyTrashed()->restore();
 
-            $orders->each(function ($q) use ($status_id) {
-                $q->statuses()->attach($status_id);
-
-                $q->update([
-                    'status_id' => $status_id,
-                    'delivered_at' => $status_id == OrderStatus::Delivered->value ? now() : null
-                ]);
-            });
+            $this->selectedOrders = [];
 
             $this->dispatch(
                 'swalDone',
-                text: __("admin/ordersPages.Orders' statuses have been updated successfully"),
+                text: __('admin/ordersPages.Orders have been restored successfully'),
                 icon: 'success'
             );
         } catch (\Throwable $th) {
+            // throw $th;
             $this->dispatch(
                 'swalDone',
-                text: __("admin/ordersPages.Orders' statuses haven't been updated"),
+                text: __("admin/ordersPages.Orders haven't been restored"),
                 icon: 'error'
             );
         }
     }
-    ######## Status #########
+    ######## Restore #########
 
 }

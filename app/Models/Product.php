@@ -47,8 +47,7 @@ class Product extends Model
     ];
 
     protected $appends = [
-        // "avg_rating", "can_review",
-        'type'
+        "avg_rating", "can_review", 'type'
     ];
 
     protected $with = ['reviews', 'orders', 'brand', 'validOffers'];
@@ -222,7 +221,7 @@ class Product extends Model
     ############# Appends :: Start #############
     public function getAvgRatingAttribute()
     {
-        return $this->reviews->avg('rating');
+        return $this->reviews->avg('rating') ?? 0;
     }
 
     public function getCanReviewAttribute()

@@ -36,15 +36,17 @@
                                 </div>
 
                                 {{-- Create New Order --}}
-                                <div class="ltr:text-right rtl:text-left">
-                                    <a href="{{ route('admin.orders.edit', $order->id) }}"
-                                        class="btn btn-sm bg-yellow-400 hover:bg-yellow-500 focus:bg-yellow-500 active:bg-yellow-500 font-bold">
-                                        <span class="material-icons rtl:ml-1 ltr:mr-1">
-                                            edit
-                                        </span>
-                                        {{ __("admin/ordersPages.Edit Order's Details") }}
-                                    </a>
-                                </div>
+                                @if (!$order->trashed())
+                                    <div class="ltr:text-right rtl:text-left">
+                                        <a href="{{ route('admin.orders.edit', $order->id) }}"
+                                            class="btn btn-sm bg-yellow-400 hover:bg-yellow-500 focus:bg-yellow-500 active:bg-yellow-500 font-bold">
+                                            <span class="material-icons rtl:ml-1 ltr:mr-1">
+                                                edit
+                                            </span>
+                                            {{ __("admin/ordersPages.Edit Order's Details") }}
+                                        </a>
+                                    </div>
+                                @endif
                             </div>
                         </div>
 

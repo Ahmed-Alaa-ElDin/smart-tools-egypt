@@ -46,6 +46,9 @@ enum OrderStatus: int
     case Shipped = 207;
     case WaitingForApproval = 208;
     case Prepared = 209;
+    case Approved = 210;
+    case Rejected = 211;
+    case WaitingForContact = 212;
 
         // Cancellation
     case CancellationRequested = 301;

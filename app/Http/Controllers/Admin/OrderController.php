@@ -49,7 +49,9 @@ class OrderController extends Controller
             "statuses",
             "invoice",
             "transactions"
-        ])->findOrFail($order_id);
+        ])
+            ->withTrashed()
+            ->findOrFail($order_id);
 
         $order->items = $order->products->merge($order->collections)->toArray();
 

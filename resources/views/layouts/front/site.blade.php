@@ -174,6 +174,7 @@
                 }
             })
 
+            // Handle Not Found Images
             $('.construction-placeholder').each(function() {
                 const element = $(this);
 

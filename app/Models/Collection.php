@@ -172,7 +172,7 @@ class Collection extends Model
     ############# Appends :: Start #############
     public function getAvgRatingAttribute()
     {
-        return $this->reviews->avg('rating');
+        return $this->reviews->avg('rating') ?? 0;
     }
 
     public function getCanReviewAttribute()

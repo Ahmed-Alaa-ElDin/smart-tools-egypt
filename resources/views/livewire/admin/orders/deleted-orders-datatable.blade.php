@@ -24,19 +24,22 @@
                             </span> &nbsp; {{ __('admin/ordersPages.Control selected orders') }}
                             &nbsp;</button>
                         <div class="dropdown-menu text-black ">
-                            <a wire:click.prevent="statusesUpdateSelect"
-                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-yellow-400 focus:bg-yellow-400 hover:text-white focus:text-white cursor-pointer">
+                            {{-- Restore All --}}
+                            <a wire:click.prevent="restoreAllConfirm"
+                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-success focus:bg-success hover:text-white focus:text-white cursor-pointer">
                                 <span class="material-icons">
-                                    linear_scale
+                                    restore
                                 </span> &nbsp;&nbsp;
-                                {{ __('admin/ordersPages.Edit Status') }}
+                                {{ __('admin/ordersPages.Restore All') }}
                             </a>
-                            <a wire:click.prevent="archiveAllConfirm"
+
+                            {{-- Delete All --}}
+                            <a wire:click.prevent="deleteAllConfirm"
                                 class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-red-600 focus:bg-red-600 hover:text-white focus:text-white cursor-pointer">
                                 <span class="material-icons">
                                     delete
                                 </span> &nbsp;&nbsp;
-                                {{ __('admin/ordersPages.Archive All') }}
+                                {{ __('admin/ordersPages.Delete All') }}
                             </a>
                         </div>
                     </div>
@@ -265,8 +268,7 @@
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
                                         <div class="flex flex-col items-center content-center justify-center">
                                             @if ($order->address_id)
-                                                <span
-                                                    class="font-bold">{{ $order->address->city->name }}</span>
+                                                <span class="font-bold">{{ $order->address->city->name }}</span>
                                                 <span class="text-xs ">{{ $order->address->governorate->name }}</span>
                                             @else
                                                 {{ __('N/A') }}
@@ -325,37 +327,19 @@
                                             </span>
                                         </a>
 
-                                        {{-- Payment History --}}
-                                        <a href="{{ route('admin.orders.payment-history', [$order->id]) }}"
-                                            title="{{ __('admin/ordersPages.Payment History') }}" class="m-0">
-                                            <span
-                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-green-500 hover:bg-green-700 rounded">
-                                                attach_money
-                                            </span>
-                                        </a>
-
-                                        {{-- Edit Status --}}
-                                        <button title="{{ __('admin/ordersPages.Edit Status') }}"
-                                            wire:click="statusUpdateSelect({{ $order->id }})"
+                                        {{-- Restore Button --}}
+                                        <button title="{{ __('admin/ordersPages.Restore') }}" type="button"
+                                            wire:click="restoreConfirm({{ $order->id }})"
                                             class="m-0 focus:outline-none">
                                             <span
-                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-yellow-400 hover:bg-yellow-700 rounded">
-                                                linear_scale
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-success hover:bg-successDark rounded">
+                                                restore
                                             </span>
                                         </button>
 
-                                        {{-- Edit Button --}}
-                                        <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}"
-                                            title="{{ __('admin/ordersPages.Edit') }}" class="m-0">
-                                            <span
-                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
-                                                edit
-                                            </span>
-                                        </a>
-
-                                        {{-- Archive Button --}}
-                                        <button title="{{ __('admin/ordersPages.Archive') }}" type="button"
-                                            wire:click="archiveConfirm({{ $order->id }})"
+                                        {{-- Delete Button --}}
+                                        <button title="{{ __('admin/ordersPages.Delete') }}" type="button"
+                                            wire:click="deleteConfirm({{ $order->id }})"
                                             class="m-0 focus:outline-none">
                                             <span
                                                 class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded">
