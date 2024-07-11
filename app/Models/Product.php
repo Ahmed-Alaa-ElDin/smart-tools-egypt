@@ -47,7 +47,9 @@ class Product extends Model
     ];
 
     protected $appends = [
-        "avg_rating", "can_review", 'type'
+        "avg_rating",
+        // "can_review",
+        'type'
     ];
 
     protected $with = ['reviews', 'orders', 'brand', 'validOffers'];
@@ -79,7 +81,6 @@ class Product extends Model
     public function categories()
     {
         return $this->belongsToThrough(Category::class, Subcategory::class);
-        // return $this->hasManyDeep(Category::class, ['product_subcategory', Subcategory::class], ['product_id', 'id', 'subcategory_id'], ['id', 'subcategory_id', 'id']);
     }
 
     // Many to many through relationship  Categories --> Products
