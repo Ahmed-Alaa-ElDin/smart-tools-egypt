@@ -7,7 +7,7 @@ return [
         'DEFAULT_PASSWORD' => 'Password@1234',
     ],
     "order_status_type" => [
-        "for_bosta" => [
+        "bosta" => [
             OrderStatus::PickupRequested->value,
             OrderStatus::WaitingForRoute->value,
             OrderStatus::RouteAssigned->value,
@@ -33,7 +33,32 @@ return [
             OrderStatus::Archived->value,
             OrderStatus::OnHold->value,
         ],
-        "for_all_orders" => [
+        "new_orders" => [
+            OrderStatus::WaitingForPayment->value,
+            OrderStatus::WaitingForApproval->value,
+        ],
+        "approved_orders" => [
+            OrderStatus::Approved->value,
+            OrderStatus::Preparing->value,
+            OrderStatus::WaitingForQualityCheck->value,
+            OrderStatus::Prepared->value,
+            OrderStatus::Shipped->value,
+        ],
+        "suspended_orders" => [
+            OrderStatus::WaitingForApproval->value,
+            OrderStatus::WaitingForContact->value,
+            OrderStatus::WaitingForPayment->value,
+            OrderStatus::CancellationRequested->value,
+            OrderStatus::EditRequested->value,
+            OrderStatus::ReturnRequested->value,
+            OrderStatus::WaitingForRefund->value,
+        ],
+        "delivered_orders" => [
+            OrderStatus::Delivered->value,
+        ],
+    ],
+    "order_status_options" => [
+        "all_orders" => [
             OrderStatus::UnderProcessing->value,
             OrderStatus::Created->value,
             OrderStatus::WaitingForPayment->value,
@@ -60,7 +85,7 @@ return [
             OrderStatus::WaitingForRefund->value,
             OrderStatus::Delivered->value,
         ],
-        "for_new_orders" => [
+        "new_orders" => [
             OrderStatus::WaitingForPayment->value,
             OrderStatus::ShippingCreates->value,
             OrderStatus::WaitingForApproval->value,
@@ -68,11 +93,36 @@ return [
             OrderStatus::Rejected->value,
             OrderStatus::WaitingForContact->value,
         ],
-        "for_approved_orders" => [
+        "approved_orders" => [
             OrderStatus::Preparing->value,
             OrderStatus::WaitingForQualityCheck->value,
             OrderStatus::Prepared->value,
             OrderStatus::Shipped->value,
+        ],
+        "suspended_orders" => [
+            OrderStatus::WaitingForApproval->value,
+            OrderStatus::WaitingForContact->value,
+            OrderStatus::WaitingForPayment->value,
+            OrderStatus::Approved->value,
+            OrderStatus::Rejected->value,
+            OrderStatus::CancellationRequested->value,
+            OrderStatus::CancellationApproved->value,
+            OrderStatus::CancellationRejected->value,
+            OrderStatus::UnderEditing->value,
+            OrderStatus::EditRequested->value,
+            OrderStatus::EditApproved->value,
+            OrderStatus::EditRejected->value,
+            OrderStatus::UnderReturning->value,
+            OrderStatus::ReturnRequested->value,
+            OrderStatus::ReturnApproved->value,
+            OrderStatus::ReturnRejected->value,
+            OrderStatus::WaitingForRefund->value,
+        ],
+        "delivered_orders" => [
+            OrderStatus::Delivered->value,
+            OrderStatus::ReturnRequested->value,
+            OrderStatus::ReturnApproved->value,
+            OrderStatus::ReturnRejected->value,
         ],
     ]
 ];

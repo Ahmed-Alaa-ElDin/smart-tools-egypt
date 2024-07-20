@@ -286,7 +286,7 @@ class OrderShippingDetails extends Component
                     'phone1' => $phones->where('default', 1)->first()->phone,
                     'phone2' => $phones->where('default', 0)->count() ? implode("-", $phones->where('default', 0)->pluck('phone')->toArray()) : null,
                     'package_type' => 'parcel',
-                    'package_desc' => 'قابل للكسر',
+                    'package_desc' => 'عروض عدد وأدوات قابلة للكسر برجاء المحافظة على مكونات الشحنة لتفادى التلف أو فقدان مكونات الشحنة',
                     'num_of_items' => Cart::instance('cart')->count(),
                     'allow_opening' => 1,
                     'notes' => $this->notes,

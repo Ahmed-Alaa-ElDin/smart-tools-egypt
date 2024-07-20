@@ -53,5 +53,8 @@ return [
     'Add Collection'            =>      'إضافة تجميعة',
     'Deleted Collections'       =>      'التجميعات المؤرشفة',
     'General Settings'          =>      'الضبط العام',
-
+    'New Orders'                =>      'طلبات جديدة',
+    'Approved Orders'           =>      'طلبات تمت الموافقة عليها',
+    'Suspended Orders'          =>      'طلبات معلقة',
+    'Delivered Orders'          =>      'طلبات تم تسليمها',
 ];

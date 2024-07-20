@@ -10,11 +10,15 @@ use App\Enums\PaymentStatus;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Storage;
+use App\Services\Front\Deliveries\Bosta;
+use App\Services\Front\Deliveries\DeliveryService;
 
 class OrdersDatatable extends Component
 {
     use WithPagination;
 
+    public $type;
     public $sortBy;
     public $sortDirection;
     public $perPage;
@@ -69,9 +73,8 @@ class OrdersDatatable extends Component
             'orders.user_id',
             'orders.address_id',
             'orders.status_id',
-            // 'orders.should_pay',
-            // 'orders.should_get',
             'orders.updated_at',
+            'orders.order_delivery_id',
             'users.f_name',
             'users.l_name',
             'statuses.name as status_name',
@@ -112,6 +115,7 @@ class OrdersDatatable extends Component
                     )
                     ->orWhereIn('orders.id', $this->selectedOrders)
             )
+            ->when($this->type != 'all_orders', fn ($q) => $q->whereIn('orders.status_id', config("constants.order_status_type.$this->type")))
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
@@ -256,7 +260,7 @@ class OrdersDatatable extends Component
             title: __('admin/ordersPages.Select Order Status'),
             confirmButtonText: __('admin/ordersPages.Update'),
             denyButtonText: __('admin/ordersPages.Cancel'),
-            data: json_encode(Status::whereIn('id', Config::get('constants.order_status_type.for_all_orders'))->orWhere('id', $currentStatus)
+            data: json_encode(Status::whereIn('id', Config::get("constants.order_status_options.$this->type"))->orWhere('id', $currentStatus)
                 ->get()
                 ->pluck('name', 'id')),
             selected: $currentStatus,
@@ -301,7 +305,7 @@ class OrdersDatatable extends Component
             title: __('admin/ordersPages.Select Order Status'),
             confirmButtonText: __('admin/ordersPages.Update'),
             denyButtonText: __('admin/ordersPages.Cancel'),
-            data: json_encode(Status::whereIn('id', Config::get('constants.order_status_type.for_all_orders'))
+            data: json_encode(Status::whereIn('id', Config::get("constants.order_status_options.$this->type"))
                 ->get()
                 ->pluck('name', 'id')),
             selected: null,
@@ -342,4 +346,141 @@ class OrdersDatatable extends Component
     }
     ######## Status #########
 
+    ######## Create Delivery #########
+    public function createBostaOrder($orderId)
+    {
+        $order = Order::findOrFail($orderId);
+
+        if (!$order->order_delivery_id) {
+            $bosta_order = createBostaOrder($order);
+
+            if ($bosta_order['status']) {
+                $this->dispatch(
+                    'swalDone',
+                    text: __("admin/ordersPages.The delivery has been created successfully"),
+                    icon: 'success'
+                );
+
+                $order->update([
+                    'tracking_number' => $bosta_order['data']['trackingNumber'],
+                    'order_delivery_id' => $bosta_order['data']['_id'],
+                ]);
+            } else {
+                $this->dispatch(
+                    'swalDone',
+                    text: __("admin/ordersPages.The delivery hasn't been created"),
+                    icon: 'error'
+                );
+            }
+        } else {
+            $this->dispatch(
+                'swalDone',
+                text: __("admin/ordersPages.The delivery has been created before"),
+                icon: 'error'
+            );
+        }
+    }
+    ######## Create Delivery #########
+
+    ######## Download Bosta AWB #########
+    public function downloadBostaAWB($deliveryId)
+    {
+        try {
+            $bostaClient = new Bosta();
+            $deliveryService = new DeliveryService($bostaClient);
+
+            // Get the AWB as base64
+            $awbs = $deliveryService->getAWBs([$deliveryId]);
+
+            if (!empty($awbs)) {
+                // Convert the base64 to PDF
+                $awbPdf = base64_decode($awbs);
+
+                // Generate the path
+                $path = "awbs/" . date('Y-m-d') . "/" . $deliveryId . ".pdf";
+
+                // Save the PDF
+                Storage::disk('public')->put($path, $awbPdf);
+
+                // Download the PDF
+                return Storage::disk('public')->download($path);
+            } else {
+                $this->dispatch(
+                    'swalDone',
+                    text: __("admin/ordersPages.Couldn't download the AWB"),
+                    icon: 'error'
+                );
+            }
+        } catch (\Exception $e) {
+            $this->dispatch(
+                'swalDone',
+                text: __("admin/ordersPages.Couldn't download the AWB"),
+                icon: 'error'
+            );
+        }
+    }
+    ######## Download Bosta AWB #########
+
+    ######## Bulk Download Bosta AWB #########
+    public function downloadBostaAWBs()
+    {
+        try {
+            $bostaClient = new Bosta();
+            $deliveryService = new DeliveryService($bostaClient);
+
+            // Get the delivery ids from the selected orders
+            $deliveryIds = Order::whereIn('id', $this->selectedOrders)->pluck('order_delivery_id')->toArray();
+
+            // Get the AWB as base64
+            $awbs = $deliveryService->getAWBs($deliveryIds);
+
+            if (!empty($awbs)) {
+                // Convert the base64 to PDF
+                $awbPdf = base64_decode($awbs);
+
+                // Generate the path
+                $path = "awbs/" . date('Y-m-d') . "/" . implode("-", $deliveryIds) . ".pdf";
+
+                // Save the PDF
+                Storage::disk('public')->put($path, $awbPdf);
+
+                // Download the PDF
+                return Storage::disk('public')->download($path);
+            } else {
+                $this->dispatch(
+                    'swalDone',
+                    text: __("admin/ordersPages.Couldn't download the AWBs"),
+                    icon: 'error'
+                );
+            }
+        } catch (\Exception $e) {
+            $this->dispatch(
+                'swalDone',
+                text: __("admin/ordersPages.Couldn't download the AWBs"),
+                icon: 'error'
+            );
+        }
+    }
+    ######## Bulk Download Bosta AWB #########
+
+    ######## TODO:: Download Purchase Order #########
+    public function downloadPurchaseOrder($order_id)
+    {
+        $order = Order::with([
+            'products' => fn ($q) => $q->with('thumbnail'),
+            'collections' => fn ($q) => $q->with('thumbnail'),
+            "statuses",
+            "invoice",
+            "transactions"
+        ])
+            ->withTrashed()
+            ->findOrFail($order_id);
+
+        $order->items = $order->products->merge($order->collections)->toArray();
+
+        $pdf = \PDF::loadView('admin.orders.purchase-order', compact('order'));
+
+        return $pdf->download('purchase_order_' . $order->id . '.pdf');
+    }
+    ######## Download Purchase Order #########
 }

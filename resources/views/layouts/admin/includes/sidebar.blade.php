@@ -123,34 +123,109 @@
 
                 <div class="collapse {{ $activeSection == 'Orders' ? ' show' : '' }}" id="orders">
                     <ul class="nav">
+                        {{-- Add Order --}}
+                        <li class="nav-item {{ $activePage == 'Add Order' ? ' active' : '' }}">
+                            <a class="nav-link" href="{{ route('admin.orders.create') }}">
+                                <span class="material-icons">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                        viewBox="0 0 24 24">
+                                        <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2">
+                                            <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
+                                            <path d="M12.5 17H6V3H4" />
+                                            <path d="m6 5l14 1l-.86 6.017M16.5 13H6m10 6h6m-3-3v6" />
+                                        </g>
+                                    </svg> </span>
+                                <span>{{ __('admin/master.Add Order') }} </span>
+                            </a>
+                        </li>
 
                         {{-- See All Orders --}}
                         <li class="nav-item {{ $activePage == 'All Orders' ? ' active' : '' }}">
                             <a class="nav-link" href="{{ route('admin.orders.index') }}">
                                 <span class="material-icons">
-                                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
-                                        width="1.13em" height="1em" preserveAspectRatio="xMidYMid meet"
-                                        viewBox="0 0 576 512">
-                                        <path fill="currentColor"
-                                            d="M560 288h-80v96l-32-21.3l-32 21.3v-96h-80c-8.8 0-16 7.2-16 16v192c0 8.8 7.2 16 16 16h224c8.8 0 16-7.2 16-16V304c0-8.8-7.2-16-16-16zm-384-64h224c8.8 0 16-7.2 16-16V16c0-8.8-7.2-16-16-16h-80v96l-32-21.3L256 96V0h-80c-8.8 0-16 7.2-16 16v192c0 8.8 7.2 16 16 16zm64 64h-80v96l-32-21.3L96 384v-96H16c-8.8 0-16 7.2-16 16v192c0 8.8 7.2 16 16 16h224c8.8 0 16-7.2 16-16V304c0-8.8-7.2-16-16-16z" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                        viewBox="0 0 24 24">
+                                        <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2">
+                                            <path
+                                                d="M4 19a2 2 0 1 0 4 0a2 2 0 1 0-4 0m11 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0" />
+                                            <path d="M17 17H6V3H4" />
+                                            <path d="m6 5l14 1l-1 7H6" />
+                                        </g>
                                     </svg>
                                 </span>
                                 <span>{{ __('admin/master.All Orders') }} </span>
                             </a>
                         </li>
 
-                        {{-- Add Order --}}
-                        <li class="nav-item {{ $activePage == 'Add Order' ? ' active' : '' }}">
-                            <a class="nav-link" href="{{ route('admin.orders.create') }}">
+                        {{-- See New Orders --}}
+                        <li class="nav-item {{ $activePage == 'New Orders' ? ' active' : '' }}">
+                            <a class="nav-link" href="{{ route('admin.orders.new-orders') }}">
                                 <span class="material-icons">
-                                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
-                                        width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
                                         viewBox="0 0 24 24">
-                                        <path fill="currentColor"
-                                            d="M12 9c.55 0 1-.45 1-1V6h2c.55 0 1-.45 1-1s-.45-1-1-1h-2V2c0-.55-.45-1-1-1s-1 .45-1 1v2H9c-.55 0-1 .45-1 1s.45 1 1 1h2v2c0 .55.45 1 1 1zm-5 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2s-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2s2-.9 2-2s-.9-2-2-2zm-8.9-5h7.45c.75 0 1.41-.41 1.75-1.03l3.24-6.14a.998.998 0 0 0-.4-1.34a.996.996 0 0 0-1.36.41L15.55 11H8.53L4.27 2H2c-.55 0-1 .45-1 1s.45 1 1 1h1l3.6 7.59l-1.35 2.44C4.52 15.37 5.48 17 7 17h11c.55 0 1-.45 1-1s-.45-1-1-1H7l1.1-2z" />
+                                        <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2">
+                                            <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
+                                            <path d="M12.5 17H6V3H4" />
+                                            <path d="m6 5l14 1l-.859 6.011M16.5 13H6m13 3v6m3-3l-3 3l-3-3" />
+                                        </g>
+                                    </svg> </span>
+                                <span>{{ __('admin/master.New Orders') }} </span>
+                            </a>
+                        </li>
+
+                        {{-- See Approved Orders --}}
+                        <li class="nav-item {{ $activePage == 'Approved Orders' ? ' active' : '' }}">
+                            <a class="nav-link" href="{{ route('admin.orders.approved-orders') }}">
+                                <span class="material-icons">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                        viewBox="0 0 24 24">
+                                        <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2">
+                                            <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
+                                            <path d="M11.5 17H6V3H4" />
+                                            <path d="m6 5l14 1l-1 7H6m9 6l2 2l4-4" />
+                                        </g>
                                     </svg>
                                 </span>
-                                <span>{{ __('admin/master.Add Order') }} </span>
+                                <span>{{ __('admin/master.Approved Orders') }} </span>
+                            </a>
+                        </li>
+
+                        {{-- See Suspended Orders --}}
+                        <li class="nav-item {{ $activePage == 'Suspended Orders' ? ' active' : '' }}">
+                            <a class="nav-link" href="{{ route('admin.orders.suspended-orders') }}">
+                                <span class="material-icons">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                        viewBox="0 0 24 24">
+                                        <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2">
+                                            <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
+                                            <path d="M15 17H6V3H4" />
+                                            <path d="m6 5l14 1l-.854 5.976M16.5 13H6m13 3v3m0 3v.01" />
+                                        </g>
+                                    </svg>
+                                </span>
+                                <span>{{ __('admin/master.Suspended Orders') }} </span>
+                            </a>
+                        </li>
+
+                        {{-- See Delivered Orders --}}
+                        <li class="nav-item {{ $activePage == 'Delivered Orders' ? ' active' : '' }}">
+                            <a class="nav-link" href="{{ route('admin.orders.delivered-orders') }}">
+                                <span class="material-icons">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                        viewBox="0 0 24 24">
+                                        <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2">
+                                            <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
+                                            <path d="M12.5 17H6V3H4" />
+                                            <path d="m6 5l14 1l-.854 5.977M16.5 13H6m13 9v-6m3 3l-3-3l-3 3" />
+                                        </g>
+                                    </svg> </span>
+                                <span>{{ __('admin/master.Delivered Orders') }} </span>
                             </a>
                         </li>
 
@@ -158,17 +233,18 @@
                         <li class="nav-item {{ $activePage == 'Deleted Orders' ? ' active' : '' }}">
                             <a class="nav-link" href="{{ route('admin.orders.softDeletedOrders') }}">
                                 <span class="material-icons rtl:ml-2 ltr:mr-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
-                                        width="1em" height="1em" preserveAspectRatio="xMidYMid meet"
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
                                         viewBox="0 0 24 24">
-                                        <path fill="currentColor"
-                                            d="M14.12 8.53L12 6.41L9.88 8.54L8.46 7.12L10.59 5L8.47 2.88l1.41-1.41L12 3.59l2.12-2.13l1.42 1.42L13.41 5l2.12 2.12l-1.41 1.41M7 18a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2a2 2 0 0 1 2-2m10 0a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2a2 2 0 0 1 2-2m-9.83-3.25a.25.25 0 0 0 .25.25H19v2H7a2 2 0 0 1-2-2c0-.35.09-.68.25-.96l1.35-2.45L3 4H1V2h3.27l.94 2l.95 2l2.24 4.73l.13.27h7.02l2.76-5l1.1-2h.01l1.74.96l-3.86 7.01c-.34.62-1 1.03-1.75 1.03H8.1l-.9 1.63l-.03.12Z" />
-                                    </svg>
-                                </span>
+                                        <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2">
+                                            <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
+                                            <path d="M13 17H6V3H4" />
+                                            <path d="m6 5l14 1l-1 7H6m16 9l-5-5m0 5l5-5" />
+                                        </g>
+                                    </svg> </span>
                                 <span>{{ __('admin/master.Archived Orders') }} </span>
                             </a>
                         </li>
-
                     </ul>
                 </div>
             </li>

@@ -638,7 +638,6 @@ class PaymentHistory extends Component
 
     public function createDelivery()
     {
-        
         $order = $this->order;
         
         if (!$order->order_delivery_id) {

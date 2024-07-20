@@ -58,6 +58,10 @@ module.exports = {
                 warningDark: "#d9b00e",
                 warningDarker: "#917609",
 
+                bostaLight: "e93842",
+                bosta: "#e30613",
+                bostaDark: "b6050f",
+
                 male: "#4cb2c9",
                 female: "#e85591",
             },

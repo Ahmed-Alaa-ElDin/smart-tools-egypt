@@ -571,7 +571,7 @@ class OrderForm extends Component
                 'phone1' => $this->default_phone,
                 'phone2' => count($non_default_phones) ? implode("-", $non_default_phones) : null,
                 'package_type' => 'parcel',
-                'package_desc' => 'قابل للكسر',
+                'package_desc' => 'عروض عدد وأدوات قابلة للكسر برجاء المحافظة على مكونات الشحنة لتفادى التلف أو فقدان مكونات الشحنة',
                 'num_of_items' => $this->product_total_amounts,
                 'allow_opening' => 1,
                 'zone_id' => $this->zone_id,

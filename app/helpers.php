@@ -410,6 +410,7 @@ function createBostaOrder($order)
             "district"      =>      $order->address->city->getTranslation('name', 'en'),
             "firstLine"     =>      $order->address->details ?? $order->address->city->getTranslation('name', 'en'),
             "secondLine"    =>      $order->address->landmarks ?? '',
+            "isWorkAddress" =>      true,
         ],
         "receiver" => [
             "phone"         =>      $order->user->phones->where('default', 1)->first()->phone,
@@ -420,7 +421,7 @@ function createBostaOrder($order)
         ],
         "businessReference" => "$order->id",
         "type"      =>      10,
-        "notes"     =>      $order->notes ? $order->notes . ($order->user->phones->where('default', 0)->count() > 1 ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : '') : ($order->user->phones->where('default', 0)->count() > 1 ? implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : ''),
+        "notes"     =>      $order->notes . ($order->user->phones->where('default', 0)->count() > 1 ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : '') . " - منتجات قابلة للكسر - برجاء الاتصال بوقت كافى قبل التوصيل والتواصل من خلال الواتس فى حالة ضعف الشبكة",
         "cod"       =>      $paymentAmount ? ceil($paymentAmount) : 0.00,
         "allowToOpenPackage" => true,
         "webhookUrl" => "https://www.smarttoolsegypt.com/api/orders/update-status",
@@ -445,7 +446,7 @@ function createBostaOrder($order)
         ]);
 
         $order->statuses()->attach(OrderStatus::PickupRequested->value);
-        
+
         return [
             'status'    =>  true,
             'data'      =>  $decoded_bosta_response,

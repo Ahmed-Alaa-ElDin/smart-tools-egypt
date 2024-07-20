@@ -89,11 +89,49 @@ class OrderController extends Controller
         //
     }
 
+    /**
+     * Display a listing of the new orders.
+     */
+    public function newOrders()
+    {
+        return view('admin.orders.new_orders');
+    }
+
+    /**
+     * Display a listing of the approved orders.
+     */
+    public function approvedOrders()
+    {
+        return view('admin.orders.approved_orders');
+    }
+
+    /**
+     * Display a listing of the suspended orders.
+     */
+    public function suspendedOrders()
+    {
+        return view('admin.orders.suspended_orders');
+    }
+
+    /**
+     * Display a listing of the delivered orders.
+     */
+    public function deliveredOrders()
+    {
+        return view('admin.orders.delivered_orders');
+    }
+
+    /**
+     * Display a listing of the history of payments.
+     */
     public function paymentHistory($order_id)
     {
         return view('admin.orders.payment_history', compact('order_id'));
     }
 
+    /**
+     * Display a listing of the soft deleted orders.
+     */
     public function softDeletedOrders()
     {
         return view('admin.orders.softDeleted');
