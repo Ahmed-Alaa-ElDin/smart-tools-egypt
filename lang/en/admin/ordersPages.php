@@ -242,7 +242,7 @@ return [
     "Couldn't download the AWB"                         =>          "Couldn't download the AWB",
     "Download All Bosta AWB"                            =>          "Download All Bosta AWB",
     "Couldn't download the AWBs"                        =>          "Couldn't download the AWBs",
-    "Manage"                                            =>          "Manage",
+    "Download All PO"                                   =>          "Download All PO",
     "Manage"                                            =>          "Manage",
     "Manage"                                            =>          "Manage",
     "Manage"                                            =>          "Manage",

@@ -1,4 +1,4 @@
-@extends('layouts.front.user_control_layout', ['titlePage' => __('front/homePage.My Orders'), 'page' => 'orders'])
+@extends('layouts.front.user-control-layout', ['titlePage' => __('front/homePage.My Orders'), 'page' => 'orders'])
 
 @section('breadcrumb')
     <li class="breadcrumb-item hover:text-primary">

@@ -47,6 +47,15 @@
                                 {{ __('admin/ordersPages.Download All Bosta AWB') }}
                             </a>
 
+                            {{-- Download PO --}}
+                            <a wire:click.prevent="downloadPurchaseOrders"
+                                class="dropdown-item dropdown-item-excel justify-start font-bold hover:bg-green-500 focus:bg-green-500 hover:text-white focus:text-white cursor-pointer">
+                                <span class="material-icons">
+                                    sim_card_download
+                                </span> &nbsp;&nbsp;
+                                {{ __('admin/ordersPages.Download All PO') }}
+                            </a>
+
                             {{-- Delete --}}
                             <a wire:click.prevent="archiveAllConfirm"
                                 class="dropdown-item dropdown-item-excel justify-start font-bold hover:bg-red-600 focus:bg-red-600 hover:text-white focus:text-white cursor-pointer">
@@ -369,7 +378,7 @@
 
                                         {{-- Download PO --}}
                                         <button title="{{ __('admin/ordersPages.Download PO') }}"
-                                            wire:click="downloadPO({{ $order->id }})"
+                                            wire:click="downloadPurchaseOrder({{ $order->id }})"
                                             class="m-0 focus:outline-none">
                                             <span
                                                 class="material-icons p-1 text-lg w-9 h-9 text-white bg-green-500 hover:bg-green-700 rounded">

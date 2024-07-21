@@ -242,4 +242,5 @@ return [
     "Couldn't download the AWB"                         =>          "لم يتم تحميل بوليصة الشحن",
     "Download All Bosta AWB"                            =>          "تحميل جميع بوليصات الشحن",
     "Couldn't download the AWBs"                        =>          "لم يتم تحميل بوليصات الشحن",
+    "Download All PO"                                   =>          "تحميل جميع الفواتير",
 ];

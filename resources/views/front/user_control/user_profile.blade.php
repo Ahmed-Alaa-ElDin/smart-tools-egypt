@@ -1,4 +1,4 @@
-@extends('layouts.front.user_control_layout', ['titlePage' => __("front/homePage.User's Profile"), 'page' => 'dashbaord'])
+@extends('layouts.front.user-control-layout', ['titlePage' => __("front/homePage.User's Profile"), 'page' => 'dashbaord'])
 
 @section('sub-content')
     {{-- User :: Left :: Start --}}

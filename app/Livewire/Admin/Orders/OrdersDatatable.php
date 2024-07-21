@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use App\Services\Front\Deliveries\Bosta;
 use App\Services\Front\Deliveries\DeliveryService;
+use PDF;
 
 class OrdersDatatable extends Component
 {
@@ -410,7 +411,7 @@ class OrdersDatatable extends Component
                 $awbPdf = base64_decode($awbs);
 
                 // Generate the path
-                $path = "awbs/" . date('Y-m-d') . "/" . $userName . ".pdf";
+                $path = "awbs/" . date('Y-m-d') . "/" . $userName . "-" . time() . ".pdf";
 
                 // Save the PDF
                 Storage::disk('public')->put($path, $awbPdf);
@@ -472,7 +473,7 @@ class OrdersDatatable extends Component
                 $awbPdf = base64_decode($awbs);
 
                 // Generate the path
-                $path = "awbs/" . date('Y-m-d') . "/" . $userNames . ".pdf";
+                $path = "awbs/" . date('Y-m-d') . "/" . $userNames . "-" . time() . ".pdf";
 
                 // Save the PDF
                 Storage::disk('public')->put($path, $awbPdf);
@@ -499,21 +500,134 @@ class OrdersDatatable extends Component
     ######## TODO:: Download Purchase Order #########
     public function downloadPurchaseOrder($order_id)
     {
-        $order = Order::with([
-            'products' => fn ($q) => $q->with('thumbnail'),
-            'collections' => fn ($q) => $q->with('thumbnail'),
-            "statuses",
-            "invoice",
-            "transactions"
-        ])
-            ->withTrashed()
-            ->findOrFail($order_id);
+        $order = Order::select([
+            'orders.id',
+            'user_id',
+            'address_id',
+            'phone1',
+            'phone2',
+            'num_of_items',
+            'zone_id',
+            'created_at',
+        ])->with([
+            'user' => function ($query) {
+                $query->select('users.id', 'f_name', 'l_name')
+                    ->without('addresses', 'phones', 'points');
+            },
+            'address' => function ($query) {
+                $query
+                    ->select('addresses.id', 'governorate_id', 'city_id', 'details', 'landmarks')
+                    ->with([
+                        'governorate' => function ($query) {
+                            $query->select('id', 'name');
+                        },
+                        'city' => function ($query) {
+                            $query->select('id', 'name');
+                        },
+                    ]);
+            },
+            'invoice',
+            'products' => function ($query) {
+                $query->select('products.id', 'name', 'base_price', 'final_price', 'model')
+                    ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
+            },
+            'collections' => function ($query) {
+                $query->select('collections.id', 'collections.name', 'base_price', 'final_price')
+                    ->with(['products' => function ($query) {
+                        $query->select('products.id', 'name', 'base_price', 'final_price', 'model')
+                            ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
+                    }])
+                    ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
+            }
+        ])->findOrFail($order_id)->toArray();
 
-        $order->items = $order->products->merge($order->collections)->toArray();
+        $order['user_name'] = $order['user']['f_name']['ar'] . " " . ($order['user']['l_name'] ? $order['user']['l_name']['ar'] : "");
+        $order['user_type'] = "عميل مميز";
 
-        $pdf = \PDF::loadView('admin.orders.purchase-order', compact('order'));
+        $order['items'] = array_merge($order['products'], $order['collections']);
 
-        return $pdf->download('purchase_order_' . $order->id . '.pdf');
+        $order['subtotal'] = $order['invoice']['subtotal_base'];
+        $order['discount'] = $order['invoice']['items_discount'] + $order['invoice']['offers_items_discount'] + $order['invoice']['coupon_items_discount'];
+        $order['extra_discount'] = $order['invoice']['offers_order_discount'] + $order['invoice']['coupon_order_discount'];
+        $order['delivery_fees'] = $order['invoice']['delivery_fees'];
+        $order['total'] = $order['invoice']['total'];
+            
+        $pdf = PDF::loadView("front.orders.purchase-order", compact("order"));
+
+        $userName = str_replace(" ", "_", $order['user_name']);
+
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->stream();
+        }, $userName . "-" . time() . ".pdf");
     }
     ######## Download Purchase Order #########
+
+    ######## Bulk Download Purchase Orders #########
+    public function downloadPurchaseOrders()
+    {
+        $orders = Order::select([
+            'orders.id',
+            'user_id',
+            'address_id',
+            'phone1',
+            'phone2',
+            'num_of_items',
+            'zone_id',
+            'created_at',
+        ])->with([
+            'user' => function ($query) {
+                $query->select('users.id', 'f_name', 'l_name')
+                    ->without('addresses', 'phones', 'points');
+            },
+            'address' => function ($query) {
+                $query
+                    ->select('addresses.id', 'governorate_id', 'city_id', 'details', 'landmarks')
+                    ->with([
+                        'governorate' => function ($query) {
+                            $query->select('id', 'name');
+                        },
+                        'city' => function ($query) {
+                            $query->select('id', 'name');
+                        },
+                    ]);
+            },
+            'invoice',
+            'products' => function ($query) {
+                $query->select('products.id', 'name', 'base_price', 'final_price', 'model')
+                    ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
+            },
+            'collections' => function ($query) {
+                $query->select('collections.id', 'collections.name', 'base_price', 'final_price')
+                    ->with(['products' => function ($query) {
+                        $query->select('products.id', 'name', 'base_price', 'final_price', 'model')
+                            ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
+                    }])
+                    ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
+            }
+        ])->whereIn('id', $this->selectedOrders)->get()->toArray();
+
+        $orders = array_map(function ($order) {
+            $order['user_name'] = $order['user']['f_name']['ar'] . " " . ($order['user']['l_name'] ? $order['user']['l_name']['ar'] : "");
+            $order['user_type'] = "عميل مميز";
+
+            $order['items'] = array_merge($order['products'], $order['collections']);
+
+            $order['subtotal'] = $order['invoice']['subtotal_base'];
+            $order['discount'] = $order['invoice']['items_discount'] + $order['invoice']['offers_items_discount'] + $order['invoice']['coupon_items_discount'];
+            $order['extra_discount'] = $order['invoice']['offers_order_discount'] + $order['invoice']['coupon_order_discount'];
+            $order['delivery_fees'] = $order['invoice']['delivery_fees'];
+            $order['total'] = $order['invoice']['total'];
+
+            return $order;
+        }, $orders);
+
+        $pdf = PDF::loadView("front.orders.purchase-orders", compact("orders"));
+
+        $userNames = str_replace(" ", "_", implode("-", array_unique(array_column($orders, 'user_name'))));
+
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->stream();
+        }, $userNames . "-" . time() . ".pdf");
+    }
+
 }
