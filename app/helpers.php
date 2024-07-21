@@ -445,7 +445,7 @@ function createBostaOrder($order)
             'status_id' => OrderStatus::PickupRequested->value,
         ]);
 
-        $order->statuses()->attach(OrderStatus::PickupRequested->value);
+        // $order->statuses()->attach(OrderStatus::PickupRequested->value);
 
         return [
             'status'    =>  true,
