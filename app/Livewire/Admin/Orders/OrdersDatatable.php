@@ -389,6 +389,19 @@ class OrdersDatatable extends Component
             $bostaClient = new Bosta();
             $deliveryService = new DeliveryService($bostaClient);
 
+            $order = Order::select([
+                "id",
+                "order_delivery_id",
+                "user_id"
+            ])
+                ->with([
+                    "user" => fn ($q) => $q->select('id', 'f_name', 'l_name')
+                ])
+                ->where('order_delivery_id', $deliveryId)
+                ->first();
+
+            $userName = str_replace(" ", "_", $order->user->f_name . " " . $order->user->l_name);
+
             // Get the AWB as base64
             $awbs = $deliveryService->getAWBs([$deliveryId]);
 
@@ -397,7 +410,7 @@ class OrdersDatatable extends Component
                 $awbPdf = base64_decode($awbs);
 
                 // Generate the path
-                $path = "awbs/" . date('Y-m-d') . "/" . $deliveryId . ".pdf";
+                $path = "awbs/" . date('Y-m-d') . "/" . $userName . ".pdf";
 
                 // Save the PDF
                 Storage::disk('public')->put($path, $awbPdf);
@@ -429,7 +442,27 @@ class OrdersDatatable extends Component
             $deliveryService = new DeliveryService($bostaClient);
 
             // Get the delivery ids from the selected orders
-            $deliveryIds = Order::whereIn('id', $this->selectedOrders)->pluck('order_delivery_id')->toArray();
+            $order = Order::select([
+                "id",
+                "order_delivery_id",
+                "user_id"
+            ])
+                ->with([
+                    "user" => fn ($q) => $q->select('id', 'f_name', 'l_name')
+                ])
+                ->whereIn('id', $this->selectedOrders)
+                ->where('order_delivery_id', '!=', null)
+                ->get()
+                ->map(function ($q) {
+                    return [
+                        "delivery_id" => $q->order_delivery_id,
+                        "user_name" => $q->user->f_name . " " . $q->user->l_name
+                    ];
+                })->toArray();
+
+            $deliveryIds = array_column($order, 'delivery_id');
+
+            $userNames = str_replace(" ", "_", implode("-", array_unique(array_column($order, 'user_name'))));
 
             // Get the AWB as base64
             $awbs = $deliveryService->getAWBs($deliveryIds);
@@ -439,7 +472,7 @@ class OrdersDatatable extends Component
                 $awbPdf = base64_decode($awbs);
 
                 // Generate the path
-                $path = "awbs/" . date('Y-m-d') . "/" . implode("-", $deliveryIds) . ".pdf";
+                $path = "awbs/" . date('Y-m-d') . "/" . $userNames . ".pdf";
 
                 // Save the PDF
                 Storage::disk('public')->put($path, $awbPdf);
