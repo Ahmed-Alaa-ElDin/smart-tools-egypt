@@ -11,7 +11,7 @@
         body {
             font-family: 'XBRiyaz', sans-serif;
             direction: rtl;
-            font-size: 1rem;
+            font-size: 0.8rem;
             font-weight: 400;
             line-height: 1.5;
             color: #212529;
@@ -35,7 +35,7 @@
                 </td>
                 <td rowspan="2" align="left">
                     <img src="{{ public_path('assets/img/logos/smart-tools-logo-text-400.png') }}"
-                        alt="Smart Tools Egypt Logo" width="15rem">
+                        alt="Smart Tools Egypt Logo" width="13rem">
                 </td>
             </tr>
             <tr>
