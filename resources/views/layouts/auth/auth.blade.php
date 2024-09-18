@@ -14,6 +14,7 @@
 
     <!-- Font Icon -->
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- Main css -->
     <link href="{{ mix('assets/css/material-dashboard.min.css') }}" rel="stylesheet" />
@@ -38,6 +39,8 @@
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
     <script scr="{{ mix('assets/js/app.js') }}"></script>
+
+    @stack('scripts')
 
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 

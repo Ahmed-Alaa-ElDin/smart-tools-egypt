@@ -9,8 +9,7 @@
                 {{-- Logo :: Start --}}
                 <div class="hidden md:flex justify-center items-center col-span-1">
                     <figure class="">
-                        <img src="{{ asset('assets/img/logos/smart-tools-logo-text-400.png') }}"
-                            alt="Smart Tools Egypt Logo">
+                        <img src="{{ asset('assets/img/logos/smart-tools-logo-text-400.png') }}" alt="Smart Tools Egypt Logo">
                     </figure>
                 </div>
                 {{-- Logo :: End --}}
@@ -39,7 +38,8 @@
                                     placeholder="{{ __('auth/authentication.Enter Your Email') }}" required>
 
                                 @error('email')
-                                    <div class="col-span-12 my-1 text-red-600 text-center text-sm font-bold">{{ __($message) }}</div>
+                                    <div class="col-span-12 my-1 text-red-600 text-center text-sm font-bold">{{ __($message) }}
+                                    </div>
                                 @enderror
                             </div>
                             {{-- Email :: End --}}
@@ -51,12 +51,18 @@
                                         {{ __('auth/authentication.Password') }}
                                     </span>
                                 </label>
-                                <input type="password" id="password" name="password"
-                                    class="col-span-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('password') border-red-500 @enderror"
-                                    placeholder="{{ __('auth/authentication.Enter Your Password') }}" required>
+                                <div class="col-span-12 w-full relative">
+                                    <input type="password" id="password" name="password"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('password') border-red-500 @enderror"
+                                        placeholder="{{ __('auth/authentication.Enter Your Password') }}" required>
+                                    <span class="material-icons show-password absolute top-2.5 right-3 cursor-pointer select-none text-base">
+                                        visibility
+                                    </span>
+                                </div>
 
                                 @error('password')
-                                    <div class="col-span-12 my-1 text-red-600 text-center text-sm font-bold">{{ __($message) }}</div>
+                                    <div class="col-span-12 my-1 text-red-600 text-center text-sm font-bold">{{ __($message) }}
+                                    </div>
                                 @enderror
                             </div>
                             {{-- Password :: End --}}
@@ -101,3 +107,19 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script>
+        // Show Password
+        document.querySelector('.show-password').addEventListener('click', function() {
+            let password = document.getElementById('password');
+            if (password.type === 'password') {
+                password.type = 'text';
+                this.innerHTML = 'visibility_off';
+            } else {
+                password.type = 'password';
+                this.innerHTML = 'visibility';
+            }
+        });
+    </script>
+@endpush

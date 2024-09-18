@@ -1201,6 +1201,18 @@ input:checked + .toggle-bg {
 .left-3 {
   left: 0.75rem !important;
 }
+.-left-\[250px\] {
+  left: -250px !important;
+}
+.top-\[35px\] {
+  top: 35px !important;
+}
+.top-2\.5 {
+  top: 0.625rem !important;
+}
+.right-3 {
+  right: 0.75rem !important;
+}
 .top-\[50\%\] {
   top: 50% !important;
 }
@@ -1557,6 +1569,9 @@ input:checked + .toggle-bg {
 .max-h-36 {
   max-height: 9rem !important;
 }
+.max-h-\[150px\] {
+  max-height: 150px !important;
+}
 .max-h-56 {
   max-height: 14rem !important;
 }
@@ -1634,6 +1649,9 @@ input:checked + .toggle-bg {
 }
 .w-7 {
   width: 1.75rem !important;
+}
+.w-\[500px\] {
+  width: 500px !important;
 }
 .w-min {
   width: -webkit-min-content !important;
@@ -2251,6 +2269,10 @@ input:checked + .toggle-bg {
   --tw-border-opacity: 1 !important;
   border-color: rgb(55 65 81 / var(--tw-border-opacity)) !important;
 }
+.border-gray-500 {
+  --tw-border-opacity: 1 !important;
+  border-color: rgb(107 114 128 / var(--tw-border-opacity)) !important;
+}
 .border-slate-300 {
   --tw-border-opacity: 1 !important;
   border-color: rgb(203 213 225 / var(--tw-border-opacity)) !important;
@@ -2262,10 +2284,6 @@ input:checked + .toggle-bg {
 .border-success {
   --tw-border-opacity: 1 !important;
   border-color: rgb(76 175 80 / var(--tw-border-opacity)) !important;
-}
-.border-gray-500 {
-  --tw-border-opacity: 1 !important;
-  border-color: rgb(107 114 128 / var(--tw-border-opacity)) !important;
 }
 .border-red-700 {
   --tw-border-opacity: 1 !important;
@@ -2429,6 +2447,10 @@ input:checked + .toggle-bg {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(225 239 254 / var(--tw-bg-opacity)) !important;
 }
+.bg-gray-300 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity)) !important;
+}
 .bg-successDarker {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(46 105 48 / var(--tw-bg-opacity)) !important;
@@ -2456,10 +2478,6 @@ input:checked + .toggle-bg {
 .bg-orange-400 {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(255 138 76 / var(--tw-bg-opacity)) !important;
-}
-.bg-gray-300 {
-  --tw-bg-opacity: 1 !important;
-  background-color: rgb(209 213 219 / var(--tw-bg-opacity)) !important;
 }
 .bg-info {
   --tw-bg-opacity: 1 !important;
@@ -3142,6 +3160,10 @@ input:checked + .toggle-bg {
 }
 .drop-shadow-\[0px_0px_20px_rgba\(255\2c 255\2c 255\2c 0\.7\)\] {
   --tw-drop-shadow: drop-shadow(0px 0px 20px rgba(255,255,255,0.7)) !important;
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow) !important;
+}
+.drop-shadow-lg {
+  --tw-drop-shadow: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1)) !important;
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow) !important;
 }
 .drop-shadow {

@@ -58,17 +58,19 @@ class OrdersDatatable extends Component
     public function render()
     {
         $orders = Order::with([
-            'user' => fn ($q) => $q->select('id', 'f_name', 'l_name')
+            'user' => fn($q) => $q->select('id', 'f_name', 'l_name')
                 ->with([
-                    'phones' => fn ($q) => $q->select('id', 'user_id', 'phone', 'default')->where('default', 1)
+                    'phones' => fn($q) => $q->select('id', 'user_id', 'phone', 'default')->where('default', 1)
                 ]),
-            'address' => fn ($q) => $q->select('id', 'governorate_id', 'city_id')->with([
-                'governorate' => fn ($q) => $q->select('id', 'name'),
-                'city' => fn ($q) => $q->select('id', 'name'),
+            'address' => fn($q) => $q->select('id', 'governorate_id', 'city_id')->with([
+                'governorate' => fn($q) => $q->select('id', 'name'),
+                'city' => fn($q) => $q->select('id', 'name'),
             ]),
-            'invoice' => fn ($q) => $q->select('id', 'order_id', 'total'),
+            'invoice' => fn($q) => $q->select('id', 'order_id', 'total'),
             'transactions',
             'status',
+            'products' => fn($q) => $q->select('products.id', 'name')->with(['brand:id,name', 'thumbnail']),
+            'collections' => fn($q) => $q->select('collections.id', 'name')->with(['thumbnail']),
         ])->select([
             'orders.id as id',
             'orders.user_id',
@@ -86,37 +88,37 @@ class OrdersDatatable extends Component
             ->leftJoin('addresses', 'addresses.id', '=', 'orders.address_id')
             ->leftJoin('governorates', 'governorates.id', '=', 'addresses.governorate_id')
             ->where(
-                fn ($q) => $q
+                fn($q) => $q
                     ->where('orders.id', 'like', '%' . $this->search . '%')
                     ->orWhereHas(
                         'user',
-                        fn ($q) => $q
+                        fn($q) => $q
                             ->where(DB::raw('LOWER(f_name)'), 'like', '%' . strtolower($this->search) . '%')
                             ->orWhere(DB::raw('LOWER(l_name)'), 'like', '%' . strtolower($this->search) . '%')
-                            ->orWhereHas('phones', fn ($q) => $q->where('phone', 'like', '%' . strtolower($this->search) . '%'))
+                            ->orWhereHas('phones', fn($q) => $q->where('phone', 'like', '%' . strtolower($this->search) . '%'))
                     )
                     ->orWhereHas(
                         'address',
-                        fn ($q) => $q
+                        fn($q) => $q
                             ->whereHas(
                                 'city',
-                                fn ($q) => $q
+                                fn($q) => $q
                                     ->where(DB::raw('LOWER(name)'), 'like', '%' . strtolower($this->search) . '%')
                             )
                             ->orWhereHas(
                                 'governorate',
-                                fn ($q) => $q
+                                fn($q) => $q
                                     ->where(DB::raw('LOWER(name)'), 'like', '%' . strtolower($this->search) . '%')
                             )
                     )
                     ->orWhereHas(
                         'status',
-                        fn ($q) => $q
+                        fn($q) => $q
                             ->where(DB::raw('LOWER(name)'), 'like', '%' . strtolower($this->search) . '%')
                     )
                     ->orWhereIn('orders.id', $this->selectedOrders)
             )
-            ->when($this->type != 'all_orders', fn ($q) => $q->whereIn('orders.status_id', config("constants.order_status_type.$this->type")))
+            ->when($this->type != 'all_orders', fn($q) => $q->whereIn('orders.status_id', config("constants.order_status_type.$this->type")))
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
 
@@ -280,10 +282,33 @@ class OrdersDatatable extends Component
 
             $order->statuses()->attach($status_id);
 
-            $order->update([
-                'status_id' => $status_id,
-                'delivered_at' => $status_id == OrderStatus::Delivered->value ? now() : null
-            ]);
+            if ($status_id == OrderStatus::Approved->value) {
+                // Create Shipment (Bosta)
+                $bosta_order = createBostaOrder($order);
+
+                if ($bosta_order['status']) {
+                    $order->update([
+                        'status_id' => OrderStatus::Preparing->value,
+                        'tracking_number' => $bosta_order['data']['trackingNumber'],
+                        'order_delivery_id' => $bosta_order['data']['_id'],
+                    ]);
+
+                    // Add new statuses (Shipment created and Preparing)
+                    $order->statuses()->attach([
+                        OrderStatus::ShippingCreates->value,
+                        OrderStatus::Preparing->value,
+                    ]);
+                } else {
+                    $order->update([
+                        'status_id' => $status_id,
+                    ]);
+                }
+            } else {
+                $order->update([
+                    'status_id' => $status_id,
+                    'delivered_at' => $status_id == OrderStatus::Delivered->value ? now() : null
+                ]);
+            }
 
             $this->dispatch(
                 'swalDone',
@@ -396,7 +421,7 @@ class OrdersDatatable extends Component
                 "user_id"
             ])
                 ->with([
-                    "user" => fn ($q) => $q->select('id', 'f_name', 'l_name')
+                    "user" => fn($q) => $q->select('id', 'f_name', 'l_name')
                 ])
                 ->where('order_delivery_id', $deliveryId)
                 ->first();
@@ -449,7 +474,7 @@ class OrdersDatatable extends Component
                 "user_id"
             ])
                 ->with([
-                    "user" => fn ($q) => $q->select('id', 'f_name', 'l_name')
+                    "user" => fn($q) => $q->select('id', 'f_name', 'l_name')
                 ])
                 ->whereIn('id', $this->selectedOrders)
                 ->where('order_delivery_id', '!=', null)
@@ -497,7 +522,7 @@ class OrdersDatatable extends Component
     }
     ######## Bulk Download Bosta AWB #########
 
-    ######## TODO:: Download Purchase Order #########
+    ######## Download Purchase Order #########
     public function downloadPurchaseOrder($order_id)
     {
         $order = Order::select([
@@ -551,7 +576,7 @@ class OrdersDatatable extends Component
         $order['extra_discount'] = $order['invoice']['offers_order_discount'] + $order['invoice']['coupon_order_discount'];
         $order['delivery_fees'] = $order['invoice']['delivery_fees'];
         $order['total'] = $order['invoice']['total'];
-            
+
         $pdf = PDF::loadView("front.orders.purchase-order", compact("order"));
 
         $userName = str_replace(" ", "_", $order['user_name']);
@@ -629,5 +654,4 @@ class OrdersDatatable extends Component
             echo $pdf->stream();
         }, $userNames . "-" . time() . ".pdf");
     }
-
 }

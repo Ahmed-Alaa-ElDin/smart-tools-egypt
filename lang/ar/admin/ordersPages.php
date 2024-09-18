@@ -243,4 +243,5 @@ return [
     "Download All Bosta AWB"                            =>          "تحميل جميع بوليصات الشحن",
     "Couldn't download the AWBs"                        =>          "لم يتم تحميل بوليصات الشحن",
     "Download All PO"                                   =>          "تحميل جميع الفواتير",
+    "Please create Bosta order first"                   =>          "الرجاء أنشاء طلب شحن أولا",
 ];

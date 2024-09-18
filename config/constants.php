@@ -48,10 +48,6 @@ return [
             OrderStatus::WaitingForApproval->value,
             OrderStatus::WaitingForContact->value,
             OrderStatus::WaitingForPayment->value,
-            OrderStatus::CancellationRequested->value,
-            OrderStatus::EditRequested->value,
-            OrderStatus::ReturnRequested->value,
-            OrderStatus::WaitingForRefund->value,
         ],
         "delivered_orders" => [
             OrderStatus::Delivered->value,
@@ -87,7 +83,6 @@ return [
         ],
         "new_orders" => [
             OrderStatus::WaitingForPayment->value,
-            OrderStatus::ShippingCreates->value,
             OrderStatus::WaitingForApproval->value,
             OrderStatus::Approved->value,
             OrderStatus::Rejected->value,

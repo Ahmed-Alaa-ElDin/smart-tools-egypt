@@ -44,7 +44,6 @@ class User extends Authenticatable
         'auth_id',
         'auth_type',
         'balance',
-        // 'points'
     ];
 
     /**

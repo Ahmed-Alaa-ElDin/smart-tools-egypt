@@ -37,8 +37,7 @@
                             {{-- Download AWB --}}
                             <a wire:click.prevent="downloadBostaAWBs"
                                 class="dropdown-item dropdown-item-excel justify-start font-bold hover:bg-green-500 focus:bg-green-500 hover:text-white focus:text-white cursor-pointer">
-                                <span
-                                    class="material-icons p-1 text-lg w-7 h-7">
+                                <span class="material-icons p-1 text-lg w-7 h-7">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                         <path fill="currentColor"
                                             d="M7.5 9a1.5 1.5 0 0 0-1.42 1.014c.345.04.665.16.942.34A.5.5 0 0 1 7.5 10H8v1.477a2 2 0 0 1 1.043.962l.281.561H13v1.5a.5.5 0 0 1-.5.5H10v1h2.5a1.5 1.5 0 0 0 1.5-1.5v-4A1.5 1.5 0 0 0 12.5 9zm5.5 3H9v-2h3.5a.5.5 0 0 1 .5.5zm-9-2h1V4a1 1 0 0 1 1-1h4v3.5A1.5 1.5 0 0 0 11.5 8H15v8a1 1 0 0 1-1 1h-4c0 .364-.097.706-.268 1H14a2 2 0 0 0 2-2V7.414a1.5 1.5 0 0 0-.44-1.06l-3.914-3.915A1.5 1.5 0 0 0 10.586 2H6a2 2 0 0 0-2 2zm10.793-3H11.5a.5.5 0 0 1-.5-.5V3.207zM2.167 11C1.522 11 1 11.522 1 12.167v4.666c0 .474.282.88.686 1.064A1.334 1.334 0 0 0 4.291 18h.751a1.334 1.334 0 0 0 2.583 0H8a1 1 0 0 0 1-1v-2.176a1 1 0 0 0-.106-.447l-.745-1.49a1 1 0 0 0-.894-.554H7v-.166C7 11.522 6.478 11 5.833 11zM7 14.333V13h.255c.126 0 .241.071.298.184l.574 1.15zm-4.667 3.334a.667.667 0 1 1 1.334 0a.667.667 0 0 1-1.334 0m4 .666a.667.667 0 1 1 0-1.333a.667.667 0 0 1 0 1.333" />
@@ -137,7 +136,7 @@
         <div class="scrollbar scrollbar-hidden -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
 
-                <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                <div class="shadow border-b border-gray-200 sm:rounded-lg">
                     <table class="min-w-full divide-y divide-gray-200">
                         {{-- Datatable Header --}}
                         <thead class="bg-gray-50">
@@ -343,13 +342,62 @@
                                         class="px-6 py-3 flex gap-1 items-center justify-center text-center text-sm font-medium">
 
                                         {{-- Order Details --}}
-                                        <a href="{{ route('admin.orders.show', [$order->id]) }}"
-                                            title="{{ __('admin/ordersPages.View') }}" class="m-0">
-                                            <span
-                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
-                                                visibility
-                                            </span>
-                                        </a>
+                                        <div class="group relative">
+                                            <a href="{{ route('admin.orders.show', [$order->id]) }}"
+                                                title="{{ __('admin/ordersPages.View') }}" class="m-0"
+                                                target="_blank">
+                                                <span
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
+                                                    visibility
+                                                </span>
+                                            </a>
+
+                                            {{-- Order Products --}}
+                                            <div
+                                                class="group-hover:block hidden hover:block absolute max-w-75 bg-white border-gray-500 border w-[500px] max-h-[150px] -left-[250px] top-[35px] overflow-y-auto rounded-lg drop-shadow-lg z-10 scrollbar scrollbar-thin scrollbar-thumb-red-200 scrollbar-track-gray-100">
+                                                <table class="w-100">
+                                                    @foreach ($order->collections as $collection)
+                                                        <tr>
+                                                            <td
+                                                                class="px-2 py-1 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                                                {{ $collection->name }}
+                                                            </td>
+                                                            <td
+                                                                class="px-2 py-1 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                                                {{ $collection->pivot->quantity }}
+                                                            </td>
+                                                            <td
+                                                                class="px-2 py-1 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                                                <span
+                                                                    class="text-xs">{{ __('front/homePage.EGP') }}</span>
+                                                                <span dir="ltr"
+                                                                    class="font-bold">{{ number_format($collection->pivot->price * $collection->pivot->quantity, 2, '.', '\'') }}</span>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+
+                                                    @foreach ($order->products as $product)
+                                                        <tr>
+                                                            <td
+                                                                class="px-2 py-1 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                                                {{ $product->name }}
+                                                            </td>
+                                                            <td
+                                                                class="px-2 py-1 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                                                {{ $product->pivot->quantity }}
+                                                            </td>
+                                                            <td
+                                                                class="px-2 py-1 text-xs font-bold text-gray-500 uppercase tracking-wider text-nowrap">
+                                                                <span
+                                                                    class="text-xs">{{ __('front/homePage.EGP') }}</span>
+                                                                <span dir="ltr"
+                                                                    class="font-bold">{{ number_format($product->pivot->price * $product->pivot->quantity, 2, '.', '\'') }}</span>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </table>
+                                            </div>
+                                        </div>
 
                                         @if ($order->order_delivery_id)
                                             {{-- Download Bosta AWB --}}
@@ -365,15 +413,27 @@
                                                 </span>
                                             </button>
                                         @else
+                                            {{-- Download Bosta AWB --}}
+                                            <button title="{{ __('admin/ordersPages.Please create Bosta order first') }}"
+                                                disabled
+                                                class="m-0 focus:outline-none">
+                                                <span
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-gray-300 rounded flex">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                        <path fill="currentColor"
+                                                            d="M7.5 9a1.5 1.5 0 0 0-1.42 1.014c.345.04.665.16.942.34A.5.5 0 0 1 7.5 10H8v1.477a2 2 0 0 1 1.043.962l.281.561H13v1.5a.5.5 0 0 1-.5.5H10v1h2.5a1.5 1.5 0 0 0 1.5-1.5v-4A1.5 1.5 0 0 0 12.5 9zm5.5 3H9v-2h3.5a.5.5 0 0 1 .5.5zm-9-2h1V4a1 1 0 0 1 1-1h4v3.5A1.5 1.5 0 0 0 11.5 8H15v8a1 1 0 0 1-1 1h-4c0 .364-.097.706-.268 1H14a2 2 0 0 0 2-2V7.414a1.5 1.5 0 0 0-.44-1.06l-3.914-3.915A1.5 1.5 0 0 0 10.586 2H6a2 2 0 0 0-2 2zm10.793-3H11.5a.5.5 0 0 1-.5-.5V3.207zM2.167 11C1.522 11 1 11.522 1 12.167v4.666c0 .474.282.88.686 1.064A1.334 1.334 0 0 0 4.291 18h.751a1.334 1.334 0 0 0 2.583 0H8a1 1 0 0 0 1-1v-2.176a1 1 0 0 0-.106-.447l-.745-1.49a1 1 0 0 0-.894-.554H7v-.166C7 11.522 6.478 11 5.833 11zM7 14.333V13h.255c.126 0 .241.071.298.184l.574 1.15zm-4.667 3.334a.667.667 0 1 1 1.334 0a.667.667 0 0 1-1.334 0m4 .666a.667.667 0 1 1 0-1.333a.667.667 0 0 1 0 1.333" />
+                                                    </svg>
+                                                </span>
+                                            </button>
                                             {{-- Create Bosta Order --}}
-                                            <button title="{{ __('admin/ordersPages.Create Bosta Order') }}"
+                                            {{-- <button title="{{ __('admin/ordersPages.Create Bosta Order') }}"
                                                 wire:click="createBostaOrder({{ $order->id }})"
                                                 class="m-0 focus:outline-none">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-secondary hover:secondaryDark rounded">
                                                     local_shipping
                                                 </span>
-                                            </button>
+                                            </button> --}}
                                         @endif
 
                                         {{-- Download PO --}}
@@ -406,13 +466,13 @@
                                         </button>
 
                                         {{-- Edit Button --}}
-                                        <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}"
+                                        {{-- <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}"
                                             title="{{ __('admin/ordersPages.Edit') }}" class="m-0">
                                             <span
                                                 class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
                                                 edit
                                             </span>
-                                        </a>
+                                        </a> --}}
 
                                         {{-- Archive Button --}}
                                         <button title="{{ __('admin/ordersPages.Archive') }}" type="button"
