@@ -58,7 +58,7 @@
                 @endif
 
                 {{-- Points --}}
-                @if ($customer->points > 0)
+                @if ($customer->validPoints > 0)
                     <div class="flex flex-col justify-center items-center gap-0 bg-gray-200 rounded p-2">
                         <label for="points" class="m-0 p-2 text-xs font-bold text-gray-900 select-none">
                             {{ __('admin/ordersPages.Points') }}

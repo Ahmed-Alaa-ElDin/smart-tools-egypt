@@ -138,7 +138,7 @@
                 </span>
 
                 <span class="p-1 w-full text-center font-bold bg-white rounded" dir="ltr">
-                    {{-- {{ number_format($selectedCustomer->points, 2, '.', '\'') }} --}}
+                    {{ number_format($selectedCustomer->validPoints, 2, '.', '\'') }}
                 </span>
             </div>
 
