@@ -47,7 +47,7 @@ class OrderController extends Controller
                     'collections.slug',
                     'collections.base_price',
                 ])->with([
-                    'products' => fn ($q) => $q->select('products.id'),
+                    'products' => fn($q) => $q->select('products.id'),
                     'reviews',
                     'thumbnail',
                 ]);
@@ -87,7 +87,8 @@ class OrderController extends Controller
                     ->with([
                         'thumbnail',
                     ]);
-            }, 'collections' => function ($query) {
+            },
+            'collections' => function ($query) {
                 $query
                     ->select([
                         'collections.id',
@@ -101,7 +102,7 @@ class OrderController extends Controller
                         'quantity'
                     ])
                     ->with([
-                        'products' => fn ($q) => $q->select('products.id'),
+                        'products' => fn($q) => $q->select('products.id'),
                         'thumbnail',
                     ]);
             },
@@ -122,7 +123,7 @@ class OrderController extends Controller
         // Get Order data
         $order = Order::with([
             'invoice',
-            'coupon' => fn ($q) => $q->with([
+            'coupon' => fn($q) => $q->with([
                 'supercategories' => function ($q) {
                     $q->with(['products']);
                 },
@@ -263,7 +264,7 @@ class OrderController extends Controller
         // B - Shipping
         // ------------------------------------------------------------------------------------------------------
         // 1 - Items Offers Free Shipping
-        $items_free_shipping = !$best_items->contains(fn ($item) => $item['offer_free_shipping'] == 0);
+        $items_free_shipping = !$best_items->contains(fn($item) => $item['offer_free_shipping'] == 0);
 
         // 2 - Order Offer Free Shipping
         $order_offer_free_shipping = $order_offer ? $order_offer->free_shipping : false;
@@ -1886,7 +1887,7 @@ class OrderController extends Controller
     public function return(Request $request, $order_id)
     {
         $order = Order::with([
-            'products' => fn ($q) => $q->with('thumbnail')
+            'products' => fn($q) => $q->with('thumbnail')
         ])->findOrFail($order_id);
 
         return view('front.orders.return_products', compact('order'));
@@ -1925,7 +1926,7 @@ class OrderController extends Controller
 
         // Get Order Products ids and quantities from Order DB
         $products = $order->products;
-        $old_products_quantities = $products->mapWithKeys(fn ($product) => [$product->id => $product->pivot->quantity]);
+        $old_products_quantities = $products->mapWithKeys(fn($product) => [$product->id => $product->pivot->quantity]);
         $old_products_total_quantities = $old_products_quantities->sum();
 
         // Validate Quantities
@@ -2510,9 +2511,9 @@ class OrderController extends Controller
             return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
         }
     }
-    ##################### Go To Paymob Iframe :: Start #####################
+    ##################### Go To Paymob Iframe :: End #####################
 
-    ##################### Go To Paymob Iframe :: Start #####################
+    ##################### Go To Paymob Iframe :: Start ##################### 
     public function goToRefund($order_id)
     {
         $order = Order::with(['user', 'products', 'address', 'transactions'])->findOrFail($order_id);
@@ -2578,8 +2579,7 @@ class OrderController extends Controller
             return redirect()->route('front.orders.index')->with('error', __('front/homePage.Refund Failed, Please Try Again'));
         }
     }
-    ##################### Go To Paymob Iframe :: Start #####################
-
+    ##################### Go To Paymob Iframe :: End #####################
 
     ##################### Update Order's Status By Bosta :: Start #####################
     public function updateStatus(Request $request)
@@ -2595,9 +2595,9 @@ class OrderController extends Controller
 
         return response()->json(['success' => true]);
     }
-    ##################### Update Order's Status By Bosta :: Start #####################
+    ##################### Update Order's Status By Bosta :: End #####################
 
-    ##################### Track the Order :: Start #####################
+    ##################### Track the Order :: Start ##################### 
     public function track(Request $request)
     {
         $order = Order::with('statuses')->findOrFail($request['order_id']);
@@ -2606,5 +2606,25 @@ class OrderController extends Controller
 
         return view('front.orders.track', compact('order', 'statuses'));
     }
-    ##################### Track the Order :: Start #####################
+    ##################### Track the Order :: End #####################
+
+    ##################### Change Payment Method :: Start #####################
+    public function changePaymentMethod(Request $request)
+    {
+        try {
+            $order = Order::findOrFail($request['order_id']);
+
+            $order
+                ->transactions()
+                ->where('payment_status_id', PaymentStatus::Pending->value)
+                ->update([
+                    'payment_method_id' => $request['payment_method_id'],
+                ]);
+
+            return redirect()->route('front.orders.index')->with('success', __('front/homePage.Payment Method Changed Successfully'));
+        } catch (\Throwable $th) {
+            return redirect()->route('front.orders.index')->with('error', __('front/homePage.Payment Method Change Failed, Please Try Again'));
+        }
+    }
+    ##################### Change Payment Method :: End #####################
 }

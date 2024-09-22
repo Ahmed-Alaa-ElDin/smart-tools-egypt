@@ -139,6 +139,13 @@ class Order extends Model
             : null;
     }
 
+    public function getUnpaidPaymentMethodsAttribute()
+    {
+        return $this->transactions->where('payment_status_id', PaymentStatus::Pending->value)->count() ?
+            $this->transactions->where('payment_status_id', PaymentStatus::Pending->value)->pluck('payment_method_id')
+            : null;
+    }
+
     public function getMainPaymentMethodAttribute()
     {
         return $this->transactions->whereIn('payment_method_id', [

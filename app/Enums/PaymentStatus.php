@@ -17,7 +17,7 @@ enum PaymentStatus: int
      * @param int $value
      * @return string|null
      */
-    public static function getKeyFromValue(int $value): ?string
+    public static function getKeyFromValue(?int $value): ?string
     {
         foreach (self::cases() as $case) {
             if ($case->value === $value) {

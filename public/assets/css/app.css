@@ -1673,6 +1673,9 @@ input:checked + .toggle-bg {
 .w-32 {
   width: 8rem !important;
 }
+.w-\[95\%\] {
+  width: 95% !important;
+}
 .w-1\/4 {
   width: 25% !important;
 }
@@ -2034,6 +2037,11 @@ input:checked + .toggle-bg {
   --tw-space-y-reverse: 0 !important;
   margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse))) !important;
   margin-bottom: calc(1rem * var(--tw-space-y-reverse)) !important;
+}
+.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0 !important;
+  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse))) !important;
+  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse)) !important;
 }
 .space-x-8 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0 !important;

@@ -12,7 +12,6 @@ use App\Http\Controllers\Front\HomepageController;
 use App\Http\Controllers\Front\InvoiceRequestController;
 use App\Http\Controllers\Front\CollectionController;
 use App\Http\Controllers\Front\ComparisonController;
-use App\Http\Controllers\Front\FavoriteController;
 use App\Http\Controllers\Front\OfferController;
 use App\Http\Controllers\Front\SubcategoryController;
 use App\Http\Controllers\Front\WishlistController;
@@ -95,7 +94,7 @@ Route::group([
         Route::post('/{order_id}/update-calc', 'updateCalc')->name('update-calc');
 
         // Save the updated order
-        Route::put('/{order_id}/{new_older_id}', 'update')->name('update');
+        Route::put('/{order_id}/{new_older_id}', 'update')->name('update')->where('new_older_id', '[0-9]+');
 
         // return total order
         Route::delete('/{order_id}/return/{new_order_id?}', 'return')->name('return');
@@ -120,6 +119,9 @@ Route::group([
 
         // track the order
         Route::get('/{order_id}/track', 'track')->name('track');
+
+        // Change payment method
+        Route::put('/{order_id}/change-payment-method', "changePaymentMethod")->name('change-payment-method');
     });
     ################ Cart & Order Controller :: End ##############
 
