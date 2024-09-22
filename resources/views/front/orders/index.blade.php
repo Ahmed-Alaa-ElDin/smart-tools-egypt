@@ -613,7 +613,7 @@
                                                 @method('PUT')
                                                 <!-- Modal body -->
                                                 @php $unpaidPaymentMethod = $order->transactions->where('payment_status_id', App\Enums\PaymentStatus::Pending->value)->first()?->payment_method_id; @endphp
-                                                <div class="p-6 space-y-2">
+                                                <div class="p-6 space-y-4">
                                                     <span class="font-bold">
                                                         {{ __('front/homePage.Choose New Payment Method') }}
                                                     </span>
