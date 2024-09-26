@@ -9,6 +9,9 @@ use Livewire\Component;
 
 class TopSuperCategories extends Component
 {
+    public $supercategories;
+    public $selectedSupercategories = [];
+    
     public function mount()
     {
         $this->supercategories = Supercategory::select([

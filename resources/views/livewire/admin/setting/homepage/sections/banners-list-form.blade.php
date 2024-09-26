@@ -121,7 +121,7 @@ bg-gray-200 @endif select-none"
             <div class="p-2 text-center text-sm font-medium flex gap-2 justify-center">
 
                 {{-- Edit Button --}}
-                <a href="{{ route('admin.setting.homepage.banners.edit', [$banner['id']]) }}" target="_blank"
+                <a href="{{ route('admin.setting.general.banners.edit', [$banner['id']]) }}" target="_blank"
                     data-title="{{ __('admin/sitePages.Edit') }}" data-toggle="tooltip" data-placement="top"
                     class="m-0">
                     <span class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
