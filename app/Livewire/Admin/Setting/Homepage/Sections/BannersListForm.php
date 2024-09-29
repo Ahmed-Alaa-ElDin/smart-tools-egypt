@@ -26,16 +26,23 @@ class BannersListForm extends Component
             return $a['rank'] <=> $b['rank'];
         });
 
+        return view('livewire.admin.setting.homepage.sections.banners-list-form', compact('banners'));
+    }
+
+    ######## Search : Start ########
+    public function updatedSearchBanner()
+    {
         $this->banners_list = Banner::select(['id', 'banner_name', 'description', 'link'])
-            ->whereNotIn('id', array_map(fn ($banner) => $banner['id'], $this->banners))
+            ->whereNotIn('id', array_map(fn($banner) => $banner['id'], $this->banners))
             ->where(function ($q) {
                 $q->where('description->ar', 'like', '%' . $this->searchBanner . '%')
                     ->orWhere('description->en', 'like', '%' . $this->searchBanner . '%');
             })
             ->get();
 
-        return view('livewire.admin.setting.homepage.sections.banners-list-form', compact('banners'));
+        $this->showResult = 1;
     }
+    ######## Search : End ########
 
     ######## Check Rank : Start ########
     public function checkRank($rank, $old_rank)
@@ -84,13 +91,19 @@ class BannersListForm extends Component
 
             unset($this->banners[$banner_key]);
 
-            $this->dispatch('swalDone', text: __('admin/sitePages.Banner has been removed from list successfully'),
-                icon: 'success');
+            $this->dispatch(
+                'swalDone',
+                text: __('admin/sitePages.Banner has been removed from list successfully'),
+                icon: 'success'
+            );
 
             $this->dispatch('listUpdated', ['selected_banners' => $this->banners])->to('admin.setting.homepage.sections.section-form');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/sitePages.Banner hasn't been removed from list"),
-                icon: 'error');
+            $this->dispatch(
+                'swalDone',
+                text: __("admin/sitePages.Banner hasn't been removed from list"),
+                icon: 'error'
+            );
         }
     }
     ######## Deleted #########
@@ -123,13 +136,19 @@ class BannersListForm extends Component
 
             $this->banners[] = $banner;
 
-            $this->dispatch('swalDone', text: __('admin/sitePages.Banner has been added to the list successfully'),
-                icon: 'success');
+            $this->dispatch(
+                'swalDone',
+                text: __('admin/sitePages.Banner has been added to the list successfully'),
+                icon: 'success'
+            );
 
             $this->dispatch('listUpdated', ['selected_banners' => $this->banners])->to('admin.setting.homepage.sections.section-form');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/sitePages.Banner hasn't been added to the list"),
-                icon: 'error');
+            $this->dispatch(
+                'swalDone',
+                text: __("admin/sitePages.Banner hasn't been added to the list"),
+                icon: 'error'
+            );
         }
     }
     ######## Add Banner to List : End #########

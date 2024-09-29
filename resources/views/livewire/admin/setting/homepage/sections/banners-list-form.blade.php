@@ -131,8 +131,7 @@ bg-gray-200 @endif select-none"
 
                 {{-- Delete Button --}}
                 <a href="#" data-title="{{ __('admin/sitePages.Remove from list') }}" data-toggle="tooltip"
-                    data-placement="top" wire:click.prevent="removeBanner({{ $banner['id'] }})"
-                    class="m-0">
+                    data-placement="top" wire:click.prevent="removeBanner({{ $banner['id'] }})" class="m-0">
                     <span
                         class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded-circle">
                         close
@@ -167,9 +166,9 @@ bg-gray-200 @endif select-none"
                 <div class="col-span-12 md:col-span-9">
                     <input
                         class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                        type="text" wire:model.live.debounce.300ms="searchBanner" onfocus="Livewire.dispatch('showResults',1);"
-                        id="banner_name" placeholder="{{ __("admin/sitePages.Enter Banner's Description") }}"
-                        maxlength="100" autocomplete="off" required>
+                        type="text" wire:model.live.debounce.300ms="searchBanner" id="banner_name"
+                        placeholder="{{ __("admin/sitePages.Enter Banner's Description") }}" maxlength="100"
+                        autocomplete="off" required>
 
                     @if ($searchBanner != '' && $showResult)
                         <div class="relative h-0">
