@@ -4975,6 +4975,10 @@ input:checked + .toggle-bg {
     max-height: 42rem !important;
   }
 
+  .lg\:max-h-180 {
+    max-height: 45rem !important;
+  }
+
   .lg\:grid-cols-1 {
     grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
   }

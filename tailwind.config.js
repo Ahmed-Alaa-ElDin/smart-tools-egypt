@@ -83,6 +83,9 @@ module.exports = {
                 '160': "40rem",
                 '164': "41rem",
                 '168': "42rem",
+                '172': "43rem",
+                '176': "44rem",
+                '180': "45rem",
             },
             fontFamily: {
                 sans: ["Nunito", ...defaultTheme.fontFamily.sans],
