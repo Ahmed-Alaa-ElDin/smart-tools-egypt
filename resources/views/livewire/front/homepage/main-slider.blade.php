@@ -112,7 +112,7 @@
     </div>
 
     {{-- Today's Deal : Start --}}
-    <aside class="col-span-12 lg:col-span-2 shadow rounded overflow-hidden lg:h-156">
+    <aside class="col-span-12 lg:col-span-2 shadow rounded overflow-hidden lg:max-h-168">
         <div class="flex justify-around items-center px-3 py-5 bg-red-100 rounded-t">
             <span class="text-sm font-bold">
                 {{ __("front/homePage.Today's Deal") }}
