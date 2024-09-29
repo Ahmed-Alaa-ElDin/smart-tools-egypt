@@ -113,7 +113,7 @@
 
     {{-- Today's Deal : Start --}}
     <aside class="col-span-12 lg:col-span-2 shadow rounded overflow-hidden">
-        <div class="flex justify-around items-center px-3 py-5 bg-red-100 rounded-t">
+        <div class="flex justify-around items-center lg:h-156 px-3 py-5 bg-red-100 rounded-t">
             <span class="text-sm font-bold">
                 {{ __("front/homePage.Today's Deal") }}
             </span>
@@ -121,7 +121,7 @@
                 class="text-xs font-bold rounded py-0.5 px-1 bg-red-600 text-white">{{ __('front/homePage.Hot') }}</span>
         </div>
         <div
-            class="overflow-auto scrollbar scrollbar-thumb-secondary scrollbar-track-primary scrollbar-thin lg:h-156 p-2 bg-primary rounded-b">
+            class="overflow-auto scrollbar scrollbar-thumb-secondary scrollbar-track-primary scrollbar-thin p-2 bg-primary rounded-b h-100">
             <div>
 
                 <ul class="grid grid-cols-2 lg:grid-cols-1 gap-2 ">
