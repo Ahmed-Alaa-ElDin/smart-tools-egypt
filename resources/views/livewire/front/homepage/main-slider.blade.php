@@ -84,7 +84,7 @@
         {{-- Main Slider & top categories : End --}}
 
         {{-- SubSlider Banners : Start --}}
-        <div class="grid grid-cols-2 gap-3 justify-between items-center overflow-hidden h-48 md:h-56 lg:h-64">
+        <div class="grid grid-cols-2 gap-3 justify-between items-center overflow-hidden">
             @foreach ($subsliderBanners as $subsliderBanner)
                 <div class="shadow rounded overflow-hidden bg-white text-center h-24 md:h-28 lg:h-32">
                     <a href="{{ $subsliderBanner->banner->link }}">
