@@ -86,7 +86,7 @@
         {{-- SubSlider Banners : Start --}}
         <div class="grid grid-cols-2 gap-3 justify-between items-center overflow-hidden">
             @foreach ($subsliderBanners as $subsliderBanner)
-                <div class="shadow rounded overflow-hidden bg-white text-center h-24 md:h-28 lg:h-32">
+                <div class="shadow rounded overflow-hidden bg-white text-center">
                     <a href="{{ $subsliderBanner->banner->link }}">
                         <img src="{{ asset('storage/images/banners/original/' . $subsliderBanner->banner->banner_name) }}"
                             class="m-auto " alt="{{ $subsliderBanner->banner->description }}">
