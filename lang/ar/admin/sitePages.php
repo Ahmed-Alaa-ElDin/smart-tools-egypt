@@ -195,4 +195,5 @@ return [
     "Small Banner: Use 150x150 sizes image"                                 =>      "البنر الصغير: استخدم صورة أبعادها 150x150",
     "Top Banner: Use 1300x50 sizes image"                                   =>      "البنر العلوي: استخدم صورة أبعادها 1300x50",
     "Small Subslider"                                                       =>      "بنر فرعي صغير",
+    "Only 4 banners are allowed"                                            =>      "أقصى عدد من البنرات 4",
 ];

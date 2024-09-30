@@ -17,7 +17,6 @@ class ChooseBannersDatatable extends Component
     public $sortDirection = 'ASC';
     public $perPage;
     public $search = "";
-
     public $selected = [];
 
     // Render Once
@@ -69,6 +68,9 @@ class ChooseBannersDatatable extends Component
                 if (SubsliderBanner::count() < 4) {
                     $banner = Banner::find($banner_id);
                     $banner->subsliderBanner()->create();
+                } else {
+                    Session::flash('error', __('admin/sitePages.Only 4 banners are allowed'));
+                    return redirect()->route('admin.setting.homepage.subslider-banners.index');
                 }
             }
 

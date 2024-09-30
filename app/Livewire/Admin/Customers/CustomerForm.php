@@ -285,7 +285,7 @@ class CustomerForm extends Component
     {
         $this->validateOnly($photo);
 
-        $imageUpload = imageUpload($photo, 'profile-', 'profiles');
+        $imageUpload = singleImageUpload($photo, 'profile-', 'profiles');
 
         $this->temp_path = $imageUpload["temporaryUrl"];
 

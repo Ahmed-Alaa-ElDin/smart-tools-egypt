@@ -195,7 +195,7 @@ return [
     "Small Banner: Use 150x150 sizes image"                                 =>      "Small Banner: Use 150x150 sizes image",
     "Top Banner: Use 1300x50 sizes image"                                   =>      "Top Banner: Use 1300x50 sizes image",
     "Small Subslider"                                                       =>      "Small Subslider",
-    "Publish"                                                               =>      "Publish",
+    "Only 4 banners are allowed"                                            =>      "Only 4 banners are allowed",
     "Publish"                                                               =>      "Publish",
     "Publish"                                                               =>      "Publish",
     "Publish"                                                               =>      "Publish",

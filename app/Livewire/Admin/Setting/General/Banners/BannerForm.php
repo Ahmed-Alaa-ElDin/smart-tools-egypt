@@ -24,7 +24,7 @@ class BannerForm extends Component
     public function rules()
     {
         return [
-            'banner'                        =>      'nullable|mimes:jpg,jpeg,png|max:2048',
+            'banner'                        =>      'nullable|mimes:jpg,jpeg,png,webp|max:2048',
             'banner_name'                   =>      'required',
             "description"                   =>      "array",
             "description.ar"                =>      "required|string|max:100",
@@ -67,6 +67,9 @@ class BannerForm extends Component
     // validate and upload photo
     public function updatedBanner($banner)
     {
+        // Validate the input
+        $this->validateOnly("banner");
+
         // Crop and resize photo
         try {
             $this->banner_name = singleImageUpload($banner, 'banner-', 'banners');
@@ -100,7 +103,6 @@ class BannerForm extends Component
                 'link' => $this->link ?? null,
                 'banner_name' => $this->banner_name ?? null,
             ]);
-
 
             DB::commit();
 

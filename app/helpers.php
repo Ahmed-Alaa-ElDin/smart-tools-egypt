@@ -14,48 +14,34 @@ use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
 use App\Enums\OrderStatus;
 
-// todo :: compare between this function and lower one
-// Upload single photo and get link
-function imageUpload($photo, $image_f_name, $folder_name)
-{
-    $image_name = $image_f_name . time() . '-' . rand() . '.' . $photo->getClientOriginalExtension();
-
-    // Crop and resize photo
-    try {
-        $manager = new ImageManager();
-
-        File::isDirectory('storage/images/' . $folder_name . '/cropped100/') || File::makeDirectory('storage/images/' . $folder_name . '/cropped100/', 0777, true, true);
-
-        $manager->make($photo)->resize(100, null, function ($constraint) {
-            $constraint->aspectRatio();
-        })->crop(100, 100)->save('storage/images/' . $folder_name . '/cropped100/' . $image_name);
-    } catch (\Throwable $th) {
-    }
-
-    // Upload photo and get link
-    $photo->storeAs('original', $image_name, $folder_name);
-
-    return ['temporaryUrl' => $photo->temporaryUrl(), "image_name" => $image_name];
-}
-
-// Upload single photo and get link
+// Upload single Image and get link
 function singleImageUpload($photo, $image_f_name, $folder_name)
 {
+    $sizes = [
+        'original',
+        '100',
+        '400'
+    ];
+
     $image_name = $image_f_name . time() . '-' . rand();
-    // Crop and resize photo
+
+    // Resize image
     try {
         $manager = new ImageManager();
 
-        File::isDirectory('storage/images/' . $folder_name . '/cropped100/') || File::makeDirectory('storage/images/' . $folder_name . '/cropped100/', 0777, true, true);
-        File::isDirectory('storage/images/' . $folder_name . '/original/') || File::makeDirectory('storage/images/' . $folder_name . '/original/', 0777, true, true);
+        $directory = "storage/images/$folder_name";
 
-        // Save cropped Size
-        $manager->make($photo)->encode('webp')->resize(100, null, function ($constraint) {
-            $constraint->aspectRatio();
-        })->crop(100, 100)->save('storage/images/' . $folder_name . '/cropped100/' . $image_name);
-
-        // Save Original Size
-        $manager->make($photo)->encode('webp')->save('storage/images/' . $folder_name . '/original/' . $image_name);
+        foreach( $sizes as $size ) {
+            if ($size == 'original') {
+                File::ensureDirectoryExists("$directory/original",0777,true,true);
+                $manager->make($photo)->encode('webp')->save('storage/images/' . $folder_name . '/original/' . $image_name);
+            } else {
+                File::ensureDirectoryExists("$directory/cropped$size", 0777, true, true);
+                $manager->make($photo)->encode('webp')->resize($size, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->crop($size, $size)->save('storage/images/' . $folder_name . '/cropped' . $size . '/' . $image_name);
+            }
+        }
     } catch (\Throwable $th) {
         // todo :: delete throw
         // throw $th;

@@ -130,7 +130,7 @@ class EditDeliveryForm extends Component
         $this->validateOnly($photo);
 
         // for photo rendering
-        $imageUpload = imageUpload($photo, 'delivery-company-', 'deliveryCompanies');
+        $imageUpload = singleImageUpload($photo, 'delivery-company-', 'deliveryCompanies');
 
         $this->temp_path = $imageUpload["temporaryUrl"];
 
