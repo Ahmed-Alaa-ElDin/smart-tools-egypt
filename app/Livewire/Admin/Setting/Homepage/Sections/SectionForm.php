@@ -48,7 +48,7 @@ class SectionForm extends Component
         if ($this->section_id) {
             $this->section = Section::with([
                 'products' =>
-                fn ($q) => $q->select([
+                fn($q) => $q->select([
                     'products.id',
                     'name',
                     'original_price',
@@ -60,9 +60,9 @@ class SectionForm extends Component
                     'thumbnail'
                 ])->withPivot('rank'),
                 'collections' =>
-                fn ($q) => $q->select(['collections.id', 'name', 'original_price', 'base_price', 'final_price', 'points', 'under_reviewing'])->with(['thumbnail'])->withPivot('rank'),
+                fn($q) => $q->select(['collections.id', 'name', 'original_price', 'base_price', 'final_price', 'points', 'under_reviewing'])->with(['thumbnail'])->withPivot('rank'),
                 'offer',
-                'banners' => fn ($q) => $q->select(['banners.id', 'banner_name', 'description', 'link'])->withPivot('rank')
+                'banners' => fn($q) => $q->select(['banners.id', 'banner_name', 'description', 'link'])->withPivot('rank')
             ])->findOrFail($this->section_id);
 
             $this->title = [
@@ -70,7 +70,7 @@ class SectionForm extends Component
                 'en' => $this->section->getTranslation('title', 'en')
             ];
 
-            $this->active = $this->section->active;
+            $this->active =  $this->section->active ? true : false;
 
             $this->type = $this->section->type;
 

@@ -22,7 +22,7 @@
                     placeholder="{{ __('admin/offersPages.Search ...') }}">
             </div>
             {{-- Search Collection Input :: End --}}
-            @if (count($list))
+            @if (count($list) || !empty($search))
                 <div
                     class="absolute button-0 left-0 w-full z-10 bg-white border border-t-0 border-gray-200 max-h-36 overflow-x-hidden rounded-b-xl p-2 scrollbar scrollbar-thin scrollbar-thumb-primary">
                     {{-- Loading :: Start --}}

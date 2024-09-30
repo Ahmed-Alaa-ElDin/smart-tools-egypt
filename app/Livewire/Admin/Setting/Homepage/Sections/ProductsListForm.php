@@ -11,7 +11,6 @@ class ProductsListForm extends Component
     public $items = [];
 
     public $search = "", $list = [];
-
     protected $listeners = ['clearSearch'];
 
     ######## Fires with each update : Start ########
@@ -21,14 +20,18 @@ class ProductsListForm extends Component
             return $a['rank'] <=> $b['rank'];
         });
 
+        if (empty($this->search)) {
+            $this->list = [];
+        }
+
         return view('livewire.admin.setting.homepage.sections.products-list-form', compact('products'));
     }
     ######## Fires with each update : Start ########
 
     ######## Search for product and collection : Start ########
-    public function updatedSearch()
+    public function updatedSearch($value)
     {
-        $products_id = array_map(fn ($item) => $item['id'], array_filter($this->items, fn ($item) => $item['type'] == 'Product'));
+        $products_id = array_map(fn($item) => $item['id'], array_filter($this->items, fn($item) => $item['type'] == 'Product'));
 
         $products = Product::select([
             'id',
@@ -48,7 +51,7 @@ class ProductsListForm extends Component
             'id',
             $products_id
         )->where(
-            fn ($q) =>
+            fn($q) =>
             $q->where('name', 'like', '%' . $this->search . '%')
                 ->orWhere('barcode', 'like', '%' . $this->search . '%')
                 ->orWhere('original_price', 'like', '%' . $this->search . '%')
@@ -56,10 +59,10 @@ class ProductsListForm extends Component
                 ->orWhere('final_price', 'like', '%' . $this->search . '%')
                 ->orWhere('description', 'like', '%' . $this->search . '%')
                 ->orWhere('model', 'like', '%' . $this->search . '%')
-                ->orWhereHas('brand', fn ($q) => $q->where('brands.name', 'like', '%' . $this->search . '%'))
+                ->orWhereHas('brand', fn($q) => $q->where('brands.name', 'like', '%' . $this->search . '%'))
         )->get();
 
-        $collections_id = array_map(fn ($item) => $item['id'], array_filter($this->items, fn ($item) => $item['type'] == 'Collection'));
+        $collections_id = array_map(fn($item) => $item['id'], array_filter($this->items, fn($item) => $item['type'] == 'Collection'));
 
         $collections = Collection::select([
             'id',
@@ -76,7 +79,7 @@ class ProductsListForm extends Component
             'id',
             $collections_id
         )->where(
-            fn ($q) =>
+            fn($q) =>
             $q->where('name', 'like', '%' . $this->search . '%')
                 ->orWhere('barcode', 'like', '%' . $this->search . '%')
                 ->orWhere('original_price', 'like', '%' . $this->search . '%')
@@ -146,8 +149,13 @@ class ProductsListForm extends Component
             $this->items[] = $collection;
         }
 
-        $this->dispatch('swalDone', text: __('admin/sitePages.Product has been added to the list successfully'),
-            icon:'success');
+        $this->clearSearch();
+
+        $this->dispatch(
+            'swalDone',
+            text: __('admin/sitePages.Product has been added to the list successfully'),
+            icon: 'success'
+        );
 
         $this->dispatch('listUpdated', ['selected_products' => $this->items])->to('admin.setting.homepage.sections.section-form');
     }
@@ -234,13 +242,19 @@ class ProductsListForm extends Component
 
             unset($this->items[$product_key]);
 
-            $this->dispatch('swalDone', text: __('admin/sitePages.Product has been removed from list successfully'),
-                icon: 'success');
+            $this->dispatch(
+                'swalDone',
+                text: __('admin/sitePages.Product has been removed from list successfully'),
+                icon: 'success'
+            );
 
             $this->dispatch('listUpdated', ['selected_products' => $this->items])->to('admin.setting.homepage.sections.section-form');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/sitePages.Product hasn't been removed from list"),
-                icon: 'error');
+            $this->dispatch(
+                'swalDone',
+                text: __("admin/sitePages.Product hasn't been removed from list"),
+                icon: 'error'
+            );
         }
     }
     ######## Remove Product :: End #########
@@ -259,13 +273,19 @@ class ProductsListForm extends Component
 
             unset($this->items[$collection_key]);
 
-            $this->dispatch('swalDone', text: __('admin/sitePages.Product has been removed from list successfully'),
-                icon: 'success');
+            $this->dispatch(
+                'swalDone',
+                text: __('admin/sitePages.Product has been removed from list successfully'),
+                icon: 'success'
+            );
 
             $this->dispatch('listUpdated', ['selected_products' => $this->items])->to('admin.setting.homepage.sections.section-form');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/sitePages.Product hasn't been removed from list"),
-                icon: 'error');
+            $this->dispatch(
+                'swalDone',
+                text: __("admin/sitePages.Product hasn't been removed from list"),
+                icon: 'error'
+            );
         }
     }
     ######## Remove Collection :: End #########
