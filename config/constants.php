@@ -41,7 +41,16 @@ return [
             OrderStatus::Approved->value,
             OrderStatus::Preparing->value,
             OrderStatus::WaitingForQualityCheck->value,
+            OrderStatus::EditApproved->value,
+        ],
+        "ready_for_shipping_orders" => [
             OrderStatus::Prepared->value,
+        ],
+        "edited_orders" => [
+            OrderStatus::UnderEditing->value,
+            OrderStatus::EditRequested->value,
+        ],
+        "shipped_orders" => [
             OrderStatus::Shipped->value,
         ],
         "suspended_orders" => [
@@ -88,6 +97,17 @@ return [
         ],
         "approved_orders" => [
             OrderStatus::Prepared->value,
+        ],
+        "ready_for_shipping_orders" => [
+            OrderStatus::Shipped->value,
+        ],
+        "edited_orders" => [
+            OrderStatus::EditApproved->value,
+            OrderStatus::EditRejected->value,
+        ],
+        "shipped_orders" => [
+            OrderStatus::Delivered->value,
+            OrderStatus::CancellationRequested->value,
         ],
         "suspended_orders" => [
             // OrderStatus::WaitingForApproval->value,

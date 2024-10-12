@@ -303,6 +303,12 @@ class OrdersDatatable extends Component
                         'status_id' => $status_id,
                     ]);
                 }
+            } else if ($status_id == OrderStatus::Rejected->value) {
+                $order->update([
+                    'status_id' => $status_id,
+                ]);
+
+                $order->delete();
             } else {
                 $order->update([
                     'status_id' => $status_id,

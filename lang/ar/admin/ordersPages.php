@@ -244,4 +244,10 @@ return [
     "Couldn't download the AWBs"                        =>          "لم يتم تحميل بوليصات الشحن",
     "Download All PO"                                   =>          "تحميل جميع الفواتير",
     "Please create Bosta order first"                   =>          "الرجاء أنشاء طلب شحن أولا",
+    "Ready for Shipping Orders"                         =>          "طلبات جاهزة للشحن",
+    "Here you can manage ready for shipping orders"     =>          "من خلال هذه الصفحة يمكنك التحكم في الطلبات الجاهزة للشحن",
+    "Shipped Orders"                                    =>          "طلبات تم شحنها",
+    "Here you can manage shipped orders"                =>          "من خلال هذه الصفحة يمكنك التحكم في الطلبات التي تم شحنها",
+    "Edited Orders"                                     =>          "طلبات تم تعديلها",
+    "Here you can manage edited orders"                 =>          "من خلال هذه الصفحة يمكنك التحكم في الطلبات التي تم تعديلها",
 ];

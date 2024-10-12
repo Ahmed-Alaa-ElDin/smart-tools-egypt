@@ -63,6 +63,7 @@ class NewOrderProductsPart extends Component
         $product = Product::with('thumbnail')->findOrFail($product_id)->toArray();
         $product['amount'] = 1;
         $this->products[$product_id] = $product;
+        $this->search = null;
     }
 
     public function clearProducts()

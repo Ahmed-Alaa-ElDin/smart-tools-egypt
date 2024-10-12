@@ -57,4 +57,8 @@ return [
     'Approved Orders'           =>      'طلبات تمت الموافقة عليها',
     'Suspended Orders'          =>      'طلبات معلقة',
     'Delivered Orders'          =>      'طلبات تم تسليمها',
+    'Edited Orders'             =>      'طلبات تم تعديلها',
+    'Ready for Shipping Orders' =>      'طلبات جاهزة للشحن',
+    'Shipped Orders'            =>      'طلبات تم شحنها',
+
 ];

@@ -106,6 +106,30 @@ class OrderController extends Controller
     }
 
     /**
+     * Display a listing of the edited orders.
+     */
+    public function editedOrders()
+    {
+        return view('admin.orders.edited_orders');
+    }
+
+    /**
+     * Display a listing of the ready for shipping orders.
+     */
+    public function readyForShipping()
+    {
+        return view('admin.orders.ready_for_shipping_orders');
+    }
+
+    /**
+     * Display a listing of the shipped orders.
+     */
+    public function shippedOrders()
+    {
+        return view('admin.orders.shipped_orders');
+    }
+
+    /**
      * Display a listing of the suspended orders.
      */
     public function suspendedOrders()

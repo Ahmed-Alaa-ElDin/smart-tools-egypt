@@ -2,12 +2,13 @@
 
 namespace App\Livewire\Admin\Orders;
 
-use App\Models\Address;
-use App\Models\Coupon;
+use App\Models\Zone;
 use App\Models\Offer;
 use App\Models\Order;
-use App\Models\Zone;
+use App\Models\Coupon;
+use App\Models\Address;
 use Livewire\Component;
+use App\Enums\OrderStatus;
 
 class OrderForm extends Component
 {
@@ -17,6 +18,7 @@ class OrderForm extends Component
     public $products_best_coupon;
     public $coupon_discount_percentage;
 
+    public $customer_id, $address_id;
 
     public $customer,
         $default_address,
@@ -29,9 +31,9 @@ class OrderForm extends Component
         $payment_method;
 
     public $best_products,
-        $products_amounts = 0,
+        $products_amounts,
         $product_total_amounts = 0,
-        $products_weights = 0,
+        $products_weights,
         $products_total_weights = 0,
         $delivery_fees,
         $zone_id,
@@ -564,7 +566,7 @@ class OrderForm extends Component
 
         try {
             Order::updateOrCreate([
-                'status_id' => 1,
+                'status_id' => OrderStatus::UnderProcessing->value,
                 'user_id'   => $this->customer_id,
             ], [
                 'address_id' => $this->address_id,
@@ -598,7 +600,7 @@ class OrderForm extends Component
                 'old_order_id',
             ]);
         } catch (\Throwable $th) {
-            //throw $th;
+            throw $th;
         }
     }
 }
