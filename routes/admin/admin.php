@@ -5,7 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
-    'middleware' => ['auth'],
+    'middleware' => ['auth','orders_count'],
     'as' =>   'admin.',
     'prefix' => '/admin',
 ], function () {

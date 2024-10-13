@@ -75,5 +75,6 @@ class Kernel extends HttpKernel
         'can_deliver' => \App\Http\Middleware\CanDeliver::class,
         'cart_not_empty' => \App\Http\Middleware\CartNotEmpty::class,
         'under_construction' => \App\Http\Middleware\UnderConstruction::class,
+        'orders_count' => \App\Http\Middleware\SidebarDataMiddleware::class,
     ];
 }

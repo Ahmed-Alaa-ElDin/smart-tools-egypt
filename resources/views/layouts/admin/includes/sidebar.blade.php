@@ -161,127 +161,183 @@
 
                         {{-- See New Orders --}}
                         <li class="nav-item {{ $activePage == 'New Orders' ? ' active' : '' }}">
-                            <a class="nav-link" href="{{ route('admin.orders.new-orders') }}">
-                                <span class="material-icons">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                                        viewBox="0 0 24 24">
-                                        <g fill="none" stroke="currentColor" stroke-linecap="round"
-                                            stroke-linejoin="round" stroke-width="2">
-                                            <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
-                                            <path d="M12.5 17H6V3H4" />
-                                            <path d="m6 5l14 1l-.859 6.011M16.5 13H6m13 3v6m3-3l-3 3l-3-3" />
-                                        </g>
-                                    </svg> </span>
-                                <span>{{ __('admin/master.New Orders') }} </span>
+                            <a class="nav-link flex justify-between gap-2"
+                                href="{{ route('admin.orders.new-orders') }}">
+                                <div class="flex gap-1 justify-start items-center">
+                                    <span class="material-icons">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                            viewBox="0 0 24 24">
+                                            <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="2">
+                                                <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
+                                                <path d="M12.5 17H6V3H4" />
+                                                <path d="m6 5l14 1l-.859 6.011M16.5 13H6m13 3v6m3-3l-3 3l-3-3" />
+                                            </g>
+                                        </svg> </span>
+                                    <span>{{ __('admin/master.New Orders') }} </span>
+                                </div>
+
+                                <span
+                                    class="inline-flex items-center justify-center p-1 rounded-full w-6 h-6 text-2xs font-bold {{ $activePage == 'New Orders' ? ' bg-white text-primary' : 'bg-secondary text-white hover:text-secondary hover:bg-white' }}">
+                                    {{ $ordersCounts['new_orders'] }}
+                                </span>
                             </a>
                         </li>
 
                         {{-- See Approved Orders --}}
                         <li class="nav-item {{ $activePage == 'Approved Orders' ? ' active' : '' }}">
-                            <a class="nav-link" href="{{ route('admin.orders.approved-orders') }}">
-                                <span class="material-icons">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                                        viewBox="0 0 24 24">
-                                        <g fill="none" stroke="currentColor" stroke-linecap="round"
-                                            stroke-linejoin="round" stroke-width="2">
-                                            <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
-                                            <path d="M11.5 17H6V3H4" />
-                                            <path d="m6 5l14 1l-1 7H6m9 6l2 2l4-4" />
-                                        </g>
-                                    </svg>
+                            <a class="nav-link flex justify-between gap-2"
+                                href="{{ route('admin.orders.approved-orders') }}">
+                                <div class="flex gap-1 justify-start items-center">
+                                    <span class="material-icons">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                            viewBox="0 0 24 24">
+                                            <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="2">
+                                                <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
+                                                <path d="M11.5 17H6V3H4" />
+                                                <path d="m6 5l14 1l-1 7H6m9 6l2 2l4-4" />
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <span>{{ __('admin/master.Approved Orders') }} </span>
+                                </div>
+
+                                <span
+                                    class="inline-flex items-center justify-center p-1 rounded-full w-6 h-6 text-2xs font-bold {{ $activePage == 'Approved Orders' ? ' bg-white text-primary' : 'bg-secondary text-white hover:text-secondary hover:bg-white' }}">
+                                    {{ $ordersCounts['approved_orders'] }}
                                 </span>
-                                <span>{{ __('admin/master.Approved Orders') }} </span>
                             </a>
                         </li>
 
                         {{-- See Edited Orders --}}
                         <li class="nav-item {{ $activePage == 'Edited Orders' ? ' active' : '' }}">
-                            <a class="nav-link" href="{{ route('admin.orders.edited-orders') }}">
-                                <span class="material-icons">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                                        viewBox="0 0 24 24">
-                                        <g fill="none" stroke="currentColor" stroke-linecap="round"
-                                            stroke-linejoin="round" stroke-width="2">
-                                            <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
-                                            <path d="M12 17H6V3H4" />
-                                            <path
-                                                d="m6 5l14 1l-.79 5.526M16 13H6m11.001 6a2 2 0 1 0 4 0a2 2 0 1 0-4 0m2-3.5V17m0 4v1.5m3.031-5.25l-1.299.75m-3.463 2l-1.3.75m0-3.5l1.3.75m3.463 2l1.3.75" />
-                                        </g>
-                                    </svg>
+                            <a class="nav-link flex justify-between gap-2"
+                                href="{{ route('admin.orders.edited-orders') }}">
+                                <div class="flex gap-1 justify-start items-center">
+                                    <span class="material-icons">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                            viewBox="0 0 24 24">
+                                            <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="2">
+                                                <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
+                                                <path d="M12 17H6V3H4" />
+                                                <path
+                                                    d="m6 5l14 1l-.79 5.526M16 13H6m11.001 6a2 2 0 1 0 4 0a2 2 0 1 0-4 0m2-3.5V17m0 4v1.5m3.031-5.25l-1.299.75m-3.463 2l-1.3.75m0-3.5l1.3.75m3.463 2l1.3.75" />
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <span>{{ __('admin/master.Edited Orders') }} </span>
+                                </div>
+
+                                <span
+                                    class="inline-flex items-center justify-center p-1 rounded-full w-6 h-6 text-2xs font-bold {{ $activePage == 'Edited Orders' ? ' bg-white text-primary' : 'bg-secondary text-white hover:text-secondary hover:bg-white' }}">
+                                    {{ $ordersCounts['edited_orders'] }}
                                 </span>
-                                <span>{{ __('admin/master.Edited Orders') }} </span>
                             </a>
                         </li>
 
                         {{-- See Ready for Shipping Orders --}}
                         <li class="nav-item {{ $activePage == 'Ready for Shipping Orders' ? ' active' : '' }}">
-                            <a class="nav-link" href="{{ route('admin.orders.ready-for-shipping-orders') }}">
-                                <span class="material-icons">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                                        viewBox="0 0 24 24">
-                                        <g fill="none" stroke="currentColor" stroke-linecap="round"
-                                            stroke-linejoin="round" stroke-width="2">
-                                            <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
-                                            <path d="M9.5 17H6V3H4" />
-                                            <path
-                                                d="m6 5l14 1l-.615 4.302M12.5 13H6m11.8 7.817l-2.172 1.138a.392.392 0 0 1-.568-.41l.415-2.411l-1.757-1.707a.389.389 0 0 1 .217-.665l2.428-.352l1.086-2.193a.392.392 0 0 1 .702 0l1.086 2.193l2.428.352a.39.39 0 0 1 .217.665l-1.757 1.707l.414 2.41a.39.39 0 0 1-.567.411z" />
-                                        </g>
-                                    </svg>
+                            <a class="nav-link flex justify-between gap-2"
+                                href="{{ route('admin.orders.ready-for-shipping-orders') }}">
+                                <div class="flex gap-1 justify-start items-center">
+                                    <span class="material-icons">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                            viewBox="0 0 24 24">
+                                            <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="2">
+                                                <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
+                                                <path d="M9.5 17H6V3H4" />
+                                                <path
+                                                    d="m6 5l14 1l-.615 4.302M12.5 13H6m11.8 7.817l-2.172 1.138a.392.392 0 0 1-.568-.41l.415-2.411l-1.757-1.707a.389.389 0 0 1 .217-.665l2.428-.352l1.086-2.193a.392.392 0 0 1 .702 0l1.086 2.193l2.428.352a.39.39 0 0 1 .217.665l-1.757 1.707l.414 2.41a.39.39 0 0 1-.567.411z" />
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <span>{{ __('admin/master.Ready for Shipping Orders') }} </span>
+                                </div>
+
+                                <span
+                                    class="inline-flex items-center justify-center p-1 rounded-full w-6 h-6 text-2xs font-bold {{ $activePage == 'Ready for Shipping Orders' ? ' bg-white text-primary' : 'bg-secondary text-white hover:text-secondary hover:bg-white' }}">
+                                    {{ $ordersCounts['ready_for_shipping_orders'] }}
                                 </span>
-                                <span>{{ __('admin/master.Ready for Shipping Orders') }} </span>
                             </a>
                         </li>
 
                         {{-- See Shipped Orders --}}
                         <li class="nav-item {{ $activePage == 'Shipped Orders' ? ' active' : '' }}">
-                            <a class="nav-link" href="{{ route('admin.orders.shipped-orders') }}">
-                                <span class="material-icons">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                                        viewBox="0 0 24 24">
-                                        <g fill="none" stroke="currentColor" stroke-linecap="round"
-                                            stroke-linejoin="round" stroke-width="2">
-                                            <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
-                                            <path d="M13.5 17H6V3H4" />
-                                            <path d="m6 5l14 1l-.858 6.004M16.5 13H6m13 3l-2 3h4l-2 3" />
-                                        </g>
-                                    </svg>
+                            <a class="nav-link flex justify-between gap-2"
+                                href="{{ route('admin.orders.shipped-orders') }}">
+                                <div class="flex gap-1 justify-start items-center">
+                                    <span class="material-icons">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                            viewBox="0 0 24 24">
+                                            <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="2">
+                                                <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
+                                                <path d="M13.5 17H6V3H4" />
+                                                <path d="m6 5l14 1l-.858 6.004M16.5 13H6m13 3l-2 3h4l-2 3" />
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <span>{{ __('admin/master.Shipped Orders') }} </span>
+                                </div>
+
+                                <span
+                                    class="inline-flex items-center justify-center p-1 rounded-full w-6 h-6 text-2xs font-bold {{ $activePage == 'Shipped Orders' ? ' bg-white text-primary' : 'bg-secondary text-white hover:text-secondary hover:bg-white' }}">
+                                    {{ $ordersCounts['shipped_orders'] }}
                                 </span>
-                                <span>{{ __('admin/master.Shipped Orders') }} </span>
                             </a>
                         </li>
 
                         {{-- See Delivered Orders --}}
                         <li class="nav-item {{ $activePage == 'Delivered Orders' ? ' active' : '' }}">
-                            <a class="nav-link" href="{{ route('admin.orders.delivered-orders') }}">
-                                <span class="material-icons">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                                        viewBox="0 0 24 24">
-                                        <g fill="none" stroke="currentColor" stroke-linecap="round"
-                                            stroke-linejoin="round" stroke-width="2">
-                                            <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
-                                            <path d="M12.5 17H6V3H4" />
-                                            <path d="m6 5l14 1l-.854 5.977M16.5 13H6m13 9v-6m3 3l-3-3l-3 3" />
-                                        </g>
-                                    </svg> </span>
-                                <span>{{ __('admin/master.Delivered Orders') }} </span>
+                            <a class="nav-link flex justify-between gap-2"
+                                href="{{ route('admin.orders.delivered-orders') }}">
+                                <div class="flex gap-1 justify-start items-center">
+                                    <span class="material-icons">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                            viewBox="0 0 24 24">
+                                            <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="2">
+                                                <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
+                                                <path d="M12.5 17H6V3H4" />
+                                                <path d="m6 5l14 1l-.854 5.977M16.5 13H6m13 9v-6m3 3l-3-3l-3 3" />
+                                            </g>
+                                        </svg> </span>
+                                    <span>{{ __('admin/master.Delivered Orders') }} </span>
+                                </div>
+
+                                <span
+                                    class="inline-flex items-center justify-center p-1 rounded-full w-6 h-6 text-2xs font-bold {{ $activePage == 'Delivered Orders' ? ' bg-white text-primary' : 'bg-secondary text-white hover:text-secondary hover:bg-white' }}">
+                                    {{ $ordersCounts['delivered_orders'] }}
+                                </span>
                             </a>
                         </li>
 
                         {{-- See Suspended Orders --}}
                         <li class="nav-item {{ $activePage == 'Suspended Orders' ? ' active' : '' }}">
-                            <a class="nav-link" href="{{ route('admin.orders.suspended-orders') }}">
-                                <span class="material-icons">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                                        viewBox="0 0 24 24">
-                                        <g fill="none" stroke="currentColor" stroke-linecap="round"
-                                            stroke-linejoin="round" stroke-width="2">
-                                            <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
-                                            <path d="M15 17H6V3H4" />
-                                            <path d="m6 5l14 1l-.854 5.976M16.5 13H6m13 3v3m0 3v.01" />
-                                        </g>
-                                    </svg>
+                            <a class="nav-link flex justify-between gap-2"
+                                href="{{ route('admin.orders.suspended-orders') }}">
+                                <div class="flex gap-1 justify-start items-center">
+                                    <span class="material-icons">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                            viewBox="0 0 24 24">
+                                            <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="2">
+                                                <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
+                                                <path d="M15 17H6V3H4" />
+                                                <path d="m6 5l14 1l-.854 5.976M16.5 13H6m13 3v3m0 3v.01" />
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <span>{{ __('admin/master.Suspended Orders') }} </span>
+                                </div>
+
+                                <span
+                                    class="inline-flex items-center justify-center p-1 rounded-full w-6 h-6 text-2xs font-bold {{ $activePage == 'Suspended Orders' ? ' bg-white text-primary' : 'bg-secondary text-white hover:text-secondary hover:bg-white' }}">
+                                    {{ $ordersCounts['suspended_orders'] }}
                                 </span>
-                                <span>{{ __('admin/master.Suspended Orders') }} </span>
                             </a>
                         </li>
 
