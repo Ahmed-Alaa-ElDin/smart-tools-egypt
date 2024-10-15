@@ -39,7 +39,7 @@ class OrderShippingSummary extends Component
 
     protected $listeners = [
         'AddressUpdated' => 'render',
-        'PhoneUpdated' => 'render',
+        // 'PhoneUpdated' => 'render',
     ];
 
     ############# Render :: Start #############
@@ -171,58 +171,70 @@ class OrderShippingSummary extends Component
     ############# Get Shipping Fees :: Start #############
     public function getShippingFees()
     {
-
-        if (auth()->check()) {
-            $this->address = auth()->user()->addresses->where('default', 1)->first();
-
-            $items_total_shipping_weights = $this->items_total_shipping_weights;
-
-            if ($this->address) {
-                // Get City Id
-                $city_id = $this->address->city_id;
-
-                $this->city_name = $this->address->city->name;
-
-                // Get Destinations and Zones for the city
-                $zones = Zone::with(['destinations'])
-                    ->where('is_active', 1)
-                    ->whereHas('destinations', fn ($q) => $q->where('city_id', $city_id))
-                    ->whereHas('delivery', fn ($q) => $q->where('is_active', 1))
-                    ->get();
-
-                // Get the best Delivery Cost
-                $prices = $zones->map(function ($zone) use ($items_total_shipping_weights) {
-                    $min_charge = $zone->min_charge;
-                    $min_weight = $zone->min_weight;
-                    $kg_charge = $zone->kg_charge;
-
-                    if ($items_total_shipping_weights < $min_weight) {
-                        return [
-                            'zone_id' => $zone->id,
-                            'charge' => $min_charge
-                        ];
-                    } else {
-                        return [
-                            'zone_id' => $zone->id,
-                            'charge' => $min_charge + ($items_total_shipping_weights - $min_weight) * $kg_charge
-                        ];
-                    }
-                });
-
-                $this->shipping_fees = $prices->min('charge');
-
-                $best_zone = $prices->filter(function ($price) {
-                    return $price['charge'] == $this->shipping_fees;
-                });
-
-                if ($best_zone->count()) {
-                    $this->best_zone_id = $best_zone->first()['zone_id'];
-                } else {
-                    $this->best_zone_id = null;
-                }
-            }
+        if (!auth()->check()) {
+            return;
         }
+
+        $this->address = auth()->user()->addresses->where('default', 1)->first();
+
+        if (!$this->address) {
+            return;
+        }
+
+        $this->city_name = $this->address->city->name;
+        $city_id = $this->address->city_id;
+
+        $zones = $this->getActiveZonesForCity($city_id);
+
+        if ($zones->isEmpty()) {
+            $this->best_zone_id = null;
+            $this->shipping_fees = null;
+            return;
+        }
+
+        $prices = $this->calculateZonePrices($zones);
+
+        $this->shipping_fees = $prices->min('charge');
+        $this->best_zone_id = $prices->where('charge', $this->shipping_fees)->first()['zone_id'] ?? null;
     }
     ############# Get Shipping Fees :: End #############
 
+    ############# Get Active Zones For City :: Start #############
+    public function getActiveZonesForCity($city_id)
+    {
+        return Zone::with(['destinations'])
+            ->where('is_active', 1)
+            ->whereHas('destinations', fn($q) => $q->where('city_id', $city_id))
+            ->whereHas('delivery', fn($q) => $q->where('is_active', 1))
+            ->get();
+    }
+    ############# Get Active Zones For City :: End #############
+
+
+    ############# Calculate Zone Prices :: Start #############
+    public function calculateZonePrices($zones)
+    {
+        return $zones->map(function ($zone) {
+            $charge = $this->calculateZoneCharge($zone);
+
+            return [
+                'zone_id' => $zone->id,
+                'charge' => $charge
+            ];
+        });
+    }
+    ############# Calculate Zone Prices :: End #############
+
+
+    ############# Calculate Zone Charge :: Start #############
+    public function calculateZoneCharge($zone)
+    {
+        if ($this->items_total_shipping_weights < $zone->min_weight) {
+            return $zone->min_charge;
+        }
+
+        $excess_weight = $this->items_total_shipping_weights - $zone->min_weight;
+
+        return $zone->min_charge + ($excess_weight * $zone->kg_charge);
+    }
 }

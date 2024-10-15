@@ -51,7 +51,7 @@ class OrderShippingDetails extends Component
         if (auth()->user()) {
             $this->user = User::with([
                 'phones',
-                'addresses' => fn ($q) => $q->with(['country', 'governorate', 'city'])
+                'addresses' => fn($q) => $q->with(['country', 'governorate', 'city'])
             ])->findOrFail(auth()->user()->id);
 
             if ($this->user->addresses->count()) {
@@ -194,7 +194,7 @@ class OrderShippingDetails extends Component
             $this->user->phones->where('id', $phone_id)->first()->update(['default' => 1]);
         }
 
-        $this->dispatch('PhoneUpdated');
+        // $this->dispatch('PhoneUpdated');
     }
     ################### Select Phone :: End ###################
 
@@ -222,9 +222,9 @@ class OrderShippingDetails extends Component
 
         $this->changePhone = false;
 
-        if ($default) {
-            $this->dispatch('PhoneUpdated');
-        }
+        // if ($default) {
+        //     $this->dispatch('PhoneUpdated');
+        // }
     }
     ################### Save Phone :: End ###################
 
@@ -253,8 +253,8 @@ class OrderShippingDetails extends Component
         $zones_count = auth()->user()->addresses->where('default', 1)->count() ?
             Zone::with(['destinations'])
             ->where('is_active', 1)
-            ->whereHas('destinations', fn ($q) => $q->where('city_id', auth()->user()->addresses->where('default', 1)->first()->city->id))
-            ->whereHas('delivery', fn ($q) => $q->where('is_active', 1))
+            ->whereHas('destinations', fn($q) => $q->where('city_id', auth()->user()->addresses->where('default', 1)->first()->city->id))
+            ->whereHas('delivery', fn($q) => $q->where('is_active', 1))
             ->count() :
             0;
 
@@ -294,7 +294,10 @@ class OrderShippingDetails extends Component
 
                 $order->save();
 
-                if ($order->statuses()->count() == 0 || $order->statuses()->orderBy('pivot_created_at', 'desc')->first()->id != OrderStatus::UnderProcessing->value) {
+                if (
+                    $order->statuses()->count() == 0 ||
+                    $order->statuses()->orderBy('pivot_created_at', 'desc')->first()->id != OrderStatus::UnderProcessing->value
+                ) {
                     $order->statuses()->attach(OrderStatus::UnderProcessing->value);
                 }
 
