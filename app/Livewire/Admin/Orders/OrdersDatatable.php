@@ -309,6 +309,12 @@ class OrdersDatatable extends Component
                 ]);
 
                 $order->delete();
+            } else if ($status_id == OrderStatus::Prepared->value) {
+                $order->statuses()->attach(OrderStatus::QualityChecked->value);
+
+                $order->update([
+                    'status_id' => OrderStatus::Prepared->value,
+                ]);
             } else {
                 $order->update([
                     'status_id' => $status_id,
@@ -354,13 +360,48 @@ class OrdersDatatable extends Component
         try {
             $orders = Order::whereIn('id', $this->selectedOrders);
 
-            $orders->each(function ($q) use ($status_id) {
-                $q->statuses()->attach($status_id);
+            $orders->each(function ($order) use ($status_id) {
+                $order->statuses()->attach($status_id);
 
-                $q->update([
-                    'status_id' => $status_id,
-                    'delivered_at' => $status_id == OrderStatus::Delivered->value ? now() : null
-                ]);
+                if ($status_id == OrderStatus::Approved->value) {
+                    // Create Shipment (Bosta)
+                    $bosta_order = createBostaOrder($order);
+
+                    if ($bosta_order['status']) {
+                        $order->update([
+                            'status_id' => OrderStatus::Preparing->value,
+                            'tracking_number' => $bosta_order['data']['trackingNumber'],
+                            'order_delivery_id' => $bosta_order['data']['_id'],
+                        ]);
+
+                        // Add new statuses (Shipment created and Preparing)
+                        $order->statuses()->attach([
+                            OrderStatus::ShippingCreates->value,
+                            OrderStatus::Preparing->value,
+                        ]);
+                    } else {
+                        $order->update([
+                            'status_id' => $status_id,
+                        ]);
+                    }
+                } else if ($status_id == OrderStatus::Rejected->value) {
+                    $order->update([
+                        'status_id' => $status_id,
+                    ]);
+
+                    $order->delete();
+                } else if ($status_id == OrderStatus::Prepared->value) {
+                    $order->statuses()->attach(OrderStatus::QualityChecked->value);
+
+                    $order->update([
+                        'status_id' => OrderStatus::Prepared->value,
+                    ]);
+                } else {
+                    $order->update([
+                        'status_id' => $status_id,
+                        'delivered_at' => $status_id == OrderStatus::Delivered->value ? now() : null
+                    ]);
+                }
             });
 
             $this->dispatch(

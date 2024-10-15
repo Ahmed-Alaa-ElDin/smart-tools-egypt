@@ -46,7 +46,7 @@ class OrderController extends Controller
         $order = Order::with([
             'products' => fn ($q) => $q->with('thumbnail'),
             'collections' => fn ($q) => $q->with('thumbnail'),
-            "statuses",
+            "statuses"=> fn($q) => $q->orderBy('pivot_created_at'),
             "invoice",
             "transactions"
         ])

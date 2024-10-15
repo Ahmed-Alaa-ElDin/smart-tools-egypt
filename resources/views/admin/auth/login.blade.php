@@ -55,7 +55,7 @@
                                     <input type="password" id="password" name="password"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 @error('password') border-red-500 @enderror"
                                         placeholder="{{ __('auth/authentication.Enter Your Password') }}" required>
-                                    <span class="material-icons show-password absolute top-2.5 right-3 cursor-pointer select-none text-base">
+                                    <span class="material-icons show-password absolute top-2.5 ltr:right-3 rtl:left-3 cursor-pointer select-none text-base">
                                         visibility
                                     </span>
                                 </div>

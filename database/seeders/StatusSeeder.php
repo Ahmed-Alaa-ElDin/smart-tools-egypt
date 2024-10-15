@@ -52,8 +52,8 @@ class StatusSeeder extends Seeder
         Status::updateOrCreate([
             'id' => 206,
             'name' => [
-                'en' => 'Waiting For Quality Check',
-                'ar' => 'في انتظار فحص الجودة',
+                'en' => 'Quality Checked',
+                'ar' => 'تم فحص الجودة',
             ],
         ]);
         Status::updateOrCreate([

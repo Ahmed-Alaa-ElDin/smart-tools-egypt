@@ -517,7 +517,7 @@ class OrderController extends Controller
                     $refund_amount = $returned_other > 0 ? ($returned_other <= $temp_transaction->payment_amount ? $returned_other : $temp_transaction->payment_amount) : 0;
                     $payment_amount = $returned_other <= 0 || $returned_other <= $temp_transaction->payment_amount ? $temp_transaction->payment_amount - $returned_other : 0.00;
 
-                    // Transactions to be Refunded 
+                    // Transactions to be Refunded
                     if ($refund_amount > 0) {
                         $temp_order->transactions()->create([
                             'invoice_id' => $invoice->id,
@@ -2247,10 +2247,10 @@ class OrderController extends Controller
 
         $Payment = new PaymentService($cardGateway);
 
-        // Smart transaction id 
+        // Smart transaction id
         $smartTransactionId = $data['obj']['order']['shipping_data']['street'] ?? null;
 
-        // Paymob transaction id 
+        // Paymob transaction id
         $paymobTransactionId = $data['obj']['id'];
 
         try {
@@ -2513,7 +2513,7 @@ class OrderController extends Controller
     }
     ##################### Go To Paymob Iframe :: End #####################
 
-    ##################### Go To Paymob Iframe :: Start ##################### 
+    ##################### Go To Paymob Iframe :: Start #####################
     public function goToRefund($order_id)
     {
         $order = Order::with(['user', 'products', 'address', 'transactions'])->findOrFail($order_id);
@@ -2597,11 +2597,10 @@ class OrderController extends Controller
     }
     ##################### Update Order's Status By Bosta :: End #####################
 
-    ##################### Track the Order :: Start ##################### 
+    ##################### Track the Order :: Start #####################
     public function track(Request $request)
     {
         $order = Order::with('statuses')->findOrFail($request['order_id']);
-
         $statuses = $order->statuses()->orderBy('pivot_id', 'desc')->get();
 
         return view('front.orders.track', compact('order', 'statuses'));

@@ -19413,9 +19413,12 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 /*!*******************************!*\
   !*** ./resources/css/app.css ***!
   \*******************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-throw new Error("Module build failed (from ./node_modules/mini-css-extract-plugin/dist/loader.js):\nModuleBuildError: Module build failed (from ./node_modules/postcss-loader/dist/cjs.js):\nSyntaxError: Unexpected token (114:1)\n    at pp$4.raise (/home/ahmed-alaa/Desktop/Programming/smart-tools-egypt/node_modules/acorn-node/node_modules/acorn/dist/acorn.js:2927:15)\n    at pp.unexpected (/home/ahmed-alaa/Desktop/Programming/smart-tools-egypt/node_modules/acorn-node/node_modules/acorn/dist/acorn.js:698:10)\n    at pp.expect (/home/ahmed-alaa/Desktop/Programming/smart-tools-egypt/node_modules/acorn-node/node_modules/acorn/dist/acorn.js:692:28)\n    at pp$3.parseObj (/home/ahmed-alaa/Desktop/Programming/smart-tools-egypt/node_modules/acorn-node/node_modules/acorn/dist/acorn.js:2563:14)\n    at pp$3.parseExprAtom (/home/ahmed-alaa/Desktop/Programming/smart-tools-egypt/node_modules/acorn-node/node_modules/acorn/dist/acorn.js:2302:19)\n    at _class.parseExprAtom (/home/ahmed-alaa/Desktop/Programming/smart-tools-egypt/node_modules/acorn-node/lib/dynamic-import/index.js:77:117)\n    at pp$3.parseExprSubscripts (/home/ahmed-alaa/Desktop/Programming/smart-tools-egypt/node_modules/acorn-node/node_modules/acorn/dist/acorn.js:2129:21)\n    at pp$3.parseMaybeUnary (/home/ahmed-alaa/Desktop/Programming/smart-tools-egypt/node_modules/acorn-node/node_modules/acorn/dist/acorn.js:2106:19)\n    at _class.parseMaybeUnary (/home/ahmed-alaa/Desktop/Programming/smart-tools-egypt/node_modules/acorn-node/lib/private-class-elements/index.js:122:54)\n    at pp$3.parseExprOps (/home/ahmed-alaa/Desktop/Programming/smart-tools-egypt/node_modules/acorn-node/node_modules/acorn/dist/acorn.js:2041:21)\n    at processResult (/home/ahmed-alaa/Desktop/Programming/smart-tools-egypt/node_modules/webpack/lib/NormalModule.js:753:19)\n    at /home/ahmed-alaa/Desktop/Programming/smart-tools-egypt/node_modules/webpack/lib/NormalModule.js:855:5\n    at /home/ahmed-alaa/Desktop/Programming/smart-tools-egypt/node_modules/loader-runner/lib/LoaderRunner.js:399:11\n    at /home/ahmed-alaa/Desktop/Programming/smart-tools-egypt/node_modules/loader-runner/lib/LoaderRunner.js:251:18\n    at context.callback (/home/ahmed-alaa/Desktop/Programming/smart-tools-egypt/node_modules/loader-runner/lib/LoaderRunner.js:124:13)\n    at Object.loader (/home/ahmed-alaa/Desktop/Programming/smart-tools-egypt/node_modules/postcss-loader/dist/index.js:142:7)");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
 
 /***/ }),
 
@@ -19779,7 +19782,8 @@ process.umask = function() { return 0; };
 /******/ 			"assets/css/splide.min": 0,
 /******/ 			"assets/css/select2.min": 0,
 /******/ 			"assets/css/material-dashboard-rtl": 0,
-/******/ 			"assets/css/material-dashboard.min": 0
+/******/ 			"assets/css/material-dashboard.min": 0,
+/******/ 			"assets/css/app": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -19829,12 +19833,12 @@ process.umask = function() { return 0; };
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["assets/css/splide.min","assets/css/select2.min","assets/css/material-dashboard-rtl","assets/css/material-dashboard.min"], () => (__webpack_require__("./resources/js/app.js")))
-/******/ 	__webpack_require__.O(undefined, ["assets/css/splide.min","assets/css/select2.min","assets/css/material-dashboard-rtl","assets/css/material-dashboard.min"], () => (__webpack_require__("./resources/css/app.css")))
-/******/ 	__webpack_require__.O(undefined, ["assets/css/splide.min","assets/css/select2.min","assets/css/material-dashboard-rtl","assets/css/material-dashboard.min"], () => (__webpack_require__("./resources/css/material-dashboard.min.css")))
-/******/ 	__webpack_require__.O(undefined, ["assets/css/splide.min","assets/css/select2.min","assets/css/material-dashboard-rtl","assets/css/material-dashboard.min"], () => (__webpack_require__("./resources/css/material-dashboard-rtl.css")))
-/******/ 	__webpack_require__.O(undefined, ["assets/css/splide.min","assets/css/select2.min","assets/css/material-dashboard-rtl","assets/css/material-dashboard.min"], () => (__webpack_require__("./resources/css/select2.min.css")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["assets/css/splide.min","assets/css/select2.min","assets/css/material-dashboard-rtl","assets/css/material-dashboard.min"], () => (__webpack_require__("./resources/css/splide.min.css")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/splide.min","assets/css/select2.min","assets/css/material-dashboard-rtl","assets/css/material-dashboard.min","assets/css/app"], () => (__webpack_require__("./resources/js/app.js")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/splide.min","assets/css/select2.min","assets/css/material-dashboard-rtl","assets/css/material-dashboard.min","assets/css/app"], () => (__webpack_require__("./resources/css/app.css")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/splide.min","assets/css/select2.min","assets/css/material-dashboard-rtl","assets/css/material-dashboard.min","assets/css/app"], () => (__webpack_require__("./resources/css/material-dashboard.min.css")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/splide.min","assets/css/select2.min","assets/css/material-dashboard-rtl","assets/css/material-dashboard.min","assets/css/app"], () => (__webpack_require__("./resources/css/material-dashboard-rtl.css")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/splide.min","assets/css/select2.min","assets/css/material-dashboard-rtl","assets/css/material-dashboard.min","assets/css/app"], () => (__webpack_require__("./resources/css/select2.min.css")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["assets/css/splide.min","assets/css/select2.min","assets/css/material-dashboard-rtl","assets/css/material-dashboard.min","assets/css/app"], () => (__webpack_require__("./resources/css/splide.min.css")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

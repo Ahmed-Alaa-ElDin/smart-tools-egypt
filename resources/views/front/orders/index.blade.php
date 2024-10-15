@@ -190,7 +190,7 @@
                                                 @endif
 
                                                 {{-- Edit Order --}}
-                                                {{-- @if (in_array($order->status_id, [App\Enums\OrderStatus::UnderProcessing->value, App\Enums\OrderStatus::Created->value, App\Enums\OrderStatus::WaitingForPayment->value, App\Enums\OrderStatus::WaitingForApproval->value, App\Enums\OrderStatus::WaitingForQualityCheck->value, App\Enums\OrderStatus::EditRequested->value]))
+                                                {{-- @if (in_array($order->status_id, [App\Enums\OrderStatus::UnderProcessing->value, App\Enums\OrderStatus::Created->value, App\Enums\OrderStatus::WaitingForPayment->value, App\Enums\OrderStatus::WaitingForApproval->value, App\Enums\OrderStatus::QualityChecked->value, App\Enums\OrderStatus::EditRequested->value]))
                                                     <button data-modal-toggle="editOrCancelOrder-{{ $order->id }}"
                                                         type="button"
                                                         class="col-span-1 btn btn-sm bg-primary font-bold m-0">

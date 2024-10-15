@@ -40,7 +40,7 @@ return [
         "approved_orders" => [
             OrderStatus::Approved->value,
             OrderStatus::Preparing->value,
-            OrderStatus::WaitingForQualityCheck->value,
+            OrderStatus::QualityChecked->value,
             OrderStatus::EditApproved->value,
         ],
         "ready_for_shipping_orders" => [
@@ -68,7 +68,7 @@ return [
             OrderStatus::WaitingForPayment->value,
             OrderStatus::ShippingCreates->value,
             OrderStatus::Preparing->value,
-            OrderStatus::WaitingForQualityCheck->value,
+            OrderStatus::QualityChecked->value,
             OrderStatus::Shipped->value,
             OrderStatus::WaitingForApproval->value,
             OrderStatus::Prepared->value,

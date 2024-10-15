@@ -65,7 +65,7 @@
         {{-- Header : End --}}
 
         {{-- Main Body : Start --}}
-        <div class="grid grid-cols-1">
+        <div class="grid grid-cols-1 min-h-screen">
 
             {{-- Content : Start --}}
             @yield('content')

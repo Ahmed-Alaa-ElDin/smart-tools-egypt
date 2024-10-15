@@ -42,7 +42,7 @@ enum OrderStatus: int
     case WaitingForPayment = 203;
     case ShippingCreates = 204;
     case Preparing = 205;
-    case WaitingForQualityCheck = 206;
+    case QualityChecked = 206;
     case Shipped = 207;
     case WaitingForApproval = 208;
     case Prepared = 209;

@@ -84,7 +84,7 @@ class AddToCartButton extends Component
         } elseif ($cart_item) {
             if ($this->add_buy == 'pay') {
                 ############ Go to Payment :: Start ############
-                // redirect()->route('front.order.shipping');
+                redirect()->route('front.order.shipping');
                 ############ Go to Payment :: End ############
             } else {
                 ############ Emit Sweet Alert :: Start ############
