@@ -116,8 +116,8 @@
 
             {{-- TODO:: Underconstruction :: Start --}}
             <div class="text-center flex-grow">
-                <span class="flex flex-wrap justify-center items-center gap-1 py-1" dir="rtl"> 
-                    لو عاوز تعمل أوردر تواصل معانا على صفحتنا على 
+                <span class="flex flex-wrap justify-center items-center gap-1 py-1" dir="rtl">
+                    لو عاوز تعمل أوردر تواصل معانا عن طريق صفحتنا على
                     <a
                         href="{{ config('settings.facebook_link') }}" target="_blank"
                         class="bg-facebook text-white px-2 py-1 text-sm rounded-full inline-flex justify-center items-center gap-1 font-bold">
