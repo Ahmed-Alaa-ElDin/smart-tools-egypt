@@ -101,7 +101,7 @@ class BannersListForm extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: __("admin/sitePages.Banner hasn't been removed from list"),
+                text: __("admin/sitePages.Banner has not been removed from list"),
                 icon: 'error'
             );
         }
@@ -146,7 +146,7 @@ class BannersListForm extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: __("admin/sitePages.Banner hasn't been added to the list"),
+                text: __("admin/sitePages.Banner has not been added to the list"),
                 icon: 'error'
             );
         }

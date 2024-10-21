@@ -280,7 +280,7 @@ class TodayDealsList extends Component
 
             $this->dispatch('listUpdated', ['selected_products' => $this->items])->to('admin.homepage.sections.section-form');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/sitePages.Product hasn't been removed from list"),
+            $this->dispatch('swalDone', text: __("admin/sitePages.Product has not been removed from list"),
                 icon: 'error');
         }
     }
@@ -305,7 +305,7 @@ class TodayDealsList extends Component
 
             $this->dispatch('listUpdated', ['selected_products' => $this->items])->to('admin.homepage.sections.section-form');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/sitePages.Product hasn't been removed from list"),
+            $this->dispatch('swalDone', text: __("admin/sitePages.Product has not been removed from list"),
                 icon: 'error');
         }
     }
@@ -336,7 +336,7 @@ class TodayDealsList extends Component
         } catch (\Throwable $th) {
             DB::rollback();
 
-            Session::flash('error', __("admin/sitePages.Section hasn't been updated"));
+            Session::flash('error', __("admin/sitePages.Section has not been updated"));
             redirect()->route('admin.setting.homepage');
         }
     }

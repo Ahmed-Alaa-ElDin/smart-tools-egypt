@@ -197,7 +197,7 @@ class DeletedOrdersDatatable extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: __("admin/ordersPages.Order hasn't been deleted"),
+                text: __("admin/ordersPages.Order has not been deleted"),
                 icon: 'error'
             );
         }
@@ -278,7 +278,7 @@ class DeletedOrdersDatatable extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: __("admin/ordersPages.Order hasn't been restored"),
+                text: __("admin/ordersPages.Order has not been restored"),
                 icon: 'error'
             );
         }

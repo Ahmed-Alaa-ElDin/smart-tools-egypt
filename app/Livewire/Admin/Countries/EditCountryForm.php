@@ -66,7 +66,7 @@ class EditCountryForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            Session::flash('error', __("admin/deliveriesPages.Country hasn't been updated"));
+            Session::flash('error', __("admin/deliveriesPages.Country has not been updated"));
             redirect()->route('admin.countries.index');
         }
     }

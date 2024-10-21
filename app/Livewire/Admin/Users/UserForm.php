@@ -375,7 +375,7 @@ class UserForm extends Component
         } catch (\Throwable $th) {
             DB::rollback();
 
-            Session::flash('error', __("admin/usersPages.User hasn't been added"));
+            Session::flash('error', __("admin/usersPages.User has not been added"));
             redirect()->route('admin.users.index');
         }
     }
@@ -466,7 +466,7 @@ class UserForm extends Component
         } catch (\Throwable $th) {
             DB::rollback();
 
-            Session::flash('error', __("admin/usersPages.User hasn't been updated"));
+            Session::flash('error', __("admin/usersPages.User has not been updated"));
             redirect()->route('admin.users.index');
         }
     }

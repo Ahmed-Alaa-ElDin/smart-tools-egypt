@@ -83,7 +83,7 @@ class SupercategoriesDatatable extends Component
             $this->dispatch('swalDone', text: $supercategory_id->publish ? __('admin/productsPages.Supercategory has been published') : __('admin/productsPages.Supercategory has been hidden'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: $supercategory_id->publish ? __("admin/productsPages.Supercategory hasn't been published") : __("admin/productsPages.Supercategory hasn't been hidden"),
+            $this->dispatch('swalDone', text: $supercategory_id->publish ? __("admin/productsPages.Supercategory has not been published") : __("admin/productsPages.Supercategory has not been hidden"),
                 icon: 'error');
         }
     }
@@ -112,7 +112,7 @@ class SupercategoriesDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/productsPages.Supercategory has been deleted successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/productsPages.Supercategory hasn't been deleted"),
+            $this->dispatch('swalDone', text: __("admin/productsPages.Supercategory has not been deleted"),
                 icon: 'error');
         }
     }

@@ -149,7 +149,7 @@ class ProductDelivery extends Component
 
         $this->delivery_cost = $delivery_cost ?? 'no delivery';
 
-        // if user hasn't set his address yet, make this address as default
+        // if user has not set his address yet, make this address as default
         if (auth()->check() && $this->user->addresses->count() == 0) {
             $this->user->addresses->create([
                 'country_id' => $this->selected_country_id,

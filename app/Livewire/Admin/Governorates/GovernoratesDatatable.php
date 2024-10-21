@@ -102,7 +102,7 @@ class GovernoratesDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/deliveriesPages.Governorate has been deleted successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/deliveriesPages.Governorate hasn't been deleted"),
+            $this->dispatch('swalDone', text: __("admin/deliveriesPages.Governorate has not been deleted"),
                 icon: 'error');
         }
     }

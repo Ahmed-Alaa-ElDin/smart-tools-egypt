@@ -105,7 +105,7 @@ class SectionsList extends Component
             $this->dispatch('swalSectionActivated', text: $section->active ? __('admin/sitePages.Section has been activated') : __('admin/sitePages.Section has been deactivated'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalSectionActivated', text: $section->active ? __("admin/sitePages.Section hasn't been activated") : __("admin/sitePages.Section hasn't been deactivated"),
+            $this->dispatch('swalSectionActivated', text: $section->active ? __("admin/sitePages.Section has not been activated") : __("admin/sitePages.Section has not been deactivated"),
                 icon: 'error');
         }
     }
@@ -134,7 +134,7 @@ class SectionsList extends Component
             $this->dispatch('swalDone', text: __('admin/sitePages.Section has been deleted successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/sitePages.Section hasn't been deleted"),
+            $this->dispatch('swalDone', text: __("admin/sitePages.Section has not been deleted"),
                 icon: 'error');
         }
     }

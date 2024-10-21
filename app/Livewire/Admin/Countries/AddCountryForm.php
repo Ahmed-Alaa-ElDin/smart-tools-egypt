@@ -64,7 +64,7 @@ class AddCountryForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            Session::flash('error', __("admin/deliveriesPages.Country hasn't been Created"));
+            Session::flash('error', __("admin/deliveriesPages.Country has not been Created"));
             redirect()->route('admin.countries.index');
         }
     }

@@ -149,7 +149,7 @@ class SubcategoryForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
-            Session::flash('error', __("admin/productsPages.Subcategory hasn't been added"));
+            Session::flash('error', __("admin/productsPages.Subcategory has not been added"));
             redirect()->route('admin.subcategories.index');
         }
     }
@@ -183,7 +183,7 @@ class SubcategoryForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
-            Session::flash('error', __("admin/productsPages.Subcategory hasn't been updated"));
+            Session::flash('error', __("admin/productsPages.Subcategory has not been updated"));
             redirect()->route('admin.subcategories.index');
         }
     }

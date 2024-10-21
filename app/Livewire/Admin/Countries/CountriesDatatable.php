@@ -89,7 +89,7 @@ class CountriesDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/deliveriesPages.Country has been deleted successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/deliveriesPages.Country hasn't been deleted"),
+            $this->dispatch('swalDone', text: __("admin/deliveriesPages.Country has not been deleted"),
                 icon: 'error');
         }
     }

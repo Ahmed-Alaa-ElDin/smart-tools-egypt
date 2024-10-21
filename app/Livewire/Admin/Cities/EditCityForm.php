@@ -91,7 +91,7 @@ class EditCityForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            Session::flash('error', __("admin/deliveriesPages.City hasn't been Updated"));
+            Session::flash('error', __("admin/deliveriesPages.City has not been Updated"));
             redirect()->route('admin.cities.index');
         }
     }

@@ -90,7 +90,7 @@ class OffersDatatable extends Component
             $this->dispatch('swalOfferDeleted', text: __('admin/offersPages.Offer has been deleted successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalOfferDeleted', text: __("admin/offersPages.Offer hasn't been deleted"),
+            $this->dispatch('swalOfferDeleted', text: __("admin/offersPages.Offer has not been deleted"),
                 icon: 'error');
         }
     }

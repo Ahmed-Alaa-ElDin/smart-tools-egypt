@@ -109,7 +109,7 @@ class CitiesDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/deliveriesPages.City has been deleted successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/deliveriesPages.City hasn't been deleted"),
+            $this->dispatch('swalDone', text: __("admin/deliveriesPages.City has not been deleted"),
                 icon: 'error');
         }
     }

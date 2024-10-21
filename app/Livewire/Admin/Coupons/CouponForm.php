@@ -178,6 +178,41 @@ class CouponForm extends Component
         if ($field == 'type') {
             $this->validateOnly('value');
         }
+
+        // Check if the updated field is part of the "search" key
+        elseif (preg_match('/items\.\d+\.search/', $field))
+        {
+            $key = explode('.', $field)[1];
+            $this->searchUpdated($key);
+        }
+
+        // Check if the updated field is supercategory_id
+        elseif (preg_match('/items\.\d+\.supercategory_id/', $field))
+        {
+            $key = explode('.', $field)[1];
+            $this->supercategoryUpdated($key);
+        }
+
+        // Check if the updated field is category_id
+        elseif (preg_match('/items\.\d+\.category_id/', $field))
+        {
+            $key = explode('.', $field)[1];
+            $this->categoryUpdated($key);
+        }
+
+        // Check if the updated field is subcategory_id
+        elseif (preg_match('/items\.\d+\.subcategory_id/', $field))
+        {
+            $key = explode('.', $field)[1];
+            $this->subcategoryUpdated($key);
+        }
+
+        // Check if the updated field is brand_id
+        elseif (preg_match('/items\.\d+\.brand_id/', $field))
+        {
+            $key = explode('.', $field)[1];
+            $this->brandUpdated($key);
+        }
     }
     // Validate inputs on blur : End
 
@@ -348,6 +383,8 @@ class CouponForm extends Component
                 $product_collection->product_collection = class_basename($product_collection);
                 return $product_collection;
             })->toArray();
+        } else {
+            $this->clearSearch($key);
         }
     }
     // Search Collection :: End
@@ -364,13 +401,15 @@ class CouponForm extends Component
     // Add Products or Collections to the item :: Start
     public function addProduct($key, $product_id, $product_collection)
     {
-        if ($product_collection == 'Product') {
+        if ($product_collection == 'Product' && !in_array($product_id, $this->items[$key]['products_id'])) {
             $this->items[$key]['products_id'][] = $product_id;
             $this->items[$key]['products'][] = Product::select('id', 'name')->find($product_id)->toArray();
-        } elseif ($product_collection == 'Collection') {
+        } elseif ($product_collection == 'Collection' && !in_array($product_id, $this->items[$key]['collections_id'])) {
             $this->items[$key]['collections_id'][] = $product_id;
             $this->items[$key]['collections'][] = Collection::select('id', 'name')->find($product_id)->toArray();
         }
+
+        $this->clearSearch($key);
     }
     // Add Products or Collections to the item :: End
 
@@ -499,7 +538,7 @@ class CouponForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
-            Session::flash('error', __("admin/offersPages.Coupon hasn't been added"));
+            Session::flash('error', __("admin/offersPages.Coupon has not been added"));
             redirect()->route('admin.coupons.index');
         }
     }
@@ -516,7 +555,7 @@ class CouponForm extends Component
             $this->coupon->update([
                 'code' => $this->code,
                 'expire_at' => $this->expire_at,
-                'number'  => !is_null($this->number) ? $this->number : null,
+                'number'  => $this->number != "" ? $this->number : null,
                 'type' => $this->type ?? 0,
                 'value' => $this->value ?? 0,
                 'free_shipping' => $this->free_shipping ? 1 : 0,
@@ -609,7 +648,7 @@ class CouponForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
-            Session::flash('error', __("admin/offersPages.Coupon hasn't been updated"));
+            Session::flash('error', __("admin/offersPages.Coupon has not been updated"));
             redirect()->route('admin.coupons.index');
         }
     }

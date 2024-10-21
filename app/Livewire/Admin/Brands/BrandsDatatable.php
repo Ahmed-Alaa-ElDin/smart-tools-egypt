@@ -86,7 +86,7 @@ class BrandsDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/productsPages.Brand has been deleted successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/productsPages.Brand hasn't been deleted"),
+            $this->dispatch('swalDone', text: __("admin/productsPages.Brand has not been deleted"),
                 icon: 'error');
         }
     }

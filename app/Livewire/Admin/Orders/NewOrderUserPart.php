@@ -141,7 +141,7 @@ class NewOrderUserPart extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: __("admin/ordersPages.Address hasn't been deleted"),
+                text: __("admin/ordersPages.Address has not been deleted"),
                 icon: 'error'
             );
         }
@@ -224,7 +224,7 @@ class NewOrderUserPart extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: __("admin/ordersPages.Address hasn't been created"),
+                text: __("admin/ordersPages.Address has not been created"),
                 icon: 'error'
             );
         }
@@ -264,7 +264,7 @@ class NewOrderUserPart extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: __("admin/ordersPages.Phone hasn't been deleted"),
+                text: __("admin/ordersPages.Phone has not been deleted"),
                 icon: 'error'
             );
         }
@@ -306,7 +306,7 @@ class NewOrderUserPart extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: __("admin/ordersPages.Phone hasn't been created"),
+                text: __("admin/ordersPages.Phone has not been created"),
                 icon: 'error'
             );
         }

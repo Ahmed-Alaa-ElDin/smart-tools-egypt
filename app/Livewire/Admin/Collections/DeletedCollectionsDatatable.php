@@ -119,7 +119,7 @@ class DeletedCollectionsDatatable extends Component
 
             $this->selectedCollections = [];
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/productsPages.Collection hasn't been deleted permanently"),
+            $this->dispatch('swalDone', text: __("admin/productsPages.Collection has not been deleted permanently"),
                 icon: 'error');
         }
     }
@@ -150,7 +150,7 @@ class DeletedCollectionsDatatable extends Component
 
             $this->selectedCollections = [];
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/productsPages.Collection hasn't been restored"),
+            $this->dispatch('swalDone', text: __("admin/productsPages.Collection has not been restored"),
                 icon: 'error');
         }
     }

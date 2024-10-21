@@ -119,7 +119,7 @@ class BannerForm extends Component
             }
         } catch (\Throwable $th) {
             DB::rollBack();
-            Session::flash('error', __("admin/sitePages.Banner hasn't been added"));
+            Session::flash('error', __("admin/sitePages.Banner has not been added"));
             redirect()->route('admin.setting.general.banners.index');
         }
     }
@@ -152,7 +152,7 @@ class BannerForm extends Component
             redirect()->route('admin.setting.general.banners.index');
         } catch (\Throwable $th) {
             DB::rollBack();
-            Session::flash('error', __("admin/sitePages.Banner hasn't been updated"));
+            Session::flash('error', __("admin/sitePages.Banner has not been updated"));
             redirect()->route('admin.setting.general.banners.index');
         }
     }

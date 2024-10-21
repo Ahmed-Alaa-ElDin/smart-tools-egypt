@@ -101,7 +101,7 @@ class DeletedCustomersDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/usersPages.Customer has been deleted successfully'),
                 icon: 'info');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/usersPages.Customer hasn't been deleted"),
+            $this->dispatch('swalDone', text: __("admin/usersPages.Customer has not been deleted"),
                 icon: 'error');
         }
     }
@@ -131,7 +131,7 @@ class DeletedCustomersDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/usersPages.Customer has been restored successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/usersPages.Customer hasn't been restored"),
+            $this->dispatch('swalDone', text: __("admin/usersPages.Customer has not been restored"),
                 icon: 'error');
         }
     }

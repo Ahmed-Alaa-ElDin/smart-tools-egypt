@@ -38,7 +38,8 @@
             <div class="col-span-3">
                 <input id="expire_at"
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('expire_at') border-red-900 border-2 @enderror"
-                    type="date" wire:model.live.blur="expire_at" placeholder="{{ __('admin/offersPages.Select Date') }}">
+                    type="date" wire:model.live.blur="expire_at"
+                    placeholder="{{ __('admin/offersPages.Select Date') }}">
 
                 @error('expire_at')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -243,12 +244,10 @@
                                         search
                                     </span>
                                 </span>
-                                <input type="text" wire:model.live="items.{{ $item_key }}.search"
-                                    onblur="setTimeout(() => {
-                                    window.livewire.dispatch('clearSearch',{{ $item_key }});
-                                }, 100)"
-                                    wire:keyup="searchUpdated('{{ $item_key }}')"
-                                    wire:keydown.escape="$dispatch('clearSearch',{{ $item_key }})"
+                                <input type="text"
+                                    wire:model.live.debounce.500ms="items.{{ $item_key }}.search"
+                                    wire:blur="clearSearch({{ $item_key }})"
+                                    wire:keydown.escape="clearSearch({{ $item_key }})"
                                     class="searchInput focus:ring-0 flex-1 block rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-200"
                                     placeholder="{{ __('admin/offersPages.Search ...') }}">
                             </div>
@@ -449,7 +448,8 @@
                             <div class="col-span-3">
                                 <input id="brand-{{ $item_key }}-value"
                                     class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.value') border-red-900 border-2 @enderror"
-                                    type="number" min="0" wire:model.live.blur="items.{{ $item_key }}.value"
+                                    type="number" min="0"
+                                    wire:model.live.blur="items.{{ $item_key }}.value"
                                     placeholder="{{ __('admin/offersPages.Enter Value') }}" maxlength="100">
 
                                 @error('items.' . $item_key . '.value')
@@ -472,7 +472,6 @@
 
                             <div class="col-span-12 sm:col-span-6 sm:col-start-4 lg:col-span-4 lg:col-start-5">
                                 <select wire:model.live="items.{{ $item_key }}.brand_id"
-                                    wire:change="$dispatch('brandUpdated',{{ $item_key }})"
                                     wire:key="brand-{{ $item_key }}-select"
                                     id="item-{{ $item_key }}-brand_id"
                                     class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.brand_id') border-red-900 border-2 @enderror">
@@ -571,7 +570,8 @@
                             <div class="col-span-3">
                                 <input id="brand-{{ $item_key }}-value"
                                     class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.value') border-red-900 border-2 @enderror"
-                                    type="number" min="0" wire:model.live.blur="items.{{ $item_key }}.value"
+                                    type="number" min="0"
+                                    wire:model.live.blur="items.{{ $item_key }}.value"
                                     placeholder="{{ __('admin/offersPages.Enter Value') }}" maxlength="100">
 
                                 @error('items.' . $item_key . '.value')
@@ -591,7 +591,6 @@
                                 class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Supercategory') }}</label>
                             <div class="col-span-3" wire:key="supercategory-{{ $item_key }}-select">
                                 <select wire:model.live="items.{{ $item_key }}.supercategory_id"
-                                    wire:change="$dispatch('supercategoryUpdated',{{ $item_key }})"
                                     id="supercategory-{{ $item_key }}"
                                     class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.supercategory_id') border-red-900 border-2 @enderror">
                                     <option value="all">
@@ -626,7 +625,6 @@
                                     class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Category') }}</label>
                                 <div class="col-span-3">
                                     <select wire:model.live="items.{{ $item_key }}.category_id"
-                                        wire:change="$dispatch('categoryUpdated',{{ $item_key }})"
                                         id="category-{{ $item_key }}"
                                         class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.category_id') border-red-900 border-2 @enderror">
                                         <option value="all">
@@ -658,7 +656,6 @@
                                     class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Subcategory') }}</label>
                                 <div class="col-span-3">
                                     <select wire:model.live="items.{{ $item_key }}.subcategory_id"
-                                        wire:change="$dispatch('subcategoryUpdated',{{ $item_key }})"
                                         id="subcategory-{{ $item_key }}"
                                         class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.subcategory_id') border-red-900 border-2 @enderror">
                                         <option value="all">

@@ -167,7 +167,7 @@ class Topsubcategories extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            Session::flash('error', __("admin/sitePages.Top Subcategories hasn't been updated"));
+            Session::flash('error', __("admin/sitePages.Top Subcategories has not been updated"));
             redirect()->route('admin.setting.homepage');
         }
     }

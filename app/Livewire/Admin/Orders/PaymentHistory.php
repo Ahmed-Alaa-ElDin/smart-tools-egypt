@@ -639,7 +639,7 @@ class PaymentHistory extends Component
     public function createDelivery()
     {
         $order = $this->order;
-        
+
         if (!$order->order_delivery_id) {
             $bosta_order = createBostaOrder($order);
 
@@ -657,7 +657,7 @@ class PaymentHistory extends Component
             } else {
                 $this->dispatch(
                     'swalDone',
-                    text: __("admin/ordersPages.The delivery hasn't been created"),
+                    text: __("admin/ordersPages.The delivery has not been created"),
                     icon: 'error'
                 );
             }

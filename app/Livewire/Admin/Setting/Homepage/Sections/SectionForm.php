@@ -186,7 +186,7 @@ class SectionForm extends Component
         } catch (\Throwable $th) {
             DB::rollback();
 
-            Session::flash('error', __("admin/sitePages.Section hasn't been added"));
+            Session::flash('error', __("admin/sitePages.Section has not been added"));
             redirect()->route('admin.setting.homepage');
         }
     }
@@ -235,7 +235,7 @@ class SectionForm extends Component
         } catch (\Throwable $th) {
             DB::rollback();
 
-            Session::flash('error', __("admin/sitePages.Section hasn't been updated"));
+            Session::flash('error', __("admin/sitePages.Section has not been updated"));
             redirect()->route('admin.setting.homepage');
         }
     }

@@ -206,7 +206,7 @@ class EditDeliveryForm extends Component
         } catch (Throwable $th) {
             DB::rollback();
 
-            Session::flash('error', __("admin/deliveriesPages.Delivery hasn't been updated"));
+            Session::flash('error', __("admin/deliveriesPages.Delivery has not been updated"));
             redirect()->route('admin.deliveries.index');
         }
     }

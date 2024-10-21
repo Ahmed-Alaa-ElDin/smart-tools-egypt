@@ -536,7 +536,7 @@ class OfferForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            Session::flash('error', __("admin/offersPages.Offer hasn't been added"));
+            Session::flash('error', __("admin/offersPages.Offer has not been added"));
             redirect()->route('admin.offers.index');
         }
     }
@@ -659,7 +659,7 @@ class OfferForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
-            Session::flash('error', __("admin/offersPages.Offer hasn't been updated"));
+            Session::flash('error', __("admin/offersPages.Offer has not been updated"));
             redirect()->route('admin.offers.index');
         }
     }

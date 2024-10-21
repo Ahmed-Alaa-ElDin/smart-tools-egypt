@@ -98,7 +98,7 @@ class DeletedSubcategoriesDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/productsPages.Subcategory has been deleted permanently successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/productsPages.Subcategory hasn't been deleted permanently"),
+            $this->dispatch('swalDone', text: __("admin/productsPages.Subcategory has not been deleted permanently"),
                 icon: 'error');
         }
     }
@@ -127,7 +127,7 @@ class DeletedSubcategoriesDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/productsPages.Subcategory has been restored successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/productsPages.Subcategory hasn't been restored"),
+            $this->dispatch('swalDone', text: __("admin/productsPages.Subcategory has not been restored"),
                 icon: 'error');
         }
     }

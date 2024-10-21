@@ -126,7 +126,7 @@ class Topbrands extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            Session::flash('error', __("admin/sitePages.Top Brands hasn't been updated"));
+            Session::flash('error', __("admin/sitePages.Top Brands has not been updated"));
             redirect()->route('admin.setting.homepage');
         }
     }

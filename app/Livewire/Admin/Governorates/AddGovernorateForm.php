@@ -73,7 +73,7 @@ class AddGovernorateForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            Session::flash('error', __("admin/deliveriesPages.Governorate hasn't been Created"));
+            Session::flash('error', __("admin/deliveriesPages.Governorate has not been Created"));
             redirect()->route('admin.governorates.index');
         }
     }

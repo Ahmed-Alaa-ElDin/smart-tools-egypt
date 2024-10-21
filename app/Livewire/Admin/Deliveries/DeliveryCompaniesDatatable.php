@@ -102,7 +102,7 @@ class DeliveryCompaniesDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/deliveriesPages.Delivery has been deleted successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/deliveriesPages.Delivery hasn't been deleted"),
+            $this->dispatch('swalDone', text: __("admin/deliveriesPages.Delivery has not been deleted"),
                 icon: 'error');
         }
     }
@@ -122,7 +122,7 @@ class DeliveryCompaniesDatatable extends Component
             $this->dispatch('swalDeliveryActivated', text: $delivery->is_active ? __('admin/deliveriesPages.Delivery has been activated') : __('admin/deliveriesPages.Delivery has been deactivated'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDeliveryActivated', text: $delivery->is_active ? __("admin/deliveriesPages.Delivery hasn't been activated") : __("admin/deliveriesPages.Delivery hasn't been deactivated"),
+            $this->dispatch('swalDeliveryActivated', text: $delivery->is_active ? __("admin/deliveriesPages.Delivery has not been activated") : __("admin/deliveriesPages.Delivery has not been deactivated"),
                 icon: 'error');
         }
     }

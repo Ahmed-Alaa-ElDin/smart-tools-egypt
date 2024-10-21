@@ -999,7 +999,7 @@ class ProductForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
-            Session::flash('error', __("admin/productsPages.Product hasn't been added"));
+            Session::flash('error', __("admin/productsPages.Product has not been added"));
             redirect()->route('admin.products.index');
         }
     }
@@ -1135,7 +1135,7 @@ class ProductForm extends Component
             DB::rollBack();
 
             // throw $th;
-            Session::flash('error', __("admin/productsPages.Product hasn't been updated"));
+            Session::flash('error', __("admin/productsPages.Product has not been updated"));
             redirect()->route('admin.products.index');
         }
     }

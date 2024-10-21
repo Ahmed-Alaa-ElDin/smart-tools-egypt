@@ -82,7 +82,7 @@ class BannersDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/productsPages.Banner has been deleted successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/productsPages.Banner hasn't been deleted"),
+            $this->dispatch('swalDone', text: __("admin/productsPages.Banner has not been deleted"),
                 icon: 'error');
         }
     }

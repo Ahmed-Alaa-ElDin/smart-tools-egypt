@@ -97,7 +97,7 @@ class DeletedProductsDatatable extends Component
             $this->dispatch('swalDone', text: $product->publish ? __('admin/productsPages.Product has been published') : __('admin/productsPages.Product has been hidden'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: $product->publish ? __("admin/productsPages.Product hasn't been published") : __("admin/productsPages.Product hasn't been hidden"),
+            $this->dispatch('swalDone', text: $product->publish ? __("admin/productsPages.Product has not been published") : __("admin/productsPages.Product has not been hidden"),
                 icon: 'error');
         }
     }
@@ -127,7 +127,7 @@ class DeletedProductsDatatable extends Component
 
             $this->selectedProducts = [];
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/productsPages.Product hasn't been deleted permanently"),
+            $this->dispatch('swalDone', text: __("admin/productsPages.Product has not been deleted permanently"),
                 icon: 'error');
         }
     }
@@ -158,7 +158,7 @@ class DeletedProductsDatatable extends Component
 
             $this->selectedProducts = [];
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/productsPages.Product hasn't been restored"),
+            $this->dispatch('swalDone', text: __("admin/productsPages.Product has not been restored"),
                 icon: 'error');
         }
     }

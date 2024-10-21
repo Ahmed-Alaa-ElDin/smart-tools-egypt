@@ -79,7 +79,7 @@ class RolesDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/usersPages.Role has been deleted successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/usersPages.Role hasn't been deleted"),
+            $this->dispatch('swalDone', text: __("admin/usersPages.Role has not been deleted"),
                 icon: 'error');
         }
     }

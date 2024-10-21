@@ -84,7 +84,7 @@ class CouponsDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/offersPages.Coupon has been deleted successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/offersPages.Coupon hasn't been deleted"),
+            $this->dispatch('swalDone', text: __("admin/offersPages.Coupon has not been deleted"),
                 icon: 'error');
         }
     }

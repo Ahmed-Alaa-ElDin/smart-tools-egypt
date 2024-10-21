@@ -145,7 +145,7 @@ class CategoryForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            Session::flash('error', __("admin/productsPages.Category hasn't been added"));
+            Session::flash('error', __("admin/productsPages.Category has not been added"));
             redirect()->route('admin.categories.index');
         }
     }
@@ -189,7 +189,7 @@ class CategoryForm extends Component
 
             // throw $th;
 
-            Session::flash('error', __("admin/productsPages.Category hasn't been updated"));
+            Session::flash('error', __("admin/productsPages.Category has not been updated"));
             redirect()->route('admin.categories.index');
         }
     }

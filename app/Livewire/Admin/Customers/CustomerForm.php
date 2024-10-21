@@ -273,7 +273,7 @@ class CustomerForm extends Component
             $this->dispatch('swalPasswordReset', text: __('admin/usersPages.Password has been reset successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalPasswordReset', text: __("admin/usersPages.Password hasn't been reset"),
+            $this->dispatch('swalPasswordReset', text: __("admin/usersPages.Password has not been reset"),
                 icon: 'error');
         }
     }
@@ -385,7 +385,7 @@ class CustomerForm extends Component
         } catch (Throwable $th) {
             DB::rollback();
 
-            Session::flash('error', __("admin/usersPages.User hasn't been added"));
+            Session::flash('error', __("admin/usersPages.User has not been added"));
             redirect()->route('admin.customers.index');
         }
     }
@@ -395,7 +395,7 @@ class CustomerForm extends Component
     {
         // Final Validate
         $this->validate();
-        
+
         DB::beginTransaction();
 
         try {
@@ -474,7 +474,7 @@ class CustomerForm extends Component
             // throw $th;
             DB::rollback();
 
-            Session::flash('error', __("admin/usersPages.Customer hasn't been updated"));
+            Session::flash('error', __("admin/usersPages.Customer has not been updated"));
             redirect()->route('admin.customers.index');
         }
     }

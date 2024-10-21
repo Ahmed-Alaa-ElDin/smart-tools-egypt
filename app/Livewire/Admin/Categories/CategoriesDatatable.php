@@ -81,7 +81,7 @@ class CategoriesDatatable extends Component
 
         return $this->sortBy = $field;
     }
-    
+
     ######################## Publish Toggle :: Start ############################
     public function publish($category_id)
     {
@@ -95,7 +95,7 @@ class CategoriesDatatable extends Component
             $this->dispatch('swalDone', text: $category_id->publish ? __('admin/productsPages.Category has been published') : __('admin/productsPages.Category has been hidden'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: $category_id->publish ? __("admin/productsPages.Category hasn't been published") : __("admin/productsPages.Category hasn't been hidden"),
+            $this->dispatch('swalDone', text: $category_id->publish ? __("admin/productsPages.Category has not been published") : __("admin/productsPages.Category has not been hidden"),
                 icon: 'error');
         }
     }
@@ -124,7 +124,7 @@ class CategoriesDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/productsPages.Category has been deleted successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/productsPages.Category hasn't been deleted"),
+            $this->dispatch('swalDone', text: __("admin/productsPages.Category has not been deleted"),
                 icon: 'error');
         }
     }

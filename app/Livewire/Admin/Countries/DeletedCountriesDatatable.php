@@ -92,7 +92,7 @@ class DeletedCountriesDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/deliveriesPages.Country has been deleted permanently successfully'),
                 icon: 'info');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/deliveriesPages.Country hasn't been deleted permanently"),
+            $this->dispatch('swalDone', text: __("admin/deliveriesPages.Country has not been deleted permanently"),
                 icon: 'error');
         }
     }
@@ -122,7 +122,7 @@ class DeletedCountriesDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/deliveriesPages.Country has been restored successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/deliveriesPages.Country hasn't been restored"),
+            $this->dispatch('swalDone', text: __("admin/deliveriesPages.Country has not been restored"),
                 icon: 'error');
         }
     }

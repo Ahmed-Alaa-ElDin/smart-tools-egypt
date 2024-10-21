@@ -80,7 +80,7 @@ class SubcategoriesDatatable extends Component
             $this->dispatch('swalDone', text: $subcategory_id->publish ? __('admin/productsPages.Subcategory has been published') : __('admin/productsPages.Subcategory has been hidden'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: $subcategory_id->publish ? __("admin/productsPages.Subcategory hasn't been published") : __("admin/productsPages.Subcategory hasn't been hidden"),
+            $this->dispatch('swalDone', text: $subcategory_id->publish ? __("admin/productsPages.Subcategory has not been published") : __("admin/productsPages.Subcategory has not been hidden"),
                 icon: 'error');
         }
     }
@@ -125,7 +125,7 @@ class SubcategoriesDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/productsPages.Subcategory has been deleted successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/productsPages.Subcategory hasn't been deleted"),
+            $this->dispatch('swalDone', text: __("admin/productsPages.Subcategory has not been deleted"),
                 icon: 'error');
         }
     }

@@ -123,7 +123,7 @@ class ProductsDatatable extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: $product->publish ? __("admin/productsPages.Product hasn't been published") : __("admin/productsPages.Product hasn't been hidden"),
+                text: $product->publish ? __("admin/productsPages.Product has not been published") : __("admin/productsPages.Product has not been hidden"),
                 icon: 'error'
             );
         }
@@ -162,7 +162,7 @@ class ProductsDatatable extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: __("admin/productsPages.Product hasn't been deleted"),
+                text: __("admin/productsPages.Product has not been deleted"),
                 icon: 'error'
             );
         }

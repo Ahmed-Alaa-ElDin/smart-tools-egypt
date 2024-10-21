@@ -112,7 +112,7 @@ class CustomersDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/usersPages.Customer has been deleted successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/usersPages.Customer hasn't been deleted"),
+            $this->dispatch('swalDone', text: __("admin/usersPages.Customer has not been deleted"),
                 icon: 'error');
         }
     }
@@ -165,7 +165,7 @@ class CustomersDatatable extends Component
                     icon: 'success');
             }
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/usersPages.Customer hasn't been banned"),
+            $this->dispatch('swalDone', text: __("admin/usersPages.Customer has not been banned"),
                 icon: 'error');
         }
     }

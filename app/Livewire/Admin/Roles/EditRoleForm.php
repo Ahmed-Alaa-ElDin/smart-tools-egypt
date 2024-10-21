@@ -73,7 +73,7 @@ class EditRoleForm extends Component
         } catch (\Throwable $th) {
             DB::rollback();
 
-            Session::flash('error', __("admin/usersPages.Role hasn't been edited"));
+            Session::flash('error', __("admin/usersPages.Role has not been edited"));
             redirect()->route('admin.roles.index');
         }
     }

@@ -90,7 +90,7 @@ class DeletedDeliveryCompaniesDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/deliveriesPages.Delivery has been deleted permanently successfully'),
                 icon: 'info');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/deliveriesPages.Delivery hasn't been deleted permanently"),
+            $this->dispatch('swalDone', text: __("admin/deliveriesPages.Delivery has not been deleted permanently"),
                 icon: 'error');
         }
     }
@@ -120,7 +120,7 @@ class DeletedDeliveryCompaniesDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/deliveriesPages.Delivery has been restored successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/deliveriesPages.Delivery hasn't been restored"),
+            $this->dispatch('swalDone', text: __("admin/deliveriesPages.Delivery has not been restored"),
                 icon: 'error');
         }
     }

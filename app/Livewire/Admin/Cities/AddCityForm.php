@@ -82,7 +82,7 @@ class AddCityForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            Session::flash('error', __("admin/deliveriesPages.City hasn't been Created"));
+            Session::flash('error', __("admin/deliveriesPages.City has not been Created"));
             redirect()->route('admin.cities.index');
         }
     }

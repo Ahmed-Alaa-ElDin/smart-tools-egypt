@@ -208,7 +208,7 @@ class OrdersDatatable extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: __("admin/ordersPages.Order hasn't been archived"),
+                text: __("admin/ordersPages.Order has not been archived"),
                 icon: 'error'
             );
         }
@@ -330,7 +330,7 @@ class OrdersDatatable extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: __("admin/ordersPages.Order's status hasn't been updated"),
+                text: __("admin/ordersPages.Order's status has not been updated"),
                 icon: 'error'
             );
         }
@@ -441,7 +441,7 @@ class OrdersDatatable extends Component
             } else {
                 $this->dispatch(
                     'swalDone',
-                    text: __("admin/ordersPages.The delivery hasn't been created"),
+                    text: __("admin/ordersPages.The delivery has not been created"),
                     icon: 'error'
                 );
             }

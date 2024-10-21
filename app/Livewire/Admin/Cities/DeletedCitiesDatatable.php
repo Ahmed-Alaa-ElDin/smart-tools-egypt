@@ -96,7 +96,7 @@ class DeletedCitiesDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/deliveriesPages.City has been deleted permanently successfully'),
                 icon: 'info');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/deliveriesPages.City hasn't been deleted permanently"),
+            $this->dispatch('swalDone', text: __("admin/deliveriesPages.City has not been deleted permanently"),
                 icon: 'error');
         }
     }
@@ -126,7 +126,7 @@ class DeletedCitiesDatatable extends Component
             $this->dispatch('swalDone', text: __('admin/deliveriesPages.City has been restored successfully'),
                 icon: 'success');
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/deliveriesPages.City hasn't been restored"),
+            $this->dispatch('swalDone', text: __("admin/deliveriesPages.City has not been restored"),
                 icon: 'error');
         }
     }

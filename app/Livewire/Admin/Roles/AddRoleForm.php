@@ -83,7 +83,7 @@ class AddRoleForm extends Component
         } catch (\Throwable $th) {
             DB::rollback();
 
-            Session::flash('error', __("admin/usersPages.Role hasn't been added"));
+            Session::flash('error', __("admin/usersPages.Role has not been added"));
             redirect()->route('admin.roles.index');
         }
     }

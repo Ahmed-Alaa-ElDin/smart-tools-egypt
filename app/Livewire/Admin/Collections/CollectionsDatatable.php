@@ -104,7 +104,7 @@ class CollectionsDatatable extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: $collection->publish ? __("admin/productsPages.Collection hasn't been published") : __("admin/productsPages.Collection hasn't been hidden"),
+                text: $collection->publish ? __("admin/productsPages.Collection has not been published") : __("admin/productsPages.Collection has not been hidden"),
                 icon: 'error'
             );
         }
@@ -143,7 +143,7 @@ class CollectionsDatatable extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: __("admin/productsPages.Collection hasn't been deleted"),
+                text: __("admin/productsPages.Collection has not been deleted"),
                 icon: 'error'
             );
         }

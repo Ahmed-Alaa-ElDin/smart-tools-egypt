@@ -127,7 +127,7 @@ class BrandForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            Session::flash('error', __("admin/productsPages.Brand hasn't been added"));
+            Session::flash('error', __("admin/productsPages.Brand has not been added"));
             redirect()->route('admin.brands.index');
         }
     }
@@ -160,7 +160,7 @@ class BrandForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            Session::flash('error', __("admin/productsPages.Brand hasn't been updated"));
+            Session::flash('error', __("admin/productsPages.Brand has not been updated"));
             redirect()->route('admin.brands.index');
         }
     }

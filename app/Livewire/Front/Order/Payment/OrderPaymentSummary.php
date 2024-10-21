@@ -83,6 +83,7 @@ class OrderPaymentSummary extends Component
     {
         $this->items_total_quantities = Cart::instance('cart')->count();
 
+        // Cart Has Items
         if ($this->items_total_quantities) {
             // Add Cart Quantity to each item
             $this->items = array_map(function ($item) {
@@ -187,7 +188,9 @@ class OrderPaymentSummary extends Component
             $this->total_points_after_order_points = $this->after_offers_total_points + $this->order_points;
             // 5 - Points After Coupon Points
             $this->total_points_after_coupon_points = $this->total_points_after_order_points + $this->coupon_total_points;
-        } else {
+        }
+        // Cart Empty
+        else {
             $this->items_total_base_prices = 0;
             $this->items_total_final_prices = 0;
             $this->items_total_discounts = 0;

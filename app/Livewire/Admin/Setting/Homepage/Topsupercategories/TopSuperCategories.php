@@ -11,7 +11,7 @@ class TopSuperCategories extends Component
 {
     public $supercategories;
     public $selectedSupercategories = [];
-    
+
     public function mount()
     {
         $this->supercategories = Supercategory::select([
@@ -61,7 +61,7 @@ class TopSuperCategories extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            Session::flash('error', __("admin/sitePages.Top Supercategories hasn't been updated"));
+            Session::flash('error', __("admin/sitePages.Top Supercategories has not been updated"));
             redirect()->route('admin.setting.homepage');
         }
     }

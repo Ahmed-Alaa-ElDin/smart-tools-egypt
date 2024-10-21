@@ -77,7 +77,7 @@ class EditGovernorateForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            Session::flash('error', __("admin/deliveriesPages.Governorate hasn't been Updated"));
+            Session::flash('error', __("admin/deliveriesPages.Governorate has not been Updated"));
             redirect()->route('admin.governorates.index');
         }
     }

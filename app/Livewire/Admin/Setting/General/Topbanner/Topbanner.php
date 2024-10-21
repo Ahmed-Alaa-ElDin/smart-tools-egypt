@@ -116,7 +116,7 @@ class Topbanner extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            Session::flash('error', __("admin/sitePages.Banner hasn't been updated"));
+            Session::flash('error', __("admin/sitePages.Banner has not been updated"));
             redirect()->route('admin.setting.general');
         }
     }

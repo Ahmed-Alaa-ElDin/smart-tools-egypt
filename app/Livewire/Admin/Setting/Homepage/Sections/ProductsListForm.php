@@ -252,7 +252,7 @@ class ProductsListForm extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: __("admin/sitePages.Product hasn't been removed from list"),
+                text: __("admin/sitePages.Product has not been removed from list"),
                 icon: 'error'
             );
         }
@@ -283,7 +283,7 @@ class ProductsListForm extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: __("admin/sitePages.Product hasn't been removed from list"),
+                text: __("admin/sitePages.Product has not been removed from list"),
                 icon: 'error'
             );
         }
