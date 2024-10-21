@@ -245,8 +245,8 @@
                                     </span>
                                 </span>
                                 <input type="text"
-                                    wire:model.live.debounce.500ms="items.{{ $item_key }}.search"
-                                    wire:blur="clearSearch({{ $item_key }})"
+                                    wire:model.live.debounce.700ms="items.{{ $item_key }}.search"
+                                    wire:blur.debounce.200ms="clearSearch({{ $item_key }})"
                                     wire:keydown.escape="clearSearch({{ $item_key }})"
                                     class="searchInput focus:ring-0 flex-1 block rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-200"
                                     placeholder="{{ __('admin/offersPages.Search ...') }}">

@@ -55,28 +55,3 @@
 @push('css')
     <link rel="stylesheet" href={{ asset('assets/js/plugins/daterangepicker-master/daterangepicker.css') }}>
 @endpush
-
-{{-- Extra Scripts --}}
-@push('js')
-
-    <script src="{{ asset('assets/js/plugins/daterangepicker-master/daterangepicker.js') }}"></script>
-
-    <script>
-        $(function() {
-            $('input[name="date_range"]').daterangepicker({
-                "minYear": 2022,
-                "timePicker": true,
-                "opens": "center",
-                "drops": "auto",
-                "applyButtonClasses": "btn-success",
-                "cancelClass": "btn-danger",
-                "showDropdowns": true,
-                locale: {
-                    format: 'YYYY-MM-DD hh:mm A',
-                }
-            }, function(start, end, label) {
-                Livewire.dispatch('daterangeUpdated', start.format('YYYY-MM-DD H:mm'), end.format('YYYY-MM-DD H:mm'));
-            });
-        });
-    </script>
-@endpush

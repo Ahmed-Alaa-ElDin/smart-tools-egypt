@@ -80,8 +80,8 @@
             <div class="col-span-6 md:col-span-5 ">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('title.en') border-red-900 border-2 @enderror"
-                    type="text" wire:model.live.blur="title.en" placeholder="{{ __('admin/offersPages.in English') }}"
-                    dir="ltr" maxlength="100">
+                    type="text" wire:model.live.blur="title.en"
+                    placeholder="{{ __('admin/offersPages.in English') }}" dir="ltr" maxlength="100">
                 @error('title.en')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                         {{ $message }}</div>
@@ -279,7 +279,7 @@
                         </div>
                         {{-- Value :: End --}}
                         {{-- Search Collection Input :: Start --}}
-                        <div class="relative col-span-12 md:col-span-6  ">
+                        <div class="relative col-span-12 md:col-span-6">
                             <div class="flex rounded-md shadow-sm">
                                 <span
                                     class="inline-flex items-center px-3 ltr:rounded-l-md rtl:rounded-r-md border border-r-0 border-gray-700 bg-gray-700 text-center text-white text-sm">
@@ -287,12 +287,10 @@
                                         search
                                     </span>
                                 </span>
-                                <input type="text" wire:model.live="items.{{ $item_key }}.search"
-                                    onblur="setTimeout(() => {
-                                    window.livewire.dispatch('clearSearch',{{ $item_key }});
-                                }, 100)"
-                                    wire:keyup="searchUpdated('{{ $item_key }}')"
-                                    wire:keydown.escape="$dispatch('clearSearch',{{ $item_key }})"
+                                <input type="text"
+                                    wire:model.live.debounce.700ms="items.{{ $item_key }}.search"
+                                    wire:blur.debounce.50ms="clearSearch({{ $item_key }})"
+                                    wire:keydown.escape="clearSearch({{ $item_key }})"
                                     class="searchInput focus:ring-0 flex-1 block rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-200"
                                     placeholder="{{ __('admin/offersPages.Search ...') }}">
                             </div>
@@ -495,7 +493,8 @@
                             <div class="col-span-3">
                                 <input id="brand-{{ $item_key }}-value"
                                     class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.value') border-red-900 border-2 @enderror"
-                                    type="number" min="0" wire:model.live.blur="items.{{ $item_key }}.value"
+                                    type="number" min="0"
+                                    wire:model.live.blur="items.{{ $item_key }}.value"
                                     placeholder="{{ __('admin/offersPages.Enter Value') }}" maxlength="100">
 
                                 @error('items.' . $item_key . '.value')
@@ -518,7 +517,6 @@
 
                             <div class="col-span-12 sm:col-span-6 sm:col-start-4 lg:col-span-4 lg:col-start-5">
                                 <select wire:model.live="items.{{ $item_key }}.brand_id"
-                                    wire:change="brandUpdated({{ $item_key }})"
                                     wire:key="brand-{{ $item_key }}-select"
                                     id="item-{{ $item_key }}-brand_id"
                                     class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.brand_id') border-red-900 border-2 @enderror">
@@ -581,7 +579,7 @@
 
                     {{-- ---------------------------------------------------------------------- --}}
                     {{-- ---------------------------------------------------------------------- --}}
-                    {{-- ########################## Ctegory :: Start ########################## --}}
+                    {{-- ########################## Category :: Start ########################## --}}
                     {{-- ---------------------------------------------------------------------- --}}
                 @elseif ($items[$item_key]['item_type'] == 'category')
                     <div class="col-span-12 grid grid-cols-12 gap-x-4 gap-y-4"
@@ -619,7 +617,8 @@
                             <div class="col-span-3">
                                 <input id="category-{{ $item_key }}-value"
                                     class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.value') border-red-900 border-2 @enderror"
-                                    type="number" min="0" wire:model.live.blur="items.{{ $item_key }}.value"
+                                    type="number" min="0"
+                                    wire:model.live.blur="items.{{ $item_key }}.value"
                                     placeholder="{{ __('admin/offersPages.Enter Value') }}" maxlength="100">
 
                                 @error('items.' . $item_key . '.value')
@@ -639,7 +638,6 @@
                                 class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Supercategory') }}</label>
                             <div class="col-span-3" wire:key="supercategory-{{ $item_key }}-select">
                                 <select wire:model.live="items.{{ $item_key }}.supercategory_id"
-                                    wire:change="supercategoryUpdated({{ $item_key }})"
                                     id="supercategory-{{ $item_key }}"
                                     class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.supercategory_id') border-red-900 border-2 @enderror">
                                     <option value="all">
@@ -674,7 +672,6 @@
                                     class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Category') }}</label>
                                 <div class="col-span-3">
                                     <select wire:model.live="items.{{ $item_key }}.category_id"
-                                        wire:change="categoryUpdated({{ $item_key }})"
                                         id="category-{{ $item_key }}"
                                         class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.category_id') border-red-900 border-2 @enderror">
                                         <option value="all">
@@ -706,7 +703,6 @@
                                     class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Subcategory') }}</label>
                                 <div class="col-span-3">
                                     <select wire:model.live="items.{{ $item_key }}.subcategory_id"
-                                        wire:change="subcategoryUpdated({{ $item_key }})"
                                         id="subcategory-{{ $item_key }}"
                                         class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('items.' . $item_key . '.subcategory_id') border-red-900 border-2 @enderror">
                                         <option value="all">
@@ -1047,13 +1043,11 @@
                     </tbody>
                 </table>
             </div>
-
         </div>
     @endif
     {{-- ######################################################### --}}
     {{-- ######################################################### --}}
     {{-- Old Items :: End --}}
-
 
     {{-- Buttons Section :: Start --}}
     <div class="col-span-12 w-full flex flex-wrap mt-2 justify-around">
@@ -1071,38 +1065,39 @@
         {{-- Back --}}
         <a href="{{ route('admin.offers.index') }}"
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/offersPages.Back') }}</a>
-
     </div>
     {{-- Buttons Section :: End --}}
 
     {{-- extra Js : :: Start --}}
-    @if ($offer_id != null)
-        @push('js')
+    @push('js')
+        <script src="{{ asset('assets/js/plugins/daterangepicker-master/daterangepicker.js') }}"></script>
 
-            <script src="{{ asset('assets/js/plugins/daterangepicker-master/daterangepicker.js') }}"></script>
-
-            <script>
-                $(function() {
-                    $('input[name="date_range"]').daterangepicker({
-                        "minYear": 2022,
-                        "timePicker": true,
-                        "startDate": "{{ $date_range['start'] }}",
-                        "endDate": "{{ $date_range['end'] }}",
-                        "opens": "center",
-                        "drops": "auto",
-                        "applyButtonClasses": "btn-success",
-                        "cancelClass": "btn-danger",
-                        "showDropdowns": true,
-                        locale: {
-                            format: 'YYYY-MM-DD hh:mm A',
-                        }
-                    }, function(start, end, label) {
-                        Livewire.dispatch('daterangeUpdated', start.format('YYYY-MM-DD H:mm'), end.format('YYYY-MM-DD H:mm'));
-                    });
+        <script>
+            $(function() {
+                $('input[name="date_range"]').daterangepicker({
+                    "minYear": parseInt(moment().format('YYYY')),
+                    "timePicker": true,
+                    "startDate": "{{ $offer_id ? $date_range['start'] : now() }}",
+                    "endDate": "{{ $offer_id ? $date_range['end'] : now() }}",
+                    "opens": "center",
+                    "drops": "auto",
+                    "applyButtonClasses": "btn-success",
+                    "cancelClass": "btn-danger",
+                    "showDropdowns": true,
+                    locale: {
+                        format: 'YYYY-MM-DD hh:mm A',
+                    }
+                }, function(start, end, label) {
+                    Livewire.dispatch('daterangeUpdated',
+                    [
+                        start.format('YYYY-MM-DD H:mm'),
+                            end.format('YYYY-MM-DD H:mm')
+                        ]
+                    );
                 });
-            </script>
-        @endpush
-    @endif
+            });
+        </script>
+    @endpush
     {{-- extra Js : :: End --}}
 
 </div>

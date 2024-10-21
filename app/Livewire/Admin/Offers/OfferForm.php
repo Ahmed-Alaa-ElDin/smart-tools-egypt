@@ -176,6 +176,42 @@ class OfferForm extends Component
         if ($field == 'type') {
             $this->validateOnly('value');
         }
+
+
+        // Check if the updated field is part of the "search" key
+        elseif (preg_match('/items\.\d+\.search/', $field))
+        {
+            $key = explode('.', $field)[1];
+            $this->searchUpdated($key);
+        }
+
+        // Check if the updated field is supercategory_id
+        elseif (preg_match('/items\.\d+\.supercategory_id/', $field))
+        {
+            $key = explode('.', $field)[1];
+            $this->supercategoryUpdated($key);
+        }
+
+        // Check if the updated field is category_id
+        elseif (preg_match('/items\.\d+\.category_id/', $field))
+        {
+            $key = explode('.', $field)[1];
+            $this->categoryUpdated($key);
+        }
+
+        // Check if the updated field is subcategory_id
+        elseif (preg_match('/items\.\d+\.subcategory_id/', $field))
+        {
+            $key = explode('.', $field)[1];
+            $this->subcategoryUpdated($key);
+        }
+
+        // Check if the updated field is brand_id
+        elseif (preg_match('/items\.\d+\.brand_id/', $field))
+        {
+            $key = explode('.', $field)[1];
+            $this->brandUpdated($key);
+        }
     }
     // Validate inputs on blur : End
 
@@ -378,6 +414,9 @@ class OfferForm extends Component
                 $product_collection->product_collection = class_basename($product_collection);
                 return $product_collection;
             })->toArray();
+        }
+        else {
+            $this->clearSearch($key);
         }
     }
     // Search Collection :: End
