@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Orders;
 
 use App\Models\Product;
 use Livewire\Component;
+use App\Models\Collection;
 
 class NewOrderProductsPart extends Component
 {
@@ -21,7 +22,7 @@ class NewOrderProductsPart extends Component
 
     public function mount()
     {
-        $this->products_list = collect([]);
+        $this->products_list = [];
     }
 
 
@@ -33,20 +34,64 @@ class NewOrderProductsPart extends Component
     public function updatedSearch()
     {
         if ($this->search != "") {
-            $this->products_list = Product::select(['id', 'name', 'base_price', 'final_price', 'free_shipping', 'brand_id', 'points'])
-                ->with(['brand' => function ($q) {
-                    $q->select('id', 'name');
-                }])
-                ->where('under_reviewing', '=', 0)
-                ->whereNotIn('id', array_map(fn ($product) => $product['id'], $this->products))
-                ->where(function ($q) {
-                    $q->where('name->ar', 'like', '%' . $this->search . '%')
-                        ->orWhere('name->en', 'like', '%' . $this->search . '%')
+            $selectedProducts = array_column(array_filter($this->products, fn($product) => $product['type'] == "Product"), 'id');
+            $selectedCollections = array_column(array_filter($this->products, fn($product) => $product['type'] == "Collection"), 'id');
+
+            $products = Product::select([
+                'id',
+                'name',
+                'barcode',
+                'original_price',
+                'base_price',
+                'final_price',
+                'under_reviewing',
+                'points',
+                'description',
+                'model',
+                'brand_id'
+            ])
+                ->with(
+                    'brand',
+                )
+                ->whereNotIn('id', $selectedProducts)
+                ->where(
+                    fn($q) =>
+                    $q->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('barcode', 'like', '%' . $this->search . '%')
+                        ->orWhere('original_price', 'like', '%' . $this->search . '%')
                         ->orWhere('base_price', 'like', '%' . $this->search . '%')
                         ->orWhere('final_price', 'like', '%' . $this->search . '%')
-                        ->orWhere('points', 'like', '%' . $this->search . '%');
-                })
-                ->get();
+                        ->orWhere('description', 'like', '%' . $this->search . '%')
+                        ->orWhere('model', 'like', '%' . $this->search . '%')
+                        ->orWhereHas('brand', fn($q) => $q->where('brands.name', 'like', '%' . $this->search . '%'))
+                )->get();
+
+            $collections = Collection::select([
+                'id',
+                'name',
+                'barcode',
+                'original_price',
+                'base_price',
+                'final_price',
+                'under_reviewing',
+                'points',
+                'description',
+                'model'
+            ])
+                ->whereNotIn('id', $selectedCollections)
+                ->where(
+                    fn($q) =>
+                    $q->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('barcode', 'like', '%' . $this->search . '%')
+                        ->orWhere('original_price', 'like', '%' . $this->search . '%')
+                        ->orWhere('base_price', 'like', '%' . $this->search . '%')
+                        ->orWhere('final_price', 'like', '%' . $this->search . '%')
+                        ->orWhere('description', 'like', '%' . $this->search . '%')
+                        ->orWhere('model', 'like', '%' . $this->search . '%')
+                )->get();
+
+
+            $this->products_list = $collections->concat($products)->toArray();
         } else {
             $this->products_list = collect([]);
         }
@@ -58,12 +103,19 @@ class NewOrderProductsPart extends Component
         $this->products_list = collect([]);
     }
 
-    public function addProduct($product_id)
+    public function addProduct($product_id, $product_collection)
     {
-        $product = Product::with('thumbnail')->findOrFail($product_id)->toArray();
-        $product['amount'] = 1;
-        $this->products[$product_id] = $product;
-        $this->search = null;
+        if ($product_collection == 'Product') {
+            $product = Product::with('thumbnail')->findOrFail($product_id)->toArray();
+            $product['amount'] = 1;
+            $this->products[] = $product;
+        } elseif ($product_collection == 'Collection') {
+            $collection = Collection::with('thumbnail')->findOrFail($product_id)->toArray();
+            $collection['amount'] = 1;
+            $this->products[] = $collection;
+        }
+
+        $this->clearSearch();
     }
 
     public function clearProducts()
@@ -71,12 +123,14 @@ class NewOrderProductsPart extends Component
         $this->products = [];
     }
 
-    public function amountUpdated($product_id, $amount)
+    public function amountUpdated($product_id, $product_collection, $amount)
     {
+        $productId = array_key_first(array_filter($this->products, fn($product) => $product['id'] == $product_id && $product['type'] == $product_collection));
+
         if ($amount > 0) {
-            $this->products[$product_id]['amount'] = $amount <= $this->products[$product_id]['quantity'] ? $amount : $this->products[$product_id]['quantity'];
+            $this->products[$productId]['amount'] = $amount <= $this->products[$productId]['quantity'] ? $amount : $this->products[$productId]['quantity'];
         } else {
-            unset($this->products[$product_id]);
+            unset($this->products[$productId]);
         }
     }
 

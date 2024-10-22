@@ -41,37 +41,39 @@
                     {{-- Products List :: Start --}}
                     @forelse ($products_list as $product)
                         <div class="group flex justify-center items-center gap-1 cursor-pointer rounded transition-all ease-in-out hover:bg-red-100 p-2"
-                            wire:click.stop="addProduct({{ $product->id }})"
-                            wire:key="product-{{ $product->id }}-{{ rand() }}">
+                            wire:click.stop="addProduct({{ $product['id'] }}, '{{ $product['type'] }}')"
+                            wire:key="product-{{ $product['id'] }}-{{ rand() }}">
                             {{-- Product's Name --}}
                             <div class="flex flex-col justify-start ltr:text-left rtl:text-right gap-2 grow">
-                                <span class="font-bold text-black">{{ $product->name }}</span>
-                                <span
-                                    class="text-xs font-bold text-gray-500">{{ $product->brand ? $product->brand->name : '' }}</span>
+                                <span class="font-bold text-black">{{ $product['name'][session('locale')] }}</span>
+                                @if (isset($product['brand']))
+                                    <span
+                                        class="text-xs font-bold text-gray-500">{{ $product['brand'] ? $product['brand']['name'] : '' }}</span>
+                                @endif
                             </div>
 
                             {{-- Price --}}
                             <div class="flex flex-wrap gap-2 justify-around items-center">
-                                @if ($product->under_reviewing)
+                                @if ($product['under_reviewing'])
                                     <span class="bg-yellow-600 px-2 py-1 rounded text-white">
                                         {{ __('admin/productsPages.Under Reviewing') }}
                                     </span>
-                                @elseif ($product->final_price == $product->base_price)
+                                @elseif ($product['final_price'] == $product['base_price'])
                                     <span class="bg-success px-2 py-1 rounded text-white">
-                                        {{ $product->final_price }}
+                                        {{ $product['final_price'] }}
                                         <span class="">
                                             {{ __('admin/productsPages. EGP') }}
                                         </span>
                                     </span>
                                 @else
                                     <span class="line-through bg-red-600 px-2 py-1 rounded text-white">
-                                        {{ $product->base_price }}
+                                        {{ $product['base_price'] }}
                                         <span class="">
                                             {{ __('admin/productsPages. EGP') }}
                                         </span>
                                     </span>
                                     <span class="bg-success px-2 py-1 rounded text-white ltr:ml-1 rtl:mr-1">
-                                        {{ $product->final_price }}
+                                        {{ $product['final_price'] }}
                                         <span class="">
                                             {{ __('admin/productsPages. EGP') }}
                                         </span>
@@ -80,7 +82,7 @@
 
                                 {{-- Points --}}
                                 <span class="bg-yellow-600 px-2 py-1 rounded text-white">
-                                    {{ $product->points ?? 0 }}
+                                    {{ $product['points'] ?? 0 }}
                                 </span>
                             </div>
                         </div>
@@ -124,11 +126,12 @@
                     wire:key='product-{{ $product['id'] }}-{{ rand() }}'>
                     <div class="flex gap-6 justify-start items-center">
                         {{-- Thumnail :: Start --}}
-                        <a href="{{ route('front.products.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) }}"
+                        <a wire:ignore
+                            href="{{ $product['type'] == 'Product' ? route('front.products.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) : route('front.collections.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) }}"
                             target="_blank" class="min-w-max block hover:text-current">
                             @if ($product['thumbnail'])
                                 <img class="w-full h-full flex justify-center items-center bg-gray-200 rounded overflow-hidden"
-                                    src="{{ asset('storage/images/products/cropped100/' . $product['thumbnail']['file_name']) }}"
+                                    src="{{ $product['type'] == 'Product' ? asset('storage/images/products/cropped100/' . $product['thumbnail']['file_name']) : asset('storage/images/collections/cropped100/' . $product['thumbnail']['file_name']) }}"
                                     alt="{{ $product['name'][session('locale')] . 'image' }}">
                             @else
                                 <div class="w-full h-full flex justify-center items-center bg-gray-200 rounded">
@@ -144,17 +147,19 @@
                             {{-- Product Info : Start --}}
                             <div class="grow flex flex-col justify-start gap-2">
                                 {{-- Product's Brand :: Start --}}
-                                {{-- todo :: brand link --}}
-                                <div class="flex items-center">
-                                    <a href="#" class="text-sm font-bold text-gray-400 hover:text-current">
-                                        {{ $product['brand'] ? $product['brand']['name'] : '' }}
-                                    </a>
-                                </div>
+                                @if (isset($product['brand']))
+                                    <div class="flex items-center">
+                                        <a href="{{ route('front.brands.show', ['brand' => $product['brand']['id']]) }}"
+                                            target="_blank" class="text-sm font-bold text-gray-400 hover:text-current">
+                                            {{ isset($product['brand']) && $product['brand'] ? $product['brand']['name'] : '' }}
+                                        </a>
+                                    </div>
+                                @endif
                                 {{-- Product's Brand :: End --}}
 
                                 {{-- Product Name : Start --}}
                                 <div class="flex items-center">
-                                    <a href="{{ route('front.products.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) }}"
+                                    <a href="{{ $product['type'] == 'Product' ? route('front.products.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) : route('front.collections.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) }}"
                                         target="_blank" class="text-lg font-bold hover:text-current">
                                         {{ $product['name'][session('locale')] }}
                                     </a>
@@ -220,9 +225,10 @@
 
                                 <div class="flex justify-center items-center gap-1 w-32">
                                     {{-- Add :: Start --}}
-                                    <button class="w-6 h-6 rounded-circle bg-secondary text-white flex justify-center items-center"
+                                    <button
+                                        class="w-6 h-6 rounded-circle bg-secondary text-white flex justify-center items-center"
                                         title="{{ __('front/homePage.Increase') }}"
-                                        wire:click="amountUpdated('{{ $product['id'] }}',{{ $product['amount'] + 1 }})">
+                                        wire:click="amountUpdated('{{ $product['id'] }}','{{ $product['type'] }}',{{ $product['amount'] + 1 }})">
                                         <span class="material-icons text-xs">
                                             add
                                         </span>
@@ -234,14 +240,15 @@
                                         oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
                                         class="focus:ring-primary focus:border-primary flex-1 block w-full min-w-maxs rounded text-xs border-gray-300 text-center text-gray-700 px-1 p-2"
                                         value="{{ $product['amount'] }}"
-                                        wire:change="amountUpdated('{{ $product['id'] }}',$event.target.value)">
+                                        wire:change="amountUpdated('{{ $product['id'] }}', '{{ $product['type'] }}',$event.target.value)">
                                     {{-- Amount :: End --}}
 
                                     {{-- Remove :: Start --}}
-                                    <button class="w-6 h-6 rounded-circle bg-secondary text-white flex justify-center items-center"
+                                    <button
+                                        class="w-6 h-6 rounded-circle bg-secondary text-white flex justify-center items-center"
                                         wire:key="DecreaseByOne-{{ rand() }}"
                                         title="{{ __('front/homePage.Decrease') }}"
-                                        wire:click="amountUpdated('{{ $product['id'] }}',{{ $product['amount'] - 1 }})">
+                                        wire:click="amountUpdated('{{ $product['id'] }}','{{ $product['type'] }}',{{ $product['amount'] - 1 }})">
                                         <span class="material-icons text-xs">
                                             remove
                                         </span>
@@ -251,7 +258,7 @@
                                     {{-- Delete :: Start --}}
                                     <button title="{{ __('front/homePage.Remove from Cart') }}"
                                         class="w-6 h-6 rounded-circle bg-white border border-primary text-primary transition ease-in-out hover:bg-primary hover:text-white flex justify-center items-center"
-                                        wire:click="amountUpdated('{{ $product['id'] }}',0)">
+                                        wire:click="amountUpdated('{{ $product['id'] }}','{{ $product['type'] }}',0)">
                                         <span class="material-icons text-xs">
                                             delete
                                         </span>
