@@ -128,16 +128,14 @@
 
         $(function() {
             // Handle Not Found Images
-            $('.construction-placeholder').each(function() {
-                const element = $(this);
+            window.handleNotFoundImages = function(element) {
+                const iconSize = element.dataset.placeholderSize;
 
-                const iconSize = element.data('placeholder-size');
+                if (!element.complete ||
+                    typeof element.naturalWidth === "undefined" ||
+                    element.naturalWidth === 0) {
 
-                if (!element[0].complete ||
-                    typeof element[0].naturalWidth === "undefined" ||
-                    element[0].naturalWidth === 0) {
-
-                    const parent = element[0].parentNode;
+                    const parent = element.parentNode;
 
                     const placeholderHTML = '<div class="flex justify-center items-center bg-gray-100">' +
                         '<span class="block material-icons ' + iconSize + '">construction</span>' +
@@ -150,6 +148,11 @@
 
                     parent.appendChild(placeholderElement.firstChild);
                 }
+            }
+
+            // Handle Not Found Images
+            document.querySelectorAll('.construction-placeholder').forEach(function(element) {
+                handleNotFoundImages(element);
             });
         });
     </script>

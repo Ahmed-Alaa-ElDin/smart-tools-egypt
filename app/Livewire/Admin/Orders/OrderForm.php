@@ -28,7 +28,8 @@ class OrderForm extends Component
         $wallet,
         $points,
         $points_egp,
-        $payment_method;
+        $payment_method,
+        $notes;
 
     public $best_products,
         $products_amounts,

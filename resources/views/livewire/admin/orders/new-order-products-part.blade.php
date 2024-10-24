@@ -123,14 +123,16 @@
             @forelse ($products as $product)
                 {{-- Product : Start --}}
                 <div class="p-4 scrollbar scrollbar-thin w-full bg-white rounded shadow"
-                    wire:key='product-{{ $product['id'] }}-{{ rand() }}'>
+                    wire:key='product-{{ $product['id'] }} }}'>
                     <div class="flex gap-6 justify-start items-center">
                         {{-- Thumnail :: Start --}}
                         <a wire:ignore
                             href="{{ $product['type'] == 'Product' ? route('front.products.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) : route('front.collections.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) }}"
                             target="_blank" class="min-w-max block hover:text-current">
                             @if ($product['thumbnail'])
-                                <img class="w-full h-full flex justify-center items-center bg-gray-200 rounded overflow-hidden"
+                                <img class="w-full h-full flex justify-center items-center bg-gray-200 rounded overflow-hidden construction-placeholder"
+                                    onerror="this.onerror=null; handleNotFoundImages(this);"
+                                    data-placeholder-size="text-[100px]"
                                     src="{{ $product['type'] == 'Product' ? asset('storage/images/products/cropped100/' . $product['thumbnail']['file_name']) : asset('storage/images/collections/cropped100/' . $product['thumbnail']['file_name']) }}"
                                     alt="{{ $product['name'][session('locale')] . 'image' }}">
                             @else

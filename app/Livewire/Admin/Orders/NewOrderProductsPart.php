@@ -127,7 +127,7 @@ class NewOrderProductsPart extends Component
     {
         $productId = array_key_first(array_filter($this->products, fn($product) => $product['id'] == $product_id && $product['type'] == $product_collection));
 
-        if ($amount > 0) {
+        if ($amount > 0 && $this->products[$productId]['quantity'] > 0) {
             $this->products[$productId]['amount'] = $amount <= $this->products[$productId]['quantity'] ? $amount : $this->products[$productId]['quantity'];
         } else {
             unset($this->products[$productId]);

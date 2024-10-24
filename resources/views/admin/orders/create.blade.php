@@ -58,14 +58,14 @@
         var displayModal = document.getElementById('displayOrderSummary');
         const modal = new Modal(displayModal);
 
-        for (let i = 0; i < searchInputs.length; i++) {
-            const element = searchInputs[i];
-            element.addEventListener('blur', function(event) {
-                setTimeout(() => {
-                    window.livewire.dispatchTo(`admin.orders.${element.dataset.name}`, 'clearSearch');
-                }, 200);
-            })
-        }
+        // for (let i = 0; i < searchInputs.length; i++) {
+        //     const element = searchInputs[i];
+        //     element.addEventListener('blur', function(event) {
+        //         setTimeout(() => {
+        //             window.livewire.dispatchTo(`admin.orders.${element.dataset.name}`, 'clearSearch');
+        //         }, 200);
+        //     })
+        // }
 
         window.addEventListener('displayOrderSummary',function () {
             modal.show();
