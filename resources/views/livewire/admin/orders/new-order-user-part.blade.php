@@ -15,7 +15,7 @@
                         search
                     </span>
                 </span>
-                <input type="text" wire:model.live.debounce.500ms='search' wire:keydown.Escape="$set('search','')"
+                <input type="text" wire:model.live.debounce.500ms='search' wire:keydown.Escape="$set('search','')" wire:blur="$set('search','')"
                     data-name="new-order-user-part"
                     class="searchInput focus:ring-0 flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-700"
                     placeholder="{{ __('admin/ordersPages.Search ...') }}">
