@@ -188,9 +188,9 @@ return [
     "Free Shipping"                                     =>          "توصيل مجاني",
     "Shipping:"                                         =>          "الشحن :",
     "Total:"                                            =>          "المجموع الكلي :",
-    "Paid by wallet :"                                  =>          "مدفوع عن طريق المحفظة :",
-    "Paid using points :"                               =>          "مدفوع باستخدام النقاط :",
-    "Total after wallet :"                              =>          "المجموع بعد المدفوعات :",
+    "Paid by wallet:"                                   =>          "مدفوع عن طريق المحفظة :",
+    "Paid using points:"                                =>          "مدفوع باستخدام النقاط :",
+    "Total after wallet:"                               =>          "المجموع بعد المدفوعات :",
     "Customer will get"                                 =>          "ما سيحصل عليه العميل",
     "Point/Points"                                      =>          "{0} نقطة |{1}  نقطة |{2} نقطة |[3,10] نقاط |[11,*] نقطة",
     "Products Points :"                                 =>          "نقاط على المنتجات :",
@@ -250,4 +250,5 @@ return [
     "Here you can manage shipped orders"                =>          "من خلال هذه الصفحة يمكنك التحكم في الطلبات التي تم شحنها",
     "Edited Orders"                                     =>          "طلبات تم تعديلها",
     "Here you can manage edited orders"                 =>          "من خلال هذه الصفحة يمكنك التحكم في الطلبات التي تم تعديلها",
+    "Order Created Successfully"                        =>          "تم انشاء الطلب بنجاح",
 ];

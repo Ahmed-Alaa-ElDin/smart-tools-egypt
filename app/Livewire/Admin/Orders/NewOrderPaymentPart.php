@@ -13,7 +13,7 @@ class NewOrderPaymentPart extends Component
 
     protected $listeners = [
         'customerUpdated',
-        'getPaymentData',
+        'setPaymentDataToPaymentPart',
     ];
 
     ############## Render :: Start ##############
@@ -40,6 +40,13 @@ class NewOrderPaymentPart extends Component
     }
     ############## Get Customer Data :: End ##############
 
+    ############## Change Payment Method :: Start ##############
+    public function updatedPaymentMethod()
+    {
+        $this->setPaymentData();
+    }
+    ############## Change Payment Method :: End ##############
+
     ############## Apply Coupon :: Start ##############
     public function couponCheck()
     {
@@ -61,6 +68,8 @@ class NewOrderPaymentPart extends Component
                 'status' => 0
             ];
         }
+
+        $this->setPaymentData();
     }
     ############## Apply Coupon :: End ##############
 
@@ -68,6 +77,8 @@ class NewOrderPaymentPart extends Component
     public function clearCoupon()
     {
         $this->coupon_id = null;
+
+        $this->setPaymentData();
 
         $this->message = null;
     }
@@ -78,18 +89,22 @@ class NewOrderPaymentPart extends Component
     public function updatedWallet($value)
     {
         $this->wallet = $value > 0 ? ($value <= $this->customer->balance ? $value : $this->customer->balance) : 0;
+
+        $this->setPaymentData();
     }
     ############## Pay Using Wallet :: End ##############
 
     ############## Pay Using Points :: Start ##############
     public function updatedPoints($value)
     {
-        $this->points = $value > 0 ? ($value <= $this->customer->points ? $value : $this->customer->points) : 0;
+        $this->points = $value > 0 ? ($value <= $this->customer->validPoints ? $value : $this->customer->validPoints) : 0;
+
+        $this->setPaymentData();
     }
     ############## Pay Using Points :: End ##############
 
     ############## Send Payment Data To Parent Order Form :: Start ##############
-    public function getPaymentData()
+    public function setPaymentData()
     {
         $this->dispatch(
             'setPaymentData',
@@ -102,4 +117,14 @@ class NewOrderPaymentPart extends Component
         )->to('admin.orders.order-form');
     }
     ############## Send Payment Data To Parent Order Form :: End ##############
+
+    ############## Set Payment Data From Parent Order Form :: Start ##############
+    public function setPaymentDataToPaymentPart($data)
+    {
+        $this->coupon_id = $data['coupon_id'];
+        $this->wallet = $data['wallet'];
+        $this->points = $data['points'];
+        $this->payment_method = $data['payment_method'];
+    }
+    ############## Set Payment Data From Parent Order Form :: End ##############
 }

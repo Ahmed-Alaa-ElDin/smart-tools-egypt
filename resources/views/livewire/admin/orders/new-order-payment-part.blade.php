@@ -52,7 +52,7 @@
                             {{ __('admin/ordersPages.Wallet') }}
                         </label>
                         <input type="number" id="wallet" min="0" max="{{ $customer->balance }}" step="0.01" value="0"
-                            wire:model.live.blur="wallet"
+                            wire:model.live.debounce.500ms="wallet"
                             class="text-sm rounded text-center border-gray-300 focus:outline-0 focus:ring-secondary focus:border-gray-300">
                     </div>
                 @endif
@@ -63,8 +63,8 @@
                         <label for="points" class="m-0 p-2 text-xs font-bold text-gray-900 select-none">
                             {{ __('admin/ordersPages.Points') }}
                         </label>
-                        <input type="number" id="points" min="0" max="{{ $customer->points }}" step="1" value="0"
-                            wire:model.live.blur="points"
+                        <input type="number" id="points" min="0" max="{{ $customer->validPoints }}" step="1" value="0"
+                            wire:model.live.debounce.500ms="points"
                             class="text-sm rounded text-center border-gray-300 focus:outline-0 focus:ring-secondary focus:border-gray-300">
                     </div>
                 @endif

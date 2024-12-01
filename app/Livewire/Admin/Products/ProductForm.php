@@ -396,7 +396,7 @@ class ProductForm extends Component
 
 
     ######################## Publish Toggle :: Start ############################
-    public function publish()
+    public function onPublishClick()
     {
         $this->publish = !$this->publish;
     }
@@ -404,7 +404,7 @@ class ProductForm extends Component
 
 
     ######################## Refundable Toggle :: Start ############################
-    public function refund()
+    public function onRefundClick()
     {
         $this->refundable = !$this->refundable;
     }
@@ -412,7 +412,7 @@ class ProductForm extends Component
 
 
     ######################## Free Shipping Toggle :: Start ############################
-    public function free_shipping()
+    public function onFreeShippingClick()
     {
         $this->free_shipping = !$this->free_shipping;
     }
@@ -420,7 +420,7 @@ class ProductForm extends Component
 
 
     ######################## Reviewing Toggle :: Start ############################
-    public function reviewing()
+    public function onReviewingClick()
     {
         $this->reviewing = !$this->reviewing;
     }

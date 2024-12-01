@@ -65,7 +65,6 @@
             class="btn font-bold bg-primary focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
             {{ __('admin/ordersPages.Back') }}
         </a>
-
     </div>
     {{-- Buttons :: End --}}
 
@@ -104,7 +103,7 @@
                                 </h3>
 
                                 <h4 class="text-sm font-bold">
-                                    {{ trans_choice('admin/ordersPages.Product', $product_total_amounts, ['product' => $product_total_amounts]) }}
+                                    {{ trans_choice('admin/ordersPages.Product', $items_total_quantities, ['product' => $items_total_quantities]) }}
                                 </h4>
                             </div>
                             {{-- ############## Title :: End ############## --}}
@@ -120,18 +119,18 @@
                                     </div>
 
                                     <div
-                                        class="flex rtl:flex-row-reverse gap-1 text-primary @if ($products_discounts || $offers_discounts || $coupon_discount) line-through @endif">
+                                        class="flex rtl:flex-row-reverse gap-1 text-primary @if ($items_discounts || $offers_discounts || $coupon_discount) line-through @endif">
                                         <span class="font-bold text-sm">{{ __('admin/ordersPages.EGP') }}</span>
                                         <span class="font-bold text-xl"
-                                            dir="ltr">{{ number_format(explode('.', $products_base_prices)[0], 0, '.', '\'') }}</span>
+                                            dir="ltr">{{ number_format(explode('.', $items_base_prices)[0], 0, '.', '\'') }}</span>
                                         <span
-                                            class="font-bold text-xs">{{ explode('.', $products_base_prices)[1] ?? '00' }}</span>
+                                            class="font-bold text-xs">{{ explode('.', $items_base_prices)[1] ?? '00' }}</span>
                                     </div>
 
                                 </div>
                                 {{-- ############## Base Price :: End ############## --}}
 
-                                @if ($products_discounts)
+                                @if ($items_discounts)
                                     {{-- ############## Products Discounts :: Start ############## --}}
                                     <div class="w-100 flex justify-between items-center gap-6">
                                         <div class="h6 font-bold m-0">
@@ -144,12 +143,12 @@
                                                     {{ __('admin/ordersPages.EGP') }}
                                                 </span>
                                                 <span class="font-bold text-xl"
-                                                    dir="ltr">{{ number_format(explode('.', $products_discounts)[0], 0, '.', '\'') }}</span>
+                                                    dir="ltr">{{ number_format(explode('.', $items_discounts)[0], 0, '.', '\'') }}</span>
                                                 <span
-                                                    class="font-bold text-xs">{{ explode('.', number_format($products_discounts, 2))[1] ?? '00' }}</span>
+                                                    class="font-bold text-xs">{{ explode('.', number_format($items_discounts, 2))[1] ?? '00' }}</span>
                                             </span>
                                             <span>
-                                                ({{ $products_discounts_percentage }} %)
+                                                ({{ $items_discounts_percentage }} %)
                                             </span>
                                         </div>
 
@@ -168,9 +167,9 @@
                                             class="flex rtl:flex-row-reverse gap-1 text-primary @if ($offers_discounts || $coupon_discount) line-through @endif">
                                             <span class="font-bold text-sm">{{ __('admin/ordersPages.EGP') }}</span>
                                             <span class="font-bold text-xl"
-                                                dir="ltr">{{ number_format(explode('.', $products_final_prices)[0], 0, '.', '\'') }}</span>
+                                                dir="ltr">{{ number_format(explode('.', $items_final_prices)[0], 0, '.', '\'') }}</span>
                                             <span
-                                                class="font-bold text-xs">{{ explode('.', $products_final_prices)[1] ?? '00' }}</span>
+                                                class="font-bold text-xs">{{ explode('.', $items_final_prices)[1] ?? '00' }}</span>
                                         </div>
                                     </div>
                                     {{-- ############## Final Price :: End ############## --}}
@@ -214,9 +213,9 @@
                                         <div class="flex rtl:flex-row-reverse gap-1 text-primary ">
                                             <span class="font-bold text-sm">{{ __('admin/ordersPages.EGP') }}</span>
                                             <span class="font-bold text-xl"
-                                                dir="ltr">{{ number_format(explode('.', $products_best_prices)[0], 0, '.', '\'') }}</span>
+                                                dir="ltr">{{ number_format(explode('.', $items_best_prices)[0], 0, '.', '\'') }}</span>
                                             <span
-                                                class="font-bold text-xs">{{ explode('.', $products_best_prices)[1] ?? '00' }}</span>
+                                                class="font-bold text-xs">{{ explode('.', $items_best_prices)[1] ?? '00' }}</span>
                                         </div>
                                     </div>
                                     {{-- ############## Best Price :: End ############## --}}
@@ -318,10 +317,10 @@
                                 {{-- ############## Total:: End ############## --}}
 
                                 {{-- ############## Wallet :: Start ############## --}}
-                                @if ($wallet)
+                                @if ($wallet > 0)
                                     <div class="w-full flex justify-between items-center gap-6">
                                         <div class="h6 font-bold m-0">
-                                            {{ __('admin/ordersPages.Paid by wallet :') }}
+                                            {{ __('admin/ordersPages.Paid by wallet:') }}
                                         </div>
 
                                         <div class="flex rtl:flex-row-reverse gap-1 text-successDark">
@@ -341,10 +340,10 @@
                                 {{-- ############## Wallet :: End ############## --}}
 
                                 {{-- ############## Points :: Start ############## --}}
-                                @if ($points)
+                                @if ($points > 0)
                                     <div class="w-full flex justify-between items-center gap-6">
                                         <div class="h6 font-bold m-0">
-                                            {{ __('admin/ordersPages.Paid using points :') }}
+                                            {{ __('admin/ordersPages.Paid using points:') }}
                                         </div>
 
                                         <div class="flex rtl:flex-row-reverse gap-1 text-successDark">
@@ -364,12 +363,12 @@
                                 {{-- ############## Points :: End ############## --}}
 
                                 {{-- ############## Total After Wallet :: Start ############## --}}
-                                @if ($wallet || $points)
+                                @if ($wallet > 0 || $points > 0)
                                     <hr class="w-full">
 
                                     <div class="w-full flex justify-between items-center gap-6">
                                         <div class="h6 font-bold m-0">
-                                            {{ __('admin/ordersPages.Total after wallet :') }}
+                                            {{ __('admin/ordersPages.Total after wallet:') }}
                                         </div>
 
                                         <div class="flex rtl:flex-row-reverse gap-1 text-successDark">
@@ -406,7 +405,7 @@
                                 <div class="font-bold p-4 flex flex-col gap-3 justify-center items-center">
 
                                     {{-- ############## Products Points :: Start ############## --}}
-                                    @if ($products_best_points)
+                                    @if ($items_best_points)
                                         <div class="w-100 flex justify-between items-center gap-6">
                                             <div class="h6 font-bold m-0">
                                                 {{ __('admin/ordersPages.Products Points :') }}
@@ -414,10 +413,10 @@
 
                                             <div class="flex rtl:flex-row-reverse gap-1 text-successDark">
                                                 <span class="font-bold text-sm">
-                                                    {{ trans_choice('admin/ordersPages.Point/Points', $products_best_points, ['points' => $products_best_points]) }}
+                                                    {{ trans_choice('admin/ordersPages.Point/Points', $items_best_points, ['points' => $items_best_points]) }}
                                                 </span>
                                                 <span class="font-bold text-xl" dir="ltr">
-                                                    {{ number_format($products_best_points, 0, '.', '\'') }}
+                                                    {{ number_format($items_best_points, 0, '.', '\'') }}
                                                 </span>
                                             </div>
                                         </div>

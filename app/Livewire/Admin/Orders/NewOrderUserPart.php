@@ -25,7 +25,6 @@ class NewOrderUserPart extends Component
 
     protected $listeners = [
         'clearSearch',
-        'getUserData'
     ];
 
     public function mount()
@@ -33,7 +32,7 @@ class NewOrderUserPart extends Component
         $this->customers = collect([]);
 
         $this->countries = Country::with([
-            'governorates' => fn ($q) => $q->with([
+            'governorates' => fn($q) => $q->with([
                 'cities'
             ])
         ])->get()->toArray();
@@ -95,6 +94,12 @@ class NewOrderUserPart extends Component
 
         $this->addAddress = false;
 
+        $this->dispatch('setUserData', [
+            'customer' => $this->selectedCustomer,
+            'default_address' => $this->defaultAddress,
+            'default_phone' => $this->defaultPhone
+        ]);
+
         $this->dispatch('customerUpdated', $this->customer_id)->to('admin.orders.new-order-payment-part');
 
         $this->clearSearch();
@@ -104,6 +109,12 @@ class NewOrderUserPart extends Component
     {
         $this->customer_id = null;
         $this->selectedCustomer = null;
+
+        $this->dispatch('setUserData', [
+            'customer' => $this->selectedCustomer,
+            'default_address' => $this->defaultAddress,
+            'default_phone' => $this->defaultPhone
+        ]);
 
         $this->dispatch('customerUpdated', null)->to('admin.orders.new-order-payment-part');
     }
@@ -123,6 +134,12 @@ class NewOrderUserPart extends Component
         }
 
         $this->defaultAddress = $address_id;
+
+        $this->dispatch('setUserData', [
+            'customer' => $this->selectedCustomer,
+            'default_address' => $this->defaultAddress,
+            'default_phone' => $this->defaultPhone
+        ]);
     }
 
     // Remove exist Address
@@ -246,6 +263,12 @@ class NewOrderUserPart extends Component
         }
 
         $this->defaultPhone = $phone_id;
+
+        $this->dispatch('setUserData', [
+            'customer' => $this->selectedCustomer,
+            'default_address' => $this->defaultAddress,
+            'default_phone' => $this->defaultPhone
+        ]);
     }
 
     // Remove exist Phone
@@ -313,15 +336,15 @@ class NewOrderUserPart extends Component
     }
     ############ Phone :: End ##############
 
-    public function getUserData()
-    {
-        $this->dispatch(
-            'setUserData',
-            data: [
-                'customer' => $this->selectedCustomer,
-                'defaultAddress' => $this->defaultAddress,
-                'defaultPhone' => $this->defaultPhone
-            ]
-        )->to('admin.orders.order-form');
-    }
+    // public function getUserData()
+    // {
+    //     $this->dispatch(
+    //         'setUserData',
+    //         data: [
+    //             'customer' => $this->selectedCustomer,
+    //             'default_address' => $this->defaultAddress,
+    //             'default_phone' => $this->defaultPhone
+    //         ]
+    //     )->to('admin.orders.order-form');
+    // }
 }

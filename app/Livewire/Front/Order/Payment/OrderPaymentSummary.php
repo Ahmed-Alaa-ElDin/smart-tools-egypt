@@ -233,8 +233,8 @@ class OrderPaymentSummary extends Component
                 // Get Destinations and Zones for the city
                 $zones = Zone::with(['destinations'])
                     ->where('is_active', 1)
-                    ->whereHas('destinations', fn ($q) => $q->where('city_id', $city_id))
-                    ->whereHas('delivery', fn ($q) => $q->where('is_active', 1))
+                    ->whereHas('destinations', fn($q) => $q->where('city_id', $city_id))
+                    ->whereHas('delivery', fn($q) => $q->where('is_active', 1))
                     ->get();
 
                 // Get the best Delivery Cost
@@ -275,11 +275,13 @@ class OrderPaymentSummary extends Component
     ############# Get Shipping Fees :: End #############
 
     ############## Get Coupon Data :: Start ##############
-    public function couponApplied($coupon_id, $products_best_coupon, $collections_best_coupon, $coupon_items_discount, $coupon_items_points, $coupon_free_shipping, $order_best_coupon)
+    public function couponApplied($coupon_id, $products_best_coupon, $collections_best_coupon, $coupon_items_discount, $coupon_items_points, $coupon_order_discount, $coupon_order_points, $coupon_free_shipping)
     {
         $this->coupon_id = $coupon_id;
         $this->coupon_items_discount = $coupon_items_discount;
         $this->coupon_items_points = $coupon_items_points;
+        $this->coupon_order_discount = $coupon_order_discount;
+        $this->coupon_order_points = $coupon_order_points;
         $this->coupon_free_shipping = $coupon_free_shipping;
 
         $this->items = array_map(function ($item) use ($products_best_coupon, $collections_best_coupon) {
@@ -302,22 +304,6 @@ class OrderPaymentSummary extends Component
             }
             return $item;
         }, $this->items);
-
-        if ($order_best_coupon['value'] > 0) {
-            if ($order_best_coupon['type'] == 0 && $order_best_coupon['value'] <= 100) {
-                $this->coupon_order_discount = $this->total_after_order_discount * $order_best_coupon['value'] / 100;
-                $this->coupon_order_points = 0;
-            } elseif ($order_best_coupon['type'] == 1) {
-                $this->coupon_order_discount = $order_best_coupon['value'] <= $this->total_after_order_discount ? $order_best_coupon['value'] : $this->total_after_order_discount;
-                $this->coupon_order_points = 0;
-            } elseif ($order_best_coupon['type'] == 2) {
-                $this->coupon_order_discount = 0;
-                $this->coupon_order_points = $order_best_coupon['value'];
-            }
-        } else {
-            $this->coupon_order_discount = 0;
-            $this->coupon_order_points = 0;
-        }
 
         $this->coupon_total_discount = $this->coupon_items_discount + $this->coupon_order_discount;
         $this->coupon_total_discount_percent = $this->total_after_order_discount ? round(($this->coupon_total_discount * 100) / $this->total_after_order_discount, 2) : 0;
@@ -492,7 +478,7 @@ class OrderPaymentSummary extends Component
 
             // Add Products and Collections to the order
             // get order's products
-            $products = array_filter($this->items, fn ($item) => $item['type'] == 'Product');
+            $products = array_filter($this->items, fn($item) => $item['type'] == 'Product');
 
             $final_products = [];
 
@@ -509,7 +495,7 @@ class OrderPaymentSummary extends Component
 
 
             // get order's collections
-            $collections = array_filter($this->items, fn ($item) => $item['type'] == 'Collection');
+            $collections = array_filter($this->items, fn($item) => $item['type'] == 'Collection');
 
             $final_collections = [];
 

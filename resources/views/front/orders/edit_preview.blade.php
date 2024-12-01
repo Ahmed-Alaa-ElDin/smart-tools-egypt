@@ -51,7 +51,7 @@
                     </div>
                 </div>
 
-                {{-- Products Disconts --}}
+                {{-- Products Discounts --}}
                 @if ($order_data['products_final_prices'] < $order_data['products_base_prices'])
                     <div class="flex justify-between items-center gap-1 px-4 py-1">
                         <span class="text-sm font-bold"> {{ __('front/homePage.Products Discounts:') }} </span>
