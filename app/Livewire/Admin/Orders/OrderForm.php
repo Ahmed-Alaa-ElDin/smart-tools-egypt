@@ -452,7 +452,9 @@ class OrderForm extends Component
                 'address_id'            =>      $default_address ? $default_address["id"] : null,
                 'phone1'                =>      $default_phone,
                 'phone2'                =>      implode(", ", $non_default_phones),
-                'status_id'             =>      OrderStatus::Approved->value,
+                'package_type'          =>      'parcel',
+                'package_desc'          =>      'عروض عدد وأدوات قابلة للكسر برجاء المحافظة على مكونات الشحنة لتفادى التلف أو فقدان مكونات الشحنة',
+                'status_id'             =>      OrderStatus::Created->value,
                 'num_of_items'          =>      $this->items_total_quantities,
                 'allow_opening'         =>      1,
                 'zone_id'               =>      $this->zone_id,
@@ -470,7 +472,6 @@ class OrderForm extends Component
             // Change the state of the order
             if ($order->statuses()->count() == 0) {
                 $order->statuses()->attach(OrderStatus::Created->value);
-                $order->statuses()->attach(OrderStatus::Approved->value);
             }
 
             // Create an Invoice for the order
@@ -564,7 +565,7 @@ class OrderForm extends Component
             $should_pay = $this->total - $this->wallet - $this->points_egp;
 
             if ($should_pay > 0) {
-                $transaction = $invoice->transactions()->updateOrCreate([
+                $invoice->transactions()->updateOrCreate([
                     'order_id' => $order->id,
                     'user_id' => $order->user_id,
                     'payment_status_id' => PaymentStatus::Pending->value,
@@ -681,6 +682,23 @@ class OrderForm extends Component
             ################### Payment :: Start ###################
             // Order is paid or will be paid on delivery
             if ($should_pay <= 0 || $this->payment_method == PaymentMethod::Cash->value) {
+                $bosta_order = createBostaOrder($order);
+
+                if ($bosta_order['status']) {
+                    $order->update([
+                        'status_id' => OrderStatus::Preparing->value,
+                        'tracking_number' => $bosta_order['data']['trackingNumber'],
+                        'order_delivery_id' => $bosta_order['data']['_id'],
+                    ]);
+
+                    // Add new statuses (Shipment created and Preparing)
+                    $order->statuses()->attach([
+                        OrderStatus::Approved->value,
+                        OrderStatus::ShippingCreates->value,
+                        OrderStatus::Preparing->value,
+                    ]);
+                }
+
                 DB::commit();
 
                 // redirect to done page
