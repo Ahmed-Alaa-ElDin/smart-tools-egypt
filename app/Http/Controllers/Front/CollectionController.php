@@ -50,18 +50,28 @@ class CollectionController extends Controller
     {
         // Get the collection
         $collection = Collection::with([
-            'images' => fn ($q) => $q->where('is_thumbnail', 0)->orderBy('featured', 'desc'),
-            'products' => fn ($q) => $q->select([
-                'products.id', 'name', 'slug', 'base_price', 'final_price', 'products.quantity', 'brand_id', 'under_reviewing'
+            'images' => fn($q) => $q->where('is_thumbnail', 0)->orderBy('featured', 'desc'),
+            'products' => fn($q) => $q->select([
+                'products.id',
+                'name',
+                'slug',
+                'base_price',
+                'final_price',
+                'products.quantity',
+                'brand_id',
+                'under_reviewing'
             ])->with([
-                'brand', 'thumbnail'
+                'brand',
+                'thumbnail'
             ]),
-            'reviews' => fn ($q) => $q->with('user'),
-            'relatedProducts' => fn ($q) => $q->select('products.id'),
-            'relatedCollections' => fn ($q) => $q->select('collections.id'),
-            'complementedProducts' => fn ($q) => $q->select('products.id'),
-            'complementedCollections' => fn ($q) => $q->select('collections.id'),
-        ])->findOrFail($id);
+            'reviews' => fn($q) => $q->with('user'),
+            'relatedProducts' => fn($q) => $q->select('products.id'),
+            'relatedCollections' => fn($q) => $q->select('collections.id'),
+            'complementedProducts' => fn($q) => $q->select('products.id'),
+            'complementedCollections' => fn($q) => $q->select('collections.id'),
+        ])
+            ->where('publish', 1)
+            ->findOrFail($id);
 
         // Get all products ids
         $relatedProductsIds = $collection->relatedProducts->pluck('id')->toArray();

@@ -50,6 +50,7 @@ class HeaderSearchBox extends Component
                         ->orWhere('model', 'like', '%' . $this->search . '%')
                         ->orWhereHas('brand', fn ($q) => $q->where('brands.name', 'like', '%' . $this->search . '%'))
                 )
+                ->where('publish', 1)
                 ->take(10)
                 ->get();
 
@@ -80,6 +81,7 @@ class HeaderSearchBox extends Component
                         ->orWhere('description', 'like', '%' . $this->search . '%')
                         ->orWhere('model', 'like', '%' . $this->search . '%')
                 )
+                ->where('publish', 1)
                 ->take(10)
                 ->get();
 
