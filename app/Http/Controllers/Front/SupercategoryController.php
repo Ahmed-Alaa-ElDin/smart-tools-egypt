@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Http\Controllers\Controller;
 use App\Models\Supercategory;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class SupercategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $supercategories = Supercategory::without('validOffers')
-            ->withCount(['products', 'categories', 'subcategories'])
+            ->withCount(['products' => function ($query) {
+                $query->select(DB::raw('count(distinct products.id)'));
+            }])
+            ->withCount(['categories', 'subcategories'])
             ->orderBy('products_count', 'desc')
             ->paginate(config('settings.front_pagination'));
 
@@ -27,7 +28,6 @@ class SupercategoryController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Supercategory  $supercategory
-     * @return \Illuminate\Http\Response
      */
     public function show($supercategory_id)
     {
@@ -35,7 +35,10 @@ class SupercategoryController extends Controller
             ->with(['categories' => function ($q) {
                 $q->with('images')->withOut('validOffers')
                     ->orderBy('products_count', 'desc')
-                    ->withCount(['subcategories', 'products']);
+                    ->withCount(['products' => function ($query) {
+                        $query->select(DB::raw('count(distinct products.id)'));
+                    }])
+                    ->withCount(['subcategories']);
             }])
             ->findOrFail($supercategory_id);
 
@@ -49,8 +52,10 @@ class SupercategoryController extends Controller
         $supercategory = Supercategory::withOut('validOffers')
             ->with(['subcategories' => function ($q) {
                 $q->withOut('validOffers')
-                    ->withCount(['products'])
-                    ->orderBy('products_count', 'desc');
+                ->withCount(['products' => function ($query) {
+                    $query->select(DB::raw('count(distinct products.id)'));
+                }])
+                ->orderBy('products_count', 'desc');
             }])
             ->findOrFail($supercategory_id);
 
@@ -62,15 +67,8 @@ class SupercategoryController extends Controller
     public function products($supercategory_id)
     {
         $supercategory = Supercategory::withOut('validOffers')
-            ->with([
-                'products' => fn ($q) => $q->select('products.id'),
-            ])
             ->findOrFail($supercategory_id);
 
-        $productsIds = $supercategory->products->pluck('id');
-
-        $products = getBestOfferForProducts($productsIds)->paginate(config('settings.front_pagination'));
-
-        return view('front.supercategories.products', compact('supercategory', 'products'));
+        return view('front.supercategories.products', compact('supercategory'));
     }
 }

@@ -482,7 +482,7 @@
 
                 {{-- Title :: Start --}}
                 <div class="text-center p-3 text-md font-bold grow">
-                    {{ __('front/homePage.Results') }}
+                    {{ $sectionTitle ?? __('front/homePage.Results') }}
                 </div>
                 {{-- Title :: End --}}
 
@@ -550,7 +550,7 @@
                         {{-- Pagination :: End --}}
                     @empty
                         <div class="col-span-4 text-center font-bold p-3">
-                            {{ __('front/homePage.No results were found for') . '"' . $search . '"' }}
+                            {{ __('front/homePage.No results were found for') . ($sectionTitle ?? ( '"' . $search . '"')) }}
                         </div>
                     @endforelse
                 </div>
@@ -560,9 +560,4 @@
         </div>
     </div>
     {{-- Search Results :: End --}}
-
-
-
-
-
 </div>

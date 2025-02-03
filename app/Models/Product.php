@@ -77,18 +77,31 @@ class Product extends Model
         return $this->belongsToMany(Subcategory::class);
     }
 
-    // Many to many through relationship  Categories --> Products
-    public function categories()
+    /**
+     * Get unique categories from the product's subcategories.
+     */
+    public function getCategoriesAttribute()
     {
-        return $this->belongsToThrough(Category::class, Subcategory::class);
+        // Load the category for each subcategory, then unique them.
+        return $this->subcategories->map(function ($subcategory) {
+            return $subcategory->category;
+        })->filter() // Remove nulls if any
+            ->unique('id')
+            ->values();
     }
 
-    // Many to many through relationship  Categories --> Products
-    public function supercategories()
+    /**
+     * Get unique supercategories from the product's subcategories.
+     */
+    public function getSupercategoriesAttribute()
     {
-        return $this->belongsToThrough(Supercategory::class, [Category::class, Subcategory::class]);
+        return $this->subcategories->map(function ($subcategory) {
+            // Make sure both category and supercategory exist.
+            return $subcategory->category ? $subcategory->category->supercategory : null;
+        })->filter() // Remove nulls
+            ->unique('id')
+            ->values();
     }
-
     // One to many relationship Product --> Image
     public function images()
     {
@@ -242,19 +255,19 @@ class Product extends Model
         $free_shipping = $this->free_shipping;
 
         // Get All Subcategories
-        $subcategories = $this->subcategories ? $this->subcategories->map(fn ($subcategory) => $subcategory->id) : [];
+        $subcategories = $this->subcategories ? $this->subcategories->map(fn($subcategory) => $subcategory->id) : [];
 
         // Get All Categories
-        $categories = count($subcategories) ? $this->subcategories->map(fn ($subcategory) => $subcategory->category) : [];
+        $categories = count($subcategories) ? $this->subcategories->map(fn($subcategory) => $subcategory->category) : [];
 
         // Get All Supercategories
-        $supercategories = count($categories) ? $categories->map(fn ($category) => $category->supercategory) : [];
+        $supercategories = count($categories) ? $categories->map(fn($category) => $category->supercategory) : [];
 
         // Get All Offers Ids
         $offers_ids = [];
 
         // Get Final Prices From Direct Offers
-        $direct_offers = $this->validOffers->map(fn ($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]);
+        $direct_offers = $this->validOffers->map(fn($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]);
         foreach ($direct_offers as $offer) {
 
             if ($offer['free_shipping']) {
@@ -284,7 +297,7 @@ class Product extends Model
         }
 
         // Get Final Prices From Offers Through Subcategories
-        $subcategories_offers = $this->subcategories ? $this->subcategories->map(fn ($subcategory) => $subcategory->validOffers->map(fn ($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
+        $subcategories_offers = $this->subcategories ? $this->subcategories->map(fn($subcategory) => $subcategory->validOffers->map(fn($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
         foreach ($subcategories_offers as $subcategory) {
             foreach ($subcategory as $offer) {
                 if ($offer['free_shipping']) {
@@ -310,7 +323,7 @@ class Product extends Model
         }
 
         // Get Final Prices From Offers Through Categories
-        $categories_offers = $categories ? $categories->map(fn ($category) => $category->validOffers->map(fn ($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
+        $categories_offers = $categories ? $categories->map(fn($category) => $category->validOffers->map(fn($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
 
         foreach ($categories_offers as $category) {
             foreach ($category as $offer) {
@@ -338,7 +351,7 @@ class Product extends Model
         }
 
         // Get Final Prices From Offers Through Supercategories
-        $supercategories_offers = $supercategories ? $supercategories->map(fn ($supercategory) => $supercategory->validOffers->map(fn ($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type])) : [];
+        $supercategories_offers = $supercategories ? $supercategories->map(fn($supercategory) => $supercategory->validOffers->map(fn($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type])) : [];
         foreach ($supercategories_offers as $supercategory) {
             foreach ($supercategory as $offer) {
                 if ($offer['free_shipping']) {
@@ -364,7 +377,7 @@ class Product extends Model
         }
 
         // Get Final Prices From Offers Through Brands
-        $brand_offers = $this->brand ? $this->brand->validOffers->map(fn ($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]) : [];
+        $brand_offers = $this->brand ? $this->brand->validOffers->map(fn($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]) : [];
         foreach ($brand_offers as $offer) {
             if ($offer['free_shipping']) {
                 $free_shipping = 1;
@@ -404,7 +417,7 @@ class Product extends Model
     public function type(): Attribute
     {
         return new Attribute(
-            get: fn () => "Product"
+            get: fn() => "Product"
         );
     }
     ############# Appends :: End #############
@@ -412,6 +425,8 @@ class Product extends Model
     ############# Scopes :: Start #############
     public function scopePublishedProduct($query)
     {
+        $now = Carbon::now('Africa/Cairo')->toDateTimeString();
+
         $query->select(
             [
                 'products.id',
@@ -438,29 +453,27 @@ class Product extends Model
                 [
                     'specs',
                     'thumbnail',
-                    'offers' => fn ($q) => $q
-                        ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                        ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
-                    'brand' => fn ($q) => $q->with([
-                        'offers' => fn ($q) => $q
-                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
+                    'offers' => fn($q) => $q->active($now),
+                    'brand' => fn($q) => $q->with([
+                        'offers' => fn($q) => $q->active($now),
                     ]),
-                    'subcategories' => fn ($q) => $q->with([
-                        'offers' => fn ($q) => $q
-                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
-                    ]),
-                    'categories' => fn ($q) => $q->with([
-                        'offers' => fn ($q) => $q
-                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                    ]),
-                    'supercategories' => fn ($q) => $q->with([
-                        'offers' => fn ($q) => $q
-                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                    ])
+                    'subcategories' => fn($q) => $q
+                        ->select('subcategories.id', 'subcategories.name', 'subcategories.category_id')
+                        ->with([
+                            'offers' => fn($q) => $q->active($now),
+                        ]),
+                    'subcategories.category' => fn($q) => $q
+                        ->select('categories.id', 'categories.name', 'categories.supercategory_id')
+                        ->with([
+                            'offers' => fn($q) => $q->active($now),
+                        ]),
+                    'subcategories.category.supercategory' => fn($q) => $q
+                        ->select('supercategories.id', 'supercategories.name')
+                        ->with([
+                            'offers' => fn($q) => $q->active($now),
+                        ]),
+                    'reviews' => fn($q) => $q->where('status', 1),
+                    'coupons'
                 ]
             )
             ->where('under_reviewing', 0)
@@ -469,6 +482,8 @@ class Product extends Model
 
     public function scopePublishedProducts($query, $productsIds)
     {
+        $now = Carbon::now('Africa/Cairo')->toDateTimeString();
+
         $query->select(
             [
                 'products.id',
@@ -495,31 +510,26 @@ class Product extends Model
                 [
                     'specs',
                     'thumbnail',
-                    'offers' => fn ($q) => $q
-                        ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                        ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
-                    'brand' => fn ($q) => $q->with([
-                        'offers' => fn ($q) => $q
-                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-
+                    'offers' => fn($q) => $q->active($now),
+                    'brand' => fn($q) => $q->with([
+                        'offers' => fn($q) => $q->active($now),
                     ]),
-                    'subcategories' => fn ($q) => $q->with([
-                        'offers' => fn ($q) => $q
-                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
-                    ]),
-                    'categories' => fn ($q) => $q->with([
-                        'offers' => fn ($q) => $q
-                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
-                    ]),
-                    'supercategories' => fn ($q) => $q->with([
-                        'offers' => fn ($q) => $q
-                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                    ]),
-                    'reviews' => fn ($q) => $q->where('status', 1),
+                    'subcategories' => fn($q) => $q
+                        ->select('subcategories.id', 'subcategories.name', 'subcategories.category_id')
+                        ->with([
+                            'offers' => fn($q) => $q->active($now),
+                        ]),
+                    'subcategories.category' => fn($q) => $q
+                        ->select('categories.id', 'categories.name',    'categories.supercategory_id')
+                        ->with([
+                            'offers' => fn($q) => $q->active($now),
+                        ]),
+                    'subcategories.category.supercategory' => fn($q) => $q
+                        ->select('supercategories.id', 'supercategories.name')
+                        ->with([
+                            'offers' => fn($q) => $q->active($now),
+                        ]),
+                    'reviews' => fn($q) => $q->where('status', 1),
                     'coupons'
                 ]
             )
@@ -530,6 +540,8 @@ class Product extends Model
 
     public function scopeProductsDetails($query, $productsIds)
     {
+        $now = Carbon::now('Africa/Cairo')->toDateTimeString();
+
         $query->select(
             [
                 'products.id',
@@ -556,31 +568,26 @@ class Product extends Model
                 [
                     'specs',
                     'thumbnail',
-                    'offers' => fn ($q) => $q
-                        ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                        ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
-                    'brand' => fn ($q) => $q->with([
-                        'offers' => fn ($q) => $q
-                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-
+                    'offers' => fn($q) => $q->active($now),
+                    'brand' => fn($q) => $q->with([
+                        'offers' => fn($q) => $q->active($now),
                     ]),
-                    'subcategories' => fn ($q) => $q->with([
-                        'offers' => fn ($q) => $q
-                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
-                    ]),
-                    'categories' => fn ($q) => $q->with([
-                        'offers' => fn ($q) => $q
-                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
-                    ]),
-                    'supercategories' => fn ($q) => $q->with([
-                        'offers' => fn ($q) => $q
-                            ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                            ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
-                    ]),
-                    'reviews' => fn ($q) => $q->where('status', 1),
+                    'subcategories' => fn($q) => $q
+                        ->select('subcategories.id', 'subcategories.name', 'subcategories.category_id')
+                        ->with([
+                            'offers' => fn($q) => $q->active($now),
+                        ]),
+                    'subcategories.category' => fn($q) => $q
+                        ->select('categories.id', 'categories.name', 'categories.supercategory_id')
+                        ->with([
+                            'offers' => fn($q) => $q->active($now),
+                        ]),
+                    'subcategories.category.supercategory' => fn($q) => $q
+                        ->select('supercategories.id', 'supercategories.name')
+                        ->with([
+                            'offers' => fn($q) => $q->active($now),
+                        ]),
+                    'reviews' => fn($q) => $q->where('status', 1),
                     'coupons'
                 ]
             )

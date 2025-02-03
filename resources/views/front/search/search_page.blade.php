@@ -23,7 +23,7 @@
 
             $('#filters-dropshadow').on('click', toggleFilters)
 
-            $('#filters-colse').on('click', toggleFilters)
+            $('#filters-close').on('click', toggleFilters)
             // ####### Filters Slider :: End #######
 
             // ####### Show More :: Start #######

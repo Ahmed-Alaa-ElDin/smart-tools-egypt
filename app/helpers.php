@@ -236,7 +236,7 @@ function getBestOfferForProduct($product_id)
 // Get the best offer for a list of products (best price, best points, free shipping)
 function getBestOfferForProducts($products_id, bool $publishedOnly = true)
 {
-    $products = $publishedOnly ? Product::publishedproducts($products_id)->get() : Product::productsDetails($products_id)->get();
+    $products = $publishedOnly ? Product::publishedProducts($products_id)->get() : Product::productsDetails($products_id)->get();
 
     foreach ($products as $key => $product) {
         ############ Get Best Offer for all products :: Start ############

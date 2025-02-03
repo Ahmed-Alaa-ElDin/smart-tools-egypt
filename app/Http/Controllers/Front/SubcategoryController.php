@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Models\Subcategory;
-use Illuminate\Http\Request;
 
 class SubcategoryController extends Controller
 {
@@ -29,15 +28,9 @@ class SubcategoryController extends Controller
      */
     public function show($subcategory_id)
     {
-        $subcategory = Subcategory::with([
-            'products' => fn ($q) => $q->select('products.id'),
-        ])
-            ->without('validOffers')
+        $subcategory = Subcategory::without('validOffers')
             ->findOrFail($subcategory_id);
 
-        $productsIds = $subcategory->products->pluck('id')->toArray();
-
-
-        return view('front.subcategories.show', compact(['subcategory', 'productsIds']));
+        return view('front.subcategories.show', compact(['subcategory']));
     }
 }

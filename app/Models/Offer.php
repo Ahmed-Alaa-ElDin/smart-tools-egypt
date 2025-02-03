@@ -147,4 +147,10 @@ class Offer extends Model
     {
         return $query->where('on_orders', 1)->where('start_at', '<=', now())->where('expire_at', '>=', now());
     }
+
+    public function scopeActive($query, $date)
+    {
+        return $query->where('start_at', '<', $date)
+            ->where('expire_at', '>', $date);
+    }
 }

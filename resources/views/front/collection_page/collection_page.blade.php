@@ -179,7 +179,6 @@
 
                     {{-- Banner :: Start --}}
                     {{-- todo : Banner --}}
-                    Banner
                     {{-- Banner :: End --}}
 
                     <hr class="my-4">

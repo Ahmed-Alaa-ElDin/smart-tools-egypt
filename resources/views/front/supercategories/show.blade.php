@@ -60,7 +60,7 @@
                     @forelse ($categories as $category)
                         <div
                             class="col-span-6 sm:col-span-4 md:col-span-3 p-2 group shadow border border-light rounded-lg hover:shadow-md hover:scale-105 transition overflow-hidden relative">
-                            <a href="{{ route('front.categories.show', $category->id) }}">
+                            <a href="{{ route('front.category.products', $category->id) }}">
                                 @if ($category->images->count())
                                     {{-- Image : Start --}}
                                     <div class="flex justify-center items-center col-span-3 w-100 max-w-100 text-9xl">
@@ -81,7 +81,7 @@
 
                             <div class="flex flex-col gap-2 my-2 items-center justify-center">
                                 {{-- Supercategory Name :: Start --}}
-                                <a href="{{ route('front.categories.show', $category->id) }}"
+                                <a href="{{ route('front.category.products', $category->id) }}"
                                     class="text-center font-bold select-none text-xl max-w-max">
                                     {{ $category->name }}
                                 </a>

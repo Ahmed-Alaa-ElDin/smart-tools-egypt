@@ -80,12 +80,12 @@
                             </a>
 
                             <div class="flex flex-col gap-2 my-2 items-center justify-center">
-                                {{-- Subercategory Name :: Start --}}
+                                {{-- Subcategory Name :: Start --}}
                                 <a href="{{ route('front.subcategories.show', $subcategory->id) }}"
                                     class="text-center font-bold select-none text-xl max-w-max">
                                     {{ $subcategory->name }}
                                 </a>
-                                {{-- Subercategory Name :: End --}}
+                                {{-- Subcategory Name :: End --}}
 
                                 {{-- Products No :: Start --}}
                                 <a href="{{ route('front.subcategories.show', $subcategory->id) }}"
