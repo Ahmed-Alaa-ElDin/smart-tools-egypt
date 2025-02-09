@@ -20,7 +20,7 @@ function singleImageUpload($photo, $image_f_name, $folder_name)
     $sizes = [
         'original',
         '100',
-        '200',
+        '250',
         '400'
     ];
 
@@ -58,7 +58,7 @@ function resizeExistingImages($folder_name)
 
     $sizes = [
         '100',
-        '200',
+        '250',
         '400'
     ];
 
@@ -107,7 +107,7 @@ function imageDelete($image_f_name, $folder_name)
 {
     Storage::disk($folder_name)->delete('original/' . $image_f_name);
     Storage::disk($folder_name)->delete('cropped100/' . $image_f_name);
-    Storage::disk($folder_name)->delete('cropped200/' . $image_f_name);
+    Storage::disk($folder_name)->delete('cropped250/' . $image_f_name);
     Storage::disk($folder_name)->delete('cropped400/' . $image_f_name);
 }
 
