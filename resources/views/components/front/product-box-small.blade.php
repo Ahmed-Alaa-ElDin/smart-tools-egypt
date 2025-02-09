@@ -46,7 +46,7 @@
                 </span>
                 {{-- Base Discount : End --}}
 
-                {{ $item['thumbnail']['file_name'] }}
+                {{ $item['thumbnail']['file_name'] }} A
 
                 {{-- Product Image : Start --}}
                 <div class="block max-h-52 overflow-hidden">
