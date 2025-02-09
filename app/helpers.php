@@ -73,6 +73,11 @@ function resizeExistingImages($folder_name)
             foreach ($sizes as $size) {
                 $croppedDirectory = "storage/images/$folder_name/cropped$size";
 
+                // Check if the cropped file exists
+                if (File::exists("$croppedDirectory/$imageName")) {
+                    continue;
+                }
+
                 File::ensureDirectoryExists($croppedDirectory, 0777, true, true);
 
                 try {
