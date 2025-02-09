@@ -31,9 +31,9 @@ function singleImageUpload($photo, $image_f_name, $folder_name)
 
         $directory = "storage/images/$folder_name";
 
-        foreach( $sizes as $size ) {
+        foreach ($sizes as $size) {
             if ($size == 'original') {
-                File::ensureDirectoryExists("$directory/original",0777,true,true);
+                File::ensureDirectoryExists("$directory/original", 0777, true, true);
                 $manager->make($photo)->encode('webp')->save('storage/images/' . $folder_name . '/original/' . $image_name);
             } else {
                 File::ensureDirectoryExists("$directory/cropped$size", 0777, true, true);
@@ -50,11 +50,55 @@ function singleImageUpload($photo, $image_f_name, $folder_name)
     return $image_name;
 }
 
+// Resize current images
+function resizeExistingImages($folder_name)
+{
+    $sizes = [
+        '100',
+        '400'
+    ];
+
+    $originalDirectory = "storage/images/$folder_name/original";
+    $manager = new ImageManager();
+
+    if (File::exists($originalDirectory)) {
+        $images = File::files($originalDirectory);
+
+        foreach ($images as $image) {
+            $imagePath = $image->getPathname();
+            $imageName = $image->getFilename();
+
+            foreach ($sizes as $size) {
+                $croppedDirectory = "storage/images/$folder_name/cropped$size";
+
+                File::ensureDirectoryExists($croppedDirectory, 0777, true, true);
+
+                try {
+                    $manager->make($imagePath)
+                        ->encode('webp')
+                        ->resize($size, null, function ($constraint) {
+                            $constraint->aspectRatio();
+                        })
+                        ->crop($size, $size)
+                        ->save("$croppedDirectory/$imageName");
+                } catch (\Throwable $th) {
+                    // Log the error or handle it as needed
+                    // For now, we'll just skip the problematic image
+                    continue;
+                }
+            }
+        }
+    } else {
+        echo "The directory '$originalDirectory' does not exist.";
+    }
+}
+
 // Delete image from storage
 function imageDelete($image_f_name, $folder_name)
 {
     Storage::disk($folder_name)->delete('original/' . $image_f_name);
     Storage::disk($folder_name)->delete('cropped100/' . $image_f_name);
+    Storage::disk($folder_name)->delete('cropped400/' . $image_f_name);
 }
 
 // Get the best offer for a product (best price, best points, free shipping)
@@ -184,37 +228,22 @@ function imageDelete($image_f_name, $folder_name)
 // Get the best offer for a product (best price, best points, free shipping)
 function getBestOfferForProduct($product_id)
 {
-    $product = Product::publishedproduct()->findOrFail($product_id);
+    $product = Product::publishedProduct()->findOrFail($product_id);
 
     // Collect all offers for the product and its related entities
-    $offers = collect();
-
-    // Add product's offers
-    $offers = $offers->merge($product->offers);
-
-    // Add offers from subcategories
-    $product->subcategories?->each(function ($subcategory) use (&$offers) {
-        $offers = $offers->merge($subcategory->offers);
-    });
-
-    // Add offers from categories
-    $product->categories?->each(function ($category) use (&$offers) {
-        $offers = $offers->merge($category->offers);
-    });
-
-    // Add offers from supercategories
-    $product->supercategories?->each(function ($supercategory) use (&$offers) {
-        $offers = $offers->merge($supercategory->offers);
-    });
-
-    // Add offers from the brand
-    $offers = $offers->merge($product->brand?->offers);
+    $offers = collect($product->offers)
+        ->merge(optional($product->subcategories)->flatMap->offers ?? [])
+        ->merge(optional($product->categories)->flatMap->offers ?? [])
+        ->merge(optional($product->supercategories)->flatMap->offers ?? [])
+        ->merge(optional($product->brand)->offers ?? []);
 
     // Calculate the best discount
-    $bestDiscount = $offers->map(function ($offer) use ($product) {
-        $value = $offer->pivot->type === 0 ? ($offer->pivot->value / 100) * $product->final_price : $offer->pivot->value;
-        return $product->final_price > $value ? round($value, 2) : $product->final_price;
-    })->max();
+    $bestDiscount = $offers->map(
+        fn($offer) =>
+        $offer->pivot->type === 0
+            ? min(round(($offer->pivot->value / 100) * $product->final_price, 2), $product->final_price)
+            : min($offer->pivot->value, $product->final_price)
+    )->max() ?? 0;
 
     // Calculate the best points
     $bestPoints = $offers->where('pivot.type', 2)->max('pivot.value');
@@ -241,34 +270,19 @@ function getBestOfferForProducts($products_id, bool $publishedOnly = true)
     foreach ($products as $key => $product) {
         ############ Get Best Offer for all products :: Start ############
         // Collect all offers for the product and its related entities
-        $offers = collect();
-
-        // Add product's offers
-        $offers = $offers->merge($product->offers);
-
-        // Add offers from subcategories
-        $product->subcategories?->each(function ($subcategory) use (&$offers) {
-            $offers = $offers->merge($subcategory->offers);
-        });
-
-        // Add offers from categories
-        $product->categories?->each(function ($category) use (&$offers) {
-            $offers = $offers->merge($category->offers);
-        });
-
-        // Add offers from supercategories
-        $product->supercategories?->each(function ($supercategory) use (&$offers) {
-            $offers = $offers->merge($supercategory->offers);
-        });
-
-        // Add offers from the brand
-        $offers = $offers->merge($product->brand?->offers);
+        $offers = collect($product->offers)
+            ->merge(optional($product->subcategories)->flatMap->offers ?? [])
+            ->merge(optional($product->categories)->flatMap->offers ?? [])
+            ->merge(optional($product->supercategories)->flatMap->offers ?? [])
+            ->merge(optional($product->brand)->offers ?? []);
 
         // Calculate the best discount
-        $bestDiscount = $offers->map(function ($offer) use ($product) {
-            $value = $offer->pivot->type === 0 ? ($offer->pivot->value / 100) * $product->final_price : $offer->pivot->value;
-            return $product->final_price > $value ? round($value, 2) : $product->final_price;
-        })->max();
+        $bestDiscount = $offers->map(
+            fn($offer) =>
+            $offer->pivot->type === 0
+                ? min(round(($offer->pivot->value / 100) * $product->final_price, 2), $product->final_price)
+                : min($offer->pivot->value, $product->final_price)
+        )->max() ?? 0;
 
         // Calculate the best points
         $bestPoints = $offers->where('pivot.type', 2)->max('pivot.value');
@@ -286,7 +300,7 @@ function getBestOfferForProducts($products_id, bool $publishedOnly = true)
 
         $reviews = $product->reviews;
 
-        $product->avg_rating = $reviews->avg('rating');
+        $product->avg_rating = $reviews->avg('rating') ?? 0;
 
         $product->reviews_count = $reviews->count();
 
@@ -303,10 +317,12 @@ function getBestOfferForCollection($collection_id)
 
     $offers = $collection->offers;
 
-    $bestDiscount = $offers->map(function ($offer) use ($collection) {
-        $value = $offer->pivot->type === 0 ? ($offer->pivot->value / 100) * $collection->final_price : $offer->pivot->value;
-        return $collection->final_price > $value ? round($value, 2) : $collection->final_price;
-    })->max();
+    $bestDiscount = $offers->map(
+        fn($offer) =>
+        $offer->pivot->type === 0
+            ? min(round(($offer->pivot->value / 100) * $collection->final_price, 2), $collection->final_price)
+            : min($offer->pivot->value, $collection->final_price)
+    )->max() ?? 0;
 
     $bestPoints = $offers->where('pivot.type', 2)->max('pivot.value');
 
@@ -331,10 +347,12 @@ function getBestOfferForCollections($collections_id)
     foreach ($collections as $key => $collection) {
         $offers = $collection->offers;
 
-        $bestDiscount = $offers->map(function ($offer) use ($collection) {
-            $value = $offer->pivot->type === 0 ? ($offer->pivot->value / 100) * $collection->final_price : $offer->pivot->value;
-            return $collection->final_price > $value ? round($value, 2) : $collection->final_price;
-        })->max();
+        $bestDiscount = $offers->map(
+            fn($offer) =>
+            $offer->pivot->type === 0
+                ? min(round(($offer->pivot->value / 100) * $collection->final_price, 2), $collection->final_price)
+                : min($offer->pivot->value, $collection->final_price)
+        )->max() ?? 0;
 
         $bestPoints = $offers->where('pivot.type', 2)->max('pivot.value');
 
@@ -365,7 +383,7 @@ function getBestOfferForCollections($collections_id)
 function get_item_rating($product_id, $type = 'Product')
 {
     $all_product_reviews = Review::with([
-        'user' => fn ($q) => $q->select('id', 'f_name', 'l_name', 'profile_photo_path')
+        'user' => fn($q) => $q->select('id', 'f_name', 'l_name', 'profile_photo_path')
     ])
         ->where('reviewable_id', $product_id)
         ->where('reviewable_type', 'App\\Models\\' . $type)
@@ -897,9 +915,9 @@ function getCouponData($items, $coupon)
 {
     $items = $items;
 
-    $products = $items->filter(fn ($item) => $item['type'] == 'Product');
+    $products = $items->filter(fn($item) => $item['type'] == 'Product');
 
-    $collections = $items->filter(fn ($item) => $item['type'] == 'Collection');
+    $collections = $items->filter(fn($item) => $item['type'] == 'Collection');
 
     $products_after_coupon = [];
 
@@ -909,7 +927,7 @@ function getCouponData($items, $coupon)
     if ($coupon->brands->count()) {
         $brands_product_from_coupon = $coupon->brands->map(function ($brand) use ($products) {
             return [
-                'products' => $products->filter(fn ($product) => in_array($product['id'], $brand->products->pluck('id')->toArray())),
+                'products' => $products->filter(fn($product) => in_array($product['id'], $brand->products->pluck('id')->toArray())),
                 'type' => $brand->pivot->type,
                 'value' => $brand->pivot->value,
             ];
@@ -939,7 +957,7 @@ function getCouponData($items, $coupon)
     if ($coupon->subcategories->count()) {
         $subcategories_product_from_coupon = $coupon->subcategories->map(function ($subcategory) use ($products) {
             return [
-                'products' => $products->filter(fn ($product) => in_array($product['id'], $subcategory->products->pluck('id')->toArray())),
+                'products' => $products->filter(fn($product) => in_array($product['id'], $subcategory->products->pluck('id')->toArray())),
                 'type' => $subcategory->pivot->type,
                 'value' => $subcategory->pivot->value,
             ];
@@ -968,7 +986,7 @@ function getCouponData($items, $coupon)
     if ($coupon->categories->count()) {
         $categories_product_from_coupon = $coupon->categories->map(function ($category) use ($products) {
             return [
-                'products' => $products->filter(fn ($product) => in_array($product['id'], $category->products->pluck('id')->toArray())),
+                'products' => $products->filter(fn($product) => in_array($product['id'], $category->products->pluck('id')->toArray())),
                 'type' => $category->pivot->type,
                 'value' => $category->pivot->value,
             ];
@@ -997,7 +1015,7 @@ function getCouponData($items, $coupon)
     if ($coupon->supercategories->count()) {
         $supercategories_product_from_coupon = $coupon->supercategories->map(function ($supercategory) use ($products) {
             return [
-                'products' => $products->filter(fn ($product) => in_array($product['id'], $supercategory->products->pluck('id')->toArray())),
+                'products' => $products->filter(fn($product) => in_array($product['id'], $supercategory->products->pluck('id')->toArray())),
                 'type' => $supercategory->pivot->type,
                 'value' => $supercategory->pivot->value,
             ];
@@ -1029,7 +1047,7 @@ function getCouponData($items, $coupon)
         $products_product_from_coupon = $coupon->products->map(function ($product) use ($products_ids, $products) {
             if (in_array($product->id, $products_ids)) {
                 return [
-                    'product' => $products->filter(fn ($o_product) => $product['id'] == $o_product['id'])->first(),
+                    'product' => $products->filter(fn($o_product) => $product['id'] == $o_product['id'])->first(),
                     'type' => $product->pivot->type,
                     'value' => $product->pivot->value,
                 ];
@@ -1079,7 +1097,7 @@ function getCouponData($items, $coupon)
         $collections_collection_from_coupon = $coupon->collections->map(function ($collection) use ($collections_ids, $collections) {
             if (in_array($collection->id, $collections_ids)) {
                 return [
-                    'collection' => $collections->filter(fn ($o_collection) => $collection['id'] == $o_collection['id'])->first(),
+                    'collection' => $collections->filter(fn($o_collection) => $collection['id'] == $o_collection['id'])->first(),
                     'type' => $collection->pivot->type,
                     'value' => $collection->pivot->value,
                 ];

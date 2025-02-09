@@ -28,8 +28,6 @@ class Subcategory extends Model
         'image_name'
     ];
 
-    protected $with = ['validOffers'];
-
     protected function asJson($value)
     {
         return json_encode($value, JSON_UNESCAPED_UNICODE);

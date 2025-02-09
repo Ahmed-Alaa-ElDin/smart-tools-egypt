@@ -21,8 +21,6 @@ class Brand extends Model
         'meta_description',
     ];
 
-    protected $with = ['validOffers'];
-
     // One to many relationship  Brand --> Products
     public function products()
     {

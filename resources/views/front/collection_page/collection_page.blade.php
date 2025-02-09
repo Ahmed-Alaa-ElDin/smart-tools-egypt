@@ -46,7 +46,7 @@
                             <ul class="splide__list">
                                 @foreach ($collection->images as $image)
                                     <li class="splide__slide">
-                                        <img src="{{ asset('storage/images/collections/original/' . $image->file_name) }}"
+                                        <img src="{{ asset('storage/images/collections/cropped100/' . $image->file_name) }}"
                                             alt="{{ $collection->name }}">
                                     </li>
                                 @endforeach
