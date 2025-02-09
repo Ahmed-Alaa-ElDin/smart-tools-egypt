@@ -1,6 +1,6 @@
 {{-- Product : Start --}}
-<li class="">
-    <div class="w-full inline-block">
+<li class="splide__slide">
+    <div class="carousel-box w-full inline-block">
         <div
             class="group shadow border border-light rounded-lg hover:shadow-md hover:scale-105 mt-1 mb-2 transition overflow-hidden relative">
 
@@ -45,6 +45,8 @@
                     </span>
                 </span>
                 {{-- Base Discount : End --}}
+
+                {{ $item['thumbnail']['file_name'] }}
 
                 {{-- Product Image : Start --}}
                 <div class="block max-h-52 overflow-hidden">
