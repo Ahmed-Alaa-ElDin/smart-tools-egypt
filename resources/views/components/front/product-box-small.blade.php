@@ -46,6 +46,8 @@
                 </span>
                 {{-- Base Discount : End --}}
 
+                @dump($item['thumbnail'])
+                
                 {{-- Product Image : Start --}}
                 <div class="block max-h-52 overflow-hidden">
                     @if ($item['thumbnail'])
