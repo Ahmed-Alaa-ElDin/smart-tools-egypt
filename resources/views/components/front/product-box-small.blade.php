@@ -47,9 +47,9 @@
                 {{-- Base Discount : End --}}
 
                 {{-- Product Image : Start --}}
-                <div class="block max-h-52 overflow-hidden">
+                <div class="block max-h-52 overflow-hidden" data-img-name = "{{ $item['thumbnail']['file_name'] }}">
                     @if ($item['thumbnail'])
-                        <img class="mx-auto max-h-52 h-full md:h-52 construction-placeholder" data-img-name = "{{ $item['thumbnail']['file_name'] }}" data-placeholder-size="text-[200px]"
+                        <img class="mx-auto max-h-52 h-full md:h-52 construction-placeholder" data-placeholder-size="text-[200px]"
                             @if ($item['type'] == 'Product') src="{{ asset('storage/images/products/cropped250/' . $item['thumbnail']['file_name']) }}"
                             @elseif ($item['type'] == 'Collection') src="{{ asset('storage/images/collections/cropped250/' . $item['thumbnail']['file_name']) }}" @endif>
                     @else
