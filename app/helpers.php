@@ -53,6 +53,8 @@ function singleImageUpload($photo, $image_f_name, $folder_name)
 // Resize current images
 function resizeExistingImages($folder_name)
 {
+    ini_set('max_execution_time', 30000);
+
     $sizes = [
         '100',
         '400'
