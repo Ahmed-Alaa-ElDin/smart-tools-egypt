@@ -12,9 +12,6 @@ class HomepageController extends Controller
 {
     public function index()
     {
-        resizeExistingImages("products");
-        resizeExistingImages("collections");
-
         // todo :: Make the code more efficient
         $all_products = [];
         $all_collections = [];
