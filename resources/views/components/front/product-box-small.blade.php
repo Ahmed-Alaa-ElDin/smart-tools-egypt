@@ -1,6 +1,6 @@
 {{-- Product : Start --}}
-<li class="splide__slide">
-    <div class="carousel-box w-full inline-block">
+<li class="">
+    <div class="w-full inline-block">
         <div
             class="group shadow border border-light rounded-lg hover:shadow-md hover:scale-105 mt-1 mb-2 transition overflow-hidden relative">
 
