@@ -170,9 +170,9 @@
                                             <div class="w-full h-full flex justify-center items-center bg-gray-100">
                                                 <img class="img-fit mx-auto lazyloaded construction-placeholder"
                                                     data-placeholder-size="text-8xl"
-                                                    @if ($item['type'] == 'Product') src="{{ asset('storage/images/products/cropped100/' . $item['thumbnail']['file_name']) }}"
+                                                    @if ($item['type'] == 'Product') src="{{ asset('storage/images/products/cropped250/' . $item['thumbnail']['file_name']) }}"
                                                 @elseif ($item['type'] == 'Collection')
-                                                src="{{ asset('storage/images/collections/cropped100/' . $item['thumbnail']['file_name']) }}" @endif
+                                                src="{{ asset('storage/images/collections/cropped250/' . $item['thumbnail']['file_name']) }}" @endif
                                                     alt="{{ $item['name'][session('locale')] . 'image' }}">
                                             </div>
                                         @else
