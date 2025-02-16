@@ -148,7 +148,7 @@
                                         {{-- Add to cart : End --}}
                                     </div>
                                     {{-- Add Product : End --}}
-                                    <a class="relative block overflow-hidden h-40 flex items-center justify-center hover:text-current"
+                                    <a class="relative block overflow-hidden flex items-center justify-center hover:text-current"
                                         href="{{ route('front.products.show', ['id' => $item['id'], 'slug' => $item['slug'][session('locale')]]) }}">
 
                                         {{-- Base Discount : Start --}}
