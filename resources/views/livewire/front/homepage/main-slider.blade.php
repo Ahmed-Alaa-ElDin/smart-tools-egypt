@@ -167,7 +167,7 @@
 
                                         {{-- Product Image : Start --}}
                                         @if ($item['thumbnail'])
-                                            <div class="w-full h-full flex justify-center items-center bg-gray-100">
+                                            <div class="w-full h-full flex justify-center items-center bg-white">
                                                 <img class="img-fit mx-auto lazyloaded construction-placeholder object-cover object-center"
                                                     data-placeholder-size="text-8xl"
                                                     @if ($item['type'] == 'Product') src="{{ asset('storage/images/products/cropped250/' . $item['thumbnail']['file_name']) }}"
