@@ -41,8 +41,8 @@
                             <ul class="splide__list">
                                 @foreach ($product->images as $image)
                                     <li class="splide__slide zoom">
-                                        <img src="{{ asset('storage/images/products/original/' . $image->file_name) }}"
-                                            alt="{{ $product->name }}" class="m-auto">
+                                        <img data-src="{{ asset('storage/images/products/original/' . $image->file_name) }}"
+                                            alt="{{ $product->name }}" class="m-auto construction-placeholder">
                                     </li>
                                 @endforeach
                             </ul>
@@ -53,7 +53,8 @@
                             <ul class="splide__list">
                                 @foreach ($product->images as $image)
                                     <li class="splide__slide">
-                                        <img src="{{ asset('storage/images/products/cropped100/' . $image->file_name) }}"
+                                        <img data-src="{{ asset('storage/images/products/cropped100/' . $image->file_name) }}"
+                                            class="construction-placeholder"
                                             alt="{{ $product->name }}">
                                     </li>
                                 @endforeach

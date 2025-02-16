@@ -133,7 +133,7 @@
                                 <img class="w-full h-full flex justify-center items-center bg-gray-200 rounded overflow-hidden construction-placeholder"
                                     onerror="this.onerror=null; handleNotFoundImages(this);"
                                     data-placeholder-size="text-[100px]"
-                                    src="{{ $product['type'] == 'Product' ? asset('storage/images/products/cropped100/' . $product['thumbnail']['file_name']) : asset('storage/images/collections/cropped100/' . $product['thumbnail']['file_name']) }}"
+                                    data-src="{{ $product['type'] == 'Product' ? asset('storage/images/products/cropped100/' . $product['thumbnail']['file_name']) : asset('storage/images/collections/cropped100/' . $product['thumbnail']['file_name']) }}"
                                     alt="{{ $product['name'][session('locale')] . 'image' }}">
                             @else
                                 <div class="w-full h-full flex justify-center items-center bg-gray-200 rounded">

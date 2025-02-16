@@ -173,35 +173,42 @@
                     $('input[name="search"]').blur();
                 }
             })
+        })
 
-            // Handle Not Found Images
-            window.handleNotFoundImages = function(element) {
-                const iconSize = element.dataset.placeholderSize;
+        document.addEventListener("DOMContentLoaded", function() {
+            const lazyImages = document.querySelectorAll('.construction-placeholder');
 
-                if (!element.complete ||
-                    typeof element.naturalWidth === "undefined" ||
-                    element.naturalWidth === 0) {
+            const lazyLoad = function(image) {
+                image.src = image.dataset.src;
+                image.onerror = function() {
+                    console.log('Failed to load image');
 
-                    const parent = element.parentNode;
+                    const iconSize = image.dataset.placeholderSize ||
+                    'text-2xl'; // Default size if not provided
+                    const placeholderHTML = `<div class="flex justify-center items-center bg-gray-100">
+                                    <span class="block material-icons ${iconSize}">construction</span>
+                                </div>`;
 
-                    const placeholderHTML = '<div class="flex justify-center items-center bg-gray-100">' +
-                        '<span class="block material-icons ' + iconSize + '">construction</span>' +
-                        '</div>';
-
-                    element.remove();
-
+                    const parent = image.parentNode;
                     const placeholderElement = document.createElement('div');
                     placeholderElement.innerHTML = placeholderHTML;
 
+                    image.remove();
                     parent.appendChild(placeholderElement.firstChild);
-                }
-            }
+                };
+            };
 
-            // Handle Not Found Images
-            document.querySelectorAll('.construction-placeholder').forEach(function(element) {
-                handleNotFoundImages(element);
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        lazyLoad(entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                });
             });
-        })
+
+            lazyImages.forEach(img => observer.observe(img));
+        });
     </script>
 
     {{-- Custom Js Files --}}
