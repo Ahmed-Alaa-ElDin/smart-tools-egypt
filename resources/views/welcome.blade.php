@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/img/logos/smart-tools-logo-fav-only-50.png') }}">
     <link rel="icon" type="image/png" href="{{ asset('assets/img/logos/smart-tools-logo-fav-only-50.png') }}">
 
-    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no'
         name='viewport' />
 
     {{-- Fonts --}}
@@ -98,13 +98,13 @@
                                                 </li>
                                             </ol>
                                         </nav>
-                            
+
                                         <section class="row">
                                             <div class="col-md-12">
-                            
+
                                                 {{-- Card --}}
                                                 <div class="card">
-                            
+
                                                     {{-- Card Head --}}
                                                     <div class="card-header card-header-primary">
                                                         <div class="row">
@@ -115,13 +115,13 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                            
+
                                                     {{-- Card Body --}}
                                                     <div class="card-body overflow-hidden">
-                            
+
                                                         {{-- Form Start --}}
                                                         @livewire('admin.brands.brand-form')
-                            
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -249,19 +249,19 @@
         <script src="{{ asset('assets/admin/js/core/popper.min.js') }}"></script>
         <script src="{{ asset('assets/js/plugins/flowbite/flowbite.js') }}"></script>
         <script src="{{ asset('assets/admin/js/core/bootstrap-material-design.min.js') }}"></script>
-    
+
         <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
         <script src="{{ asset('assets/admin/js/material-dashboard.min.js') }}" type="text/javascript"></script>
-    
+
         <!--  Plugin for Sweet Alert -->
         <script src="{{ asset('assets/js/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
-    
+
         <!-- Chartist JS -->
         <script src="{{ asset('assets/admin/js/plugins/chartist.min.js') }}"></script>
-    
+
         <!-- Plugin for the momentJs  -->
         <script src="{{ asset('assets/admin/js/plugins/moment.min.js') }}"></script>
-    
+
         <script>
             @if (Session::has('success'))
                 Swal.fire({
@@ -280,10 +280,10 @@
                     showConfirmButton: false,
                 })
             @endif
-    
+
             // #### Sweetalert ####
             window.addEventListener('swalConfirm', function(e) {
-    
+
                 Swal.fire({
                     icon: e.detail.icon,
                     text: e.detail.text,
@@ -299,7 +299,7 @@
                     }
                 });
             });
-    
+
             window.addEventListener('swalDone', function(e) {
                 Swal.fire({
                     text: e.detail.text,
@@ -317,7 +317,7 @@
             });
             // #### Sweetalert ####
         </script>
-    
+
         {{-- Custom Js Files --}}
         <script src="{{ asset('assets/js/plugins/tinymce/tinymce.min.js') }}"></script>
 
@@ -341,9 +341,9 @@
                 statusbar: false,
                 menubar: false,
                 content_style: '.mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before { text-align: center ; width: 100% }'
-    
+
             }
-    
+
             // tinymce for SEO Description
             tinymce.init({
                 ...options,
@@ -356,10 +356,10 @@
                 }
             });
         </script>
-        
+
         {{-- Custom Js Files for livewire blade --}}
         @stack('livewire-js')
-    
+
 </body>
 
 </html>

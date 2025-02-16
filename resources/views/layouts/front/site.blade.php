@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/img/logos/smart-tools-logo-fav-only-50.png') }}">
     <link rel="icon" type="image/png" href="{{ asset('assets/img/logos/smart-tools-logo-fav-only-50.png') }}">
 
-    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no'
         name='viewport' />
 
     {{-- todo : facebook meta tags --}}
