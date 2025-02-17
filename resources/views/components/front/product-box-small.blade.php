@@ -1,5 +1,5 @@
 {{-- Product : Start --}}
-<li class="splide__slide">
+<li class="splide__slide" wire:ignore.self>
     <div class="carousel-box w-full inline-block">
         <div
             class="group shadow border border-light rounded-lg hover:shadow-md hover:scale-105 mt-1 mb-2 transition overflow-hidden relative">
@@ -47,11 +47,11 @@
                 {{-- Base Discount : End --}}
 
                 {{-- Product Image : Start --}}
-                <div class="block max-h-52 overflow-hidden">
+                <div class="block max-h-52 overflow-hidden" wire:ignore.self>
                     @if ($item['thumbnail'])
                         <img class="mx-auto max-h-52 h-full md:h-52 construction-placeholder" data-placeholder-size="text-[200px]"
-                            @if ($item['type'] == 'Product') data-src="{{ asset('storage/images/products/cropped250/' . $item['thumbnail']['file_name']) }}" alt="{{ $item['name'][session('locale')] . 'image' }}"
-                            @elseif ($item['type'] == 'Collection') data-src="{{ asset('storage/images/collections/cropped250/' . $item['thumbnail']['file_name']) }}" alt="{{ $item['name'][session('locale')] . 'image' }}" @endif>
+                            @if ($item['type'] == 'Product') src="{{ asset('storage/images/products/cropped250/' . $item['thumbnail']['file_name']) }}" alt="{{ $item['name'][session('locale')] . 'image' }}"
+                            @elseif ($item['type'] == 'Collection') src="{{ asset('storage/images/collections/cropped250/' . $item['thumbnail']['file_name']) }}" alt="{{ $item['name'][session('locale')] . 'image' }}" @endif>
                     @else
                         <div class="flex justify-center items-center bg-gray-100">
                             <span class="block material-icons text-[200px]">

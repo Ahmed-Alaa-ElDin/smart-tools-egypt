@@ -12,8 +12,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/img/logos/smart-tools-logo-fav-only-50.png') }}">
     <link rel="icon" type="image/png" href="{{ asset('assets/img/logos/smart-tools-logo-fav-only-50.png') }}">
 
-    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no'
-        name='viewport' />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no' name='viewport' />
 
     {{-- todo : facebook meta tags --}}
     <meta property="og:url" content='{{ isset($url) ? $url : 'https://smarttoolsegypt.com' }}' />
@@ -175,19 +174,23 @@
             })
         })
 
-        document.addEventListener("DOMContentLoaded", function() {
-            const lazyImages = document.querySelectorAll('.construction-placeholder');
+        // #### Initialize Image Handlers #### (Singleton Pattern)
+        let observer; // Keep single observer instance
+        let isInitialized = false;
+
+        function initializeImageHandlers() {
+            // Only initialize once
+            if (isInitialized) return;
+            isInitialized = true;
 
             const lazyLoad = function(image) {
-                image.src = image.dataset.src;
+                console.log(image);
                 image.onerror = function() {
-                    console.log('Failed to load image');
-
-                    const iconSize = image.dataset.placeholderSize ||
-                    'text-2xl'; // Default size if not provided
-                    const placeholderHTML = `<div class="flex justify-center items-center bg-gray-100">
-                                    <span class="block material-icons ${iconSize}">construction</span>
-                                </div>`;
+                    const iconSize = image.dataset.placeholderSize || 'text-2xl';
+                    const placeholderHTML =
+                        `<div class="flex justify-center items-center bg-gray-100">
+                            <span class="block material-icons ${iconSize}">construction</span>
+                        </div>`;
 
                     const parent = image.parentNode;
                     const placeholderElement = document.createElement('div');
@@ -198,16 +201,51 @@
                 };
             };
 
-            const observer = new IntersectionObserver((entries, observer) => {
+            // Create single IntersectionObserver instance
+            observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        lazyLoad(entry.target);
-                        observer.unobserve(entry.target);
+                        const img = entry.target;
+                        lazyLoad(img);
+                        observer.unobserve(img);
                     }
                 });
             });
 
-            lazyImages.forEach(img => observer.observe(img));
+            // Function to observe new images
+            function observeNewImages() {
+                const lazyImages = document.querySelectorAll('.construction-placeholder:not([data-observed])');
+
+                lazyImages.forEach(img => {
+                    img.dataset.observed = true;
+                    observer.observe(img);
+                });
+            }
+
+            // Livewire v3 hook for DOM updates
+            Livewire.hook('commit', ({
+                component,
+                commit,
+                respond,
+                succeed,
+                fail
+            }) => {
+                succeed(() => {
+                    // Wait for DOM to update
+                    setTimeout(observeNewImages, 0);
+                });
+            });
+
+            // Initial observation
+            observeNewImages();
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeImageHandlers);
+
+        // Re-initialize when Livewire connects (for turbo visits)
+        document.addEventListener('livewire:init', () => {
+            initializeImageHandlers();
         });
     </script>
 

@@ -9,9 +9,9 @@
             @if ($item['thumbnail'])
                 <img class="w-full h-full flex justify-center items-center bg-gray-200 construction-placeholder"
                 data-placeholder-size="text-8xl"
-                    @if ($item['type'] == 'Product') data-src="{{ asset('storage/images/products/cropped100/' . $item['thumbnail']['file_name']) }}"
+                    @if ($item['type'] == 'Product') src="{{ asset('storage/images/products/cropped100/' . $item['thumbnail']['file_name']) }}"
                 @elseif ($item['type'] == 'Collection')
-                data-src="{{ asset('storage/images/collections/cropped100/' . $item['thumbnail']['file_name']) }}" @endif
+                src="{{ asset('storage/images/collections/cropped100/' . $item['thumbnail']['file_name']) }}" @endif
                     alt="{{ $item['name'][session('locale')] . 'image' }}">
             @else
                 <div class="w-full h-full flex justify-center items-center bg-gray-200 rounded">

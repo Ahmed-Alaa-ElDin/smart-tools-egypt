@@ -527,18 +527,18 @@
 
                 {{-- Products :: Start --}}
                 <div class="p-3 w-full grid grid-cols-4 gap-3">
-                    @forelse ($items as $item)
-                        {{-- Reults Count :: Start --}}
+                    @forelse ($items as $key => $item)
+                        {{-- Results Count :: Start --}}
                         @if ($loop->first)
                             <div class="col-span-4 text-center text-xs font-bold text-gray-600">
                                 {{ trans_choice('front/homePage.Product / Products found', $items->total(), ['no' => $items->total()]) }}
                             </div>
                         @endif
-                        {{-- Reults Count :: End --}}
+                        {{-- Results Count :: End --}}
 
-                        <div class="col-span-2 lg:col-span-1">
-                            <x-front.product-box-small :item="$item->toArray()" wire:key="item-{{ rand() }}" />
-                        </div>
+                        <ul class="col-span-2 lg:col-span-1">
+                            <x-front.product-box-small :item="$item->toArray()" wire:key="item-{{ $key }}-{{ $item['id'] }}"/>
+                        </ul>
 
                         {{-- Pagination :: Start --}}
                         @if ($loop->last && $items->hasMorePages())

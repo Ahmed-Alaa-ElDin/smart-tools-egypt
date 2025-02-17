@@ -370,5 +370,8 @@ abstract class ProductFilter extends Component
     public function loadMore()
     {
         $this->perPage += config('settings.front_pagination');
+
+        // dispatch Image handler
+        $this->dispatch('initializeImageHandlers');
     }
 }
