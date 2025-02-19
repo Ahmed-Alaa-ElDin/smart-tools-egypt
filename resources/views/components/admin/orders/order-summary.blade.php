@@ -63,26 +63,26 @@
                         {{ $order->num_of_items }}
                     </td>
                     <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format($order->invoice->total, 2, '.', '\'') }}
+                        {{ number_format($order->invoice->total ?? 0, 2, '.', '\'') }}
                     </td>
                     <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format($order->invoice->unpaid, 2, '.', '\'') }}
+                        {{ number_format($order->invoice->unpaid ?? 0, 2, '.', '\'') }}
                     </td>
                     <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format($order->invoice->paid, 2, '.', '\'') }}
+                        {{ number_format($order->invoice->paid ?? 0, 2, '.', '\'') }}
                     </td>
                     <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format(abs($order->invoice->refundable), 2, '.', '\'') }}
+                        {{ number_format(abs($order->invoice->refundable ?? 0), 2, '.', '\'') }}
                     </td>
                     <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format(abs($order->invoice->refunded), 2, '.', '\'') }}
+                        {{ number_format(abs($order->invoice->refunded ?? 0), 2, '.', '\'') }}
                     </td>
                     <td class="px-6 py-2 text-center">
                         <div class="flex flex-wrap justify-center">
                             @foreach ($order->payment_methods->unique() as $payment_method)
                                 <span class="text-sm">
                                     {{ __('admin/ordersPages.' . App\Enums\PaymentMethod::getKeyFromValue($payment_method)) }}
-                                    @if(!$loop->last)
+                                    @if (!$loop->last)
                                         ,
                                     @endif
                                 </span>

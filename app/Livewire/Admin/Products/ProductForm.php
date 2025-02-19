@@ -588,17 +588,17 @@ class ProductForm extends Component
 
 
     ######################## Updated Arabic description :: Start ############################
-    public function descriptionAr($value)
+    public function descriptionAr($descriptionAr)
     {
-        $this->description['ar'] = $value;
+        $this->description['ar'] = $descriptionAr;
     }
     ######################## Updated Arabic description :: End ############################
 
 
     ######################## Updated English description :: Start ############################
-    public function descriptionEn($value)
+    public function descriptionEn($descriptionEn)
     {
-        $this->description['en'] = $value;
+        $this->description['en'] = $descriptionEn;
     }
     ######################## Updated English description :: End ############################
 
