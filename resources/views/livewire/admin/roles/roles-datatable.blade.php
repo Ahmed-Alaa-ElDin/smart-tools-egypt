@@ -48,14 +48,14 @@
                                 <tr>
 
                                     {{-- Name --}}
-                                    <th wire:click="sortBy('name')" scope="col"
+                                    <th wire:click="setSortBy('name')" scope="col"
                                         class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                         {{ __('admin/usersPages.Name') }} &nbsp;
                                         @include('partials._sort_icon', ['field' => 'name'])
                                     </th>
 
                                     {{-- Permissions Num --}}
-                                    <th wire:click="sortBy('permissions_count')" scope="col"
+                                    <th wire:click="setSortBy('permissions_count')" scope="col"
                                         class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                         <div class="min-w-max">
                                             {{ __('admin/usersPages.No. of Permissions') }} &nbsp;
@@ -66,7 +66,7 @@
                                     </th>
 
                                     {{-- users Num --}}
-                                    <th wire:click="sortBy('users_count')" scope="col"
+                                    <th wire:click="setSortBy('users_count')" scope="col"
                                         class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                         <div class="min-w-max">
                                             {{ __('admin/usersPages.No. of Users') }} &nbsp;

@@ -151,7 +151,7 @@
                                 </th>
 
                                 {{-- Order Id Header --}}
-                                <th wire:click="sortBy('orders.id')" scope="col"
+                                <th wire:click="setSortBy('orders.id')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/ordersPages.ID') }} &nbsp;
@@ -162,7 +162,7 @@
                                 </th>
 
                                 {{-- Status Header --}}
-                                <th wire:click="sortBy('status_name->{{ session('locale') }}')" scope="col"
+                                <th wire:click="setSortBy('status_name->{{ session('locale') }}')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/ordersPages.Status') }} &nbsp;
@@ -173,7 +173,7 @@
                                 </th>
 
                                 {{-- Customer Info. Header --}}
-                                <th wire:click="sortBy('f_name->{{ session('locale') }}')" scope="col"
+                                <th wire:click="setSortBy('f_name->{{ session('locale') }}')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/ordersPages.Customer Info.') }} &nbsp;
@@ -184,7 +184,7 @@
                                 </th>
 
                                 {{-- Address Header --}}
-                                <th wire:click="sortBy('governorate_name->{{ session('locale') }}')" scope="col"
+                                <th wire:click="setSortBy('governorate_name->{{ session('locale') }}')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/ordersPages.Address') }} &nbsp;
@@ -195,7 +195,7 @@
                                 </th>
 
                                 {{-- Total Header --}}
-                                <th wire:click="sortBy('orders.total')" scope="col"
+                                <th {{-- wire:click="setSortBy('orders.total')"  --}} scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/ordersPages.Total') }} &nbsp;
@@ -206,7 +206,7 @@
                                 </th>
 
                                 {{-- Remaining Header --}}
-                                <th wire:click="sortBy('orders.should_pay')" scope="col"
+                                <th {{-- wire:click="setSortBy('orders.should_pay')" --}} scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/ordersPages.Should Pay / Get') }} &nbsp;
@@ -217,7 +217,7 @@
                                 </th>
 
                                 {{-- Last Update Header --}}
-                                <th wire:click="sortBy('orders.updated_at')" scope="col"
+                                <th wire:click="setSortBy('orders.updated_at')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/ordersPages.Last Update') }} &nbsp;
@@ -414,9 +414,9 @@
                                             </button>
                                         @else
                                             {{-- Download Bosta AWB --}}
-                                            <button title="{{ __('admin/ordersPages.Please create Bosta order first') }}"
-                                                disabled
-                                                class="m-0 focus:outline-none">
+                                            <button
+                                                title="{{ __('admin/ordersPages.Please create Bosta order first') }}"
+                                                disabled class="m-0 focus:outline-none">
                                                 <span
                                                     class="material-icons p-1 text-lg w-9 h-9 text-white bg-gray-300 rounded flex">
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

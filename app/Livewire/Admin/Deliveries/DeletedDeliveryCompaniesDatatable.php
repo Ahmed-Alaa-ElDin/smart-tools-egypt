@@ -52,7 +52,7 @@ class DeletedDeliveryCompaniesDatatable extends Component
     }
 
     // Add conditions of sorting
-    public function sortBy($field)
+    public function setSortBy($field)
     {
         if ($this->sortDirection == 'ASC') {
             $this->sortDirection = 'DESC';

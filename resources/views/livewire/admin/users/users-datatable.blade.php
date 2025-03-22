@@ -72,7 +72,7 @@
                             <tr>
 
                                 {{-- Name --}}
-                                <th wire:click="sortBy('f_name')" scope="col"
+                                <th wire:click="setSortBy('f_name')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/usersPages.Name') }} &nbsp;
                                     @include('partials._sort_icon', [
@@ -81,14 +81,14 @@
                                 </th>
 
                                 {{-- Email --}}
-                                <th wire:click="sortBy('email')" scope="col"
+                                <th wire:click="setSortBy('email')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/usersPages.Contacts') }}&nbsp;
                                     @include('partials._sort_icon', ['field' => 'email'])
                                 </th>
 
                                 {{-- Balance --}}
-                                <th wire:click="sortBy('balance')" scope="col"
+                                <th wire:click="setSortBy('balance')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/usersPages.Balance') }}&nbsp;
@@ -99,7 +99,7 @@
                                 </th>
 
                                 {{-- Visits Num --}}
-                                <th wire:click="sortBy('visit_num')" scope="col"
+                                <th wire:click="setSortBy('visit_num')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/usersPages.Visits No.') }} &nbsp;

@@ -74,7 +74,7 @@
                             <tr>
 
                                 {{-- Name --}}
-                                <th wire:click="sortBy('governorates.name->{{ session('locale') }}')" scope="col"
+                                <th wire:click="setSortBy('governorates.name->{{ session('locale') }}')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Name') }} &nbsp;
                                     @include('partials._sort_icon', [
@@ -83,7 +83,7 @@
                                 </th>
 
                                 {{-- Country Name --}}
-                                <th wire:click="sortBy('countries.name->{{ session('locale') }}')" scope="col"
+                                <th wire:click="setSortBy('countries.name->{{ session('locale') }}')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Country Name') }}
                                     @include('partials._sort_icon', [
@@ -92,7 +92,7 @@
                                 </th>
 
                                 {{-- Cities No. --}}
-                                <th wire:click="sortBy('cities_count')" scope="col"
+                                <th wire:click="setSortBy('cities_count')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Cities No.') }}
                                     @include('partials._sort_icon', [
@@ -101,7 +101,7 @@
                                 </th>
 
                                 {{-- Users No. --}}
-                                <th wire:click="sortBy('users_count')" scope="col"
+                                <th wire:click="setSortBy('users_count')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Users No.') }}
                                     @include('partials._sort_icon', [
@@ -110,7 +110,7 @@
                                 </th>
 
                                 {{-- Deliverry Comp. No. --}}
-                                <th wire:click="sortBy('deliveries_count')" scope="col"
+                                <th wire:click="setSortBy('deliveries_count')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Delivery Comp. No.') }}
                                     @include('partials._sort_icon', [

@@ -480,7 +480,7 @@ class CollectionForm extends Component
     ######################## Update Profit Margin :: Start ############################
 
     ######################## Publish Toggle :: Start ############################
-    public function publish()
+    public function togglePublish()
     {
         $this->publish = !$this->publish;
     }
@@ -488,7 +488,7 @@ class CollectionForm extends Component
 
 
     ######################## Refundable Toggle :: Start ############################
-    public function refund()
+    public function toggleRefundable()
     {
         $this->refundable = !$this->refundable;
     }
@@ -496,7 +496,7 @@ class CollectionForm extends Component
 
 
     ######################## Free Shipping Toggle :: Start ############################
-    public function free_shipping()
+    public function toggleFreeShipping()
     {
         $this->free_shipping = !$this->free_shipping;
     }
@@ -504,7 +504,7 @@ class CollectionForm extends Component
 
 
     ######################## Reviewing Toggle :: Start ############################
-    public function reviewing()
+    public function toggleReviewing()
     {
         $this->reviewing = !$this->reviewing;
     }
@@ -622,17 +622,17 @@ class CollectionForm extends Component
 
 
     ######################## Updated Arabic description :: Start ############################
-    public function descriptionAr($value)
+    public function descriptionAr($descriptionAr)
     {
-        $this->description['ar'] = $value;
+        $this->description['ar'] = $descriptionAr;
     }
     ######################## Updated Arabic description :: End ############################
 
 
     ######################## Updated English description :: Start ############################
-    public function descriptionEn($value)
+    public function descriptionEn($descriptionEn)
     {
-        $this->description['en'] = $value;
+        $this->description['en'] = $descriptionEn;
     }
     ######################## Updated English description :: End ############################
 

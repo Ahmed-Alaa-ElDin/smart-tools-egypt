@@ -62,7 +62,7 @@
                                                 <div class="flex rtl:flex-row-reverse gap-1 text-sm">
                                                     <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
                                                     <span class=""
-                                                        dir="ltr">{{ number_format(abs($order->invoice->total), 2, '.', '\'') }}</span>
+                                                        dir="ltr">{{ number_format(abs($order->invoice->total ?? 0), 2, '.', '\'') }}</span>
                                                 </div>
                                             </div>
 
@@ -672,7 +672,7 @@
                         @endforelse
                         {{-- Order List :: End --}}
                         <div class="w-full">
-                            {{ $orders->links('vendor.pagination.tailwind') }}
+                            {{ $orders->links() }}
                         </div>
                     </div>
                 </div>

@@ -78,7 +78,7 @@
                             <tr>
 
                                 {{-- Name --}}
-                                <th wire:click="sortBy('name')" scope="col"
+                                <th wire:click="setSortBy('name')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Name') }} &nbsp;
                                     @include('partials._sort_icon', [
@@ -87,7 +87,7 @@
                                 </th>
 
                                 {{-- Email --}}
-                                <th wire:click="sortBy('email')" scope="col"
+                                <th wire:click="setSortBy('email')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/deliveriesPages.Contacts') }}&nbsp;
                                     @include('partials._sort_icon', ['field' => 'email'])

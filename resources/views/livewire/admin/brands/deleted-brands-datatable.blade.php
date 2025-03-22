@@ -79,7 +79,7 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 {{-- Name Header --}}
-                                <th wire:click="sortBy('name')" scope="col"
+                                <th wire:click="setSortBy('name')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/productsPages.Name') }} &nbsp;
@@ -90,7 +90,7 @@
                                 </th>
 
                                 {{-- Country Header --}}
-                                <th wire:click="sortBy('country_id')" scope="col"
+                                <th wire:click="setSortBy('country_id')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/productsPages.Country') }}&nbsp;
@@ -101,7 +101,7 @@
                                 </th>
 
                                 {{-- Products Count Header --}}
-                                <th wire:click="sortBy('products_count')" scope="col"
+                                <th wire:click="setSortBy('products_count')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/productsPages.No. of Products') }}&nbsp;

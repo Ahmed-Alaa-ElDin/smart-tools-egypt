@@ -324,25 +324,29 @@
         <script>
             // Basic tinumce config
             let options = {
-                inline: true,
-                plugins: [
-                    'lists',
-                    'autolink',
-                    'advlist',
-                    'directionality',
-                    'table',
-                    'autoresize',
-                    // 'fullscreen'
-                ],
-                toolbar: 'ltr rtl | ' +
-                    'bold italic backcolor fontsizeselect| alignleft aligncenter ' +
-                    'alignright alignjustify | bullist numlist outdent indent | ' +
-                    'removeformat',
-                statusbar: false,
-                menubar: false,
-                content_style: '.mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before { text-align: center ; width: 100% }'
-
-            }
+            inline: true,
+            plugins: [
+                'lists',
+                'autolink',
+                'advlist',
+                'directionality',
+                'table',
+                'autoresize',
+            ],
+            toolbar: `ltr rtl | bold italic forecolor backcolor fontsizeselect alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat`,
+            statusbar: false,
+            menubar: false,
+            forced_root_block: "<div></div>",
+            content_style: `
+                .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {
+                    text-align: center ; width: 100%
+                    }
+                    .mce-content-body ul {
+                        padding: 0 10px;
+                        list-style-type: disc;
+                    }
+                `,
+        }
 
             // tinymce for SEO Description
             tinymce.init({

@@ -59,7 +59,7 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 {{-- Name Header --}}
-                                <th wire:click="sortBy('categories.name->{{ session('locale') }}')" scope="col"
+                                <th wire:click="setSortBy('categories.name->{{ session('locale') }}')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/productsPages.Name') }} &nbsp;
@@ -70,7 +70,7 @@
                                 </th>
 
                                 {{-- Super Category Header --}}
-                                <th wire:click="sortBy('supercategory_name->{{ session('locale') }}')" scope="col"
+                                <th wire:click="setSortBy('supercategory_name->{{ session('locale') }}')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/productsPages.Supercategory') }}&nbsp;
@@ -81,7 +81,7 @@
                                 </th>
 
                                 {{-- Subcategory Header --}}
-                                <th wire:click="sortBy('subcategories_count')" scope="col"
+                                <th wire:click="setSortBy('subcategories_count')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/productsPages.No. of Subcategories') }}&nbsp;
@@ -92,7 +92,7 @@
                                 </th>
 
                                 {{-- Publish Header --}}
-                                <th wire:click="sortBy('publish')" scope="col"
+                                <th wire:click="setSortBy('publish')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/productsPages.Published') }}&nbsp;

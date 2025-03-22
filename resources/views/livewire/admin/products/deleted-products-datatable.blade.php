@@ -112,7 +112,7 @@
                                 </th>
 
                                 {{-- Name Header --}}
-                                <th wire:click="sortBy('products.name->{{ session('locale') }}')" scope="col"
+                                <th wire:click="setSortBy('products.name->{{ session('locale') }}')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/productsPages.Name') }} &nbsp;
@@ -123,7 +123,7 @@
                                 </th>
 
                                 {{-- Brand Header --}}
-                                <th wire:click="sortBy('brand_name')" scope="col"
+                                <th wire:click="setSortBy('brand_name')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/productsPages.Brand') }}&nbsp;
@@ -142,7 +142,7 @@
                                 </th>
 
                                 {{-- Price Header --}}
-                                <th wire:click="sortBy('final_price')" scope="col"
+                                <th wire:click="setSortBy('final_price')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/productsPages.Price') }}&nbsp;
@@ -153,7 +153,7 @@
                                 </th>
 
                                 {{-- Quantity Header --}}
-                                <th wire:click="sortBy('quantity')" scope="col"
+                                <th wire:click="setSortBy('quantity')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/productsPages.Quantity') }}&nbsp;
@@ -162,7 +162,7 @@
                                 </th>
 
                                 {{-- Publish Header --}}
-                                <th wire:click="sortBy('publish')" scope="col"
+                                <th wire:click="setSortBy('publish')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/productsPages.Published') }}&nbsp;

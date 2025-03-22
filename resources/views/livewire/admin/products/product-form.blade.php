@@ -427,12 +427,12 @@
             {{-- Publish Start --}}
             <div
                 class="col-span-6 md:col-span-3 md:col-start-4 lg:col-span-6 lg:col-start-1 grid grid-cols-2 gap-y-2 gap-x-2 items-center w-full">
-                <label wire:click="onPublishClick"
+                <label wire:click="togglePublish"
                     class="col-span-1 lg:col-span-2 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/productsPages.Publish') }}</label>
                 <div class="col-span-1 lg:col-span-2">
                     {!! $publish
-                        ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="onPublishClick">toggle_on</span>'
-                        : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="onPublishClick">toggle_off</span>' !!}
+                        ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="togglePublish">toggle_on</span>'
+                        : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="togglePublish">toggle_off</span>' !!}
 
                     @error('publish')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -445,12 +445,12 @@
 
             {{-- Refundable Start --}}
             <div class="col-span-6 md:col-span-3 lg:col-span-6 grid grid-cols-2 gap-y-2 items-center w-full">
-                <label wire:click="onRefundClick"
+                <label wire:click="toggleRefundable"
                     class="col-span-1 lg:col-span-2 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/productsPages.Refundable') }}</label>
                 <div class="col-span-1 lg:col-span-2">
                     {!! $refundable
-                        ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="onRefundClick">toggle_on</span>'
-                        : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="onRefundClick">toggle_off</span>' !!}
+                        ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="toggleRefundable">toggle_on</span>'
+                        : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="toggleRefundable">toggle_off</span>' !!}
 
                     @error('refundable')
                         <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -1042,14 +1042,14 @@
             {{-- Free Shipping Start --}}
             <div
                 class="col-span-6 sm:col-span-6 md:col-span-3 lg:col-span-3 w-full grid grid-cols-3 gap-x-6 gap-y-1 items-center rounded text-center">
-                <label for="free_shipping" wire:click="onFreeShippingClick"
+                <label for="free_shipping" wire:click="toggleFreeShipping"
                     class="col-span-3 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer select-none">{{ __('admin/productsPages.Free Shipping') }}</label>
 
                 <div class="col-span-3">
                     <div class="col-span-2 md:col-span-1">
                         {!! $free_shipping
-                            ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="onFreeShippingClick">toggle_on</span>'
-                            : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="onFreeShippingClick">toggle_off</span>' !!}
+                            ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="toggleFreeShipping">toggle_on</span>'
+                            : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="toggleFreeShipping">toggle_off</span>' !!}
 
                         @error('free_shipping')
                             <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
@@ -1063,14 +1063,14 @@
             {{-- under reviewing Start --}}
             <div
                 class="col-span-6 sm:col-span-6 md:col-span-3 lg:col-span-3 w-full grid grid-cols-3 gap-x-6 gap-y-1 items-center rounded text-center">
-                <label for="reviewing" wire:click="onReviewingClick"
+                <label for="reviewing" wire:click="toggleReviewing"
                     class="col-span-3 font-bold m-0 text-center font-bold text-xs text-gray-700 cursor-pointer select-none">{{ __('admin/productsPages.Under Reviewing') }}</label>
 
                 <div class="col-span-3">
                     <div class="col-span-2 md:col-span-1">
                         {!! $reviewing
-                            ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="onReviewingClick">toggle_on</span>'
-                            : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="onReviewingClick">toggle_off</span>' !!}
+                            ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="toggleReviewing">toggle_on</span>'
+                            : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="toggleReviewing">toggle_off</span>' !!}
 
                         @error('reviewing')
                             <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">

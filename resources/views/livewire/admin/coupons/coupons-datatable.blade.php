@@ -43,7 +43,7 @@
                             <tr>
 
                                 {{-- Code --}}
-                                <th wire:click="sortBy('code')" scope="col"
+                                <th wire:click="setSortBy('code')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     {{ __('admin/offersPages.Code') }} &nbsp;
                                     @include('partials._sort_icon', [
@@ -52,7 +52,7 @@
                                 </th>
 
                                 {{-- Expiration Date --}}
-                                <th wire:click="sortBy('expire_at')" scope="col"
+                                <th wire:click="setSortBy('expire_at')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/offersPages.Expiration Date') }}
@@ -63,7 +63,7 @@
                                 </th>
 
                                 {{-- Amount --}}
-                                <th wire:click="sortBy('number')" scope="col"
+                                <th wire:click="setSortBy('number')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/offersPages.Number') }}

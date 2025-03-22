@@ -53,7 +53,7 @@
                                 <th scope="col"></th>
 
                                 {{-- Name Header --}}
-                                <th wire:click="sortBy('banner_name')" scope="col"
+                                <th wire:click="setSortBy('banner_name')" scope="col"
                                     class="px-6 py-3 text-center max-w-36 text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/sitePages.Name') }} &nbsp;
@@ -64,7 +64,7 @@
                                 </th>
 
                                 {{-- Description Header --}}
-                                <th wire:click="sortBy('description')" scope="col"
+                                <th wire:click="setSortBy('description')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/sitePages.Description') }}&nbsp;
@@ -75,7 +75,7 @@
                                 </th>
 
                                 {{-- Link Header --}}
-                                <th wire:click="sortBy('link')" scope="col"
+                                <th wire:click="setSortBy('link')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/sitePages.Link') }}&nbsp;

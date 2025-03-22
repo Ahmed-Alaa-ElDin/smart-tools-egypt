@@ -43,7 +43,7 @@
                             <tr>
 
                                 {{-- Code --}}
-                                <th wire:click="sortBy('title->{{ session('locale') }}')" scope="col"
+                                <th wire:click="setSortBy('title->{{ session('locale') }}')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/offersPages.Title') }} &nbsp;
@@ -54,7 +54,7 @@
                                 </th>
 
                                 {{-- Start Date --}}
-                                <th wire:click="sortBy('start_at')" scope="col"
+                                <th wire:click="setSortBy('start_at')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/offersPages.Start Date') }}
@@ -65,7 +65,7 @@
                                 </th>
 
                                 {{-- Expiration Date --}}
-                                <th wire:click="sortBy('expire_at')" scope="col"
+                                <th wire:click="setSortBy('expire_at')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/offersPages.Expiration Date') }}
@@ -76,7 +76,7 @@
                                 </th>
 
                                 {{-- Free Shipping --}}
-                                <th wire:click="sortBy('free_shipping')" scope="col"
+                                <th wire:click="setSortBy('free_shipping')" scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
                                     <div class="min-w-max">
 

@@ -65,7 +65,7 @@ class CollectionListDatatable extends Component
             $this->collectionsIds = $collections->pluck('id')->toArray();
 
             $this->checkAllCollectionsSelected();
-        
+
         return view('livewire.admin.collections.collection-list-datatable', compact('collections'));
     }
 
@@ -76,7 +76,7 @@ class CollectionListDatatable extends Component
     }
 
     // Add conditions of sorting
-    public function sortBy($field)
+    public function setSortBy($field)
     {
         if ($this->sortDirection == 'ASC') {
             $this->sortDirection = 'DESC';
