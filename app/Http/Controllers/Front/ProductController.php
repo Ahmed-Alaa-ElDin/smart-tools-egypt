@@ -51,14 +51,16 @@ class ProductController extends Controller
         // Get the product
         $product = Product::with([
             'specs',
-            'images' => fn ($q) => $q->where('is_thumbnail', 0)->orderBy('featured', 'desc'),
+            'images' => fn($q) => $q->where('is_thumbnail', 0)->orderBy('featured', 'desc'),
             'brand',
-            'reviews' => fn ($q) => $q->with('user'),
-            'relatedProducts' => fn ($q) => $q->select('products.id'),
-            'relatedCollections' => fn ($q) => $q->select('collections.id'),
-            'complementedProducts' => fn ($q) => $q->select('products.id'),
-            'complementedCollections' => fn ($q) => $q->select('collections.id'),
-        ])->findOrFail($id);
+            'reviews.user',
+            'relatedProducts:id',
+            'relatedCollections:id',
+            'complementedProducts:id',
+            'complementedCollections:id',
+        ])
+            ->where('publish', 1)
+            ->findOrFail($id);
 
         // Get all products ids
         $productId = $product->id;

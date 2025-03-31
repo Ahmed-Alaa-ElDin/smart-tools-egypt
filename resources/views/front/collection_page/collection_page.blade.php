@@ -82,98 +82,106 @@
 
                     <hr class="my-4">
 
-                    {{-- Collection Price :: Start --}}
-                    <div class="flex flex-col gap-2">
-                        {{-- Base Price :: Start --}}
-                        <div class="flex gap-3 items-center">
-                            <span class="text-gray-800 font-bold text-md">
-                                {{ __('front/homePage.Before Discount: ') }}
-                            </span>
-                            <del class="flex rtl:flex-row-reverse gap-1 font-bold text-red-400 text-sm">
-                                <span>
-                                    {{ __('front/homePage.EGP') }}
-                                </span>
-                                <span class="font-bold text-3xl"
-                                    dir="ltr">{{ number_format(explode('.', $collection->base_price)[0], 0, '.', '\'') }}</span>
-                            </del>
-                        </div>
-                        {{-- Base Price :: End --}}
-
-                        {{-- Discount Price :: Start --}}
-                        <div class="flex gap-3 items-center">
-                            <span class="text-gray-800 font-bold text-md">
-                                {{ __('front/homePage.After Discount: ') }}
-                            </span>
-                            <span class="flex rtl:flex-row-reverse gap-1 font-bold text-successDark text-sm">
-                                <span>
-                                    {{ __('front/homePage.EGP') }}
-                                </span>
-                                <span class="font-bold text-2xl"
-                                    dir="ltr">{{ number_format(explode('.', $collection->final_price)[0], 0, '.', '\'') }}</span>
-                                <span
-                                    class="font-bold text-xs">{{ explode('.', $collection->final_price)[1] ?? '00' }}</span>
-                            </span>
-                        </div>
-                        {{-- Discount Price :: End --}}
-
-                        {{-- Disount Amount :: Start --}}
-                        <div class="flex gap-3 items-center">
-                            <span class="text-gray-800 font-bold text-md">
-                                {{ __('front/homePage.You Saved: ') }}
-                            </span>
-                            <span class="flex rtl:flex-row-reverse gap-1 font-bold text-success text-sm">
-                                <span
-                                    class="font-bold text-lg">(%{{ number_format((($collection->base_price - $collection->final_price) * 100) / $collection->base_price, 0) ?? '%0' }})</span>
-                                &nbsp;
-                                <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
-                                <span class="font-bold text-xl"
-                                    dir="ltr">{{ number_format(explode('.', $collection->base_price - $collection->final_price)[0], 0, '.', '\'') }}</span>
-                                <span
-                                    class="font-bold text-xs">{{ explode('.', $collection->base_price - $collection->final_price)[1] ?? '00' }}</span>
-                            </span>
-                        </div>
-                        {{-- Disount Amount :: End --}}
-
-                        {{-- Extra Discount :: Start --}}
-                        @if ($collection_offer->best_price < $collection->final_price)
+                    @if ($collection->quantity > 0)
+                        {{-- Collection Price :: Start --}}
+                        <div class="flex flex-col gap-2">
+                            {{-- Base Price :: Start --}}
                             <div class="flex gap-3 items-center">
                                 <span class="text-gray-800 font-bold text-md">
-                                    {{ __('front/homePage.Extra Discount: ') }}
+                                    {{ __('front/homePage.Before Discount: ') }}
+                                </span>
+                                <del class="flex rtl:flex-row-reverse gap-1 font-bold text-red-400 text-sm">
+                                    <span>
+                                        {{ __('front/homePage.EGP') }}
+                                    </span>
+                                    <span class="font-bold text-3xl"
+                                        dir="ltr">{{ number_format(explode('.', $collection->base_price)[0], 0, '.', '\'') }}</span>
+                                </del>
+                            </div>
+                            {{-- Base Price :: End --}}
+
+                            {{-- Discount Price :: Start --}}
+                            <div class="flex gap-3 items-center">
+                                <span class="text-gray-800 font-bold text-md">
+                                    {{ __('front/homePage.After Discount: ') }}
+                                </span>
+                                <span class="flex rtl:flex-row-reverse gap-1 font-bold text-successDark text-sm">
+                                    <span>
+                                        {{ __('front/homePage.EGP') }}
+                                    </span>
+                                    <span class="font-bold text-2xl"
+                                        dir="ltr">{{ number_format(explode('.', $collection->final_price)[0], 0, '.', '\'') }}</span>
+                                    <span
+                                        class="font-bold text-xs">{{ explode('.', $collection->final_price)[1] ?? '00' }}</span>
+                                </span>
+                            </div>
+                            {{-- Discount Price :: End --}}
+
+                            {{-- Disount Amount :: Start --}}
+                            <div class="flex gap-3 items-center">
+                                <span class="text-gray-800 font-bold text-md">
+                                    {{ __('front/homePage.You Saved: ') }}
                                 </span>
                                 <span class="flex rtl:flex-row-reverse gap-1 font-bold text-success text-sm">
                                     <span
-                                        class="font-bold text-lg">(%{{ number_format((($collection->final_price - $collection_offer->best_price) * 100) / $collection->final_price, 0) ?? '%0' }})</span>
+                                        class="font-bold text-lg">(%{{ number_format((($collection->base_price - $collection->final_price) * 100) / $collection->base_price, 0) ?? '%0' }})</span>
                                     &nbsp;
                                     <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
                                     <span class="font-bold text-xl"
-                                        dir="ltr">{{ number_format(explode('.', $collection->final_price - $collection_offer->best_price)[0], 0, '.', '\'') }}</span>
+                                        dir="ltr">{{ number_format(explode('.', $collection->base_price - $collection->final_price)[0], 0, '.', '\'') }}</span>
                                     <span
-                                        class="font-bold text-xs">{{ explode('.', $collection->final_price - $collection_offer->best_price)[1] ?? '00' }}</span>
+                                        class="font-bold text-xs">{{ explode('.', $collection->base_price - $collection->final_price)[1] ?? '00' }}</span>
                                 </span>
                             </div>
-                        @endif
-                        {{-- Extra Discount :: End --}}
+                            {{-- Disount Amount :: End --}}
 
-                        {{-- Extra Points :: Start --}}
-                        @if ($collection_offer->best_points)
-                            <div class="flex gap-3 items-center">
-                                <span class="text-gray-800 font-bold text-md">
-                                    {{ __("front/homePage.You'll get: ") }}
-                                </span>
-                                <span class="flex rtl:flex-row-reverse gap-1 font-bold text-success text-sm">
-                                    <span class="font-bold text-lg">
-                                        <span dir="ltr">
-                                            {{ number_format($collection_offer->best_points, 0, '.', '\'') ?? 0 }}
-                                        </span>
-                                        &nbsp;
-                                        {{ trans_choice('front/homePage.Point/Points', $collection_offer->best_points, ['points' => $collection_offer->best_points]) }}
+                            {{-- Extra Discount :: Start --}}
+                            @if ($collectionOffer->best_price < $collection->final_price)
+                                <div class="flex gap-3 items-center">
+                                    <span class="text-gray-800 font-bold text-md">
+                                        {{ __('front/homePage.Extra Discount: ') }}
                                     </span>
-                                </span>
-                            </div>
-                        @endif
-                        {{-- Extra Points :: End --}}
-                    </div>
-                    {{-- Collection Price :: End --}}
+                                    <span class="flex rtl:flex-row-reverse gap-1 font-bold text-success text-sm">
+                                        <span
+                                            class="font-bold text-lg">(%{{ number_format((($collection->final_price - $collectionOffer->best_price) * 100) / $collection->final_price, 0) ?? '%0' }})</span>
+                                        &nbsp;
+                                        <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
+                                        <span class="font-bold text-xl"
+                                            dir="ltr">{{ number_format(explode('.', $collection->final_price - $collectionOffer->best_price)[0], 0, '.', '\'') }}</span>
+                                        <span
+                                            class="font-bold text-xs">{{ explode('.', $collection->final_price - $collectionOffer->best_price)[1] ?? '00' }}</span>
+                                    </span>
+                                </div>
+                            @endif
+                            {{-- Extra Discount :: End --}}
+
+                            {{-- Extra Points :: Start --}}
+                            @if ($collectionOffer->best_points)
+                                <div class="flex gap-3 items-center">
+                                    <span class="text-gray-800 font-bold text-md">
+                                        {{ __("front/homePage.You'll get: ") }}
+                                    </span>
+                                    <span class="flex rtl:flex-row-reverse gap-1 font-bold text-success text-sm">
+                                        <span class="font-bold text-lg">
+                                            <span dir="ltr">
+                                                {{ number_format($collectionOffer->best_points, 0, '.', '\'') ?? 0 }}
+                                            </span>
+                                            &nbsp;
+                                            {{ trans_choice('front/homePage.Point/Points', $collectionOffer->best_points, ['points' => $collectionOffer->best_points]) }}
+                                        </span>
+                                    </span>
+                                </div>
+                            @endif
+                            {{-- Extra Points :: End --}}
+                        </div>
+                        {{-- Collection Price :: End --}}
+                    @else
+                        <div class="flex gap-3 items-center">
+                            <span class="text-gray-600 font-bold text-lg">
+                                {{ __('front/homePage.No Stock') }}
+                            </span>
+                        </div>
+                    @endif
 
                     <hr class="my-4">
 
@@ -186,45 +194,65 @@
                     <div class="grid grid-cols-12 gap-4 items-center justify-around md:justify-between mt-4">
                         {{-- Add Collection : Start --}}
                         <div class="col-span-12 md:col-span-8 flex flex-col justify-center gap-3">
-                            {{-- Add to cart : Start --}}
-                            @livewire(
-                                'front.general.cart.add-to-cart-button',
-                                [
-                                    'item_id' => $collection['id'],
-                                    'text' => true,
-                                    'large' => true,
-                                    'type' => 'Collection',
-                                    'add_buy' => 'add',
-                                ],
-                                key('add-cart-button-' . Str::random(10))
-                            )
-                            {{-- Add to cart : End --}}
+                            @if ($collection->quantity > 0)
+                                {{-- Add to cart : Start --}}
+                                @livewire(
+                                    'front.general.cart.add-to-cart-button',
+                                    [
+                                        'item_id' => $collection->id,
+                                        'text' => true,
+                                        'large' => true,
+                                        'type' => 'Collection',
+                                        'add_buy' => 'add',
+                                    ],
+                                    key("add-cart-button-{$collection->id}")
+                                )
+                                {{-- Add to cart : End --}}
 
-                            {{-- Go To Payment : Start --}}
-                            @livewire(
-                                'front.general.cart.add-to-cart-button',
-                                [
-                                    'item_id' => $collection['id'],
-                                    'text' => true,
-                                    'large' => true,
-                                    'type' => 'Collection',
-                                    'add_buy' => 'pay',
-                                ],
-                                key('add-cart-button-' . Str::random(10))
-                            )
-                            {{-- Go To Payment : End --}}
+                                {{-- Go To Payment : Start --}}
+                                @livewire(
+                                    'front.general.cart.add-to-cart-button',
+                                    [
+                                        'item_id' => $collection->id,
+                                        'text' => true,
+                                        'large' => true,
+                                        'type' => 'Collection',
+                                        'add_buy' => 'pay',
+                                    ],
+                                    key("add-cart-button-{$collection->id}")
+                                )
+                                {{-- Go To Payment : End --}}
+                            @else
+                                {{-- No Stock : Start --}}
+                                <div class="flex flex-col gap-3">
+                                    {{-- Notify Me : Start --}}
+                                    @livewire(
+                                        'front.general.back-to-stock-notification.back-to-stock-notification-button',
+                                        [
+                                            'item_id' => $collection->id,
+                                            'text' => true,
+                                            'large' => true,
+                                            'type' => 'Collection',
+                                            'isNotified' => $collection->hasPendingNotification,
+                                        ],
+                                        key("notify-me-button-{$collection->id}")
+                                    )
+                                    {{-- Notify Me : End --}}
+                                </div>
+                                {{-- No Stock : End --}}
+                            @endif
 
-                            <div class="flex flex-wrap justify-around gap-2">
+                            <div class="flex flex-wrap justify-between gap-2">
                                 {{-- Add to compare : Start --}}
                                 @livewire(
                                     'front.general.compare.add-to-compare-button',
                                     [
-                                        'item_id' => $collection['id'],
+                                        'item_id' => $collection->id,
                                         'text' => true,
                                         'large' => true,
                                         'type' => 'Collection',
                                     ],
-                                    key('add-compare-button-' . Str::random(10))
+                                    key("add-compare-button-{$collection->id}")
                                 )
                                 {{-- Add to compare : End --}}
 
@@ -232,12 +260,12 @@
                                 @livewire(
                                     'front.general.wishlist.add-to-wishlist-button',
                                     [
-                                        'item_id' => $collection['id'],
+                                        'item_id' => $collection->id,
                                         'text' => true,
                                         'large' => true,
                                         'type' => 'Collection',
                                     ],
-                                    key('add-wishlist-button-' . Str::random(10))
+                                    key("add-wishlist-button-{$collection->id}")
                                 )
                                 {{-- Add to wishlist : End --}}
                             </div>
@@ -246,18 +274,20 @@
 
                         <div class="col-span-12 md:col-span-4 flex md:flex-col gap-3 justify-between items-center">
                             {{-- Cart Amount :: Start --}}
-                            <div>
-                                @livewire(
-                                    'front.general.cart.cart-amount',
-                                    [
-                                        'item_id' => $collection->id,
-                                        'unique' => 'item-' . $collection->id,
-                                        'type' => 'Collection',
-                                        'title' => false,
-                                    ],
-                                    key($collection->name . '-' . rand())
-                                )
-                            </div>
+                            @if ($collection->quantity > 0)
+                                <div>
+                                    @livewire(
+                                        'front.general.cart.cart-amount',
+                                        [
+                                            'item_id' => $collection->id,
+                                            'unique' => 'item-' . $collection->id,
+                                            'type' => 'Collection',
+                                            'title' => false,
+                                        ],
+                                        key("cart-amount-{$collection->name}-{$collection->id}")
+                                    )
+                                </div>
+                            @endif
                             {{-- Cart Amount :: End --}}
 
                             {{-- Collection Share :: Start --}}
@@ -717,7 +747,10 @@
                     {{-- Delivery Cost Body :: Start --}}
                     <div class="hidden p-4 rounded-lg flex items-center justify-center" id="delivery-cost"
                         role="tabpanel" aria-labelledby="delivery-cost-tab">
-                        @livewire('front.product.delivery.product-delivery', ['free_shipping' => $collection_offer->free_shipping, 'collection_weight' => $collection->weight])
+                        @livewire('front.product.delivery.product-delivery', [
+                            'free_shipping' => $collectionOffer->free_shipping,
+                            'collection_weight' => $collection->weight, 
+                        ])
                     </div>
                     {{-- Delivery Cost Body :: End --}}
 
@@ -907,7 +940,8 @@
                     selector: '#comment',
                     setup: function(editor) {
                         editor.on('blur', function(e) {
-                            window.livewire.dispatch('updatedComment', tinymce.get(e.target
+                            window.livewire.dispatch('updatedComment', tinymce.get(e
+                                    .target
                                     .id)
                                 .getContent())
                         });

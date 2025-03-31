@@ -44,7 +44,6 @@ class CollectionController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show($id, $slug = null)
     {
@@ -93,7 +92,7 @@ class CollectionController extends Controller
         $collectionsOffers = getBestOfferForCollections($allCollectionsIds);
 
         // Get the collection's Best Offer
-        $collection_offer = $collectionsOffers->where('id', $collectionId)->first();
+        $collectionOffer = $collectionsOffers->where('id', $collectionId)->first();
 
         // Get the product's related products and collections
         $relatedProducts = $productsOffers->whereIn('id', $relatedProductsIds);
@@ -106,14 +105,14 @@ class CollectionController extends Controller
         $complementedItems = $complementedProducts->concat($complementedCollections)->toArray();
 
         // Get the collection's data from the cart
-        $collection_cart = Cart::instance('cart')->search(function ($cartItem, $rowId) use ($id) {
+        $collectionCart = Cart::instance('cart')->search(function ($cartItem) use ($id) {
             return $cartItem->id == $id;
         });
 
         // Get the app locale
         $locale = session('locale');
 
-        return view('front.collection_page.collection_page', compact('collection', 'collection_offer', 'relatedItems', 'complementedItems', 'collection_cart', 'locale'));
+        return view('front.collection_page.collection_page', compact('collection', 'collectionOffer', 'relatedItems', 'complementedItems', 'collectionCart', 'locale'));
     }
 
     /**

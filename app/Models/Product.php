@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Translatable\HasTranslations;
-use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 use Znck\Eloquent\Traits\BelongsToThrough;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
@@ -49,7 +49,8 @@ class Product extends Model
     protected $appends = [
         "avg_rating",
         // "can_review",
-        'type'
+        'type',
+        'has_pending_notification'
     ];
 
     protected $with = [
@@ -236,6 +237,18 @@ class Product extends Model
         )->withTimestamps();
     }
 
+    // many to many polymorphic relationship Product --> Back To Stock Notifications
+    public function backToStockNotifications()
+    {
+        return $this->morphToMany(
+            BackToStockNotification::class,
+            'notifiable',
+            'back_to_stock_notifiables',
+            'notifiable_id',
+            'notification_id'
+        );
+    }
+
     ############# Appends :: Start #############
     public function getAvgRatingAttribute()
     {
@@ -246,178 +259,6 @@ class Product extends Model
     {
         return $this->reviews->where('user_id', auth()->id())->count() == 0 && $this->orders->where('user_id', auth()->id())->count() > 0 ? true : false;
     }
-
-    // public function getBestOfferAttribute()
-    // {
-    //     // Get All Product's Prices -- Start with Product's Final Price
-    //     $all_prices = [$this->final_price];
-
-    //     // Get All Product's Points -- Start with Product's Points
-    //     $all_points = [];
-
-    //     // Get Free Shipping
-    //     $free_shipping = $this->free_shipping;
-
-    //     // Get All Subcategories
-    //     $subcategories = $this->subcategories ? $this->subcategories->map(fn($subcategory) => $subcategory->id) : [];
-
-    //     // Get All Categories
-    //     $categories = count($subcategories) ? $this->subcategories->map(fn($subcategory) => $subcategory->category) : [];
-
-    //     // Get All Supercategories
-    //     $supercategories = count($categories) ? $categories->map(fn($category) => $category->supercategory) : [];
-
-    //     // Get All Offers Ids
-    //     $offers_ids = [];
-
-    //     // Get Final Prices From Direct Offers
-    //     $direct_offers = $this->validOffers->map(fn($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]);
-    //     foreach ($direct_offers as $offer) {
-
-    //         if ($offer['free_shipping']) {
-    //             $free_shipping = 1;
-    //             $offers_ids[] = $offer['offer_id'];
-    //         }
-
-    //         // Percentage Offer
-    //         if ($offer['type'] == 0) {
-    //             $all_prices[] = round($this->final_price - (($offer['value'] / 100) * $this->final_price), 2);
-    //             $offers_ids[] = $offer['offer_id'];
-    //         }
-    //         // Fixed Offer
-    //         elseif ($offer['type'] == 1) {
-    //             if ($this->final_price >  $offer['value']) {
-    //                 $all_prices[] = round($this->final_price - $offer['value'], 2);
-    //             } else {
-    //                 $all_prices[] = 0;
-    //             }
-    //             $offers_ids[] = $offer['offer_id'];
-    //         }
-    //         // Points Offer
-    //         elseif ($offer['type'] == 2) {
-    //             $all_points[] = $offer['value'];
-    //             $offers_ids[] = $offer['offer_id'];
-    //         }
-    //     }
-
-    //     // Get Final Prices From Offers Through Subcategories
-    //     $subcategories_offers = $this->subcategories ? $this->subcategories->map(fn($subcategory) => $subcategory->validOffers->map(fn($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
-    //     foreach ($subcategories_offers as $subcategory) {
-    //         foreach ($subcategory as $offer) {
-    //             if ($offer['free_shipping']) {
-    //                 $free_shipping = 1;
-    //                 $offers_ids[] = $offer['offer_id'];
-    //             }
-
-    //             if ($offer['type'] == 0) {
-    //                 $all_prices[] = round($this->final_price - (($offer['value'] / 100) * $this->final_price), 2);
-    //                 $offers_ids[] = $offer['offer_id'];
-    //             } elseif ($offer['type'] == 1) {
-    //                 if ($this->final_price >  $offer['value']) {
-    //                     $all_prices[] = round($this->final_price - $offer['value'], 2);
-    //                 } else {
-    //                     $all_prices[] = 0;
-    //                 }
-    //                 $offers_ids[] = $offer['offer_id'];
-    //             } elseif ($offer['type'] == 2) {
-    //                 $all_points[] = $offer['value'];
-    //                 $offers_ids[] = $offer['offer_id'];
-    //             }
-    //         }
-    //     }
-
-    //     // Get Final Prices From Offers Through Categories
-    //     $categories_offers = $categories ? $categories->map(fn($category) => $category->validOffers->map(fn($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
-
-    //     foreach ($categories_offers as $category) {
-    //         foreach ($category as $offer) {
-
-    //             if ($offer['free_shipping']) {
-    //                 $free_shipping = 1;
-    //                 $offers_ids[] = $offer['offer_id'];
-    //             }
-
-    //             if ($offer['type'] == 0) {
-    //                 $all_prices[] = round($this->final_price - (($offer['value'] / 100) * $this->final_price), 2);
-    //                 $offers_ids[] = $offer['offer_id'];
-    //             } elseif ($offer['type'] == 1) {
-    //                 if ($this->final_price >  $offer['value']) {
-    //                     $all_prices[] = round($this->final_price - $offer['value'], 2);
-    //                 } else {
-    //                     $all_prices[] = 0;
-    //                 }
-    //                 $offers_ids[] = $offer['offer_id'];
-    //             } elseif ($offer['type'] == 2) {
-    //                 $all_points[] = $offer['value'];
-    //                 $offers_ids[] = $offer['offer_id'];
-    //             }
-    //         }
-    //     }
-
-    //     // Get Final Prices From Offers Through Supercategories
-    //     $supercategories_offers = $supercategories ? $supercategories->map(fn($supercategory) => $supercategory->validOffers->map(fn($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type])) : [];
-    //     foreach ($supercategories_offers as $supercategory) {
-    //         foreach ($supercategory as $offer) {
-    //             if ($offer['free_shipping']) {
-    //                 $free_shipping = 1;
-    //                 $offers_ids[] = $offer['offer_id'];
-    //             }
-
-    //             if ($offer['type'] == 0) {
-    //                 $all_prices[] = round($this->final_price - (($offer['value'] / 100) * $this->final_price), 2);
-    //                 $offers_ids[] = $offer['offer_id'];
-    //             } elseif ($offer['type'] == 1) {
-    //                 if ($this->final_price >  $offer['value']) {
-    //                     $all_prices[] = round($this->final_price - $offer['value'], 2);
-    //                 } else {
-    //                     $all_prices[] = 0;
-    //                 }
-    //                 $offers_ids[] = $offer['offer_id'];
-    //             } elseif ($offer['type'] == 2) {
-    //                 $all_points[] = $offer['value'];
-    //                 $offers_ids[] = $offer['offer_id'];
-    //             }
-    //         }
-    //     }
-
-    //     // Get Final Prices From Offers Through Brands
-    //     $brand_offers = $this->brand ? $this->brand->validOffers->map(fn($offer) => ['offer_id' => $offer->id, 'free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]) : [];
-    //     foreach ($brand_offers as $offer) {
-    //         if ($offer['free_shipping']) {
-    //             $free_shipping = 1;
-    //             $offers_ids[] = $offer['offer_id'];
-    //         }
-
-    //         if ($offer['type'] == 0) {
-    //             $all_prices[] = round($this->final_price - (($offer['value'] / 100) * $this->final_price), 2);
-    //             $offers_ids[] = $offer['offer_id'];
-    //         } elseif ($offer['type'] == 1) {
-    //             if ($this->final_price >  $offer['value']) {
-    //                 $all_prices[] = round($this->final_price - $offer['value'], 2);
-    //             } else {
-    //                 $all_prices[] = 0;
-    //             }
-    //             $offers_ids[] = $offer['offer_id'];
-    //         } elseif ($offer['type'] == 2) {
-    //             $all_points[] = $offer['value'];
-    //             $offers_ids[] = $offer['offer_id'];
-    //         }
-    //     }
-
-    //     // Get Best Points Offer
-    //     $best_points = count($all_points) ? max($all_points) : 0;
-
-    //     // Get Best Price Offer
-    //     $best_price = count($all_prices) ? min($all_prices) : 0;
-
-    //     return [
-    //         'best_price' => $best_price,
-    //         'best_points' => count($all_points) ? $best_points + $this->points : $this->points,
-    //         'free_shipping' =>  $free_shipping,
-    //         'offers_ids' => array_unique($offers_ids),
-    //     ];
-    // }
-
 
     public function getBestOfferAttribute()
     {
@@ -472,6 +313,32 @@ class Product extends Model
             get: fn() => "Product"
         );
     }
+
+    protected function hasPendingNotification(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $guestPhone = session('guest_phone', null);
+
+                if (auth()->check()) {
+                    return $this
+                        ->backToStockNotifications()
+                        ->where('user_id', auth()->id())
+                        ->exists();
+                } elseif ($guestPhone !== null) {
+                    return $this
+                        ->backToStockNotifications()
+                        ->where('phone', $guestPhone)
+                        ->exists();
+                }
+
+                return false;
+            },
+            // Optional: Add a setter if needed
+            set: fn ($value) => $value
+        );
+    }
+
     ############# Appends :: End #############
 
     ############# Scopes :: Start #############

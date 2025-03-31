@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Translatable\HasTranslations;
-use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 use Znck\Eloquent\Traits\BelongsToThrough;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Collection extends Model
 {
@@ -43,7 +44,11 @@ class Collection extends Model
     ];
 
     protected $appends = [
-        "avg_rating", "can_review", "quantity", 'type'
+        "avg_rating",
+        "can_review",
+        "quantity",
+        'type',
+        'has_pending_notification'
     ];
 
     protected $with = ['reviews', 'orders', 'products'];
@@ -169,6 +174,18 @@ class Collection extends Model
         )->withPivot('rank');
     }
 
+    // many to many polymorphic relationship Collection --> Back To Stock Notifications
+    public function backToStockNotifications()
+    {
+        return $this->morphToMany(
+            BackToStockNotification::class,
+            'notifiable',
+            'back_to_stock_notifiables',
+            'notifiable_id',
+            'notification_id'
+        );
+    }
+
     ############# Appends :: Start #############
     public function getAvgRatingAttribute()
     {
@@ -183,14 +200,39 @@ class Collection extends Model
     public function getQuantityAttribute()
     {
         return $this->products()
-            ->without(['reviews', 'orders', 'brand', 'validOffers'])->get()
-            ->map(fn ($product) =>  floor($product->quantity / $product->pivot->quantity))
+            ->without(['reviews', 'orders', 'brand'])->get()
+            ->map(fn($product) =>  floor($product->quantity / $product->pivot->quantity))
             ->min() ?? 0;
     }
 
     public function getTypeAttribute()
     {
         return "Collection";
+    }
+
+    protected function hasPendingNotification(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $guestPhone = session('guest_phone', null);
+
+                if (auth()->check()) {
+                    return $this
+                        ->backToStockNotifications()
+                        ->where('user_id', auth()->id())
+                        ->exists();
+                } elseif ($guestPhone !== null) {
+                    return $this
+                        ->backToStockNotifications()
+                        ->where('phone', $guestPhone)
+                        ->exists();
+                }
+
+                return false;
+            },
+            // Optional: Add a setter if needed
+            set: fn ($value) => $value
+        );
     }
     ############# Appends :: End #############
 
@@ -219,10 +261,10 @@ class Collection extends Model
             ->with(
                 [
                     'thumbnail',
-                    'offers' => fn ($q) => $q
+                    'offers' => fn($q) => $q
                         ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
                         ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
-                    'reviews' => fn ($q) => $q->where('status', 1),
+                    'reviews' => fn($q) => $q->where('status', 1),
                     'coupons'
                 ]
             )
@@ -255,10 +297,10 @@ class Collection extends Model
                 [
                     // 'products' => fn ($q) => $q->with(['brand' => fn ($q) => $q->with('offers')]),
                     'thumbnail',
-                    'offers' => fn ($q) => $q
+                    'offers' => fn($q) => $q
                         ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
                         ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
-                    'reviews' => fn ($q) => $q->where('status', 1),
+                    'reviews' => fn($q) => $q->where('status', 1),
                     'coupons'
                 ]
             )
@@ -266,7 +308,6 @@ class Collection extends Model
             ->where('under_reviewing', 0)
             ->where('publish', 1);
     }
-
     ############# Scopes :: End #############
 
 }

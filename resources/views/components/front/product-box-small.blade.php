@@ -8,24 +8,65 @@
             <div
                 class="hidden lg:flex absolute top-2 ltr:-right-10 z-10 rtl:-left-10 transition-all ease-in-out duration-500 ltr:group-hover:right-2 rtl:group-hover:left-2 flex-col gap-1">
                 {{-- Add to compare : Start --}}
-                @livewire('front.general.compare.add-to-compare-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-compare-button-' . Str::random(10)))
+                @livewire(
+                    'front.general.compare.add-to-compare-button',
+                    [
+                        'item_id' => $item['id'],
+                        'type' => $item['type'],
+                    ],
+                    key("add-compare-button-{$item['id']}")
+                )
                 {{-- Add to compare : End --}}
-
 
                 @if ($wishlist)
                     {{-- Remove from wishlist : Start --}}
-                    @livewire('front.general.wishlist.remove-from-wishlist-button', ['item_id' => $item['id'], 'type' => $item['type']], key('remove-wishlist-button-' . Str::random(10)))
+                    @livewire(
+                        'front.general.wishlist.remove-from-wishlist-button',
+                        [
+                            'item_id' => $item['id'],
+                            'type' => $item['type'],
+                        ],
+                        key("remove-wishlist-button-{$item['id']}")
+                    )
                     {{-- Remove from wishlist : End --}}
                 @else
                     {{-- Add to wishlist : Start --}}
-                    @livewire('front.general.wishlist.add-to-wishlist-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-wishlist-button-' . Str::random(10)))
+                    @livewire(
+                        'front.general.wishlist.add-to-wishlist-button',
+                        [
+                            'item_id' => $item['id'],
+                            'type' => $item['type'],
+                        ],
+                        key("add-wishlist-button-{$item['id']}")
+                    )
                     {{-- Add to wishlist : End --}}
                 @endif
 
                 @if (isset($item['quantity']) && $item['quantity'] > 0)
                     {{-- Add to cart : Start --}}
-                    @livewire('front.general.cart.add-to-cart-button', ['item_id' => $item['id'], 'type' => $item['type']], key('add-cart-button-' . Str::random(10)))
+                    @livewire(
+                        'front.general.cart.add-to-cart-button',
+                        [
+                            'item_id' => $item['id'],
+                            'type' => $item['type'],
+                        ],
+                        key("add-cart-button-{$item['id']}")
+                    )
                     {{-- Add to cart : End --}}
+                @else
+                    {{-- Notify Me : Start --}}
+                    @livewire(
+                        'front.general.back-to-stock-notification.back-to-stock-notification-button',
+                        [
+                            'item_id' => $item['id'],
+                            'text' => false,
+                            'large' => false,
+                            'type' => $item['type'],
+                            'isNotified' => $item['has_pending_notification'],
+                        ],
+                        key("notify-me-button-{$item['id']}")
+                    )
+                    {{-- Notify Me : End --}}
                 @endif
             </div>
             {{-- Add Product Large Screen : End --}}
@@ -49,7 +90,8 @@
                 {{-- Product Image : Start --}}
                 <div class="block max-h-52 overflow-hidden" wire:ignore.self>
                     @if ($item['thumbnail'])
-                        <img class="mx-auto max-h-52 h-full md:h-52 construction-placeholder" data-placeholder-size="text-[200px]"
+                        <img class="mx-auto max-h-52 h-full md:h-52 construction-placeholder"
+                            data-placeholder-size="text-[200px]"
                             @if ($item['type'] == 'Product') src="{{ asset('storage/images/products/cropped250/' . $item['thumbnail']['file_name']) }}" alt="{{ $item['name'][session('locale')] . 'image' }}"
                             @elseif ($item['type'] == 'Collection') src="{{ asset('storage/images/collections/cropped250/' . $item['thumbnail']['file_name']) }}" alt="{{ $item['name'][session('locale')] . 'image' }}" @endif>
                     @else

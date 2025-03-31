@@ -149,6 +149,31 @@
             })
         });
 
+        window.addEventListener('swalGetGuestPhone', function(e) {
+            Swal.fire({
+                title: e.detail.title,
+                html: e.detail.html,
+                showDenyButton: true,
+                confirmButtonText: e.detail.confirmButtonText,
+                denyButtonText: e.detail.denyButtonText,
+                denyButtonColor: e.detail.denyButtonColor,
+                confirmButtonColor: e.detail.confirmButtonColor,
+                preConfirm: () => {
+                    return [
+                        document.getElementById('guest_phone').value,
+                    ]
+                }
+            }).then((result) => {
+                console.log(result);
+
+                if (result.isConfirmed) {
+                    Livewire.dispatch(e.detail.method, {
+                        phone: result.value[0],
+                    })
+                }
+            });
+        });
+
         $(function() {
             $('.remove_banner_button').on('click', function(e) {
                 e.stopPropagation();
@@ -184,7 +209,7 @@
             isInitialized = true;
 
             const lazyLoad = function(image) {
-                console.log(image);
+
                 image.onerror = function() {
                     const iconSize = image.dataset.placeholderSize || 'text-2xl';
                     const placeholderHTML =

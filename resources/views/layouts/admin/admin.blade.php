@@ -125,8 +125,8 @@
         });
         // #### Sweetalert ####
 
-                // #### Initialize Image Handlers #### (Singleton Pattern)
-                let observer; // Keep single observer instance
+        // #### Initialize Image Handlers #### (Singleton Pattern)
+        let observer; // Keep single observer instance
         let isInitialized = false;
 
         function initializeImageHandlers() {
@@ -135,7 +135,7 @@
             isInitialized = true;
 
             const lazyLoad = function(image) {
-                console.log(image);
+
                 image.onerror = function() {
                     const iconSize = image.dataset.placeholderSize || 'text-2xl';
                     const placeholderHTML =
