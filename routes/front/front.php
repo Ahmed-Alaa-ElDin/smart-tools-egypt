@@ -144,4 +144,8 @@ Route::group([
     ################ Collection Controller :: Start ##############
     Route::get('/c/{id}-{slug?}', [CollectionController::class, 'show'])->name('collections.show');
     ################ Collection Controller :: End ##############
+
+    ################ Quote Request Controller :: Start ##############
+    Route::get('/quote-request', [QuoteRequestController::class, 'show'])->name('quote-request');
+    ################ Quote Request Controller :: End ##############
 });

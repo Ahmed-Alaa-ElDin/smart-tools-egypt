@@ -47,7 +47,7 @@
 
                             @if ($order_id)
                                 <a href="{{ route('front.orders.track', $order_id) }}" class="btn bg-secondary font-bold">
-                                    {{ __('front/homePage.Track Your Order') }}
+                                    {{ __('front/homePage.Track Order') }}
                                 </a>
                             @else
                                 <a href="{{ route('front.homepage') }}" class="btn bg-primary font-bold">

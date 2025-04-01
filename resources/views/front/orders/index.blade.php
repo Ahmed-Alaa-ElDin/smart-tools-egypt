@@ -163,7 +163,7 @@
                                                     ]))
                                                     <a href="{{ route('front.orders.track', $order->id) }}"
                                                         class="col-span-1 btn btn-sm bg-secondary font-bold m-0">
-                                                        {{ __('front/homePage.Track Your Order') }}
+                                                        {{ __('front/homePage.Track Order') }}
                                                     </a>
                                                 @endif
 

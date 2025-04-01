@@ -1,12 +1,164 @@
-<footer class="pt-3 pb-10 xl:pb-3 bg-secondary text-white">
+<footer class="py-7 bg-secondary text-white">
     <div class="container">
-        <div class="grid grid-cols-12 items-center gap-3">
+        {{-- All Columns : Start --}}
+        <div class="grid grid-cols-12 items-center gap-3 my-6">
+            {{-- Column 1 : Customer Service :: Start --}}
             <div class="col-span-12 lg:col-span-4">
-                <div class="text-center ltr:md:text-left rtl:md:text-right text-sm font-bold" current-verison="6.0">
-                    © Smart Tools Egypt {{ date('Y') }}
+                <h3 class="text-lg font-bold mb-3">
+                    {{ __('front/homePage.Customer Service') }}
+                </h3>
+
+                <ul class="list-inline flex flex-col justify-start items-start gap-2">
+                    {{-- Login :: Start --}}
+                    <li class="list-inline-item m-0">
+                        @if (!auth()->check())
+                            <a href="{{ route('login') }}" class="hover:text-white">
+                                {{ __('front/homePage.Login') }}
+                            </a>
+                        @else
+                            <form action="{{ route('logout') }}" method="POST" class="m-0">
+                                @csrf
+                                <button type="submit" class="hover:text-white">
+                                    {{ __('front/homePage.Logout') }}
+                                </button>
+                            </form>
+                        @endif
+                    </li>
+                    {{-- Login :: End --}}
+
+                    {{-- Track Orders :: Start --}}
+                    @if (auth()->check())
+                        <li class="list-inline-item m-0">
+                            <a href="{{ route('front.orders.index') }}" class="hover:text-white">
+                                {{ __('front/homePage.Track Orders') }}
+                            </a>
+                        </li>
+                    @else
+                        <li class="list-inline-item m-0">
+                            <a href="{{ route('login') }}" class="hover:text-white">
+                                {{ __('front/homePage.Track Orders') }}
+                            </a>
+                        </li>
+                    @endif
+                    {{-- Track Orders :: End --}}
+
+                    {{-- Request a Quote :: Start --}}
+                    <li class="list-inline-item m-0">
+                        <a href="{{ route('login') }}" class="hover:text-white">
+                            {{ __('front/homePage.Request a Quote') }}
+                        </a>
+                    </li>
+                    {{-- Request a Quote :: End --}}
+
+                    {{-- Be the First to Know Our Offers :: Start --}}
+                    <li class="list-inline-item m-0">
+                        <a href="{{ route('login') }}" class="hover:text-white">
+                            {{ __('front/homePage.Be the First to Know Our Offers') }}
+                        </a>
+                    </li>
+                    {{-- Be the First to Know Our Offers :: End --}}
+                </ul>
+            </div>
+            {{-- Column 1 : Customer Service :: End --}}
+
+            {{-- Column 2 : Our Services :: Start --}}
+            <div class="col-span-12 lg:col-span-4">
+                <h3 class="text-lg font-bold mb-3">
+                    {{ __('front/homePage.Our Services') }}
+                </h3>
+
+                <ul class="list-inline flex flex-col justify-start items-start gap-2">
+                    {{-- Delivery :: Start --}}
+                    <li class="list-inline-item m-0">
+                        <a href="{{ route('login') }}" class="hover:text-white">
+                            {{ __('front/homePage.Delivery') }}
+                        </a>
+                    </li>
+                    {{-- Delivery :: End --}}
+
+                    {{-- Returns & Exchanges :: Start --}}
+                    <li class="list-inline-item m-0">
+                        <a href="{{ route('login') }}" class="hover:text-white">
+                            {{ __('front/homePage.Returns & Exchanges') }}
+                        </a>
+                    </li>
+                    {{-- Returns & Exchanges :: End --}}
+
+                    {{-- Privacy Policy :: Start --}}
+                    <li class="list-inline-item m-0">
+                        <a href="{{ route('login') }}" class="hover:text-white">
+                            {{ __('front/homePage.Privacy Policy') }}
+                        </a>
+                    </li>
+                    {{-- Privacy Policy :: End --}}
+
+                    {{-- Sell With Us :: Start --}}
+                    <li class="list-inline-item m-0">
+                        <a href="{{ route('login') }}" class="hover:text-white">
+                            {{ __('front/homePage.Sell With Us') }}
+                        </a>
+                    </li>
+                    {{-- Sell With Us :: End --}}
+                </ul>
+            </div>
+            {{-- Column 2 : Our Services :: End --}}
+
+            {{-- Column 3 : About Us :: Start --}}
+            <div class="col-span-12 lg:col-span-4">
+                <h3 class="text-lg font-bold mb-3">
+                    {{ __('front/homePage.About Us') }}
+                </h3>
+
+                <ul class="list-inline flex flex-col justify-start items-start gap-2">
+                    {{-- Contact Us :: Start --}}
+                    <li class="list-inline-item m-0">
+                        <a href="{{ route('login') }}" class="hover:text-white">
+                            {{ __('front/homePage.Contact Us') }}
+                        </a>
+                    </li>
+                    {{-- Contact Us :: End --}}
+
+                    {{-- Customer Reviews :: Start --}}
+                    <li class="list-inline-item m-0">
+                        <a href="{{ route('login') }}" class="hover:text-white">
+                            {{ __('front/homePage.Customer Reviews') }}
+                        </a>
+                    </li>
+                    {{-- Customer Reviews :: End --}}
+
+                    {{-- Call Us :: Start --}}
+                    <li class="list-inline-item m-0">
+                        <a href="{{ route('login') }}" class="hover:text-white">
+                            {{ __('front/homePage.Call Us') }}
+                        </a>
+                    </li>
+                    {{-- Call Us :: End --}}
+
+                    {{-- Our Branches :: Start --}}
+                    <li class="list-inline-item m-0">
+                        <a href="{{ route('login') }}" class="hover:text-white">
+                            {{ __('front/homePage.Our Branches') }}
+                        </a>
+                    </li>
+                    {{-- Our Branches :: End --}}
+                </ul>
+            </div>
+            {{-- Column 3 : About Us :: End --}}
+        </div>
+        {{-- All Columns : End --}}
+
+
+        <div class="grid grid-cols-12 items-center justify-center gap-3">
+            {{-- Copyright :: Start --}}
+            <div class="col-span-12">
+                <div class="text-center text-sm font-bold">
+                    {{ __('front/homePage.All Rights Reserved to Smart Tools Egypt', ['date' => date('Y')]) }}
                 </div>
             </div>
-            <div class="col-span-12 lg:col-span-4">
+            {{-- Copyright :: End --}}
+
+            {{-- Social Media :: Start --}}
+            <div class="col-span-12">
                 <ul class="list-inline flex justify-center items-center gap-3">
                     <li class="list-inline-item m-0">
                         <a href="https://www.facebook.com/SmartToolsEgypt" target="_blank"
@@ -50,16 +202,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-span-12 lg:col-span-4">
-                <div class="text-center rtl:md:text-left ltr:text-right">
-                    <ul class="list-inline mb-0">
-                        <li class="list-inline-item">
-                            <img src="https://www.naijaloaded.com.ng/wp-content/uploads/2020/10/Naijaloaded-Desktop-PC-Logo-4.png"
-                                height="30" class="mw-100 h-auto" style="max-height: 30px">
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            {{-- Social Media :: End --}}
         </div>
     </div>
 </footer>
