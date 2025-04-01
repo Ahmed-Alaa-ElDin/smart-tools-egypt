@@ -16,7 +16,6 @@
         {{-- Search Box :: Start --}}
 
         @if ($search)
-
             <div id="typed-search-box"
                 class="stop-propagation bg-white rounded shadow-lg absolute left-0 top-100 w-100 z-50 max-h-56 overflow-y-scroll scrollbar scrollbar-thin scrollbar-thumb-primary hover">
                 {{-- Search Results :: Start --}}

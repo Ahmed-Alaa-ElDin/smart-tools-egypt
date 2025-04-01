@@ -118,44 +118,45 @@
             <a class="md:p-3 p-2 text-left block hover:text-current"
                 @if ($item['type'] == 'Product') href="{{ route('front.products.show', ['id' => $item['id'], 'slug' => $item['slug'][session('locale')]]) }}"
             @elseif ($item['type'] == 'Collection') href="{{ route('front.collections.show', ['id' => $item['id'], 'slug' => $item['slug'][session('locale')]]) }}" @endif>
-                {{-- Price : Start --}}
-                <div class="flex flex-wrap-reverse justify-center items-center gap-3">
-                    @if ($item['under_reviewing'])
-                        <span class="text-yellow-600 font-bold mb-2">
-                            {{ __('front/homePage.Under Reviewing') }}
-                        </span>
-                    @else
-                        {{-- Final Price : Start --}}
-                        <div class="flex rtl:flex-row-reverse gap-1">
-                            <span class="font-bold text-successDark text-sm">{{ __('front/homePage.EGP') }}</span>
-                            <span class="font-bold text-successDark text-2xl"
-                                dir="ltr">{{ number_format(explode('.', $item['final_price'])[0], 0, '.', '\'') }}</span>
-                            <span
-                                class="font-bold text-successDark text-xs">{{ explode('.', $item['final_price'])[1] }}</span>
-                        </div>
-                        {{-- Final Price : End --}}
-
-                        {{-- Base Price : Start --}}
-                        <del class="flex rtl:flex-row-reverse gap-1 font-bold text-red-400 text-sm">
-                            <span>
-                                {{ __('front/homePage.EGP') }}
+                @if ($item['quantity'])
+                    {{-- Price : Start --}}
+                    <div class="flex flex-wrap-reverse justify-center items-center gap-3">
+                        @if ($item['under_reviewing'])
+                            <span class="text-yellow-600 font-bold mb-2">
+                                {{ __('front/homePage.Under Reviewing') }}
                             </span>
-                            <span class="font-bold text-3xl"
-                                dir="ltr">{{ number_format(explode('.', $item['base_price'])[0], 0, '.', '\'') }}</span>
-                        </del>
-                        {{-- Base Price : End --}}
-                    @endif
+                        @else
+                            {{-- Final Price : Start --}}
+                            <div class="flex rtl:flex-row-reverse gap-1">
+                                <span class="font-bold text-successDark text-sm">{{ __('front/homePage.EGP') }}</span>
+                                <span class="font-bold text-successDark text-2xl"
+                                    dir="ltr">{{ number_format(explode('.', $item['final_price'])[0], 0, '.', '\'') }}</span>
+                                <span
+                                    class="font-bold text-successDark text-xs">{{ explode('.', $item['final_price'])[1] }}</span>
+                            </div>
+                            {{-- Final Price : End --}}
 
-                </div>
-                {{-- Price : End --}}
-
-                {{-- Free Shipping: Start --}}
-                @if ($item['free_shipping'])
-                    <div class="text-center text-success font-bold text-sm">
-                        {{ __('front/homePage.Free Shipping') }}
+                            {{-- Base Price : Start --}}
+                            <del class="flex rtl:flex-row-reverse gap-1 font-bold text-red-400 text-sm">
+                                <span>
+                                    {{ __('front/homePage.EGP') }}
+                                </span>
+                                <span class="font-bold text-3xl"
+                                    dir="ltr">{{ number_format(explode('.', $item['base_price'])[0], 0, '.', '\'') }}</span>
+                            </del>
+                            {{-- Base Price : End --}}
+                        @endif
                     </div>
+                    {{-- Price : End --}}
+
+                    {{-- Free Shipping: Start --}}
+                    @if ($item['free_shipping'])
+                        <div class="text-center text-success font-bold text-sm">
+                            {{ __('front/homePage.Free Shipping') }}
+                        </div>
+                    @endif
+                    {{-- Free Shipping: End --}}
                 @endif
-                {{-- Free Shipping: End --}}
 
                 {{-- Reviews : Start --}}
                 <div class="my-1 text-center flex justify-center items-center gap-2">
@@ -210,7 +211,7 @@
                 </div>
 
                 {{-- Points : Start --}}
-                @if ($item['points'] || $item['best_points'])
+                @if ($item['quantity'] > 0 && ($item['points'] || $item['best_points']))
                     <div
                         class="rounded px-2 mt-2 bg-gray-200 border-gray-800 text-black text-sm border flex justify-between items-center">
                         <span>{{ __('front/homePage.Points') }}</span>
