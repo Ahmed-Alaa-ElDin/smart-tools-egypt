@@ -36,7 +36,7 @@ class BackToStockNotificationButton extends Component
     {
         try {
             if (!$this->item) {
-                $this->dispatchWarningNotification(__('front/homePage.Item not found'));
+                $this->dispatchErrorNotification(__('front/homePage.Item not found'));
                 return;
             }
 
@@ -68,7 +68,7 @@ class BackToStockNotificationButton extends Component
             $this->phone = $phone;
 
             // Validate phone
-            $this->validate();
+            $this->validateOnly('phone');
 
             // Save phone
             session()->put('guest_phone', $this->phone);
