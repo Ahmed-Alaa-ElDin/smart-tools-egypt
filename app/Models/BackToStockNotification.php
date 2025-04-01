@@ -17,20 +17,24 @@ class BackToStockNotification extends Model
 
     public function product()
     {
-        return $this->morphedByMany(Product::class,
-        'notifiable',
+        return $this->morphedByMany(
+            Product::class,
+            'notifiable',
             'back_to_stock_notifiables',
             'id',
-            'notification_id');
+            'notification_id'
+        );
     }
 
     public function collection()
     {
-        return $this->morphedByMany(Collection::class,
-         'notifiable',
+        return $this->morphedByMany(
+            Collection::class,
+            'notifiable',
             'back_to_stock_notifiables',
             'id',
-            'notification_id');
+            'notification_id'
+        );
     }
 
     public function user()

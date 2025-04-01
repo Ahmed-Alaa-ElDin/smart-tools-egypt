@@ -324,11 +324,13 @@ class Product extends Model
                     return $this
                         ->backToStockNotifications()
                         ->where('user_id', auth()->id())
+                        ->whereNull('sent_at')
                         ->exists();
                 } elseif ($guestPhone !== null) {
                     return $this
                         ->backToStockNotifications()
                         ->where('phone', $guestPhone)
+                        ->whereNull('sent_at')
                         ->exists();
                 }
 
