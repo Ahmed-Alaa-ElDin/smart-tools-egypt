@@ -1,14 +1,14 @@
 <footer class="py-7 bg-secondary text-white">
     <div class="container">
         {{-- All Columns : Start --}}
-        <div class="grid grid-cols-12 items-center gap-3 my-6">
+        <div class="grid grid-cols-12 items-center gap-7 my-6 text-center ltr:lg:text-left rtl:lg:text-right">
             {{-- Column 1 : Customer Service :: Start --}}
             <div class="col-span-12 lg:col-span-4">
                 <h3 class="text-lg font-bold mb-3">
                     {{ __('front/homePage.Customer Service') }}
                 </h3>
 
-                <ul class="list-inline flex flex-col justify-start items-start gap-2">
+                <ul class="list-inline flex flex-col justify-start items-center lg:items-start gap-2">
                     {{-- Login :: Start --}}
                     <li class="list-inline-item m-0">
                         @if (!auth()->check())
@@ -67,7 +67,7 @@
                     {{ __('front/homePage.Our Services') }}
                 </h3>
 
-                <ul class="list-inline flex flex-col justify-start items-start gap-2">
+                <ul class="list-inline flex flex-col justify-start items-center lg:items-start gap-2">
                     {{-- Delivery :: Start --}}
                     <li class="list-inline-item m-0">
                         <a href="{{ route('login') }}" class="hover:text-white">
@@ -109,7 +109,7 @@
                     {{ __('front/homePage.About Us') }}
                 </h3>
 
-                <ul class="list-inline flex flex-col justify-start items-start gap-2">
+                <ul class="list-inline flex flex-col justify-start items-center lg:items-start gap-2">
                     {{-- Contact Us :: Start --}}
                     <li class="list-inline-item m-0">
                         <a href="{{ route('login') }}" class="hover:text-white">
@@ -171,7 +171,7 @@
                         </a>
                     </li>
                     <li class="list-inline-item m-0">
-                        <a href="#" target="_blank"
+                        <a href="#"
                             class="youtube text-xl flex bg-youtube w-9 h-9 rounded-circle items-center justify-center transition-all hover:bg-white hover:text-youtube focus:text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
                                 height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
