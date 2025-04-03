@@ -46,7 +46,7 @@
     {{-- <script src="{{ mix('assets/js/app.js') }}"></script> --}}
     {{-- <script src="{{ asset('assets/front/js/core/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/front/js/core/popper.min.js') }}"></script>
-    <script src="{{ asset('assets/js/plugins/flowbite/flowbite.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/flowbite/dist/flowbite.min.js') }}"></script>
     <script src="{{ asset('assets/front/js/core/bootstrap-material-design.min.js') }}"></script> --}}
 
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->

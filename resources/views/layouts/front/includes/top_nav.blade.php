@@ -114,7 +114,7 @@
             <div class="text-center flex-grow">
                 <span class="flex flex-wrap justify-center items-center gap-1 py-1" dir="rtl">
                     لو عاوز تعمل أوردر تواصل معانا عن طريق صفحتنا على
-                    <a href="{{ config('settings.facebook_link') }}" target="_blank"
+                    <a href="https://www.facebook.com/{{ config('settings.facebook_page_name') }}" target="_blank"
                         class="bg-facebook text-white px-2 py-1 text-sm rounded-full inline-flex justify-center items-center gap-1 font-bold">
                         Facebook
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">

@@ -363,16 +363,72 @@
                                         </div>
 
                                         {{-- Facebook --}}
-                                        <div class="col-span-8 md:col-span-6">
-                                            <label for="facebook_link" class="font-bold text-xs text-gray-700">
-                                                {{ __('admin/sitePages.Facebook Link') }}
+                                        <div class="col-span-4 md:col-span-3">
+                                            <label for="facebook_page_name" class="font-bold text-xs text-gray-700">
+                                                {{ __('admin/sitePages.Facebook Page Name') }}
                                             </label>
-                                            <input type="text" name="facebook_link" id="facebook_link" dir="ltr"
-                                                class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('facebook_link') border-red-900 border-2 @enderror"
-                                                value="{{ old('facebook_link', $settings->facebook_link) }}">
-                                            @error('facebook_link')
-                                                <label id="facebook_link-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
-                                                    for="facebook_link">{{ $message }}</label>
+                                            <input type="text" name="facebook_page_name" id="facebook_page_name" dir="ltr"
+                                                class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('facebook_page_name') border-red-900 border-2 @enderror"
+                                                value="{{ old('facebook_page_name', $settings->facebook_page_name) }}">
+                                            @error('facebook_page_name')
+                                                <label id="facebook_page_name-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
+                                                    for="facebook_page_name">{{ $message }}</label>
+                                            @enderror
+                                        </div>
+
+                                        {{-- YouTube Channel --}}
+                                        <div class="col-span-4 md:col-span-3">
+                                            <label for="youtube_channel_name" class="font-bold text-xs text-gray-700">
+                                                {{ __('admin/sitePages.Youtube Channel Name') }}
+                                            </label>
+                                            <input type="text" name="youtube_channel_name" id="youtube_channel_name" dir="ltr"
+                                                class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('youtube_channel_name') border-red-900 border-2 @enderror"
+                                                value="{{ old('youtube_channel_name', $settings->youtube_channel_name) }}">
+                                            @error('youtube_channel_name')
+                                                <label id="youtube_channel_name-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
+                                                    for="youtube_channel_name">{{ $message }}</label>
+                                            @enderror
+                                        </div>
+
+                                        {{-- Instagram Page --}}
+                                        <div class="col-span-4 md:col-span-3">
+                                            <label for="instagram_page_name" class="font-bold text-xs text-gray-700">
+                                                {{ __('admin/sitePages.Instagram Page Name') }}
+                                            </label>
+                                            <input type="text" name="instagram_page_name" id="instagram_page_name" dir="ltr"
+                                                class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('instagram_page_name') border-red-900 border-2 @enderror"
+                                                value="{{ old('instagram_page_name', $settings->instagram_page_name) }}">
+                                            @error('instagram_page_name')
+                                                <label id="instagram_page_name-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
+                                                    for="instagram_page_name">{{ $message }}</label>
+                                            @enderror
+                                        </div>
+
+                                        {{-- TikTok Page --}}
+                                        <div class="col-span-4 md:col-span-3">
+                                            <label for="tiktok_page_name" class="font-bold text-xs text-gray-700">
+                                                {{ __('admin/sitePages.TikTok Page Name') }}
+                                            </label>
+                                            <input type="text" name="tiktok_page_name" id="tiktok_page_name" dir="ltr"
+                                                class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('tiktok_page_name') border-red-900 border-2 @enderror"
+                                                value="{{ old('tiktok_page_name', $settings->tiktok_page_name) }}">
+                                            @error('tiktok_page_name')
+                                                <label id="tiktok_page_name-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
+                                                    for="tiktok_page_name">{{ $message }}</label>
+                                            @enderror
+                                        </div>
+
+                                        {{-- Whatsapp Group Invitation Code --}}
+                                        <div class="col-span-4 md:col-span-3">
+                                            <label for="whatsapp_group_invitation_code" class="font-bold text-xs text-gray-700">
+                                                {{ __('admin/sitePages.Whatsapp Group Invitation Code') }}
+                                            </label>
+                                            <input type="text" name="whatsapp_group_invitation_code" id="whatsapp_group_invitation_code" dir="ltr"
+                                                class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('whatsapp_group_invitation_code') border-red-900 border-2 @enderror"
+                                                value="{{ old('whatsapp_group_invitation_code', $settings->whatsapp_group_invitation_code) }}">
+                                            @error('whatsapp_group_invitation_code')
+                                                <label id="whatsapp_group_invitation_code-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
+                                                    for="whatsapp_group_invitation_code">{{ $message }}</label>
                                             @enderror
                                         </div>
                                     </div>

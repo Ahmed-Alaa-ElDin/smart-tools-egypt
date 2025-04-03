@@ -1,20 +1,22 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Front\SupercategoryController;
 use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\BrandController;
-use App\Http\Controllers\Front\CategoryController;
+use App\Http\Controllers\Front\OfferController;
 use App\Http\Controllers\Front\OrderController;
+use App\Http\Controllers\Front\PolicyController;
+use App\Http\Controllers\Front\AboutUsController;
 use App\Http\Controllers\Front\ProductController;
 use App\Http\Controllers\Front\ProfileController;
+use App\Http\Controllers\Front\CategoryController;
 use App\Http\Controllers\Front\HomepageController;
-use App\Http\Controllers\Front\InvoiceRequestController;
+use App\Http\Controllers\Front\WishlistController;
 use App\Http\Controllers\Front\CollectionController;
 use App\Http\Controllers\Front\ComparisonController;
-use App\Http\Controllers\Front\OfferController;
 use App\Http\Controllers\Front\SubcategoryController;
-use App\Http\Controllers\Front\WishlistController;
+use App\Http\Controllers\Front\SupercategoryController;
+use App\Http\Controllers\Front\InvoiceRequestController;
 
 Route::group([
     'middleware' => ['getCart'],
@@ -137,6 +139,16 @@ Route::group([
     Route::post('/invoice-request-store', [InvoiceRequestController::class, 'store'])->name('invoice-request.store')->middleware('auth');
     ################ Invoice Request Controller :: End ##############
 
+    ################ Policies :: Start ##############
+    Route::get('/delivery-policy', [PolicyController::class, 'delivery'])->name('policies.delivery');
+    Route::get('/return-and-exchange-policy', [PolicyController::class, 'returnAndExchange'])->name('policies.return-and-exchange');
+    Route::get('/privacy-policy', [PolicyController::class, 'privacy'])->name('policies.privacy');
+    ################ Policies :: End ##############
+
+    ################ About Us :: Start ##############
+    Route::get('/branches', [AboutUsController::class, 'branches'])->name('about-us.branches');
+    ################ About Us :: End ##############
+
     ################ Product Controller :: Start ##############
     Route::get('/{id}-{slug?}', [ProductController::class, 'show'])->name('products.show');
     ################ Product Controller :: End ##############
@@ -146,6 +158,6 @@ Route::group([
     ################ Collection Controller :: End ##############
 
     ################ Quote Request Controller :: Start ##############
-    Route::get('/quote-request', [QuoteRequestController::class, 'show'])->name('quote-request');
+    // Route::get('/quote-request', [QuoteRequestController::class, 'show'])->name('quote-request');
     ################ Quote Request Controller :: End ##############
 });

@@ -24,8 +24,12 @@ return new class extends Migration
             $table->integer('new_arrival_period')->default(0);
             $table->string('max_price_offer_name')->default('{"ar":"منتجات أقل من 500 جنية","en":"Products less than 500 EGP"}');
             $table->decimal('max_price_offer')->default(0);
-            $table->string('whatsapp_number')->default('01010097248');
-            $table->string('facebook_link')->default('https://www.facebook.com/SmartToolsEgypt/');
+            $table->string('whatsapp_number')->default('01010097248')->nullable();
+            $table->string('facebook_page_name')->default('SmartToolsEgypt')->nullable();
+            $table->string('youtube_channel_name')->nullable();
+            $table->string('instagram_page_name')->nullable();
+            $table->string('tiktok_page_name')->nullable();
+            $table->string('whatsapp_group_invitation_code')->nullable();
             $table->timestamps();
         });
     }

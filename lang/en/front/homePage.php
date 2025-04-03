@@ -509,4 +509,16 @@ return [
     "Our Branches"                                  =>      "Our Branches",
     "Customer Reviews"                              =>      "Customer Reviews",
     "All Rights Reserved to Smart Tools Egypt"      =>      "©:date All Rights Reserved to Smart Tools Egypt",
+    "Delivery Policy"                               =>      "Delivery Policy",
+    "Return and Exchange Policy"                    =>      "Return and Exchange Policy",
+    "Our Branches Content"                          =>      "The main branch is being prepared. Your prayers are appreciated.",
+    "Messenger"                                     =>      "Messenger",
+    "WhatsApp"                                      =>      "WhatsApp",
+    "WhatsApp Group"                                =>      "WhatsApp Group",
+    "Youtube"                                       =>      "Youtube",
+    "Tiktok"                                        =>      "Tiktok",
+    "Instagram"                                     =>      "Instagram",
+    "Facebook"                                      =>      "Facebook",
+    "Join Our WhatsApp Group"                       =>      "Join Our WhatsApp Group to get the latest offers and updates",
+    "Sell With Us Text"                             =>      "Contact Us to display your products on our platform"
 ];

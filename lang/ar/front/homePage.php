@@ -502,5 +502,16 @@ return [
     "Our Branches"                                  =>      "فروعنا",
     "Customer Reviews"                              =>      "آراء عملائنا",
     "All Rights Reserved to Smart Tools Egypt"      =>      "جميع الحقوق محفوظة لـ Smart Tools Egypt©",
-
+    "Delivery Policy"                               =>      "سياسة التوصيل",
+    "Return and Exchange Policy"                    =>      "سياسة الإرجاع والتبديل",
+    "Our Branches Content"                          =>      "جارى تجيز الفرع الرئيسى دعواتكم",
+    "Messenger"                                     =>      "ماسنجر",
+    "WhatsApp"                                      =>      "واتساب",
+    "WhatsApp Group"                                =>      "جروب الواتساب",
+    "Youtube"                                       =>      "يوتيوب",
+    "Tiktok"                                        =>      "تيك توك",
+    "Instagram"                                     =>      "انستجرام",
+    "Facebook"                                      =>      "فيس بوك",
+    "Join Our WhatsApp Group"                       =>      "انضم لجروب الواتساب علشان تعرف احدث العروض والمنتجات",
+    "Sell With Us Text"                             =>      "تواصل معانا علشان تعرض منتجاتك على موقعنا"
 ];

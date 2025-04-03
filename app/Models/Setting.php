@@ -23,7 +23,11 @@ class Setting extends Model
         'max_price_offer_name',
         'max_price_offer',
         'whatsapp_number',
-        'facebook_link',
+        'facebook_page_name',
+        'youtube_channel_name',
+        'instagram_page_name',
+        'tiktok_page_name',
+        'whatsapp_group_invitation_code',
     ];
 
     public $translatable = [
@@ -36,5 +40,4 @@ class Setting extends Model
     {
         return json_encode($value, JSON_UNESCAPED_UNICODE);
     }
-
 }

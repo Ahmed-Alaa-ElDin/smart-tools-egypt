@@ -18,7 +18,7 @@ class GlobalSettingController  extends Controller
 
     public function update(Request $request)
     {
-        // Validate data 
+        // Validate data
         $request->validate([
             'back_pagination' => 'required|in:5,10,25,50,100',
             'front_pagination' => 'required|integer',
@@ -34,8 +34,12 @@ class GlobalSettingController  extends Controller
             'max_price_offer_name_ar' => 'required|string',
             'max_price_offer_name_en' => 'required|string',
             'max_price_offer' => 'required|numeric',
-            'whatsapp_number' => 'required|numeric',
-            'facebook_link' => 'required|url',
+            'whatsapp_number' => 'nullable|numeric',
+            'facebook_page_name' => 'nullable|string',
+            'youtube_channel_name' => 'nullable|string',
+            'instagram_page_name' => 'nullable|string',
+            'tiktok_page_name' => 'nullable|string',
+            'whatsapp_group_invitation_code' => 'nullable|string',
         ]);
 
         // Update settings
@@ -63,10 +67,14 @@ class GlobalSettingController  extends Controller
             ],
             'max_price_offer' => $request->max_price_offer,
             'whatsapp_number' => $request->whatsapp_number,
-            'facebook_link' => $request->facebook_link,
+            'facebook_page_name' => $request->facebook_page_name,
+            'youtube_channel_name' => $request->youtube_channel_name,
+            'instagram_page_name' => $request->instagram_page_name,
+            'tiktok_page_name' => $request->tiktok_page_name,
+            'whatsapp_group_invitation_code' => $request->whatsapp_group_invitation_code,
         ]);
 
         // Redirect to the settings page with a success message
-        return redirect()->route('admin.setting.general')->with('success', 'Settings updated successfully');
+        return redirect()->route('admin.setting.general')->with('success', __('admin/sitePages.Settings updated successfully'));
     }
 }

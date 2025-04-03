@@ -184,7 +184,10 @@ return [
     "Special Offers"                                                        =>      "عروض خاصة",
     "Contact Information"                                                   =>      "معلومات التواصل",
     "Whatsapp Number"                                                       =>      "رقم الواتساب",
-    "Facebook Link"                                                         =>      "رابط الفيسبوك",
+    "Facebook Page Name"                                                    =>      "اسم الصفحة على الفيسبوك",
+    "Youtube Channel Name"                                                  =>      "اسم القناة على يوتيوب",
+    "TikTok Page Name"                                                      =>      "اسم الصفحة على تيك توك",
+    "Instagram Page Name"                                                   =>      "اسم الصفحة على إنستغرام",
     "Name (Ar)"                                                             =>      "الاسم بالعربية",
     "Name (En)"                                                             =>      "الاسم بالانجليزية",
     "Manage SubSlider Small Banners"                                        =>      "التحكم بالبنرات الفرعية الصغيرة",
@@ -196,4 +199,6 @@ return [
     "Top Banner: Use 1300x50 sizes image"                                   =>      "البنر العلوي: استخدم صورة أبعادها 1300x50",
     "Small Subslider"                                                       =>      "بنر فرعي صغير",
     "Only 4 banners are allowed"                                            =>      "أقصى عدد من البنرات 4",
+    "Settings updated successfully"                                         =>      "تم تحديث الإعدادات بنجاح",
+    "Whatsapp Group Invitation Code"                                        =>      "كود دعوة المجموعة في الواتساب",
 ];
