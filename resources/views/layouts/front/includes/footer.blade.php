@@ -393,7 +393,7 @@
                     {{-- YouTube :: Start --}}
                     @if (config('settings.youtube_channel_name'))
                         <li>
-                            <a href="https://www.youtube.com/c/{{ config('settings.youtube_channel_name') }}"
+                            <a href="https://www.youtube.com/{{ config('settings.youtube_channel_name') }}"
                                 target="_blank"
                                 class="flex items-center p-3 text-base font-bold text-white rounded-lg bg-youtube hover:bg-youtubeHover group hover:shadow">
                                 <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
@@ -421,7 +421,7 @@
                     {{-- TikTok :: Start --}}
                     @if (config('settings.tiktok_page_name'))
                         <li>
-                            <a href="https://www.tiktok.com/@{{ config('settings.tiktok_page_name') }}" target="_blank"
+                            <a href="https://www.tiktok.com/{{ config('settings.tiktok_page_name') }}" target="_blank"
                                 class="flex items-center p-3 text-base font-bold text-white rounded-lg bg-tiktok hover:bg-tiktokHover group hover:shadow">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
                                     viewBox="0 0 32 32">
