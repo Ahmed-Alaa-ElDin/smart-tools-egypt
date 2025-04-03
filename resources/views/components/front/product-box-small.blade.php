@@ -6,7 +6,8 @@
 
             {{-- Add Product Large Screen : Start --}}
             <div
-                class="hidden lg:flex absolute top-2 ltr:-right-10 z-10 rtl:-left-10 transition-all ease-in-out duration-500 ltr:group-hover:right-2 rtl:group-hover:left-2 flex-col gap-1">
+                class="hidden lg:flex absolute top-2 ltr:-right-10 z-10 rtl:-left-10 transition-all ease-in-out duration-500 ltr:group-hover:right-2 rtl:group-hover:left-2 flex-col gap-1"
+                wire:ignore>
                 {{-- Add to compare : Start --}}
                 @livewire(
                     'front.general.compare.add-to-compare-button',
