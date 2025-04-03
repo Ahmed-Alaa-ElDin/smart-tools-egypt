@@ -42,7 +42,6 @@
             <div class="col-span-6 md:col-span-2 text-center flex items-center justify-center">
                 <input class="appearance-none rounded-full checked:bg-secondary outline-none ring-0 cursor-pointer"
                     type="checkbox" id="active" wire:model="active">
-                    {{ $active }}
             </div>
 
             @error('active')

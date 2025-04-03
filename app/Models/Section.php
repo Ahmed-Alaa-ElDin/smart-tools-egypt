@@ -42,7 +42,7 @@ class Section extends Model
     // Many to many relationship  Sections --> Banners
     public function banners()
     {
-        return $this->belongsToMany(Banner::class);
+        return $this->belongsToMany(Banner::class)->withPivot('rank')->orderBy('banner_section.rank');
     }
 
     // Many to many relationship  Sections --> Offers

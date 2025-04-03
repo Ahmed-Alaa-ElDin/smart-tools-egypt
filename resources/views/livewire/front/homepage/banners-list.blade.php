@@ -1,7 +1,7 @@
 <section class="offer-bar mb-3">
     <div class="container">
         <div class="grid grid-cols-12 gap-3 items-center justify-between">
-            @foreach ($section->banners as $banner)
+            @foreach ($banners as $banner)
                 @if (!$loop->last)
                     <div class="group relative col-span-6 lg:col-span-4  overflow-hidden ">
                         <a href="{{ env('APP_URL') . session('locale') . '/' . $banner->link }}"

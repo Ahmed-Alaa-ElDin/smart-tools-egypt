@@ -1,14 +1,21 @@
 /*!
 
- =========================================================
- * Material Dashboard rtl - v1.1
- =========================================================
- *
- * author: Alireza Esfahani <aynzad@gmail.com>
- * https://github.com/aynzad
- * http://gonjeshk.ir
- *
- */
+
+=========================================================
+* Material Dashboard rtl - v1.1
+=========================================================
+*
+* author: Alireza Esfahani <aynzad@gmail.com>
+* https://github.com/aynzad
+* http://gonjeshk.ir
+*
+*/
+@font-face {
+    font-family: 'Cairo';
+    src: url('cairo-font.woff2') format('woff2');
+    font-display: swap;
+}
+
 html[dir="rtl"] {
     text-align: right;
     direction: rtl;

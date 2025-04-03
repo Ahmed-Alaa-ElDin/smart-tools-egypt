@@ -10,6 +10,8 @@ class BannersList extends Component
 
     public function render()
     {
-        return view('livewire.front.homepage.banners-list');
+        $banners = $this->section->banners;
+
+        return view('livewire.front.homepage.banners-list', compact('banners'));
     }
 }
