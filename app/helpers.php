@@ -15,15 +15,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Enums\OrderStatus;
 
 // Upload single Image and get link
-function singleImageUpload($photo, $image_f_name, $folder_name)
+function singleImageUpload($photo, $image_f_name, $folder_name, $sizes = ['original', '100', '250', '400'])
 {
-    $sizes = [
-        'original',
-        '100',
-        '250',
-        '400'
-    ];
-
     $image_name = $image_f_name . time() . '-' . rand();
 
     // Resize image
@@ -35,12 +28,12 @@ function singleImageUpload($photo, $image_f_name, $folder_name)
         foreach ($sizes as $size) {
             if ($size == 'original') {
                 File::ensureDirectoryExists("$directory/original", 0777, true, true);
-                $manager->make($photo)->encode('webp')->save('storage/images/' . $folder_name . '/original/' . $image_name);
+                $manager->make($photo)->encode('webp')->save("$directory/original/$image_name");
             } else {
                 File::ensureDirectoryExists("$directory/cropped$size", 0777, true, true);
                 $manager->make($photo)->encode('webp')->resize($size, null, function ($constraint) {
                     $constraint->aspectRatio();
-                })->crop($size, $size)->save('storage/images/' . $folder_name . '/cropped' . $size . '/' . $image_name);
+                })->crop($size, $size)->save("$directory/cropped$size/$image_name");
             }
         }
     } catch (\Throwable $th) {
@@ -52,15 +45,9 @@ function singleImageUpload($photo, $image_f_name, $folder_name)
 }
 
 // Resize current images
-function resizeExistingImages($folder_name)
+function resizeExistingImages($folder_name, $sizes = ['100', '250', '400'], $crop = true)
 {
     ini_set('max_execution_time', 30000);
-
-    $sizes = [
-        '100',
-        '250',
-        '400'
-    ];
 
     $originalDirectory = "storage/images/$folder_name/original";
     $manager = new ImageManager();
@@ -83,13 +70,23 @@ function resizeExistingImages($folder_name)
                 File::ensureDirectoryExists($croppedDirectory, 0777, true, true);
 
                 try {
-                    $manager->make($imagePath)
-                        ->encode('webp')
-                        ->resize($size, null, function ($constraint) {
+                    $img = $manager->make($imagePath)
+                        ->encode('webp');
+
+                    if ($crop) {
+                        // Resize while maintaining aspect ratio but ensuring the smallest side meets the crop size
+                        $img->fit($size, $size, function ($constraint) {
+                            $constraint->upsize();
+                        });
+                    } else {
+                        // Resize normally without cropping
+                        $img->resize($size, null, function ($constraint) {
                             $constraint->aspectRatio();
-                        })
-                        ->crop($size, $size)
-                        ->save("$croppedDirectory/$imageName");
+                            $constraint->upsize();
+                        });
+                    }
+
+                    $img->save("$croppedDirectory/$imageName");
                 } catch (\Throwable $th) {
                     // Log the error or handle it as needed
                     // For now, we'll just skip the problematic image
@@ -110,130 +107,6 @@ function imageDelete($image_f_name, $folder_name)
     Storage::disk($folder_name)->delete('cropped250/' . $image_f_name);
     Storage::disk($folder_name)->delete('cropped400/' . $image_f_name);
 }
-
-// Get the best offer for a product (best price, best points, free shipping)
-// function getBestOfferForProduct($product_id)
-// {
-//     $product = Product::publishedproduct()->findOrFail($product_id);
-
-//     ############ Get Best Offer for all products :: Start ############
-//     // Get All Product's Prices -- Start with Product's Final Price
-//     $offers_discount = [0];
-
-//     // Get All Product's Points -- Start with Product's Points
-//     $offers_points = [0];
-
-//     // Get Free Shipping
-//     $free_shipping = $product->free_shipping;
-
-//     // Get All Subcategories
-//     $subcategories = $product->subcategories ? $product->subcategories->map(fn ($subcategory) => $subcategory->id) : [];
-
-//     // Get All Categories
-//     $categories = $product->categories ? $product->categories->map(fn ($category) => $category->id) : [];
-
-//     // Get All Supercategories
-//     $supercategories = $product->supercategories ? $product->supercategories->map(fn ($supercategory) => $supercategory->id) : [];
-
-//     // Get Final Prices Fromi Direct Offers
-//     $direct_offers = $product->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]);
-//     foreach ($direct_offers as $offer) {
-//         if ($offer['free_shipping']) {
-//             $free_shipping = 1;
-//         }
-
-//         if ($offer['type'] == 0) {
-//             $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
-//         } elseif ($offer['type'] == 1) {
-//             $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
-//         } elseif ($offer['type'] == 2) {
-//             $offers_points[] = $offer['value'];
-//         }
-//     }
-
-//     // Get Final Prices From Offers Through Subcategories
-//     $subcategories_offers = $subcategories ? $product->subcategories->map(fn ($subcategory) => $subcategory->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
-//     foreach ($subcategories_offers as $subcategory) {
-//         foreach ($subcategory as $offer) {
-//             if ($offer['free_shipping']) {
-//                 $free_shipping = 1;
-//             }
-
-//             if ($offer['type'] == 0) {
-//                 $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
-//             } elseif ($offer['type'] == 1) {
-//                 $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
-//             } elseif ($offer['type'] == 2) {
-//                 $offers_points[] = $offer['value'];
-//             }
-//         }
-//     }
-
-//     // Get Final Prices From Offers Through Categories
-//     $categories_offers = $categories ? $product->categories->map(fn ($category) => $category->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]))->toArray() : [];
-//     foreach ($categories_offers as $category) {
-//         foreach ($category as $offer) {
-//             if ($offer['free_shipping']) {
-//                 $free_shipping = 1;
-//             }
-
-//             if ($offer['type'] == 0) {
-//                 $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
-//             } elseif ($offer['type'] == 1) {
-//                 $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
-//             } elseif ($offer['type'] == 2) {
-//                 $offers_points[] = $offer['value'];
-//             }
-//         }
-//     }
-
-//     // Get Final Prices From Offers Through Supercategories
-//     $supercategories_offers = $supercategories ? $product->supercategories->map(fn ($supercategory) => $supercategory->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type])) : [];
-//     foreach ($supercategories_offers as $supercategory) {
-//         foreach ($supercategory as $offer) {
-//             if ($offer['free_shipping']) {
-//                 $free_shipping = 1;
-//             }
-
-//             if ($offer['type'] == 0) {
-//                 $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
-//             } elseif ($offer['type'] == 1) {
-//                 $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
-//             } elseif ($offer['type'] == 2) {
-//                 $offers_points[] = $offer['value'];
-//             }
-//         }
-//     }
-
-//     // Get Final Prices From Offers Through Brands
-//     $brand_offers = $product->brand ? $product->brand->offers->map(fn ($offer) => ['free_shipping' => $offer->free_shipping, 'value' => $offer->pivot->value, 'type' => $offer->pivot->type]) : [];
-//     foreach ($brand_offers as $offer) {
-//         if ($offer['free_shipping']) {
-//             $free_shipping = 1;
-//         }
-
-//         if ($offer['type'] == 0) {
-//             $offers_discount[] = round(($offer['value'] / 100) * $product->final_price, 2);
-//         } elseif ($offer['type'] == 1) {
-//             $offers_discount[] = $product->final_price >  $offer['value'] ? round($offer['value'], 2) : $product->final_price;
-//         } elseif ($offer['type'] == 2) {
-//             $offers_points[] = $offer['value'];
-//         }
-//     }
-
-//     // Get the Best Price
-//     $product->offer_discount = max($offers_discount);
-//     $product->best_price = $product->final_price - $product->offer_discount;
-
-//     // Get the Best Points
-//     $product->offer_points = max($offers_points);
-//     $product->best_points = $product->points + $product->offer_points;
-
-//     $product->offer_free_shipping = $free_shipping;
-//     ############ Get Best Offer for all products :: End ############
-
-//     return $product;
-// }
 
 // Get the best offer for a product (best price, best points, free shipping)
 function getBestOfferForProduct($product_id)

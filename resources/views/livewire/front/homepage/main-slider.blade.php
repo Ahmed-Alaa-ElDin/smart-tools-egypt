@@ -71,8 +71,8 @@
                         @foreach ($banners as $banner)
                             <li class="splide__slide">
                                 <a href="{{ $banner->banner->link }}">
-                                    <img src="{{ asset('storage/images/banners/original/' . $banner->banner->banner_name) }}"
-                                        class="" alt="{{ $banner->banner->description }}">
+                                    <img src="{{ asset('storage/images/banners/cropped1000/' . $banner->banner->banner_name) }}"
+                                        class="w-[1000px]" alt="{{ $banner->banner->description }}">
                                 </a>
                             </li>
                         @endforeach
@@ -88,8 +88,8 @@
             @foreach ($subsliderBanners as $subsliderBanner)
                 <div class="shadow rounded overflow-hidden bg-white text-center">
                     <a href="{{ $subsliderBanner->banner->link }}">
-                        <img src="{{ asset('storage/images/banners/original/' . $subsliderBanner->banner->banner_name) }}"
-                            class="m-auto " alt="{{ $subsliderBanner->banner->description }}">
+                        <img src="{{ asset('storage/images/banners/cropped500/' . $subsliderBanner->banner->banner_name) }}"
+                            class="m-auto w-[500px]" alt="{{ $subsliderBanner->banner->description }}">
                     </a>
                 </div>
             @endforeach
@@ -102,8 +102,8 @@
                 <div
                     class="subslider-small-banner flex justify-center items-center shadow rounded overflow-hidden bg-white text-center">
                     <a href="{{ $subsliderSmallBanner->banner->link }}">
-                        <img src="{{ asset('storage/images/banners/original/' . $subsliderSmallBanner->banner->banner_name) }}"
-                            class="m-auto " alt="{{ $subsliderSmallBanner->banner->description }}">
+                        <img src="{{ asset('storage/images/banners/cropped150/' . $subsliderSmallBanner->banner->banner_name) }}"
+                            class="m-auto w-[150px]" alt="{{ $subsliderSmallBanner->banner->description }}">
                     </a>
                 </div>
             @endforeach
