@@ -37,6 +37,7 @@ class HeaderSearchBox extends Component
             )
             ->where('publish', 1)
             ->take(10)
+            ->asArray()
             ->get();
         // if ($this->search) {
         //     $products = Product::select([
