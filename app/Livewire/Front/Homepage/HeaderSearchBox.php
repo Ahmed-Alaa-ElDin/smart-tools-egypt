@@ -34,7 +34,10 @@ class HeaderSearchBox extends Component
             ->with(
                 'brand',
                 'thumbnail'
-            )->first();
+            )
+            ->where('publish', 1)
+            ->take(10)
+            ->get();
         // if ($this->search) {
         //     $products = Product::select([
         //         'id',
