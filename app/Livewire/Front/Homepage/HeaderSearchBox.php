@@ -51,7 +51,7 @@ class HeaderSearchBox extends Component
                         ->orWhereHas('brand', fn ($q) => $q->where('brands.name', 'like', '%' . $this->search . '%'))
                 )
                 ->where('publish', 1)
-                ->take(value: 1)
+                ->take(value: 10)
                 ->get();
 
             $collections = Collection::select([
@@ -82,7 +82,7 @@ class HeaderSearchBox extends Component
                         ->orWhere('model', 'like', '%' . $this->search . '%')
                 )
                 ->where('publish', 1)
-                ->take(1)
+                ->take(10)
                 ->get();
 
             $this->items = $collections->concat($products)->map(function ($product_collection) {
