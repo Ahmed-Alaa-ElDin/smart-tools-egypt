@@ -21,10 +21,7 @@ class HeaderSearchBox extends Component
             $products = Product::with('brand', 'thumbnail')->where('publish', 1)->take(10)->get();
             $collections = Collection::with('thumbnail')->where('publish', 1)->take(10)->get();
 
-            $this->items = $collections->concat($products)->map(function ($product_collection) {
-                $product_collection->product_collection = class_basename($product_collection);
-                return $product_collection;
-            })->toArray();
+            $this->items = $collections->toArray();
             return;
             $products = Product::select([
                 'id',
