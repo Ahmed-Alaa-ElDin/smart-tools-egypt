@@ -52,7 +52,7 @@ class HeaderSearchBox extends Component
                 )
                 ->where('publish', 1)
                 ->take(value: 10)
-                ->get();
+                ->get()->toArray();
 
             // $collections = Collection::select([
             //     'id',
