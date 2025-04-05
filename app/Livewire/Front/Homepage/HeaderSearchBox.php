@@ -18,11 +18,6 @@ class HeaderSearchBox extends Component
     public function updatedSearch($key)
     {
         if ($this->search) {
-            $products = Product::with('brand', 'thumbnail')->where('publish', 1)->take(10)->get();
-            // $collections = Collection::with('thumbnail')->where('publish', 1)->take(10)->get();
-
-            $this->items = $products->toArray();
-            return;
             $products = Product::select([
                 'id',
                 'name',
@@ -95,7 +90,7 @@ class HeaderSearchBox extends Component
                 return $product_collection;
             })->toArray();
         } else {
-            $this->items = [];
+            $this->items = collect([]);
         }
     }
 
