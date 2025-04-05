@@ -90,7 +90,7 @@ class HeaderSearchBox extends Component
                 return $product_collection;
             })->toArray();
 
-        dd($key);
+        dump($key);
 
         } else {
             $this->items = collect([]);
