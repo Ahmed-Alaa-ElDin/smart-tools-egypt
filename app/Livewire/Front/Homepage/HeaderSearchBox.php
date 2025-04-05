@@ -88,7 +88,7 @@ class HeaderSearchBox extends Component
             $this->items = $collections->concat($products)->map(function ($product_collection) {
                 $product_collection->product_collection = class_basename($product_collection);
                 return $product_collection;
-            });
+            })->toArray();
         } else {
             $this->items = collect([]);
         }
