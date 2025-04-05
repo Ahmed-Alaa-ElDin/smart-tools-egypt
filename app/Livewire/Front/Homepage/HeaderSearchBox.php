@@ -17,7 +17,6 @@ class HeaderSearchBox extends Component
 
     public function updatedSearch($key)
     {
-        $this->items = [];
         if ($this->search) {
             $products = Product::select([
                 'id',
