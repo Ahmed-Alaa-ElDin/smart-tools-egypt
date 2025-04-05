@@ -18,8 +18,8 @@ class HeaderSearchBox extends Component
     public function updatedSearch($key)
     {
         if ($this->search) {
-            $products = Product::take(10)->get();
-            $collections = Collection::take(10)->get();
+            $products = Product::with('brand', 'thumbnail')->where('publish', 1)->take(10)->get();
+            $collections = Collection::with('thumbnail')->where('publish', 1)->take(10)->get();
 
             $this->items = $collections->concat($products)->map(function ($product_collection) {
                 $product_collection->product_collection = class_basename($product_collection);
