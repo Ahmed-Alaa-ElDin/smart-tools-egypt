@@ -17,7 +17,6 @@ class HeaderSearchBox extends Component
 
     public function updatedSearch($key)
     {
-        dd($key);
         if ($this->search) {
             $products = Product::select([
                 'id',
@@ -90,6 +89,9 @@ class HeaderSearchBox extends Component
                 $product_collection->product_collection = class_basename($product_collection);
                 return $product_collection;
             })->toArray();
+
+        dd($key);
+
         } else {
             $this->items = collect([]);
         }
