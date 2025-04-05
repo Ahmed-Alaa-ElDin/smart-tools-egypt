@@ -17,10 +17,24 @@ class HeaderSearchBox extends Component
 
     public function updatedSearch($key)
     {
-        $this->items = [
-            "Ahmed",
-            "Mohammed"
-        ];
+        $this->items = Product::select([
+            'id',
+            'name',
+            'slug',
+            'barcode',
+            'original_price',
+            'base_price',
+            'final_price',
+            'under_reviewing',
+            'points',
+            'description',
+            'model',
+            'brand_id'
+        ])
+            ->with(
+                'brand',
+                'thumbnail'
+            )->first();
         // if ($this->search) {
         //     $products = Product::select([
         //         'id',
