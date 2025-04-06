@@ -99,7 +99,9 @@ class OrderShippingDetails extends Component
             $this->user->addresses->where('id', $address_id)->first()->update(['default' => 1]);
         }
 
-        // $this->dispatch('AddressUpdated');
+        dd(auth()->user());
+
+        $this->dispatch('AddressUpdated');
     }
     ################### Select Address :: End ###################
 
