@@ -47,7 +47,7 @@ class Bosta implements DeliveryInterface
                 "lastName"      =>      $order->user->l_name ? $order->user->l_name : $order->user->f_name,
                 "phone"         =>      $order->user->phones->where('default', 1)->first()->phone,
                 "secondPhone"   =>      $order->user->phones->where('default', 0)->count() ? $order->user->phones->where('default', 0)->first()->phone : '',
-                "email"         =>      $order->user->email ?? '',
+                "email"         =>      $order->user->email ?? "info@smarttoolsegypt.com",
             ],
             "businessReference" => $order->id,
             "allowToOpenPackage" => $order->allow_opening ? true : false,
@@ -62,8 +62,6 @@ class Bosta implements DeliveryInterface
         ])->post(env('BOSTA_NEW_DELIVERY_URL'), $orderData);
 
         $decodedBostaResponse = $response->json();
-
-        dd($decodedBostaResponse);
 
         if ($response->successful() && $decodedBostaResponse['data']) {
 
