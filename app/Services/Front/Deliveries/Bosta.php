@@ -78,7 +78,6 @@ class Bosta implements DeliveryInterface
                 'data'      =>  $decodedBostaResponse,
             ];
         } else {
-            dd($decodedBostaResponse);
             return [
                 'status'    =>  false,
                 'data'      =>  $decodedBostaResponse,
