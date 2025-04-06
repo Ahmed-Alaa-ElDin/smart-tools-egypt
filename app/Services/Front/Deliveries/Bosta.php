@@ -21,8 +21,6 @@ class Bosta implements DeliveryInterface
         // Calculate the payment amount
         $paymentAmount = $unpaidTransactions->where('payment_method_id', PaymentMethod::Cash->value)->sum('payment_amount') ?? 0;
 
-        dd($unpaidTransactions);
-
         // Create the order data
         $orderData = [
             "type"      =>      10,
@@ -65,8 +63,6 @@ class Bosta implements DeliveryInterface
 
         $decodedBostaResponse = $response->json();
 
-        dd($decodedBostaResponse);
-
         if ($response->successful() && $decodedBostaResponse['data']) {
 
             // update order in database
@@ -82,6 +78,7 @@ class Bosta implements DeliveryInterface
                 'data'      =>  $decodedBostaResponse,
             ];
         } else {
+            dd($decodedBostaResponse);
             return [
                 'status'    =>  false,
                 'data'      =>  $decodedBostaResponse,
