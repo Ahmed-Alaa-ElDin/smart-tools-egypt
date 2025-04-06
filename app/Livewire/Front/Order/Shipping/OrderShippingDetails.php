@@ -43,7 +43,7 @@ class OrderShippingDetails extends Component
         $this->resetAddress();
 
         $oldOrder = Order::where('status_id', OrderStatus::UnderProcessing->value)
-            ->where('user_id', auth()->user()->id)
+            ->where('user_id', auth()->user()->id ?? 0)
             ->first();
 
         if ($oldOrder) {

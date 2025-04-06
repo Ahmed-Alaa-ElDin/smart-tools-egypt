@@ -81,7 +81,7 @@ class OrderPaymentSummary extends Component
 
     public function mount () {
         $order = Order::where('status_id', OrderStatus::UnderProcessing->value)
-            ->where('user_id', auth()->user()->id)
+            ->where('user_id', auth()->user()->id ?? 0)
             ->first();
 
         if ($order) {
