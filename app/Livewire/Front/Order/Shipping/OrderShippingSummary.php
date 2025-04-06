@@ -145,6 +145,7 @@ class OrderShippingSummary extends Component
             // 5 - Prices After Order Offer
             $this->total_after_order_discount = $this->total_after_offer_prices - $this->order_discount + $this->shipping_fees;
 
+            dd("sadas");
 
             // ------------------------------------------------------------------------------------------------------
             // C - Points
@@ -179,8 +180,6 @@ class OrderShippingSummary extends Component
             $this->city_name = null;
             $this->address = null;
         }
-
-        dd("sadas");
 
         return view('livewire.front.order.shipping.order-shipping-summary');
     }
