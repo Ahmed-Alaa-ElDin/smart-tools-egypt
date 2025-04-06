@@ -615,6 +615,8 @@ class OrdersDatatable extends Component
 
         $userName = str_replace(" ", "_", $order['user_name']);
 
+        dd($userName);
+        
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->stream();
         }, $userName . "-" . time() . ".pdf");
