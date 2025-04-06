@@ -61,6 +61,8 @@ class OrderShippingSummary extends Component
     ############# Render :: Start #############
     public function render()
     {
+        dd("sadas");
+
         $this->items_total_quantities = Cart::instance('cart')->count();
 
         if ($this->items_total_quantities) {
@@ -87,8 +89,6 @@ class OrderShippingSummary extends Component
 
                 return $item;
             }, $this->items);
-
-            dd("sadas");
 
             $this->items_total_weights = array_sum(array_column($this->items, 'total_weight'));
             $this->items_total_shipping_weights = array_sum(array_column($this->items, 'total_shipping_weight'));
