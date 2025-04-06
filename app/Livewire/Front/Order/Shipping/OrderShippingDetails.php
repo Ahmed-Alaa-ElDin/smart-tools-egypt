@@ -34,6 +34,7 @@ class OrderShippingDetails extends Component
     public $allowToOpenPackage = false;
 
     protected $listeners = [
+        'AllowToOpenPackageUpdated',
         'submit'
     ];
 
@@ -333,5 +334,10 @@ class OrderShippingDetails extends Component
                 redirect()->route('front.order.shipping');
             }
         }
+    }
+
+    public function AllowToOpenPackageUpdated()
+    {
+        dd('sadas');
     }
 }

@@ -259,7 +259,6 @@ class OrderShippingSummary extends Component
     public function AllowToOpenPackageUpdated($data)
     {
         $this->allow_to_open_package = $data['allowToOpenPackage'];
-        dd("sadas");
 
         $this->render();
     }
