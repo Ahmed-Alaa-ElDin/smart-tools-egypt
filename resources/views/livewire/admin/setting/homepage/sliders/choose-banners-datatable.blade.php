@@ -114,7 +114,7 @@
                                             <div class="flex-shrink-0 h-10 w-10">
                                                 @if ($banner->banner_name != null)
                                                     <img class="h-10 w-10 rounded-full"
-                                                        src="{{ asset('storage/images/banners/cropped100/' . $banner->banner_name) }}"
+                                                        src="{{ asset('storage/images/banners/cropped150/' . $banner->banner_name) }}"
                                                         alt="{{ $banner->banner_name }}">
                                                 @else
                                                     <div
