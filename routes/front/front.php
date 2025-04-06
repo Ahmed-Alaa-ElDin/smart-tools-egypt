@@ -70,14 +70,14 @@ Route::group([
     ################ Cart & Order Controller :: Start ##############
     Route::get('/cart', [CartController::class, 'index'])->name('cart')->middleware(['cart_not_empty']);
 
-    Route::get('/orders/shipping', [OrderController::class, 'shipping'])->name('order.shipping')->middleware(['cart_not_empty', 'under_construction']);
+    Route::get('/orders/shipping', [OrderController::class, 'shipping'])->name('order.shipping')->middleware(['cart_not_empty']);
 
-    Route::prefix('/orders')->middleware(['auth', 'under_construction'])->controller(OrderController::class)->name('orders.')->group(function () {
+    Route::prefix('/orders')->middleware(['auth'])->controller(OrderController::class)->name('orders.')->group(function () {
         // Billing Options
         Route::get('/payment', 'payment')->name('payment')->middleware(['can_deliver', 'cart_not_empty']);
 
         // Check the paymob response
-        Route::post('/payment/check-processed', 'paymentCheckProcessed')->name('payment.check-processed')->withoutMiddleware(['auth', 'under_construction']);
+        Route::post('/payment/check-processed', 'paymentCheckProcessed')->name('payment.check-processed')->withoutMiddleware(['auth']);
         Route::get('/payment/check-response', 'paymentCheckResponse')->name('payment.check-response');
 
         // Confirm the order
