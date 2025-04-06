@@ -21,6 +21,8 @@ class Bosta implements DeliveryInterface
         // Calculate the payment amount
         $paymentAmount = $unpaidTransactions->where('payment_method_id', PaymentMethod::Cash->value)->sum('payment_amount') ?? 0;
 
+        dd($unpaidTransactions);
+
         // Create the order data
         $orderData = [
             "type"      =>      10,
