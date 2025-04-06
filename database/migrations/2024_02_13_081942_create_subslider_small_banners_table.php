@@ -17,6 +17,8 @@ return new class extends Migration
             $table->tinyInteger('rank')->default(127);
             $table->foreign('banner_id')->references('id')->on('banners')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
+
+            $table->foreign('banner_id')->references('id')->on('banners')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
