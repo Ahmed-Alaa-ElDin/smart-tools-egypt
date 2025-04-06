@@ -109,9 +109,11 @@ class AddDeliveryForm extends Component
         // for photo rendering
         $imageUpload = singleImageUpload($photo, 'delivery-company-', 'deliveryCompanies');
 
-        $this->temp_path = $imageUpload["temporaryUrl"];
+        $directory = asset("storage/images/deliveryCompanies");
 
-        $this->image_name = $imageUpload["image_name"];
+        $this->temp_path = "$directory/original/$imageUpload";
+
+        $this->image_name = $imageUpload;
     }
 
     // remove image

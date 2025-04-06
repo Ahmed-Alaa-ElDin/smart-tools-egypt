@@ -26,7 +26,9 @@ class EditDeliveryForm extends Component
 
     public $defaultPhone = 0;
 
-    public $name = ['ar' => '', 'en' => ''], $email, $active = 0;
+    public $name = ['ar' => '', 'en' => ''];
+    public $email;
+    public $active = false;
 
     public function rules()
     {
@@ -77,7 +79,7 @@ class EditDeliveryForm extends Component
         }));
 
         // active or Not
-        $this->active = $this->delivery->is_active;
+        $this->active = $this->delivery->is_active ? true : false;
 
         // get old image
         $this->oldImage = $this->delivery->logo_path;
@@ -132,9 +134,11 @@ class EditDeliveryForm extends Component
         // for photo rendering
         $imageUpload = singleImageUpload($photo, 'delivery-company-', 'deliveryCompanies');
 
-        $this->temp_path = $imageUpload["temporaryUrl"];
+        $directory = asset("storage/images/deliveryCompanies");
 
-        $this->image_name = $imageUpload["image_name"];
+        $this->temp_path = "$directory/original/$imageUpload";
+
+        $this->image_name = $imageUpload;
     }
 
     // remove image
@@ -184,7 +188,6 @@ class EditDeliveryForm extends Component
                     array_push($newPhones, $newPhone);
                 }
             }
-
 
             $this->delivery->phones()->saveMany($newPhones);
             ### Add Phones ###

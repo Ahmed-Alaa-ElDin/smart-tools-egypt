@@ -20,7 +20,7 @@
     {{-- Payment Part :: End --}}
 
     {{-- Notes :: Start --}}
-    <div class="w-full bg-red-50 p-2 rounded-xl shadow">
+    <div class="w-full bg-red-50 p-2 pb-3 rounded-xl shadow">
         <div class="grid grid-cols-4 justify-center items-center gap-3 p-3">
             <h2 class="col-span-4 text-center font-bold">
                 {{ __('front/homePage.Notes') }}
@@ -32,6 +32,15 @@
                 </textarea>
             </div>
         </div>
+
+        {{-- Allow open package :: Start --}}
+        <div class="col-span-4">
+            <label for="allowToOpenPackage" class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3">
+                {{ __('admin/ordersPages.Allow to open package') }}
+            </label>
+            <input id="allowToOpenPackage" type="checkbox" wire:model.live="allowToOpenPackage" class="appearance-none border-red-600 rounded-full checked:bg-primary outline-none ring-0 cursor-pointer">
+        </div>
+        {{-- Allow open package :: End --}}
     </div>
     {{-- Notes :: End --}}
 

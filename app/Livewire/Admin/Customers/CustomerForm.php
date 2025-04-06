@@ -47,7 +47,7 @@ class CustomerForm extends Component
             'f_name.en'                     => 'nullable|string|max:20|min:3',
             'l_name.ar'                     => 'nullable|string|max:20|min:3',
             'l_name.en'                     => 'nullable|string|max:20|min:3',
-            'photo'                         => 'nullable|mimes:jpg,jpeg,png|max:2048',
+            'photo'                         => 'nullable|image|max:2048',
             'email'                         => 'nullable|email|max:50|min:3|unique:users,email,' . $this->customer_id,
             'phones.*.phone'                => 'nullable|required|digits:11|regex:/^01[0-2]\d{1,8}$/|' . Rule::unique('phones')->ignore($this->customer_id, 'user_id'),
             'gender'                        => 'in:0,1',
@@ -283,13 +283,18 @@ class CustomerForm extends Component
     // validate and upload photo
     public function updatedPhoto($photo)
     {
-        $this->validateOnly($photo);
+        try {
+            $this->validateOnly('photo');
 
-        $imageUpload = singleImageUpload($photo, 'profile-', 'profiles');
+            $imageUpload = singleImageUpload($photo, 'profile-', 'profiles');
 
-        $this->temp_path = $imageUpload["temporaryUrl"];
-
-        $this->image_name = $imageUpload["image_name"];
+            $directory = asset("storage/images/profiles");
+            $this->temp_path = "$directory/original/$imageUpload";
+            $this->image_name = $imageUpload;
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->reset('photo'); // Reset the photo property if validation fails
+            throw $e; // Re-throw the exception to show the error message
+        }
     }
 
     // remove image
@@ -323,7 +328,7 @@ class CustomerForm extends Component
                 'gender'                => $this->gender,
                 'profile_photo_path'    =>  $this->image_name,
                 'visit_num'             => 0,
-                'birth_date'            => $this->birth_date
+                'birth_date'            => !empty($this->birth_date) ? $this->birth_date : null,
             ]);
 
             // Add Email if exists
@@ -416,7 +421,7 @@ class CustomerForm extends Component
 
                 'profile_photo_path'    =>  $this->oldImage ?? $this->image_name,
 
-                'birth_date' => $this->birth_date
+                'birth_date' => !empty($this->birth_date) ? $this->birth_date : null,
             ]);
             ### Basic Data ###
 

@@ -119,10 +119,10 @@ class GovernorateController extends Controller
         DB::beginTransaction();
 
         try {
-            $encoded_api_governorates = Http::acceptJson()->get('https://app.bosta.co/api/v0/cities')->body();
+            $encoded_api_governorates = Http::acceptJson()->get('https://app.bosta.co/api/v2/cities?countryId=60e4482c7cb7d4bc4849c4d5')->body();
             $decoded_api_governorates = json_decode($encoded_api_governorates);
 
-            foreach ($decoded_api_governorates as $governorate) {
+            foreach ($decoded_api_governorates->data->list as $governorate) {
                 Governorate::updateOrCreate(
                     ['bosta_id' => $governorate->_id],
                     [

@@ -520,5 +520,6 @@ return [
     "Instagram"                                     =>      "Instagram",
     "Facebook"                                      =>      "Facebook",
     "Join Our WhatsApp Group"                       =>      "Join Our WhatsApp Group to get the latest offers and updates",
-    "Sell With Us Text"                             =>      "Contact Us to display your products on our platform"
+    "Sell With Us Text"                             =>      "Contact Us to display your products on our platform",
+    "Allow to open package"                         =>      "Request to open package",
 ];

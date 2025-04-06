@@ -2,11 +2,14 @@
 
 namespace App\Interfaces\Front\Deliveries;
 
+use App\Models\Order;
+
 interface DeliveryInterface
 {
     /**
      * TODO:: Create a new delivery
      */
+    public function createDelivery(Order $order): array;
 
     /**
      * TODO:: Update delivery status

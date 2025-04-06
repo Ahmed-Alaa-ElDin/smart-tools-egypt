@@ -441,6 +441,13 @@
                 placeholder="{{ __('front/homePage.Please mention any note related to the order') }}"
                 class="w-full py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 overflow-hidden"></textarea>
         </div>
+
+        <div class="col-span-4">
+            <label for="allowToOpenPackage" class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3">
+                {{ __('front/homePage.Allow to open package') }}
+            </label>
+            <input id="allowToOpenPackage" type="checkbox" wire:model.live="allowToOpenPackage" class="appearance-none border-gray-600 rounded-full checked:bg-secondary outline-none ring-0 cursor-pointer">
+        </div>
     </div>
     {{-- Notes :: End --}}
 

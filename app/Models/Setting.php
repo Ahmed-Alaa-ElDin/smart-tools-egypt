@@ -28,6 +28,7 @@ class Setting extends Model
         'instagram_page_name',
         'tiktok_page_name',
         'whatsapp_group_invitation_code',
+        'allow_to_open_package_price',
     ];
 
     public $translatable = [

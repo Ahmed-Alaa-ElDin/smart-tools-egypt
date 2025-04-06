@@ -15,6 +15,7 @@ use App\Enums\PaymentStatus;
 use App\Services\CouponService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use App\Services\Front\Deliveries\Bosta;
 
 class OrderForm extends Component
 {
@@ -35,7 +36,8 @@ class OrderForm extends Component
         $points = 0,
         $points_egp = 0.00,
         $payment_method = 1,
-        $notes;
+        $notes = "",
+        $allowToOpenPackage = false;
 
     public $delivery_fees,
         $zone_id,
@@ -321,11 +323,13 @@ class OrderForm extends Component
         });
 
         // delivery fees
-        $this->delivery_fees = $prices->min('charge');
+        $deliveryFeesBeforeAllowToOpen = $prices->min('charge');
+
+        $this->delivery_fees = $deliveryFeesBeforeAllowToOpen + ($this->allowToOpenPackage ? config('settings.allow_to_open_package_price') : 0);
 
         // best zone
-        $best_zone = $prices->filter(function ($price) {
-            return $price['charge'] == $this->delivery_fees;
+        $best_zone = $prices->filter(function ($price) use ($deliveryFeesBeforeAllowToOpen) {
+            return $price['charge'] == $deliveryFeesBeforeAllowToOpen;
         });
 
         $this->zone_id = $best_zone->count() ? $best_zone->first()['zone_id'] : null;
@@ -456,7 +460,7 @@ class OrderForm extends Component
                 'package_desc'          =>      'عروض عدد وأدوات قابلة للكسر برجاء المحافظة على مكونات الشحنة لتفادى التلف أو فقدان مكونات الشحنة',
                 'status_id'             =>      OrderStatus::Created->value,
                 'num_of_items'          =>      $this->items_total_quantities,
-                'allow_opening'         =>      1,
+                'allow_opening'         =>      $this->allowToOpenPackage,
                 'zone_id'               =>      $this->zone_id,
                 'coupon_id'             =>      $this->coupon_id,
                 'items_points'          =>      $items_total_points,
@@ -682,19 +686,16 @@ class OrderForm extends Component
             ################### Payment :: Start ###################
             // Order is paid or will be paid on delivery
             if ($should_pay <= 0 || $this->payment_method == PaymentMethod::Cash->value) {
-                $bosta_order = createBostaOrder($order);
+                $bosta_order = (new Bosta())->createDelivery($order);
 
                 if ($bosta_order['status']) {
                     $order->update([
                         'status_id' => OrderStatus::Preparing->value,
-                        'tracking_number' => $bosta_order['data']['trackingNumber'],
-                        'order_delivery_id' => $bosta_order['data']['_id'],
                     ]);
 
                     // Add new statuses (Shipment created and Preparing)
                     $order->statuses()->attach([
                         OrderStatus::Approved->value,
-                        OrderStatus::ShippingCreates->value,
                         OrderStatus::Preparing->value,
                     ]);
                 }

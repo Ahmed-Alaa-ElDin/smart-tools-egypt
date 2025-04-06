@@ -290,7 +290,7 @@
                                     {{-- Address Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
                                         <div class="flex flex-col items-center content-center justify-center">
-                                            @if ($order->address_id)
+                                            @if ($order->address_id && $order->address)
                                                 <span class="font-bold">{{ $order->address->city->name }}</span>
                                                 <span class="text-xs ">{{ $order->address->governorate->name }}</span>
                                             @else

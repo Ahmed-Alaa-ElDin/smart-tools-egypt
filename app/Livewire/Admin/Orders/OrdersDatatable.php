@@ -282,44 +282,30 @@ class OrdersDatatable extends Component
 
             $order->statuses()->attach($status_id);
 
-            if ($status_id == OrderStatus::Approved->value) {
-                // Create Shipment (Bosta)
-                $bosta_order = createBostaOrder($order);
-
-                if ($bosta_order['status']) {
-                    $order->update([
-                        'status_id' => OrderStatus::Preparing->value,
-                        'tracking_number' => $bosta_order['data']['trackingNumber'],
-                        'order_delivery_id' => $bosta_order['data']['_id'],
-                    ]);
-
-                    // Add new statuses (Shipment created and Preparing)
-                    $order->statuses()->attach([
-                        OrderStatus::ShippingCreates->value,
-                        OrderStatus::Preparing->value,
-                    ]);
-                } else {
+            switch ($status_id) {
+                case OrderStatus::Approved->value:
+                    $this->handleApprovedStatus($order);
+                    break;
+                case OrderStatus::Rejected->value:
                     $order->update([
                         'status_id' => $status_id,
                     ]);
-                }
-            } else if ($status_id == OrderStatus::Rejected->value) {
-                $order->update([
-                    'status_id' => $status_id,
-                ]);
 
-                $order->delete();
-            } else if ($status_id == OrderStatus::Prepared->value) {
-                $order->statuses()->attach(OrderStatus::QualityChecked->value);
+                    $order->delete();
+                    break;
+                case OrderStatus::Prepared->value:
+                    $order->statuses()->attach(OrderStatus::QualityChecked->value);
 
-                $order->update([
-                    'status_id' => OrderStatus::Prepared->value,
-                ]);
-            } else {
-                $order->update([
-                    'status_id' => $status_id,
-                    'delivered_at' => $status_id == OrderStatus::Delivered->value ? now() : null
-                ]);
+                    $order->update([
+                        'status_id' => OrderStatus::Prepared->value,
+                    ]);
+                    break;
+                default:
+                    $order->update([
+                        'status_id' => $status_id,
+                        'delivered_at' => $status_id == OrderStatus::Delivered->value ? now() : null
+                    ]);
+                    break;
             }
 
             $this->dispatch(
@@ -363,44 +349,31 @@ class OrdersDatatable extends Component
             $orders->each(function ($order) use ($status_id) {
                 $order->statuses()->attach($status_id);
 
-                if ($status_id == OrderStatus::Approved->value) {
-                    // Create Shipment (Bosta)
-                    $bosta_order = createBostaOrder($order);
+                switch ($status_id) {
+                    case OrderStatus::Approved->value:
+                        $this->handleApprovedStatus($order);
 
-                    if ($bosta_order['status']) {
-                        $order->update([
-                            'status_id' => OrderStatus::Preparing->value,
-                            'tracking_number' => $bosta_order['data']['trackingNumber'],
-                            'order_delivery_id' => $bosta_order['data']['_id'],
-                        ]);
-
-                        // Add new statuses (Shipment created and Preparing)
-                        $order->statuses()->attach([
-                            OrderStatus::ShippingCreates->value,
-                            OrderStatus::Preparing->value,
-                        ]);
-                    } else {
+                        break;
+                    case OrderStatus::Rejected->value:
                         $order->update([
                             'status_id' => $status_id,
                         ]);
-                    }
-                } else if ($status_id == OrderStatus::Rejected->value) {
-                    $order->update([
-                        'status_id' => $status_id,
-                    ]);
 
-                    $order->delete();
-                } else if ($status_id == OrderStatus::Prepared->value) {
-                    $order->statuses()->attach(OrderStatus::QualityChecked->value);
+                        $order->delete();
+                        break;
+                    case OrderStatus::Prepared->value:
+                        $order->statuses()->attach(OrderStatus::QualityChecked->value);
 
-                    $order->update([
-                        'status_id' => OrderStatus::Prepared->value,
-                    ]);
-                } else {
-                    $order->update([
-                        'status_id' => $status_id,
-                        'delivered_at' => $status_id == OrderStatus::Delivered->value ? now() : null
-                    ]);
+                        $order->update([
+                            'status_id' => OrderStatus::Prepared->value,
+                        ]);
+                        break;
+                    default:
+                        $order->update([
+                            'status_id' => $status_id,
+                            'delivered_at' => $status_id == OrderStatus::Delivered->value ? now() : null
+                        ]);
+                        break;
                 }
             });
 
@@ -417,6 +390,25 @@ class OrdersDatatable extends Component
             );
         }
     }
+
+    protected function handleApprovedStatus(Order $order)
+    {
+        $bostaOrder = false;
+
+        if (!$order->order_delivery_id) {
+            $bostaOrder = (new Bosta())->createDelivery($order);
+        }
+
+        if ($order->order_delivery_id || ($bostaOrder && $bostaOrder['status'])) {
+            $order->update([
+                'status_id' => OrderStatus::Preparing->value,
+            ]);
+
+            $order->statuses()->attach([OrderStatus::Preparing->value]);
+        } else {
+            $order->update(['status_id' => OrderStatus::Approved->value]);
+        }
+    }
     ######## Status #########
 
     ######## Create Delivery #########
@@ -425,7 +417,7 @@ class OrdersDatatable extends Component
         $order = Order::findOrFail($orderId);
 
         if (!$order->order_delivery_id) {
-            $bosta_order = createBostaOrder($order);
+            $bosta_order = (new Bosta())->createDelivery($order);
 
             if ($bosta_order['status']) {
                 $this->dispatch(
@@ -433,11 +425,6 @@ class OrdersDatatable extends Component
                     text: __("admin/ordersPages.The delivery has been created successfully"),
                     icon: 'success'
                 );
-
-                $order->update([
-                    'tracking_number' => $bosta_order['data']['trackingNumber'],
-                    'order_delivery_id' => $bosta_order['data']['_id'],
-                ]);
             } else {
                 $this->dispatch(
                     'swalDone',

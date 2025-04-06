@@ -24,7 +24,7 @@ class BannerForm extends Component
     public function rules()
     {
         return [
-            'banner'                        =>      'nullable|mimes:jpg,jpeg,png,webp|max:2048',
+            'banner'                        =>      'nullable|image|max:2048',
             'banner_name'                   =>      'required',
             "description"                   =>      "array",
             "description.ar"                =>      "required|string|max:100",

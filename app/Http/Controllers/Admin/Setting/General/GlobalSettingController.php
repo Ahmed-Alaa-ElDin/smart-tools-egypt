@@ -40,6 +40,7 @@ class GlobalSettingController  extends Controller
             'instagram_page_name' => 'nullable|string',
             'tiktok_page_name' => 'nullable|string',
             'whatsapp_group_invitation_code' => 'nullable|string',
+            'allow_to_open_package_price' => 'required|numeric',
         ]);
 
         // Update settings
@@ -72,6 +73,7 @@ class GlobalSettingController  extends Controller
             'instagram_page_name' => $request->instagram_page_name,
             'tiktok_page_name' => $request->tiktok_page_name,
             'whatsapp_group_invitation_code' => $request->whatsapp_group_invitation_code,
+            'allow_to_open_package_price' => $request->allow_to_open_package_price,
         ]);
 
         // Redirect to the settings page with a success message

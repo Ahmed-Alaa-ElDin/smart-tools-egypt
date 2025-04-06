@@ -8,14 +8,11 @@ use App\Models\Country;
 use App\Models\Governorate;
 use App\Models\Phone;
 use App\Models\User;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Spatie\Permission\Models\Role;
 
 class ProfileEdit extends Component
 {

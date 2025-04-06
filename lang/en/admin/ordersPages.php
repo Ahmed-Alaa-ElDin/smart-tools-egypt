@@ -251,7 +251,7 @@ return [
     "Edited Orders"                                     =>          "Edited Orders",
     "Here you can manage edited orders"                 =>          "Here you can manage edited orders",
     "Order Created Successfully"                        =>          "Order Created Successfully",
-    "Manage"                                            =>          "Manage",
+    "Allow to open package"                             =>          "Allow to open package",
     "Manage"                                            =>          "Manage",
     "Manage"                                            =>          "Manage",
     "Manage"                                            =>          "Manage",

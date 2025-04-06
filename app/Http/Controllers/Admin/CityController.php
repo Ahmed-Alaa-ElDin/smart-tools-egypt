@@ -111,16 +111,16 @@ class CityController extends Controller
 
         try {
             foreach ($governorates as $governorate) {
-                $encoded_api_cities = Http::acceptJson()->get('https://app.bosta.co/api/v0/cities/' . $governorate->bosta_id . '/zones')->body();
+                $encoded_api_cities = Http::acceptJson()->get('https://app.bosta.co/api/v2/cities/' . $governorate->bosta_id . '/districts')->body();
                 $decoded_api_cities = json_decode($encoded_api_cities);
 
-                foreach ($decoded_api_cities as $city) {
+                foreach ($decoded_api_cities->data as $city) {
                     City::updateOrCreate(
-                        ['bosta_id' => $city->_id],
+                        ['bosta_id' => $city->districtId],
                         [
                             'name' => [
-                                'en' => $city->name,
-                                'ar' => $city->nameAr,
+                                'en' => $city->zoneName . ($city->districtName != $city->zoneName ? " - " . $city->districtName : ''),
+                                'ar' => $city->zoneOtherName . ($city->districtOtherName != $city->zoneOtherName ? " - " . $city->districtOtherName : ''),
                             ],
                             'governorate_id' => $governorate->id,
                         ]
@@ -130,14 +130,14 @@ class CityController extends Controller
 
             DB::commit();
 
-            Session::flash('success', __('admin/deliveriesPages.Governorates Imported successfully'));
+            Session::flash('success', __('admin/deliveriesPages.Cities Imported successfully'));
 
-            return redirect()->route('admin.governorates.index');
+            return redirect()->route('admin.cities.index');
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            Session::flash('error', __("admin/deliveriesPages.Governorates haven't been Imported"));
-            return redirect()->route('admin.governorates.index');
+            Session::flash('error', __("admin/deliveriesPages.Cities haven't been Imported"));
+            return redirect()->route('admin.cities.index');
         }
     }
 }

@@ -201,6 +201,7 @@ return [
     "Only 4 banners are allowed"                                            =>      "Only 4 banners are allowed",
     "Settings updated successfully"                                         =>      "Settings updated successfully",
     "Whatsapp Group Invitation Code"                                        =>      "Whatsapp Group Invitation Code",
+    "Allow To Open Package Price"                                           =>      "Allow To Open Package Price",
     "Publish"                                                               =>      "Publish",
     "Publish"                                                               =>      "Publish",
     "Publish"                                                               =>      "Publish",

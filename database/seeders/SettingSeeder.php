@@ -37,6 +37,7 @@ class SettingSeeder extends Seeder
             'max_price_offer' => 500,
             'whatsapp_number' => '01010097248',
             'facebook_page_name' => 'SmartToolsEgypt',
+            'allow_to_open_package_price' => 10,
         ]);
     }
 }

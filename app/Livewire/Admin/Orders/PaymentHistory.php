@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Orders;
 
 use App\Models\Order;
 use App\Models\Invoice;
+use App\Services\Front\Deliveries\Bosta;
 use Livewire\Component;
 use App\Models\Transaction;
 use App\Enums\PaymentMethod;
@@ -31,10 +32,10 @@ class PaymentHistory extends Component
     public function render()
     {
         $this->order = Order::with([
-            'transactions' => fn ($q) => $q->orderBy('updated_at', 'desc')->withTrashed(),
+            'transactions' => fn($q) => $q->orderBy('updated_at', 'desc')->withTrashed(),
             'invoice',
-            'user' => fn ($q) => $q->with([
-                'phones' => fn ($q) => $q->where('default', 1)
+            'user' => fn($q) => $q->with([
+                'phones' => fn($q) => $q->where('default', 1)
             ])->select('id', 'f_name', 'l_name')
         ])->findOrFail($this->order_id);
 
@@ -595,7 +596,8 @@ class PaymentHistory extends Component
         if ($payment_amount > 0 && $payment_amount <= $order->invoice->paid) {
             if (in_array($type, [PaymentMethod::Card->value, PaymentMethod::Installments->value])) {
                 $orderTransactionsIds = $order->transactions()->where([
-                    'payment_status_id' => PaymentStatus::Paid->value, 'payment_method_id' => $type
+                    'payment_status_id' => PaymentStatus::Paid->value,
+                    'payment_method_id' => $type
                 ])->pluck('service_provider_transaction_id')->toArray();
 
                 if (!in_array($transaction_id, $orderTransactionsIds)) {
@@ -641,7 +643,7 @@ class PaymentHistory extends Component
         $order = $this->order;
 
         if (!$order->order_delivery_id) {
-            $bosta_order = createBostaOrder($order);
+            $bosta_order = (new Bosta())->createDelivery($order);
 
             if ($bosta_order['status']) {
                 $this->dispatch(
@@ -649,11 +651,6 @@ class PaymentHistory extends Component
                     text: __("admin/ordersPages.The delivery has been created successfully"),
                     icon: 'success'
                 );
-
-                $order->update([
-                    'tracking_number' => $bosta_order['data']['trackingNumber'],
-                    'order_delivery_id' => $bosta_order['data']['_id'],
-                ]);
             } else {
                 $this->dispatch(
                     'swalDone',

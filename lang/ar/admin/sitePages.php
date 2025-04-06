@@ -201,4 +201,5 @@ return [
     "Only 4 banners are allowed"                                            =>      "أقصى عدد من البنرات 4",
     "Settings updated successfully"                                         =>      "تم تحديث الإعدادات بنجاح",
     "Whatsapp Group Invitation Code"                                        =>      "كود دعوة المجموعة في الواتساب",
+    "Allow To Open Package Price"                                           =>      "السعر للسماح بفتح الأوردر",
 ];

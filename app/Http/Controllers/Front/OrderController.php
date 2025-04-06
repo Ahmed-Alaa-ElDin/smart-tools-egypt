@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
+use App\Services\Front\Deliveries\Bosta;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use App\Services\Front\Payments\PaymentService;
 use App\Services\Front\Payments\Gateways\CardGateway;
@@ -1261,7 +1262,7 @@ class OrderController extends Controller
                     if (
                         ($old_order->order_delivery_id && editBostaOrder($temp_order, $old_order))
                         ||
-                        (is_null($old_order->order_delivery_id) && createBostaOrder($temp_order, 4)['status'])
+                        (is_null($old_order->order_delivery_id) && (new Bosta())->createDelivery($temp_order)['status'])
                     ) {
 
                         // Update Order Data
@@ -1395,7 +1396,7 @@ class OrderController extends Controller
                     if (
                         ($old_order->order_delivery_id && editBostaOrder($temp_order, $old_order))
                         ||
-                        (is_null($old_order->order_delivery_id) && createBostaOrder($temp_order, 4)['status'])
+                        (is_null($old_order->order_delivery_id) && (new Bosta())->createDelivery($temp_order)['status'])
                     ) {
 
                         // Update Order Data
@@ -1424,7 +1425,7 @@ class OrderController extends Controller
                         $temp_order->transactions()->update([
                             'invoice_id' => $temp_order->invoice->id,
                             'order_id' => $old_order->id,
-                            'old_order_id' => Null,
+                            'old_order_id' => null,
                         ]);
 
                         // Update invoice

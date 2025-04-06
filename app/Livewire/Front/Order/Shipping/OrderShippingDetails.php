@@ -31,6 +31,7 @@ class OrderShippingDetails extends Component
     public $changePhone;
     public $notes;
     public $billing = false;
+    public $allowToOpenPackage = false;
 
     protected $listeners = [
         'submit'
@@ -40,6 +41,15 @@ class OrderShippingDetails extends Component
     public function mount()
     {
         $this->resetAddress();
+
+        $oldOrder = Order::where('status_id', OrderStatus::UnderProcessing->value)
+            ->where('user_id', auth()->user()->id)
+            ->first();
+
+        if ($oldOrder) {
+            $this->notes = $oldOrder->notes;
+            $this->allowToOpenPackage = $oldOrder->allow_opening ? true : false;
+        }
     }
     ################### Mount :: End ###################
 
@@ -242,6 +252,17 @@ class OrderShippingDetails extends Component
     }
     ################### Remove Phone :: End ###################
 
+
+    ################### Allow to open package :: Start ###################
+    public function updatedAllowToOpenPackage($value)
+    {
+        $this->dispatch('AllowToOpenPackageUpdated', [
+            'allowToOpenPackage' => $value
+        ]);
+    }
+    ################### Allow to open package :: End ###################
+
+
     // ----------------------------------------------------------
     // ----------------------------------------------------------
     ################### Submit :: Start ###################
@@ -288,7 +309,7 @@ class OrderShippingDetails extends Component
                     'package_type' => 'parcel',
                     'package_desc' => 'عروض عدد وأدوات قابلة للكسر برجاء المحافظة على مكونات الشحنة لتفادى التلف أو فقدان مكونات الشحنة',
                     'num_of_items' => Cart::instance('cart')->count(),
-                    'allow_opening' => 1,
+                    'allow_opening' => $this->allowToOpenPackage,
                     'notes' => $this->notes,
                 ]);
 

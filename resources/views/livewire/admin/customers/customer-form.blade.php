@@ -34,7 +34,7 @@
                     {{ __('admin/usersPages.Profile Image') }} </label>
                 <input
                     class="col-span-12 md:col-span-10 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                    id="photo" type="file" type="image" wire:model.live.blur="photo">
+                    id="photo" type="file" type="image" wire:model="photo">
 
                 @error('photo')
                     <span class="col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">{{ $message }}</span>
@@ -261,7 +261,7 @@
                             <select
                                 class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
                                 wire:model.live='addresses.{{ $index }}.country_id'
-                                wire:change='$dispatch("countryUpdated",{{ $index }})'
+                                wire:change='$dispatch("countryUpdated",{"index":{{ $index }}})'
                                 id="country{{ $index }}">
                                 @forelse ($countries as $country)
                                     <option value="{{ $country['id'] }}">
@@ -283,7 +283,7 @@
                                 class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
                                 wire:model.live='addresses.{{ $index }}.governorate_id'
                                 id="governorate{{ $index }}"
-                                wire:change='$dispatch("governorateUpdated",{{ $index }})'>
+                                wire:change='$dispatch("governorateUpdated",{"index":{{ $index }}})'>
                                 @forelse ($governorates[$index] as $governorate)
                                     <option value="{{ $governorate['id'] }}">
                                         {{ $governorate['name'][session('locale')] }}</option>
@@ -309,7 +309,7 @@
                             <select
                                 class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
                                 wire:model.live='addresses.{{ $index }}.city_id' id="city{{ $index }}"
-                                wire:change='$dispatch("cityUpdated",{{ $index }})'>
+                                wire:change='$dispatch("cityUpdated",{"index":{{ $index }}})'>
                                 @forelse ($cities[$index] as $city)
                                     <option value="{{ $city['id'] }}">{{ $city['name'][session('locale')] }}
                                     </option>

@@ -169,8 +169,32 @@
                                     </div>
                                     {{-- Return Policy : End --}}
 
-                                    {{-- Special Offers : Start --}}
+                                    {{-- Allow To Open Package Price : Start --}}
                                     <div class="grid grid-cols-12 gap-3 justify-between mb-3 w-full bg-red-100 p-4 rounded shadow">
+                                        <div class="col-span-12">
+                                            <h3 class="text-lg font-bold text-black mb-2">
+                                                {{ __('admin/sitePages.Allow To Open Package Price') }}
+                                            </h3>
+                                        </div>
+
+                                        {{-- Allow To Open Package Price --}}
+                                        <div class="col-span-4 md:col-span-3">
+                                            <label for="allow_to_open_package_price" class="font-bold text-xs text-gray-700">
+                                                {{ __('admin/sitePages.Allow To Open Package Price') }}
+                                            </label>
+                                            <input type="number" name="allow_to_open_package_price" id="allow_to_open_package_price" dir="ltr"
+                                                class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('allow_to_open_package_price') border-red-900 border-2 @enderror"
+                                                value="{{ old('allow_to_open_package_price', $settings->allow_to_open_package_price) }}">
+                                            @error('allow_to_open_package_price')
+                                                <label id="allow_to_open_package_price-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
+                                                    for="allow_to_open_package_price">{{ $message }}</label>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    {{-- Allow To Open Package Price : End --}}
+
+                                    {{-- Special Offers : Start --}}
+                                    <div class="grid grid-cols-12 gap-3 justify-between mb-3 w-full bg-gray-100 p-4 rounded shadow">
                                         <div class="col-span-12">
                                             <h3 class="text-lg font-bold text-black mb-2">
                                                 {{ __('admin/sitePages.Special Offers') }}
@@ -190,7 +214,7 @@
 
                                                 <input type="text" name="last_box_name_ar" id="last_box_name_ar"
                                                     dir="rtl"
-                                                    class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('last_box_name_ar') border-red-900 border-2 @enderror"
+                                                    class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('last_box_name_ar') border-red-900 border-2 @enderror"
                                                     value="{{ old('last_box_name_ar', $settings->getTranslation('last_box_name', 'ar')) }}">
                                                 @error('last_box_name_ar')
                                                     <label id="last_box_name_ar-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
@@ -205,7 +229,7 @@
 
                                                 <input type="text" name="last_box_name_en" id="last_box_name_en"
                                                     dir="ltr"
-                                                    class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('last_box_name_en') border-red-900 border-2 @enderror"
+                                                    class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('last_box_name_en') border-red-900 border-2 @enderror"
                                                     value="{{ old('last_box_name_en', $settings->getTranslation('last_box_name', 'en')) }}">
                                                 @error('last_box_name_en')
                                                     <label id="last_box_name_en-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
@@ -220,7 +244,7 @@
 
                                                 <input type="number" name="last_box_quantity" id="last_box_quantity"
                                                     dir="ltr"
-                                                    class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('last_box_quantity') border-red-900 border-2 @enderror"
+                                                    class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('last_box_quantity') border-red-900 border-2 @enderror"
                                                     value="{{ old('last_box_quantity', $settings->last_box_quantity) }}">
                                                 @error('last_box_quantity')
                                                     <label id="last_box_quantity-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
@@ -244,7 +268,7 @@
 
                                                 <input type="text" name="new_arrival_name_ar" id="new_arrival_name_ar"
                                                     dir="rtl"
-                                                    class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('new_arrival_name_ar') border-red-900 border-2 @enderror"
+                                                    class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('new_arrival_name_ar') border-red-900 border-2 @enderror"
                                                     value="{{ old('new_arrival_name_ar', $settings->getTranslation('new_arrival_name', 'ar')) }}">
                                                 @error('new_arrival_name_ar')
                                                     <label id="new_arrival_name_ar-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
@@ -259,7 +283,7 @@
 
                                                 <input type="text" name="new_arrival_name_en" id="new_arrival_name_en"
                                                     dir="ltr"
-                                                    class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('new_arrival_name_en') border-red-900 border-2 @enderror"
+                                                    class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('new_arrival_name_en') border-red-900 border-2 @enderror"
                                                     value="{{ old('new_arrival_name_en', $settings->getTranslation('new_arrival_name', 'en')) }}">
                                                 @error('new_arrival_name_en')
                                                     <label id="new_arrival_name_en-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
@@ -274,7 +298,7 @@
 
                                                 <input type="number" name="new_arrival_period" id="new_arrival_period"
                                                     dir="ltr"
-                                                    class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('new_arrival_period') border-red-900 border-2 @enderror"
+                                                    class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('new_arrival_period') border-red-900 border-2 @enderror"
                                                     value="{{ old('new_arrival_period', $settings->new_arrival_period) }}">
                                                 @error('new_arrival_period')
                                                     <label id="new_arrival_period-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
@@ -298,7 +322,7 @@
 
                                                 <input type="text" name="max_price_offer_name_ar"
                                                     id="max_price_offer_name_ar" dir="rtl"
-                                                    class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('max_price_offer_name_ar') border-red-900 border-2 @enderror"
+                                                    class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('max_price_offer_name_ar') border-red-900 border-2 @enderror"
                                                     value="{{ old('max_price_offer_name_ar', $settings->getTranslation('max_price_offer_name', 'ar')) }}">
                                                 @error('max_price_offer_name_ar')
                                                     <label id="max_price_offer_name_ar-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
@@ -313,7 +337,7 @@
 
                                                 <input type="text" name="max_price_offer_name_en"
                                                     id="max_price_offer_name_en" dir="ltr"
-                                                    class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('max_price_offer_name_en') border-red-900 border-2 @enderror"
+                                                    class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('max_price_offer_name_en') border-red-900 border-2 @enderror"
                                                     value="{{ old('max_price_offer_name_en', $settings->getTranslation('max_price_offer_name', 'en')) }}">
                                                 @error('max_price_offer_name_en')
                                                     <label id="max_price_offer_name_en-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
@@ -328,7 +352,7 @@
 
                                                 <input type="number" name="max_price_offer" id="max_price_offer"
                                                     step="0.1" min="0" dir="ltr"
-                                                    class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('max_price_offer') border-red-900 border-2 @enderror"
+                                                    class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('max_price_offer') border-red-900 border-2 @enderror"
                                                     value="{{ old('max_price_offer', $settings->max_price_offer) }}">
                                                 @error('max_price_offer')
                                                     <label id="max_price_offer-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
@@ -340,7 +364,7 @@
                                     {{-- Special Offers : End --}}
 
                                     {{-- Contact Information : Start --}}
-                                    <div class="grid grid-cols-12 gap-3 justify-between mb-3 w-full bg-gray-100 p-4 rounded shadow">
+                                    <div class="grid grid-cols-12 gap-3 justify-between mb-3 w-full bg-red-100 p-4 rounded shadow">
                                         <div class="col-span-12">
                                             <h3 class="text-lg font-bold text-black mb-2">
                                                 {{ __('admin/sitePages.Contact Information') }}
@@ -354,7 +378,7 @@
                                             </label>
                                             <input type="text" name="whatsapp_number" id="whatsapp_number"
                                                 dir="ltr"
-                                                class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('whatsapp_number') border-red-900 border-2 @enderror"
+                                                class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('whatsapp_number') border-red-900 border-2 @enderror"
                                                 value="{{ old('whatsapp_number', $settings->whatsapp_number) }}">
                                             @error('whatsapp_number')
                                                 <label id="whatsapp_number-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
@@ -368,7 +392,7 @@
                                                 {{ __('admin/sitePages.Facebook Page Name') }}
                                             </label>
                                             <input type="text" name="facebook_page_name" id="facebook_page_name" dir="ltr"
-                                                class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('facebook_page_name') border-red-900 border-2 @enderror"
+                                                class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('facebook_page_name') border-red-900 border-2 @enderror"
                                                 value="{{ old('facebook_page_name', $settings->facebook_page_name) }}">
                                             @error('facebook_page_name')
                                                 <label id="facebook_page_name-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
@@ -382,7 +406,7 @@
                                                 {{ __('admin/sitePages.Youtube Channel Name') }}
                                             </label>
                                             <input type="text" name="youtube_channel_name" id="youtube_channel_name" dir="ltr"
-                                                class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('youtube_channel_name') border-red-900 border-2 @enderror"
+                                                class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('youtube_channel_name') border-red-900 border-2 @enderror"
                                                 value="{{ old('youtube_channel_name', $settings->youtube_channel_name) }}">
                                             @error('youtube_channel_name')
                                                 <label id="youtube_channel_name-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
@@ -396,7 +420,7 @@
                                                 {{ __('admin/sitePages.Instagram Page Name') }}
                                             </label>
                                             <input type="text" name="instagram_page_name" id="instagram_page_name" dir="ltr"
-                                                class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('instagram_page_name') border-red-900 border-2 @enderror"
+                                                class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('instagram_page_name') border-red-900 border-2 @enderror"
                                                 value="{{ old('instagram_page_name', $settings->instagram_page_name) }}">
                                             @error('instagram_page_name')
                                                 <label id="instagram_page_name-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
@@ -410,7 +434,7 @@
                                                 {{ __('admin/sitePages.TikTok Page Name') }}
                                             </label>
                                             <input type="text" name="tiktok_page_name" id="tiktok_page_name" dir="ltr"
-                                                class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('tiktok_page_name') border-red-900 border-2 @enderror"
+                                                class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('tiktok_page_name') border-red-900 border-2 @enderror"
                                                 value="{{ old('tiktok_page_name', $settings->tiktok_page_name) }}">
                                             @error('tiktok_page_name')
                                                 <label id="tiktok_page_name-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"
@@ -424,7 +448,7 @@
                                                 {{ __('admin/sitePages.Whatsapp Group Invitation Code') }}
                                             </label>
                                             <input type="text" name="whatsapp_group_invitation_code" id="whatsapp_group_invitation_code" dir="ltr"
-                                                class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('whatsapp_group_invitation_code') border-red-900 border-2 @enderror"
+                                                class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('whatsapp_group_invitation_code') border-red-900 border-2 @enderror"
                                                 value="{{ old('whatsapp_group_invitation_code', $settings->whatsapp_group_invitation_code) }}">
                                             @error('whatsapp_group_invitation_code')
                                                 <label id="whatsapp_group_invitation_code-error" class="col-span-12 mt-2 bg-red-700 rounded text-white shadow px-3 py-1"

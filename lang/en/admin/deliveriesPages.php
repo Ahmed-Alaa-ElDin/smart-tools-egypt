@@ -208,7 +208,8 @@ return [
     "Import From Bosta" => "Import From Bosta",
     "Governorates Imported successfully" => "Governorates Imported successfully",
     "Governorates haven't been Imported" => "Governorates haven't been Imported",
-    "Cities" => "Cities",
+    "Cities Imported successfully" => "Cities Imported successfully",
+    "Cities haven't been Imported" => "Cities haven't been Imported",
 
 
 ];

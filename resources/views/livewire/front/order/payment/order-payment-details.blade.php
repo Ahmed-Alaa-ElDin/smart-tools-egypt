@@ -76,16 +76,16 @@
                 </div>
 
                 {{-- Credit Card --}}
-                <div class="select-none cursor-pointer text-sm hover:shadow-inner shadow rounded-xl py-2 px-3 @if ($payment_method == 2) bg-successDarker text-white shadow-inner font-bold @else bg-gray-100 @endif"
+                {{-- <div class="select-none cursor-pointer text-sm hover:shadow-inner shadow rounded-xl py-2 px-3 @if ($payment_method == 2) bg-successDarker text-white shadow-inner font-bold @else bg-gray-100 @endif"
                     wire:click="payBy(2)">
                     {{ __('front/homePage.Credit / Debit Card') }}
-                </div>
+                </div> --}}
 
                 {{-- installment --}}
-                <div class="select-none cursor-pointer text-sm hover:shadow-inner shadow rounded-xl py-2 px-3 @if ($payment_method == 3) bg-successDarker text-white shadow-inner font-bold @else bg-gray-100 @endif"
+                {{-- <div class="select-none cursor-pointer text-sm hover:shadow-inner shadow rounded-xl py-2 px-3 @if ($payment_method == 3) bg-successDarker text-white shadow-inner font-bold @else bg-gray-100 @endif"
                     wire:click="payBy(3)">
                     {{ __('front/homePage.Installment') }}
-                </div>
+                </div> --}}
 
                 {{-- Vodafone Cash --}}
                 <div class="select-none cursor-pointer text-sm hover:shadow-inner shadow rounded-xl py-2 px-3 @if ($payment_method == 4) bg-successDarker text-white shadow-inner font-bold @else bg-gray-100 @endif"

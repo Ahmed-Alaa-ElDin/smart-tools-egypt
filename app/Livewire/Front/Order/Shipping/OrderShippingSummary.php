@@ -2,10 +2,12 @@
 
 namespace App\Livewire\Front\Order\Shipping;
 
-use App\Models\Offer;
 use App\Models\Zone;
-use Gloudemans\Shoppingcart\Facades\Cart;
+use App\Models\Offer;
+use App\Models\Order;
 use Livewire\Component;
+use App\Enums\OrderStatus;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 class OrderShippingSummary extends Component
 {
@@ -36,11 +38,25 @@ class OrderShippingSummary extends Component
     public $offers_total_points = 0;
     public $after_offers_total_points = 0;
     public $total_points_after_order_points = 0;
+    public $allow_to_open_package = false;
 
     protected $listeners = [
         'AddressUpdated' => 'render',
         // 'PhoneUpdated' => 'render',
+        'AllowToOpenPackageUpdated',
     ];
+
+    ############# Mount :: Start #############
+    public function mount () {
+        $order = Order::where('status_id', OrderStatus::UnderProcessing->value)
+            ->where('user_id', auth()->user()->id)
+            ->first();
+
+        if ($order) {
+            $this->allow_to_open_package = $order->allow_opening ? true : false;
+        }
+    }
+    ############# Mount :: End #############
 
     ############# Render :: Start #############
     public function render()
@@ -194,8 +210,10 @@ class OrderShippingSummary extends Component
 
         $prices = $this->calculateZonePrices($zones);
 
-        $this->shipping_fees = $prices->min('charge');
-        $this->best_zone_id = $prices->where('charge', $this->shipping_fees)->first()['zone_id'] ?? null;
+        $shippingFeesBeforeAllowToOpenPackage = $prices->min('charge');
+
+        $this->shipping_fees = $shippingFeesBeforeAllowToOpenPackage + ($this->allow_to_open_package ? config('settings.allow_to_open_package_price') : 0);
+        $this->best_zone_id = $prices->where('charge', $shippingFeesBeforeAllowToOpenPackage)->first()['zone_id'] ?? null;
     }
     ############# Get Shipping Fees :: End #############
 
@@ -237,4 +255,13 @@ class OrderShippingSummary extends Component
 
         return $zone->min_charge + ($excess_weight * $zone->kg_charge);
     }
+
+    ############# Allow to open package :: Start #############
+    public function AllowToOpenPackageUpdated($data)
+    {
+        $this->allow_to_open_package = $data['allowToOpenPackage'];
+
+        $this->render();
+    }
+    ############# Allow to open package :: End #############
 }

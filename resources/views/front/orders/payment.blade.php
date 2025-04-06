@@ -30,7 +30,7 @@
 
                         {{-- ############## Order Billing Details :: Start ############## --}}
                         @livewire('front.order.payment.order-payment-details')
-                        {{-- ############## Ordergeneral Billing Details :: End ############## --}}
+                        {{-- ############## Order Billing Details :: End ############## --}}
                     </div>
                     {{-- ############## Order Billing Details :: End ############## --}}
                 @endauth

@@ -219,7 +219,8 @@
                         <div class="col-span-2 md:col-span-3">
                             <input
                                 class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('birth_date') border-red-900 border-2 @enderror"
-                                type="date" wire:model.live.blur="birth_date" id="birth_date" tabindex="9" required>
+                                type="date" wire:model.live.blur="birth_date" id="birth_date" tabindex="9"
+                                required>
                             @error('birth_date')
                                 <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                                     {{ $message }}</div>
@@ -278,7 +279,7 @@
                                     <select
                                         class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
                                         wire:model.live='addresses.{{ $index }}.country_id'
-                                        wire:change='$dispatch("countryUpdated",{{ $index }})'
+                                        wire:change='$dispatch("countryUpdated",{"index":{{ $index }}})'
                                         id="country{{ $index }}">
                                         @forelse ($countries as $country)
                                             <option value="{{ $country->id }}">{{ $country->name }}</option>
@@ -299,7 +300,7 @@
                                         class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
                                         wire:model.live='addresses.{{ $index }}.governorate_id'
                                         id="governorate{{ $index }}"
-                                        wire:change='$dispatch("governorateUpdated",{{ $index }})'>
+                                        wire:change='$dispatch("governorateUpdated",{"index":{{ $index }}})'>
                                         @forelse ($governorates[$index] as $governorate)
                                             <option value="{{ $governorate['id'] }}">
                                                 {{ $governorate['name'][session('locale')] }}</option>
@@ -327,7 +328,7 @@
                                         class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
                                         wire:model.live='addresses.{{ $index }}.city_id'
                                         id="city{{ $index }}"
-                                        wire:change='$dispatch("cityUpdated",{{ $index }})'>
+                                        wire:change='$dispatch("cityUpdated",{"index":{{ $index }}})'>
                                         @forelse ($cities[$index] as $city)
                                             <option value="{{ $city['id'] }}">
                                                 {{ $city['name'][session('locale')] }}
@@ -351,8 +352,8 @@
                                     <label
                                         class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
                                         for="details{{ $index }}">{{ __('front/homePage.Address Details') }}</label>
-                                    <textarea id="details{{ $index }}" rows="2" wire:model.live.blur="addresses.{{ $index }}.details"
-                                        dir="rtl"
+                                    <textarea id="details{{ $index }}" rows="2"
+                                        wire:model.live.blur="addresses.{{ $index }}.details" dir="rtl"
                                         placeholder="{{ __('front/homePage.Please mention the details of the address such as street name, building number, ... etc.') }}"
                                         class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 overflow-hidden"></textarea>
                                 </div>

@@ -212,4 +212,6 @@ return [
     "Import From Bosta" => "استيراد من بوسطة",
     "Governorates Imported successfully" => "تم استيراد المحافظات بنجاح",
     "Governorates haven't been Imported" => "لم يتم استيراد المحافظات",
+    "Cities Imported successfully" => "تم استيراد المناطق بنجاح",
+    "Cities haven't been Imported" => "لم يتم استيراد المناطق",
 ];

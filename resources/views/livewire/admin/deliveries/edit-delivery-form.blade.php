@@ -6,7 +6,7 @@
     <form enctype="multipart/form-data">
         @csrf
         {{-- Image --}}
-        <div class="grid grid-cols-12 gap-x-6 gap-y-2 items-center bg-gray-100 p-2 text-center my-2 	rounded">
+        <div class="grid grid-cols-12 gap-x-6 gap-y-2 items-center justify-center justify-items-center bg-gray-100 p-2 text-center my-2 rounded">
 
             {{-- Loading Spinner --}}
             <div wire:loading wire:target="photo" class="col-span-12 my-2">
@@ -31,7 +31,7 @@
                 <label for="photo" class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">
                     {{ __('admin/deliveriesPages.Logo') }} </label>
                 <input
-                    class="form-control block w-full md:w-50 px-2 py-1 text-sm font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none col-span-12 md:col-span-10 py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
+                    class="col-span-12 md:col-span-10 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
                     id="photo" type="file" type="image" wire:model.live="photo">
 
                 @error('photo')
@@ -49,8 +49,8 @@
             <div class="col-span-6 md:col-span-5">
                 <input
                     class="first_input py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('name.ar') border-red-900 border-2 @enderror"
-                    type="text" wire:model.live.blur="name.ar" placeholder="{{ __('admin/deliveriesPages.in Arabic') }}"
-                    required>
+                    type="text" wire:model.live.blur="name.ar"
+                    placeholder="{{ __('admin/deliveriesPages.in Arabic') }}" required>
                 @error('name.ar')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                         {{ $message }}</div>
@@ -60,7 +60,8 @@
             <div class="col-span-6 md:col-span-5 ">
                 <input
                     class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('name.en') border-red-900 border-2 @enderror"
-                    type="text" wire:model.live.blur="name.en" placeholder="{{ __('admin/deliveriesPages.in English') }}">
+                    type="text" wire:model.live.blur="name.en"
+                    placeholder="{{ __('admin/deliveriesPages.in English') }}">
                 @error('name.en')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                         {{ $message }}</div>
@@ -145,13 +146,15 @@
         <div class="grid grid-cols-12  items-center text-center my-2">
             <div
                 class="col-span-6 md:col-span-4 grid grid-cols-6 md:grid-cols-4 gap-x-6 gap-y-1 items-center bg-red-100 p-2 rounded text-center">
-                <label
-                    class="col-span-6 md:col-span-2 text-black font-bold m-0 text-center">{{ __('admin/deliveriesPages.Active') }}</label>
+                <label class="col-span-6 md:col-span-2 text-black font-bold m-0 text-center select-none cursor-pointer"
+                    for="active">
+                    {{ __('admin/deliveriesPages.Active') }}
+                </label>
 
                 {{-- Active --}}
                 <div class="col-span-6 md:col-span-2 text-center flex items-center justify-center">
                     <input class="appearance-none rounded-full checked:bg-primary outline-none ring-0 cursor-pointer"
-                        type="checkbox" wire:model.live.blur="active" value="1">
+                        type="checkbox" wire:model.live="active" value="1" id="active">
                 </div>
                 @error('active')
                     <div class="inline-block mt-2 col-span-6 md:col-span-4 bg-red-700 rounded text-white shadow px-3 py-1">

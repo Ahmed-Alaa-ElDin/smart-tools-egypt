@@ -66,6 +66,7 @@ class OrderPaymentSummary extends Component
         'type' => null,
         'value' => 0,
     ];
+    public $allow_to_open_package = false;
 
     public $payment_method = null;
     public $balance = 0;
@@ -77,6 +78,16 @@ class OrderPaymentSummary extends Component
         'updatePaymentMethod',
         'submit',
     ];
+
+    public function mount () {
+        $order = Order::where('status_id', OrderStatus::UnderProcessing->value)
+            ->where('user_id', auth()->user()->id)
+            ->first();
+
+        if ($order) {
+            $this->allow_to_open_package = $order->allow_opening ? true : false;
+        }
+    }
 
     ############# Render :: Start #############
     public function render()
@@ -256,10 +267,12 @@ class OrderPaymentSummary extends Component
                     }
                 });
 
-                $this->shipping_fees = $prices->min('charge');
+                $shippingFeesBeforeAllowingToOpenPackage = $prices->min('charge');
 
-                $best_zone = $prices->filter(function ($price) {
-                    return $price['charge'] == $this->shipping_fees;
+                $this->shipping_fees = $shippingFeesBeforeAllowingToOpenPackage + ($this->allow_to_open_package ? config('settings.allow_to_open_package_price') : 0);
+
+                $best_zone = $prices->filter(function ($price) use ($shippingFeesBeforeAllowingToOpenPackage) {
+                    return $price['charge'] == $shippingFeesBeforeAllowingToOpenPackage;
                 });
 
                 if ($best_zone->count()) {
@@ -346,7 +359,7 @@ class OrderPaymentSummary extends Component
             $order->update([
                 'status_id'             =>      OrderStatus::Created->value,
                 'num_of_items'          =>      $this->items_total_quantities,
-                'allow_opening'         =>      1,
+                'allow_opening'         =>      $this->allow_to_open_package ? 1 : 0,
                 'zone_id'               =>      $this->best_zone_id,
                 'coupon_id'             =>      $this->coupon_id,
                 'items_points'          =>      $this->items_total_points,
