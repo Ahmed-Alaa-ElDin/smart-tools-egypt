@@ -63,8 +63,6 @@ class Bosta implements DeliveryInterface
 
         $decodedBostaResponse = $response->json();
 
-        dd($decodedBostaResponse);
-
         if ($response->successful() && $decodedBostaResponse['data']) {
 
             // update order in database
