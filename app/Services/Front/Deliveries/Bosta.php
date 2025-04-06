@@ -47,7 +47,7 @@ class Bosta implements DeliveryInterface
                 "lastName"      =>      $order->user->l_name ? $order->user->l_name : $order->user->f_name,
                 "phone"         =>      $order->user->phones->where('default', 1)->first()->phone,
                 "secondPhone"   =>      $order->user->phones->where('default', 0)->count() ? $order->user->phones->where('default', 0)->first()->phone : '',
-                "email"         =>      $order->user->email ?? "info@smarttoolsegypt.com",
+                "email"         =>      $order->user->email != "" ? $order->user->email : "info@smarttoolsegypt.com",
             ],
             "businessReference" => $order->id,
             "allowToOpenPackage" => $order->allow_opening ? true : false,
