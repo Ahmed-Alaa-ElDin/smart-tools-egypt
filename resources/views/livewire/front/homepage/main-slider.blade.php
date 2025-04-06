@@ -70,7 +70,7 @@
                     <ul class="splide__list shadow">
                         @foreach ($banners as $banner)
                             <li class="splide__slide">
-                                <a href="{{ $banner->banner->link }}">
+                                <a href="{{ str_starts_with($banner->banner->link, 'http') ? $banner->banner->link : env('APP_URL') . $banner->banner->link }}">
                                     <img src="{{ asset('storage/images/banners/cropped1000/' . $banner->banner->banner_name) }}"
                                         class="w-[1000px]" alt="{{ $banner->banner->description }}">
                                 </a>
@@ -87,7 +87,7 @@
         <div class="grid grid-cols-2 gap-3 justify-between items-center overflow-hidden">
             @foreach ($subsliderBanners as $subsliderBanner)
                 <div class="shadow rounded overflow-hidden bg-white text-center">
-                    <a href="{{ $subsliderBanner->banner->link }}">
+                    <a href="{{ str_starts_with($subsliderBanner->banner->link, 'http') ? $subsliderBanner->banner->link : env('APP_URL') . $subsliderBanner->banner->link }}">
                         <img src="{{ asset('storage/images/banners/cropped500/' . $subsliderBanner->banner->banner_name) }}"
                             class="m-auto w-[500px]" alt="{{ $subsliderBanner->banner->description }}">
                     </a>
@@ -101,7 +101,7 @@
             @foreach ($subsliderSmallBanners as $subsliderSmallBanner)
                 <div
                     class="subslider-small-banner flex justify-center items-center shadow rounded overflow-hidden bg-white text-center">
-                    <a href="{{ $subsliderSmallBanner->banner->link }}">
+                    <a href="{{ str_starts_with($subsliderSmallBanner->banner->link, 'http') ? $subsliderSmallBanner->banner->link : env('APP_URL') . $subsliderSmallBanner->banner->link }}">
                         <img src="{{ asset('storage/images/banners/cropped150/' . $subsliderSmallBanner->banner->banner_name) }}"
                             class="m-auto w-[150px]" alt="{{ $subsliderSmallBanner->banner->description }}">
                     </a>
