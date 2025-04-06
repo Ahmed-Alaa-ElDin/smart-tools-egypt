@@ -13,6 +13,5 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         '*/payment/check-processed',
-        'livewire/*'
     ];
 }
