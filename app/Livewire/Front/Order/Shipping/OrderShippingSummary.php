@@ -88,6 +88,8 @@ class OrderShippingSummary extends Component
                 return $item;
             }, $this->items);
 
+            dd("sadas");
+
             $this->items_total_weights = array_sum(array_column($this->items, 'total_weight'));
             $this->items_total_shipping_weights = array_sum(array_column($this->items, 'total_shipping_weight'));
 
@@ -144,8 +146,6 @@ class OrderShippingSummary extends Component
 
             // 5 - Prices After Order Offer
             $this->total_after_order_discount = $this->total_after_offer_prices - $this->order_discount + $this->shipping_fees;
-
-            dd("sadas");
 
             // ------------------------------------------------------------------------------------------------------
             // C - Points
