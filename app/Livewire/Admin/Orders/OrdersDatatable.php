@@ -559,8 +559,6 @@ class OrdersDatatable extends Component
     ######## Download Purchase Order #########
     public function downloadPurchaseOrder($order_id)
     {
-        dd($order_id);
-
         $order = Order::select([
             'orders.id',
             'user_id',
