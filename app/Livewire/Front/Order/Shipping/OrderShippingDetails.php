@@ -257,7 +257,7 @@ class OrderShippingDetails extends Component
     ################### Allow to open package :: Start ###################
     public function updatedAllowToOpenPackage($value)
     {
-        $this->dispatchSelf('AllowToOpenPackageUpdated', [
+        $this->dispatch('AllowToOpenPackageUpdated', [
             'allowToOpenPackage' => $value
         ]);
     }
