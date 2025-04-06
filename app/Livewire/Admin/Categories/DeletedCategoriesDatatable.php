@@ -54,8 +54,6 @@ class DeletedCategoriesDatatable extends Component
             })
             ->orderBy($this->sortBy, $this->sortDirection)->paginate($this->perPage);
 
-
-        // dd($categories);
         return view('livewire.admin.categories.deleted-categories-datatable', compact('categories'));
     }
 

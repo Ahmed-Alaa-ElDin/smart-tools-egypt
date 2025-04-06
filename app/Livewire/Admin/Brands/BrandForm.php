@@ -165,8 +165,4 @@ class BrandForm extends Component
         }
     }
     ######################## Save Updated Brand : End ############################
-
-    // public function call () {
-    //     dd("call");
-    // }
 }

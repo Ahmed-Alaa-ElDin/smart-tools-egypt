@@ -173,7 +173,6 @@ class CustomerForm extends Component
     // Called with every update
     public function render()
     {
-        // dd($this->countries);
         return view('livewire.admin.customers.customer-form');
     }
 

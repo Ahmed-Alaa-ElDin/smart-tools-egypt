@@ -14,7 +14,6 @@ class OrderPaymentHistoryView extends Component
      */
     public function __construct($transactions)
     {
-        // dd($transactions);
         $this->transactions = $transactions;
     }
 

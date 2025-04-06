@@ -299,8 +299,6 @@ class AddZoneForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            dd($th);
-
             Session::flash('error', __("admin/deliveriesPages.Zones haven't been added"));
             redirect()->route('admin.deliveries.index');
         }

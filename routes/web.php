@@ -70,7 +70,6 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         $order['extra_discount'] = $order['invoice']['offers_order_discount'] + $order['invoice']['coupon_order_discount'];
         $order['delivery_fees'] = $order['invoice']['delivery_fees'];
         $order['total'] = $order['invoice']['total'];
-        // dd($order);
 
         return view('front.orders.purchase-order', compact('order'));
     });

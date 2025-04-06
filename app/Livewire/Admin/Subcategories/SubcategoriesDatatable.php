@@ -57,7 +57,6 @@ class SubcategoriesDatatable extends Component
             ->leftJoin('supercategories', 'categories.supercategory_id', '=', 'supercategories.id')
             ->orderBy($this->sortBy, $this->sortDirection)->paginate($this->perPage);
 
-        // dd($subcategories);
         return view('livewire.admin.subcategories.subcategories-datatable', compact('subcategories'));
     }
 

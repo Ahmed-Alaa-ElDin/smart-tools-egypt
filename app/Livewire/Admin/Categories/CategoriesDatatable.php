@@ -55,8 +55,6 @@ class CategoriesDatatable extends Component
             ->where('supercategory_id', 'like', $this->supercategory_id)
             ->orderBy($this->sortBy, $this->sortDirection)->paginate($this->perPage);
 
-
-        // dd($categories);
         return view('livewire.admin.categories.categories-datatable', compact('categories'));
     }
 

@@ -61,7 +61,6 @@
                             <hr class="my-2">
 
                             {{-- Order's Products :: Start --}}
-                            {{-- @dd($order->transactions) --}}
                             <x-admin.orders.order-products-list :items="$order->items" />
                             {{-- Order's Products :: End --}}
 

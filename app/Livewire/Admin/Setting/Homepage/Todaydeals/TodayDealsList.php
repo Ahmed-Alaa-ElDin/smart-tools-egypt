@@ -314,7 +314,6 @@ class TodayDealsList extends Component
     ######## Update : Start #########
     public function save()
     {
-        // dd($this->items);
         DB::beginTransaction();
 
         try {
