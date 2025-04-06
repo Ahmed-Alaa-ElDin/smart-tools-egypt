@@ -70,7 +70,7 @@ return [
     "Select Country" => "Select Country",
     "Select Governorate" => "Select Governorate",
     "Zones have been added successfully" => "Zones have been added successfully",
-    "Zones haven't been added" => "Zones haven't been added",
+    "Zones haven't been added" => "Zones haven\'t been added",
     "Update and Edit Company's Zones" => "Update and Edit Company's Zones",
     "Deleted Delivery Companies" => "Deleted Delivery Companies",
     "Here you can Restore / Permanently delete delivery companies" => "Here you can Restore / Permanently delete delivery companies",
