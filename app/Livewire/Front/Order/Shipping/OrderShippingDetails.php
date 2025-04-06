@@ -99,8 +99,6 @@ class OrderShippingDetails extends Component
         }
 
         $this->dispatch('AddressUpdated');
-
-        dd("address selected");
     }
     ################### Select Address :: End ###################
 

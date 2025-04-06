@@ -180,6 +180,8 @@ class OrderShippingSummary extends Component
             $this->address = null;
         }
 
+        dd("sadas");
+
         return view('livewire.front.order.shipping.order-shipping-summary');
     }
     ############# Render :: End #############
