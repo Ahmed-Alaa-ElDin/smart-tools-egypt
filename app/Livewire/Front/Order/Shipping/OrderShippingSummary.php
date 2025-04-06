@@ -61,8 +61,6 @@ class OrderShippingSummary extends Component
     ############# Render :: Start #############
     public function render()
     {
-        dd("sadas");
-
         $this->items_total_quantities = Cart::instance('cart')->count();
 
         if ($this->items_total_quantities) {
@@ -261,6 +259,7 @@ class OrderShippingSummary extends Component
     public function AllowToOpenPackageUpdated($data)
     {
         $this->allow_to_open_package = $data['allowToOpenPackage'];
+        dd("sadas");
 
         $this->render();
     }
