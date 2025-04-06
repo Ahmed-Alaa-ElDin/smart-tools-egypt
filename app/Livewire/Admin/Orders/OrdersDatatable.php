@@ -559,6 +559,8 @@ class OrdersDatatable extends Component
     ######## Download Purchase Order #########
     public function downloadPurchaseOrder($order_id)
     {
+        dd($order_id);
+
         $order = Order::select([
             'orders.id',
             'user_id',
@@ -615,8 +617,6 @@ class OrdersDatatable extends Component
 
         $userName = str_replace(" ", "_", $order['user_name']);
 
-        dd($userName);
-        
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->stream();
         }, $userName . "-" . time() . ".pdf");
