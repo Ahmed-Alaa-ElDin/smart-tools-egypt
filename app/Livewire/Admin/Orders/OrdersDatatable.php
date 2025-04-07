@@ -662,7 +662,7 @@ class OrdersDatatable extends Component
         ])->whereIn('id', $this->selectedOrders)->get()->toArray();
 
         $orders = array_map(function ($order) {
-            $order['user_name'] = $order['user']['f_name']['ar'] . " " . ($order['user']['l_name'] ? $order['user']['l_name']['ar'] : "");
+            $order['user_name'] = ($order['user']['f_name'] ? $order['user']['f_name']['ar'] : '') . " " . ($order['user']['l_name'] ? $order['user']['l_name']['ar'] : "");
             $order['user_type'] = "عميل مميز";
 
             $order['items'] = array_merge($order['products'], $order['collections']);
