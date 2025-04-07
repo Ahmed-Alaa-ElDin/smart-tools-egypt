@@ -522,8 +522,6 @@ class OrdersDatatable extends Component
 
             $deliveryIds = array_column($order, 'delivery_id');
 
-            $userNames = str_replace(" ", "_", implode("-", array_unique(array_column($order, 'user_name'))));
-
             // Get the AWB as base64
             $awbs = $deliveryService->getAWBs($deliveryIds);
 
