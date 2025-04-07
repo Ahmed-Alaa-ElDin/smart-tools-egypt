@@ -51,7 +51,7 @@ class UserForm extends Component
             'phones.*.phone'                => 'nullable|digits:11|regex:/^01[0-2]\d{1,8}$/|' . Rule::unique('phones')->ignore($this->user_id, 'user_id'),
             'gender'                        => 'in:0,1',
             'role'                          => 'exists:roles,id',
-            'birth_date'                    => 'date|before:today',
+            'birth_date'                    => 'nullable|date|before:today',
             'photo'                         => 'nullable|mimes:jpg,jpeg,png|max:2048',
             'addresses.*.country_id'        => 'required|exists:countries,id',
             'addresses.*.governorate_id'    => 'required|exists:governorates,id',
