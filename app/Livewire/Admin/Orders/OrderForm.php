@@ -458,7 +458,7 @@ class OrderForm extends Component
                 'phone2'                =>      implode(", ", $non_default_phones),
                 'package_type'          =>      'parcel',
                 'package_desc'          =>      'عروض عدد وأدوات قابلة للكسر برجاء المحافظة على مكونات الشحنة لتفادى التلف أو فقدان مكونات الشحنة',
-                'status_id'             =>      OrderStatus::Created->value,
+                'status_id'             =>      OrderStatus::WaitingForApproval->value,
                 'num_of_items'          =>      $this->items_total_quantities,
                 'allow_opening'         =>      $this->allowToOpenPackage,
                 'zone_id'               =>      $this->zone_id,
@@ -475,7 +475,7 @@ class OrderForm extends Component
 
             // Change the state of the order
             if ($order->statuses()->count() == 0) {
-                $order->statuses()->attach(OrderStatus::Created->value);
+                $order->statuses()->attach([OrderStatus::Created->value, OrderStatus::WaitingForApproval->value]);
             }
 
             // Create an Invoice for the order
