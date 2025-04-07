@@ -26,5 +26,5 @@ interface DeliveryInterface
      * @param string $language
      * @return string
      */
-    public function getAWBs(array $deliveryIds, string $pageSize = "A4", string $language = "ar"): string;
+    public function getAWBs(array $deliveryIds, string $pageSize = "A6", string $language = "ar"): string;
 }
