@@ -470,7 +470,7 @@ class OrdersDatatable extends Component
                 $awbPdf = base64_decode($awbs);
 
                 // Generate the path
-                $path = "awbs/" . date('Y-m-d') . "/" . $userName . "-" . time() . ".pdf";
+                $path = "awbs/" . date('Y-m-d') . "/" . date('Y-m-d') . "- 1 Order AWB.pdf";
 
                 // Save the PDF
                 Storage::disk('public')->put($path, $awbPdf);
@@ -532,7 +532,7 @@ class OrdersDatatable extends Component
                 $awbPdf = base64_decode($awbs);
 
                 // Generate the path
-                $path = "awbs/" . date('Y-m-d') . "/" . $userNames . "-" . time() . ".pdf";
+                $path = "awbs/" . date('Y-m-d') . "/" . date('Y-m-d') . "-" . count($deliveryIds) . " Orders AWB.pdf";
 
                 // Save the PDF
                 Storage::disk('public')->put($path, $awbPdf);
