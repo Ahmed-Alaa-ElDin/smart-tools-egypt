@@ -598,7 +598,7 @@ class OrdersDatatable extends Component
             }
         ])->findOrFail($order_id)->toArray();
 
-        $order['user_name'] = $order['user']['f_name']['ar'] . " " . ($order['user']['l_name'] ? $order['user']['l_name']['ar'] : "");
+        $order['user_name'] = ($order['user']['f_name'] ? $order['user']['f_name']['ar'] : '') . " " . ($order['user']['l_name'] ? $order['user']['l_name']['ar'] : '');
         $order['user_type'] = "عميل مميز";
 
         $order['items'] = array_merge($order['products'], $order['collections']);
@@ -611,11 +611,9 @@ class OrdersDatatable extends Component
 
         $pdf = PDF::loadView("front.orders.purchase-order", compact("order"));
 
-        $userName = str_replace(" ", "_", $order['user_name']);
-
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->stream();
-        }, $userName . "-" . time() . ".pdf");
+        }, date('Y-m-d') . " - 1 Order.pdf");
     }
     ######## Download Purchase Order #########
 
@@ -680,10 +678,8 @@ class OrdersDatatable extends Component
 
         $pdf = PDF::loadView("front.orders.purchase-orders", compact("orders"));
 
-        $userNames = str_replace(" ", "_", implode("-", array_unique(array_column($orders, 'user_name'))));
-
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->stream();
-        }, $userNames . "-" . time() . ".pdf");
+        }, date('Y-m-d') . " - " . count($orders) . " Orders.pdf");
     }
 }
