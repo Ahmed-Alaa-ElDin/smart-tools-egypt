@@ -58,11 +58,11 @@
                         <div>
                             <span style="font-weight:bold;">العنوان:</span>
                             <span>
-                                {{ $order['address']['details'] ? $order['address']['details'] . ' - ' : '' }}
-                                {{ $order['address']['city']['name']['ar'] }} -
-                                {{ $order['address']['governorate']['name']['ar'] }}
+                                {{ $order['address'] && $order['address']['details'] ? $order['address']['details'] . ' - ' : '' }}
+                                {{ $order['address'] && $order['address']['city']['name']['ar'] }} -
+                                {{ $order['address'] && $order['address']['governorate']['name']['ar'] }}
                                 <br>
-                                {{ $order['address']['landmarks'] }}
+                                {{ $order['address'] && $order['address']['landmarks'] }}
                             </span>
                         </div>
 
