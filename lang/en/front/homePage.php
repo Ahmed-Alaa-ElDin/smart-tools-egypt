@@ -522,4 +522,5 @@ return [
     "Join Our WhatsApp Group"                       =>      "Join Our WhatsApp Group to get the latest offers and updates",
     "Sell With Us Text"                             =>      "Contact Us to display your products on our platform",
     "Allow to open package"                         =>      "Request to open package",
+    "Allow to open package description"             =>      "Please note that you will pay :amount EGP for the package opening. As this option requires special packaging.",
 ];

@@ -447,6 +447,11 @@
                 {{ __('front/homePage.Allow to open package') }}
             </label>
             <input id="allowToOpenPackage" type="checkbox" wire:model.live="allowToOpenPackage" class="appearance-none border-gray-600 rounded-full checked:bg-secondary outline-none ring-0 cursor-pointer">
+            <div class="mx-3">
+                <span class="text-gray-400 text-sm">
+                    {{ __('front/homePage.Allow to open package description', ['amount' => config('settings.allow_to_open_package_price')]) }}
+                </span>
+            </div>
         </div>
     </div>
     {{-- Notes :: End --}}
