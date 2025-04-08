@@ -36,7 +36,7 @@ class UserForm extends Component
 
     public $f_name = ['ar' => '', 'en' => ''], $l_name = ['ar' => '', 'en' => ''], $email, $phone, $gender = '0', $role, $birth_date;
 
-    public $countries = [], $governorates = [],  $cities = [];
+    public $countries = collect([]), $governorates = collect([]),  $cities = collect([]);
 
     protected $listeners = ['countryUpdated', 'governorateUpdated'];
 
@@ -97,7 +97,7 @@ class UserForm extends Component
         ]];
 
         // get all countries
-        $this->countries = Country::orderBy('name->' . session('locale'))->get();
+        $this->countries = Country::get();
 
         if ($this->countries->count()) {
             // User Has Addresses

@@ -32,7 +32,7 @@ class CustomerForm extends Component
     public $defaultAddress = 0;
 
     public $f_name = ['ar' => '', 'en' => ''], $l_name = ['ar' => '', 'en' => ''], $email, $phone, $gender = '0', $birth_date;
-    public $countries = [], $governorates = [],  $cities = [];
+    public $countries = collect([]), $governorates = collect([]),  $cities = collect([]);
 
     public $phones = [];
     public $addresses = [];
@@ -79,7 +79,7 @@ class CustomerForm extends Component
             ]
         ];
 
-        $this->countries = Country::orderBy('name->' . session('locale'))->get()->toArray();
+        $this->countries = Country::get()->toArray();
 
         if ($this->customer_id) {
             // get User Data
