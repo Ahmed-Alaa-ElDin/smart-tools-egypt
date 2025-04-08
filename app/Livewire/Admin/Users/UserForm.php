@@ -36,7 +36,7 @@ class UserForm extends Component
 
     public $f_name = ['ar' => '', 'en' => ''], $l_name = ['ar' => '', 'en' => ''], $email, $phone, $gender = '0', $role, $birth_date;
 
-    public $countries = collect([]), $governorates = collect([]),  $cities = collect([]);
+    public $countries = [], $governorates = [],  $cities = [];
 
     protected $listeners = ['countryUpdated', 'governorateUpdated'];
 

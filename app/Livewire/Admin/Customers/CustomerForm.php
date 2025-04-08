@@ -32,7 +32,7 @@ class CustomerForm extends Component
     public $defaultAddress = 0;
 
     public $f_name = ['ar' => '', 'en' => ''], $l_name = ['ar' => '', 'en' => ''], $email, $phone, $gender = '0', $birth_date;
-    public $countries = collect([]), $governorates = collect([]),  $cities = collect([]);
+    public $countries = [], $governorates = [],  $cities = [];
 
     public $phones = [];
     public $addresses = [];
