@@ -68,7 +68,7 @@
                                         {{ $order['address'] && $order['address']['city']['name']['ar'] ? $order['address']['city']['name']['ar'] : '' }} -
                                         {{ $order['address'] && $order['address']['governorate']['name']['ar'] ? $order['address']['governorate']['name']['ar'] : '' }}
                                         <br>
-                                        {{ $order['address'] && $order['address']['landmarks'] }}
+                                        {{ $order['address'] && $order['address']['landmarks'] ? $order['address']['landmarks'] : '' }}
                                     </span>
                                 </div>
 
