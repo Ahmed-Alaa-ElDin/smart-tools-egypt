@@ -103,8 +103,6 @@ class NewOrderUserPart extends Component
             'default_phone' => $this->defaultPhone
         ]);
 
-        $this->dispatch('customerUpdated', $this->customer_id)->to('admin.orders.new-order-payment-part');
-
         $this->clearSearch();
     }
 
@@ -118,8 +116,6 @@ class NewOrderUserPart extends Component
             'default_address' => $this->defaultAddress,
             'default_phone' => $this->defaultPhone
         ]);
-
-        $this->dispatch('customerUpdated', null)->to('admin.orders.new-order-payment-part');
     }
 
     ############ Address :: Start ##############

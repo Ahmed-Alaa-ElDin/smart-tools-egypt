@@ -12,7 +12,7 @@ class NewOrderPaymentPart extends Component
     public $customer, $code, $coupon_id, $message, $wallet = 0.00, $points = 0, $payment_method = 1;
 
     protected $listeners = [
-        'customerUpdated',
+        'setUserData',
         'setPaymentDataToPaymentPart',
     ];
 
@@ -24,10 +24,10 @@ class NewOrderPaymentPart extends Component
     ############## Render :: End ##############
 
     ############## Get Customer Data :: Start ##############
-    public function customerUpdated($customer_id)
+    public function setUserData($data)
     {
-        if ($customer_id) {
-            $this->customer = User::findOrFail($customer_id);
+        if ($data['customer']) {
+            $this->customer = User::findOrFail($data['customer']['id']);
         } else {
             $this->customer = null;
             $this->coupon_id = null;
