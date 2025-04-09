@@ -49,7 +49,7 @@ class CustomerForm extends Component
             'l_name.en'                     => 'nullable|string|max:20|min:3',
             'photo'                         => 'nullable|image|max:2048',
             'email'                         => 'nullable|email|max:50|min:3|unique:users,email,' . $this->customer_id,
-            'phones.*.phone'                => 'nullable|required|digits:11|regex:/^01[0-2]\d{1,8}$/|' . Rule::unique('phones')->ignore($this->customer_id, 'user_id'),
+            'phones.*.phone'                => 'required|digits:11|regex:/^01[0125]\d{1,8}$/|' . Rule::unique('phones')->ignore($this->customer_id, 'user_id'),
             'gender'                        => 'in:0,1',
             'birth_date'                    => 'date|before:today',
             'addresses.*.country_id'        => 'required|exists:countries,id',
