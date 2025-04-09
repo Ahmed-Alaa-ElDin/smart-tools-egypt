@@ -103,7 +103,7 @@
         <div class="flex flex-wrap gap-3 justify-between items-center overflow-hidden">
             @foreach ($subsliderSmallBanners as $subsliderSmallBanner)
                 <div
-                    class="max-w-[75px] max-h-[75px] md:max-w-[100px] md:max-h-[100px] lg:max-w-[150px] lg:max-h-[150px] flex justify-center items-center shadow rounded overflow-hidden bg-white text-center">
+                    class="w-[100px] h-[100px] lg:w-[150px] lg:h-[150px] flex justify-center items-center shadow rounded overflow-hidden bg-white text-center">
                     <a
                         href="{{ str_starts_with($subsliderSmallBanner->banner->link, 'http') ? $subsliderSmallBanner->banner->link : env('APP_URL') . $subsliderSmallBanner->banner->link }}">
                         <img loading="lazy"
@@ -111,7 +111,7 @@
                             srcset="{{ asset('storage/images/banners/cropped75/' . $subsliderSmallBanner->banner->banner_name) }} 75w,
                                 {{ asset('storage/images/banners/cropped150/' . $subsliderSmallBanner->banner->banner_name) }} 150w"
                             sizes="(max-width: 768px) 75px, 150px"
-                            class="m-auto w-[75px] h-[75px] md:w-[100px] md:h-[100px] lg:w-[150px] lg:h-[150px]"
+                            class="m-auto w-[100px] h-[100px] lg:w-[150px] lg:h-[150px]"
                             alt="{{ $subsliderSmallBanner->banner->description }}">
                     </a>
                 </div>
