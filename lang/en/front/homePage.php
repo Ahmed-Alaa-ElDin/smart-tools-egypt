@@ -523,4 +523,5 @@ return [
     "Sell With Us Text"                             =>      "Contact Us to display your products on our platform",
     "Allow to open package"                         =>      "Request to open package",
     "Allow to open package description"             =>      "Please note that you will pay :amount EGP for the package opening. As this option requires special packaging.",
+    "General Offer Description"                     =>      "Discover exclusive deals, limited-time discounts, and special promotions on our top products. Shop now and save big while offers last!",
 ];
