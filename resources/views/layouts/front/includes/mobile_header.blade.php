@@ -1,5 +1,5 @@
 <div class="mobile-bottom-header fixed lg:hidden bottom-0 bg-white shadow-lg border-top rounded-top w-full">
-    <div class="flex justify-between items-center">
+    <div class="flex justify-center items-center gap-2">
         <div class="col">
             <a href="{{ route('front.homepage') }}" class="block text-center pb-2 pt-3 text-xs">
                 <span class="material-icons opacity-60 text-xl">
@@ -9,11 +9,11 @@
             </a>
         </div>
         <div class="col">
-            <a href="#" class="block text-center pb-2 pt-3 text-xs">
+            <a href="{{ route('front.wishlist') }}" class="block text-center pb-2 pt-3 text-xs">
                 <span class="material-icons opacity-60 text-xl">
-                    category
+                    favorite
                 </span>
-                <span class="block font-bold opacity-60">{{ __('front/homePage.All Categories') }}</span>
+                <span class="block font-bold opacity-60">{{ __('front/homePage.My Wishlist') }}</span>
             </a>
         </div>
         <div class="col">
