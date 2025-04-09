@@ -109,11 +109,10 @@
                         {{ __('front/homePage.Subtotal :') }}
                     </div>
                     <div class="flex gap-1" dir="ltr">
-                        <span class="font-bold text-green-700">{{ __('front/homePage.EGP') }}</span>
+                        <span class="font-bold text-green-700">{{ __('front/homePage.EGP') }} </span>
                         <span
-                            class="font-bold text-green-700">{{ explode('.', Cart::instance('cart')->subtotal())[0] }}</span>
-                        <span
-                            class="font-bold text-green-700 text-xs">{{ explode('.', Cart::instance('cart')->subtotal())[1] }}</span>
+                            class="font-bold text-green-700">{{ formatTotal(Cart::instance('cart')->subtotal()) }}</span>
+                        <span class="font-bold text-green-700 text-xs">00</span>
                     </div>
                 </div>
                 {{-- Cart Subtotal :: End --}}
@@ -133,7 +132,7 @@
 
                     <div class="flex justify-center items-center gap-3 w-full">
                         {{-- View & Edit Cart :: Start --}}
-                        <a href="{{ route('front.cart') }}" class="grow btn bg-primary btn-sm text-white font-bold" >
+                        <a href="{{ route('front.cart') }}" class="grow btn bg-primary btn-sm text-white font-bold">
                             <span class="material-icons">
                                 edit
                             </span>

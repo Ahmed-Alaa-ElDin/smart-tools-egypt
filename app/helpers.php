@@ -1050,6 +1050,14 @@ function getCouponData($items, $coupon)
         "order_best_coupon" => $order_best_coupon
     ];
 }
-    ############## Get Coupon Data :: End ##############
+############## Get Coupon Data :: End ##############
+
+############## Correct Total :: Start ##############
+function formatTotal($total, $decimal = 0, $thousand = '\'')
+{
+    $value = floatval(str_replace("'", '', $total));
+    return number_format(ceil($value), $decimal, '.', $thousand);
+}
+############## Correct Total :: End ##############
 
 ################ COUPON :: End ##################

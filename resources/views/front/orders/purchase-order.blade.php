@@ -179,7 +179,10 @@
                     <td colspan="4"></td>
                     <th style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">الإجمالي بعد الخصم</th>
                     <td style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">
-                        {{ number_format(ceil($order['total']), 2) }} ج.م
+                        <span dir="ltr">
+                            {{ formatTotal($order['total'],2,',') }}
+                        </span>
+                        &nbsp; ج.م
                     </td>
                 </tr>
             </tfoot>

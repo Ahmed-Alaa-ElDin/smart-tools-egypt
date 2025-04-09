@@ -63,19 +63,19 @@
                         {{ $order->num_of_items }}
                     </td>
                     <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format($order->invoice->total ?? 0, 2, '.', '\'') }}
+                        {{ formatTotal($order->invoice->total ?? 0,2) }}
                     </td>
                     <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format($order->invoice->unpaid ?? 0, 2, '.', '\'') }}
+                        {{ formatTotal($order->invoice->unpaid ?? 0,2) }}
                     </td>
                     <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format($order->invoice->paid ?? 0, 2, '.', '\'') }}
+                        {{ formatTotal($order->invoice->paid ?? 0,2) }}
                     </td>
                     <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format(abs($order->invoice->refundable ?? 0), 2, '.', '\'') }}
+                        {{ formatTotal(abs($order->invoice->refundable ?? 0),2) }}
                     </td>
                     <td class="px-6 py-2 text-center whitespace-nowrap" dir="ltr">
-                        {{ number_format(abs($order->invoice->refunded ?? 0), 2, '.', '\'') }}
+                        {{ formatTotal(abs($order->invoice->refunded ?? 0),2) }}
                     </td>
                     <td class="px-6 py-2 text-center">
                         <div class="flex flex-wrap justify-center">

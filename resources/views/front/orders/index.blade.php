@@ -62,7 +62,7 @@
                                                 <div class="flex rtl:flex-row-reverse gap-1 text-sm">
                                                     <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
                                                     <span class=""
-                                                        dir="ltr">{{ number_format(abs($order->invoice->total ?? 0), 2, '.', '\'') }}</span>
+                                                        dir="ltr">{{ formatTotal(abs($order->invoice->total ?? 0)) }}</span>
                                                 </div>
                                             </div>
 
@@ -624,14 +624,14 @@
                                                             value="{{ App\Enums\PaymentMethod::Cash->value }}">
                                                             {{ __('front/homePage.' . App\Enums\PaymentMethod::getKeyFromValue(App\Enums\PaymentMethod::Cash->value)) }}
                                                         </option>
-                                                        <option @if (App\Enums\PaymentMethod::Card->value == $unpaidPaymentMethod) selected @endif
+                                                        {{-- <option @if (App\Enums\PaymentMethod::Card->value == $unpaidPaymentMethod) selected @endif
                                                             value="{{ App\Enums\PaymentMethod::Card->value }}">
                                                             {{ __('front/homePage.' . App\Enums\PaymentMethod::getKeyFromValue(App\Enums\PaymentMethod::Card->value)) }}
                                                         </option>
                                                         <option @if (App\Enums\PaymentMethod::Installments->value == $unpaidPaymentMethod) selected @endif
                                                             value="{{ App\Enums\PaymentMethod::Installments->value }}">
                                                             {{ __('front/homePage.' . App\Enums\PaymentMethod::getKeyFromValue(App\Enums\PaymentMethod::Installments->value)) }}
-                                                        </option>
+                                                        </option> --}}
                                                         <option @if (App\Enums\PaymentMethod::VodafoneCash->value == $unpaidPaymentMethod) selected @endif
                                                             value="{{ App\Enums\PaymentMethod::VodafoneCash->value }}">
                                                             {{ __('front/homePage.' . App\Enums\PaymentMethod::getKeyFromValue(App\Enums\PaymentMethod::VodafoneCash->value)) }}

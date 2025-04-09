@@ -207,9 +207,9 @@
             <div class="flex rtl:flex-row-reverse gap-1 text-white">
                 <span class="font-bold text-sm">{{ __('front/homePage.EGP') }}</span>
                 <span class="font-bold text-2xl"
-                    dir="ltr">{{ number_format(explode('.', ceil($total_after_order_discount))[0], 0, '.', '\'') }}</span>
+                    dir="ltr">{{ formatTotal($total_after_order_discount) }}</span>
                 <span
-                    class="font-bold text-xs">{{ explode('.', number_format(ceil($total_after_order_discount), 2))[1] ?? '00' }}</span>
+                    class="font-bold text-xs">00</span>
             </div>
 
         </div>

@@ -302,7 +302,7 @@
                                     {{-- Total Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
                                         <div class="flex items-center content-center justify-center" dir="ltr">
-                                            {{ number_format($order->invoice?->total, 2, '.', '\'') }}
+                                            {{ formatTotal($order->invoice?->total) }}
                                         </div>
                                     </td>
 
@@ -311,10 +311,10 @@
                                         <div class="flex flex-col items-center content-center justify-center overflow-hidden text-white rounded-lg shadow-inner"
                                             dir="ltr">
                                             <span class="bg-red-500 w-full text-center px-2">
-                                                {{ number_format($order->should_pay, 2, '.', '\'') }}
+                                                {{ formatTotal($order->should_pay) }}
                                             </span>
                                             <span class="bg-green-500 w-full text-center px-2">
-                                                {{ number_format($order->should_get, 2, '.', '\'') }}
+                                                {{ formatTotal($order->should_get) }}
                                             </span>
                                         </div>
                                     </td>
