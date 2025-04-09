@@ -1,8 +1,7 @@
-{{-- Product : Start --}}
 <li class="splide__slide" wire:ignore.self>
     <div class="carousel-box w-full inline-block">
         <div
-            class="group shadow border border-light rounded-lg hover:shadow-md hover:scale-105 mt-1 mb-2 transition overflow-hidden relative">
+            class="group shadow border border-light rounded-lg hover:shadow-md hover:scale-105 mt-1 mb-2 transition overflow-hidden relative bg-white">
 
             {{-- Add Product Large Screen : Start --}}
             <div
@@ -177,13 +176,13 @@
                 <div class="flex flex-col gap-2">
 
                     {{-- Product Name : Start --}}
-                    <h4 class="text-md m-0 text-center font-bold truncate">
+                    <h4 class="text-md m-0 text-center font-bold truncate" title="{{ $item['name'][session('locale')] }}">
                         {{ $item['name'][session('locale')] }}
                     </h4>
                     {{-- Product Name : End --}}
 
                     {{-- Product Model : Start --}}
-                    <h4 dir="ltr" class="text-sm m-0 text-center text-gray-500 truncate">
+                    <h4 dir="ltr" class="text-sm m-0 text-center text-gray-500 truncate" title="{{ $item['model'] }}">
                         {{ $item['model'] }}
                     </h4>
                     {{-- Product Model : End --}}
@@ -306,6 +305,4 @@
             {{-- Add Product Small Screen : End --}}
         </div>
     </div>
-
 </li>
-{{-- Product : End --}}
