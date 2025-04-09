@@ -3,7 +3,7 @@
     'url' => "https://www.smarttoolsegypt.com/$product->id-$product->slug",
     'title' => $product->name,
     'description' => $product->description,
-    'thumbnail' => $product->thumbnail,
+    'thumbnail' => $product->thumbnail ? asset("storage/images/products/cropped100/{$product->thumbnail->file_name}") : asset('assets/img/logos/smart-tools-logos.png'),
 ])
 
 @section('content')
