@@ -26,7 +26,7 @@ class ProductsImport implements ToModel
                     'en' => $row[1] ?? $row[2],
                 ],
                 'slug' => [
-                    'ar' => Str::slug($row[2], '-'),
+                    'ar' => Str::slug($row[2], '-', null),
                     'en' => Str::slug($row[1] ?? $row[2], '-'),
                 ],
                 'barcode' => $row[4],
