@@ -305,7 +305,7 @@ class NewOrderUserPart extends Component
     public function savePhone()
     {
         $this->validate([
-            'newPhone'      =>    'required|digits:11|regex:/^01[0-2]\d{1,8}$/|' . Rule::unique('phones', 'phone')->ignore($this->customer_id, 'user_id'),
+            'newPhone'      =>    'required|digits:11|regex:/^01[0125]\d{1,8}$/|' . Rule::unique('phones', 'phone')->ignore($this->customer_id, 'user_id'),
         ], [
             'newPhone.regex' => __('validation.The phone numbers must start with 010, 011, 012 or 015')
         ]);
