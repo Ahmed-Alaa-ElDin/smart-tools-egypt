@@ -4,7 +4,7 @@ return [
     "Smart Tools Egypt"         =>      "Smart Tools Egypt",
     "Compare"                   =>      "قارن",
     "Wishlist"                  =>      "المفضلة",
-    "Cart"                      =>      "سلة المشتريات",
+    "Cart"                      =>      "السلة",
     "I'm Shopping for ..."      =>      "ابحث عن ...",
     "Main Categories"           =>      "الأقسام الرئيسية",
     "Show All"                  =>      "عرض الكل >>",

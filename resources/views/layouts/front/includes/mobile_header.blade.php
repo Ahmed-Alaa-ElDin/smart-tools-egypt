@@ -1,6 +1,6 @@
 <div class="mobile-bottom-header fixed lg:hidden bottom-0 bg-white shadow-lg border-top rounded-top w-full">
     <div class="flex justify-center items-center px-4">
-        <div class="col">
+        <div class="col px-0">
             <a href="{{ route('front.homepage') }}" class="block text-center pb-2 pt-3 text-xs">
                 <span class="material-icons opacity-60 text-xl">
                     home
@@ -8,7 +8,7 @@
                 <span class="block font-bold opacity-60">{{ __('front/homePage.Home') }}</span>
             </a>
         </div>
-        <div class="col">
+        <div class="col px-0">
             <a href="{{ route('front.wishlist') }}" class="block text-center pb-2 pt-3 text-xs">
                 <span class="material-icons opacity-60 text-xl">
                     favorite
@@ -16,7 +16,7 @@
                 <span class="block font-bold opacity-60">{{ __('front/homePage.My Wishlist') }}</span>
             </a>
         </div>
-        <div class="col">
+        <div class="col px-0">
             <a href="{{ route('front.cart') }}" class="relative flex justify-center text-center pb-2 pt-3 min-w-max text-xs">
                 <span
                     class="flex justify-center items-center bg-primary h-12 w-12 border border-white border-4 rounded-circle absolute -mt-12">
@@ -30,7 +30,7 @@
                 </span>
             </a>
         </div>
-        <div class="col">
+        <div class="col px-0">
             <a href="#" class="block text-center pb-2 pt-3 text-xs">
                 <span class="inline-block relative px-2">
                     <span class="material-icons opacity-60 text-xl">
@@ -40,7 +40,7 @@
                 <span class="block font-bold opacity-60 ">{{ __('front/homePage.Notifications') }}</span>
             </a>
         </div>
-        <div class="col">
+        <div class="col px-0">
             <a href="{{ route('front.profile.index') }}" class="block text-center pb-2 pt-3 text-xs">
                 <span class="block mx-auto">
                     @if (auth()->user() && auth()->user()->profile_photo_path)
