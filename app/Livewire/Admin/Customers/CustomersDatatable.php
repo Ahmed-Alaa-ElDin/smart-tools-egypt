@@ -103,10 +103,10 @@ class CustomersDatatable extends Component
             id: $user_id);
     }
 
-    public function softDeleteUser($user_id)
+    public function softDeleteUser($id)
     {
         try {
-            $user = User::findOrFail($user_id);
+            $user = User::findOrFail($id);
             $user->delete();
 
             $this->dispatch('swalDone', text: __('admin/usersPages.Customer has been deleted successfully'),
