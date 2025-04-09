@@ -41,7 +41,6 @@ class BannerForm extends Component
     // Called Once at the beginning
     public function mount()
     {
-        resizeExistingImages("banners", ['75', '150', '500', '1000'], false);
         if ($this->banner_id) {
             $banner = Banner::findOrFail($this->banner_id);
 
