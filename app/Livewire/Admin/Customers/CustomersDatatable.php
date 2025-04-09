@@ -33,16 +33,22 @@ class CustomersDatatable extends Component
 
     public function render()
     {
-        $users = User::with(['phones', 'roles', 'cities', 'countries'])
+        $users = User::with([
+            'phones',
+            'roles',
+            'cities',
+            'countries',
+            'points'
+        ])
             ->where(
-                fn ($q) => $q
+                fn($q) => $q
                     ->whereDoesntHave('roles')
                     ->orwhereHas("roles", function ($q) {
                         $q->where("id", 1);
                     })
             )
             ->where(
-                fn ($q) => $q
+                fn($q) => $q
                     ->where('f_name->en', 'like', '%' . $this->search . '%')
                     ->orWhere('f_name->ar', 'like', '%' . $this->search . '%')
                     ->orWhere('l_name->en', 'like', '%' . $this->search . '%')
@@ -54,13 +60,11 @@ class CustomersDatatable extends Component
             )
             ->where(function ($q) {
                 if ($this->city_id) {
-                    return $q->whereHas('cities', fn ($q) => $q->where('cities.id', $this->city_id));
-                }
-                elseif ($this->governorate_id) {
-                    return $q->whereHas('governorates', fn ($q) => $q->where('governorates.id', $this->governorate_id));
-                }
-                elseif ($this->country_id) {
-                    return $q->whereHas('countries', fn ($q) => $q->where('countries.id', $this->country_id));
+                    return $q->whereHas('cities', fn($q) => $q->where('cities.id', $this->city_id));
+                } elseif ($this->governorate_id) {
+                    return $q->whereHas('governorates', fn($q) => $q->where('governorates.id', $this->governorate_id));
+                } elseif ($this->country_id) {
+                    return $q->whereHas('countries', fn($q) => $q->where('countries.id', $this->country_id));
                 }
             })
             ->orderBy($this->sortBy, $this->sortDirection)
@@ -92,7 +96,9 @@ class CustomersDatatable extends Component
     ######## Deleted #########
     public function deleteConfirm($user_id)
     {
-        $this->dispatch('swalConfirm', text: __('admin/usersPages.Are you sure, you want to delete this customer ?'),
+        $this->dispatch(
+            'swalConfirm',
+            text: __('admin/usersPages.Are you sure, you want to delete this customer ?'),
             confirmButtonText: __('admin/usersPages.Delete'),
             denyButtonText: __('admin/usersPages.Cancel'),
             denyButtonColor: 'green',
@@ -100,7 +106,8 @@ class CustomersDatatable extends Component
             focusDeny: true,
             icon: 'warning',
             method: 'softDeleteUser',
-            id: $user_id);
+            id: $user_id
+        );
     }
 
     public function softDeleteUser($id)
@@ -109,11 +116,17 @@ class CustomersDatatable extends Component
             $user = User::findOrFail($id);
             $user->delete();
 
-            $this->dispatch('swalDone', text: __('admin/usersPages.Customer has been deleted successfully'),
-                icon: 'success');
+            $this->dispatch(
+                'swalDone',
+                text: __('admin/usersPages.Customer has been deleted successfully'),
+                icon: 'success'
+            );
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/usersPages.Customer has not been deleted"),
-                icon: 'error');
+            $this->dispatch(
+                'swalDone',
+                text: __("admin/usersPages.Customer has not been deleted"),
+                icon: 'error'
+            );
         }
     }
     ######## Deleted #########
@@ -123,10 +136,13 @@ class CustomersDatatable extends Component
     ######## Add Points #########
     public function addPointsForm($user_id)
     {
-        $this->dispatch('swalAddPointsForm', title: __('admin/usersPages.Enter the points you want to add'),
+        $this->dispatch(
+            'swalAddPointsForm',
+            title: __('admin/usersPages.Enter the points you want to add'),
             confirmButtonText: __('admin/usersPages.Add'),
             denyButtonText: __('admin/usersPages.Cancel'),
-            user_id: $user_id);
+            user_id: $user_id
+        );
     }
 
     public function addPoints($user_id, $points)
@@ -138,11 +154,17 @@ class CustomersDatatable extends Component
 
             $user->save();
 
-            $this->dispatch('swalDone', text: __('admin/usersPages.Points added successfully'),
-                icon: 'success');
+            $this->dispatch(
+                'swalDone',
+                text: __('admin/usersPages.Points added successfully'),
+                icon: 'success'
+            );
         } catch (\Throwable $th) {
-            $this->dispatch('swalUserRoleChanged', text: __("admin/usersPages.Points haven't been added"),
-                icon: 'error');
+            $this->dispatch(
+                'swalUserRoleChanged',
+                text: __("admin/usersPages.Points haven't been added"),
+                icon: 'error'
+            );
         }
     }
     ######## Add Points #########
@@ -158,15 +180,24 @@ class CustomersDatatable extends Component
             $user->save();
 
             if ($user->banned) {
-                $this->dispatch('swalDone', text:__('admin/usersPages.Customer has been banned successfully'),
-                    icon: 'success');
+                $this->dispatch(
+                    'swalDone',
+                    text: __('admin/usersPages.Customer has been banned successfully'),
+                    icon: 'success'
+                );
             } else {
-                $this->dispatch('swalDone', text:__('admin/usersPages.Customer has been unbanned successfully'),
-                    icon: 'success');
+                $this->dispatch(
+                    'swalDone',
+                    text: __('admin/usersPages.Customer has been unbanned successfully'),
+                    icon: 'success'
+                );
             }
         } catch (\Throwable $th) {
-            $this->dispatch('swalDone', text: __("admin/usersPages.Customer has not been banned"),
-                icon: 'error');
+            $this->dispatch(
+                'swalDone',
+                text: __("admin/usersPages.Customer has not been banned"),
+                icon: 'error'
+            );
         }
     }
     ######## Banning User : End ########

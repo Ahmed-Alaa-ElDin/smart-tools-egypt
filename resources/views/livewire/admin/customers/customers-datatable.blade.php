@@ -99,13 +99,10 @@
                                 </th>
 
                                 {{-- Points Header --}}
-                                <th wire:click="setSortBy('points')" scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                <th scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
                                     <div class="min-w-max">
                                         {{ __('admin/usersPages.Points') }}&nbsp;
-                                        @include('partials._sort_icon', [
-                                            'field' => 'points',
-                                        ])
                                     </div>
                                 </th>
 
@@ -170,7 +167,13 @@
                                         <div class="text-sm text-gray-900">{{ $user->email }}
                                         </div>
                                         <div class="text-sm text-gray-500">
-                                            {{ $user->phones->where('default', 1)->first() ? $user->phones->where('default', 1)->first()->phone : '' }}
+                                            @foreach ($user->phones as $phone)
+                                                <span
+                                                    class="@if ($phone->default) font-bold @endif">{{ $phone->phone }}</span>
+                                                @if (!$loop->last)
+                                                    -
+                                                @endif
+                                            @endforeach
                                         </div>
                                     </td>
 
@@ -179,7 +182,7 @@
                                     </td>
 
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
-                                        {{ $user->points }}
+                                        {{ $user->valid_points }}
                                     </td>
 
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
