@@ -79,7 +79,8 @@ class OrderPaymentSummary extends Component
         'submit',
     ];
 
-    public function mount () {
+    public function mount()
+    {
         $order = Order::where('status_id', OrderStatus::UnderProcessing->value)
             ->where('user_id', auth()->user()->id ?? 0)
             ->first();
@@ -288,8 +289,16 @@ class OrderPaymentSummary extends Component
     ############# Get Shipping Fees :: End #############
 
     ############## Get Coupon Data :: Start ##############
-    public function couponApplied($coupon_id, $products_best_coupon, $collections_best_coupon, $coupon_items_discount, $coupon_items_points, $coupon_order_discount, $coupon_order_points, $coupon_free_shipping)
-    {
+    public function couponApplied(
+        $coupon_id,
+        $products_best_coupon,
+        $collections_best_coupon,
+        $coupon_items_discount,
+        $coupon_items_points,
+        $coupon_order_discount,
+        $coupon_order_points,
+        $coupon_free_shipping
+    ) {
         $this->coupon_id = $coupon_id;
         $this->coupon_items_discount = $coupon_items_discount;
         $this->coupon_items_points = $coupon_items_points;

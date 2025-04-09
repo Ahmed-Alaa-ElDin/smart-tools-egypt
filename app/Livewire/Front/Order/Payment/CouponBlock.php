@@ -208,10 +208,8 @@ class CouponBlock extends Component
             0,
             0,
             false,
-            [
-                'type' => null,
-                'value' => 0,
-            ]
+            0,
+            false
         );
     }
 }
