@@ -51,7 +51,7 @@ class CustomerForm extends Component
             'email'                         => 'nullable|email|max:50|min:3|unique:users,email,' . $this->customer_id,
             'phones.*.phone'                => 'required|digits:11|regex:/^01[0125]\d{1,8}$/|' . Rule::unique('phones')->ignore($this->customer_id, 'user_id'),
             'gender'                        => 'in:0,1',
-            'birth_date'                    => 'date|before:today',
+            'birth_date'                    => 'nullable|date|before:today',
             'addresses.*.country_id'        => 'required|exists:countries,id',
             'addresses.*.governorate_id'    => 'required|exists:governorates,id',
             'addresses.*.city_id'           => 'required|exists:cities,id',
