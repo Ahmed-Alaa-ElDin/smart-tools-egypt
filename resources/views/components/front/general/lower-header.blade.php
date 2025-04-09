@@ -1,4 +1,4 @@
-<div class="bg-white border-top border-gray-200 py-1 scrollbar scrollbar-hidden-x">
+<div class="bg-white border-top border-gray-200 py-1 scrollbar scrollbar-hidden-x scrollbar-zero">
     <div class="container">
         <ul class="flex flex-nowrap justify-between lg:justify-center items-center gap-2 text-center">
             @foreach ($nav_links as $nav_link)

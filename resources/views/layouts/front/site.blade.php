@@ -46,6 +46,17 @@
     @stack('css')
     {{-- Custom CSS :: End --}}
 
+    <style>
+        .scrollbar-zero {
+            scrollbar-width: 0 !important;
+            -ms-overflow-style: none !important;
+        }
+
+        .scrollbar-zero::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+
 </head>
 
 <body class="{{ $class ?? '' }}">
