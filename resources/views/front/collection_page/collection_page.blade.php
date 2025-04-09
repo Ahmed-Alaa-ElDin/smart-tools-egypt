@@ -3,7 +3,7 @@
     'url' => "https://www.smarttoolsegypt.com/$collection->id-$collection->slug",
     'title' => $collection->name,
     'description' => $collection->description,
-    'thumbnail' => $collection->thumbnail,
+    'thumbnail' => $collection->thumbnail ? asset("storage/images/collections/cropped100/{$collection->thumbnail->file_name}") : asset('assets/img/logos/smart-tools-logos.png'),
 ])
 
 @section('content')
@@ -749,7 +749,7 @@
                         role="tabpanel" aria-labelledby="delivery-cost-tab">
                         @livewire('front.product.delivery.product-delivery', [
                             'free_shipping' => $collectionOffer->free_shipping,
-                            'collection_weight' => $collection->weight, 
+                            'collection_weight' => $collection->weight,
                         ])
                     </div>
                     {{-- Delivery Cost Body :: End --}}
