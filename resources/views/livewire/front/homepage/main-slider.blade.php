@@ -70,8 +70,10 @@
                     <ul class="splide__list shadow">
                         @foreach ($banners as $banner)
                             <li class="splide__slide">
-                                <a href="{{ str_starts_with($banner->banner->link, 'http') ? $banner->banner->link : env('APP_URL') . $banner->banner->link }}">
-                                    <img src="{{ asset('storage/images/banners/cropped1000/' . $banner->banner->banner_name) }}"
+                                <a
+                                    href="{{ str_starts_with($banner->banner->link, 'http') ? $banner->banner->link : env('APP_URL') . $banner->banner->link }}">
+                                    <img loading="lazy"
+                                        src="{{ asset('storage/images/banners/cropped1000/' . $banner->banner->banner_name) }}"
                                         class="w-[1000px]" alt="{{ $banner->banner->description }}">
                                 </a>
                             </li>
@@ -87,7 +89,8 @@
         <div class="grid grid-cols-2 gap-3 justify-between items-center overflow-hidden">
             @foreach ($subsliderBanners as $subsliderBanner)
                 <div class="shadow rounded overflow-hidden bg-white text-center">
-                    <a href="{{ str_starts_with($subsliderBanner->banner->link, 'http') ? $subsliderBanner->banner->link : env('APP_URL') . $subsliderBanner->banner->link }}">
+                    <a
+                        href="{{ str_starts_with($subsliderBanner->banner->link, 'http') ? $subsliderBanner->banner->link : env('APP_URL') . $subsliderBanner->banner->link }}">
                         <img src="{{ asset('storage/images/banners/cropped500/' . $subsliderBanner->banner->banner_name) }}"
                             class="m-auto w-[500px]" alt="{{ $subsliderBanner->banner->description }}">
                     </a>
@@ -97,13 +100,19 @@
         {{-- SubSlider Banners : End --}}
 
         {{-- Subslider Small Banner : Start --}}
-        <div class="flex flex-wrap gap-3 justify-around items-center overflow-hidden">
+        <div class="flex flex-wrap gap-3 justify-between items-center overflow-hidden">
             @foreach ($subsliderSmallBanners as $subsliderSmallBanner)
                 <div
-                    class="subslider-small-banner flex justify-center items-center shadow rounded overflow-hidden bg-white text-center">
-                    <a href="{{ str_starts_with($subsliderSmallBanner->banner->link, 'http') ? $subsliderSmallBanner->banner->link : env('APP_URL') . $subsliderSmallBanner->banner->link }}">
-                        <img src="{{ asset('storage/images/banners/cropped150/' . $subsliderSmallBanner->banner->banner_name) }}"
-                            class="m-auto w-[150px]" alt="{{ $subsliderSmallBanner->banner->description }}">
+                    class="max-w-[75px] max-h-[75px] md:max-w-[100px] md:max-h-[100px] lg:max-w-[150px] lg:max-h-[150px] flex justify-center items-center shadow rounded overflow-hidden bg-white text-center">
+                    <a
+                        href="{{ str_starts_with($subsliderSmallBanner->banner->link, 'http') ? $subsliderSmallBanner->banner->link : env('APP_URL') . $subsliderSmallBanner->banner->link }}">
+                        <img loading="lazy"
+                            src="{{ asset('storage/images/banners/cropped150/' . $subsliderSmallBanner->banner->banner_name) }}"
+                            srcset="{{ asset('storage/images/banners/cropped75/' . $subsliderSmallBanner->banner->banner_name) }} 75w,
+                                {{ asset('storage/images/banners/cropped150/' . $subsliderSmallBanner->banner->banner_name) }} 150w"
+                            sizes="(max-width: 768px) 75px, 150px"
+                            class="m-auto w-[75px] h-[75px] md:w-[100px] md:h-[100px] lg:w-[150px] lg:h-[150px]"
+                            alt="{{ $subsliderSmallBanner->banner->description }}">
                     </a>
                 </div>
             @endforeach
