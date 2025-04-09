@@ -1,5 +1,5 @@
 <div class="mobile-bottom-header fixed lg:hidden bottom-0 bg-white shadow-lg border-top rounded-top w-full">
-    <div class="flex justify-center items-center gap-2 px-4">
+    <div class="flex justify-center items-center px-4">
         <div class="col">
             <a href="{{ route('front.homepage') }}" class="block text-center pb-2 pt-3 text-xs">
                 <span class="material-icons opacity-60 text-xl">
