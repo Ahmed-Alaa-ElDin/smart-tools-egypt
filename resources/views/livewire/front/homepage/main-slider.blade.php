@@ -86,12 +86,12 @@
         {{-- Main Slider & top categories : End --}}
 
         {{-- SubSlider Banners : Start --}}
-        <div class="grid grid-cols-2 gap-3 justify-between items-center overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 justify-between items-center overflow-hidden">
             @foreach ($subsliderBanners as $subsliderBanner)
                 <div class="shadow rounded overflow-hidden bg-white text-center">
                     <a
                         href="{{ str_starts_with($subsliderBanner->banner->link, 'http') ? $subsliderBanner->banner->link : env('APP_URL') . $subsliderBanner->banner->link }}">
-                        <img src="{{ asset('storage/images/banners/cropped500/' . $subsliderBanner->banner->banner_name) }}"
+                        <img loading="lazy" src="{{ asset('storage/images/banners/cropped500/' . $subsliderBanner->banner->banner_name) }}"
                             class="m-auto w-[500px]" alt="{{ $subsliderBanner->banner->description }}">
                     </a>
                 </div>
