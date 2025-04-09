@@ -112,10 +112,10 @@
 
             {{-- TODO:: Underconstruction :: Start --}}
             <div class="text-center flex-grow">
-                <span class="flex flex-wrap justify-center items-center gap-1 py-1" dir="rtl">
+                <span class="flex flex-wrap justify-center items-center gap-1 py-1 text-xs md:text-base" dir="rtl">
                     لو قابلتك أي مشكلة تواصل معانا عن طريق صفحتنا على
                     <a href="https://www.facebook.com/{{ config('settings.facebook_page_name') }}" target="_blank"
-                        class="bg-facebook text-white px-2 py-1 text-sm rounded-full inline-flex justify-center items-center gap-1 font-bold">
+                        class="bg-facebook text-white px-2 py-1 text-xs md:text-sm rounded-full inline-flex justify-center items-center gap-1 font-bold">
                         Facebook
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                             <path fill="currentColor"
@@ -123,7 +123,7 @@
                         </svg>
                     </a> أو
                     <a href="https://wa.me/+2{{ config('settings.whatsapp_number') }}" target="_blank"
-                        class="bg-whatsapp text-white px-2 py-1 text-sm rounded-full inline-flex justify-center items-center gap-1 font-bold">
+                        class="bg-whatsapp text-white px-2 py-1 text-xs md:text-sm rounded-full inline-flex justify-center items-center gap-1 font-bold">
                         WhatsApp
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                             <path fill="currentColor"
