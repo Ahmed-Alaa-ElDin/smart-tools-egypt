@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Orders;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Collection;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class NewOrderProductsPart extends Component
 {
@@ -32,8 +33,9 @@ class NewOrderProductsPart extends Component
 
     public function updatedSearch()
     {
-        // Early return if search is empty
-        if (empty($this->search)) {
+        $search = trim($this->search);
+
+        if (blank($search)) {
             $this->products_list = collect([]);
             return;
         }
@@ -41,6 +43,7 @@ class NewOrderProductsPart extends Component
         $selectedProducts = array_column(array_filter($this->products, fn($product) => $product['type'] == "Product"), 'id');
         $selectedCollections = array_column(array_filter($this->products, fn($product) => $product['type'] == "Collection"), 'id');
 
+                // Search in Products
         $products = Product::select([
             'id',
             'name',
@@ -54,25 +57,18 @@ class NewOrderProductsPart extends Component
             'model',
             'brand_id'
         ])
-            ->with(
-                'brand',
-            )
+            ->with('brand')
             ->whereNotIn('id', $selectedProducts)
-            ->where(
-                fn($q) =>
-                $q->where('name', 'like', '%' . $this->search . '%')
-                    ->orWhere('barcode', 'like', '%' . $this->search . '%')
-                    ->orWhere('original_price', 'like', '%' . $this->search . '%')
-                    ->orWhere('base_price', 'like', '%' . $this->search . '%')
-                    ->orWhere('final_price', 'like', '%' . $this->search . '%')
-                    ->orWhere('description', 'like', '%' . $this->search . '%')
-                    ->orWhere('model', 'like', '%' . $this->search . '%')
-                    ->orWhereHas('brand', fn($q) => $q->where('brands.name', 'like', '%' . $this->search . '%'))
-            )
-            ->where("publish",  1)
-            ->where("quantity", ">", 0)
+            ->where('publish', 1)
+            ->where('quantity', '>', 0)
+            ->where(function ($q) use ($search) {
+                $this->searchCallback($q);
+                $q->orWhereHas('brand', fn($q) => $q->where('brands.name', 'like', "%{$search}%"));
+            })
+            ->limit(10)
             ->get();
 
+        // Search in Collections
         $collections = Collection::select([
             'id',
             'name',
@@ -83,25 +79,31 @@ class NewOrderProductsPart extends Component
             'under_reviewing',
             'points',
             'description',
-            'model',
+            'model'
         ])
             ->whereNotIn('id', $selectedCollections)
-            ->where(
-                fn($q) =>
-                $q->where('name', 'like', '%' . $this->search . '%')
-                    ->orWhere('barcode', 'like', '%' . $this->search . '%')
-                    ->orWhere('original_price', 'like', '%' . $this->search . '%')
-                    ->orWhere('base_price', 'like', '%' . $this->search . '%')
-                    ->orWhere('final_price', 'like', '%' . $this->search . '%')
-                    ->orWhere('description', 'like', '%' . $this->search . '%')
-                    ->orWhere('model', 'like', '%' . $this->search . '%')
-            )
-            ->where("publish",  1)
-            ->get()
-            ->filter(fn($collection) => $collection->quantity > 0);
+            ->where('publish', 1)
+            ->where(function ($q) use ($search) {
+                $this->searchCallback($q);
+            })
+            ->limit(10)
+            ->get();
 
+        // Combine results
         $this->products_list = $collections->concat($products)->toArray();
     }
+
+    private function searchCallback(Builder $query): Builder
+    {
+        return $query->where('name', 'like', "%{$this->search}%")
+            ->orWhere('barcode', 'like', "%{$this->search}%")
+            ->orWhere('original_price', 'like', "%{$this->search}%")
+            ->orWhere('base_price', 'like', "%{$this->search}%")
+            ->orWhere('final_price', 'like', "%{$this->search}%")
+            ->orWhere('description', 'like', "%{$this->search}%")
+            ->orWhere('model', 'like', "%{$this->search}%");
+    }
+
 
     public function clearSearch()
     {

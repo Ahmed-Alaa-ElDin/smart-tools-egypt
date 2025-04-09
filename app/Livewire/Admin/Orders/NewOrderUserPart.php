@@ -57,21 +57,24 @@ class NewOrderUserPart extends Component
 
     public function updatedSearch()
     {
-        if ($this->search != "") {
-            $this->customers = User::where(function ($q) {
-                $q->where('f_name->ar', 'like', '%' . $this->search . '%')
-                    ->orWhere('l_name->ar', 'like', '%' . $this->search . '%')
-                    ->orWhere('f_name->en', 'like', '%' . $this->search . '%')
-                    ->orWhere('l_name->en', 'like', '%' . $this->search . '%')
-                    ->orWhere('email', 'like', '%' . $this->search . '%')
-                    ->orWhereHas('phones', function ($q) {
-                        $q->where('phone', 'like', '%' . $this->search . '%');
-                    });
-            })
-                ->get();
-        } else {
+        $term = trim($this->search);
+
+        if (blank($term)) {
             $this->customers = collect([]);
+            return;
         }
+
+        $this->customers = User::query()
+            ->where(function ($query) use ($term) {
+                $query->where('f_name->ar', 'like', "%$term%")
+                    ->orWhere('l_name->ar', 'like', "%$term%")
+                    ->orWhere('f_name->en', 'like', "%$term%")
+                    ->orWhere('l_name->en', 'like', "%$term%")
+                    ->orWhere('email', 'like', "%$term%")
+                    ->orWhereHas('phones', fn($q) => $q->where('phone', 'like', "%$term%"));
+            })
+            ->limit(10)
+            ->get();
     }
 
     public function clearSearch()
@@ -82,7 +85,7 @@ class NewOrderUserPart extends Component
 
     public function updatedCustomerId()
     {
-        $this->selectedCustomer = User::findOrFail($this->customer_id);
+        $this->selectedCustomer = User::with('addresses', 'phones')->findOrFail($this->customer_id);
 
         $defaultAddress = $this->selectedCustomer->addresses->where('default', 1)->first();
 
