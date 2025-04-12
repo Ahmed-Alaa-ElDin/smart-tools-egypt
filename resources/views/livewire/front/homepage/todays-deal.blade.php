@@ -63,14 +63,14 @@
     </aside>
 
     <div class="lg:hidden">
-        <div class="px-2 py-4 md:px-4 md:py-3 bg-white shadow rounded">
+        <div class="bg-primary shadow rounded">
 
             {{-- Header : Start --}}
-            <div class="flex flex-wrap mb-3 gap-2 justify-between items-baseline border-b text-center">
+            <div class="px-2 md:px-4 flex flex-wrap mb-3 gap-2 justify-between items-baseline border-b text-center bg-red-100">
                 {{-- Title : Start --}}
                 <h3
                     class="flex align-center justify-center items-center gap-5 h5 font-bold mb-0 w-full text-center md:w-auto">
-                    <span class="border-b-2 border-primary py-3 inline-block">{{ $section->title }}</span>
+                    <span class="py-3 inline-block">{{ $section->title }}</span>
 
                     <span class="text-white bg-primary rounded px-2 py-1 text-xs">{{ __('front/homePage.Hot') }}</span>
                 </h3>
@@ -86,7 +86,7 @@
             {{-- Header : End --}}
 
             {{-- Slider : Start --}}
-            <div class="product_list splide h-full w-full row-span-2 rounded overflow-hidden" wire:ignore>
+            <div class="product_list px-2 md:px-4 splide h-full w-full row-span-2 rounded overflow-hidden bg-primary" wire:ignore>
                 <div class="splide__track">
                     {{-- List of Products : Start --}}
                     <ul class="splide__list">
