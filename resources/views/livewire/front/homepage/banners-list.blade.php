@@ -1,6 +1,6 @@
 <section class="offer-bar mb-3">
     <div class="container">
-        <div class="grid grid-cols-12 gap-3 items-center justify-between">
+        <div class="grid grid-cols-12 gap-3 items-center justify-between justify-items-center">
             @foreach ($banners as $banner)
                 @if (!$loop->last)
                     <div class="group relative col-span-12 md:col-span-6 lg:col-span-4  overflow-hidden ">

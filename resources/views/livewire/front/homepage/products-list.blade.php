@@ -5,8 +5,8 @@
             {{-- Header : Start --}}
             <div class="flex flex-wrap mb-3 gap-2 justify-between items-baseline border-b text-center">
                 {{-- Title : Start --}}
-                <h3 class="h5 font-bold mb-0 w-full text-center md:w-auto">
-                    <span class="border-b-2 border-primary pb-3 inline-block">{{ $section->title }}</span>
+                <h3 class="flex align-center justify-center items-center gap-5 h5 font-bold mb-0 w-full text-center md:w-auto">
+                    <span class="border-b-2 border-primary py-3 inline-block">{{ $section->title }}</span>
                 </h3>
                 {{-- Title : End --}}
 

@@ -1,4 +1,4 @@
-<section class="top-slider container mt-4 mb-3 relative overflow-hidden grid grid-cols-12 gap-3 lg:gap-4">
+<section class="top-slider container mt-4 mb-3 relative grid grid-cols-12 gap-3 lg:gap-4 items-stretch">
 
     {{-- All Categories : Start --}}
     <aside class="col-span-2 hidden lg:block z-10 ">
@@ -88,11 +88,12 @@
         {{-- SubSlider Banners : Start --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 justify-between items-center overflow-hidden">
             @foreach ($subsliderBanners as $subsliderBanner)
-                <div class="shadow rounded overflow-hidden bg-white text-center">
+                <div class="overflow-hidden text-center">
                     <a
                         href="{{ str_starts_with($subsliderBanner->banner->link, 'http') ? $subsliderBanner->banner->link : env('APP_URL') . $subsliderBanner->banner->link }}">
-                        <img loading="lazy" src="{{ asset('storage/images/banners/cropped500/' . $subsliderBanner->banner->banner_name) }}"
-                            class="m-auto w-[500px]" alt="{{ $subsliderBanner->banner->description }}">
+                        <img loading="lazy"
+                            src="{{ asset('storage/images/banners/cropped500/' . $subsliderBanner->banner->banner_name) }}"
+                            class="shadow rounded m-auto w-[500px]" alt="{{ $subsliderBanner->banner->description }}">
                     </a>
                 </div>
             @endforeach
@@ -100,7 +101,7 @@
         {{-- SubSlider Banners : End --}}
 
         {{-- Subslider Small Banner : Start --}}
-        <div class="flex flex-wrap gap-3 justify-between items-center overflow-hidden">
+        <div class="flex flex-wrap gap-2 justify-between items-center overflow-hidden">
             @foreach ($subsliderSmallBanners as $subsliderSmallBanner)
                 <div
                     class="w-[100px] h-[100px] lg:w-[150px] lg:h-[150px] flex justify-center items-center shadow rounded overflow-hidden bg-white text-center">
@@ -121,67 +122,6 @@
     </div>
 
     {{-- Today's Deal : Start --}}
-    <aside class="col-span-12 lg:col-span-2 shadow rounded overflow-hidden lg:max-h-180">
-        <div class="flex justify-around items-center px-3 py-5 bg-red-100 rounded-t">
-            <span class="text-sm font-bold">
-                {{ __("front/homePage.Today's Deal") }}
-            </span>
-            <span
-                class="text-xs font-bold rounded py-0.5 px-1 bg-red-600 text-white">{{ __('front/homePage.Hot') }}</span>
-        </div>
-        <div
-            class="overflow-auto scrollbar scrollbar-thumb-secondary scrollbar-track-primary scrollbar-thin p-2 bg-primary rounded-b h-100">
-            <div>
-
-                <ul class="grid grid-cols-2 lg:grid-cols-1 gap-2 ">
-                    @foreach ($items as $item)
-                        {{-- Product : Start --}}
-                        <x-front.product-box-small :item="$item" />
-                        {{-- Product : End --}}
-                    @endforeach
-
-                    {{-- See All : Start --}}
-                    @if ($todayDeals->count() > 11)
-                        {{-- Product : Start --}}
-                        <li
-                            class="product overflow-hidden bg-white border border-light rounded hover:shadow-md hover:scale-105 transition cursor-pointer">
-                            <div class="carousel-box inline-block w-100">
-                                <div class="group mb-2">
-                                    <div class="relative overflow-hidden h-40 flex items-center justify-center">
-
-                                        {{-- Fake Image : Start --}}
-                                        <div class="w-full h-full flex justify-center items-center bg-gray-200">
-                                            <div class="flex justify-center items-center">
-                                                <span class="block material-icons text-8xl">
-                                                    construction
-                                                </span>
-                                            </div>
-                                        </div>
-                                        {{-- Fake Image : End --}}
-
-                                    </div>
-
-                                    <div class="md:p-3 p-2 text-left">
-
-                                        {{-- Product Name : Start --}}
-                                        <h3 class="mb-0 text-center">
-                                            <span class="block text-gray-800">
-                                                {{ __('front/homePage.See All') }}
-                                            </span>
-                                        </h3>
-                                        {{-- Product Name : End --}}
-
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        {{-- Product : End --}}
-                    @endif
-                    {{-- See All : End --}}
-
-                </ul>
-            </div>
-        </div>
-    </aside>
+    @livewire('front.homepage.todays-deal', ['section' => $todayDeals])
     {{-- Today's Deal : End --}}
 </section>

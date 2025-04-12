@@ -21,9 +21,8 @@ class HomepageController extends Controller
             'products' => fn ($q) => $q
                 ->select(['products.id', 'products.publish'])
                 ->where('products.publish', 1)
-                ->with('brand')
-                ->withPivot('rank')
-                ->orderBy('rank'),
+                // ->with(['brand:id,name'])
+                ->orderByPivot('rank'),
             'collections' => fn ($q) => $q
                 ->select(['collections.id', 'collections.publish'])
                 ->where('collections.publish', 1)
@@ -39,8 +38,9 @@ class HomepageController extends Controller
             ]),
             'banners'
         ])
-            ->where('active', 1)
-            ->orderBy('rank')->get();
+            ->whereActive(1)
+            ->orderBy('rank')
+            ->get();
         ############## Get All Active Sections with Relations :: End ##############
 
         ############ Extract of products From Sections :: Start ############
@@ -165,7 +165,7 @@ class HomepageController extends Controller
         ############ Get All Sections :: End ############
 
         ############ Get Today Deals Section :: Start ############
-        $today_deals_sections = $sections->where("today_deals", 1)->first();
+        $today_deals_section = $sections->where("today_deals", 1)->first();
         ############ Get Today Deals Section :: End ############
 
         ############ Get Top Categories :: Start ############
@@ -176,7 +176,7 @@ class HomepageController extends Controller
         $brands = Brand::select('id', 'name', 'top', 'logo_path')->without('validOffers')->where("top", '>', 0)->orderBy("top")->get();
         ############ Get Top Brands :: End ############
 
-        return view('front.homepage.homepage', compact('homepage_sections', 'today_deals_sections', 'categories', 'brands'));
+        return view('front.homepage.homepage', compact('homepage_sections', 'today_deals_section', 'categories', 'brands'));
     }
 
     public function search(Request $request)
