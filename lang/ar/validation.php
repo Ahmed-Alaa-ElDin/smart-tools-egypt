@@ -265,6 +265,8 @@ return [
         'addresses.*.landmarks' => 'العلامة المميزة',
         'address.details'       => 'تفاصيل العنوان',
         'address.landmarks'     => 'العلامة المميزة',
+        'newAddress.details'    => 'تفاصيل العنوان',
+        'newAddress.landmarks'  => 'العلامة المميزة',
     ],
 
     /*
