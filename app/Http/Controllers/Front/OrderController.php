@@ -283,7 +283,7 @@ class OrderController extends Controller
             $min_charge = $zone->min_charge;
             $min_weight = $zone->min_weight;
             $kg_charge = $zone->kg_charge;
-            $shipping_fees = $items_total_shipping_weights < $min_weight ? $min_charge : $min_charge + ($items_total_shipping_weights - $min_weight) * $kg_charge;
+            $shipping_fees = $items_total_shipping_weights < $min_weight ? $min_charge : $min_charge + (ceil($items_total_shipping_weights) - $min_weight) * $kg_charge;
         } else {
             $shipping_fees = 0.00;
         }

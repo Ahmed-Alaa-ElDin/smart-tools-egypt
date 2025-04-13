@@ -250,7 +250,7 @@ class OrderShippingSummary extends Component
             return $zone->min_charge;
         }
 
-        $excess_weight = $this->items_total_shipping_weights - $zone->min_weight;
+        $excess_weight = ceil($this->items_total_shipping_weights) - $zone->min_weight;
 
         return $zone->min_charge + ($excess_weight * $zone->kg_charge);
     }

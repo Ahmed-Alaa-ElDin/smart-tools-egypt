@@ -138,7 +138,7 @@ class ProductDelivery extends Component
             $min_charge = $zone->min_charge;
             $min_weight = $zone->min_weight;
             $kg_charge = $zone->kg_charge;
-            $product_weight = $this->product_weight;
+            $product_weight = ceil($this->product_weight);
 
             if ($product_weight < $min_weight) {
                 return $min_charge;
