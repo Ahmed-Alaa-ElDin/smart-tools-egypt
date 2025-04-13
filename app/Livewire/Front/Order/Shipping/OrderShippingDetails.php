@@ -114,15 +114,27 @@ class OrderShippingDetails extends Component
     ################ Update Addresses' Fields :: Start #####################
     public function updatedAddressCountryId()
     {
-        $this->governorates = Governorate::where('country_id', $this->address['country_id'])->orderBy('name->' . session('locale'))->get()->toArray();
+        $this->governorates = Governorate::where('country_id', $this->address['country_id'])
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray();
         $this->address['governorate_id'] = count($this->governorates) ? $this->governorates[0]['id'] : '';
-        $this->cities = count($this->governorates) ? City::where('governorate_id', $this->address['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray() : [];
+        $this->cities = count($this->governorates) ? City::where('governorate_id', $this->address['governorate_id'])
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray() : [];
         $this->address['city_id'] = $this->cities ? $this->cities[0]['id'] : '';
     }
 
     public function updatedAddressGovernorateId()
     {
-        $this->cities = City::where('governorate_id', $this->address['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray();
+        $this->cities = City::where('governorate_id', $this->address['governorate_id'])
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray();
         $this->address['city_id'] = $this->cities ? $this->cities[0]['id'] : '';
     }
     ################ Update Addresses' Fields :: End #####################
@@ -134,6 +146,8 @@ class OrderShippingDetails extends Component
             'address.country_id'        => 'required|exists:countries,id',
             'address.governorate_id'    => 'required|exists:governorates,id',
             'address.city_id'           => 'required|exists:cities,id',
+            'address.details'           => 'required|string',
+            'address.landmarks'         => 'nullable|string',
         ]);
 
         Address::create([
@@ -221,7 +235,7 @@ class OrderShippingDetails extends Component
     public function savePhone($default)
     {
         $this->validate([
-            'phone' => 'required|digits:11|regex:/^01[0-2]\d{1,8}$/|' . Rule::unique('phones')->ignore($this->user->id, 'user_id'),
+            'phone' => 'required|digits:11|regex:/^01[0-2,5]\d{1,8}$/|' . Rule::unique('phones')->ignore($this->user->id, 'user_id'),
         ]);
 
         Phone::create([

@@ -49,6 +49,8 @@ class RegisterFromOrder extends Component
             'address.country_id'        => 'required|exists:countries,id',
             'address.governorate_id'    => 'required|exists:governorates,id',
             'address.city_id'           => 'required|exists:cities,id',
+            'address.details'           => 'required|string',
+            'address.landmarks'         => 'nullable|string',
         ];
     }
 
@@ -57,19 +59,31 @@ class RegisterFromOrder extends Component
     {
         return [
             'phones.*.phone.digits_between' => __('validation.The phone numbers must contain digits between 8 & 11'),
-            'phones.*.phone.regex:/^01[0-2]\d{1,8}$/' => __('validation.The phone numbers must start with 010, 011, 012 or 015'),
+            'phones.*.phone.regex:/^01[0-2,5]\d{1,8}$/' => __('validation.The phone numbers must start with 010, 011, 012 or 015'),
         ];
     }
 
     public function mount()
     {
         // get all countries
-        $this->countries = Country::orderBy('name->' . session('locale'))->get();
+        $this->countries = Country::get();
 
         if ($this->countries->count()) {
+            $this->address['country_id'] = $this->countries->first()->id;
+
             // User Has Addresses
-            $this->governorates = Governorate::where('country_id', $this->address['country_id'])->orderBy('name->' . session('locale'))->get()->toArray();
-            $this->cities = City::where('governorate_id', $this->address['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray();
+            $this->governorates = Governorate::where('country_id', $this->address['country_id'])
+                ->whereHas('deliveries')
+                ->orderBy('name->' . session('locale'))
+                ->get()
+                ->toArray();
+            $this->address['governorate_id'] = count($this->governorates) ? $this->governorates[0]['id'] : '';
+
+            $this->cities = City::where('governorate_id', $this->address['governorate_id'])
+                ->whereHas('deliveries')
+                ->orderBy('name->' . session('locale'))
+                ->get()
+                ->toArray();
         }
     }
 
@@ -82,15 +96,27 @@ class RegisterFromOrder extends Component
     ################ Address :: Start #####################
     public function updatedAddressCountryId()
     {
-        $this->governorates = Governorate::where('country_id', $this->address['country_id'])->orderBy('name->' . session('locale'))->get()->toArray();
+        $this->governorates = Governorate::where('country_id', $this->address['country_id'])
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray();
         $this->address['governorate_id'] = count($this->governorates) ? $this->governorates[0]['id'] : '';
-        $this->cities = count($this->governorates) ? City::where('governorate_id', $this->address['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray() : [];
+        $this->cities = count($this->governorates) ? City::where('governorate_id', $this->address['governorate_id'])
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray() : [];
         $this->address['city_id'] = $this->cities ? $this->cities[0]['id'] : '';
     }
 
     public function updatedAddressGovernorateId()
     {
-        $this->cities = City::where('governorate_id', $this->address['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray();
+        $this->cities = City::where('governorate_id', $this->address['governorate_id'])
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray();
         $this->address['city_id'] = $this->cities ? $this->cities[0]['id'] : '';
     }
     ################ Address :: End #####################

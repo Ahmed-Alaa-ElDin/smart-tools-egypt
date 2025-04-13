@@ -284,7 +284,7 @@
                             <select
                                 class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
                                 wire:model.live='addresses.{{ $index }}.country_id'
-                                wire:change='$dispatch("countryUpdated",{{ $index }})'
+                                wire:change='$dispatch("countryUpdated",{"index":{{ $index }}})'
                                 id="country{{ $index }}">
                                 @forelse ($countries as $country)
                                     <option value="{{ $country->id }}">{{ $country->name }}</option>
@@ -304,7 +304,7 @@
                                 class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
                                 wire:model.live='addresses.{{ $index }}.governorate_id'
                                 id="governorate{{ $index }}"
-                                wire:change='$dispatch("governorateUpdated",{{ $index }})'>
+                                wire:change='$dispatch("governorateUpdated",{"index":{{ $index }}})'>
                                 @forelse ($governorates[$index] as $governorate)
                                     <option value="{{ $governorate['id'] }}">
                                         {{ $governorate['name'][session('locale')] }}</option>
@@ -330,7 +330,7 @@
                             <select
                                 class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
                                 wire:model.live='addresses.{{ $index }}.city_id' id="city{{ $index }}"
-                                wire:change='$dispatch("cityUpdated",{{ $index }})'>
+                                wire:change='$dispatch("cityUpdated",{"index":{{ $index }}})'>
                                 @forelse ($cities[$index] as $city)
                                     <option value="{{ $city['id'] }}">{{ $city['name'][session('locale')] }}
                                     </option>

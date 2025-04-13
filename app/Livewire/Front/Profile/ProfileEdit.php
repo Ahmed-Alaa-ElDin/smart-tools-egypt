@@ -52,13 +52,15 @@ class ProfileEdit extends Component
             'l_name.ar'                     => 'nullable|string|max:40|min:3',
             'l_name.en'                     => 'nullable|string|max:40|min:3',
             'email'                         => 'nullable|email|max:50|min:3',
-            'phones.*.phone'                => 'required_if:auth_id,Null|nullable|digits:11|regex:/^01[0-2]\d{1,8}$/|' . Rule::unique('phones')->ignore($this->user_id, 'user_id'),
+            'phones.*.phone'                => 'required_if:auth_id,Null|nullable|digits:11|regex:/^01[0125]\d{1,8}$/|' . Rule::unique('phones')->ignore($this->user_id, 'user_id'),
             'gender'                        => 'in:0,1',
             'birth_date'                    => 'date|before:today',
             'photo'                         => 'nullable|mimes:jpg,jpeg,png|max:2048',
             'addresses.*.country_id'        => 'required|exists:countries,id',
             'addresses.*.governorate_id'    => 'required|exists:governorates,id',
             'addresses.*.city_id'           => 'required|exists:cities,id',
+            'addresses.*.details'           => 'required|string',
+            'addresses.*.landmarks'         => 'nullable|string',
             'defaultAddress'                => 'required',
             'defaultPhone'                  => 'required',
         ];
@@ -70,6 +72,7 @@ class ProfileEdit extends Component
         return [
             'phones.*.phone.digits_between' => __('validation.The phone numbers must contain digits between 8 & 11'),
             'phones.*.phone.required_if'   => __('validation.The phone number field is required'),
+            'addresses.*.details.required'  => __('validation.The details field is required'),
         ];
     }
 
@@ -99,12 +102,23 @@ class ProfileEdit extends Component
 
         if ($this->countries->count()) {
             // User Has Addresses
-            $this->governorates[0] = Governorate::where('country_id', $this->addresses[0]['country_id'])->orderBy('name->' . session('locale'))->get()->toArray();
-            $this->cities[0] = City::where('governorate_id', $this->addresses[0]['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray();
+            $this->governorates[0] = Governorate::where('country_id', $this->addresses[0]['country_id'])
+                ->whereHas('deliveries')
+                ->orderBy('name->' . session('locale'))
+                ->get()
+                ->toArray();
+            $this->cities[0] = City::where('governorate_id', $this->addresses[0]['governorate_id'])
+                ->whereHas('deliveries')
+                ->orderBy('name->' . session('locale'))
+                ->get()
+                ->toArray();
         }
 
         // get User Data
-        $this->user = User::with(['phones', 'addresses' => fn ($q) => $q->with(['country', 'governorate', 'city'])])->findOrFail($this->user_id);
+        $this->user = User::with([
+            'phones',
+            'addresses' => fn($q) => $q->with(['country', 'governorate', 'city'])
+        ])->findOrFail($this->user_id);
 
         // get old image
         $this->oldImage = $this->user->profile_photo_path;
@@ -216,15 +230,27 @@ class ProfileEdit extends Component
     ################ Addresses #####################
     public function countryUpdated($index)
     {
-        $this->governorates[$index] = Governorate::where('country_id', $this->addresses[$index]['country_id'])->orderBy('name->' . session('locale'))->get()->toArray();
+        $this->governorates[$index] = Governorate::where('country_id', $this->addresses[$index]['country_id'])
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray();
         $this->addresses[$index]['governorate_id'] = count($this->governorates[$index]) ? $this->governorates[$index][0]['id'] : '';
-        $this->cities[$index] = count($this->governorates[$index]) ? City::where('governorate_id', $this->addresses[$index]['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray() : [];
+        $this->cities[$index] = count($this->governorates[$index]) ? City::where('governorate_id', $this->addresses[$index]['governorate_id'])
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray() : [];
         $this->addresses[$index]['city_id'] = $this->cities[$index] ? $this->cities[$index][0]['id'] : '';
     }
 
     public function governorateUpdated($index)
     {
-        $this->cities[$index] = City::where('governorate_id', $this->addresses[$index]['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray();
+        $this->cities[$index] = City::where('governorate_id', $this->addresses[$index]['governorate_id'])
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray();
         $this->addresses[$index]['city_id'] = $this->cities[$index] ? $this->cities[$index][0]['id'] : '';
     }
 
@@ -241,11 +267,19 @@ class ProfileEdit extends Component
 
         array_push($this->addresses, $newAddress);
 
-        $governorates = Governorate::where('country_id', 1)->orderBy('name->' . session('locale'))->get()->toArray();
+        $governorates = Governorate::where('country_id', 1)
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray();
 
         array_push($this->governorates, $governorates);
 
-        array_push($this->cities, City::where('governorate_id', 1)->orderBy('name->' . session('locale'))->get()->toArray());
+        array_push($this->cities, City::where('governorate_id', 1)
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray());
     }
 
 

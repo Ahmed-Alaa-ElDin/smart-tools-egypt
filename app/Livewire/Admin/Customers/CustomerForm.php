@@ -55,6 +55,8 @@ class CustomerForm extends Component
             'addresses.*.country_id'        => 'required|exists:countries,id',
             'addresses.*.governorate_id'    => 'required|exists:governorates,id',
             'addresses.*.city_id'           => 'required|exists:cities,id',
+            'addresses.*.details'           => 'required|string',
+            'addresses.*.landmarks'         => 'nullable|string',
             'defaultAddress'                => 'required',
             'defaultPhone'                  => 'required',
         ];
@@ -144,9 +146,7 @@ class CustomerForm extends Component
                     $this->governorates[$index] = Governorate::where('country_id', $address['country_id'])->get()->toArray();
                     $this->cities[$index] = City::where('governorate_id', $address['governorate_id'])->get()->toArray();
                 }
-                $this->defaultAddress = key(array_filter($this->addresses, function ($address) {
-                    return $address['default'] == 1;
-                }));
+                $this->defaultAddress = key(array_filter($this->addresses, fn($address) => $address['default'] == 1));
             }
         } else {
             // get user addresses if present
@@ -161,10 +161,18 @@ class CustomerForm extends Component
 
             $this->addresses["0"]['country_id'] = count($this->countries) ? $this->countries["0"]['id'] : null;
 
-            $this->governorates[0] = $this->addresses["0"]['country_id'] ? Governorate::where('country_id', $this->addresses["0"]['country_id'])->orderBy('name->' . session('locale'))->get()->toArray() : [];
+            $this->governorates[0] = $this->addresses["0"]['country_id'] ? Governorate::where('country_id', $this->addresses["0"]['country_id'])
+                ->whereHas('deliveries')
+                ->orderBy('name->' . session('locale'))
+                ->get()
+                ->toArray() : [];
             $this->addresses["0"]['governorate_id'] = count($this->governorates[0]) ? $this->governorates[0]["0"]['id'] : null;
 
-            $this->cities[0] = $this->addresses["0"]['governorate_id'] ? City::where('governorate_id', $this->addresses["0"]['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray() : [];
+            $this->cities[0] = $this->addresses["0"]['governorate_id'] ? City::where('governorate_id', $this->addresses["0"]['governorate_id'])
+                ->whereHas('deliveries')
+                ->orderBy('name->' . session('locale'))
+                ->get()
+                ->toArray() : [];
             $this->addresses["0"]['city_id'] = count($this->cities[0]) ? $this->cities[0]['0']['id'] : null;
         }
     }
@@ -205,15 +213,27 @@ class CustomerForm extends Component
     ################ Addresses #####################
     public function countryUpdated($index)
     {
-        $this->governorates[$index] = Governorate::where('country_id', $this->addresses[$index]['country_id'])->orderBy('name->' . session('locale'))->get()->toArray();
+        $this->governorates[$index] = Governorate::where('country_id', $this->addresses[$index]['country_id'])
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray();
         $this->addresses[$index]['governorate_id'] = count($this->governorates[$index]) ? $this->governorates[$index][0]['id'] : '';
-        $this->cities[$index] = count($this->governorates[$index]) ? City::where('governorate_id', $this->addresses[$index]['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray() : [];
+        $this->cities[$index] = count($this->governorates[$index]) ? City::where('governorate_id', $this->addresses[$index]['governorate_id'])
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray() : [];
         $this->addresses[$index]['city_id'] = $this->cities[$index] ? $this->cities[$index][0]['id'] : '';
     }
 
     public function governorateUpdated($index)
     {
-        $this->cities[$index] = City::where('governorate_id', $this->addresses[$index]['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray();
+        $this->cities[$index] = City::where('governorate_id', $this->addresses[$index]['governorate_id'])
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray();
         $this->addresses[$index]['city_id'] = $this->cities[$index] ? $this->cities[$index][0]['id'] : '';
     }
 
@@ -229,13 +249,21 @@ class CustomerForm extends Component
         ];
         $newAddress['country_id'] = count($this->countries) ? $this->countries[0]['id'] : '';
 
-        $governorates = Governorate::where('country_id', $newAddress['country_id'])->orderBy('name->' . session('locale'))->get()->toArray();
+        $governorates = Governorate::where('country_id', $newAddress['country_id'])
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray();
 
         array_push($this->governorates, $governorates);
 
         $newAddress['governorate_id'] = count($governorates) ? $governorates[0]['id'] : '';
 
-        $cities = City::where('governorate_id', $newAddress['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray();
+        $cities = City::where('governorate_id', $newAddress['governorate_id'])
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray();
 
         array_push($this->cities, $cities);
 
@@ -258,9 +286,12 @@ class CustomerForm extends Component
     ################ Password #####################
     public function resetPasswordConfirm()
     {
-        $this->dispatch('swalConfirmPassword', text: __('admin/usersPages.Are you sure, you want to reset the password ?'),
+        $this->dispatch(
+            'swalConfirmPassword',
+            text: __('admin/usersPages.Are you sure, you want to reset the password ?'),
             confirmButtonText: __('admin/usersPages.Confirm'),
-            denyButtonText: __('admin/usersPages.Cancel'));
+            denyButtonText: __('admin/usersPages.Cancel')
+        );
     }
 
     public function resetPassword()
@@ -269,11 +300,17 @@ class CustomerForm extends Component
             $this->customer->password = Hash::make(Config::get('constants.constants.DEFAULT_PASSWORD'));
             $this->customer->save();
 
-            $this->dispatch('swalPasswordReset', text: __('admin/usersPages.Password has been reset successfully'),
-                icon: 'success');
+            $this->dispatch(
+                'swalPasswordReset',
+                text: __('admin/usersPages.Password has been reset successfully'),
+                icon: 'success'
+            );
         } catch (\Throwable $th) {
-            $this->dispatch('swalPasswordReset', text: __("admin/usersPages.Password has not been reset"),
-                icon: 'error');
+            $this->dispatch(
+                'swalPasswordReset',
+                text: __("admin/usersPages.Password has not been reset"),
+                icon: 'error'
+            );
         }
     }
     ################ Password #####################

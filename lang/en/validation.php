@@ -141,6 +141,7 @@ return [
     'arabic name required' => 'Arabic Name is required',
     'english name required' => 'English Name is required',
     'url required' => 'Link is required',
+    'The details field is required' => 'The details field is required',
 
 
     /*
@@ -234,8 +235,10 @@ return [
         'nav_links.*.name.en'   => "Link's English Name",
         'nav_links.*.url'       => 'Link',
         'nav_links.*.active'    => 'Active Status',
-        'banner'                => 'Banner',
-        'banner'                => 'Banner',
+        'addresses.*.details'   => 'Address Details',
+        'addresses.*.landmarks' => 'Address Landmarks',
+        'address.details'       => 'Address Details',
+        'address.landmarks'     => 'Address Landmarks',
         'banner'                => 'Banner',
         'banner'                => 'Banner',
         'banner'                => 'Banner',

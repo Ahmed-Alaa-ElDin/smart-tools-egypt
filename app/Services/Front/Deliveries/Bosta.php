@@ -23,8 +23,8 @@ class Bosta implements DeliveryInterface
 
         // Create the order data
         $orderData = [
-            "type"      =>      10,
-            "specs" => [
+            "type"                  =>      10,
+            "specs"                 => [
                 "size"              =>      "SMALL",
                 "packageType"       =>      "Parcel",
                 "packageDetails"    =>      [
@@ -33,25 +33,25 @@ class Bosta implements DeliveryInterface
                 ],
                 // "weight"            =>      $order->total_weight,
             ],
-            "notes"     =>      $order->notes . ($order->user->phones->where('default', 0)->count() > 1 ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : '') . " - منتجات قابلة للكسر - برجاء الاتصال بوقت كافى قبل التوصيل والتواصل من خلال الواتس فى حالة ضعف الشبكة",
-            "cod"       =>      $paymentAmount ? ceil($paymentAmount) : 0.00,
-            "dropOffAddress" => [
-                "city"          =>      $order->address->governorate->getTranslation('name', 'en'),
-                "districtId"    =>      $order->address->city->bosta_id,
-                "firstLine"     =>      str_pad($order->address->details ?? $order->address->city->getTranslation('name', 'en'), 5, '-'),
-                "secondLine"    =>      $order->address->landmarks ?? '',
-                "isWorkAddress" =>      true,
+            "notes"                 =>      $order->notes . ($order->user->phones->where('default', 0)->count() > 1 ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : '') . " - منتجات قابلة للكسر - برجاء الاتصال بوقت كافى قبل التوصيل والتواصل من خلال الواتس فى حالة ضعف الشبكة",
+            "cod"                   =>      $paymentAmount ? ceil($paymentAmount) : 0.00,
+            "dropOffAddress"        =>      [
+                "city"              =>      $order->address->governorate->getTranslation('name', 'en'),
+                "districtId"        =>      $order->address->city->bosta_id,
+                "firstLine"         =>      $order->address->governorate->getTranslation('name', 'ar') . " - " . $order->address->city->getTranslation('name', 'ar') . " - " . str_pad($order->address->details ?? "", 5, '-'),
+                "secondLine"        =>      $order->address->landmarks ?? '',
+                "isWorkAddress"     =>      true,
             ],
-            "receiver" => [
-                "firstName"     =>      $order->user->f_name,
-                "lastName"      =>      $order->user->l_name ? $order->user->l_name : $order->user->f_name,
-                "phone"         =>      $order->user->phones->where('default', 1)->first()->phone,
-                "secondPhone"   =>      $order->user->phones->where('default', 0)->count() ? $order->user->phones->where('default', 0)->first()->phone : '',
-                "email"         =>      $order->user->email != "" ? $order->user->email : "info@smarttoolsegypt.com",
+            "receiver"              =>      [
+                "firstName"         =>      $order->user->f_name,
+                "lastName"          =>      $order->user->l_name ?? $order->user->f_name,
+                "phone"             =>      $order->user->phones->where('default', 1)->first()->phone,
+                "secondPhone"       =>      $order->user->phones->where('default', 0)->count() ? $order->user->phones->where('default', 0)->first()->phone : '',
+                "email"             =>      $order->user->email != "" ? $order->user->email : "info@smarttoolsegypt.com",
             ],
-            "businessReference" => $order->id,
-            "allowToOpenPackage" => $order->allow_opening ? true : false,
-            "webhookUrl" => env('BOSTA_WEBHOOK_URL', "https://www.smarttoolsegypt.com/api/orders/update-status"),
+            "businessReference"     =>      $order->id,
+            "allowToOpenPackage"    =>      $order->allow_opening ? true : false,
+            "webhookUrl"            =>      env('BOSTA_WEBHOOK_URL', "https://www.smarttoolsegypt.com/api/orders/update-status"),
         ];
 
         // Send the request to Bosta API

@@ -22,12 +22,7 @@ class CountrySeeder extends Seeder
 
         Country::create([
             'id' => 2,
-            'name' => ['en' => 'Libya', 'ar' => 'ليبيا'],
-        ]);
-
-        Country::create([
-            'id' => 3,
-            'name' => ['en' => 'Libya', 'ar' => 'المملكة العربية السعودية'],
+            'name' => ['en' => 'China', 'ar' => 'الصين'],
         ]);
     }
 }

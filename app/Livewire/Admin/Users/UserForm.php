@@ -56,6 +56,8 @@ class UserForm extends Component
             'addresses.*.country_id'        => 'required|exists:countries,id',
             'addresses.*.governorate_id'    => 'required|exists:governorates,id',
             'addresses.*.city_id'           => 'required|exists:cities,id',
+            'addresses.*.details'           => 'required|string',
+            'addresses.*.landmarks'         => 'nullable|string',
             'defaultAddress'                => 'required',
             'defaultPhone'                  => 'required',
         ];
@@ -167,8 +169,16 @@ class UserForm extends Component
             if ($this->countries->count()) {
                 // User Has Addresses
                 foreach ($this->addresses as $index => $address) {
-                    $this->governorates[$index] = Governorate::where('country_id', $address['country_id'])->get()->toArray();
-                    $this->cities[$index] = City::where('governorate_id', $address['governorate_id'])->get()->toArray();
+                    $this->governorates[$index] = Governorate::where('country_id', $address['country_id'])
+                        ->whereHas('deliveries')
+                        ->orderBy('name->' . session('locale'))
+                        ->get()
+                        ->toArray();
+                    $this->cities[$index] = City::where('governorate_id', $address['governorate_id'])
+                        ->whereHas('deliveries')
+                        ->orderBy('name->' . session('locale'))
+                        ->get()
+                        ->toArray();
                 }
                 $this->defaultAddress = key(array_filter($this->addresses, function ($address) {
                     return $address['default'] == 1;
@@ -224,15 +234,27 @@ class UserForm extends Component
     ################ Addresses #####################
     public function countryUpdated($index)
     {
-        $this->governorates[$index] = Governorate::where('country_id', $this->addresses[$index]['country_id'])->orderBy('name->' . session('locale'))->get()->toArray();
+        $this->governorates[$index] = Governorate::where('country_id', $this->addresses[$index]['country_id'])
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray();
         $this->addresses[$index]['governorate_id'] = count($this->governorates[$index]) ? $this->governorates[$index][0]['id'] : '';
-        $this->cities[$index] = count($this->governorates[$index]) ? City::where('governorate_id', $this->addresses[$index]['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray() : [];
+        $this->cities[$index] = count($this->governorates[$index]) ? City::where('governorate_id', $this->addresses[$index]['governorate_id'])
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray() : [];
         $this->addresses[$index]['city_id'] = $this->cities[$index] ? $this->cities[$index][0]['id'] : '';
     }
 
     public function governorateUpdated($index)
     {
-        $this->cities[$index] = City::where('governorate_id', $this->addresses[$index]['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray();
+        $this->cities[$index] = City::where('governorate_id', $this->addresses[$index]['governorate_id'])
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray();
         $this->addresses[$index]['city_id'] = $this->cities[$index] ? $this->cities[$index][0]['id'] : '';
     }
 
@@ -249,11 +271,19 @@ class UserForm extends Component
 
         array_push($this->addresses, $newAddress);
 
-        $governorates = Governorate::where('country_id', 1)->orderBy('name->' . session('locale'))->get()->toArray();
+        $governorates = Governorate::where('country_id', 1)
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray();
 
         array_push($this->governorates, $governorates);
 
-        array_push($this->cities, City::where('governorate_id', 1)->orderBy('name->' . session('locale'))->get()->toArray());
+        array_push($this->cities, City::where('governorate_id', 1)
+            ->whereHas('deliveries')
+            ->orderBy('name->' . session('locale'))
+            ->get()
+            ->toArray());
     }
 
 

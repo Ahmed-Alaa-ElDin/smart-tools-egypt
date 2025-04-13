@@ -105,7 +105,7 @@ return [
     'arabic name required' => 'الاسم بالعربية مطلوب',
     'english name required' => 'الاسم بالإنجليزية مطلوب',
     'url required' => 'الرابط مطلوب',
-
+    'The details field is required'   => 'تفاصيل العنوان مطلوب',
 
     /*
     |--------------------------------------------------------------------------
@@ -261,8 +261,10 @@ return [
         'nav_links.*.name.en'   => "الاسم بالإنجليزية",
         'nav_links.*.url'       => 'الرابط',
         'nav_links.*.active'    => 'حالة الزر',
-
-
+        'addresses.*.details'   => 'تفاصيل العنوان',
+        'addresses.*.landmarks' => 'العلامة المميزة',
+        'address.details'       => 'تفاصيل العنوان',
+        'address.landmarks'     => 'العلامة المميزة',
     ],
 
     /*

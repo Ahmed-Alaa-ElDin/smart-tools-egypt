@@ -131,7 +131,8 @@
                                                 class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
                                                 wire:model.live='address.country_id' id="country">
                                                 @forelse ($countries as $country)
-                                                    <option value="{{ $country->id }}">{{ $country->name }}
+                                                    <option value="{{ $country->id }}">
+                                                        {{ $country->name }}
                                                     </option>
                                                 @empty
                                                     <option value="">
