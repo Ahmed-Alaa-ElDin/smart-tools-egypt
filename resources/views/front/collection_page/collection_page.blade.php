@@ -204,6 +204,7 @@
                                         'large' => true,
                                         'type' => 'Collection',
                                         'add_buy' => 'add',
+                                        'unique' => 'item-' . $collection->id,
                                     ],
                                     key("add-cart-button-{$collection->id}")
                                 )
@@ -218,6 +219,7 @@
                                         'large' => true,
                                         'type' => 'Collection',
                                         'add_buy' => 'pay',
+                                        'unique' => 'item-' . $collection->id,
                                     ],
                                     key("add-cart-button-{$collection->id}")
                                 )

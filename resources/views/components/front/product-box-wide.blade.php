@@ -155,7 +155,7 @@
 
                 @if ($type == 'cart')
                     {{-- Product Amount :: Start --}}
-                    <div class="min-w-[120px] max-w-[150px] md:min-w-0 my-2">
+                    <div class="min-w-[120px] max-w-[150px]">
                         @livewire(
                             'front.general.cart.cart-amount',
                             [

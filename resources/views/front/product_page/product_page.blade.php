@@ -232,6 +232,7 @@
                                         'large' => true,
                                         'type' => 'Product',
                                         'add_buy' => 'pay',
+                                        'unique' => 'item-' . $product->id,
                                     ],
                                     key("go-to-cart-button-{$product->id}")
                                 )
@@ -248,6 +249,7 @@
                                             'large' => true,
                                             'type' => 'Product',
                                             'isNotified' => $product->hasPendingNotification,
+                                            'unique' => 'item-' . $product->id,
                                         ],
                                         key("notify-me-button-{$product->id}")
                                     )
@@ -294,7 +296,7 @@
                                         'front.general.cart.cart-amount',
                                         [
                                             'item_id' => $product->id,
-                                            'unique' => 'item-' . $product->id,
+                                            'unique' => "item-{$product->id}",
                                             'type' => 'Product',
                                             'title' => false,
                                         ],

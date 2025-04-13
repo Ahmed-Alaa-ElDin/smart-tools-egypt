@@ -47,7 +47,17 @@
                     {{-- Buttons :: Start --}}
                     <div class="flex justify-around items-center mt-2 gap-2">
                         {{-- Add To Cart :: Start --}}
-                        @livewire('front.general.cart.add-to-cart-button', ['item_id' => $item->id, 'type' => $item->options->type, 'text' => false, 'add_buy' => 'add'], key('add-cart-button-' . Str::random(10)))
+                        @livewire(
+                            'front.general.cart.add-to-cart-button',
+                            [
+                                'item_id' => $item->id,
+                                'type' => $item->options->type,
+                                'text' => false,
+                                'add_buy' => 'add',
+                                'unique' => 'item-' . $item->id,
+                            ],
+                            key("add-cart-button-{$item->id}")
+                        )
 
                         {{-- Delete :: Start --}}
                         @livewire('front.general.wishlist.remove-from-wishlist-button', ['item_id' => $item->id, 'type' => $item->options->type, 'text' => false, 'add_buy' => 'add'], key('add-cart-button-' . Str::random(10)))

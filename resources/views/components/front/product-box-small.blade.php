@@ -4,8 +4,7 @@
             class="group shadow border border-light rounded-lg hover:shadow-md hover:scale-105 mt-1 mb-2 transition overflow-hidden relative bg-white">
 
             {{-- Add Product Large Screen : Start --}}
-            <div
-                class="hidden lg:flex absolute top-2 ltr:-right-10 z-10 rtl:-left-10 transition-all ease-in-out duration-500 ltr:group-hover:right-2 rtl:group-hover:left-2 flex-col gap-1"
+            <div class="hidden lg:flex absolute top-2 ltr:-right-10 z-10 rtl:-left-10 transition-all ease-in-out duration-500 ltr:group-hover:right-2 rtl:group-hover:left-2 flex-col gap-1"
                 wire:ignore>
                 {{-- Add to compare : Start --}}
                 @livewire(
@@ -44,18 +43,18 @@
 
                 @if (isset($item['quantity']) && $item['quantity'] > 0)
                     {{-- Add to cart : Start --}}
-                    @livewire(
+                    {{-- @livewire(
                         'front.general.cart.add-to-cart-button',
                         [
                             'item_id' => $item['id'],
                             'type' => $item['type'],
                         ],
                         key("add-cart-button-{$item['id']}")
-                    )
+                    ) --}}
                     {{-- Add to cart : End --}}
                 @else
                     {{-- Notify Me : Start --}}
-                    @livewire(
+                    {{-- @livewire(
                         'front.general.back-to-stock-notification.back-to-stock-notification-button',
                         [
                             'item_id' => $item['id'],
@@ -65,7 +64,7 @@
                             'isNotified' => $item['has_pending_notification'],
                         ],
                         key("notify-me-button-{$item['id']}")
-                    )
+                    ) --}}
                     {{-- Notify Me : End --}}
                 @endif
             </div>
@@ -176,13 +175,15 @@
                 <div class="flex flex-col gap-2">
 
                     {{-- Product Name : Start --}}
-                    <h4 class="text-md m-0 text-center font-bold truncate" title="{{ $item['name'][session('locale')] }}">
+                    <h4 class="text-md m-0 text-center font-bold truncate"
+                        title="{{ $item['name'][session('locale')] }}">
                         {{ $item['name'][session('locale')] }}
                     </h4>
                     {{-- Product Name : End --}}
 
                     {{-- Product Model : Start --}}
-                    <h4 dir="ltr" class="text-sm m-0 text-center text-gray-500 truncate" title="{{ $item['model'] }}">
+                    <h4 dir="ltr" class="text-sm m-0 text-center text-gray-500 truncate"
+                        title="{{ $item['model'] }}">
                         {{ $item['model'] }}
                     </h4>
                     {{-- Product Model : End --}}
@@ -224,7 +225,7 @@
 
             {{-- Cart Amount : Start --}}
             @if ($item['quantity'])
-                <div class="md:p-3 p-2">
+                <div class="">
                     @livewire(
                         'front.general.cart.cart-amount',
                         [
@@ -274,7 +275,9 @@
                     )
                     {{-- Add to wishlist : End --}}
                 @endif
+            </div>
 
+            <div class="flex top-2 gap-5 justify-center">
                 @if (isset($item['quantity']) && $item['quantity'] > 0)
                     {{-- Add to cart : Start --}}
                     @livewire(
@@ -282,6 +285,8 @@
                         [
                             'item_id' => $item['id'],
                             'type' => $item['type'],
+                            'text' => true,
+                            'unique' => 'item-' . $item['id'],
                         ],
                         key("add-cart-button-{$item['id']}")
                     )
@@ -292,10 +297,11 @@
                         'front.general.back-to-stock-notification.back-to-stock-notification-button',
                         [
                             'item_id' => $item['id'],
-                            'text' => false,
+                            'text' => true,
                             'large' => false,
                             'type' => $item['type'],
                             'isNotified' => $item['has_pending_notification'],
+                            'unique' => 'item-' . $item['id'],
                         ],
                         key("notify-me-button-{$item['id']}")
                     )

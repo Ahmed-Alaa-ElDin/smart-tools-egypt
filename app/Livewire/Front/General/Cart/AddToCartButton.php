@@ -10,10 +10,21 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 
 class AddToCartButton extends Component
 {
-    public $item_id, $type = 'Product', $text = false, $large = false, $add_buy = 'add';
+    public $item_id, $type = 'Product', $text = false, $large = false, $add_buy = 'add', $inCart = false, $unique;
+
+    protected function getListeners()
+    {
+        return [
+            'cartUpdated:' . $this->unique => 'render',
+            'cartCleared' => 'render',
+        ];
+    }
+
 
     public function render()
     {
+        $this->inCart = Cart::instance('cart')->search(fn ($cartItem, $rowId) => $cartItem->id === $this->item_id && $cartItem->options->type === $this->type)->count();
+
         return view('livewire.front.general.cart.add-to-cart-button');
     }
 

@@ -208,8 +208,9 @@
                                             'large' => false,
                                             'type' => $item->type,
                                             'add_buy' => 'add',
+                                            'unique' => 'item-' . $item->id,
                                         ],
-                                        key('add-cart-button-' . Str::random(10))
+                                        key("add-cart-button-{$item->id}")
                                     )
                                     {{-- Add to cart : End --}}
 
@@ -222,7 +223,7 @@
                                             'large' => false,
                                             'type' => $item->type,
                                         ],
-                                        key('add-wishlist-button-' . Str::random(10))
+                                        key("add-wishlist-button-{$item->id}")
                                     )
                                     {{-- Add to wishlist : End --}}
 
@@ -235,7 +236,7 @@
                                             'large' => false,
                                             'type' => $item->type,
                                         ],
-                                        key('remove-from-compare-button-' . Str::random(10))
+                                        key("remove-from-compare-button-{$item->id}")
                                     )
                                     {{-- Add to comparison : End --}}
                             </td>
