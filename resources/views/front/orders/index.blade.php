@@ -130,9 +130,9 @@
                                                                 {{ __('front/homePage.Go to Payment') }}
                                                             </a>
 
-                                                            {{-- Popup Vodafone cash pay warning --}}
-                                                        @elseif ($order->unpaid_payment_method == App\Enums\PaymentMethod::VodafoneCash->value)
-                                                            <button data-modal-toggle="payVodafonCashModal" type="button"
+                                                            {{-- Popup Electronic wallet pay warning --}}
+                                                        @elseif ($order->unpaid_payment_method == App\Enums\PaymentMethod::ElectronicWallet->value)
+                                                            <button data-modal-toggle="payElectronicWalletModal" type="button"
                                                                 class="dropdown-item justify-center w-[95%] font-bold hover:bg-success focus:bg-success">
                                                                 {{ __('front/homePage.Go to Payment') }}
                                                             </button>
@@ -142,7 +142,7 @@
 
                                                 {{-- Refund  --}}
                                                 {{-- @if ($order->status_id == App\Enums\OrderStatus::WaitingForRefund->value)
-                                                    @if ($order->unpaid_payment_method == App\Enums\PaymentMethod::VodafoneCash->value)
+                                                    @if ($order->unpaid_payment_method == App\Enums\PaymentMethod::ElectronicWallet->value)
                                                         <button data-modal-toggle="getMoneyModal" type="button"
                                                             class="col-span-1 btn btn-sm bg-successDark font-bold m-0">
                                                             {{ __('front/homePage.Refund') }}
@@ -482,8 +482,8 @@
                                 </div>
                                 {{-- Cancel Order Confirm :: End --}}
 
-                                {{-- Pay via Vodafone Cash Warning Modal :: Start --}}
-                                <div id="payVodafonCashModal" tabindex="-1"
+                                {{-- Pay via Electronic Wallet Warning Modal :: Start --}}
+                                <div id="payElectronicWalletModal" tabindex="-1"
                                     class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full justify-center items-center hidden"
                                     aria-modal="true" role="dialog">
                                     <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
@@ -492,10 +492,10 @@
                                             <!-- Modal header -->
                                             <div class="flex justify-between items-start p-4 rounded-t border-b">
                                                 <h3 class="grow text-xl font-semibold text-gray-900 dark:text-white">
-                                                    {{ __('front/homePage.Pay via vodafone-cash') }} </h3>
+                                                    {{ __('front/homePage.Pay via electronic wallet') }} </h3>
                                                 <button type="button"
                                                     class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
-                                                    data-modal-toggle="payVodafonCashModal">
+                                                    data-modal-toggle="payElectronicWalletModal">
                                                     <svg aria-hidden="true" class="w-5 h-5" fill="currentColor"
                                                         viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                         <path fill-rule="evenodd"
@@ -508,7 +508,7 @@
                                             <!-- Modal body -->
                                             <div class="p-6 space-y-6">
                                                 <p class="leading-relaxed text-gray-900 text-center">
-                                                    {!! __('front/homePage.Vodafone Cash Confirm', [
+                                                    {!! __('front/homePage.Electronic Wallet Confirm', [
                                                         'icon' =>
                                                             '<a href="https://wa.me/+2' .
                                                             config('settings.whatsapp_number') .
@@ -530,9 +530,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- Pay via Vodafone Cash Warning Modal :: End --}}
+                                {{-- Pay via Electronic Wallet Warning Modal :: End --}}
 
-                                {{-- Refund via Vodafone Cash Warning Modal :: Start --}}
+                                {{-- Refund via Electronic Wallet Warning Modal :: Start --}}
                                 <div id="getMoneyModal" tabindex="-1"
                                     class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full justify-center items-center hidden"
                                     aria-modal="true" role="dialog">
@@ -542,7 +542,7 @@
                                             <!-- Modal header -->
                                             <div class="flex justify-between items-start p-4 rounded-t border-b">
                                                 <h3 class="grow text-xl font-semibold text-gray-900 dark:text-white">
-                                                    {{ __('front/homePage.Refund via vodafone-cash') }} </h3>
+                                                    {{ __('front/homePage.Refund via electronic wallet') }} </h3>
                                                 <button type="button"
                                                     class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
                                                     data-modal-toggle="getMoneyModal">
@@ -558,7 +558,7 @@
                                             <!-- Modal body -->
                                             <div class="p-6 space-y-6">
                                                 <p class="leading-relaxed text-gray-900 text-center">
-                                                    {!! __('front/homePage.Vodafone Cash Refund Confirm', [
+                                                    {!! __('front/homePage.Electronic Wallet Refund Confirm', [
                                                         'icon' =>
                                                             '<a href="https://wa.me/+2' .
                                                             config('settings.whatsapp_number') .
@@ -580,7 +580,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- Refund via Vodafone Cash Warning Modal :: End --}}
+                                {{-- Refund via Electronic Wallet Warning Modal :: End --}}
 
                                 {{-- Change payment Method :: Start --}}
                                 <div id="changePaymentMethod-{{ $order->id }}" tabindex="-1"
@@ -632,9 +632,13 @@
                                                             value="{{ App\Enums\PaymentMethod::Installments->value }}">
                                                             {{ __('front/homePage.' . App\Enums\PaymentMethod::getKeyFromValue(App\Enums\PaymentMethod::Installments->value)) }}
                                                         </option> --}}
-                                                        <option @if (App\Enums\PaymentMethod::VodafoneCash->value == $unpaidPaymentMethod) selected @endif
-                                                            value="{{ App\Enums\PaymentMethod::VodafoneCash->value }}">
-                                                            {{ __('front/homePage.' . App\Enums\PaymentMethod::getKeyFromValue(App\Enums\PaymentMethod::VodafoneCash->value)) }}
+                                                        <option @if (App\Enums\PaymentMethod::ElectronicWallet->value == $unpaidPaymentMethod) selected @endif
+                                                            value="{{ App\Enums\PaymentMethod::ElectronicWallet->value }}">
+                                                            {{ __('front/homePage.' . App\Enums\PaymentMethod::getKeyFromValue(App\Enums\PaymentMethod::ElectronicWallet->value)) }}
+                                                        </option>
+                                                        <option @if (App\Enums\PaymentMethod::Flash->value == $unpaidPaymentMethod) selected @endif
+                                                            value="{{ App\Enums\PaymentMethod::Flash->value }}">
+                                                            {{ __('front/homePage.' . App\Enums\PaymentMethod::getKeyFromValue(App\Enums\PaymentMethod::Flash->value)) }}
                                                         </option>
                                                     </select>
                                                 </div>

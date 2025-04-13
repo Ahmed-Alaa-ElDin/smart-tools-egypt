@@ -19,7 +19,7 @@ class Bosta implements DeliveryInterface
         $unpaidTransactions = $order->transactions()->where('payment_status_id', PaymentStatus::Pending->value)->get();
 
         // Calculate the payment amount
-        $paymentAmount = $unpaidTransactions->where('payment_method_id', PaymentMethod::Cash->value)->sum('payment_amount') ?? 0;
+        $paymentAmount = $unpaidTransactions->whereIn('payment_method_id', [PaymentMethod::Cash->value, PaymentMethod::Flash->value, PaymentMethod::ElectronicWallet->value])->sum('payment_amount') ?? 0;
 
         // Create the order data
         $orderData = [

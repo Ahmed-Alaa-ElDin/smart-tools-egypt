@@ -79,28 +79,35 @@
                         <div class="select-none cursor-pointer text-xs hover:shadow-inner shadow rounded-xl py-2 px-3
                     @if ($payment_method == 1) bg-secondary text-white shadow-inner font-bold @else bg-white @endif"
                             wire:click="$set('payment_method',1)">
-                            {{ __('front/homePage.Cash on delivery (COD)') }}
+                            {{ __('admin/ordersPages.Cash on delivery (COD)') }}
                         </div>
 
                         {{-- Credit Card --}}
                         {{-- <div class="select-none cursor-pointer text-xs hover:shadow-inner shadow rounded-xl py-2 px-3
                     @if ($payment_method == 2) bg-secondary text-white shadow-inner font-bold @else bg-white @endif"
                             wire:click="$set('payment_method',2)">
-                            {{ __('front/homePage.Credit / Debit Card') }}
+                            {{ __('admin/ordersPages.Credit / Debit Card') }}
                         </div> --}}
 
                         {{-- installment --}}
                         {{-- <div class="select-none cursor-pointer text-xs hover:shadow-inner shadow rounded-xl py-2 px-3
                     @if ($payment_method == 3) bg-secondary text-white shadow-inner font-bold @else bg-white @endif"
                             wire:click="$set('payment_method',3)">
-                            {{ __('front/homePage.Installment') }}
+                            {{ __('admin/ordersPages.Installment') }}
                         </div> --}}
 
-                        {{-- Vodafone Cash --}}
+                        {{-- Electronic Wallet --}}
                         <div class="select-none cursor-pointer text-xs hover:shadow-inner shadow rounded-xl py-2 px-3
-                    @if ($payment_method == 4) bg-secondary text-white shadow-inner font-bold @else bg-white @endif"
+                            @if ($payment_method == 4) bg-secondary text-white shadow-inner font-bold @else bg-white @endif"
                             wire:click="$set('payment_method',4)">
-                            {{ __('front/homePage.Vodafone Cash') }}
+                            {{ __('admin/ordersPages.Electronic Wallet') }}
+                        </div>
+
+                        {{-- Flash --}}
+                        <div class="select-none cursor-pointer text-xs hover:shadow-inner shadow rounded-xl py-2 px-3
+                            @if ($payment_method == 5) bg-secondary text-white shadow-inner font-bold @else bg-white @endif"
+                            wire:click="$set('payment_method',5)">
+                            {{ __('admin/ordersPages.Flash') }}
                         </div>
                     </div>
                 </div>

@@ -7,7 +7,8 @@ enum PaymentMethod: int
     case Cash = 1;
     case Card = 2;
     case Installments = 3;
-    case VodafoneCash = 4;
+    case ElectronicWallet = 4;
+    case Flash = 5;
     case Wallet = 10;
     case Points = 11;
 

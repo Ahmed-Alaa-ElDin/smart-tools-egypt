@@ -660,8 +660,8 @@ class OrderPaymentSummary extends Component
                 }
             }
 
-            // Order will be paid by Vodafone Cash
-            elseif ($this->payment_method == PaymentMethod::VodafoneCash->value) {
+            // Order will be paid by Electronic Wallet
+            elseif (in_array($this->payment_method, [PaymentMethod::ElectronicWallet->value, PaymentMethod::Flash->value])) {
                 $order->update([
                     'status_id' => OrderStatus::WaitingForPayment->value,
                 ]);

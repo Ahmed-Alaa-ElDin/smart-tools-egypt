@@ -455,7 +455,7 @@ class OrderController extends Controller
                 $temp_order->transactions()->delete();
 
                 // todo
-                // Get old transaction done using user's Card or Vodafone Cash
+                // Get old transaction done using user's Card or Electronic Wallet
                 $old_order_used_other_transaction = $order->transactions
                     ->whereNotIn('payment_method_id', [10, 11])
                     ->where('payment_status_id', 2);
@@ -794,7 +794,7 @@ class OrderController extends Controller
             $old_order->points()->where('status', 0)->delete();
 
             // Cash On Delivery
-            if (is_null($old_order->mainPaymentMethod) || $old_order->mainPaymentMethod == 1) {
+            if (is_null($old_order->mainPaymentMethod) || $old_order->mainPaymentMethod == PaymentMethod::Cash) {
                 if (editBostaOrder($temp_order, $old_order)) {
                     // Update Order Data
                     $old_order->update([
@@ -906,9 +906,9 @@ class OrderController extends Controller
             }
 
             // Card or installment
-            elseif ($old_order->mainPaymentMethod == 2 || $old_order->mainPaymentMethod == 3) {
+            elseif ($old_order->mainPaymentMethod == PaymentMethod::Card || $old_order->mainPaymentMethod == PaymentMethod::Installments) {
                 if ($should_get && $request->type == 'wallet') {
-                    $pended_card_refund = $temp_order->transactions()->whereIn('payment_method_id', [2, 3])->where('payment_status_id', 4);
+                    $pended_card_refund = $temp_order->transactions()->whereIn('payment_method_id', [PaymentMethod::Card, PaymentMethod::Installments])->where('payment_status_id', 4);
                     $pended_card_refund_amount = $pended_card_refund->sum('payment_amount') ?? 0;
                     $pended_card_refund_count = $pended_card_refund->count() ? true : false;
 
@@ -1252,12 +1252,12 @@ class OrderController extends Controller
                 }
             }
 
-            // Vodafone Cash
-            elseif ($old_order->mainPaymentMethod == 4) {
+            // Electronic Wallet
+            elseif ($old_order->mainPaymentMethod == PaymentMethod::ElectronicWallet) {
                 if ($should_get && $request->type == 'wallet') {
-                    $pended_vodafone_refund = $temp_order->transactions()->where('payment_method_id', 4)->where('payment_status_id', 4);
-                    $pended_vodafone_refund_amount = $pended_vodafone_refund->sum('payment_amount') ?? 0;
-                    $pended_vodafone_refund_count = $pended_vodafone_refund->count() ? true : false;
+                    $pended_electronic_wallet_refund = $temp_order->transactions()->where('payment_method_id', PaymentMethod::ElectronicWallet)->where('payment_status_id', 4);
+                    $pended_electronic_wallet_refund_amount = $pended_electronic_wallet_refund->sum('payment_amount') ?? 0;
+                    $pended_electronic_wallet_refund_count = $pended_electronic_wallet_refund->count() ? true : false;
 
                     if (
                         ($old_order->order_delivery_id && editBostaOrder($temp_order, $old_order))
@@ -1369,9 +1369,9 @@ class OrderController extends Controller
                         }
 
                         // Add Paid Amount to the User's Balance
-                        if ($pended_vodafone_refund_count) {
+                        if ($pended_electronic_wallet_refund_count) {
                             $old_order->user()->update([
-                                'balance' => $old_order->user->balance + $pended_vodafone_refund_amount,
+                                'balance' => $old_order->user->balance + $pended_electronic_wallet_refund_amount,
                             ]);
 
                             $old_order->transactions()->where('payment_method_id', 4)->where('payment_status_id', 4)->update([
@@ -1388,10 +1388,10 @@ class OrderController extends Controller
                         Session::flash('error', __('front/homePage.Something went wrong, please try again later'));
                         return redirect()->route('front.orders.index');
                     }
-                } elseif ($should_get && $request->type == 'vodafone') {
-                    $pended_vodafone_refund = $temp_order->transactions()->where('payment_method_id', 4)->where('payment_status_id', 4);
-                    $pended_vodafone_refund_amount = $pended_vodafone_refund->sum('payment_amount') ?? 0;
-                    $pended_vodafone_refund_count = $pended_vodafone_refund->count() ? true : false;
+                } elseif ($should_get && $request->type == 'wallet') {
+                    $pended_electronic_wallet_refund = $temp_order->transactions()->where('payment_method_id', 4)->where('payment_status_id', 4);
+                    $pended_electronic_wallet_refund_amount = $pended_electronic_wallet_refund->sum('payment_amount') ?? 0;
+                    $pended_electronic_wallet_refund_count = $pended_electronic_wallet_refund->count() ? true : false;
 
                     if (
                         ($old_order->order_delivery_id && editBostaOrder($temp_order, $old_order))
@@ -1511,9 +1511,9 @@ class OrderController extends Controller
                         return redirect()->route('front.orders.index');
                     }
                 } elseif (!$should_pay && !$should_get && $request->type == 'equal') {
-                    $pended_vodafone_refund = $temp_order->transactions()->where('payment_method_id', 4)->where('payment_status_id', 4);
-                    $pended_vodafone_refund_amount = $pended_vodafone_refund->sum('payment_amount') ?? 0;
-                    $pended_vodafone_refund_count = $pended_vodafone_refund->count() ? true : false;
+                    $pended_electronic_wallet_refund = $temp_order->transactions()->where('payment_method_id', 10)->where('payment_status_id', 4);
+                    $pended_electronic_wallet_refund_amount = $pended_electronic_wallet_refund->sum('payment_amount') ?? 0;
+                    $pended_electronic_wallet_refund_count = $pended_electronic_wallet_refund->count() ? true : false;
 
                     if (
                         ($old_order->order_delivery_id && editBostaOrder($temp_order, $old_order))
@@ -2145,7 +2145,7 @@ class OrderController extends Controller
         $order = Order::findOrFail($order_id);
 
         $order->update([
-            'payment_method_id' => $request->type == "cod" ? 1 : ($request->type == "card" ? 2 : ($request->type == "vodafone" ? 4 : ($request->type == "wallet" ? 10 : 0))),
+            'payment_method_id' => $request->type == "cod" ? 1 : ($request->type == "card" ? 2 : ($request->type == "electronic wallet" ? 4 : ($request->type == "wallet" ? 10 : 0))),
             'status_id' => 17
         ]);
 

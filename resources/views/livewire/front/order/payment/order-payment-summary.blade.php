@@ -351,7 +351,7 @@
                 </span>
             </button>
         </div>
-    @elseif ($payment_method == 4)
+    @elseif ($payment_method == 4 || $payment_method == 5)
         <hr>
 
         <div class="flex gap-2 justify-around items-center p-2">

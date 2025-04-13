@@ -83,7 +83,7 @@ return [
     "Card"                                              =>          "بطاقة بنكية",
     "Installment"                                       =>          "تقسيط",
     "Installments"                                      =>          "تقسيط",
-    "Vodafone Cash"                                     =>          "فودافون كاش",
+    "Electronic Wallet"                                 =>          "انستاباي / محفظة الكترونية",
     "This transaction is already done"                  =>          "هذه العملية تمت بالفعل",
     "This transaction has been done successfully"       =>          "تم تأكيد العملية بنجاح",
     "Unexpected error occurred, please try again"       =>          "حدث خطأ غير متوقع ، برجاء المحاولة مرة أخرى.",
@@ -98,7 +98,7 @@ return [
     "Customer's Wallet"                                 =>          "المحفظة بالموقع",
     "COD"                                               =>          "الدفع عند التوصيل",
     "Customer's Card"                                   =>          "الحساب البنكي",
-    "Customer's Vodafone Wallet"                        =>          "محفظة فودافون كاش",
+    "Customer's Electronic Wallet"                        =>          "انستاباي / محفظة الالكترونية",
     "Add Payment"                                       =>          "إضافة عملية دفع",
     "Add Refund"                                        =>          "إضافة عملية استرداد",
     "Wallet"                                            =>          "المحفظة بالموقع",
@@ -252,4 +252,5 @@ return [
     "Here you can manage edited orders"                 =>          "من خلال هذه الصفحة يمكنك التحكم في الطلبات التي تم تعديلها",
     "Order Created Successfully"                        =>          "تم انشاء الطلب بنجاح",
     "Allow to open package"                             =>          "السماح بفتح الطلب عند الاستلام",
+    "Flash"                                             =>          "فلاش",
 ];

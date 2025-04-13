@@ -228,13 +228,13 @@ class PaymentHistory extends Component
                             class="appearance-none checked:bg-secondary checked:border-white outline-none ring-0 cursor-pointer"
                             type="radio" id="wallet" name="type" value="' . PaymentMethod::Wallet->value . '" checked/>
                         </div>' .
-                ($transaction->payment_method_id == PaymentMethod::Wallet->value ? "" : '
-                        <div class="flex items-center Justify-center gap-2">
-                            <label class="text-gray-600 text-sm font-bold select-none cursor-pointer m-0" for="other">' . (__("admin/ordersPages." . PaymentMethod::getKeyFromValue($transaction->payment_method_id)) ?? __('N/A')) . '</label>
-                            <input
-                            class="appearance-none checked:bg-secondary checked:border-white outline-none ring-0 cursor-pointer"
-                            type="radio" id="other" name="type" value="' . $transaction->payment_method_id . '"/>
-                        </div>
+                        ($transaction->payment_method_id == PaymentMethod::Wallet->value ? "" : '
+                            <div class="flex items-center Justify-center gap-2">
+                                <label class="text-gray-600 text-sm font-bold select-none cursor-pointer m-0" for="other">' . (__("admin/ordersPages." . PaymentMethod::getKeyFromValue($transaction->payment_method_id)) ?? __('N/A')) . '</label>
+                                <input
+                                class="appearance-none checked:bg-secondary checked:border-white outline-none ring-0 cursor-pointer"
+                                type="radio" id="other" name="type" value="' . $transaction->payment_method_id . '"/>
+                            </div>
                         ') .
                 '</div>
                 </div>
@@ -270,8 +270,8 @@ class PaymentHistory extends Component
             return;
         }
 
-        // return to customer by delivery, vodafone cash or customer's wallet
-        if (in_array($type, [PaymentMethod::Cash->value, PaymentMethod::VodafoneCash->value, PaymentMethod::Wallet->value])) {
+        // return to customer by delivery, electronic wallet or customer's wallet
+        if (in_array($type, [PaymentMethod::Cash->value, PaymentMethod::ElectronicWallet->value, PaymentMethod::Wallet->value])) {
             $this->refundSuccess($transaction, $type, $payment_amount, $transaction_id, $order, $user, $partial_payment, $return_to_wallet);
         }
 
@@ -475,10 +475,16 @@ class PaymentHistory extends Component
                             type="radio" id="installment" name="type" value="3"/>
                         </div>
                         <div class="flex items-center Justify-center gap-2">
-                            <label class="text-gray-600 text-sm font-bold select-none cursor-pointer m-0" for="vodafone">' . __("admin/ordersPages.Vodafone Cash") . '</label>
+                            <label class="text-gray-600 text-sm font-bold select-none cursor-pointer m-0" for="electronic-wallet">' . __("admin/ordersPages.Electronic Wallet") . '</label>
                             <input
                             class="appearance-none checked:bg-secondary checked:border-white outline-none ring-0 cursor-pointer"
-                            type="radio" id="vodafone" name="type" value="4"/>
+                            type="radio" id="electronic-wallet" name="type" value="4"/>
+                        </div>
+                        <div class="flex items-center Justify-center gap-2">
+                            <label class="text-gray-600 text-sm font-bold select-none cursor-pointer m-0" for="flash">' . __("admin/ordersPages.Flash") . '</label>
+                            <input
+                            class="appearance-none checked:bg-secondary checked:border-white outline-none ring-0 cursor-pointer"
+                            type="radio" id="flash" name="type" value="5"/>
                         </div>
                     </div>
                 </div>
@@ -571,10 +577,16 @@ class PaymentHistory extends Component
                             type="radio" id="installment" name="type" value="3"/>
                         </div>
                         <div class="flex items-center Justify-center gap-2">
-                            <label class="text-gray-600 text-sm font-bold select-none cursor-pointer m-0" for="vodafone">' . __("admin/ordersPages.Vodafone Cash") . '</label>
+                            <label class="text-gray-600 text-sm font-bold select-none cursor-pointer m-0" for="electronic-wallet">' . __("admin/ordersPages.Electronic Wallet") . '</label>
                             <input
                             class="appearance-none checked:bg-secondary checked:border-white outline-none ring-0 cursor-pointer"
-                            type="radio" id="vodafone" name="type" value="4"/>
+                            type="radio" id="electronic-wallet" name="type" value="4"/>
+                        </div>
+                        <div class="flex items-center Justify-center gap-2">
+                            <label class="text-gray-600 text-sm font-bold select-none cursor-pointer m-0" for="flash">' . __("admin/ordersPages.Flash") . '</label>
+                            <input
+                            class="appearance-none checked:bg-secondary checked:border-white outline-none ring-0 cursor-pointer"
+                            type="radio" id="flash" name="type" value="5"/>
                         </div>
                     </div>
                 </div>

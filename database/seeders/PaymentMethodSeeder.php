@@ -13,7 +13,7 @@ class PaymentMethodSeeder extends Seeder
      */
     public function run(): void
     {
-        //1 => cash, 2 => card, 3 => installments, 4 => vodafone cash, 10 => wallet, 11 => points
+        //1 => cash, 2 => card, 3 => installments, 4 => electronic wallet, 10 => wallet, 11 => points
         $methods = [
             [
                 'id' => 1,
@@ -29,7 +29,7 @@ class PaymentMethodSeeder extends Seeder
             ],
             [
                 'id' => 4,
-                'name' => ['en' => 'Vodafone Cash', 'ar' => 'فودافون كاش']
+                'name' => ['en' => 'Instapay/Electronic Wallet', 'ar' => 'انستاباي/محفظة الكترونية']
             ],
             [
                 'id' => 10,

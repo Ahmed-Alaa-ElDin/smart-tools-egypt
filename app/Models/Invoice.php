@@ -44,13 +44,13 @@ class Invoice extends Model
             PaymentMethod::Cash->value,
             PaymentMethod::Card->value,
             PaymentMethod::Installments->value,
-            PaymentMethod::VodafoneCash->value,
+            PaymentMethod::ElectronicWallet->value,
         ])->count() ?
             $this->transactions->whereIn('payment_method_id', [
                 PaymentMethod::Cash->value,
                 PaymentMethod::Card->value,
                 PaymentMethod::Installments->value,
-                PaymentMethod::VodafoneCash->value,
+                PaymentMethod::ElectronicWallet->value,
             ])->first()->payment_method_id : null;
     }
 

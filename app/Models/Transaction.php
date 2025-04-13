@@ -43,7 +43,7 @@ class Transaction extends Model
     {
         return $this->belongsTo(PaymentStatus::class);
     }
-    
+
     public function paymentMethod()
     {
         return $this->belongsTo(PaymentMethod::class);
@@ -79,7 +79,7 @@ class Transaction extends Model
         return $query->where('payment_method', 3);
     }
 
-    public function scopeVodafoneCash($query)
+    public function scopeElectronicWallet($query)
     {
         return $query->where('payment_method', 4);
     }

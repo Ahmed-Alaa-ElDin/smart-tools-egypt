@@ -43,6 +43,10 @@ module.exports = {
                 telegramHover: "#1d81b2",
                 tiktok: "#000000",
                 tiktokHover: "#4d4d4d",
+                flashPrimary: "#2A2F7E",
+                flashPrimaryHover: "#1C215D",
+                flashSecondary: "#D1EC74",
+                flashSecondaryHover: "#ABC85F",
 
                 view: "#3498db",
                 viewHover: "#2980b9",

@@ -165,7 +165,7 @@
                                 @elseif ($order_data['payment_method'] == 3)
                                     {{ __('front/homePage.Installment') }}
                                 @elseif ($order_data['payment_method'] == 4)
-                                    {{ __('front/homePage.Vodafone Cash') }}
+                                    {{ __('front/homePage.Electronic Wallet') }}
                                 @endif
                             </span>
                         </div>
@@ -282,9 +282,9 @@
                             @csrf
                             @method('PUT')
 
-                            <button type="submit" name="type" value="vodafone"
+                            <button type="submit" name="type" value="electronic-wallet"
                                 class="btn border border-successDark text-successDark hover:bg-successDark hover:text-white active:bg-successDark active:text-white font-bold">
-                                {{ __('front/homePage.Confirm and Refund to My Vodafone Cash Wallet') }}
+                                {{ __('front/homePage.Confirm and Refund to My Electronic Wallet') }}
                             </button>
                         </form>
                     @endif

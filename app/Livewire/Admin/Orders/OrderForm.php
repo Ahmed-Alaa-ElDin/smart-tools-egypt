@@ -79,7 +79,7 @@ class OrderForm extends Component
         'default_address'        =>       'required_with:customer',
         'default_phone'          =>       'required_with:customer',
         'items'                 =>       'array|min:1',
-        'payment_method'        =>       'required|in:1,2,3,4',
+        'payment_method'        =>       'required|in:1,2,3,4,5',
     ];
 
     public function messages()
@@ -708,7 +708,7 @@ class OrderForm extends Component
             // }
 
             // // Order will be paid by card
-            // elseif ($this->payment_method == PaymentMethod::Card->value || $this->payment_method == PaymentMethod::Installments->value || $this->payment_method == PaymentMethod::VodafoneCash->value) {
+            // elseif ($this->payment_method == PaymentMethod::Card->value || $this->payment_method == PaymentMethod::Installments->value || $this->payment_method == PaymentMethod::ElectronicWallet->value) {
             //     $order->update([
             //         'status_id' => OrderStatus::WaitingForPayment->value
             //     ]);
@@ -726,7 +726,7 @@ class OrderForm extends Component
 
             // redirect to done page
             Session::flash('success', __('admin/ordersPages.Order Created Successfully'));
-            redirect()->route('admin.orders.index');
+            redirect()->route('admin.orders.new-orders');
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
