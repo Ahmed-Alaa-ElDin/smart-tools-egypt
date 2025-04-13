@@ -70,6 +70,11 @@
             {{ __('admin/ordersPages.Create Order') }}
         </button>
 
+        <button wire:click="getOrderData(true, true)"
+            class="text-white font-bold rounded px-3 py-2 bg-success hover:bg-successDark">
+            {{ __('admin/ordersPages.Create and Start another order') }}
+        </button>
+
         <a href="{{ url()->previous() }}"
             class="btn font-bold bg-primary focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
             {{ __('admin/ordersPages.Back') }}
@@ -502,6 +507,11 @@
                     <button type="button" wire:click="getOrderData(true)"
                         class="btn font-bold text-white bg-success hover:bg-successDark hover:text-white focus:outline-none rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">
                         {{ __('admin/ordersPages.Create Order') }}
+                    </button>
+
+                    <button type="button" wire:click="getOrderData(true, true)"
+                        class="btn font-bold text-white bg-success hover:bg-successDark hover:text-white focus:outline-none rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">
+                        {{ __('admin/ordersPages.Create and Start another order') }}
                     </button>
 
                     <button type="button" onclick="modal.hide()"

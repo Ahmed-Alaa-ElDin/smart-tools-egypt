@@ -253,6 +253,6 @@ return [
     "Order Created Successfully"                        =>          "Order Created Successfully",
     "Allow to open package"                             =>          "Allow to open package",
     "Flash"                                             =>          "Flash",
-    "Manage"                                            =>          "Manage",
+    "Create and Start another order"                    =>          "Create and Start another order",
     "Manage"                                            =>          "Manage",
 ];

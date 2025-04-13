@@ -2501,6 +2501,10 @@ input:checked + .toggle-bg {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(46 105 48 / var(--tw-bg-opacity)) !important;
 }
+.bg-flashPrimary {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(42 47 126 / var(--tw-bg-opacity)) !important;
+}
 .bg-yellow-500 {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(194 120 3 / var(--tw-bg-opacity)) !important;
@@ -2552,10 +2556,6 @@ input:checked + .toggle-bg {
 .bg-primaryDarker {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(112 0 22 / var(--tw-bg-opacity)) !important;
-}
-.bg-flashPrimary {
-  --tw-bg-opacity: 1 !important;
-  background-color: rgb(42 47 126 / var(--tw-bg-opacity)) !important;
 }
 .bg-blue-700 {
   --tw-bg-opacity: 1 !important;
@@ -2743,13 +2743,13 @@ input:checked + .toggle-bg {
   padding-top: 0px !important;
   padding-bottom: 0px !important;
 }
-.py-7 {
-  padding-top: 1.75rem !important;
-  padding-bottom: 1.75rem !important;
-}
 .px-8 {
   padding-left: 2rem !important;
   padding-right: 2rem !important;
+}
+.py-7 {
+  padding-top: 1.75rem !important;
+  padding-bottom: 1.75rem !important;
 }
 .py-6 {
   padding-top: 1.5rem !important;
@@ -3065,6 +3065,10 @@ input:checked + .toggle-bg {
   --tw-text-opacity: 1 !important;
   color: rgb(200 30 30 / var(--tw-text-opacity)) !important;
 }
+.text-flashSecondary {
+  --tw-text-opacity: 1 !important;
+  color: rgb(209 236 116 / var(--tw-text-opacity)) !important;
+}
 .text-yellow-500 {
   --tw-text-opacity: 1 !important;
   color: rgb(194 120 3 / var(--tw-text-opacity)) !important;
@@ -3088,10 +3092,6 @@ input:checked + .toggle-bg {
 .text-indigo-700 {
   --tw-text-opacity: 1 !important;
   color: rgb(81 69 205 / var(--tw-text-opacity)) !important;
-}
-.text-flashSecondary {
-  --tw-text-opacity: 1 !important;
-  color: rgb(209 236 116 / var(--tw-text-opacity)) !important;
 }
 .underline {
   -webkit-text-decoration-line: underline !important;
@@ -3645,6 +3645,10 @@ input:checked + .toggle-bg {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(26 86 219 / var(--tw-bg-opacity)) !important;
 }
+.hover\:bg-flashSecondary:hover {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(209 236 116 / var(--tw-bg-opacity)) !important;
+}
 .hover\:bg-messengerHover:hover {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(0 90 197 / var(--tw-bg-opacity)) !important;
@@ -3672,10 +3676,6 @@ input:checked + .toggle-bg {
 .hover\:bg-gray-400:hover {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(156 163 175 / var(--tw-bg-opacity)) !important;
-}
-.hover\:bg-flashSecondary:hover {
-  --tw-bg-opacity: 1 !important;
-  background-color: rgb(209 236 116 / var(--tw-bg-opacity)) !important;
 }
 .hover\:bg-blue-800:hover {
   --tw-bg-opacity: 1 !important;
@@ -3724,6 +3724,10 @@ input:checked + .toggle-bg {
   --tw-text-opacity: 1 !important;
   color: rgb(0 0 0 / var(--tw-text-opacity)) !important;
 }
+.hover\:text-flashPrimary:hover {
+  --tw-text-opacity: 1 !important;
+  color: rgb(42 47 126 / var(--tw-text-opacity)) !important;
+}
 .hover\:text-youtube:hover {
   --tw-text-opacity: 1 !important;
   color: rgb(255 0 0 / var(--tw-text-opacity)) !important;
@@ -3755,10 +3759,6 @@ input:checked + .toggle-bg {
 .hover\:text-red-800:hover {
   --tw-text-opacity: 1 !important;
   color: rgb(155 28 28 / var(--tw-text-opacity)) !important;
-}
-.hover\:text-flashPrimary:hover {
-  --tw-text-opacity: 1 !important;
-  color: rgb(42 47 126 / var(--tw-text-opacity)) !important;
 }
 .hover\:text-blue-600:hover {
   --tw-text-opacity: 1 !important;
@@ -5085,12 +5085,12 @@ input:checked + .toggle-bg {
     grid-column: span 6 / span 6 !important;
   }
 
-  .xl\:col-span-9 {
-    grid-column: span 9 / span 9 !important;
-  }
-
   .xl\:col-span-4 {
     grid-column: span 4 / span 4 !important;
+  }
+
+  .xl\:col-span-9 {
+    grid-column: span 9 / span 9 !important;
   }
 
   .xl\:block {

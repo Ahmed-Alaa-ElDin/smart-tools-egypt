@@ -74,6 +74,7 @@ class NewOrderUserPart extends Component
         }
 
         $this->customers = User::query()
+            ->with(['addresses', 'phones'])
             ->where(function ($query) use ($term) {
                 $query->where('f_name->ar', 'like', "%$term%")
                     ->orWhere('l_name->ar', 'like', "%$term%")

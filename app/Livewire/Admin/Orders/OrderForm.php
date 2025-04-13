@@ -105,7 +105,7 @@ class OrderForm extends Component
         return view('livewire.admin.orders.order-form');
     }
 
-    public function getOrderData($make_order = false)
+    public function getOrderData($make_order = false, $new_order = false)
     {
         $this->make_order = $make_order;
 
@@ -117,7 +117,7 @@ class OrderForm extends Component
             if ($this->total_after_wallet < 0 || $this->total < 0) {
                 $this->dispatch('displayOrderSummary');
             } else {
-                $this->makeOrder();
+                $this->makeOrder($new_order);
             }
         } else {
             $this->dispatch('displayOrderSummary');
@@ -422,7 +422,7 @@ class OrderForm extends Component
     }
 
     // Make Order
-    public function makeOrder()
+    public function makeOrder($new_order = false)
     {
         $default_phones = array_column(array_filter($this->customer['phones'], fn($phone) => $phone['default'] == 1), 'phone');
         $default_phone = count($default_phones) > 0 ? $default_phones[0] : null;
@@ -632,7 +632,7 @@ class OrderForm extends Component
             // Get Collections from database
             $order->collections()->each(function ($collection) {
                 $collection->products()->each(function ($product) use ($collection) {
-                    $product->quantity = $product->quantity + ($collection->pivot->quantity * $product->pivot->quantity);
+                    $product->quantity += $collection->pivot->quantity * $product->pivot->quantity;
                     $product->save();
                 });
             });
@@ -726,7 +726,12 @@ class OrderForm extends Component
 
             // redirect to done page
             Session::flash('success', __('admin/ordersPages.Order Created Successfully'));
-            redirect()->route('admin.orders.new-orders');
+
+            if ($new_order) {
+                redirect()->route('admin.orders.create');
+            } else {
+                redirect()->route('admin.orders.new-orders');
+            }
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

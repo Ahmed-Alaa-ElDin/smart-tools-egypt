@@ -16,7 +16,7 @@
                     </span>
                 </span>
                 <input type="text" wire:model.live.debounce.500ms='search' wire:keydown.Escape="$set('search','')"
-                    wire:blur="$set('search','')" data-name="new-order-user-part"
+                    wire:blur.debounce.200ms="$set('search','')" data-name="new-order-user-part"
                     class="searchInput focus:ring-0 flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-700"
                     placeholder="{{ __('admin/ordersPages.Search ...') }}">
             </div>
@@ -46,9 +46,11 @@
                             <span class="text-center font-bold text-gray-900 group-hover:text-white">
                                 {{ $customer->f_name . ' ' . $customer->l_name }}
                             </span>
-                            <span class="text-sm font-bold text-gray-500 group-hover:text-gray-50">
-                                {{ $customer->phones->where('default', 1)->count() ? $customer->phones->where('default', 1)->first()->phone : '' }}
-                            </span>
+                            @if ($customer->phones->where('default', 1)->count() > 0)
+                                <span class="text-sm font-bold text-gray-500 group-hover:text-gray-50">
+                                    {{ $customer->phones->where('default', 1)->first()->phone }}
+                                </span>
+                            @endif
                         </div>
 
                         @if (!$loop->last)

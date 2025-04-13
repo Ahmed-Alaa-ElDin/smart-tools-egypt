@@ -253,4 +253,5 @@ return [
     "Order Created Successfully"                        =>          "تم انشاء الطلب بنجاح",
     "Allow to open package"                             =>          "السماح بفتح الطلب عند الاستلام",
     "Flash"                                             =>          "فلاش",
+    "Create and Start another order"                    =>          "إنشاء وبدء طلب جديد",
 ];
