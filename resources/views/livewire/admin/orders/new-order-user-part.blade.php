@@ -15,8 +15,8 @@
                         search
                     </span>
                 </span>
-                <input type="text" wire:model.live.debounce.500ms='search' wire:keydown.Escape="$set('search','')" wire:blur="$set('search','')"
-                    data-name="new-order-user-part"
+                <input type="text" wire:model.live.debounce.500ms='search' wire:keydown.Escape="$set('search','')"
+                    wire:blur="$set('search','')" data-name="new-order-user-part"
                     class="searchInput focus:ring-0 flex-1 block w-full rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-gray-700"
                     placeholder="{{ __('admin/ordersPages.Search ...') }}">
             </div>
@@ -206,7 +206,7 @@
                 @if (!$addAddress)
                     <div class="col-span-4">
                         <div class="flex justify-center items-center gap-2">
-                            <button wire:click="$set('addAddress',{{ true }})"
+                            <button wire:click="$set('addAddress',true)"
                                 class="btn btn-sm bg-secondary hover:bg-secondaryDark font-bold">
                                 <span class="material-icons text-sm">
                                     add
@@ -331,7 +331,7 @@
                                         wire:click="saveAddress">
                                         {{ __('admin/ordersPages.Save') }}
                                     </button>
-                                    <button wire:click="$set('addAddress',{{ false }})"
+                                    <button wire:click="$set('addAddress',false)"
                                         class="btn btn-sm bg-primary hover:bg-primaryDark text-white font-bold rounded focus:outline-none focus:shadow-outline">
                                         {{ __('admin/ordersPages.Cancel') }}
                                     </button>
@@ -374,7 +374,7 @@
                 @if (!$addPhone)
                     <div class="col-span-2">
                         <div class="flex justify-center items-center gap-2">
-                            <button wire:click="$set('addPhone',{{ true }})"
+                            <button wire:click="$set('addPhone',true)"
                                 class="btn btn-sm bg-secondary hover:bg-secondaryDark font-bold">
                                 <span class="material-icons text-sm">
                                     add
@@ -411,7 +411,7 @@
                                         wire:click="savePhone">
                                         {{ __('admin/ordersPages.Save') }}
                                     </button>
-                                    <button wire:click="$set('addPhone',{{ false }})"
+                                    <button wire:click="$set('addPhone',false)"
                                         class="btn btn-sm bg-primary hover:bg-primaryDark text-white font-bold rounded focus:outline-none focus:shadow-outline">
                                         {{ __('admin/ordersPages.Cancel') }}
                                     </button>

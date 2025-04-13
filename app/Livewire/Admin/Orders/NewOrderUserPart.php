@@ -194,6 +194,7 @@ class NewOrderUserPart extends Component
                 $this->newAddress['city_id'] = count($this->cities) ? $this->cities[0]['id'] : '';
             }
         } else {
+
             $this->newAddress = [
                 'country_id'        => null,
                 'governorate_id'    => null,
