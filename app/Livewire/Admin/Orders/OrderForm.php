@@ -683,45 +683,6 @@ class OrderForm extends Component
                 ]);
             }
 
-            ################### Payment :: Start ###################
-            // Order is paid or will be paid on delivery
-            // if ($should_pay <= 0 || $this->payment_method == PaymentMethod::Cash->value) {
-            //     $bosta_order = (new Bosta())->createDelivery($order);
-
-            //     if ($bosta_order['status']) {
-            //         $order->update([
-            //             'status_id' => OrderStatus::Preparing->value,
-            //         ]);
-
-            //         // Add new statuses (Shipment created and Preparing)
-            //         $order->statuses()->attach([
-            //             OrderStatus::Approved->value,
-            //             OrderStatus::Preparing->value,
-            //         ]);
-            //     }
-
-            //     DB::commit();
-
-            //     // redirect to done page
-            //     Session::flash('success', __('admin/ordersPages.Order Created Successfully'));
-            //     redirect()->route('admin.orders.index');
-            // }
-
-            // // Order will be paid by card
-            // elseif ($this->payment_method == PaymentMethod::Card->value || $this->payment_method == PaymentMethod::Installments->value || $this->payment_method == PaymentMethod::ElectronicWallet->value) {
-            //     $order->update([
-            //         'status_id' => OrderStatus::WaitingForPayment->value
-            //     ]);
-
-            //     $order->statuses()->attach(OrderStatus::WaitingForPayment->value);
-
-            //     DB::commit();
-
-            //     // redirect to done page
-            //     Session::flash('success', __('admin/ordersPages.Order Created Successfully'));
-            //     redirect()->route('admin.orders.index');
-            // }
-
             DB::commit();
 
             // redirect to done page
