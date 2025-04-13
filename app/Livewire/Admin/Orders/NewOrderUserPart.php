@@ -18,8 +18,15 @@ class NewOrderUserPart extends Component
     public $addAddress = false, $defaultAddress;
     public $addPhone = false, $defaultPhone;
 
-    public $newAddress, $countries;
-    public $newPhone;
+    public $newAddress = [
+        'country_id'        => null,
+        'governorate_id'    => null,
+        'city_id'           => null,
+        'details'           => null,
+        'landmarks'         => null,
+    ];
+    public $countries = [], $governorates = [], $cities = [];
+    public $newPhone = null;
     public $customers;
 
 
@@ -31,23 +38,25 @@ class NewOrderUserPart extends Component
     {
         $this->customers = collect([]);
 
-        $this->countries = Country::with([
-            'governorates' => fn($q) => $q->with([
-                'cities'
-            ])
-        ])->get()->toArray();
+        $this->countries = Country::get()->toArray();
 
-        $this->newAddress = [
-            'country_id'        => $this->countries[0]['id'],
-            'governorates'      => $this->countries[0]['governorates'],
-            'governorate_id'    => $this->countries[0]['governorates'][0]['id'],
-            'cities'            => $this->countries[0]['governorates'][0]['cities'],
-            'city_id'           => $this->countries[0]['governorates'][0]['cities'][0]['id'],
-            'details'           => null,
-            'landmarks'         => null,
-        ];
+        if (count($this->countries)) {
+            $this->newAddress['country_id'] = $this->countries[0]['id'];
 
-        $this->newPhone = null;
+            // User Has Addresses
+            $this->governorates = Governorate::where('country_id', $this->newAddress['country_id'])
+                ->whereHas('deliveries')
+                ->orderBy('name->' . session('locale'))
+                ->get()
+                ->toArray();
+            $this->newAddress['governorate_id'] = count($this->governorates) ? $this->governorates[0]['id'] : '';
+
+            $this->cities = City::where('governorate_id', $this->newAddress['governorate_id'])
+                ->whereHas('deliveries')
+                ->orderBy('name->' . session('locale'))
+                ->get()
+                ->toArray();
+        }
     }
 
     public function render()
@@ -167,12 +176,28 @@ class NewOrderUserPart extends Component
     public function updatedAddAddress($value)
     {
         if ($value) {
+            $this->countries = Country::get()->toArray();
+
+            if (count($this->countries)) {
+                $this->newAddress['country_id'] = $this->countries[0]['id'];
+
+                $this->governorates = Governorate::where('country_id', $this->newAddress['country_id'])
+                    ->orderBy('name->' . session('locale'))
+                    ->get()
+                    ->toArray();
+                $this->newAddress['governorate_id'] = count($this->governorates) ? $this->governorates[0]['id'] : '';
+
+                $this->cities = City::where('governorate_id', $this->newAddress['governorate_id'])
+                    ->orderBy('name->' . session('locale'))
+                    ->get()
+                    ->toArray();
+                $this->newAddress['city_id'] = count($this->cities) ? $this->cities[0]['id'] : '';
+            }
+        } else {
             $this->newAddress = [
-                'country_id'        => $this->countries[0]['id'],
-                'governorates'      => $this->countries[0]['governorates'],
-                'governorate_id'    => $this->countries[0]['governorates'][0]['id'],
-                'cities'            => $this->countries[0]['governorates'][0]['cities'],
-                'city_id'           => $this->countries[0]['governorates'][0]['cities'][0]['id'],
+                'country_id'        => null,
+                'governorate_id'    => null,
+                'city_id'           => null,
                 'details'           => null,
                 'landmarks'         => null,
             ];
@@ -183,29 +208,30 @@ class NewOrderUserPart extends Component
     public function updatedNewAddressCountryId($value)
     {
         // Get the Governorates of the selected country
-        $this->newAddress['governorates'] = Governorate::where('country_id', $value)
+        $this->governorates = Governorate::where('country_id', $value)
+            ->whereHas('deliveries')
             ->orderBy('name->' . session('locale'))
             ->get()
             ->toArray();
 
         // set default governorate id
-        $this->newAddress['governorate_id'] = count($this->newAddress['governorates']) ? $this->newAddress['governorates'][0]['id'] : '';
+        $this->newAddress['governorate_id'] = count($this->governorates) ? $this->governorates[0]['id'] : '';
 
         // Get the cities of the selected governorate
-        $this->newAddress['cities'] = count($this->newAddress['governorates']) ? City::where('governorate_id', $this->newAddress['governorate_id'])->orderBy('name->' . session('locale'))->get()->toArray() : [];
+        $this->cities = count($this->governorates) ? City::where('governorate_id', $this->newAddress['governorate_id'])->whereHas('deliveries')->orderBy('name->' . session('locale'))->get()->toArray() : [];
 
         // set default city id
-        $this->newAddress['city_id'] = count($this->newAddress['cities']) ? $this->newAddress['cities'][0]['id'] : '';
+        $this->newAddress['city_id'] = count($this->cities) ? $this->cities[0]['id'] : '';
     }
 
     // Updated governorate id in new address
     public function updatedNewAddressGovernorateId($value)
     {
         // Get the cities of the selected governorate
-        $this->newAddress['cities'] = City::where('governorate_id', $value)->orderBy('name->' . session('locale'))->get()->toArray();
+        $this->cities = City::where('governorate_id', $value)->whereHas('deliveries')->orderBy('name->' . session('locale'))->get()->toArray();
 
         // set default city id
-        $this->newAddress['city_id'] = count($this->newAddress['cities']) ? $this->newAddress['cities'][0]['id'] : '';
+        $this->newAddress['city_id'] = count($this->cities) ? $this->cities[0]['id'] : '';
     }
 
     // save new address
@@ -215,6 +241,8 @@ class NewOrderUserPart extends Component
             'newAddress.country_id'        => 'required|exists:countries,id',
             'newAddress.governorate_id'    => 'required|exists:governorates,id',
             'newAddress.city_id'           => 'required|exists:cities,id',
+            'newAddress.details'           => 'required|string',
+            'newAddress.landmarks'         => 'nullable|string',
         ]);
 
         try {

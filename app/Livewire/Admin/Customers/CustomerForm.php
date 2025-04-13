@@ -38,7 +38,11 @@ class CustomerForm extends Component
     public $addresses = [];
     public $role;
 
-    protected $listeners = ['countryUpdated', 'governorateUpdated', 'resetPassword'];
+    protected $listeners = [
+        'countryUpdated',
+        'governorateUpdated',
+        'resetPassword'
+    ];
 
     public function rules()
     {

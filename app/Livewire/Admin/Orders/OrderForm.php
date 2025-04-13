@@ -76,8 +76,8 @@ class OrderForm extends Component
 
     protected $rules = [
         'customer'              =>       'required',
-        'default_address'        =>       'required_with:customer',
-        'default_phone'          =>       'required_with:customer',
+        'default_address'       =>       'required_with:customer',
+        'default_phone'         =>       'required_with:customer',
         'items'                 =>       'array|min:1',
         'payment_method'        =>       'required|in:1,2,3,4,5',
     ];

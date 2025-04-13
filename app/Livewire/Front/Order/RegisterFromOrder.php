@@ -66,10 +66,10 @@ class RegisterFromOrder extends Component
     public function mount()
     {
         // get all countries
-        $this->countries = Country::get();
+        $this->countries = Country::get()->toArray();
 
-        if ($this->countries->count()) {
-            $this->address['country_id'] = $this->countries->first()->id;
+        if (count($this->countries)) {
+            $this->address['country_id'] = $this->countries[0]['id'];
 
             // User Has Addresses
             $this->governorates = Governorate::where('country_id', $this->address['country_id'])

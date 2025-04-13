@@ -254,7 +254,7 @@
                                         <select
                                             class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
                                             wire:model.live='newAddress.governorate_id' id="governorate">
-                                            @forelse ($newAddress['governorates'] as $governorate)
+                                            @forelse ($governorates as $governorate)
                                                 <option value="{{ $governorate['id'] }}">
                                                     {{ $governorate['name'][session('locale')] }}</option>
                                             @empty
@@ -280,7 +280,7 @@
                                         <select
                                             class="col-span-2 lg:col-span-3 w-full py-1 rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
                                             wire:model.live='newAddress.city_id' id="city">
-                                            @forelse ($newAddress['cities'] as $city)
+                                            @forelse ($cities as $city)
                                                 <option value="{{ $city['id'] }}">
                                                     {{ $city['name'][session('locale')] }}
                                                 </option>
