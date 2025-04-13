@@ -31,7 +31,7 @@ class Bosta implements DeliveryInterface
                     "itemsCount"    => $order->num_of_items,
                     "description"   => $order->package_desc,
                 ],
-                "weight"            =>      $order->total_weight,
+                // "weight"            =>      $order->total_weight,
             ],
             "notes"     =>      $order->notes . ($order->user->phones->where('default', 0)->count() > 1 ? " - " . implode(' - ', $order->user->phones->where('default', 0)->pluck('phone')->toArray()) : '') . " - منتجات قابلة للكسر - برجاء الاتصال بوقت كافى قبل التوصيل والتواصل من خلال الواتس فى حالة ضعف الشبكة",
             "cod"       =>      $paymentAmount ? ceil($paymentAmount) : 0.00,
