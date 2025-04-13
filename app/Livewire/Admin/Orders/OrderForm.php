@@ -317,7 +317,7 @@ class OrderForm extends Component
             } else {
                 return [
                     'zone_id' => $zone->id,
-                    'charge' => $min_charge + ($items_total_weights - $min_weight) * $kg_charge
+                    'charge' => $min_charge + ceil($items_total_weights - $min_weight) * $kg_charge
                 ];
             }
         });
