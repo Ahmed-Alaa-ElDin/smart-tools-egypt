@@ -282,7 +282,17 @@
                                                 {{ $order->user ? $order->user->f_name . ' ' . $order->user->l_name : __('N/A') }}
                                             </span>
                                             <span class="text-gray-500">
-                                                {{ $order->user && $order->user->phones->count() ? $order->user->phones->where('default', 1)->first()->phone : __('N/A') }}
+                                                @if ($order->user && $order->user->phones->count())
+                                                    @foreach ($order->user->phones as $phone)
+                                                        <span
+                                                            class="@if ($phone->default) font-bold @endif">{{ $phone->phone }}</span>
+                                                        @if (!$loop->last)
+                                                            -
+                                                        @endif
+                                                    @endforeach
+                                                @else
+                                                    {{ __('N/A') }}
+                                                @endif
                                             </span>
                                         </div>
                                     </td>

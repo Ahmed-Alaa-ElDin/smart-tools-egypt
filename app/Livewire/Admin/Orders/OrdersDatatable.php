@@ -60,7 +60,7 @@ class OrdersDatatable extends Component
         $orders = Order::with([
             'user' => fn($q) => $q->select('id', 'f_name', 'l_name')
                 ->with([
-                    'phones' => fn($q) => $q->select('id', 'user_id', 'phone', 'default')->where('default', 1)
+                    'phones' => fn($q) => $q->select('id', 'user_id', 'phone', 'default')
                 ]),
             'address' => fn($q) => $q->select('id', 'governorate_id', 'city_id')->with([
                 'governorate' => fn($q) => $q->select('id', 'name'),
