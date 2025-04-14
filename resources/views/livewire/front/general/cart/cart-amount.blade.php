@@ -40,7 +40,7 @@
                     {{-- Remove :: End --}}
 
                     {{-- Delete :: Start --}}
-                    @if ($remove)
+                    {{-- @if ($remove)
                         <button title="{{ __('front/homePage.Remove from Cart') }}"
                             class="w-6 h-6 rounded-circle bg-white border border-primary text-primary transition ease-in-out hover:bg-primary hover:text-white"
                             wire:click="removeFromCart('{{ $cartItem->rowId }}','{{ $item_id }}')">
@@ -48,7 +48,7 @@
                                 delete
                             </span>
                         </button>
-                    @endif
+                    @endif --}}
                     {{-- Delete :: End --}}
                 </div>
             @else
@@ -82,7 +82,7 @@
                     {{-- Remove :: End --}}
 
                     {{-- Delete :: Start --}}
-                    @if ($remove)
+                    {{-- @if ($remove)
                         <button title="{{ __('front/homePage.Remove from Cart') }}"
                             class="w-8 h-8 rounded-circle bg-white border border-primary text-primary transition ease-in-out hover:bg-primary hover:text-white"
                             wire:click="removeFromCart('{{ $cartItem->rowId }}','{{ $item_id }}')">
@@ -90,7 +90,7 @@
                                 delete
                             </span>
                         </button>
-                    @endif
+                    @endif --}}
                     {{-- Delete :: End --}}
                 </div>
             @endif
