@@ -469,46 +469,98 @@ class CustomerForm extends Component
             $this->customer->syncRoles(1);
             ### Role ###
 
-            ### Add Phones ###
-            $this->customer->phones()->delete();
-
-            $newPhones = [];
+            ### Sync Phones ###
+            // Create a collection of existing phones indexed by phone number for easy lookup
+            $existingPhones = $this->customer->phones()->get()->keyBy('phone');
+            $updatedPhoneIds = [];
 
             foreach ($this->phones as $index => $phone) {
-                if ($phone['phone']) {
-                    $newPhone = new Phone([
-                        'phone' => $phone['phone'],
-                        'default' => $index == $this->defaultPhone ? 1 : 0
-                    ]);
-                    array_push($newPhones, $newPhone);
+                if (!empty($phone['phone'])) {
+                    $isDefault = $index == $this->defaultPhone ? 1 : 0;
+
+                    // Check if this phone already exists
+                    if ($existingPhones->has($phone['phone'])) {
+                        // Update existing phone
+                        $existingPhone = $existingPhones->get($phone['phone']);
+                        $existingPhone->default = $isDefault;
+                        $existingPhone->save();
+
+                        $updatedPhoneIds[] = $existingPhone->id;
+                    } else {
+                        // Create new phone
+                        $newPhone = new Phone([
+                            'phone' => $phone['phone'],
+                            'default' => $isDefault
+                        ]);
+                        $this->customer->phones()->save($newPhone);
+
+                        $updatedPhoneIds[] = $newPhone->id;
+                    }
                 }
             }
 
-            $this->customer->phones()->saveMany($newPhones);
-            ### Add Phones ###
+            // Delete phones that aren't in the new set
+            $this->customer->phones()
+                ->whereNotIn('id', $updatedPhoneIds)
+                ->delete();
+            ### Sync Phones ###
 
-
-            ### Add Addresses ###
-            $this->customer->addresses()->delete();
-
-            $newAddresses = [];
+            ### Sync Addresses ###
+            // Create a collection of existing addresses for lookup
+            // We'll use a composite key since addresses don't have a single unique field like phone numbers
+            $existingAddresses = $this->customer->addresses()->get();
+            $updatedAddressIds = [];
 
             foreach ($this->addresses as $index => $address) {
                 if ($address['country_id'] && $address['governorate_id'] && $address['city_id']) {
-                    $newAddress = new Address([
-                        'country_id' => $address['country_id'],
-                        'governorate_id' => $address['governorate_id'],
-                        'city_id' => $address['city_id'],
-                        'details' => $address['details'],
-                        'landmarks' => $address['landmarks'],
-                        'default' => $index == $this->defaultAddress ? 1 : 0,
-                    ]);
-                    array_push($newAddresses, $newAddress);
+                    $isDefault = $index == $this->defaultAddress ? 1 : 0;
+
+                    // Look for matching existing address based on location identifiers
+                    $existingAddress = $existingAddresses->first(function ($item) use ($address) {
+                        return $item->country_id == $address['country_id'] &&
+                            $item->governorate_id == $address['governorate_id'] &&
+                            $item->city_id == $address['city_id'] &&
+                            $item->details == $address['details'] &&
+                            $item->landmarks == $address['landmarks'];
+                    });
+
+                    if ($existingAddress) {
+                        // Update existing address
+                        $existingAddress->default = $isDefault;
+                        $existingAddress->save();
+
+                        $updatedAddressIds[] = $existingAddress->id;
+                    } else {
+                        // Create new address
+                        $newAddress = new Address([
+                            'country_id' => $address['country_id'],
+                            'governorate_id' => $address['governorate_id'],
+                            'city_id' => $address['city_id'],
+                            'details' => $address['details'],
+                            'landmarks' => $address['landmarks'],
+                            'default' => $isDefault,
+                        ]);
+                        $this->customer->addresses()->save($newAddress);
+
+                        $updatedAddressIds[] = $newAddress->id;
+                    }
                 }
             }
 
-            $this->customer->addresses()->saveMany($newAddresses);
-            ### Add Addresses ###
+            // Only delete addresses that are no longer needed
+            // This is critical since you're linking address IDs to orders
+            $this->customer->addresses()
+                ->whereNotIn('id', $updatedAddressIds)
+                ->delete();
+            ### Sync Addresses ###
+
+            ### Update the orders that haven't been shipped ###
+            $this->customer->orders()->whereNull('tracking_number')->update([
+                'address_id' => $this->customer->addresses()->where('default', 1)->first()->id,
+                'phone1' => $this->customer->phones()->where('default', 1)->first()->phone,
+                'phone2' => $this->customer->phones()->where('default', 0)->first()->phone,
+            ]);
+            ### Update the orders that haven't been shipped ###
 
             // Save and End Transaction
             DB::commit();
