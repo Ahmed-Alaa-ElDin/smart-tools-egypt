@@ -605,13 +605,13 @@ class OrdersDatatable extends Component
 
         $order['items'] = array_merge($order['products'], $order['collections']);
 
-        $order['subtotal'] = $order['invoice']['subtotal_base'];
-        $order['products_discount'] = $order['invoice']['items_discount'];
-        $order['offers_discount'] = $order['invoice']['offers_items_discount'] + $order['invoice']['offers_order_discount'];
-        $order['coupon_discount'] = $order['invoice']['coupon_items_discount'] + $order['invoice']['coupon_order_discount'];
+        $order['subtotal'] = $order['invoice'] ? $order['invoice']['subtotal_base'] : 0;
+        $order['products_discount'] = $order['invoice'] ? $order['invoice']['items_discount'] : 0;
+        $order['offers_discount'] = $order['invoice'] ? ($order['invoice']['offers_items_discount'] + $order['invoice']['offers_order_discount']) : 0;
+        $order['coupon_discount'] = $order['invoice'] ? ($order['invoice']['coupon_items_discount'] + $order['invoice']['coupon_order_discount']) : 0;
         $order['coupon_code'] = $order['coupon'] ? $order['coupon']['code'] : null;
-        $order['delivery_fees'] = $order['invoice']['delivery_fees'];
-        $order['total'] = $order['invoice']['total'];
+        $order['delivery_fees'] = $order['invoice'] ? $order['invoice']['delivery_fees'] : 0;
+        $order['total'] = $order['invoice'] ? $order['invoice']['total'] : 0;
 
         $pdf = PDF::loadView("front.orders.purchase-order", compact("order"));
 
@@ -673,14 +673,14 @@ class OrdersDatatable extends Component
 
             $order['items'] = array_merge($order['products'], $order['collections']);
 
-            $order['subtotal'] = $order['invoice']['subtotal_base'];
-            $order['discount'] = $order['invoice']['items_discount'] + $order['invoice']['offers_items_discount'] + $order['invoice']['coupon_items_discount'];
-            $order['products_discount'] = $order['invoice']['items_discount'];
-            $order['offers_discount'] = $order['invoice']['offers_items_discount'] + $order['invoice']['offers_order_discount'];
-            $order['coupon_discount'] = $order['invoice']['coupon_items_discount'] + $order['invoice']['coupon_order_discount'];
+            $order['subtotal'] = $order['invoice'] ? $order['invoice']['subtotal_base'] : 0;
+            $order['discount'] = $order['invoice'] ? ($order['invoice']['items_discount'] + $order['invoice']['offers_items_discount'] + $order['invoice']['coupon_items_discount']) : 0;
+            $order['products_discount'] = $order['invoice'] ? $order['invoice']['items_discount'] : 0;
+            $order['offers_discount'] = $order['invoice'] ? ($order['invoice']['offers_items_discount'] + $order['invoice']['offers_order_discount']) : 0;
+            $order['coupon_discount'] = $order['invoice'] ? ($order['invoice']['coupon_items_discount'] + $order['invoice']['coupon_order_discount']) : 0;
             $order['coupon_code'] = $order['coupon'] ? $order['coupon']['code'] : null;
-            $order['delivery_fees'] = $order['invoice']['delivery_fees'];
-            $order['total'] = $order['invoice']['total'];
+            $order['delivery_fees'] = $order['invoice'] ? $order['invoice']['delivery_fees'] : 0;
+            $order['total'] = $order['invoice'] ? $order['invoice']['total'] : 0;
 
             return $order;
         }, $orders);
