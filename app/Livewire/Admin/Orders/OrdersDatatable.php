@@ -559,6 +559,7 @@ class OrdersDatatable extends Component
     {
         $order = Order::select([
             'orders.id',
+            'coupon_id',
             'user_id',
             'address_id',
             'phone1',
@@ -584,6 +585,7 @@ class OrdersDatatable extends Component
                     ]);
             },
             'invoice',
+            'coupon',
             'products' => function ($query) {
                 $query->select('products.id', 'name', 'base_price', 'final_price', 'model')
                     ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
@@ -604,8 +606,10 @@ class OrdersDatatable extends Component
         $order['items'] = array_merge($order['products'], $order['collections']);
 
         $order['subtotal'] = $order['invoice']['subtotal_base'];
-        $order['discount'] = $order['invoice']['items_discount'] + $order['invoice']['offers_items_discount'] + $order['invoice']['coupon_items_discount'];
-        $order['extra_discount'] = $order['invoice']['offers_order_discount'] + $order['invoice']['coupon_order_discount'];
+        $order['products_discount'] = $order['invoice']['items_discount'];
+        $order['offers_discount'] = $order['invoice']['offers_items_discount'] + $order['invoice']['offers_order_discount'];
+        $order['coupon_discount'] = $order['invoice']['coupon_items_discount'] + $order['invoice']['coupon_order_discount'];
+        $order['coupon_code'] = $order['coupon'] ? $order['coupon']['code'] : null;
         $order['delivery_fees'] = $order['invoice']['delivery_fees'];
         $order['total'] = $order['invoice']['total'];
 
@@ -623,6 +627,7 @@ class OrdersDatatable extends Component
         $orders = Order::select([
             'orders.id',
             'user_id',
+            'coupon_id',
             'address_id',
             'phone1',
             'phone2',
@@ -647,6 +652,7 @@ class OrdersDatatable extends Component
                     ]);
             },
             'invoice',
+            'coupon',
             'products' => function ($query) {
                 $query->select('products.id', 'name', 'base_price', 'final_price', 'model')
                     ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
@@ -669,14 +675,17 @@ class OrdersDatatable extends Component
 
             $order['subtotal'] = $order['invoice']['subtotal_base'];
             $order['discount'] = $order['invoice']['items_discount'] + $order['invoice']['offers_items_discount'] + $order['invoice']['coupon_items_discount'];
-            $order['extra_discount'] = $order['invoice']['offers_order_discount'] + $order['invoice']['coupon_order_discount'];
+            $order['products_discount'] = $order['invoice']['items_discount'];
+            $order['offers_discount'] = $order['invoice']['offers_items_discount'] + $order['invoice']['offers_order_discount'];
+            $order['coupon_discount'] = $order['invoice']['coupon_items_discount'] + $order['invoice']['coupon_order_discount'];
+            $order['coupon_code'] = $order['coupon'] ? $order['coupon']['code'] : null;
             $order['delivery_fees'] = $order['invoice']['delivery_fees'];
             $order['total'] = $order['invoice']['total'];
 
             return $order;
         }, $orders);
 
-        $pdf = PDF::loadView("front.orders.purchase-orders", compact("orders"));
+    $pdf = PDF::loadView("front.orders.purchase-orders", compact("orders"));
 
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->stream();

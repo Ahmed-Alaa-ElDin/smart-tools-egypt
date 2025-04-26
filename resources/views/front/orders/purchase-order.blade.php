@@ -30,7 +30,7 @@
             <tr>
                 <td>
                     <div style="font-size: 2rem;font-weight: 700;">
-                        {{ $order["user_type"] }}
+                        {{ $order['user_type'] }}
                     </div>
                 </td>
                 <td rowspan="2" align="left">
@@ -59,7 +59,8 @@
                             <span style="font-weight:bold;">العنوان:</span>
                             <span>
                                 {{ $order['address'] && $order['address']['details'] ? $order['address']['details'] . ' - ' : '' }}
-                                {{ $order['address'] && $order['address']['city']['name']['ar'] ? $order['address']['city']['name']['ar'] : '' }} -
+                                {{ $order['address'] && $order['address']['city']['name']['ar'] ? $order['address']['city']['name']['ar'] : '' }}
+                                -
                                 {{ $order['address'] && $order['address']['governorate']['name']['ar'] ? $order['address']['governorate']['name']['ar'] : '' }}
                                 <br>
                                 {{ $order['address'] && $order['address']['landmarks'] ? $order['address']['landmarks'] : '' }}
@@ -152,24 +153,36 @@
                 </tr>
                 <tr>
                     <td colspan="4"></td>
-                    <th style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">الخصم</th>
+                    <th style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">خصم المنتجات</th>
                     <td style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">
-                        {{ number_format($order['discount'], 2) }} ج.م
+                        {{ number_format($order['products_discount'], 2) }} ج.م
                     </td>
                 </tr>
-                @if ($order['extra_discount'])
+                @if ($order['offers_discount'])
                     <tr>
                         <td colspan="4"></td>
-                        <th style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">خصم إضافي</th>
+                        <th style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">خصم العروض</th>
                         <td style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">
-                            {{ number_format($order['extra_discount'], 2) }} ج.م
+                            {{ number_format($order['offers_discount'], 2) }} ج.م
+                        </td>
+                    </tr>
+                @endif
+                @if ($order['coupon_discount'])
+                    <tr>
+                        <td colspan="2"></td>
+                        <td style="border: 1px solid black;padding: 0.5rem 0.75rem; font-weight: bold;">كود الكوبون</td>
+                        <td style="border: 1px solid black;padding: 0.5rem 0.75rem;">{{ $order['coupon_code'] }}</td>
+                        <th style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">خصم الكوبون</th>
+                        <td style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">
+                            {{ number_format($order['coupon_discount'], 2) }} ج.م
                         </td>
                     </tr>
                 @endif
                 @if ($order['delivery_fees'])
                     <tr>
                         <td colspan="4"></td>
-                        <th style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">رسوم التوصيل</th>
+                        <th style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">رسوم التوصيل
+                        </th>
                         <td style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">
                             {{ number_format($order['delivery_fees'], 2) }} ج.م
                         </td>
@@ -180,7 +193,7 @@
                     <th style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">الإجمالي بعد الخصم</th>
                     <td style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">
                         <span dir="ltr">
-                            {{ formatTotal($order['total'],2,',') }}
+                            {{ formatTotal($order['total'], 2, ',') }}
                         </span>
                         &nbsp; ج.م
                     </td>

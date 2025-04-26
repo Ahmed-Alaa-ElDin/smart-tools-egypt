@@ -158,18 +158,28 @@
                         </tr>
                         <tr>
                             <td colspan="4"></td>
-                            <th style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">الخصم</th>
+                            <th style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">خصم المنتجات</th>
                             <td style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">
-                                {{ number_format($order['discount'], 2) }} ج.م
+                                {{ number_format($order['products_discount'], 2) }} ج.م
                             </td>
                         </tr>
-                        @if ($order['extra_discount'])
+                        @if ($order['offers_discount'])
                             <tr>
                                 <td colspan="4"></td>
-                                <th style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">خصم إضافي
-                                </th>
+                                <th style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">خصم العروض</th>
                                 <td style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">
-                                    {{ number_format($order['extra_discount'], 2) }} ج.م
+                                    {{ number_format($order['offers_discount'], 2) }} ج.م
+                                </td>
+                            </tr>
+                        @endif
+                        @if ($order['coupon_discount'])
+                            <tr>
+                                <td colspan="2"></td>
+                                <td style="border: 1px solid black;padding: 0.5rem 0.75rem; font-weight: bold;">كود الكوبون</td>
+                                <td style="border: 1px solid black;padding: 0.5rem 0.75rem;">{{ $order['coupon_code'] }}</td>
+                                <th style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">خصم الكوبون</th>
+                                <td style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">
+                                    {{ number_format($order['coupon_discount'], 2) }} ج.م
                                 </td>
                             </tr>
                         @endif
