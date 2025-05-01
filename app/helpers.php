@@ -33,7 +33,7 @@ function singleImageUpload($photo, $image_f_name, $folder_name, $sizes = ['origi
                 File::ensureDirectoryExists("$directory/cropped$size", 0777, true, true);
                 $manager->make($photo)->encode('webp')->resize($size, null, function ($constraint) {
                     $constraint->aspectRatio();
-                })->crop($size, $size)->save("$directory/cropped$size/$image_name");
+                })->save("$directory/cropped$size/$image_name");
             }
         }
     } catch (\Throwable $th) {
