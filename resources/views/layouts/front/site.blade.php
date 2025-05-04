@@ -28,15 +28,15 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;400;700;900&display=swap" rel="stylesheet">
     @if (LaravelLocalization::getCurrentLocale() == 'ar')
-        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap"
-            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap"
+        rel="stylesheet">
     @endif
 
     {{-- Main CSS Files --}}
     <link href="{{ mix('assets/css/material-dashboard.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ mix('assets/css/app.css') }}">
     @if (LaravelLocalization::getCurrentLocale() == 'ar')
-        <link href="{{ mix('assets/css/material-dashboard-rtl.css') }}" rel="stylesheet" />
+    <link href="{{ mix('assets/css/material-dashboard-rtl.css') }}" rel="stylesheet" />
     @endif
 
     {{-- Splide --}}
@@ -56,6 +56,33 @@
             display: none;
         }
     </style>
+
+    <!-- Meta Pixel Code -->
+    <script>
+        ! function(f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function() {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1174640216338366');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=1174640216338366&ev=PageView&noscript=1" /></noscript>
+    <!-- End Meta Pixel Code -->
 
 </head>
 
@@ -118,40 +145,43 @@
     <script src="{{ asset('assets/front/js/plugins/splide.min.js') }}"></script>
 
     <script>
-        @if (Session::has('success'))
-            Swal.fire({
-                text: '{{ Session::get('success') }}',
-                icon: 'success',
-                timer: 3000,
-                timerProgressBar: true,
-                showConfirmButton: false,
-            })
-        @elseif (Session::has('error'))
-            Swal.fire({
-                text: '{{ Session::get('error') }}',
-                icon: 'error',
-                timer: 3000,
-                timerProgressBar: true,
-                showConfirmButton: false,
-            })
-        @elseif (Session::has('warning'))
-            Swal.fire({
-                text: '{{ Session::get('warning') }}',
-                icon: 'warning',
-                timer: 3000,
-                timerProgressBar: true,
-                showConfirmButton: false,
-            })
+        @if(Session::has('success'))
+        Swal.fire({
+            text: '{{ Session::get('
+            success ') }}',
+            icon: 'success',
+            timer: 3000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+        })
+        @elseif(Session::has('error'))
+        Swal.fire({
+            text: '{{ Session::get('
+            error ') }}',
+            icon: 'error',
+            timer: 3000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+        })
+        @elseif(Session::has('warning'))
+        Swal.fire({
+            text: '{{ Session::get('
+            warning ') }}',
+            icon: 'warning',
+            timer: 3000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+        })
         @endif
 
         window.addEventListener('swalDone', function(e) {
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
-                @if (session('locale' == 'en'))
-                    position: 'top-left',
+                @if(session('locale' == 'en'))
+                position: 'top-left',
                 @else
-                    position: 'top-right',
+                position: 'top-right',
                 @endif
                 showConfirmButton: false,
                 toast: true,
