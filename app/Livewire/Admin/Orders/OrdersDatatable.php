@@ -559,6 +559,7 @@ class OrdersDatatable extends Component
     {
         $order = Order::select([
             'orders.id',
+            'orders.allow_opening',
             'coupon_id',
             'user_id',
             'address_id',
@@ -626,6 +627,7 @@ class OrdersDatatable extends Component
     {
         $orders = Order::select([
             'orders.id',
+            'orders.allow_opening',
             'user_id',
             'coupon_id',
             'address_id',

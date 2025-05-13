@@ -42,6 +42,10 @@
                         class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
                         {{ __('admin/ordersPages.Payment Method') }}
                     </th>
+                    <th
+                        class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
+                        {{ __('admin/ordersPages.Allow to open package Short') }}
+                    </th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-red-200">
@@ -88,6 +92,9 @@
                                 </span>
                             @endforeach
                         </div>
+                    </td>
+                    <td class="px-6 py-2 text-center whitespace-nowrap">
+                        {{ $order->allow_to_open ? __('admin/ordersPages.Yes') : __('admin/ordersPages.No') }}
                     </td>
                 </tr>
             </tbody>

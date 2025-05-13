@@ -277,7 +277,8 @@
 
                                     {{-- Customer Info. Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
-                                        <div class="flex flex-col items-center content-center justify-center">
+                                        <a href="{{ route('admin.users.edit', $order->user_id) }}"
+                                            class="flex flex-col items-center content-center justify-center">
                                             <span class="font-bold">
                                                 {{ $order->user ? $order->user->f_name . ' ' . $order->user->l_name : __('N/A') }}
                                             </span>
@@ -294,7 +295,7 @@
                                                     {{ __('N/A') }}
                                                 @endif
                                             </span>
-                                        </div>
+                                        </a>
                                     </td>
 
                                     {{-- Address Body --}}

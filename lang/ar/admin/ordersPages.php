@@ -252,6 +252,7 @@ return [
     "Here you can manage edited orders"                 =>          "من خلال هذه الصفحة يمكنك التحكم في الطلبات التي تم تعديلها",
     "Order Created Successfully"                        =>          "تم انشاء الطلب بنجاح",
     "Allow to open package"                             =>          "السماح بفتح الطلب عند الاستلام",
+    "Allow to open package Short"                       =>          "السماح بفتح الطلب",
     "Flash"                                             =>          "فلاش",
     "Create and Start another order"                    =>          "إنشاء وبدء طلب جديد",
 ];

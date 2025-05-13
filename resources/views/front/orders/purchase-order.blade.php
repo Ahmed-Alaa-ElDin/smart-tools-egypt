@@ -180,7 +180,9 @@
                 @endif
                 @if ($order['delivery_fees'])
                     <tr>
-                        <td colspan="4"></td>
+                        <td colspan="2"></td>
+                        <td style="border: 1px solid black;padding: 0.5rem 0.75rem; font-weight: bold;">السماح بفتح الطلب</td>
+                        <td style="border: 1px solid black;padding: 0.5rem 0.75rem;">{{ $order['allow_opening'] ? 'نعم' : 'لا' }}</td>
                         <th style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">رسوم التوصيل
                         </th>
                         <td style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">

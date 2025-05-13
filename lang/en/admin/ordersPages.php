@@ -252,6 +252,7 @@ return [
     "Here you can manage edited orders"                 =>          "Here you can manage edited orders",
     "Order Created Successfully"                        =>          "Order Created Successfully",
     "Allow to open package"                             =>          "Allow to open package",
+    "Allow to open package Short"                       =>          "Allow to open",
     "Flash"                                             =>          "Flash",
     "Create and Start another order"                    =>          "Create and Start another order",
     "Manage"                                            =>          "Manage",
