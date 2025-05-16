@@ -571,8 +571,6 @@ class CustomerForm extends Component
             // throw $th;
             DB::rollback();
 
-            dd($th);
-
             Session::flash('error', __("admin/usersPages.Customer has not been updated"));
             redirect()->route('admin.customers.index');
         }
