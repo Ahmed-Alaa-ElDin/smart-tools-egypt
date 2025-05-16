@@ -277,7 +277,7 @@
 
                                     {{-- Customer Info. Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
-                                        <a href="{{ route('admin.users.edit', $order->user_id) }}" target="_blank"
+                                        <a href="{{ route('admin.customers.edit', $order->user_id) }}" target="_blank"
                                             class="flex flex-col items-center content-center justify-center">
                                             <span class="font-bold">
                                                 {{ $order->user ? $order->user->f_name . ' ' . $order->user->l_name : __('N/A') }}
