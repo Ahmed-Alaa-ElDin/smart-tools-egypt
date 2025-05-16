@@ -3,9 +3,10 @@
 namespace App\Livewire\Admin\Customers;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Config;
 
 class CustomersDatatable extends Component
 {
@@ -21,7 +22,7 @@ class CustomersDatatable extends Component
 
     public $search = "";
 
-    protected $listeners = ['softDeleteUser', 'addPoints'];
+    protected $listeners = ['softDeleteUser', 'addPoints', 'editRoles'];
 
     // Render Once
     public function mount()
@@ -92,6 +93,40 @@ class CustomersDatatable extends Component
         }
         return $this->sortBy = $field;
     }
+
+    ######## Edit User Roles #########
+    public function editRolesSelect($user_id)
+    {
+        $this->dispatch(
+            'swalEditRolesSelect',
+            title: __('admin/usersPages.Select User Role'),
+            confirmButtonText: __('admin/usersPages.Update'),
+            denyButtonText: __('admin/usersPages.Cancel'),
+            data: json_encode(Role::get()->pluck('name', 'name')),
+            selected: User::findOrFail($user_id)->roles->first()->name ?? 'Customer',
+            user_id: $user_id
+        );
+    }
+
+    public function editRoles($user_id, $role_name)
+    {
+        try {
+            User::findOrFail($user_id)->syncRoles($role_name);
+
+            $this->dispatch(
+                'swalUserRoleChanged',
+                text: __('admin/usersPages.New role assigned successfully'),
+                icon: 'success'
+            );
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'swalUserRoleChanged',
+                text: __('admin/usersPages.New role hasn\'n been assigned'),
+                icon: 'error'
+            );
+        }
+    }
+    ######## Edit User Roles #########
 
     ######## Deleted #########
     public function deleteConfirm($user_id)

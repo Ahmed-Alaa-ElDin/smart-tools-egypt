@@ -72,7 +72,10 @@
 
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.dispatch('editRoles', e.detail.user_id, result.value);
+                    Livewire.dispatch('editRoles', {
+                        user_id: e.detail.user_id,
+                        role_name: result.value
+                    });
                 }
             });
         });
@@ -111,7 +114,10 @@
 
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.dispatch('addPoints', e.detail.user_id, result.value);
+                    Livewire.dispatch('addPoints', {
+                        user_id: e.detail.user_id,
+                        points: result.value
+                    });
                 }
             });
         });

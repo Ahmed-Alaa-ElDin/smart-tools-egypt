@@ -56,6 +56,49 @@
 {{-- Extra Scripts --}}
 @push('js')
     <script>
+        // #### User Edit Role ####
+        window.addEventListener('swalEditRolesSelect', function(e) {
+            Swal.fire({
+                title: e.detail.title,
+                input: 'select',
+                inputOptions: JSON.parse(e.detail.data),
+                inputValue: e.detail.selected,
+                customClass: {
+                    input: 'role-grapper rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300',
+                },
+                showDenyButton: true,
+                confirmButtonText: e.detail.confirmButtonText,
+                denyButtonText: e.detail.denyButtonText,
+                denyButtonColor: 'gray',
+                confirmButtonColor: 'green',
+
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.dispatch('editRoles', {
+                        user_id: e.detail.user_id,
+                        role_name: result.value
+                    });
+                }
+            });
+        });
+
+        window.addEventListener('swalUserRoleChanged', function(e) {
+            Swal.fire({
+                text: e.detail.text,
+                icon: e.detail.icon,
+                @if (session('locale' == 'en'))
+                    position: 'top-left',
+                @else
+                    position: 'top-right',
+                @endif
+                showConfirmButton: false,
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+            })
+        });
+        // #### User Edit Role ####
+
         // #### Customer Add Points ####
         window.addEventListener('swalAddPointsForm', function(e) {
             Swal.fire({
@@ -73,7 +116,10 @@
 
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.dispatch('addPoints', e.detail.user_id, result.value);
+                    Livewire.dispatch('addPoints', {
+                        user_id: e.detail.user_id,
+                        points: result.value
+                    });
                 }
             });
         });
