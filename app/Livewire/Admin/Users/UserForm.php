@@ -496,6 +496,8 @@ class UserForm extends Component
         } catch (\Throwable $th) {
             DB::rollback();
 
+            dd($th);
+
             Session::flash('error', __("admin/usersPages.User has not been updated"));
             redirect()->route('admin.users.index');
         }
