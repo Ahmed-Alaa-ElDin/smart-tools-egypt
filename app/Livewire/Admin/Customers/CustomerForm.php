@@ -558,7 +558,7 @@ class CustomerForm extends Component
             $this->customer->orders()->whereNull('tracking_number')->update([
                 'address_id' => $this->customer->addresses()->where('default', 1)->first()->id,
                 'phone1' => $this->customer->phones()->where('default', 1)->first()->phone,
-                'phone2' => $this->customer->phones()->where('default', 0)->first()->phone,
+                'phone2' => $this->customer->phones()->where('default', 0)->first()?->phone ?? null,
             ]);
             ### Update the orders that haven't been shipped ###
 
@@ -570,7 +570,7 @@ class CustomerForm extends Component
         } catch (\Throwable $th) {
             // throw $th;
             DB::rollback();
-            
+
             dd($th);
 
             Session::flash('error', __("admin/usersPages.Customer has not been updated"));
