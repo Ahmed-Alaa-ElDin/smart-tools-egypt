@@ -117,7 +117,7 @@
                             </div>
                             {{-- Discount Price :: End --}}
 
-                            {{-- Disount Amount :: Start --}}
+                            {{-- Discount Amount :: Start --}}
                             <div class="flex gap-3 items-center">
                                 <span class="text-gray-800 font-bold text-md">
                                     {{ __('front/homePage.You Saved: ') }}
@@ -133,7 +133,7 @@
                                         class="font-bold text-xs">{{ explode('.', $collection->base_price - $collection->final_price)[1] ?? '00' }}</span>
                                 </span>
                             </div>
-                            {{-- Disount Amount :: End --}}
+                            {{-- Discount Amount :: End --}}
 
                             {{-- Extra Discount :: Start --}}
                             @if ($collectionOffer->best_price < $collection->final_price)
@@ -953,7 +953,7 @@
 
             $('#copyToClipboard').on('click', function() {
                 navigator.clipboard.writeText(
-                    "https://smarttoolsegypt.com/{{ $collection->id }}-{{ $collection->slug }}");
+                    "https://smarttoolsegypt.com/c/{{ $collection->id }}-{{ $collection->slug }}");
                 Swal.fire({
                     text: "{{ __('front/homePage.The link has been copied successfully') }}",
                     icon: "success",
