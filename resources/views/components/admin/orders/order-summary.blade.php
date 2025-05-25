@@ -94,7 +94,7 @@
                         </div>
                     </td>
                     <td class="px-6 py-2 text-center whitespace-nowrap">
-                        {{ $order->allow_to_open ? __('admin/ordersPages.Yes') : __('admin/ordersPages.No') }}
+                        {{ $order->allow_opening ? __('admin/ordersPages.Yes') : __('admin/ordersPages.No') }}
                     </td>
                 </tr>
             </tbody>
