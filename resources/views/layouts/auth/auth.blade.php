@@ -38,7 +38,30 @@
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
-    <script scr="{{ mix('assets/js/app.js') }}"></script>
+    <script src="{{ mix('assets/js/app.js') }}"></script>
+
+    <!--  Plugin for Sweet Alert -->
+    <script src="{{ asset('assets/js/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+
+    <script>
+        // SweetAlert
+        window.addEventListener('swalDone', function(e) {
+            Swal.fire({
+                text: e.detail.text,
+                icon: e.detail.icon,
+                @if(session('locale' == 'en'))
+                position: 'top-left',
+                @else
+                position: 'top-right',
+                @endif
+                showConfirmButton: false,
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+            })
+        });
+    </script>
+
 
     @stack('scripts')
 

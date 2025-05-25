@@ -3588,10 +3588,6 @@ input:checked + .toggle-bg {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(41 128 185 / var(--tw-bg-opacity)) !important;
 }
-.hover\:bg-green-800:hover {
-  --tw-bg-opacity: 1 !important;
-  background-color: rgb(3 84 63 / var(--tw-bg-opacity)) !important;
-}
 .hover\:bg-roleHover:hover {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(22 160 133 / var(--tw-bg-opacity)) !important;
@@ -3651,6 +3647,10 @@ input:checked + .toggle-bg {
 .hover\:bg-flashSecondary:hover {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(209 236 116 / var(--tw-bg-opacity)) !important;
+}
+.hover\:bg-green-800:hover {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(3 84 63 / var(--tw-bg-opacity)) !important;
 }
 .hover\:bg-messengerHover:hover {
   --tw-bg-opacity: 1 !important;
@@ -3766,6 +3766,10 @@ input:checked + .toggle-bg {
 .hover\:text-blue-600:hover {
   --tw-text-opacity: 1 !important;
   color: rgb(28 100 242 / var(--tw-text-opacity)) !important;
+}
+.hover\:underline:hover {
+  -webkit-text-decoration-line: underline !important;
+          text-decoration-line: underline !important;
 }
 .hover\:opacity-100:hover {
   opacity: 1 !important;

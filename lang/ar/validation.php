@@ -106,6 +106,7 @@ return [
     'english name required' => 'الاسم بالإنجليزية مطلوب',
     'url required' => 'الرابط مطلوب',
     'The details field is required'   => 'تفاصيل العنوان مطلوب',
+    'starts_with' => 'يجب أن يبدأ حقل :attribute بـ :values.',
 
     /*
     |--------------------------------------------------------------------------
@@ -267,6 +268,10 @@ return [
         'address.landmarks'     => 'العلامة المميزة',
         'newAddress.details'    => 'تفاصيل العنوان',
         'newAddress.landmarks'  => 'العلامة المميزة',
+        'resetPasswordPhone'    => 'رقم الموبايل',
+        'resetPasswordCode'     => 'رمز إعادة تعيين كلمة المرور',
+        'newPassword'           => 'كلمة المرور الجديدة',
+        'newPasswordConfirmation' => 'تأكيد كلمة المرور الجديدة',
     ],
 
     /*

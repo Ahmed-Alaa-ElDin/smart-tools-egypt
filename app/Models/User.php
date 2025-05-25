@@ -34,6 +34,7 @@ class User extends Authenticatable
         'l_name',
         'email',
         'password',
+        'reset_password_code',
         'gender',
         'visit_num',
         'banned',

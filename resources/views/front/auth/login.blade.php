@@ -68,6 +68,7 @@
                             </div>
                             {{-- Password :: End --}}
 
+
                             {{-- Auth Error Message :: Start --}}
                             @error('auth')
                                 <div class="col-span-12 text-red-600 text-center text-sm font-bold">{{ __($message) }}</div>
@@ -89,6 +90,16 @@
                             </div>
                             {{-- Remeber Me :: End --}}
 
+                            {{-- Forgot Password Link --}}
+                            <div class="col-span-12 text-right">
+                                <button type="button" data-modal-target="forgot-password-modal"
+                                    data-modal-toggle="forgot-password-modal"
+                                    class="text-sm font-bold text-gray-900 hover:underline">
+                                    {{ __('auth/authentication.Forgot Password?') }}
+                                </button>
+                            </div>
+                            {{-- End Forgot Password Link --}}
+
                             {{-- Submit :: Start --}}
                             <div class="col-span-12 w-full group grid grid-cols-12">
                                 <button type="submit"
@@ -106,7 +117,7 @@
                         <span class="font-bold">{{ __('auth/authentication.Or login with') }}</span>
 
                         <ul class="flex items-center gap-1">
-                            <li>
+                            {{-- <li>
                                 <a href="{{ route('facebook.redirect') }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
                                         class="w-8 h-8 p-2 text-white rounded-full shadow bg-facebook transition-all ease-in-out hover:scale-110"
@@ -116,8 +127,8 @@
                                             d="M13.397 20.997v-8.196h2.765l.411-3.209h-3.176V7.548c0-.926.258-1.56 1.587-1.56h1.684V3.127A22.336 22.336 0 0 0 14.201 3c-2.444 0-4.122 1.492-4.122 4.231v2.355H7.332v3.209h2.753v8.202h3.312z" />
                                     </svg>
                                 </a>
-                            </li>
-                            <li>
+                            </li> --}}
+                            {{-- <li>
                                 <a href="{{ route('twitter.redirect') }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
                                         class="w-8 h-8 p-2 text-white rounded-full shadow bg-twitter transition-all ease-in-out hover:scale-110"
@@ -127,7 +138,7 @@
                                             d="M23.643 4.937c-.835.37-1.732.62-2.675.733a4.67 4.67 0 0 0 2.048-2.578a9.3 9.3 0 0 1-2.958 1.13a4.66 4.66 0 0 0-7.938 4.25a13.229 13.229 0 0 1-9.602-4.868c-.4.69-.63 1.49-.63 2.342A4.66 4.66 0 0 0 3.96 9.824a4.647 4.647 0 0 1-2.11-.583v.06a4.66 4.66 0 0 0 3.737 4.568a4.692 4.692 0 0 1-2.104.08a4.661 4.661 0 0 0 4.352 3.234a9.348 9.348 0 0 1-5.786 1.995a9.5 9.5 0 0 1-1.112-.065a13.175 13.175 0 0 0 7.14 2.093c8.57 0 13.255-7.098 13.255-13.254c0-.2-.005-.402-.014-.602a9.47 9.47 0 0 0 2.323-2.41l.002-.003Z" />
                                     </svg>
                                 </a>
-                            </li>
+                            </li> --}}
                             <li>
                                 <a href="{{ route('google.redirect') }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
@@ -158,9 +169,14 @@
 
         </div>
     </section>
+
+    {{-- Forgot Password Modal --}}
+    @livewire('front.auth.reset-password-modal')
+    {{-- End Forgot Password Modal --}}
 @endsection
 
 @push('scripts')
+    <script src="{{ asset('assets/js/plugins/flowbite/dist/flowbite.min.js') }}"></script>
     <script>
         // Show Password
         document.querySelector('.show-password').addEventListener('click', function() {
