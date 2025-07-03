@@ -56,7 +56,7 @@
                 {{-- Name --}}
                 <div class="grid grid-cols-12 gap-x-6 gap-y-2 items-center bg-gray-100 p-2 rounded text-center my-2">
                     <label
-                        class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">{{ __('front/homePage.First Name') }}</label>
+                        class="col-span-12 md:col-span-2 text-black m-0 text-center">{{ __('front/homePage.First Name') }}</label>
                     {{-- First Name Ar --}}
                     <div class="col-span-6 md:col-span-5">
                         <input
@@ -80,7 +80,7 @@
                         @enderror
                     </div>
                     <label
-                        class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">{{ __('front/homePage.Last Name') }}</label>
+                        class="col-span-12 md:col-span-2 text-black m-0 text-center">{{ __('front/homePage.Last Name') }}</label>
 
                     {{-- Last Name Ar --}}
                     <div class="col-span-6 md:col-span-5 ">
@@ -396,6 +396,59 @@
             </div>
             {{-- Addresses :: End --}}
 
+            {{-- Change Password :: Start --}}
+            <div class="col-span-12 md:col-start-5 md:col-span-8  bg-white rounded-xl p-4 text-center">
+                {{-- Title --}}
+                <label for="basic-info" class="col-span-12 text-gray-800 font-bold m-0 text-lg mb-2">
+                    {{ __('front/homePage.Change Password') }}
+                </label>
+
+                <div class="grid grid-cols-12 gap-x-6 gap-y-2 items-center bg-gray-100 p-2 rounded text-center my-2">
+                    {{-- Old Password--}}
+                    <label
+                        class="col-span-4 md:col-span-3 text-black m-0 text-center">{{ __('front/homePage.Old Password') }}</label>
+                    <div class="col-span-8 md:col-span-9">
+                        <input
+                            class="first_input py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('old_password') border-red-900 border-2 @enderror"
+                            type="password" wire:model.live.blur="old_password" dir="ltr"
+                            placeholder="{{ __('front/homePage.Old Password') }}" tabindex="1" required>
+                        @error('old_password')
+                            <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
+                                {{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    {{-- New Password--}}
+                    <label
+                        class="col-span-4 md:col-span-3 text-black m-0 text-center">{{ __('front/homePage.New Password') }}</label>
+                    <div class="col-span-8 md:col-span-9">
+                        <input
+                            class="first_input py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('new_password') border-red-900 border-2 @enderror"
+                            type="password" wire:model.live.blur="new_password" dir="ltr"
+                            placeholder="{{ __('front/homePage.New Password') }}" tabindex="1" required>
+                        @error('new_password')
+                            <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
+                                {{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    {{-- New Password Confirmation --}}
+                    <label
+                        class="col-span-4 md:col-span-3 text-black m-0 text-center">{{ __('front/homePage.New Password Confirmation') }}</label>
+                    <div class="col-span-8 md:col-span-9">
+                        <input
+                            class="first_input py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('new_password_confirmation') border-red-900 border-2 @enderror"
+                            type="password" wire:model.live.blur="new_password_confirmation" dir="ltr"
+                            placeholder="{{ __('front/homePage.New Password Confirmation') }}" tabindex="1" required>
+                        @error('new_password_confirmation')
+                            <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
+                                {{ $message }}</div>
+                        @enderror
+                    </div>
+
+                </div>
+            </div>
+            {{-- Change Password :: End --}}
         </div>
 
         {{-- Buttons Section Start --}}

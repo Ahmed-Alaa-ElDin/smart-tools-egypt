@@ -101,7 +101,13 @@ return [
     'not_in' => 'The selected :attribute is invalid.',
     'not_regex' => 'The :attribute format is invalid.',
     'numeric' => 'The :attribute must be a number.',
-    'password' => 'The password is incorrect.',
+    'password' => [
+        'mixed' => 'The :attribute must be a mix of letters, numbers, and symbols.',
+        'letters' => 'The :attribute must contain at least one letter.',
+        'numbers' => 'The :attribute must contain at least one number.',
+        'symbols' => 'The :attribute must contain at least one symbol.',
+        'uncompromised' => 'The :attribute must not be compromised.',
+    ],
     'present' => 'The :attribute field must be present.',
     'prohibited' => 'The :attribute field is prohibited.',
     'prohibited_if' => 'The :attribute field is prohibited when :other is :value.',
@@ -142,7 +148,6 @@ return [
     'english name required' => 'English Name is required',
     'url required' => 'Link is required',
     'The details field is required' => 'The details field is required',
-
 
     /*
     |--------------------------------------------------------------------------
@@ -245,11 +250,10 @@ return [
         'resetPasswordCode'     => 'Reset Password Code',
         'newPassword'           => 'New Password',
         'newPasswordConfirmation' => 'New Password Confirmation',
-        'banner'                => 'Banner',
-        'banner'                => 'Banner',
-        'banner'                => 'Banner',
-        'banner'                => 'Banner',
-        'banner'                => 'Banner',
+        'oldPassword'           => 'Old Password',
+        'old_password'          => 'Old Password',
+        'new_password'          => 'New Password',
+        'new_password_confirmation' => 'New Password Confirmation',
 
     ],
 

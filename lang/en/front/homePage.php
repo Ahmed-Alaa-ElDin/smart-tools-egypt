@@ -526,4 +526,8 @@ return [
     "General Offer Description"                     =>      "Discover exclusive deals, limited-time discounts, and special promotions on our top products. Shop now and save big while offers last!",
     "Flash"                                         =>      "Credit/Debit Card/ValU",
     "Flash Message"                                 =>      "You can pay using a credit card, debit card, or ValU via the :flash-icon app through the shipping company's representative. For more details, please contact our customer service :icon.",
+    "Change Password"                               =>      "Change Password",
+    "Old Password"                                  =>      "Old Password",
+    "New Password"                                  =>      "New Password",
+    "New Password Confirmation"                     =>      "New Password Confirmation"
 ];

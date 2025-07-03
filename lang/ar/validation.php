@@ -107,6 +107,14 @@ return [
     'url required' => 'الرابط مطلوب',
     'The details field is required'   => 'تفاصيل العنوان مطلوب',
     'starts_with' => 'يجب أن يبدأ حقل :attribute بـ :values.',
+    'current_password' => 'كلمة المرور غير صحيحة',
+    'password' => [
+        'mixed' => 'يجب أن يحتوي حقل :attribute على حروف كبيرة و حروفصغيرة و أرقام و علامات خاصة',
+        'letters' => 'يجب أن يحتوي حقل :attribute على حروف',
+        'numbers' => 'يجب أن يحتوي حقل :attribute على أرقام',
+        'symbols' => 'يجب أن يحتوي حقل :attribute على علامات خاصة',
+        'uncompromised' => 'يجب أن يحتوي حقل :attribute على كلمات غير مخالفة',
+    ],
 
     /*
     |--------------------------------------------------------------------------

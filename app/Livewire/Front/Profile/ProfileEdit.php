@@ -2,17 +2,19 @@
 
 namespace App\Livewire\Front\Profile;
 
-use App\Models\Address;
 use App\Models\City;
-use App\Models\Country;
-use App\Models\Governorate;
-use App\Models\Phone;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Validation\Rule;
+use App\Models\Phone;
+use App\Models\Address;
+use App\Models\Country;
 use Livewire\Component;
+use App\Models\Governorate;
 use Livewire\WithFileUploads;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rules\Password;
 
 class ProfileEdit extends Component
 {
@@ -42,6 +44,10 @@ class ProfileEdit extends Component
 
     public $addresses = [];
 
+    public $old_password = '';
+    public $new_password = '';
+    public $new_password_confirmation = '';
+
     protected $listeners = ['countryUpdated', 'governorateUpdated'];
 
     public function rules()
@@ -63,6 +69,9 @@ class ProfileEdit extends Component
             'addresses.*.landmarks'         => 'nullable|string',
             'defaultAddress'                => 'required',
             'defaultPhone'                  => 'required',
+            'old_password'                  => ['required_with:new_password', 'string', 'max:50', 'min:8', 'current_password'],
+            'new_password'                  => ['required_with:old_password', 'string', 'max:50', 'min:8', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()->symbols()],
+            'new_password_confirmation'     => ['required_with:old_password', 'string', 'max:50', 'min:8'],
         ];
     }
 
@@ -310,6 +319,18 @@ class ProfileEdit extends Component
     }
     ######################## Profile Image : End ############################
 
+    ######################## Password : Start ############################
+    public function updatedNewPassword()
+    {
+        $this->validateOnly('new_password_confirmation');
+    }
+
+    public function updatedNewPasswordConfirmation()
+    {
+        $this->validateOnly('new_password');
+    }
+    ######################## Password : End ############################
+
     ################ Update #####################
     public function update()
     {
@@ -337,7 +358,9 @@ class ProfileEdit extends Component
 
                 'profile_photo_path'    =>  $this->oldImage ?? $this->image_name,
 
-                'birth_date' => $this->birth_date ?? Null
+                'birth_date' => $this->birth_date ?? Null,
+
+                'password' => $this->new_password ? Hash::make($this->new_password) : $this->user->password,
             ]);
             ### Basic Data ###
 
