@@ -255,4 +255,6 @@ return [
     "Allow to open package Short"                       =>          "السماح بفتح الطلب",
     "Flash"                                             =>          "فلاش",
     "Create and Start another order"                    =>          "إنشاء وبدء طلب جديد",
+    "Pending Points"                                    =>          "النقاط المعلقة",
+    "Approved Points"                                   =>          "النقاط الموافق عليها",
 ];

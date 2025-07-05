@@ -255,5 +255,7 @@ return [
     "Allow to open package Short"                       =>          "Allow to open",
     "Flash"                                             =>          "Flash",
     "Create and Start another order"                    =>          "Create and Start another order",
+    "Pending Points"                                    =>          "Pending Points",
+    "Approved Points"                                   =>          "Approved Points",
     "Manage"                                            =>          "Manage",
 ];

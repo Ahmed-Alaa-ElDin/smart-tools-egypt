@@ -1,7 +1,7 @@
 {{-- Product : Start --}}
 <div class="p-4 scrollbar scrollbar-thin">
     <div class="flex gap-6 justify-start items-center">
-        {{-- Thumnail :: Start --}}
+        {{-- Thumbnail :: Start --}}
         <a @if ($item['type'] == 'Product') href="{{ route('front.products.show', ['id' => $item['id'], 'slug' => $item['slug'][session('locale')]]) }}"
                 @elseif ($item['type'] == 'Collection')
                 href="{{ route('front.collections.show', ['id' => $item['id'], 'slug' => $item['slug'][session('locale')]]) }}" @endif
@@ -21,7 +21,7 @@
                 </div>
             @endif
         </a>
-        {{-- Thumnail :: End --}}
+        {{-- Thumbnail :: End --}}
 
         <div class="flex flex-wrap gap-6 justify-between items-center w-full max-w-100 md:flex-nowrap">
             {{-- Product Info : Start --}}

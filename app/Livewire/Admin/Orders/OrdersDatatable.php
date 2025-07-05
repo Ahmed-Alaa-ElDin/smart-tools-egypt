@@ -300,10 +300,25 @@ class OrdersDatatable extends Component
                         'status_id' => OrderStatus::Prepared->value,
                     ]);
                     break;
+                case OrderStatus::Delivered->value:
+                    $order->update([
+                        'status_id' => OrderStatus::Delivered->value,
+                        'delivered_at' => now()
+                    ]);
+
+                    $order->points()->update([
+                        'status' => 1,
+                    ]);
+                    break;
+                case OrderStatus::ReturnApproved->value:
+                case OrderStatus::ReturnedToBusiness->value:
+                    $order->points()->update([
+                        'status' => 0,
+                    ]);
+                    break;
                 default:
                     $order->update([
                         'status_id' => $status_id,
-                        'delivered_at' => $status_id == OrderStatus::Delivered->value ? now() : null
                     ]);
                     break;
             }
@@ -368,10 +383,27 @@ class OrdersDatatable extends Component
                             'status_id' => OrderStatus::Prepared->value,
                         ]);
                         break;
+                    case OrderStatus::Delivered->value:
+                        $order->statuses()->attach(OrderStatus::Delivered->value);
+
+                        $order->update([
+                            'status_id' => OrderStatus::Delivered->value,
+                            'delivered_at' => now()
+                        ]);
+
+                        $order->points()->update([
+                            'status' => 1,
+                        ]);
+                        break;
+                    case OrderStatus::ReturnApproved->value:
+                    case OrderStatus::ReturnedToBusiness->value:
+                        $order->points()->update([
+                            'status' => 0,
+                        ]);
+                        break;
                     default:
                         $order->update([
                             'status_id' => $status_id,
-                            'delivered_at' => $status_id == OrderStatus::Delivered->value ? now() : null
                         ]);
                         break;
                 }

@@ -48,7 +48,8 @@ class OrderController extends Controller
             'collections' => fn ($q) => $q->with('thumbnail'),
             "statuses"=> fn($q) => $q->orderBy('pivot_created_at'),
             "invoice",
-            "transactions"
+            "transactions",
+            "points"
         ])
             ->withTrashed()
             ->findOrFail($order_id);

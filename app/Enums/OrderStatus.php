@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum OrderStatus: int
 {
-        // Pickup
+    // Pickup
     case PickupRequested = 10;
     case WaitingForRoute = 11;
     case RouteAssigned = 20;
@@ -13,10 +13,10 @@ enum OrderStatus: int
     case PickedUpFromConsignee = 23;
     case ReceivedAtWarehouse = 24;
 
-        // In Transit
+    // In Transit
     case InTransitBetweenHubs = 30;
 
-        // Delivery
+    // Delivery
     case PickingUp = 40;
     case PickedUp = 41;
     case PendingCustomerSignature = 42;
@@ -28,7 +28,7 @@ enum OrderStatus: int
     case CanceledUncoveredArea = 49;
     case CollectionFailed = 50;
 
-        // Other
+    // Other
     case Lost = 100;
     case Damaged = 101;
     case Investigation = 102;
@@ -36,7 +36,7 @@ enum OrderStatus: int
     case Archived = 104;
     case OnHold = 105;
 
-        // Order
+    // Order
     case UnderProcessing = 201;
     case Created = 202;
     case WaitingForPayment = 203;
@@ -50,7 +50,7 @@ enum OrderStatus: int
     case Rejected = 211;
     case WaitingForContact = 212;
 
-        // Cancellation
+    // Cancellation
     case CancellationRequested = 301;
     case CancellationApproved = 302;
     case CancellationRejected = 303;
@@ -59,7 +59,7 @@ enum OrderStatus: int
     case EditApproved = 306;
     case EditRejected = 307;
 
-        // Return
+    // Return
     case UnderReturning = 401;
     case ReturnRequested = 402;
     case ReturnApproved = 403;

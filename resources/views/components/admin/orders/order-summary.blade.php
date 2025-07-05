@@ -46,6 +46,14 @@
                         class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
                         {{ __('admin/ordersPages.Allow to open package Short') }}
                     </th>
+                    <th
+                        class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
+                        {{ __('admin/ordersPages.Pending Points') }}
+                    </th>
+                    <th
+                        class="px-6 py-3 text-center text-xs font-bold text-red-700 uppercase tracking-wider select-none">
+                        {{ __('admin/ordersPages.Approved Points') }}
+                    </th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-red-200">
@@ -95,6 +103,12 @@
                     </td>
                     <td class="px-6 py-2 text-center whitespace-nowrap">
                         {{ $order->allow_opening ? __('admin/ordersPages.Yes') : __('admin/ordersPages.No') }}
+                    </td>
+                    <td class="px-6 py-2 text-center whitespace-nowrap">
+                        {{ $order->points->where('status', App\Enums\PointStatus::Pending->value)->sum('value') }}
+                    </td>
+                    <td class="px-6 py-2 text-center whitespace-nowrap">
+                        {{ $order->points->where('status', App\Enums\PointStatus::Approved->value)->sum('value') }}
                     </td>
                 </tr>
             </tbody>

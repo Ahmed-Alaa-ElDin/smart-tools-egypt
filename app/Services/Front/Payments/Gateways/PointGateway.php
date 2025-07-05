@@ -13,6 +13,6 @@ class PointGateway implements PaymentGateway
 
     public function processPayment(float $amount = 0)
     {
-        return 'InstallmentGateway: $' . $amount;
+        return 'PointGateway: $' . $amount;
     }
 }
