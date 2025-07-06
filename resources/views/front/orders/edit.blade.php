@@ -93,7 +93,7 @@
 
                                 <div
                                     class="flex gap-5 items-center p-4 scrollbar scrollbar-hidden rounded @if ($collection->pivot->quantity == 0) bg-red-100 @endif">
-                                    {{-- Thumnail :: Start --}}
+                                    {{-- Thumbnail :: Start --}}
                                     <a href="{{ route('front.collections.show', ['id' => $collection->id, 'slug' => $collection->slug]) }}"
                                         class="block hover:text-current">
                                         @if ($collection->thumbnail)
@@ -108,7 +108,7 @@
                                             </div>
                                         @endif
                                     </a>
-                                    {{-- Thumnail :: End --}}
+                                    {{-- Thumbnail :: End --}}
 
                                     {{-- Collection Info :: Start --}}
                                     <div class="grow flex flex-col justify-start gap-2">
@@ -210,7 +210,7 @@
 
                                 <div
                                     class="flex gap-5 items-center p-4 scrollbar scrollbar-hidden rounded @if ($product->pivot->quantity == 0) bg-red-100 @endif">
-                                    {{-- Thumnail :: Start --}}
+                                    {{-- Thumbnail :: Start --}}
                                     <a href="{{ route('front.products.show', ['id' => $product->id, 'slug' => $product->slug]) }}"
                                         class="block hover:text-current">
                                         @if ($product->thumbnail)
@@ -225,14 +225,14 @@
                                             </div>
                                         @endif
                                     </a>
-                                    {{-- Thumnail :: End --}}
+                                    {{-- Thumbnail :: End --}}
 
                                     {{-- Product Info :: Start --}}
                                     <div class="grow flex flex-col justify-start gap-2">
                                         {{-- Product's Brand :: Start --}}
                                         {{-- todo :: brand link --}}
                                         <div class="flex items-center">
-                                            <a href="#" class="text-sm font-bold text-gray-400 hover:text-current">
+                                            <a href="{{ route('front.brands.show', ['brand' => $product->brand->id]) }}" class="text-sm font-bold text-gray-400 hover:text-current">
                                                 {{ $product->brand ? $product->brand->name : '' }}
                                             </a>
                                         </div>

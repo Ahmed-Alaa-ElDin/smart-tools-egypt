@@ -190,13 +190,13 @@
                                                 @endif
 
                                                 {{-- Edit Order --}}
-                                                {{-- @if (in_array($order->status_id, [App\Enums\OrderStatus::UnderProcessing->value, App\Enums\OrderStatus::Created->value, App\Enums\OrderStatus::WaitingForPayment->value, App\Enums\OrderStatus::WaitingForApproval->value, App\Enums\OrderStatus::QualityChecked->value, App\Enums\OrderStatus::EditRequested->value]))
+                                                @if (in_array($order->status_id, [App\Enums\OrderStatus::UnderProcessing->value, App\Enums\OrderStatus::Created->value, App\Enums\OrderStatus::WaitingForPayment->value, App\Enums\OrderStatus::WaitingForApproval->value, App\Enums\OrderStatus::QualityChecked->value, App\Enums\OrderStatus::EditRequested->value]))
                                                     <button data-modal-toggle="editOrCancelOrder-{{ $order->id }}"
                                                         type="button"
                                                         class="col-span-1 btn btn-sm bg-primary font-bold m-0">
                                                         {{ __('front/homePage.Edit/Cancel Order') }}
                                                     </button>
-                                                @endif --}}
+                                                @endif
 
                                                 {{-- Return Order --}}
                                                 {{-- @if ($order->can_returned)
@@ -492,7 +492,7 @@
                                             <!-- Modal header -->
                                             <div class="flex justify-between items-start p-4 rounded-t border-b">
                                                 <h3 class="grow text-xl font-semibold text-gray-900 dark:text-white">
-                                                    {{ __('front/homePage.Pay via electronic wallet') }} </h3>
+                                                    {{ __('front/homePage.Pay via Electronic Wallet') }} </h3>
                                                 <button type="button"
                                                     class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
                                                     data-modal-toggle="payElectronicWalletModal">
@@ -522,7 +522,7 @@
                                             <!-- Modal footer -->
                                             <div
                                                 class="flex items-center justify-around p-2 space-x-2 rounded-b border-t border-gray-200">
-                                                <button data-modal-toggle="payVodafonCashModal" type="button"
+                                                <button data-modal-toggle="payElectronicWalletModal" type="button"
                                                     class="btn bg-successDark focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                                                     {{ __('front/homePage.Done') }}
                                                 </button>
