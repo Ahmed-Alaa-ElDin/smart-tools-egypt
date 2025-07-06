@@ -75,7 +75,7 @@
                                     <div class="flex rtl:flex-row-reverse gap-1 text-successDark">
                                         <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
                                         <span dir="ltr"
-                                            class="font-bold">{{ number_format($order->invoice->total, 2, '.', '\'') }}</span>
+                                            class="font-bold">{{ number_format($order->invoice->total ?? 0, 2, '.', '\'') }}</span>
                                     </div>
                                 </div>
                             </div>

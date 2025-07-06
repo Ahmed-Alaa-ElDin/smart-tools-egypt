@@ -279,7 +279,7 @@
                                     {{-- Total Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
                                         <div class="flex items-center content-center justify-center" dir="ltr">
-                                            {{ number_format($order->invoice->total, 2, '.', '\'') }}
+                                            {{ number_format($order->invoice->total ?? 0, 2, '.', '\'') }}
                                         </div>
                                     </td>
 

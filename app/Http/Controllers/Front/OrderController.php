@@ -353,7 +353,7 @@ class OrderController extends Controller
         $payment_methods = $order->payment_methods;
         $main_payment_method = $order->main_payment_method;
         $paid = $order->invoice->paid;
-        $old_price = $order->invoice->total;
+        $old_price = $order->invoice?->total;
         $should_pay = $total_order > $paid ? round($total_order - $paid, 2) : 0.00;
         $should_get = $total_order < $paid ? round($paid - $total_order, 2) : 0.00;
         $difference = round($total_order - $paid, 2);
