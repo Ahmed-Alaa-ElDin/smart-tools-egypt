@@ -90,10 +90,10 @@ Route::group([
         Route::delete('/{order_id}/cancel/{temp_order_id?}', 'cancel')->name('cancel');
 
         // Edit the order
-        Route::get('/{order_id}/edit', 'edit')->name('edit');
+        Route::get('/{order}/edit', 'edit')->name('edit')->middleware('can:update,order');
 
         // Show the orders details after edits
-        Route::post('/{order_id}/update-calc', 'updateCalc')->name('update-calc');
+        Route::post('/{order}/update-calc', 'updateCalc')->name('update-calc')->middleware('can:update,order');
 
         // Save the updated order
         Route::put('/{order_id}/{new_older_id}', 'update')->name('update')->where('new_older_id', '[0-9]+');

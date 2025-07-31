@@ -218,6 +218,7 @@ return [
     "Credit / Debit Card"       =>      "بطاقة الائتمان أو المشتريات (فيزا / ماستركارد)",
     "Installment"               =>      "تقسيط",
     "Electronic Wallet"         =>      "انستاباي / محفظة الكترونية",
+    "Wallet"                    =>      "المحفظة بالموقع",
     "Use my points"             =>      "استخدام نقاطي",
     "Use"                       =>      "استخدام",
     "Equivalent to "            =>      "يكافئ ",

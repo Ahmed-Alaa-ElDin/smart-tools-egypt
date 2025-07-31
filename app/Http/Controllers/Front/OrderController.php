@@ -68,9 +68,9 @@ class OrderController extends Controller
     ##################### Orders List :: End #####################
 
     ##################### Edit Order Before Shipping:: Start #####################
-    public function edit($order_id)
+    public function edit(Order $order)
     {
-        $order = Order::with([
+        $order->load([
             'products' => function ($query) {
                 $query->select([
                     'products.id',
@@ -106,23 +106,24 @@ class OrderController extends Controller
                         'thumbnail',
                     ]);
             },
-        ])
-            ->findOrFail($order_id);
+        ]);
 
         return view('front.orders.edit', compact('order'));
     }
     ##################### Edit Order Before Shipping:: End #####################
 
     ##################### Preview Order's Edits :: Start #####################
-    public function updateCalc(Request $request, $order_id)
+    public function updateCalc(Request $request, Order $order)
     {
         // products ids
         $products_ids = $request->products_ids;
         $collections_ids = $request->collections_ids;
 
         // Get Order data
-        $order = Order::with([
+        $order->load([
             'invoice',
+            'zone',
+            'address',
             'coupon' => fn($q) => $q->with([
                 'supercategories' => function ($q) {
                     $q->with(['products']);
@@ -137,7 +138,7 @@ class OrderController extends Controller
                     $q->with(['products']);
                 },
             ]),
-        ])->findOrFail($order_id);
+        ]);
 
         // Get Zone data
         $zone = $order->zone;
@@ -284,6 +285,7 @@ class OrderController extends Controller
             $min_weight = $zone->min_weight;
             $kg_charge = $zone->kg_charge;
             $shipping_fees = $items_total_shipping_weights < $min_weight ? $min_charge : $min_charge + (ceil($items_total_shipping_weights) - $min_weight) * $kg_charge;
+            $shipping_fees += $order->allow_to_open_package ? config('settings.allow_to_open_package_price') : 0;
         } else {
             $shipping_fees = 0.00;
         }
@@ -413,7 +415,7 @@ class OrderController extends Controller
 
                 // Extract paid transactions
                 $paid_transactions = [];
-                foreach ($order->transactions()->where('payment_status_id', 2)->get() as $transaction) {
+                foreach ($order->transactions()->where('payment_status_id', PaymentStatus::Paid->value)->get() as $transaction) {
                     $paid_transactions[] = [
                         'invoice_id' => $invoice->id,
                         'order_id' => $temp_order->id,
@@ -438,9 +440,9 @@ class OrderController extends Controller
                     'order_id' => $temp_order->id,
                     'old_order_id' => $order->id,
                     'user_id' => $temp_order->user_id,
-                    'payment_method_id' => $main_payment_method ?? 1,
+                    'payment_method_id' => $main_payment_method ?? PaymentMethod::Cash->value,
                     'payment_amount' => $should_pay,
-                    'payment_status_id' => 1,
+                    'payment_status_id' => PaymentStatus::Pending->value,
                     'payment_details' => json_encode([
                         "amount_cents" => number_format($should_pay * 100, 0, '', ''),
                         "points" => 0,
@@ -457,23 +459,23 @@ class OrderController extends Controller
                 // todo
                 // Get old transaction done using user's Card or Electronic Wallet
                 $old_order_used_other_transaction = $order->transactions
-                    ->whereNotIn('payment_method_id', [10, 11])
-                    ->where('payment_status_id', 2);
+                    ->whereNotIn('payment_method_id', [PaymentMethod::Wallet->value, PaymentMethod::Points->value])
+                    ->where('payment_status_id', PaymentStatus::Paid->value);
                 // ->first();
                 $old_order_used_other = $old_order_used_other_transaction ? $old_order_used_other_transaction->sum('payment_amount') : 0.00;
                 // $old_order_used_other_transaction_payment_details = $old_order_used_other_transaction ? json_decode($old_order_used_other_transaction->payment_details) : null;
 
                 // Get old transaction done using user's balance
                 $old_order_used_balance_transaction = $order->transactions
-                    ->where('payment_method_id', 10)
-                    ->where('payment_status_id', 2)
+                    ->where('payment_method_id', PaymentMethod::Wallet->value)
+                    ->where('payment_status_id', PaymentStatus::Paid->value)
                     ->first();
                 $old_order_used_balance = $old_order_used_balance_transaction ? $old_order_used_balance_transaction->payment_amount : 0.00;
 
                 // Get old transaction done using user's points
                 $old_order_used_points_transaction = $order->transactions
-                    ->where('payment_method_id', 11)
-                    ->where('payment_status_id', 2)
+                    ->where('payment_method_id', PaymentMethod::Points->value)
+                    ->where('payment_status_id', PaymentStatus::Paid->value)
                     ->first();
                 $old_order_used_points_egp = $old_order_used_points_transaction ? $old_order_used_points_transaction->payment_amount : 0.00;
                 $old_order_used_points =  $old_order_used_points_egp / config('settings.points_conversion_rate') ?? 0;
@@ -526,7 +528,7 @@ class OrderController extends Controller
                             'user_id' => $temp_order->user_id,
                             'payment_amount' => $refund_amount,
                             'payment_method_id' => $temp_transaction->payment_method,
-                            'payment_status_id' => 4,
+                            'payment_status_id' => PaymentStatus::Refundable->value,
                             'paymob_order_id' => $temp_transaction->paymob_order_id,
                             'payment_details' => json_encode([
                                 "amount_cents" => number_format($refund_amount * 100, 0, '', ''),
@@ -548,7 +550,7 @@ class OrderController extends Controller
                             'user_id' => $temp_order->user_id,
                             'payment_amount' => $payment_amount,
                             'payment_method_id' => $temp_transaction->payment_method,
-                            'payment_status_id' => 2,
+                            'payment_status_id' => PaymentStatus::Paid->value,
                             'paymob_order_id' => $temp_transaction->paymob_order_id,
                             'payment_details' => json_encode([
                                 "amount_cents" => number_format($payment_amount * 100, 0, '', ''),
@@ -568,8 +570,8 @@ class OrderController extends Controller
                         'old_order_id' => $order->id,
                         'user_id' => $temp_order->user_id,
                         'payment_amount' => $returned_balance,
-                        'payment_method_id' => 10,
-                        'payment_status_id' => 4,
+                        'payment_method_id' => PaymentMethod::Wallet->value,
+                        'payment_status_id' => PaymentStatus::Refundable->value,
                         'payment_details' => json_encode([
                             "amount_cents" => number_format($returned_balance * 100, 0, '', ''),
                             "points" => 0,
@@ -586,8 +588,8 @@ class OrderController extends Controller
                         'old_order_id' => $order->id,
                         'user_id' => $temp_order->user_id,
                         'payment_amount' => $returned_points_egp,
-                        'payment_method_id' => 11,
-                        'payment_status_id' => 4,
+                        'payment_method_id' => PaymentMethod::Points->value,
+                        'payment_status_id' => PaymentStatus::Refundable->value,
                         'payment_details' => json_encode([
                             "amount_cents" => number_format($returned_points_egp * 100, 0, '', ''),
                             "points" => $returned_points,
@@ -604,8 +606,8 @@ class OrderController extends Controller
                         'old_order_id' => $order->id,
                         'user_id' => $temp_order->user_id,
                         'payment_amount' => $remaining_balance,
-                        'payment_method_id' => 10,
-                        'payment_status_id' => 2,
+                        'payment_method_id' => PaymentMethod::Wallet->value,
+                        'payment_status_id' => PaymentStatus::Paid->value,
                         'payment_details' => json_encode([
                             "amount_cents" => number_format($remaining_balance * 100, 0, '', ''),
                             "points" => 0,
@@ -622,8 +624,8 @@ class OrderController extends Controller
                         'old_order_id' => $order->id,
                         'user_id' => $temp_order->user_id,
                         'payment_amount' => $remaining_points_egp,
-                        'payment_method_id' => 11,
-                        'payment_status_id' => 2,
+                        'payment_method_id' => PaymentMethod::Points->value,
+                        'payment_status_id' => PaymentStatus::Paid->value,
                         'payment_details' => json_encode([
                             "amount_cents" => number_format($remaining_points_egp * 100, 0, '', ''),
                             "points" => $remaining_points,

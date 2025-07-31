@@ -272,9 +272,7 @@ class OrderPaymentSummary extends Component
 
                 $this->shipping_fees = $shippingFeesBeforeAllowingToOpenPackage + ($this->allow_to_open_package ? config('settings.allow_to_open_package_price') : 0);
 
-                $best_zone = $prices->filter(function ($price) use ($shippingFeesBeforeAllowingToOpenPackage) {
-                    return $price['charge'] == $shippingFeesBeforeAllowingToOpenPackage;
-                });
+                $best_zone = $prices->filter(fn($price) => $price['charge'] == $shippingFeesBeforeAllowingToOpenPackage);
 
                 if ($best_zone->count()) {
                     $this->best_zone_id = $best_zone->first()['zone_id'];

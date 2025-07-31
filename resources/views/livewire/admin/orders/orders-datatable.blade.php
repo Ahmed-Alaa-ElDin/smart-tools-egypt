@@ -477,13 +477,13 @@
                                         </button>
 
                                         {{-- Edit Button --}}
-                                        <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}"
+                                        {{-- <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}"
                                             title="{{ __('admin/ordersPages.Edit') }}" class="m-0">
                                             <span
                                                 class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
                                                 edit
                                             </span>
-                                        </a>
+                                        </a> --}}
 
                                         {{-- Archive Button --}}
                                         <button title="{{ __('admin/ordersPages.Archive') }}" type="button"

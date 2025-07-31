@@ -118,6 +118,7 @@ class OrdersDatatable extends Component
                     )
                     ->orWhereIn('orders.id', $this->selectedOrders)
             )
+            ->whereNotIn('orders.status_id', [OrderStatus::UnderProcessing->value, OrderStatus::UnderEditing->value, OrderStatus::UnderReturning->value])
             ->when($this->type != 'all_orders', fn($q) => $q->whereIn('orders.status_id', config("constants.order_status_type.$this->type")))
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);

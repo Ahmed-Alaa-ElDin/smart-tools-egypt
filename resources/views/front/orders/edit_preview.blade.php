@@ -219,9 +219,9 @@
                     <div class="flex rtl:flex-row-reverse gap-1 text-successDark">
                         <span class="font-bold">{{ __('front/homePage.EGP') }}</span>
                         <span class="font-bold text-2xl"
-                            dir="ltr">{{ number_format(explode('.', $order_data['order_total'])[0], 0, '.', '\'') }}</span>
+                            dir="ltr">{{ formatTotal($order_data['order_total']) }}</span>
                         <span
-                            class="font-bold text-sm">{{ explode('.', number_format($order_data['order_total'], 2))[1] ?? '00' }}</span>
+                            class="font-bold text-xs">00</span>
                     </div>
                 </div>
             </div>
@@ -379,9 +379,9 @@
                         <div class="flex rtl:flex-row-reverse gap-1">
                             <span class="font-bold">{{ __('front/homePage.EGP') }}</span>
                             <span class="font-bold text-2xl"
-                                dir="ltr">{{ number_format(explode('.', abs($order_data['difference']))[0], 0, '.', '\'') }}</span>
+                                dir="ltr">{{ formatTotal(abs($order_data['difference'])) }}</span>
                             <span
-                                class="font-bold text-sm">{{ explode('.', number_format(abs($order_data['difference']), 2))[1] ?? '00' }}</span>
+                                class="font-bold text-xs">00</span>
                         </div>
                     </div>
 

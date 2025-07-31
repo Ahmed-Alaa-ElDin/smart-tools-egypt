@@ -75,7 +75,7 @@
 
                                                     <span class="text-sm">
                                                         @foreach ($order->payment_methods as $payment_method)
-                                                            {{ App\Enums\PaymentMethod::getKeyFromValue($payment_method) }}
+                                                            {{ __('front/homePage.' . App\Enums\PaymentMethod::getKeyFromValue($payment_method)) }}
                                                             @if (!$loop->last)
                                                                 ,
                                                             @endif
@@ -190,13 +190,13 @@
                                                 @endif
 
                                                 {{-- Edit Order --}}
-                                                @if (in_array($order->status_id, [App\Enums\OrderStatus::UnderProcessing->value, App\Enums\OrderStatus::Created->value, App\Enums\OrderStatus::WaitingForPayment->value, App\Enums\OrderStatus::WaitingForApproval->value, App\Enums\OrderStatus::QualityChecked->value, App\Enums\OrderStatus::EditRequested->value]))
+                                                {{-- @if (in_array($order->status_id, [App\Enums\OrderStatus::UnderProcessing->value, App\Enums\OrderStatus::Created->value, App\Enums\OrderStatus::WaitingForPayment->value, App\Enums\OrderStatus::WaitingForApproval->value, App\Enums\OrderStatus::QualityChecked->value, App\Enums\OrderStatus::EditRequested->value]))
                                                     <button data-modal-toggle="editOrCancelOrder-{{ $order->id }}"
                                                         type="button"
                                                         class="col-span-1 btn btn-sm bg-primary font-bold m-0">
                                                         {{ __('front/homePage.Edit/Cancel Order') }}
                                                     </button>
-                                                @endif
+                                                @endif --}}
 
                                                 {{-- Return Order --}}
                                                 {{-- @if ($order->can_returned)
@@ -406,7 +406,7 @@
                                             <!-- Modal footer -->
                                             <div
                                                 class="flex items-center justify-around p-2 space-x-2 rounded-b border-t border-gray-200">
-                                                <a href="{{ route('front.orders.edit', ['order_id' => $order->id]) }}"
+                                                <a href="{{ route('front.orders.edit', ['order' => $order->id]) }}"
                                                     class="btn text-gray-600 bg-white hover:bg-gray-100 focus:outline-none rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">
                                                     {{ __('front/homePage.Edit Order') }}
                                                 </a>
