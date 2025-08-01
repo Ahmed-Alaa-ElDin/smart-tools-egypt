@@ -607,6 +607,12 @@ class OrderPaymentSummary extends Component
 
                 DB::commit();
 
+                $this->dispatch(
+                    'initiate-checkout',
+                    value: $this->total_after_coupon_discount,
+                    currency: "EGP",
+                );
+
                 // redirect to done page
                 Session::flash('success', __('front/homePage.Order Created Successfully'));
                 redirect()->route('front.orders.done')->with('order_id', $order->id);
@@ -629,6 +635,12 @@ class OrderPaymentSummary extends Component
                 $clientSecret = $payment->getClientSecret($order, $transaction, "New");
 
                 if ($clientSecret) {
+                    $this->dispatch(
+                        'initiate-checkout',
+                        value: $this->total_after_coupon_discount,
+                        currency: "EGP",
+                    );
+
                     return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
                 } else {
                     return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
@@ -652,6 +664,12 @@ class OrderPaymentSummary extends Component
                 $clientSecret = $payment->getClientSecret($order, $transaction, "New");
 
                 if ($clientSecret) {
+                    $this->dispatch(
+                        'initiate-checkout',
+                        value: $this->total_after_coupon_discount,
+                        currency: "EGP",
+                    );
+
                     return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
                 } else {
                     return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
@@ -667,6 +685,13 @@ class OrderPaymentSummary extends Component
                 $order->statuses()->attach(OrderStatus::WaitingForPayment->value);
 
                 DB::commit();
+
+                $this->dispatch(
+                    'initiate-checkout',
+                    value: $this->total_after_coupon_discount,
+                    currency: "EGP",
+                );
+
                 // redirect to done page
                 Session::flash('success', __('front/homePage.Order Created Successfully'));
                 redirect()->route('front.orders.done')->with('order_id', $order->id);

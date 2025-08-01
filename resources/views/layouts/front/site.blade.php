@@ -31,15 +31,15 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;400;700;900&display=swap" rel="stylesheet">
     @if (LaravelLocalization::getCurrentLocale() == 'ar')
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap"
-        rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap"
+            rel="stylesheet">
     @endif
 
     {{-- Main CSS Files --}}
     <link href="{{ mix('assets/css/material-dashboard.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ mix('assets/css/app.css') }}">
     @if (LaravelLocalization::getCurrentLocale() == 'ar')
-    <link href="{{ mix('assets/css/material-dashboard-rtl.css') }}" rel="stylesheet" />
+        <link href="{{ mix('assets/css/material-dashboard-rtl.css') }}" rel="stylesheet" />
     @endif
 
     {{-- Splide --}}
@@ -148,43 +148,43 @@
     <script src="{{ asset('assets/front/js/plugins/splide.min.js') }}"></script>
 
     <script>
-        @if(Session::has('success'))
-        Swal.fire({
-            text: '{{ Session::get('
-            success ') }}',
-            icon: 'success',
-            timer: 3000,
-            timerProgressBar: true,
-            showConfirmButton: false,
-        })
-        @elseif(Session::has('error'))
-        Swal.fire({
-            text: '{{ Session::get('
-            error ') }}',
-            icon: 'error',
-            timer: 3000,
-            timerProgressBar: true,
-            showConfirmButton: false,
-        })
-        @elseif(Session::has('warning'))
-        Swal.fire({
-            text: '{{ Session::get('
-            warning ') }}',
-            icon: 'warning',
-            timer: 3000,
-            timerProgressBar: true,
-            showConfirmButton: false,
-        })
+        @if (Session::has('success'))
+            Swal.fire({
+                text: '{{ Session::get('
+                            success ') }}',
+                icon: 'success',
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+            })
+        @elseif (Session::has('error'))
+            Swal.fire({
+                text: '{{ Session::get('
+                            error ') }}',
+                icon: 'error',
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+            })
+        @elseif (Session::has('warning'))
+            Swal.fire({
+                text: '{{ Session::get('
+                            warning ') }}',
+                icon: 'warning',
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+            })
         @endif
 
         window.addEventListener('swalDone', function(e) {
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
-                @if(session('locale' == 'en'))
-                position: 'top-left',
+                @if (session('locale' == 'en'))
+                    position: 'top-left',
                 @else
-                position: 'top-right',
+                    position: 'top-right',
                 @endif
                 showConfirmButton: false,
                 toast: true,
@@ -315,6 +315,14 @@
         // Re-initialize when Livewire connects (for turbo visits)
         document.addEventListener('livewire:init', () => {
             initializeImageHandlers();
+
+            Livewire.on('initiate-checkout', (event) => {
+                console.log(event);
+                fbq('track', 'InitiateCheckout', {
+                    value: event.value,
+                    currency: event.currency,
+                });
+            });
         });
     </script>
 
