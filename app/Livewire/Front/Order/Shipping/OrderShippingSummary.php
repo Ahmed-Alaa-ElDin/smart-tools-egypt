@@ -6,7 +6,8 @@ use App\Models\Zone;
 use App\Models\Offer;
 use App\Models\Order;
 use Livewire\Component;
-use App\Enums\OrderStatus;
+use App\Enums\OrderStatus;  
+use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
 
 class OrderShippingSummary extends Component
@@ -44,6 +45,7 @@ class OrderShippingSummary extends Component
         'AddressUpdated' => 'render',
         // 'PhoneUpdated' => 'render',
         'AllowToOpenPackageUpdated',
+        'goToPayment'
     ];
 
     ############# Mount :: Start #############
@@ -263,4 +265,19 @@ class OrderShippingSummary extends Component
         $this->render();
     }
     ############# Allow to open package :: End #############
+
+    public function goToPayment(bool $status) {
+        if ($status) {
+            $this->dispatch(
+                'initiate-checkout',
+                value: ceil($this->total_after_order_discount),
+            );
+
+            Session::flash('success', __('front/homePage.Shipping Details Saved Successfully'));
+            redirect()->route('front.orders.payment');
+        } else {
+            Session::flash('error', __('front/homePage.Shipping Details Haven\'t Saved'));
+            redirect()->route('front.order.shipping');
+        }
+    }
 }

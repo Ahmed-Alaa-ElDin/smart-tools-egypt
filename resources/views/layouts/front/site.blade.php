@@ -316,11 +316,17 @@
         document.addEventListener('livewire:init', () => {
             initializeImageHandlers();
 
+            Livewire.on('purchase', (event) => {
+                fbq('track', 'Purchase', {
+                    value: event.value,
+                    currency: "EGP",
+                });
+            });
+
             Livewire.on('initiate-checkout', (event) => {
-                console.log(event);
                 fbq('track', 'InitiateCheckout', {
                     value: event.value,
-                    currency: event.currency,
+                    currency: "EGP",
                 });
             });
         });

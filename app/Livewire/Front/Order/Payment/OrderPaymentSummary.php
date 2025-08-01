@@ -608,9 +608,8 @@ class OrderPaymentSummary extends Component
                 DB::commit();
 
                 $this->dispatch(
-                    'initiate-checkout',
+                    'purchase',
                     value: $this->total_after_coupon_discount,
-                    currency: "EGP",
                 );
 
                 // redirect to done page
@@ -636,9 +635,8 @@ class OrderPaymentSummary extends Component
 
                 if ($clientSecret) {
                     $this->dispatch(
-                        'initiate-checkout',
+                        'purchase',
                         value: $this->total_after_coupon_discount,
-                        currency: "EGP",
                     );
 
                     return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
@@ -665,9 +663,8 @@ class OrderPaymentSummary extends Component
 
                 if ($clientSecret) {
                     $this->dispatch(
-                        'initiate-checkout',
+                        'purchase',
                         value: $this->total_after_coupon_discount,
-                        currency: "EGP",
                     );
 
                     return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
@@ -687,9 +684,8 @@ class OrderPaymentSummary extends Component
                 DB::commit();
 
                 $this->dispatch(
-                    'initiate-checkout',
+                    'purchase',
                     value: $this->total_after_coupon_discount,
-                    currency: "EGP",
                 );
 
                 // redirect to done page
