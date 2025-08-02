@@ -6,7 +6,7 @@ use App\Models\Zone;
 use App\Models\Offer;
 use App\Models\Order;
 use Livewire\Component;
-use App\Enums\OrderStatus;  
+use App\Enums\OrderStatus;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
 
@@ -270,7 +270,7 @@ class OrderShippingSummary extends Component
         if ($status) {
             $this->dispatch(
                 'initiate-checkout',
-                value: ceil($this->total_after_order_discount),
+                value: ceil($this->total_after_offer_prices),
             );
 
             Session::flash('success', __('front/homePage.Shipping Details Saved Successfully'));

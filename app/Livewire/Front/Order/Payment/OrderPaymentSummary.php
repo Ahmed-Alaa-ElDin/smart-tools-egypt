@@ -609,7 +609,7 @@ class OrderPaymentSummary extends Component
 
                 $this->dispatch(
                     'purchase',
-                    value: $this->total_after_coupon_discount,
+                    value: $this->total_after_order_discount,
                 );
 
                 // redirect to done page
@@ -636,7 +636,7 @@ class OrderPaymentSummary extends Component
                 if ($clientSecret) {
                     $this->dispatch(
                         'purchase',
-                        value: $this->total_after_coupon_discount,
+                        value: $this->total_after_order_discount,
                     );
 
                     return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
@@ -664,7 +664,7 @@ class OrderPaymentSummary extends Component
                 if ($clientSecret) {
                     $this->dispatch(
                         'purchase',
-                        value: $this->total_after_coupon_discount,
+                        value: $this->total_after_order_discount,
                     );
 
                     return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
@@ -685,7 +685,7 @@ class OrderPaymentSummary extends Component
 
                 $this->dispatch(
                     'purchase',
-                    value: $this->total_after_coupon_discount,
+                    value: $this->total_after_order_discount,
                 );
 
                 // redirect to done page
