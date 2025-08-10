@@ -315,20 +315,6 @@
         // Re-initialize when Livewire connects (for turbo visits)
         document.addEventListener('livewire:init', () => {
             initializeImageHandlers();
-
-            Livewire.on('purchase', (event) => {
-                fbq('track', 'Purchase', {
-                    value: event.value,
-                    currency: "EGP",
-                });
-            });
-
-            Livewire.on('initiate-checkout', (event) => {
-                fbq('track', 'InitiateCheckout', {
-                    value: event.value,
-                    currency: "EGP",
-                });
-            });
         });
     </script>
 

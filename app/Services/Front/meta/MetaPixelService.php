@@ -26,7 +26,7 @@ class MetaPixelService
                 [
                     'event_name' => $eventName,
                     'event_time' => now()->timestamp,
-                    'action_source' => 'website', // could be 'email', 'phone_call', etc.
+                    'action_source' => 'website',
                     'user_data' => $this->hashUserData($userData),
                     'custom_data' => $customData,
                 ]
@@ -39,7 +39,6 @@ class MetaPixelService
 
     private function hashUserData(array $data)
     {
-        // Meta requires SHA256 hashes for PII
         return collect($data)
             ->mapWithKeys(function ($value, $key) {
                 return [$key => hash('sha256', strtolower(trim($value)))];

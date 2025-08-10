@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\Zone;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 
@@ -337,11 +338,13 @@ class OrderShippingDetails extends Component
 
                 DB::commit();
 
-                $this->dispatch('goToPayment', status: true);
+                Session::flash('success', __('front/homePage.Shipping Details Saved Successfully'));
+                redirect()->route('front.orders.payment');
             } catch (\Throwable $th) {
                 DB::rollBack();
 
-                $this->dispatch('goToPayment', status: false);
+                Session::flash('error', __('front/homePage.Shipping Details Haven\'t Saved'));
+                redirect()->route('front.order.shipping');
             }
         }
     }

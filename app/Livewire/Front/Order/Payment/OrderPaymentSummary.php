@@ -607,11 +607,6 @@ class OrderPaymentSummary extends Component
 
                 DB::commit();
 
-                $this->dispatch(
-                    'purchase',
-                    value: ceil($this->total_after_order_discount - $this->coupon_total_discount ?? 0),
-                );
-
                 // redirect to done page
                 Session::flash('success', __('front/homePage.Order Created Successfully'));
                 redirect()->route('front.orders.done')->with('order_id', $order->id);
@@ -634,11 +629,6 @@ class OrderPaymentSummary extends Component
                 $clientSecret = $payment->getClientSecret($order, $transaction, "New");
 
                 if ($clientSecret) {
-                    $this->dispatch(
-                        'purchase',
-                        value: ceil($this->total_after_order_discount - $this->coupon_total_discount ?? 0),
-                    );
-
                     return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
                 } else {
                     return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
@@ -662,11 +652,6 @@ class OrderPaymentSummary extends Component
                 $clientSecret = $payment->getClientSecret($order, $transaction, "New");
 
                 if ($clientSecret) {
-                    $this->dispatch(
-                        'purchase',
-                        value: ceil($this->total_after_order_discount - $this->coupon_total_discount ?? 0),
-                    );
-
                     return redirect()->away("https://accept.paymob.com/unifiedcheckout/?publicKey=" . env("PAYMOB_PUBLIC_KEY") . "&clientSecret={$clientSecret}");
                 } else {
                     return redirect()->route('front.orders.payment')->with('error', __('front/homePage.Payment Failed, Please Try Again'));
@@ -682,11 +667,6 @@ class OrderPaymentSummary extends Component
                 $order->statuses()->attach(OrderStatus::WaitingForPayment->value);
 
                 DB::commit();
-
-                $this->dispatch(
-                    'purchase',
-                    value: ceil($this->total_after_order_discount - $this->coupon_total_discount ?? 0),
-                );
 
                 // redirect to done page
                 Session::flash('success', __('front/homePage.Order Created Successfully'));
