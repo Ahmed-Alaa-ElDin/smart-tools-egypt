@@ -3,6 +3,7 @@
 namespace App\Livewire\Front\General\BackToStockNotification;
 
 use Livewire\Component;
+use App\Facades\MetaPixel;
 use Illuminate\Support\Facades\DB;
 use App\Models\BackToStockNotification;
 use Illuminate\Validation\ValidationException;
@@ -55,6 +56,15 @@ class BackToStockNotificationButton extends Component
 
             // Change the state of the button
             $this->isNotified = true;
+
+            MetaPixel::sendEvent("Subscribe", [], [
+                'content_type' => 'product',
+                'content_ids' => [$this->item_id],
+                'content_name' => $this->item->name,
+                'contents' => [$this->item->toArray()],
+                'currency' => 'EGP',
+                'value' => $this->item->final_price,
+            ]);
 
             $this->dispatchSuccessNotification(__('front/homePage.The notification has been added successfully'));
         } catch (\Exception $e) {

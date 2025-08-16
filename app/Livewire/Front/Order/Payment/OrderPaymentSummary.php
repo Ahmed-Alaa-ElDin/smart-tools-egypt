@@ -9,14 +9,15 @@ use App\Models\Order;
 use App\Models\Coupon;
 use Livewire\Component;
 use App\Enums\OrderStatus;
+use App\Facades\MetaPixel;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use App\Services\Front\Payments\PaymentService;
 use App\Services\Front\Payments\Gateways\CardGateway;
 use App\Services\Front\Payments\Gateways\InstallmentGateway;
-use App\Services\Front\Payments\PaymentService;
 
 class OrderPaymentSummary extends Component
 {
@@ -349,7 +350,7 @@ class OrderPaymentSummary extends Component
         try {
             $this->balance = $this->total_after_coupon_discount > $this->balance ? $this->balance : $this->total_after_coupon_discount;
 
-            $this->points_egp = ($this->total_after_coupon_discount - $this->balance) > $this->points_egp ? $this->points_egp : (($this->total_after_coupon_discount) - $this->balance);
+            $this->points_egp = ($this->total_after_coupon_discount - $this->balance) > $this->points_egp ? $this->points_egp : ($this->total_after_coupon_discount - $this->balance);
             $this->points = floor($this->points_egp / config('settings.points_conversion_rate'));
 
             // Get the order from database
@@ -504,6 +505,7 @@ class OrderPaymentSummary extends Component
 
             foreach ($products as $product) {
                 $final_products[$product['id']] = [
+                    'id' => $product['id'],
                     'quantity' => $product['qty'],
                     'original_price' => $product['original_price'],
                     'price' => $product['best_price'] - $product['coupon_discount'],
@@ -521,6 +523,7 @@ class OrderPaymentSummary extends Component
 
             foreach ($collections as $collection) {
                 $final_collections[$collection['id']] = [
+                    'id' => $collection['id'],
                     'quantity' => $collection['qty'],
                     'original_price' => $collection['original_price'],
                     'price' => $collection['best_price'] - $collection['coupon_discount'],
@@ -595,6 +598,15 @@ class OrderPaymentSummary extends Component
             // Clear Cart
             Cart::instance('cart')->destroy();
             Cart::instance('cart')->store($order->user->id);
+
+            MetaPixel::sendEvent("Purchase", [], [
+                'content_type' => 'product_group',
+                'content_ids' => array_merge(array_keys($final_products), array_keys($final_collections)),
+                'content_name' => $collection->name,
+                'contents' => array_merge(array_values($final_products), array_values($final_collections)),
+                'currency' => 'EGP',
+                'value' => $this->total_after_coupon_discount,
+            ]);
 
             ################### Payment :: Start ###################
             // Order is paid or will be paid on delivery
