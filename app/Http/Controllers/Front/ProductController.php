@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Http\Controllers\Controller;
 use App\Models\Product;
-use Gloudemans\Shoppingcart\Facades\Cart;
+use App\Facades\MetaPixel;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
+use Illuminate\Contracts\View\Factory;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 class ProductController extends Controller
 {
@@ -44,9 +47,9 @@ class ProductController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return View|Factory
      */
-    public function show($id, $slug = null)
+    public function show($id, $slug = null): Factory|View
     {
         // Get the product
         $product = Product::with([
@@ -123,6 +126,24 @@ class ProductController extends Controller
 
         // Get the app locale
         $locale = session('locale');
+
+        MetaPixel::sendEvent('ViewContent', [], [
+            'content_type' => 'product',
+            'content_ids' => [$product->id],
+            'content_name' => $product->name,
+            'contents' => [
+                [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'type' => 'product',
+                    'barcode' => $product->barcode,
+                    'brand' => $product->brand->name,
+                    'price' => $product->final_price,
+                ],
+            ],
+            'currency' => 'EGP',
+            'value' => $product->final_price,
+        ]);
 
         return view('front.product_page.product_page', compact('product', 'productOffer', 'relatedItems', 'complementedItems', 'product_cart', 'locale'));
     }

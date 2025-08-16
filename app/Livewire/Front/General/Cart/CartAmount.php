@@ -2,11 +2,12 @@
 
 namespace App\Livewire\Front\General\Cart;
 
-use App\Models\Collection;
 use App\Models\Product;
-use Gloudemans\Shoppingcart\Facades\Cart;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use App\Facades\MetaPixel;
+use App\Models\Collection;
+use Illuminate\Support\Facades\Auth;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 class CartAmount extends Component
 {
@@ -202,6 +203,21 @@ class CartAmount extends Component
             $this->dispatch('swalDone', text: __('front/homePage.Product Has Been Added To The Cart Successfully'),
                 icon: 'success');
             ############ Emit Sweet Alert :: End ############
+
+            ############ Emit Meta Pixel event :: Start ############
+            MetaPixel::sendEvent('AddToCart', [], [
+                'content_type' => $this->type ? 'product' : 'product_group',
+                'content_ids' => [$item_id],
+                'contents' => [
+                    [
+                        'id' => $item_id,
+                        'quantity' => $quantity,
+                    ],
+                ],
+                'value' => $item->best_price,
+                'currency' => 'EGP',
+            ]);
+            ############ Emit Meta Pixel event :: End ############
         } elseif ($item->under_reviewing == 1) {
             ############ Emit Sweet Alert :: Start ############
             $this->dispatch('swalDone', text: __('front/homePage.Sorry This Product is Under Reviewing'),
