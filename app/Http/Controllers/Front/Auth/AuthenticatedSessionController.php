@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Front\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
-use Gloudemans\Shoppingcart\Facades\Cart;
+use App\Facades\MetaPixel;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Session;
+use App\Http\Requests\Auth\LoginRequest;
 use Laravel\Socialite\Facades\Socialite;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -111,6 +112,9 @@ class AuthenticatedSessionController extends Controller
 
         Auth::login($createdUser, true);
 
+        // Send Meta Pixel event
+        MetaPixel::sendEvent('CompleteRegistration', [], []);
+
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
@@ -159,6 +163,9 @@ class AuthenticatedSessionController extends Controller
         $createdUser->assignRole('Customer');
 
         Auth::login($createdUser, true);
+
+        // Send Meta Pixel event
+        MetaPixel::sendEvent('CompleteRegistration', [], []);
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

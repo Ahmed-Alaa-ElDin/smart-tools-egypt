@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Http\Controllers\Controller;
+use App\Facades\MetaPixel;
 use App\Models\Collection;
-use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 class CollectionController extends Controller
 {
@@ -111,6 +112,27 @@ class CollectionController extends Controller
 
         // Get the app locale
         $locale = session('locale');
+
+        $collectionProducts = $collection->products->map(fn($product) => [
+            'id' => $product->id,
+            'name' => $product->name,
+            'type' => 'product',
+            'barcode' => $product->barcode,
+            'brand' => $product->brand->name,
+            'price' => $product->final_price,
+        ])->toArray();
+
+        $collectionProductsIds = $collection->products->pluck('id')->toArray();
+
+        // Send Meta Pixel event
+        MetaPixel::sendEvent('ViewContent', [], [
+            'content_type' => 'product_group',
+            'content_ids' => [$collection->id, ...$collectionProductsIds],
+            'content_name' => $collection->name,
+            'contents' => $collectionProducts,
+            'currency' => 'EGP',
+            'value' => $collection->final_price,
+        ]);
 
         return view('front.collection_page.collection_page', compact('collection', 'collectionOffer', 'relatedItems', 'complementedItems', 'collectionCart', 'locale'));
     }

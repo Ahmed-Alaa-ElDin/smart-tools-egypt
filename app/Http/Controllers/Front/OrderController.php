@@ -6,6 +6,7 @@ use ErrorException;
 use App\Models\Offer;
 use App\Models\Order;
 use App\Enums\OrderStatus;
+use App\Facades\MetaPixel;
 use App\Models\Transaction;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
@@ -2175,15 +2176,30 @@ class OrderController extends Controller
         $products_id = [];
         $cart_collections_id = [];
         $collections_id = [];
+        $cartItemsDetails = [];
 
         // get items id from cart
-        Cart::instance('cart')->content()->map(function ($item) use (&$products_id, &$collections_id, &$cart_products_id, &$cart_collections_id) {
+        Cart::instance('cart')->content()->map(function ($item) use (&$products_id, &$collections_id, &$cart_products_id, &$cart_collections_id, &$cartItemsDetails) {
             if ($item->options->type == 'Product') {
                 $products_id[] = $item->id;
                 $cart_products_id[] = $item->id;
+                $cartItemsDetails[] = [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'quantity' => $item->qty,
+                    'type' => 'product',
+                    'price' => $item->price * $item->qty,
+                ];
             } elseif ($item->options->type == 'Collection') {
                 $collections_id[] = $item->id;
                 $cart_collections_id[] = $item->id;
+                $cartItemsDetails[] = [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'quantity' => $item->qty,
+                    'type' => 'product_group',
+                    'price' => $item->price * $item->qty,
+                ];
             }
         });
 
@@ -2199,6 +2215,15 @@ class OrderController extends Controller
         $cart_products = $products->whereIn('id', $cart_products_id);
         $cart_collections = $collections->whereIn('id', $cart_collections_id);
         $cart_items = $cart_collections->concat($cart_products)->toArray();
+
+        // emit event
+        MetaPixel::sendEvent('CompleteRegistration', [], [
+            'content_type' => 'product_group',
+            'content_ids' => array_merge($cart_products_id, $cart_collections_id),
+            'contents' => $cartItemsDetails,
+            'value' => array_sum(array_column($cartItemsDetails, 'price')),
+            'currency' => 'EGP',
+        ]);
 
         return view('front.orders.shipping', compact('cart_items'));
     }
@@ -2211,15 +2236,30 @@ class OrderController extends Controller
         $products_id = [];
         $cart_collections_id = [];
         $collections_id = [];
+        $cartItemsDetails = [];
 
         // get items id from cart
-        Cart::instance('cart')->content()->map(function ($item) use (&$products_id, &$collections_id, &$cart_products_id, &$cart_collections_id) {
+        Cart::instance('cart')->content()->map(function ($item) use (&$products_id, &$collections_id, &$cart_products_id, &$cart_collections_id, &$cartItemsDetails) {
             if ($item->options->type == 'Product') {
                 $products_id[] = $item->id;
                 $cart_products_id[] = $item->id;
+                $cartItemsDetails[] = [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'quantity' => $item->qty,
+                    'type' => 'product',
+                    'price' => $item->price * $item->qty,
+                ];
             } elseif ($item->options->type == 'Collection') {
                 $collections_id[] = $item->id;
                 $cart_collections_id[] = $item->id;
+                $cartItemsDetails[] = [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'quantity' => $item->qty,
+                    'type' => 'product_group',
+                    'price' => $item->price * $item->qty,
+                ];
             }
         });
 
@@ -2235,6 +2275,15 @@ class OrderController extends Controller
         $cart_products = $products->whereIn('id', $cart_products_id);
         $cart_collections = $collections->whereIn('id', $cart_collections_id);
         $cart_items = $cart_collections->concat($cart_products)->toArray();
+
+        // emit event
+        MetaPixel::sendEvent('InitiateCheckout', [], [
+            'content_type' => 'product_group',
+            'content_ids' => array_merge($cart_products_id, $cart_collections_id),
+            'contents' => $cartItemsDetails,
+            'value' => array_sum(array_column($cartItemsDetails, 'price')),
+            'currency' => 'EGP',
+        ]);
 
         return view('front.orders.payment', compact('cart_items'));
     }

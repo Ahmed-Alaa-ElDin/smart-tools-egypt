@@ -52,5 +52,6 @@ return [
         'id' => env('META_PIXEL_ID'),
         'access_token' => env('META_ACCESS_TOKEN'),
         'api_version' => env('META_API_VERSION', 'v18.0'),
+        'page_id' => env('META_PAGE_ID'),
     ],
 ];

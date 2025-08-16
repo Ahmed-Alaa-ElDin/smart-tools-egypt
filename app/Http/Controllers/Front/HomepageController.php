@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Http\Controllers\Controller;
 use App\Models\Brand;
-use App\Models\Category;
 use App\Models\Section;
+use App\Models\Category;
+use App\Facades\MetaPixel;
+use App\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class HomepageController extends Controller
@@ -18,23 +19,23 @@ class HomepageController extends Controller
 
         ############## Get All Active Sections with Relations :: Start ##############
         $sections = Section::with([
-            'products' => fn ($q) => $q
+            'products' => fn($q) => $q
                 ->select(['products.id', 'products.publish'])
                 ->where('products.publish', 1)
                 // ->with(['brand:id,name'])
                 ->orderByPivot('rank'),
-            'collections' => fn ($q) => $q
+            'collections' => fn($q) => $q
                 ->select(['collections.id', 'collections.publish'])
                 ->where('collections.publish', 1)
                 ->withPivot('rank')
                 ->orderBy('rank'),
-            'offer' => fn ($q) => $q->with([
-                'directProducts' => fn ($q) => $q->with('brand')->where('products.publish', 1),
-                'directCollections' => fn ($q) => $q->where('collections.publish', 1),
-                'supercategoryProducts' => fn ($q) => $q->where('products.publish', 1),
-                'categoryProducts' => fn ($q) => $q->where('products.publish', 1),
-                'subcategoryProducts' => fn ($q) => $q->where('products.publish', 1),
-                'brandProducts' => fn ($q) => $q->where('products.publish', 1),
+            'offer' => fn($q) => $q->with([
+                'directProducts' => fn($q) => $q->with('brand')->where('products.publish', 1),
+                'directCollections' => fn($q) => $q->where('collections.publish', 1),
+                'supercategoryProducts' => fn($q) => $q->where('products.publish', 1),
+                'categoryProducts' => fn($q) => $q->where('products.publish', 1),
+                'subcategoryProducts' => fn($q) => $q->where('products.publish', 1),
+                'brandProducts' => fn($q) => $q->where('products.publish', 1),
             ]),
             'banners'
         ])
@@ -183,14 +184,19 @@ class HomepageController extends Controller
     {
         $search = $request->get('search');
 
+        MetaPixel::sendEvent('Search', [], [
+            'search_string' => $search,
+            'content_type' => 'product',
+        ]);
+
         return view('front.search.search_page', compact('search'));
     }
 
     public function showProductList(int $section_id = 1)
     {
         $section = Section::with([
-            'products' => fn ($q) => $q->select('products.id'),
-            'collections' => fn ($q) => $q->select('collections.id')
+            'products' => fn($q) => $q->select('products.id'),
+            'collections' => fn($q) => $q->select('collections.id')
         ])->findOrFail($section_id);
 
         ############ Get Best Offer for all products :: Start ############

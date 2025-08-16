@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Models\Offer;
 use App\Models\Product;
 use App\Models\Setting;
+use App\Facades\MetaPixel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -53,12 +54,12 @@ class OfferController extends Controller
     {
         $offer = Offer::with(
             [
-                'directProducts' => fn ($q) => $q->where('products.publish', 1),
-                'directCollections' => fn ($q) => $q->where('collections.publish', 1),
-                'supercategoryProducts' => fn ($q) => $q->where('products.publish', 1),
-                'categoryProducts' => fn ($q) => $q->where('products.publish', 1),
-                'subcategoryProducts' => fn ($q) => $q->where('products.publish', 1),
-                'brandProducts' => fn ($q) => $q->where('products.publish', 1),
+                'directProducts' => fn($q) => $q->where('products.publish', 1),
+                'directCollections' => fn($q) => $q->where('collections.publish', 1),
+                'supercategoryProducts' => fn($q) => $q->where('products.publish', 1),
+                'categoryProducts' => fn($q) => $q->where('products.publish', 1),
+                'subcategoryProducts' => fn($q) => $q->where('products.publish', 1),
+                'brandProducts' => fn($q) => $q->where('products.publish', 1),
             ]
         )->findOrFail($id);
 
@@ -130,6 +131,13 @@ class OfferController extends Controller
         $productsIds = Product::where('publish', 1)->where('quantity', '>', 0)->where('quantity', '<=', $settings->last_box_quantity)->pluck('id')->toArray();
         $collectionsIds = [];
 
+        // Send Meta Pixel event
+        MetaPixel::sendEvent('CustomizeProduct', [], [
+            'content_type' => 'product_group',
+            'content_ids' => $productsIds,
+            'content_name' => $offer->title,
+        ]);
+
         return view('front.offers.show', compact('offer', 'productsIds', 'collectionsIds'));
     }
 
@@ -161,13 +169,21 @@ class OfferController extends Controller
 
         $collectionsIds = [];
 
+        // Send Meta Pixel event
+        MetaPixel::sendEvent('CustomizeProduct', [], [
+            'content_type' => 'product_group',
+            'content_ids' => $productsIds,
+            'content_name' => $offer->title,
+        ]);
+
         return view('front.offers.show', compact('offer', 'productsIds', 'collectionsIds'));
     }
 
     /**
      * Maximum Price Offer
      */
-    public function maxPrice(){
+    public function maxPrice()
+    {
         $settings = Setting::first();
 
         $offer = new Offer;
@@ -186,6 +202,13 @@ class OfferController extends Controller
         $productsIds = Product::where('publish', 1)->where('quantity', '>', 0)->get()->pluck('id');
 
         $collectionsIds = [];
+
+        // Send Meta Pixel event
+        MetaPixel::sendEvent('CustomizeProduct', [], [
+            'content_type' => 'product_group',
+            'content_ids' => $productsIds,
+            'content_name' => $offer->title,
+        ]);
 
         return view('front.offers.show', compact('offer', 'productsIds', 'collectionsIds'));
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Front\meta;
 
 use Illuminate\Support\Facades\Http;
 
@@ -17,30 +17,64 @@ class MetaPixelService
         $this->apiVersion = config('services.meta_pixel.api_version');
     }
 
-    public function sendEvent(string $eventName, array $userData, array $customData = [])
+    public function sendEvent(string $eventName, array $userData = [], array $customData = [])
     {
-        $endpoint = "https://graph.facebook.com/{$this->apiVersion}/{$this->pixelId}/events";
+        try {
+            $endpoint = "https://graph.facebook.com/{$this->apiVersion}/{$this->pixelId}/events";
 
-        $payload = [
-            'data' => [
-                [
-                    'event_name' => $eventName,
-                    'event_time' => now()->timestamp,
-                    'action_source' => 'website',
-                    'user_data' => $this->hashUserData($userData),
-                    'custom_data' => $customData,
-                ]
-            ],
-            'access_token' => $this->accessToken,
-        ];
+            $clientIp = request()->getClientIp();
+            $userAgent = request()->userAgent();
+            $fbc = request()->cookie('_fbc');
+            $fbp = request()->cookie('_fbp');
 
-        return Http::post($endpoint, $payload)->json();
+            $user = auth()->check() ? auth()->user() : null;
+
+            $hashedUserData = $this->hashUserData(array_merge($userData, [
+                'em' => $user?->email,
+                'ph' => $user?->phones?->pluck('phone')->toArray() ?? [],
+                'fn' => $user?->f_name,
+                'ln' => $user?->l_name,
+                'ge' => $user ? ($user->gender === 0 ? 'm' : 'f') : null,
+                'db' => $user?->birth_date ? \Carbon\Carbon::parse($user->birth_date)->format('Ymd') : null, //YYYYMMDD
+                'country' => "eg",
+                'external_id' => $user?->id,
+            ]));
+
+            $finalUserData = array_merge($hashedUserData, [
+                'client_ip' => $clientIp,
+                'user_agent' => $userAgent,
+                'fbc' => $fbc,
+                'fbp' => $fbp,
+                'page_id' => config('services.meta_pixel.page_id'),
+            ]);
+
+            $payload = [
+                'data' => [
+                    [
+                        'event_name' => $eventName,
+                        'event_time' => now()->timestamp,
+                        'action_source' => 'website',
+                        'user_data' => $finalUserData,
+                        'custom_data' => $customData,
+                    ]
+                ],
+                'event_source_url' => request()->url(),
+                'access_token' => $this->accessToken,
+            ];
+
+            return Http::post($endpoint, $payload)->json();
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     private function hashUserData(array $data)
     {
         return collect($data)
             ->mapWithKeys(function ($value, $key) {
+                if (is_array($value)) {
+                    return [$key => array_map(fn($v) => hash('sha256', strtolower(trim($v))), $value ?? [])];
+                }
                 return [$key => hash('sha256', strtolower(trim($value)))];
             })
             ->toArray();

@@ -170,9 +170,9 @@
                 @if ($order['coupon_discount'])
                     <tr>
                         <td colspan="2"></td>
-                        <td style="border: 1px solid black;padding: 0.5rem 0.75rem; font-weight: bold;">كود الكوبون</td>
+                        <td style="border: 1px solid black;padding: 0.5rem 0.75rem; font-weight: bold;">كود الخصم</td>
                         <td style="border: 1px solid black;padding: 0.5rem 0.75rem;">{{ $order['coupon_code'] }}</td>
-                        <th style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">خصم الكوبون</th>
+                        <th style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">خصم كود الخصم</th>
                         <td style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">
                             {{ number_format($order['coupon_discount'], 2) }} ج.م
                         </td>

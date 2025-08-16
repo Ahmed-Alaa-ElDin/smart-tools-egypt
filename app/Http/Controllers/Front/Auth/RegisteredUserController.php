@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Front\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Models\Phone;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
-use Gloudemans\Shoppingcart\Facades\Cart;
-use Illuminate\Auth\Events\Registered;
+use App\Models\Phone;
+use App\Facades\MetaPixel;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
+use App\Providers\RouteServiceProvider;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Validation\Rules\Password;
 
 class RegisteredUserController extends Controller
@@ -75,6 +76,9 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user, $request->remember);
+
+        // Send Meta Pixel event
+        MetaPixel::sendEvent('CompleteRegistration', [], []);
 
         return redirect(RouteServiceProvider::HOME);
     }

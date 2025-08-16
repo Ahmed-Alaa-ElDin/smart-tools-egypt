@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
+use App\Services\Front\meta\MetaPixelService;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton('meta-pixel', fn() => new MetaPixelService());
     }
 
     /**
@@ -32,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
         // $this->app->usePublicPath(__DIR__ . '/../../../public_html'); For V10
 
         // Macro for pagination in Collection
-        Collection::macro('paginate', function($perPage, $total = null, $page = null, $pageName = 'page') {
+        Collection::macro('paginate', function ($perPage, $total = null, $page = null, $pageName = 'page') {
             $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
 
             return new LengthAwarePaginator(
