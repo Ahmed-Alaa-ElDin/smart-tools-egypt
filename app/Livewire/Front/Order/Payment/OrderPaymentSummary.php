@@ -505,7 +505,6 @@ class OrderPaymentSummary extends Component
 
             foreach ($products as $product) {
                 $final_products[$product['id']] = [
-                    'id' => $product['id'],
                     'quantity' => $product['qty'],
                     'original_price' => $product['original_price'],
                     'price' => $product['best_price'] - $product['coupon_discount'],
@@ -523,7 +522,6 @@ class OrderPaymentSummary extends Component
 
             foreach ($collections as $collection) {
                 $final_collections[$collection['id']] = [
-                    'id' => $collection['id'],
                     'quantity' => $collection['qty'],
                     'original_price' => $collection['original_price'],
                     'price' => $collection['best_price'] - $collection['coupon_discount'],
@@ -599,13 +597,22 @@ class OrderPaymentSummary extends Component
             Cart::instance('cart')->destroy();
             Cart::instance('cart')->store($order->user->id);
 
+            $purchased_items = array_merge(array_map(fn($item, $key) => [
+                'id' => $key,
+                'quantity' => $item['quantity'] ?? 1,
+                'item_price' => $item['price'],
+            ], $final_products,array_keys($final_products)), array_map(fn($item, $key) => [
+                'id' => $key,
+                'quantity' => $item['quantity'] ?? 1,
+                'item_price' => $item['price'],
+            ], $final_collections,array_keys($final_collections)));
+
             MetaPixel::sendEvent("Purchase", [], [
                 'content_type' => 'product_group',
                 'content_ids' => array_merge(array_keys($final_products), array_keys($final_collections)),
-                'content_name' => $collection->name,
-                'contents' => array_merge(array_values($final_products), array_values($final_collections)),
+                'contents' => $purchased_items,
                 'currency' => 'EGP',
-                'value' => $this->total_after_coupon_discount,
+                'value' => ceil($this->total_after_coupon_discount ?? 0),
             ]);
 
             ################### Payment :: Start ###################

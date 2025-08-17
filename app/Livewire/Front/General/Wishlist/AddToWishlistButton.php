@@ -4,6 +4,7 @@ namespace App\Livewire\Front\General\Wishlist;
 
 use App\Models\Product;
 use Livewire\Component;
+use App\Facades\MetaPixel;
 use App\Models\Collection;
 use Illuminate\Support\Facades\Auth;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -65,6 +66,20 @@ class AddToWishlistButton extends Component
             if (Auth::check()) {
                 Cart::instance('wishlist')->store(Auth::user()->id);
             }
+
+            MetaPixel::sendEvent('AddToWishlist', [], [
+                'content_type' => 'product',
+                'content_ids' => [$this->item_id],
+                'contents' => [
+                    [
+                        'id' => $this->item_id,
+                        'quantity' => 1,
+                    ],
+                ],
+                'value' => $item->best_price,
+                'currency' => 'EGP',
+            ]);
+            ############ Emit Meta Pixel event :: End ############
 
             ############ Emit Sweet Alert :: Start ############
             $this->dispatch('swalDone', text: __('front/homePage.Product Has Been Added To The Wishlist Successfully'),

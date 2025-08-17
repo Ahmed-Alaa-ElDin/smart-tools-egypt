@@ -134,11 +134,7 @@ class ProductController extends Controller
             'contents' => [
                 [
                     'id' => $product->id,
-                    'name' => $product->name,
-                    'type' => 'product',
-                    'barcode' => $product->barcode,
-                    'brand' => $product->brand->name,
-                    'price' => $product->final_price,
+                    'item_price' => $product->final_price,
                 ],
             ],
             'currency' => 'EGP',

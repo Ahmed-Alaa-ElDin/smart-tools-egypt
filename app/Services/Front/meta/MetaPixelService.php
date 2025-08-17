@@ -41,8 +41,8 @@ class MetaPixelService
             ]));
 
             $finalUserData = array_merge($hashedUserData, [
-                'client_ip' => $clientIp,
-                'user_agent' => $userAgent,
+                'client_ip_address' => $clientIp,
+                'client_user_agent' => $userAgent,
                 'fbc' => $fbc,
                 'fbp' => $fbp,
                 'page_id' => config('services.meta_pixel.page_id'),
@@ -60,6 +60,7 @@ class MetaPixelService
                 ],
                 'event_source_url' => request()->url(),
                 'access_token' => $this->accessToken,
+                'test_event_code' => 'TEST69190'
             ];
 
             return Http::post($endpoint, $payload)->json();

@@ -61,7 +61,13 @@ class BackToStockNotificationButton extends Component
                 'content_type' => 'product',
                 'content_ids' => [$this->item_id],
                 'content_name' => $this->item->name,
-                'contents' => [$this->item->toArray()],
+                'contents' => [
+                    [
+                        'id' => $this->item->id,
+                        'quantity' => 1,
+                        'item_price' => $this->item->final_price,
+                    ],
+                ],
                 'currency' => 'EGP',
                 'value' => $this->item->final_price,
             ]);
@@ -88,6 +94,21 @@ class BackToStockNotificationButton extends Component
 
             // Change the state of the button
             $this->isNotified = true;
+
+            MetaPixel::sendEvent("Subscribe", [], [
+                'content_type' => 'product',
+                'content_ids' => [$this->item_id],
+                'content_name' => $this->item->name,
+                'contents' => [
+                    [
+                        'id' => $this->item->id,
+                        'quantity' => 1,
+                        'item_price' => $this->item->final_price,
+                    ],
+                ],
+                'currency' => 'EGP',
+                'value' => $this->item->final_price,
+            ]);
 
             $this->dispatchSuccessNotification(__('front/homePage.The notification has been added successfully'));
         } catch (ValidationException $e) {
