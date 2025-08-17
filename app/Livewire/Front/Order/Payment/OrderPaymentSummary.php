@@ -612,7 +612,7 @@ class OrderPaymentSummary extends Component
                 'content_ids' => array_merge(array_keys($final_products), array_keys($final_collections)),
                 'contents' => $purchased_items,
                 'currency' => 'EGP',
-                'value' => ceil($this->total_after_coupon_discount ?? 0),
+                'value' => ceil($this->total_after_order_discount - $this->coupon_total_discount ?? 0),
             ]);
 
             ################### Payment :: Start ###################
