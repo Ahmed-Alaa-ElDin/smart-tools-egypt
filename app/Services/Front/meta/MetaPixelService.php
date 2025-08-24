@@ -2,6 +2,7 @@
 
 namespace App\Services\Front\meta;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 
 class MetaPixelService
@@ -52,6 +53,7 @@ class MetaPixelService
                 'data' => [
                     [
                         'event_name' => $eventName,
+                        'event_id' => Str::uuid(),
                         'event_time' => now()->timestamp,
                         'action_source' => 'website',
                         'user_data' => $finalUserData,
