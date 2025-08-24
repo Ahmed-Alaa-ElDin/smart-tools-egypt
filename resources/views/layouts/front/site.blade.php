@@ -213,6 +213,19 @@
             });
         });
 
+        (function() {
+            function setFbcCookie() {
+                var urlParams = new URLSearchParams(window.location.search);
+                var fbclid = urlParams.get('fbclid');
+                if (fbclid) {
+                    var now = Math.floor(new Date().getTime() / 1000);
+                    var fbcValue = 'fb.1.' + now + '.' + fbclid;
+                    document.cookie = '_fbc=' + fbcValue + '; path=/; max-age=' + (60 * 60 * 24 * 90); // 90 days
+                }
+            }
+            setFbcCookie();
+        })();
+
         $(function() {
             $('.remove_banner_button').on('click', function(e) {
                 e.stopPropagation();
