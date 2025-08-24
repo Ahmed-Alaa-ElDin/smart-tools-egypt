@@ -215,8 +215,6 @@
 
         // #### Get Refund Data ####
         window.addEventListener('swalGetRefundData', function(e) {
-            console.log(e);
-
             Swal.fire({
                 title: e.detail.title,
                 html: e.detail.html,
@@ -234,7 +232,6 @@
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    console.log(e);
                     Livewire.dispatch(e.detail.method, {
                         id: e.detail.id,
                         payment_amount: result.value[0],

@@ -150,8 +150,7 @@
     <script>
         @if (Session::has('success'))
             Swal.fire({
-                text: '{{ Session::get('
-                            success ') }}',
+                text: '{{ Session::get('success') }}',
                 icon: 'success',
                 timer: 3000,
                 timerProgressBar: true,
@@ -159,8 +158,7 @@
             })
         @elseif (Session::has('error'))
             Swal.fire({
-                text: '{{ Session::get('
-                            error ') }}',
+                text: '{{ Session::get('error') }}',
                 icon: 'error',
                 timer: 3000,
                 timerProgressBar: true,
@@ -168,8 +166,7 @@
             })
         @elseif (Session::has('warning'))
             Swal.fire({
-                text: '{{ Session::get('
-                            warning ') }}',
+                text: '{{ Session::get('warning') }}',
                 icon: 'warning',
                 timer: 3000,
                 timerProgressBar: true,
@@ -208,8 +205,6 @@
                     ]
                 }
             }).then((result) => {
-                console.log(result);
-
                 if (result.isConfirmed) {
                     Livewire.dispatch(e.detail.method, {
                         phone: result.value[0],

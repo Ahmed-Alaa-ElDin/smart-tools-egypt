@@ -17,6 +17,7 @@ class OrderShippingSummary extends Component
     public $items_total_base_prices = 0;
     public $items_total_final_prices = 0;
     public $items_total_discounts = 0;
+    public $items_free_shipping = 0;
     public $items_discounts_percentage = 0;
     public $total_after_offer_prices = 0;
     public $offers_total_discounts = 0;
@@ -48,7 +49,8 @@ class OrderShippingSummary extends Component
     ];
 
     ############# Mount :: Start #############
-    public function mount () {
+    public function mount()
+    {
         $order = Order::where('status_id', OrderStatus::UnderProcessing->value)
             ->where('user_id', auth()->user()->id ?? 0)
             ->first();
@@ -67,9 +69,7 @@ class OrderShippingSummary extends Component
         if ($this->items_total_quantities) {
             // Add Cart Quantity to each item
             $this->items = array_map(function ($item) {
-                $cart_item = Cart::instance('cart')->search(function ($cart_item) use ($item) {
-                    return $cart_item->id == $item['id'] && $cart_item->options->type == $item['type'];
-                })->first();
+                $cart_item = Cart::instance('cart')->search(fn($cart_item) => $cart_item->id == $item['id'] && $cart_item->options->type == $item['type'])->first();
 
                 $item['after_offer_price'] = $item['final_price'] - $item['offer_discount'];
                 $item['qty'] = $cart_item->qty ?? 0;
@@ -98,17 +98,20 @@ class OrderShippingSummary extends Component
             // ------------------------------------------------------------------------------------------------------
             // A - Shipping
             // ------------------------------------------------------------------------------------------------------
-            // 1 - Items Offers Free Shipping
+            // 1 - Items Free Shipping
+            $this->items_free_shipping = !in_array(0, array_column($this->items, 'free_shipping'));
+
+            // 2 - Items Offers Free Shipping
             $this->offers_free_shipping = !in_array(0, array_column($this->items, 'offer_free_shipping'));
 
-            // 2 - Order Offer Free Shipping
+            // 3 - Order Offer Free Shipping
             if ($order_offer) {
                 // Order Free Shipping
                 $this->order_offer_free_shipping = $order_offer->free_shipping;
             }
 
-            // 3 - Total Order Free Shipping (After Items & Order Offers)
-            $this->total_order_free_shipping = $this->offers_free_shipping || $this->order_offer_free_shipping;
+            // 4 - Total Order Free Shipping (After Items & Order Offers)
+            $this->total_order_free_shipping = $this->items_free_shipping || $this->offers_free_shipping || $this->order_offer_free_shipping;
 
             $this->getShippingFees();
 

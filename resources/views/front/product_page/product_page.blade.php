@@ -99,6 +99,16 @@
                     @if ($product->quantity > 0)
                         {{-- Product Price :: Start --}}
                         <div class="flex flex-col gap-2">
+                            {{-- Free Shipping :: Start --}}
+                            @if ($productOffer->free_shipping)
+                                <div class="flex gap-3 items-center">
+                                    <span class="font-bold text-lg text-success">
+                                        {{ __('front/homePage.Free Shipping') }}
+                                    </span>
+                                </div>
+                            @endif
+                            {{-- Free Shipping :: End --}}
+
                             {{-- Base Price :: Start --}}
                             <div class="flex gap-3 items-center">
                                 <span class="text-gray-800 font-bold text-md">
@@ -201,9 +211,8 @@
 
                     {{-- Banner :: Start --}}
                     {{-- todo : Banner --}}
+                    {{-- <hr class="my-4"> --}}
                     {{-- Banner :: End --}}
-
-                    <hr class="my-4">
 
                     <div class="grid grid-cols-12 gap-4 items-center justify-around md:justify-between mt-4">
                         {{-- Add Product : Start --}}

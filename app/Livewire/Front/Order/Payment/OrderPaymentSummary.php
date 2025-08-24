@@ -41,6 +41,7 @@ class OrderPaymentSummary extends Component
     public $shipping_fees = 0;
     public $items_total_weights = 0;
     public $items_total_shipping_weights = 0;
+    public $items_free_shipping = 0;
     public $best_zone_id = null;
     public $city_name = null;
     public $address = null;
@@ -136,17 +137,20 @@ class OrderPaymentSummary extends Component
             // ------------------------------------------------------------------------------------------------------
             // A - Shipping
             // ------------------------------------------------------------------------------------------------------
-            // 1 - Items Offers Free Shipping
+            // 1 - Items Free Shipping
+            $this->items_free_shipping = !in_array(0, array_column($this->items, 'free_shipping'));
+
+            // 2 - Items Offers Free Shipping
             $this->offers_free_shipping = !in_array(0, array_column($this->items, 'offer_free_shipping'));
 
-            // 2 - Order Offer Free Shipping
+            // 3 - Order Offer Free Shipping
             if ($order_offer) {
                 // Order Free Shipping
                 $this->order_offer_free_shipping = $order_offer->free_shipping;
             }
 
-            // 3 - Total Order Free Shipping (After Items & Order Offers)
-            $this->total_order_free_shipping = $this->offers_free_shipping || $this->order_offer_free_shipping || $this->coupon_free_shipping;
+            // 4 - Total Order Free Shipping (After Items & Order Offers)
+            $this->total_order_free_shipping = $this->items_free_shipping || $this->offers_free_shipping || $this->order_offer_free_shipping || $this->coupon_free_shipping;
 
             $this->getShippingFees();
 
