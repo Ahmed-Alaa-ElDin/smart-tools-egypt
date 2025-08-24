@@ -75,9 +75,9 @@ class MetaPixelService
         return collect($data)
             ->mapWithKeys(function ($value, $key) {
                 if (is_array($value)) {
-                    return [$key => array_map(fn($v) => hash('sha256', strtolower(trim($v))), $value ?? [])];
+                    return [$key => array_map(fn($v) => empty($v) ? '' : hash('sha256', strtolower(trim($v))), $value ?? [])];
                 }
-                return [$key => hash('sha256', strtolower(trim($value)))];
+                return [$key => empty($value) ? '' : hash('sha256', strtolower(trim($value)))];
             })
             ->toArray();
     }
