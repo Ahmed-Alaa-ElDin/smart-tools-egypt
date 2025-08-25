@@ -25,8 +25,8 @@ class MetaPixelService
 
             $clientIp = request()->getClientIp();
             $userAgent = request()->userAgent();
-            $fbc = request()->cookie('_fbc');
-            $fbp = request()->cookie('_fbp');
+            $fbc = $_COOKIE['_fbc'] ?? null;
+            $fbp = $_COOKIE['_fbp'] ?? null;
 
             $user = auth()->check() ? auth()->user() : null;
 
