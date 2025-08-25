@@ -2281,7 +2281,7 @@ class OrderController extends Controller
         $cart_items = $cart_collections->concat($cart_products)->toArray();
 
         // emit event
-        $test = MetaPixel::sendEvent('InitiateCheckout', [], [
+        MetaPixel::sendEvent('InitiateCheckout', [], [
             'content_type' => 'product_group',
             'content_ids' => array_merge($cart_products_id, $cart_collections_id),
             'contents' => array_map(fn ($item) => [
