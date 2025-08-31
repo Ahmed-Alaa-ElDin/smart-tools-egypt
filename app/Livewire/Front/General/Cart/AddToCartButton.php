@@ -11,7 +11,7 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 
 class AddToCartButton extends Component
 {
-    public $item_id, $type = 'Product', $text = false, $large = false, $add_buy = 'add', $inCart = false, $unique;
+    public $item_id, $type = 'Product', $text = false, $large = false, $add_buy = 'add', $inCart = false, $unique, $addedClasses = "";
 
     protected function getListeners()
     {

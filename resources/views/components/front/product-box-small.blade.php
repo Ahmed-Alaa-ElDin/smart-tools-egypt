@@ -287,6 +287,7 @@
                             'type' => $item['type'],
                             'text' => true,
                             'unique' => 'item-' . $item['id'],
+                            'addedClasses' => 'mb-3',
                         ],
                         key("add-cart-button-{$item['id']}")
                     )

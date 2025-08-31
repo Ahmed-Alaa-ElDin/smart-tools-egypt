@@ -30,7 +30,7 @@
                     {{-- Day : Start --}}
                     <div class="countdown-item bg-primary flex justify-center items-center p-1 rounded shadow ">
                         <span
-                            class="days inline-block text-black bg-white px-1 rounded">{{ $diffDays }}</span>
+                            class="days inline-block text-black bg-white px-1 text-xs md:text-sm rounded">{{ $diffDays }}</span>
                         <span
                             class="inline-block text-white text-center text-xs font-bold px-1">{{ trans_choice('front/homePage.Day', $diffDays) }}</span>
                     </div>
@@ -40,7 +40,7 @@
                     {{-- Hour : Start --}}
                     <div class="countdown-item bg-primary flex justify-center items-center p-1 rounded shadow ">
                         <span
-                            class="hours inline-block text-black bg-white px-1 rounded">{{ $diffHours }}</span>
+                            class="hours inline-block text-black bg-white px-1 text-xs md:text-sm rounded">{{ $diffHours }}</span>
                         <span
                             class="inline-block text-white text-center text-xs font-bold px-1">{{ trans_choice('front/homePage.Hour', $diffHours) }}</span>
                     </div>
@@ -50,7 +50,7 @@
                     {{-- Minute : Start --}}
                     <div class="countdown-item bg-primary flex justify-center items-center p-1 rounded shadow ">
                         <span
-                            class="minutes inline-block text-black bg-white px-1 rounded">{{ $diffMinutes }}</span>
+                            class="minutes inline-block text-black bg-white px-1 text-xs md:text-sm rounded">{{ $diffMinutes }}</span>
                         <span
                             class="inline-block text-white text-center text-xs font-bold px-1">{{ trans_choice('front/homePage.Minute', $diffMinutes) }}</span>
                     </div>
@@ -60,7 +60,7 @@
                     {{-- Second : Start --}}
                     <div class="countdown-item bg-primary flex justify-center items-center p-1 rounded shadow ">
                         <span
-                            class="seconds inline-block text-black bg-white px-1 rounded">{{ $diffSeconds }}</span>
+                            class="seconds inline-block text-black bg-white px-1 text-xs md:text-sm rounded">{{ $diffSeconds }}</span>
                         <span
                             class="inline-block text-white text-center text-xs font-bold px-1">{{ trans_choice('front/homePage.Second', $diffSeconds) }}</span>
                     </div>
