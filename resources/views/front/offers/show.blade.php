@@ -3,7 +3,7 @@
     'url' => route('front.offers.show', ['offer' => $offer->id]),
     'title' => $offer->title,
     'description' => __('front/homePage.General Offer Description'),
-    'thumbnail' => $offer->banner ? asset("storage/images/banners/cropped150/{$offer->banner}") : asset('assets/img/logos/smart-tools-logos.png'),
+    'thumbnail' => $offer->banner ? asset("storage/images/banners/cropped250/{$offer->banner}") : asset('assets/img/logos/smart-tools-logos.png'),
 ])
 
 @php
@@ -49,7 +49,7 @@
                         @if ($offer->banner)
                             <div class="w-24 md:w-64">
                                 <img class="rounded-lg  m-0"
-                                    src="{{ asset('storage/images/banners/cropped150/' . $offer->banner) }}"
+                                    src="{{ asset('storage/images/banners/cropped250/' . $offer->banner) }}"
                                     alt="{{ $offer->title }}">
                             </div>
                         @else
