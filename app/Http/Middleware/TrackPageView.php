@@ -4,7 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Facades\MetaPixel;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpFoundation\Response;
 
 class TrackPageView
@@ -22,7 +24,11 @@ class TrackPageView
             !$request->is('*admin*') &&
             !$request->ajax()
         ) {
-            MetaPixel::sendEvent('PageView');
+            $eventId = Str::uuid();
+
+            MetaPixel::sendEvent('PageView', [], [], $eventId);
+
+            View::share('meta_event_id', $eventId);
         }
 
         return $next($request);

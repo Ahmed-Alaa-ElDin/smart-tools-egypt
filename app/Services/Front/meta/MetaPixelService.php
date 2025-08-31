@@ -18,9 +18,13 @@ class MetaPixelService
         $this->apiVersion = config('services.meta_pixel.api_version');
     }
 
-    public function sendEvent(string $eventName, array $userData = [], array $customData = [])
+    public function sendEvent(string $eventName, array $userData = [], array $customData = [], string $eventId = "")
     {
         try {
+            if (empty($eventId)) {
+                $eventId = Str::uuid();
+            }
+
             $endpoint = "https://graph.facebook.com/{$this->apiVersion}/{$this->pixelId}/events";
 
             $clientIp = request()->getClientIp();
@@ -53,7 +57,7 @@ class MetaPixelService
                 'data' => [
                     [
                         'event_name' => $eventName,
-                        'event_id' => Str::uuid(),
+                        'event_id' => $eventId,
                         'event_time' => now()->timestamp,
                         'action_source' => 'website',
                         'user_data' => $finalUserData,
