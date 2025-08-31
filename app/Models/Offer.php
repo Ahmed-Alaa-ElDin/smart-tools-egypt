@@ -78,7 +78,9 @@ class Offer extends Model
             ['offerables'],
             [null, 'id'],
             [null, ['offerable_type', 'offerable_id']]
-        )->withPivot('offerables', ['value', 'type']);
+        )
+            ->select(['collections.id', 'collections.publish'])
+            ->withPivot('offerables', ['value', 'type']);
     }
 
     // many to many Deep relationship  Offer --> Products
@@ -89,7 +91,9 @@ class Offer extends Model
             ['offerables'],
             [null, 'id'],
             [null, ['offerable_type', 'offerable_id']]
-        )->select(['products.id', 'products.publish'])->withPivot('offerables', ['value', 'type']);
+        )
+            ->select(['products.id', 'products.publish'])
+            ->withPivot('offerables', ['value', 'type']);
     }
 
     // many to many Deep relationship  Offer --> Super-Category --> Products
