@@ -66,6 +66,7 @@ class MetaPixelService
                 ],
                 'event_source_url' => request()->url(),
                 'access_token' => $this->accessToken,
+                'test_event_code' => 'TEST3780',
             ];
 
             return Http::post($endpoint, $payload)->json();
