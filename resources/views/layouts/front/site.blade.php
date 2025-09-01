@@ -81,7 +81,7 @@
         }(window, document, 'script',
             'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '1174640216338366');
-        fbq('track', 'PageView', {
+        fbq('track', 'PageView', {}, {
             eventId: {{ $meta_event_id ?? '' }}
         });
     </script>
