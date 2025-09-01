@@ -76,12 +76,3 @@
         {{-- Brands :: Start --}}
     </div>
 @endsection
-
-{{-- Extra Scripts --}}
-@push('js')
-    <script>
-        $(document).ready(function() {
-
-        });
-    </script>
-@endpush

@@ -14,9 +14,6 @@
                             <span>
                                 {{ __('front/homePage.Smart Tools Egypt') }}
                             </span>
-                            <span class="text-xs">
-                                موقع تجريبي
-                            </span>
                         </span>
                     </a>
                 </div>
