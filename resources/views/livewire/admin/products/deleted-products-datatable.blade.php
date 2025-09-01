@@ -199,7 +199,6 @@
                                         <div class="flex items-center content-center w-64">
                                             <div class="flex-shrink-0 h-10 w-10">
                                                 @if ($product->thumbnail)
-                                                    {{-- @dump($product->thumbnail) --}}
                                                     <img class="h-10 w-10 rounded-full"
                                                         src="{{ asset('storage/images/products/cropped100/' . $product->thumbnail->file_name) }}"
                                                         alt="{{ $product->name . 'image' }}">

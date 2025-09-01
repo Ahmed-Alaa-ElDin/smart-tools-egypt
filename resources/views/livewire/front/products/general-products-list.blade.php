@@ -6,9 +6,9 @@
     @endforeach
 
     {{-- Load More :: Start --}}
-    {{-- @if ($items->hasMorePages()) --}}
-        <div x-data x-intersect="$wire.loadMore(); console.log('ahmed')" wire:key="load-more-{{ rand() }}"></div>
-    {{-- @endif --}}
+    @if ($items->hasMorePages())
+        <div x-data x-intersect="$wire.loadMore()" wire:key="load-more-{{ rand() }}"></div>
+    @endif
 
     <div wire:loading wire:target="loadMore" class="col-span-4 text-center">
         <x-front.loaders.load-more />
