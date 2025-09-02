@@ -22,6 +22,7 @@ class CartSummary extends Component
     public $order_discount_percent;
     public $order_points;
     public $total_after_order_discount;
+    public $items_free_shipping;
     public $offers_free_shipping;
     public $order_offer_free_shipping;
     public $total_order_free_shipping;
@@ -105,17 +106,20 @@ class CartSummary extends Component
             // ------------------------------------------------------------------------------------------------------
             // B - Free Shipping
             // ------------------------------------------------------------------------------------------------------
-            // 1 - Items Offers Free Shipping
-            $this->offers_free_shipping = !in_array(0, array_column($this->items, 'offer_free_shipping'));
+            // 1 - Items Free Shipping
+            $this->items_free_shipping = in_array(1, array_column($this->items, 'free_shipping'));
 
-            // 2 - Order Offer Free Shipping
+            // 2 - Items Offers Free Shipping
+            $this->offers_free_shipping = in_array(1, array_column($this->items, 'offer_free_shipping'));
+
+            // 3 - Order Offer Free Shipping
             if ($order_offer) {
                 // Order Free Shipping
                 $this->order_offer_free_shipping = $order_offer->free_shipping;
             }
 
-            // 3 - Total Order Free Shipping (After Items & Order Offers)
-            $this->total_order_free_shipping = $this->offers_free_shipping || $this->order_offer_free_shipping;
+            // 4 - Total Order Free Shipping (After Items & Order Offers)
+            $this->total_order_free_shipping = $this->items_free_shipping || $this->offers_free_shipping || $this->order_offer_free_shipping;
 
             // ------------------------------------------------------------------------------------------------------
             // C - Points

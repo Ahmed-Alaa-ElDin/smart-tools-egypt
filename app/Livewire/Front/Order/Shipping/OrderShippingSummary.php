@@ -99,10 +99,10 @@ class OrderShippingSummary extends Component
             // A - Shipping
             // ------------------------------------------------------------------------------------------------------
             // 1 - Items Free Shipping
-            $this->items_free_shipping = !in_array(0, array_column($this->items, 'free_shipping'));
+            $this->items_free_shipping = in_array(1, array_column($this->items, 'free_shipping'));
 
             // 2 - Items Offers Free Shipping
-            $this->offers_free_shipping = !in_array(0, array_column($this->items, 'offer_free_shipping'));
+            $this->offers_free_shipping = in_array(1, array_column($this->items, 'offer_free_shipping'));
 
             // 3 - Order Offer Free Shipping
             if ($order_offer) {
