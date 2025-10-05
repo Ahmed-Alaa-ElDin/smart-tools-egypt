@@ -157,7 +157,7 @@
                             @for ($i = 1; $i <= 5; $i++)
                                 <span
                                     class="material-icons inline-block mr-1 cursor-pointer transition-all ease-in-out hover:scale-125 @if ($i <= $rating) text-yellow-300 @else text-gray-400 @endif"
-                                    wire:click="rating({{ $i }})">
+                                    wire:click="changeRating({{ $i }})">
                                     star
                                 </span>
                             @endfor

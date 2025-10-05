@@ -101,7 +101,7 @@ class ReviewBlock extends Component
     ############# Render :: End #############
 
     ############# Rating :: Start #############
-    public function rating($rating)
+    public function changeRating($rating)
     {
         $this->rating = $rating;
     }
