@@ -215,7 +215,7 @@ class OrderShippingSummary extends Component
 
         $shippingFeesBeforeAllowToOpenPackage = $prices->min('charge');
 
-        $this->shipping_fees = $shippingFeesBeforeAllowToOpenPackage + ($this->allow_to_open_package ? config('settings.allow_to_open_package_price') : 0);
+        $this->shipping_fees = $this->total_order_free_shipping ? 0 : $shippingFeesBeforeAllowToOpenPackage + ($this->allow_to_open_package ? config('settings.allow_to_open_package_price') : 0);
         $this->best_zone_id = $prices->where('charge', $shippingFeesBeforeAllowToOpenPackage)->first()['zone_id'] ?? null;
     }
     ############# Get Shipping Fees :: End #############
