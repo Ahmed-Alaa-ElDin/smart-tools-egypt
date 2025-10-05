@@ -933,33 +933,33 @@
                 directionality: 'rtl'
             };
 
-            // tinymce for Description
-            tinymce.init({
-                ...options,
-                selector: '#comment',
-                setup: function(editor) {
-                    editor.on('blur', function(e) {
-                        window.livewire.dispatch('updatedComment', tinymce.get(e.target.id)
-                            .getContent())
-                    });
-                }
-            });
+            // // tinymce for Description
+            // tinymce.init({
+            //     ...options,
+            //     selector: '#comment',
+            //     setup: function(editor) {
+            //         editor.on('blur', function(e) {
+            //             Livewire.dispatch('updatedComment', {
+            //                 'comment': tinymce.get(e.target.id).getContent()
+            //             })
+            //         });
+            //     }
+            // });
 
-            // reinitialize tinymce for Description
-            window.addEventListener('tinyMCE', function() {
-                tinymce.init({
-                    ...options,
-                    selector: '#comment',
-                    setup: function(editor) {
-                        editor.on('blur', function(e) {
-                            window.livewire.dispatch('updatedComment', tinymce.get(e
-                                    .target
-                                    .id)
-                                .getContent())
-                        });
-                    }
-                });
-            })
+            // // reinitialize tinymce for Description
+            // window.addEventListener('tinyMCE', function() {
+            //     tinymce.init({
+            //         ...options,
+            //         selector: '#comment',
+            //         setup: function(editor) {
+            //             editor.on('blur', function(e) {
+            //                 Livewire.dispatch('updatedComment', {
+            //                     'comment': tinymce.get(e.target.id).getContent()
+            //                 })
+            //             });
+            //         }
+            //     });
+            // })
 
             $('#copyToClipboard').on('click', function() {
                 navigator.clipboard.writeText(

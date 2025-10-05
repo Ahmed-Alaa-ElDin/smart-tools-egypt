@@ -1,7 +1,7 @@
 <div class="w-full">
     <div class="w-full grid grid-cols-2 gap-8 justify-between items-start">
         <div class="col-span-2 md:col-span-1 flex flex-col gap-6">
-            {{-- Old Rewiews Summary :: Start --}}
+            {{-- Old Reviews Summary :: Start --}}
             <div class="rounded-xl bg-gradient-to-br from-gray-100 to-white py-4 px-8 shadow-lg select-none">
                 <p class="text-center text-xl mb-3 font-bold">
                     {{ __('front/homePage.Reviews Summary') }}
@@ -42,7 +42,8 @@
                         </div>
                         <div class="w-full bg-gray-200 rounded-full">
                             <div class="bg-green-500 text-xs font-bold text-white text-center p-0.5 leading-none rounded-full truncate"
-                                style="width: {{ round($five_stars_percentage) }}%" title="{{ round($five_stars_percentage) }}% ({{ $five_stars_count }})">
+                                style="width: {{ round($five_stars_percentage) }}%"
+                                title="{{ round($five_stars_percentage) }}% ({{ $five_stars_count }})">
                                 {{ round($five_stars_percentage) }}% ({{ $five_stars_count }})
                             </div>
                         </div>
@@ -61,9 +62,10 @@
                         </div>
                         <div class="w-full bg-gray-200 rounded-full">
                             <div class="bg-lime-500 text-xs font-bold text-white text-center p-0.5 leading-none rounded-full truncate"
-                            style="width: {{ round($four_stars_percentage) }}%" title="{{ round($four_stars_percentage) }}% ({{ $four_stars_count }})">
-                            {{ round($four_stars_percentage) }}% ({{ $four_stars_count }})
-                        </div>
+                                style="width: {{ round($four_stars_percentage) }}%"
+                                title="{{ round($four_stars_percentage) }}% ({{ $four_stars_count }})">
+                                {{ round($four_stars_percentage) }}% ({{ $four_stars_count }})
+                            </div>
                         </div>
                     </div>
                     {{-- 4 Stars :: End --}}
@@ -80,9 +82,10 @@
                         </div>
                         <div class="w-full bg-gray-200 rounded-full">
                             <div class="bg-yellow-300 text-xs font-bold text-white text-center p-0.5 leading-none rounded-full truncate"
-                            style="width: {{ round($three_stars_percentage) }}%" title="{{ round($three_stars_percentage) }}% ({{ $three_stars_count }})">
-                            {{ round($three_stars_percentage) }}% ({{ $three_stars_count }})
-                        </div>
+                                style="width: {{ round($three_stars_percentage) }}%"
+                                title="{{ round($three_stars_percentage) }}% ({{ $three_stars_count }})">
+                                {{ round($three_stars_percentage) }}% ({{ $three_stars_count }})
+                            </div>
                         </div>
                     </div>
                     {{-- 3 Stars :: End --}}
@@ -99,9 +102,10 @@
                         </div>
                         <div class="w-full bg-gray-200 rounded-full">
                             <div class="bg-orange-400 text-xs font-bold text-white text-center p-0.5 leading-none rounded-full truncate"
-                            style="width: {{ round($two_stars_percentage) }}%" title="{{ round($two_stars_percentage) }}% ({{ $two_stars_count }})">
-                            {{ round($two_stars_percentage) }}% ({{ $two_stars_count }})
-                        </div>
+                                style="width: {{ round($two_stars_percentage) }}%"
+                                title="{{ round($two_stars_percentage) }}% ({{ $two_stars_count }})">
+                                {{ round($two_stars_percentage) }}% ({{ $two_stars_count }})
+                            </div>
                         </div>
                     </div>
                     {{-- 2 Stars :: End --}}
@@ -118,16 +122,17 @@
                         </div>
                         <div class="w-full bg-gray-200 rounded-full">
                             <div class="bg-red-500 text-xs font-bold text-white text-center p-0.5 leading-none rounded-full truncate"
-                            style="width: {{ round($one_stars_percentage) }}%" title="{{ round($one_stars_percentage) }}% ({{ $one_stars_count }})">
-                            {{ round($one_stars_percentage) }}% ({{ $one_stars_count }})
-                        </div>
+                                style="width: {{ round($one_stars_percentage) }}%"
+                                title="{{ round($one_stars_percentage) }}% ({{ $one_stars_count }})">
+                                {{ round($one_stars_percentage) }}% ({{ $one_stars_count }})
+                            </div>
                         </div>
                     </div>
                     {{-- 1 Star :: End --}}
                 </div>
 
             </div>
-            {{-- Old Rewiews Summary :: End --}}
+            {{-- Old Reviews Summary :: End --}}
 
             {{-- New Review :: Start --}}
             {{-- todo :: Check if the user bought this product --}}
@@ -173,11 +178,11 @@
                     </div>
 
                     {{-- Comment :: Start --}}
-                    <div wire:ignore
+                    <textarea wire:model="comment"
                         class="py-1 w-full min-h-[9rem] px-6 rounded text-right border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 cursor-text"
-                        type="text" id="comment" placeholder="{{ __('front/homePage.Add Your Comment Here') }}">
-                        {!! $comment !!}
-                    </div>
+                        type="text" placeholder="{{ __('front/homePage.Add Your Comment Here') }}">
+                        {{ $comment }}
+                    </textarea>
                     {{-- Comment :: End --}}
 
 
@@ -208,7 +213,8 @@
                         {{ __('front/homePage.You Should Login First to be able to add a new review') }}
                     </p>
                     {{-- todo :: login route name --}}
-                    <a href="{{ route('login') }}" class="btn bg-yellow-500 font-bold">{{ __('front/homePage.Login') }}</a>
+                    <a href="{{ route('login') }}"
+                        class="btn bg-yellow-500 font-bold">{{ __('front/homePage.Login') }}</a>
                 </div>
             @endif
             {{-- New Review :: End --}}
@@ -237,9 +243,15 @@
                                     person
                                 </span>
                             @endif
-                            <span
-                                class="font-bold">{{ $user_review->user->f_name . ' ' . $user_review->user->l_name }}</span>
+                            <div class="flex flex-col gap-1 justify-center items-start">
+                                <span
+                                    class="font-bold">{{ $user_review->user->f_name . ' ' . $user_review->user->l_name }}</span>
+                                <span class="text-sm">
+                                    {{ $user_review->created_at->diffForHumans() }}
+                                </span>
+                            </div>
                         </div>
+
                         {{-- Rating :: Start --}}
                         <div class="text-center select-none">
                             @for ($i = 1; $i <= 5; $i++)
@@ -266,7 +278,7 @@
                     @if ($user_review->comment)
                         <div class="py-1 w-full px-6 rounded border-0 shadow-sm" type="text"
                             placeholder="{{ __('front/homePage.Add Your Comment Here') }}">
-                            {!! $user_review->comment !!}
+                            {!! nl2br(e($user_review->comment)) !!}
                         </div>
                     @endif
                     {{-- Comment :: End --}}
@@ -295,7 +307,12 @@
                                     person
                                 </span>
                             @endif
-                            <span class="font-bold">{{ $review->user->f_name . ' ' . $review->user->l_name }}</span>
+                            <div class="flex flex-col gap-1 justify-center items-start">
+                                <span class="font-bold">{{ $review->user->f_name . ' ' . $review->user->l_name }}</span>
+                                <span class="text-sm">
+                                    {{ $review->created_at->diffForHumans() }}
+                                </span>
+                            </div>
                         </div>
                         {{-- Rating :: Start --}}
                         <div class="text-center select-none">
@@ -312,7 +329,7 @@
                     @if ($review->comment)
                         <div class="py-1 w-full px-6 rounded border-0 shadow-sm" type="text"
                             placeholder="{{ __('front/homePage.Add Your Comment Here') }}">
-                            {!! $review->comment !!}
+                            {!! nl2br(e($review->comment)) !!}
                         </div>
                     @endif
                     {{-- Comment :: End --}}

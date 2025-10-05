@@ -15,6 +15,10 @@ Route::group([
     require_once __DIR__ . "/orders/orders.php";
     // ############## Orders Routes End ##############
 
+    // ############## Reviews Routes Start ##############
+    require_once __DIR__ . "/reviews/reviews.php";
+    // ############## Reviews Routes End ##############
+
     // ############## Products Routes Start ##############
     require_once __DIR__ . "/products_brands/products_brands.php";
     // ############## Products Routes End ##############

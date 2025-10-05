@@ -60,5 +60,8 @@ return [
     'Edited Orders'             =>      'طلبات تم تعديلها',
     'Ready for Shipping Orders' =>      'طلبات جاهزة للشحن',
     'Shipped Orders'            =>      'طلبات تم شحنها',
-
+    'Reviews'                   =>      'التقييمات',
+    'All Reviews'               =>      'جميع التقييمات',
+    'Add Review'                =>      'إضافة تقييم',
+    'Pending Reviews'           =>      'التقييمات المعلقة',
 ];

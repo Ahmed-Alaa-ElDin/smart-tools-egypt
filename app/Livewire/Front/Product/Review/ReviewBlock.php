@@ -14,42 +14,44 @@ class ReviewBlock extends Component
 
     public $item_reviews_count, $five_stars_count, $five_stars_percentage, $four_stars_count, $four_stars_percentage, $three_stars_count, $three_stars_percentage, $two_stars_count, $two_stars_percentage, $one_stars_count, $one_stars_percentage;
 
-    protected $listeners = [
-        'updatedComment'
-    ];
-
     ############# Mount :: Start #############
-    public function mount()
-    {
-    }
+    public function mount() {}
     ############# Mount :: End #############
 
     ############# Render :: Start #############
     public function render()
     {
+        $perPage = config('settings.back_pagination');
+        $allItemReviews = $this->reviews;
+        $user = auth()->user();
+
         // get all item's reviews
         $all_item_reviews = $this->reviews;
 
-        if (auth()->check()) {
+        if ($user) {
             // get user's review
-            $user_review = $all_item_reviews->where('user_id', auth()->user()->id)->first();
+            $user_review = $all_item_reviews->where('user_id', $user->id)->first();
+            $this->reviewSubmitted = $user_review ? true : false;
             $this->user_review = $user_review;
             // get other reviews
-            $all_reviews = $all_item_reviews->where('user_id', '!=', auth()->user()->id)->paginate(config('settings.back_pagination'));
+            $all_reviews = $all_item_reviews->where('user_id', '!=', $user->id)->where('status', 1)->paginate($perPage);
         } else {
             $user_review = null;
             $this->user_review = null;
-            $all_reviews = $all_item_reviews->paginate(config('settings.back_pagination'));
+            $all_reviews = $all_item_reviews->where('status', 1)->paginate($perPage);
+            $this->reviewSubmitted = false;
         }
 
+        $all_approved_reviews = $all_item_reviews->where('status', 1);
+
         // get item's average rating
-        $this->item_rating = $all_item_reviews->avg('rating');
+        $this->item_rating = $all_approved_reviews->avg('rating');
 
         // get item's total reviews
-        $this->item_reviews_count = $all_item_reviews->count();
+        $this->item_reviews_count = $all_approved_reviews->count();
 
         // get 5 stars rating count
-        $this->five_stars_count = $all_item_reviews->where('rating', 5)->count();
+        $this->five_stars_count = $all_approved_reviews->where('rating', 5)->count();
         if ($this->five_stars_count) {
             $this->five_stars_percentage = $this->item_reviews_count > 0 ? ($this->five_stars_count / $this->item_reviews_count) * 100 : 0;
         } else {
@@ -57,7 +59,7 @@ class ReviewBlock extends Component
         }
 
         // get 4 stars rating count
-        $this->four_stars_count = $all_item_reviews->where('rating', 4)->count();
+        $this->four_stars_count = $all_approved_reviews->where('rating', 4)->count();
         if ($this->four_stars_count) {
             $this->four_stars_percentage = $this->item_reviews_count > 0 ? ($this->four_stars_count / $this->item_reviews_count) * 100 : 0;
         } else {
@@ -65,7 +67,7 @@ class ReviewBlock extends Component
         }
 
         // get 3 stars rating count
-        $this->three_stars_count = $all_item_reviews->where('rating', 3)->count();
+        $this->three_stars_count = $all_approved_reviews->where('rating', 3)->count();
         if ($this->three_stars_count) {
             $this->three_stars_percentage = $this->item_reviews_count > 0 ? ($this->three_stars_count / $this->item_reviews_count) * 100 : 0;
         } else {
@@ -73,7 +75,7 @@ class ReviewBlock extends Component
         }
 
         // get 2 stars rating count
-        $this->two_stars_count = $all_item_reviews->where('rating', 2)->count();
+        $this->two_stars_count = $all_approved_reviews->where('rating', 2)->count();
         if ($this->two_stars_count) {
             $this->two_stars_percentage = $this->item_reviews_count > 0 ? ($this->two_stars_count / $this->item_reviews_count) * 100 : 0;
         } else {
@@ -81,20 +83,14 @@ class ReviewBlock extends Component
         }
 
         // get 1 stars rating count
-        $this->one_stars_count = $all_item_reviews->where('rating', 1)->count();
+        $this->one_stars_count = $all_approved_reviews->where('rating', 1)->count();
         if ($this->one_stars_count) {
             $this->one_stars_percentage = $this->item_reviews_count > 0 ? ($this->one_stars_count / $this->item_reviews_count) * 100 : 0;
         } else {
             $this->one_stars_percentage = 0;
         }
 
-        // if user has already reviewed this item
-        if ($user_review) {
-            $this->reviewSubmitted = true;
-        }
-
         return view('livewire.front.product.review.review-block', compact(
-            'user_review',
             'all_reviews'
         ));
     }
@@ -105,54 +101,42 @@ class ReviewBlock extends Component
     {
         $this->rating = $rating;
     }
-    ############# Rating :: End #############
-
-    ############# Comment :: Start #############
-    public function updatedComment($comment)
-    {
-        $this->comment = $comment;
-    }
-    ############# Comment :: End #############
-
-    ############# Updated Current Page :: Start #############
-    // public function updatedCurrentPage($currentPage)
-    // {
-    //     if (auth()->check()) {
-    //         // get user's review
-    //         $this->user_review = $this->all_product_reviews->where('user_id', auth()->user()->id)->first();
-    //         // get other reviews
-    //         $this->all_reviews = $this->all_product_reviews->where('user_id', '!=', auth()->user()->id)->forPage($currentPage, config('settings.back_pagination'));
-    //     } else {
-    //         $this->user_review = null;
-    //         $this->all_reviews = $this->all_product_reviews->forPage($currentPage, config('settings.back_pagination'));
-    //     }
-    // }
-    ############# Updated Current Page :: End #############
 
     ############# Add Review :: Start #############
     public function addReview()
     {
-        $this->validate([
-            'rating' => 'required|numeric|between:1,5'
-        ], [
-            'rating.required' => __('front/homePage.Please select rating.'),
-            'rating.numeric' => __('front/homePage.Please select rating.'),
-            'rating.between' => __('front/homePage.Please select rating.')
-        ]);
+        try {
+            $this->validate([
+                'rating' => 'required|numeric|between:1,5'
+            ], [
+                'rating.required' => __('front/homePage.Please select rating.'),
+                'rating.numeric' => __('front/homePage.Please select rating.'),
+                'rating.between' => __('front/homePage.Please select rating.')
+            ]);
 
-        $review = Review::create([
-            'user_id' => auth()->user()->id,
-            'reviewable_id' => $this->item_id,
-            'reviewable_type' => 'App\\Models\\' . $this->type,
-            'comment' => $this->comment,
-            'rating' => $this->rating,
-            'status' => 0
-        ]);
+            Review::create([
+                'user_id' => auth()->user()->id,
+                'reviewable_id' => $this->item_id,
+                'reviewable_type' => 'App\\Models\\' . $this->type,
+                'comment' => $this->comment,
+                'rating' => $this->rating,
+                'status' => 0
+            ]);
 
-        $this->dispatch('swalDone', text: __('front/homePage.Review has been Added successfully'),
-            icon:'success');
+            $this->dispatch(
+                'swalDone',
+                text: __('front/homePage.Review has been Added successfully'),
+                icon: 'success'
+            );
 
-        $this->reviewSubmitted = true;
+            $this->reviewSubmitted = true;
+        } catch (\Exception $e) {
+            $this->dispatch(
+                'swalDone',
+                text: __('front/homePage.Something went wrong'),
+                icon: 'error'
+            );
+        }
     }
     ############# Add Review :: End #############
 
@@ -161,8 +145,11 @@ class ReviewBlock extends Component
     {
         $this->user_review->delete();
 
-        $this->dispatch('swalDone', text: __('front/homePage.Review has been Deleted successfully'),
-            icon:'success');
+        $this->dispatch(
+            'swalDone',
+            text: __('front/homePage.Review has been Deleted successfully'),
+            icon: 'success'
+        );
 
         $this->dispatch('tinyMCE');
 

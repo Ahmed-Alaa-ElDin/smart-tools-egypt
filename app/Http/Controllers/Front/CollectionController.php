@@ -64,7 +64,7 @@ class CollectionController extends Controller
                 'brand',
                 'thumbnail'
             ]),
-            'reviews' => fn($q) => $q->with('user'),
+            'reviews' => fn($q) => $q->with('user')->orderBy('created_at', 'desc'),
             'relatedProducts' => fn($q) => $q->select('products.id'),
             'relatedCollections' => fn($q) => $q->select('collections.id'),
             'complementedProducts' => fn($q) => $q->select('products.id'),

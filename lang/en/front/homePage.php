@@ -529,5 +529,6 @@ return [
     "Change Password"                               =>      "Change Password",
     "Old Password"                                  =>      "Old Password",
     "New Password"                                  =>      "New Password",
-    "New Password Confirmation"                     =>      "New Password Confirmation"
+    "New Password Confirmation"                     =>      "New Password Confirmation",
+    "Review has been Added successfully"            =>      "Review has been Added successfully",
 ];

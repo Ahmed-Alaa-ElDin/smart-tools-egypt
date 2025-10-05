@@ -56,7 +56,7 @@ class ProductController extends Controller
             'specs',
             'images' => fn($q) => $q->where('is_thumbnail', 0)->orderBy('featured', 'desc'),
             'brand',
-            'reviews.user',
+            'reviews' => fn($q) => $q->with('user')->orderBy('created_at', 'desc'),
             'relatedProducts:id',
             'relatedCollections:id',
             'complementedProducts:id',

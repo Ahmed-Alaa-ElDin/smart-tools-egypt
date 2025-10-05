@@ -493,6 +493,54 @@
                 </div>
             </li>
 
+            {{-- Reviews --}}
+            <li class="nav-item {{ $activeSection == 'Reviews' ? ' active' : '' }}">
+                <a class="nav-link" data-toggle="collapse" href="#reviews"
+                    aria-expanded="{{ $activeSection == 'Reviews' ? 'true' : 'false' }}">
+                    <span class="material-icons">
+                        reviews
+                    </span>
+                    <span>{{ __('admin/master.Reviews') }}
+                        <b class="caret"></b>
+                    </span>
+                </a>
+
+                <div class="collapse {{ $activeSection == 'Reviews' ? ' show' : '' }}" id="reviews">
+                    <ul class="nav">
+
+                        {{-- See All Reviews --}}
+                        <li class="nav-item {{ $activePage == 'All Reviews' ? ' active' : '' }}">
+                            <a class="nav-link" href="{{ route('admin.reviews.index') }}">
+                                <span class="material-icons">
+                                    reviews
+                                </span>
+                                <span>{{ __('admin/master.All Reviews') }} </span>
+                            </a>
+                        </li>
+
+                        {{-- Pending Reviews --}}
+                        <li class="nav-item {{ $activePage == 'Pending Reviews' ? ' active' : '' }}">
+                            <a class="nav-link" href="{{ route('admin.reviews.pending') }}">
+                                <span class="material-icons">
+                                    rate_review
+                                </span>
+                                <span>{{ __('admin/master.Pending Reviews') }} </span>
+                            </a>
+                        </li>
+
+                        {{-- Add Review --}}
+                        <li class="nav-item {{ $activePage == 'Add Review' ? ' active' : '' }}">
+                            <a class="nav-link" href="{{ route('admin.reviews.create') }}">
+                                <span class="material-icons">
+                                    control_point
+                                </span>
+                                <span>{{ __('admin/master.Add Review') }} </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
             {{-- Offers --}}
             <li class="nav-item {{ $activeSection == 'Offers' ? ' active' : '' }}">
                 <a class="nav-link" data-toggle="collapse" href="#offers"

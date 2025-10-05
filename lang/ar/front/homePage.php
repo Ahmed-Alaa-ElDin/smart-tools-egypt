@@ -522,5 +522,6 @@ return [
     "Change Password"                               =>      "تغيير كلمة المرور",
     "Old Password"                                  =>      "كلمة المرور القديمة",
     "New Password"                                  =>      "كلمة المرور الجديدة",
-    "New Password Confirmation"                     =>      "تأكيد كلمة المرور الجديدة"
+    "New Password Confirmation"                     =>      "تأكيد كلمة المرور الجديدة",
+    "Review has been Added successfully"            =>      "تم إضافة التقييم بنجاح",
 ];

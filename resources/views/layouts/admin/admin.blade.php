@@ -92,17 +92,21 @@
             Swal.fire({
                 icon: e.detail.icon,
                 text: e.detail.text,
+                html: e.detail.html,
                 showDenyButton: true,
                 confirmButtonText: e.detail.confirmButtonText,
                 denyButtonText: e.detail.denyButtonText,
                 denyButtonColor: e.detail.denyButtonColor,
                 confirmButtonColor: e.detail.confirmButtonColor,
                 focusDeny: e.detail.focusDeny,
+                showCancelButton: e.detail.showCancelButton ?? false,
+                showDenyButton: e.detail.showDenyButton ?? true,
+                showConfirmButton: e.detail.showConfirmButton ?? true,
             }).then((result) => {
                 if (result.isConfirmed) {
                     Livewire.dispatch(e.detail.method, {
                         id: e.detail.id,
-                        details: e.detail.details || []
+                        details: e.detail.details ?? []
                     });
                 }
             });
