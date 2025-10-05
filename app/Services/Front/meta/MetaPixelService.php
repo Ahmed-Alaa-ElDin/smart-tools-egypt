@@ -59,6 +59,7 @@ class MetaPixelService
                         'event_name' => $eventName,
                         'event_id' => $eventId,
                         'event_time' => now()->timestamp,
+                        'creation_time' => now()->timestamp,
                         'action_source' => 'website',
                         'user_data' => $finalUserData,
                         'custom_data' => $customData,
