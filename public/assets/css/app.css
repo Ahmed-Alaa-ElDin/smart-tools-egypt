@@ -546,11 +546,6 @@ select {
   outline: 1px auto -webkit-focus-ring-color;
 }
 
-* {
-  scrollbar-color: initial;
-  scrollbar-width: initial;
-}
-
 .tooltip-arrow,.tooltip-arrow:before {
   position: absolute;
   width: 8px;
@@ -3264,83 +3259,6 @@ input:checked + .toggle-bg {
 }
 .will-change-auto {
   will-change: auto !important;
-}
-.scrollbar {
-  --scrollbar-track: initial !important;
-  --scrollbar-thumb: initial !important;
-  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track) !important;
-  overflow: overlay !important;
-}
-.scrollbar.overflow-x-hidden {
-  overflow-x: hidden !important;
-}
-.scrollbar.overflow-y-hidden {
-  overflow-y: hidden !important;
-}
-.scrollbar::-webkit-scrollbar-track {
-  background-color: var(--scrollbar-track) !important;
-}
-.scrollbar::-webkit-scrollbar-thumb {
-  background-color: var(--scrollbar-thumb) !important;
-}
-.scrollbar {
-  scrollbar-width: auto !important;
-}
-.scrollbar::-webkit-scrollbar {
-  width: 16px !important;
-  height: 16px !important;
-}
-.scrollbar-thin {
-  --scrollbar-track: initial !important;
-  --scrollbar-thumb: initial !important;
-  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track) !important;
-  overflow: overlay !important;
-}
-.scrollbar-thin.overflow-x-hidden {
-  overflow-x: hidden !important;
-}
-.scrollbar-thin.overflow-y-hidden {
-  overflow-y: hidden !important;
-}
-.scrollbar-thin::-webkit-scrollbar-track {
-  background-color: var(--scrollbar-track) !important;
-}
-.scrollbar-thin::-webkit-scrollbar-thumb {
-  background-color: var(--scrollbar-thumb) !important;
-}
-.scrollbar-thin {
-  scrollbar-width: thin !important;
-}
-.scrollbar-thin::-webkit-scrollbar {
-  width: 8px !important;
-  height: 8px !important;
-}
-.scrollbar-track-white {
-  --scrollbar-track: #ffffff !important;
-}
-.scrollbar-track-gray-\31 00 {
-  --scrollbar-track: #F3F4F6 !important;
-}
-.scrollbar-thumb-gray-\31 00 {
-  --scrollbar-thumb: #F3F4F6 !important;
-}
-.scrollbar-thumb-gray-\37 00 {
-  --scrollbar-thumb: #374151 !important;
-}
-.scrollbar-thumb-red-\31 00 {
-  --scrollbar-thumb: #FDE8E8 !important;
-}
-.scrollbar-thumb-red-\32 00 {
-  --scrollbar-thumb: #FBD5D5 !important;
-}
-.scrollbar-track-primary {
-  --scrollbar-track: #ba0024 !important;
-}
-.scrollbar-thumb-primary {
-  --scrollbar-thumb: #ba0024 !important;
-}
-.scrollbar-thumb-secondary {
-  --scrollbar-thumb: #333 !important;
 }
 .placeholder\:italic::-moz-placeholder {
   font-style: italic !important;
