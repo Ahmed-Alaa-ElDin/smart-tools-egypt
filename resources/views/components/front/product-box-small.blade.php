@@ -195,15 +195,15 @@
                                 {{ __('front/homePage.Currently Not Available') }}
                             </h5>
                         @elseif ($item['quantity'] == 1)
-                            <h5 class="font-bold text-sm text-yellow-600 text-center">
+                            <h5 class="font-bold text-sm text-red-600 text-center">
                                 {{ __('front/homePage.Last Piece') }}
                             </h5>
                         @elseif ($item['quantity'] == 2)
-                            <h5 class="font-bold text-sm text-yellow-600 text-center">
+                            <h5 class="font-bold text-sm text-red-600 text-center">
                                 {{ __('front/homePage.Only 2 Pieces Remaining') }}
                             </h5>
                         @elseif ($item['quantity'] == 3)
-                            <h5 class="font-bold text-sm text-success text-center">
+                            <h5 class="font-bold text-sm text-red text-center">
                                 {{ __('front/homePage.Only 3 Pieces Remaining') }}
                             </h5>
                         @endif

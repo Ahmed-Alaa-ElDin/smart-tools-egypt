@@ -99,6 +99,22 @@
                     @if ($product->quantity > 0)
                         {{-- Product Price :: Start --}}
                         <div class="flex flex-col gap-2">
+                            {{-- Quantity :: Start --}}
+                            @if ($product->quantity == 1)
+                                <h5 class="font-bold text-red-600 text-start">
+                                    {{ __('front/homePage.Last Piece') }}
+                                </h5>
+                            @elseif ($product->quantity == 2)
+                                <h5 class="font-bold text-red-600 text-start">
+                                    {{ __('front/homePage.Only 2 Pieces Remaining') }}
+                                </h5>
+                            @elseif ($product->quantity == 3)
+                                <h5 class="font-bold text-red text-start">
+                                    {{ __('front/homePage.Only 3 Pieces Remaining') }}
+                                </h5>
+                            @endif
+                            {{-- Quantity :: End --}}
+
                             {{-- Free Shipping :: Start --}}
                             @if ($productOffer->free_shipping)
                                 <div class="flex gap-3 items-center">

@@ -83,6 +83,22 @@
                     <hr class="my-4">
 
                     @if ($collection->quantity > 0)
+                        {{-- Quantity :: Start --}}
+                        @if ($collection->quantity == 1)
+                            <h5 class="font-bold text-red-600 text-start">
+                                {{ __('front/homePage.Last Piece') }}
+                            </h5>
+                        @elseif ($collection->quantity == 2)
+                            <h5 class="font-bold text-red-600 text-start">
+                                {{ __('front/homePage.Only 2 Pieces Remaining') }}
+                            </h5>
+                        @elseif ($collection->quantity == 3)
+                            <h5 class="font-bold text-red text-start">
+                                {{ __('front/homePage.Only 3 Pieces Remaining') }}
+                            </h5>
+                        @endif
+                        {{-- Quantity :: End --}}
+
                         {{-- Collection Price :: Start --}}
                         <div class="flex flex-col gap-2">
                             {{-- Free Shipping :: Start --}}
@@ -486,7 +502,7 @@
             <div class="col-span-12">
                 <div class="mb-4 border-b-2 border-gray-200 dark:border-gray-700">
                     <ul class="flex flex-wrap gap-3 justify-around -mb-0.5 text-sm font-medium text-center" id="myTab"
-                        data-tabs-toggle="#myTabContent" role="tablist">
+                        data-tabs-toggle="#detailsTabs" role="tablist">
                         {{-- Video Header :: Start --}}
                         @if ($collection->video)
                             <li role="presentation">
@@ -592,7 +608,7 @@
                     </ul>
                 </div>
 
-                <div id="myTabContent">
+                <div id="detailsTabs">
 
                     {{-- Video Body :: Start --}}
                     @if ($collection->video)
