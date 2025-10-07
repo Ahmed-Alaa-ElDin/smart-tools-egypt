@@ -203,8 +203,16 @@
                                 {{ __('front/homePage.Only 2 Pieces Remaining') }}
                             </h5>
                         @elseif ($item['quantity'] == 3)
-                            <h5 class="font-bold text-sm text-red text-center">
+                            <h5 class="font-bold text-sm text-red-600 text-center">
                                 {{ __('front/homePage.Only 3 Pieces Remaining') }}
+                            </h5>
+                        @elseif ($item['quantity'] == 4)
+                            <h5 class="font-bold text-sm text-red-600 text-center">
+                                {{ __('front/homePage.Only 4 Pieces Remaining') }}
+                            </h5>
+                        @elseif ($item['quantity'] == 5)
+                            <h5 class="font-bold text-sm text-red-600 text-center">
+                                {{ __('front/homePage.Only 5 Pieces Remaining') }}
                             </h5>
                         @endif
                     @endif

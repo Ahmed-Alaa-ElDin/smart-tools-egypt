@@ -93,8 +93,16 @@
                                 {{ __('front/homePage.Only 2 Pieces Remaining') }}
                             </h5>
                         @elseif ($collection->quantity == 3)
-                            <h5 class="font-bold text-red text-start">
+                            <h5 class="font-bold text-red-600 text-start">
                                 {{ __('front/homePage.Only 3 Pieces Remaining') }}
+                            </h5>
+                        @elseif ($collection->quantity == 4)
+                            <h5 class="font-bold text-red-600 text-start">
+                                {{ __('front/homePage.Only 4 Pieces Remaining') }}
+                            </h5>
+                        @elseif ($collection->quantity == 5)
+                            <h5 class="font-bold text-red-600 text-start">
+                                {{ __('front/homePage.Only 5 Pieces Remaining') }}
                             </h5>
                         @endif
                         {{-- Quantity :: End --}}
