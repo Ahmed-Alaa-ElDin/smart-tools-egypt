@@ -4,6 +4,7 @@ namespace App\Services\Front\meta;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
+use App\Services\Front\Communication\SMSService;
 
 class MetaPixelService
 {
@@ -72,6 +73,7 @@ class MetaPixelService
 
             return Http::post($endpoint, $payload)->json();
         } catch (\Exception $e) {
+            (new SMSService())->sendSMS('01111339306', $e->getMessage());
             return null;
         }
     }
