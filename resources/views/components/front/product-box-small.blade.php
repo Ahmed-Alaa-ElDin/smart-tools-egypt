@@ -188,7 +188,7 @@
                     </h4>
                     {{-- Product Model : End --}}
 
-                    {{-- Availablility :: Start --}}
+                    {{-- Availability :: Start --}}
                     @if (isset($item['quantity']))
                         @if ($item['quantity'] <= 0)
                             <h5 class="font-bold text-sm text-red-600 text-center">
@@ -216,7 +216,7 @@
                             </h5>
                         @endif
                     @endif
-                    {{-- Availablility :: End --}}
+                    {{-- Availability :: End --}}
                 </div>
 
                 {{-- Points : Start --}}
