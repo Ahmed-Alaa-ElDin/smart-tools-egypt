@@ -71,9 +71,12 @@ class MetaPixelService
                 'test_event_code' => 'TEST35586',
             ];
 
-            (new SMSService())->sendSMS('01111339306', "event_name: {$eventName}\n");
 
-            return Http::post($endpoint, $payload)->json();
+            $test = Http::post($endpoint, $payload)->json();
+
+            (new SMSService())->sendSMS('01111339306', json_encode($test));
+
+            return $test;
         } catch (\Exception $e) {
             (new SMSService())->sendSMS('01111339306', $e->getMessage());
             return null;
