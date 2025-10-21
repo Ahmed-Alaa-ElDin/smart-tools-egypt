@@ -349,13 +349,25 @@
         document.addEventListener('livewire:init', () => {
             initializeImageHandlers();
 
-            Livewire.on('metaPixelEvent', (eventName, userData = {}, customData = {}, eventId = null) => {
+            Livewire.on('metaPixelEvent', (params) => {
+                const {
+                    eventName,
+                    userData,
+                    customData,
+                    eventId
+                } = params;
+
                 const eventParams = {
                     ...customData,
                     ...(eventId ? {
                         eventID: eventId
                     } : {}) // Meta Pixel expects 'eventID', not 'eventId'
                 };
+
+                console.log("Event Name: ", eventName);
+                console.log("User Data: ", userData);
+                console.log("Custom Data: ", customData);
+                console.log("Event ID: ", eventId);
 
                 fbq('track', eventName, eventParams);
 
