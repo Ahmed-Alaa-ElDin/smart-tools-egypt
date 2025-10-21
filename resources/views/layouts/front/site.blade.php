@@ -349,11 +349,22 @@
         document.addEventListener('livewire:init', () => {
             initializeImageHandlers();
 
-            Livewire.on('metaPixelEvent', (eventName, userData, customData, eventId) => {
-                fbq('track', eventName, customData, {
-                    eventId: eventId
-                });
+            Livewire.on('metaPixelEvent', (eventName, userData = {}, customData = {}, eventId = null) => {
+                const eventParams = {
+                    ...customData,
+                    ...(eventId ? {
+                        eventID: eventId
+                    } : {}) // Meta Pixel expects 'eventID', not 'eventId'
+                };
+
+                fbq('track', eventName, eventParams);
+
+                // Optionally include user data for matching (if applicable)
+                if (Object.keys(userData).length) {
+                    fbq('init', 'YOUR_PIXEL_ID', userData);
+                }
             });
+
         });
     </script>
 
