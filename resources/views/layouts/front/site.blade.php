@@ -364,16 +364,11 @@
                     } : {}) // Meta Pixel expects 'eventID', not 'eventId'
                 };
 
-                console.log("Event Name: ", eventName);
-                console.log("User Data: ", userData);
-                console.log("Custom Data: ", customData);
-                console.log("Event ID: ", eventId);
-
                 fbq('track', eventName, eventParams);
 
                 // Optionally include user data for matching (if applicable)
                 if (Object.keys(userData).length) {
-                    fbq('init', 'YOUR_PIXEL_ID', userData);
+                    fbq('init', '1174640216338366', userData);
                 }
             });
 
