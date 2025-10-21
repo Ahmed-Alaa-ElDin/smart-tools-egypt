@@ -67,7 +67,10 @@ class AddToWishlistButton extends Component
                 Cart::instance('wishlist')->store(Auth::user()->id);
             }
 
-            MetaPixel::sendEvent('AddToWishlist', [], [
+            ############ Emit Meta Pixel event :: Start ############
+            $metaEventId = MetaPixel::generateEventId();
+
+            $customData = [
                 'content_type' => 'product',
                 'content_ids' => [$this->item_id],
                 'contents' => [
@@ -78,19 +81,40 @@ class AddToWishlistButton extends Component
                 ],
                 'value' => $item->best_price,
                 'currency' => 'EGP',
-            ]);
+            ];
+
+            $this->dispatch(
+                'metaPixelEvent',
+                eventName: 'AddToWishlist',
+                userData: [],
+                customData: $customData,
+                eventId: $metaEventId
+            );
+
+            MetaPixel::sendEvent(
+                'AddToWishlist',
+                [],
+                $customData,
+                $metaEventId
+            );
             ############ Emit Meta Pixel event :: End ############
 
             ############ Emit Sweet Alert :: Start ############
-            $this->dispatch('swalDone', text: __('front/homePage.Product Has Been Added To The Wishlist Successfully'),
-                icon: 'success');
+            $this->dispatch(
+                'swalDone',
+                text: __('front/homePage.Product Has Been Added To The Wishlist Successfully'),
+                icon: 'success'
+            );
             ############ Emit Sweet Alert :: End ############
         }
         ############ Add Product to Wishlist :: End ############
         else {
             ############ Emit Sweet Alert :: Start ############
-            $this->dispatch('swalDone', text: __('front/homePage.Sorry This Product is Already in the Wishlist'),
-                icon: 'error');
+            $this->dispatch(
+                'swalDone',
+                text: __('front/homePage.Sorry This Product is Already in the Wishlist'),
+                icon: 'error'
+            );
             ############ Emit Sweet Alert :: End ############
         }
 

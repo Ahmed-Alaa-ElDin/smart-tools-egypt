@@ -57,7 +57,10 @@ class BackToStockNotificationButton extends Component
             // Change the state of the button
             $this->isNotified = true;
 
-            MetaPixel::sendEvent("Subscribe", [], [
+            ############ Emit Meta Pixel event :: Start ############
+            $eventId = MetaPixel::generateEventId();
+
+            $customData = [
                 'content_type' => 'product',
                 'content_ids' => [$this->item_id],
                 'content_name' => $this->item->name,
@@ -70,7 +73,18 @@ class BackToStockNotificationButton extends Component
                 ],
                 'currency' => 'EGP',
                 'value' => $this->item->final_price,
-            ]);
+            ];
+
+            $this->dispatch(
+                "metaPixelEvent",
+                eventName: 'Subscribe',
+                userData: [],
+                customData: $customData,
+                eventId: $eventId,
+            );
+
+            MetaPixel::sendEvent("Subscribe", [], $customData, $eventId);
+            ############ Emit Meta Pixel event :: End ############
 
             $this->dispatchSuccessNotification(__('front/homePage.The notification has been added successfully'));
         } catch (\Exception $e) {
@@ -95,7 +109,10 @@ class BackToStockNotificationButton extends Component
             // Change the state of the button
             $this->isNotified = true;
 
-            MetaPixel::sendEvent("Subscribe", [], [
+            ############ Emit Meta Pixel event :: Start ############
+            $eventId = MetaPixel::generateEventId();
+
+            $customData = [
                 'content_type' => 'product',
                 'content_ids' => [$this->item_id],
                 'content_name' => $this->item->name,
@@ -108,7 +125,18 @@ class BackToStockNotificationButton extends Component
                 ],
                 'currency' => 'EGP',
                 'value' => $this->item->final_price,
-            ]);
+            ];
+
+            $this->dispatch(
+                "metaPixelEvent",
+                eventName: 'Subscribe',
+                userData: [],
+                customData: $customData,
+                eventId: $eventId,
+            );
+
+            MetaPixel::sendEvent("Subscribe", [], $customData, $eventId);
+            ############ Emit Meta Pixel event :: End ############
 
             $this->dispatchSuccessNotification(__('front/homePage.The notification has been added successfully'));
         } catch (ValidationException $e) {

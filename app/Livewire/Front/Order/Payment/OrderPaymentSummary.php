@@ -605,19 +605,46 @@ class OrderPaymentSummary extends Component
                 'id' => $key,
                 'quantity' => $item['quantity'] ?? 1,
                 'item_price' => $item['price'],
-            ], $final_products,array_keys($final_products)), array_map(fn($item, $key) => [
+            ], $final_products, array_keys($final_products)), array_map(fn($item, $key) => [
                 'id' => $key,
                 'quantity' => $item['quantity'] ?? 1,
                 'item_price' => $item['price'],
-            ], $final_collections,array_keys($final_collections)));
+            ], $final_collections, array_keys($final_collections)));
 
-            MetaPixel::sendEvent("Purchase", [], [
+            ############ Emit Meta Pixel event :: Start ############
+            $eventId = MetaPixel::generateEventId();
+
+            $customData = [
                 'content_type' => 'product_group',
                 'content_ids' => array_merge(array_keys($final_products), array_keys($final_collections)),
                 'contents' => $purchased_items,
                 'currency' => 'EGP',
                 'value' => ceil($this->total_after_order_discount - $this->coupon_total_discount ?? 0),
-            ]);
+            ];
+
+            $this->dispatch(
+                "metaPixelEvent",
+                eventName: 'Purchase',
+                userData: [],
+                customData: $customData,
+                eventId: $eventId,
+            );
+
+            MetaPixel::sendEvent(
+                "Purchase",
+                [],
+                $customData,
+                $eventId
+            );
+            ############ Emit Meta Pixel event :: End ############
+
+            ############ Emit Sweet Alert :: Start ############
+            $this->dispatch(
+                'swalDone',
+                text: __('front/homePage.Order Created Successfully'),
+                icon: 'success'
+            );
+            ############ Emit Sweet Alert :: End ############
 
             ################### Payment :: Start ###################
             // Order is paid or will be paid on delivery

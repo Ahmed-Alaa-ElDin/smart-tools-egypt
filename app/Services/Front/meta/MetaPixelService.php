@@ -23,7 +23,7 @@ class MetaPixelService
     {
         try {
             if (empty($eventId)) {
-                $eventId = Str::uuid();
+                $eventId = $this->generateEventId();
             }
 
             $endpoint = "https://graph.facebook.com/{$this->apiVersion}/{$this->pixelId}/events";
@@ -90,5 +90,10 @@ class MetaPixelService
                 return [$key => empty($value) ? '' : hash('sha256', strtolower(trim($value)))];
             })
             ->toArray();
+    }
+
+    public function generateEventId()
+    {
+        return Str::uuid();
     }
 }

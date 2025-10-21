@@ -70,8 +70,11 @@ class CartAmount extends Component
             ############ Emit event to reinitialize the slider :: End ############
 
             ############ Emit Sweet Alert :: Start ############
-            $this->dispatch('swalDone', text: __('front/homePage.Sorry This Product is Out Of Stock'),
-                icon: 'error');
+            $this->dispatch(
+                'swalDone',
+                text: __('front/homePage.Sorry This Product is Out Of Stock'),
+                icon: 'error'
+            );
             ############ Emit Sweet Alert :: End ############
         }
     }
@@ -128,8 +131,11 @@ class CartAmount extends Component
             ############ Emit event to reinitialize the slider :: End ############
 
             ############ Emit Sweet Alert :: Start ############
-            $this->dispatch('swalDone', text: __('front/homePage.Sorry This Product is Out Of Stock'),
-                icon: 'error');
+            $this->dispatch(
+                'swalDone',
+                text: __('front/homePage.Sorry This Product is Out Of Stock'),
+                icon: 'error'
+            );
             ############ Emit Sweet Alert :: End ############
         }
     }
@@ -150,8 +156,11 @@ class CartAmount extends Component
         ############ Emit event to reinitialize the slider :: End ############
 
         ############ Emit Sweet Alert :: Start ############
-        $this->dispatch('swalDone', text: __('front/homePage.Product Removed From Your Cart Successfully'),
-            icon:'success');
+        $this->dispatch(
+            'swalDone',
+            text: __('front/homePage.Product Removed From Your Cart Successfully'),
+            icon: 'success'
+        );
         ############ Emit Sweet Alert :: End ############
 
     }
@@ -200,12 +209,17 @@ class CartAmount extends Component
             ############ Emit event to reinitialize the slider :: End ############
 
             ############ Emit Sweet Alert :: Start ############
-            $this->dispatch('swalDone', text: __('front/homePage.Product Has Been Added To The Cart Successfully'),
-                icon: 'success');
+            $this->dispatch(
+                'swalDone',
+                text: __('front/homePage.Product Has Been Added To The Cart Successfully'),
+                icon: 'success'
+            );
             ############ Emit Sweet Alert :: End ############
 
             ############ Emit Meta Pixel event :: Start ############
-            MetaPixel::sendEvent('AddToCart', [], [
+            $eventId = MetaPixel::generateEventId();
+
+            $customData = [
                 'content_type' => $this->type ? 'product' : 'product_group',
                 'content_ids' => [$item_id],
                 'contents' => [
@@ -216,22 +230,41 @@ class CartAmount extends Component
                 ],
                 'value' => $item->best_price,
                 'currency' => 'EGP',
-            ]);
+            ];
+
+            $this->dispatch(
+                'metaPixelEvent',
+                eventName: 'AddToCart',
+                userData: [],
+                customData: $customData,
+                eventId: $eventId,
+            );
+
+            MetaPixel::sendEvent('AddToCart', [], $customData, $eventId);
             ############ Emit Meta Pixel event :: End ############
         } elseif ($item->under_reviewing == 1) {
             ############ Emit Sweet Alert :: Start ############
-            $this->dispatch('swalDone', text: __('front/homePage.Sorry This Product is Under Reviewing'),
-                icon: 'error');
+            $this->dispatch(
+                'swalDone',
+                text: __('front/homePage.Sorry This Product is Under Reviewing'),
+                icon: 'error'
+            );
             ############ Emit Sweet Alert :: End ############
         } elseif ($item->quantity == 0) {
             ############ Emit Sweet Alert :: Start ############
-            $this->dispatch('swalDone', text: __('front/homePage.Sorry This Product is Out of Stock'),
-                icon: 'error');
+            $this->dispatch(
+                'swalDone',
+                text: __('front/homePage.Sorry This Product is Out of Stock'),
+                icon: 'error'
+            );
             ############ Emit Sweet Alert :: End ############
         } elseif ($cart_item) {
             ############ Emit Sweet Alert :: Start ############
-            $this->dispatch('swalDone', text: __('front/homePage.Sorry This Product is Already in the Cart'),
-                icon: 'error');
+            $this->dispatch(
+                'swalDone',
+                text: __('front/homePage.Sorry This Product is Already in the Cart'),
+                icon: 'error'
+            );
             ############ Emit Sweet Alert :: End ############
         }
     }

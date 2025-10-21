@@ -240,9 +240,9 @@
 
         (function() {
             function setFbcCookie() {
-                var urlParams = new URLSearchParams(window.location.search);
-                var fbclid = urlParams.get('fbclid');
+                var fbclid = new URLSearchParams(window.location.search).get('fbclid');
                 if (fbclid) {
+                    fbclid = encodeURIComponent(fbclid); // restore original form
                     var now = Math.floor(new Date().getTime() / 1000);
                     var fbcValue = 'fb.1.' + now + '.' + fbclid;
                     document.cookie = '_fbc=' + fbcValue + '; path=/; max-age=' + (60 * 60 * 24 * 90); // 90 days
@@ -348,6 +348,12 @@
         // Re-initialize when Livewire connects (for turbo visits)
         document.addEventListener('livewire:init', () => {
             initializeImageHandlers();
+
+            Livewire.on('metaPixelEvent', (eventName, userData, customData, eventId) => {
+                fbq('track', eventName, customData, {
+                    eventId: eventId
+                });
+            });
         });
     </script>
 

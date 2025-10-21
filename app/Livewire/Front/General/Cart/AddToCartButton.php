@@ -71,7 +71,9 @@ class AddToCartButton extends Component
             ############ Emit event to reinitialize the slider :: End ############
 
             ############ Emit Meta Pixel event :: Start ############
-            MetaPixel::sendEvent('AddToCart', [], [
+            $eventId = MetaPixel::generateEventId();
+
+            $customData = [
                 'content_type' => 'product',
                 'content_ids' => [$this->item_id],
                 'contents' => [
@@ -82,7 +84,17 @@ class AddToCartButton extends Component
                 ],
                 'value' => $item->best_price,
                 'currency' => 'EGP',
-            ]);
+            ];
+
+            $this->dispatch(
+                'metaPixelEvent',
+                eventName: 'AddToCart',
+                userData: [],
+                customData: $customData,
+                eventId: $eventId,
+            );
+
+            MetaPixel::sendEvent('AddToCart', [], $customData, $eventId);
             ############ Emit Meta Pixel event :: End ############
 
             ############ Emit Sweet Alert :: Start ############
