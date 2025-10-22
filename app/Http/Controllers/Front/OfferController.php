@@ -132,13 +132,20 @@ class OfferController extends Controller
         $collectionsIds = [];
 
         // Send Meta Pixel event
-        MetaPixel::sendEvent('CustomizeProduct', [], [
-            'content_type' => 'product_group',
-            'content_ids' => $productsIds,
-            'content_name' => $offer->title,
-        ]);
+        $pixelParams = [
+            "eventName" => 'CustomizeProduct',
+            "userData" => [],
+            "customData" => [
+                'content_type' => 'product_group',
+                'content_ids' => $productsIds,
+                'content_name' => $offer->title,
+            ],
+            "eventId" => MetaPixel::generateEventId(),
+        ];
 
-        return view('front.offers.show', compact('offer', 'productsIds', 'collectionsIds'));
+        MetaPixel::sendEvent($pixelParams['eventName'], $pixelParams['userData'], $pixelParams['customData'], $pixelParams['eventId']);
+
+        return view('front.offers.show', compact('offer', 'productsIds', 'collectionsIds', 'pixelParams'));
     }
 
     /**
@@ -170,13 +177,20 @@ class OfferController extends Controller
         $collectionsIds = [];
 
         // Send Meta Pixel event
-        MetaPixel::sendEvent('CustomizeProduct', [], [
-            'content_type' => 'product_group',
-            'content_ids' => $productsIds,
-            'content_name' => $offer->title,
-        ]);
+        $pixelParams = [
+            "eventName" => 'CustomizeProduct',
+            "userData" => [],
+            "customData" => [
+                'content_type' => 'product_group',
+                'content_ids' => $productsIds,
+                'content_name' => $offer->title,
+            ],
+            "eventId" => MetaPixel::generateEventId(),
+        ];
 
-        return view('front.offers.show', compact('offer', 'productsIds', 'collectionsIds'));
+        MetaPixel::sendEvent($pixelParams['eventName'], $pixelParams['userData'], $pixelParams['customData'], $pixelParams['eventId']);
+
+        return view('front.offers.show', compact('offer', 'productsIds', 'collectionsIds', 'pixelParams'));
     }
 
     /**
@@ -204,12 +218,19 @@ class OfferController extends Controller
         $collectionsIds = [];
 
         // Send Meta Pixel event
-        MetaPixel::sendEvent('CustomizeProduct', [], [
-            'content_type' => 'product_group',
-            'content_ids' => $productsIds,
-            'content_name' => $offer->title,
-        ]);
+        $pixelParams = [
+            "eventName" => 'CustomizeProduct',
+            "userData" => [],
+            "customData" => [
+                'content_type' => 'product_group',
+                'content_ids' => $productsIds,
+                'content_name' => $offer->title,
+            ],
+            "eventId" => MetaPixel::generateEventId(),
+        ];
 
-        return view('front.offers.show', compact('offer', 'productsIds', 'collectionsIds'));
+        MetaPixel::sendEvent($pixelParams['eventName'], $pixelParams['userData'], $pixelParams['customData'], $pixelParams['eventId']);
+
+        return view('front.offers.show', compact('offer', 'productsIds', 'collectionsIds', 'pixelParams'));
     }
 }

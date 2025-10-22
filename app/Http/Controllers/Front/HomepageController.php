@@ -184,12 +184,19 @@ class HomepageController extends Controller
     {
         $search = $request->get('search');
 
-        MetaPixel::sendEvent('Search', [], [
-            'search_string' => $search,
-            'content_type' => 'product',
-        ]);
+        $pixelParams = [
+            "eventName" => 'Search',
+            "userData" => [],
+            "customData" => [
+                'search_string' => $search,
+                'content_type' => 'product',
+            ],
+            "eventId" => MetaPixel::generateEventId(),
+        ];
 
-        return view('front.search.search_page', compact('search'));
+        MetaPixel::sendEvent($pixelParams['eventName'], $pixelParams['userData'], $pixelParams['customData'], $pixelParams['eventId']);
+
+        return view('front.search.search_page', compact('search', 'pixelParams'));
     }
 
     public function showProductList(int $section_id = 1)

@@ -199,6 +199,22 @@
             })
         @endif
 
+        window.pixelEvent = function(eventName, userData, customData, eventId) {
+            const eventParams = {
+                ...customData,
+                ...(eventId ? {
+                    eventID: eventId
+                } : {}) // Meta Pixel expects 'eventID', not 'eventId'
+            };
+
+            fbq('track', eventName, eventParams);
+
+            // Optionally include user data for matching (if applicable)
+            if (Object.keys(userData).length) {
+                fbq('init', '1174640216338366', userData);
+            }
+        };
+
         window.addEventListener('swalDone', function(e) {
             Swal.fire({
                 text: e.detail.text,
@@ -357,22 +373,21 @@
                     eventId
                 } = params;
 
-                const eventParams = {
-                    ...customData,
-                    ...(eventId ? {
-                        eventID: eventId
-                    } : {}) // Meta Pixel expects 'eventID', not 'eventId'
-                };
-
-                fbq('track', eventName, eventParams);
-
-                // Optionally include user data for matching (if applicable)
-                if (Object.keys(userData).length) {
-                    fbq('init', '1174640216338366', userData);
-                }
+                pixelEvent(eventName, userData, customData, eventId);
             });
-
         });
+
+        // Send Meta Pixel event
+        const {
+            eventName,
+            userData,
+            customData,
+            eventId
+        } = {!! json_encode($pixelParams ?? []) !!} || {};
+
+        if (eventName) {
+            pixelEvent(eventName, userData, customData, eventId);
+        }
     </script>
 
     {{-- Custom Js Files --}}

@@ -2217,19 +2217,31 @@ class OrderController extends Controller
         $cart_items = $cart_collections->concat($cart_products)->toArray();
 
         // emit event
-        MetaPixel::sendEvent('CompleteRegistration', [], [
-            'content_type' => 'product_group',
-            'content_ids' => array_merge($cart_products_id, $cart_collections_id),
-            'contents' => array_map(fn ($item) => [
-                'id' => $item['id'],
-                'quantity' => $item['quantity'] ?? 1,
-                'item_price' => $item['price'],
-            ], $cartItemsDetails),
-            'value' => ceil(array_sum(array_column($cartItemsDetails, 'price')) ?? 0),
-            'currency' => 'EGP',
-        ]);
+        $pixelParams = [
+            "eventName" => 'CompleteRegistration',
+            "userData" => [],
+            "customData" => [
+                'content_type' => 'product_group',
+                'content_ids' => array_merge($cart_products_id, $cart_collections_id),
+                'contents' => array_map(fn($item) => [
+                    'id' => $item['id'],
+                    'quantity' => $item['quantity'] ?? 1,
+                    'item_price' => $item['price'],
+                ], $cartItemsDetails),
+                'value' => ceil(array_sum(array_column($cartItemsDetails, 'price')) ?? 0),
+                'currency' => 'EGP',
+            ],
+            "eventId" => MetaPixel::generateEventId(),
+        ];
 
-        return view('front.orders.shipping', compact('cart_items'));
+        MetaPixel::sendEvent(
+            $pixelParams['eventName'],
+            $pixelParams['userData'],
+            $pixelParams['customData'],
+            $pixelParams['eventId']
+        );
+
+        return view('front.orders.shipping', compact('cart_items', 'pixelParams'));
     }
     ##################### Go To Shipping Details During Placing the Order :: End #####################
 
@@ -2281,19 +2293,26 @@ class OrderController extends Controller
         $cart_items = $cart_collections->concat($cart_products)->toArray();
 
         // emit event
-        MetaPixel::sendEvent('InitiateCheckout', [], [
-            'content_type' => 'product_group',
-            'content_ids' => array_merge($cart_products_id, $cart_collections_id),
-            'contents' => array_map(fn ($item) => [
-                'id' => $item['id'],
-                'quantity' => $item['quantity'] ?? 1,
-                'item_price' => $item['price'],
-            ], $cartItemsDetails),
-            'value' => ceil(array_sum(array_column($cartItemsDetails, 'price')) ?? 0),
-            'currency' => 'EGP',
-        ]);
+        $pixelParams = [
+            "eventName" => 'InitiateCheckout',
+            "userData" => [],
+            "customData" => [
+                'content_type' => 'product_group',
+                'content_ids' => array_merge($cart_products_id, $cart_collections_id),
+                'contents' => array_map(fn($item) => [
+                    'id' => $item['id'],
+                    'quantity' => $item['quantity'] ?? 1,
+                    'item_price' => $item['price'],
+                ], $cartItemsDetails),
+                'value' => ceil(array_sum(array_column($cartItemsDetails, 'price')) ?? 0),
+                'currency' => 'EGP',
+            ],
+            "eventId" => MetaPixel::generateEventId(),
+        ];
 
-        return view('front.orders.payment', compact('cart_items'));
+        MetaPixel::sendEvent($pixelParams['eventName'], $pixelParams['userData'], $pixelParams['customData'], $pixelParams['eventId']);
+
+        return view('front.orders.payment', compact('cart_items', 'pixelParams'));
     }
     ##################### Go To Billing Details During Placing the Order :: End #####################
 

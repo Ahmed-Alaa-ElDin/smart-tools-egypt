@@ -127,21 +127,29 @@ class ProductController extends Controller
         // Get the app locale
         $locale = session('locale');
 
-        MetaPixel::sendEvent('ViewContent', [], [
-            'content_type' => 'product',
-            'content_ids' => [$product->id],
-            'content_name' => $product->name,
-            'contents' => [
-                [
-                    'id' => $product->id,
-                    'item_price' => $product->final_price,
+        // Send Meta Pixel event
+        $pixelParams = [
+            "eventName" => 'ViewContent',
+            "userData" => [],
+            "customData" => [
+                'content_type' => 'product',
+                'content_ids' => [$product->id],
+                'content_name' => $product->name,
+                'contents' => [
+                    [
+                        'id' => $product->id,
+                        'item_price' => $product->final_price,
+                    ],
                 ],
+                'currency' => 'EGP',
+                'value' => $product->final_price,
             ],
-            'currency' => 'EGP',
-            'value' => $product->final_price,
-        ]);
+            "eventId" => MetaPixel::generateEventId(),
+        ];
 
-        return view('front.product_page.product_page', compact('product', 'productOffer', 'relatedItems', 'complementedItems', 'product_cart', 'locale'));
+        MetaPixel::sendEvent($pixelParams['eventName'], $pixelParams['userData'], $pixelParams['customData'], $pixelParams['eventId']);
+
+        return view('front.product_page.product_page', compact('product', 'productOffer', 'relatedItems', 'complementedItems', 'product_cart', 'locale', 'pixelParams'));
     }
 
     /**

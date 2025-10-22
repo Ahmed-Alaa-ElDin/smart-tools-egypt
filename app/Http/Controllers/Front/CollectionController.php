@@ -121,16 +121,23 @@ class CollectionController extends Controller
         $collectionProductsIds = $collection->products->pluck('id')->toArray();
 
         // Send Meta Pixel event
-        MetaPixel::sendEvent('ViewContent', [], [
-            'content_type' => 'product_group',
-            'content_ids' => [$collection->id, ...$collectionProductsIds],
-            'content_name' => $collection->name,
-            'contents' => $collectionProducts,
-            'currency' => 'EGP',
-            'value' => $collection->final_price,
-        ]);
+        $pixelParams = [
+            "eventName" => 'ViewContent',
+            "userData" => [],
+            "customData" => [
+                'content_type' => 'product_group',
+                'content_ids' => [$collection->id, ...$collectionProductsIds],
+                'content_name' => $collection->name,
+                'contents' => $collectionProducts,
+                'currency' => 'EGP',
+                'value' => $collection->final_price,
+            ],
+            "eventId" => MetaPixel::generateEventId(),
+        ];
 
-        return view('front.collection_page.collection_page', compact('collection', 'collectionOffer', 'relatedItems', 'complementedItems', 'collectionCart', 'locale'));
+        MetaPixel::sendEvent($pixelParams['eventName'], $pixelParams['userData'], $pixelParams['customData'], $pixelParams['eventId']);
+
+        return view('front.collection_page.collection_page', compact('collection', 'collectionOffer', 'relatedItems', 'complementedItems', 'collectionCart', 'locale', 'pixelParams'));
     }
 
     /**

@@ -46,6 +46,3 @@
         {{-- todo: Other Product Suggestions (Similar Products, Related Products, etc.) in the Cart Page (if any) --}}
     </div>
 @endsection
-
-{{-- Extra Scripts --}}
-

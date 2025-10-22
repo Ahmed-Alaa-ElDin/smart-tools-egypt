@@ -62,7 +62,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Redirect the user to the Facebook authentication page.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function facebookRedirect()
     {
@@ -72,7 +72,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Obtain the user information from Facebook.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function facebookCallback()
     {
@@ -113,15 +113,27 @@ class AuthenticatedSessionController extends Controller
         Auth::login($createdUser, true);
 
         // Send Meta Pixel event
-        MetaPixel::sendEvent('CompleteRegistration', [], []);
+        $pixelParams = [
+            "eventName" => 'CompleteRegistration',
+            "userData" => [],
+            "customData" => [],
+            "eventId" => MetaPixel::generateEventId(),
+        ];
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        MetaPixel::sendEvent(
+            $pixelParams['eventName'],
+            $pixelParams['userData'],
+            $pixelParams['customData'],
+            $pixelParams['eventId']
+        );
+
+        return redirect()->intended(RouteServiceProvider::HOME)->with('pixelParams', $pixelParams);
     }
 
     /**
      * Redirect the user to the Google authentication page.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function googleRedirect()
     {
@@ -131,7 +143,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Obtain the user information from Google.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function googleCallback()
     {
@@ -165,9 +177,21 @@ class AuthenticatedSessionController extends Controller
         Auth::login($createdUser, true);
 
         // Send Meta Pixel event
-        MetaPixel::sendEvent('CompleteRegistration', [], []);
+        $pixelParams = [
+            "eventName" => 'CompleteRegistration',
+            "userData" => [],
+            "customData" => [],
+            "eventId" => MetaPixel::generateEventId(),
+        ];
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        MetaPixel::sendEvent(
+            $pixelParams['eventName'],
+            $pixelParams['userData'],
+            $pixelParams['customData'],
+            $pixelParams['eventId']
+        );
+
+        return redirect()->intended(RouteServiceProvider::HOME)->with('pixelParams', $pixelParams);
     }
 
     /**
