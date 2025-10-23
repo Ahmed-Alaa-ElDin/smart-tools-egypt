@@ -261,8 +261,6 @@
                     fbclid = encodeURIComponent(fbclid); // restore original form
                     var now = Math.floor(new Date().getTime() / 1000);
                     var fbcValue = 'fb.1.' + now + '.' + fbclid;
-                    console.log("frontEnd :" + now);
-                    console.log("backEnd :" + {{ now()->timestamp }});
                     document.cookie = '_fbc=' + fbcValue + '; path=/; max-age=' + (60 * 60 * 24 * 90); // 90 days
                 }
             }
