@@ -3,7 +3,9 @@
 namespace App\Livewire\Front\Product\Review;
 
 use App\Models\Review;
+use App\Models\Product;
 use Livewire\Component;
+use App\Models\Collection;
 use Livewire\WithPagination;
 
 class ReviewBlock extends Component
@@ -123,13 +125,21 @@ class ReviewBlock extends Component
                 'status' => 0
             ]);
 
+            $this->reviewSubmitted = true;
+
+            if ($this->type == 'Product') {
+                $product = Product::select('id')->with('reviews')->find($this->item_id);
+                $this->reviews = $product->reviews;
+            } elseif ($this->type == 'Collection') {
+                $collection = Collection::select('id')->with('reviews')->find($this->item_id);
+                $this->reviews = $collection->reviews;
+            }
+
             $this->dispatch(
                 'swalDone',
                 text: __('front/homePage.Review has been Added successfully'),
                 icon: 'success'
             );
-
-            $this->reviewSubmitted = true;
         } catch (\Exception $e) {
             $this->dispatch(
                 'swalDone',
@@ -145,6 +155,14 @@ class ReviewBlock extends Component
     {
         $this->user_review->delete();
 
+        if ($this->type == 'Product') {
+            $product = Product::select('id')->with('reviews')->find($this->item_id);
+            $this->reviews = $product->reviews;
+        } elseif ($this->type == 'Collection') {
+            $collection = Collection::select('id')->with('reviews')->find($this->item_id);
+            $this->reviews = $collection->reviews;
+        }
+
         $this->dispatch(
             'swalDone',
             text: __('front/homePage.Review has been Deleted successfully'),
@@ -155,8 +173,6 @@ class ReviewBlock extends Component
 
         $this->reviewSubmitted = false;
         $this->user_review = null;
-
-        return redirect(request()->header('Referer'));
     }
     ############# Delete Review :: End #############
 }

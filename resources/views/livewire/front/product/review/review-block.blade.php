@@ -134,6 +134,7 @@
             </div>
             {{-- Old Reviews Summary :: End --}}
 
+            {{ $reviewSubmitted ? 'Submitted' : 'Not Submitted' }}
             {{-- New Review :: Start --}}
             {{-- todo :: Check if the user bought this product --}}
             @if (auth()->check() && !$reviewSubmitted)
@@ -212,7 +213,6 @@
                     <p class="text-center mb-2">
                         {{ __('front/homePage.You Should Login First to be able to add a new review') }}
                     </p>
-                    {{-- todo :: login route name --}}
                     <a href="{{ route('login') }}"
                         class="btn bg-yellow-500 font-bold">{{ __('front/homePage.Login') }}</a>
                 </div>
