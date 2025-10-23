@@ -188,7 +188,7 @@
 
                                     {{-- Rating Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
-                                        <div class="flex flex-wrap items-center content-center justify-center">
+                                        <div class="flex flex-nowrap items-center content-center justify-center">
                                             @for ($i = 1; $i <= 5; $i++)
                                                 <span
                                                     class="material-icons inline-block text-lg @if ($i <= $review->rating) text-yellow-300 @else text-gray-400 @endif">
