@@ -2666,10 +2666,16 @@ class OrderController extends Controller
 
         $order->update([
             'status_id' => $request['state'],
-            'delivered_at' => $request['state'] == 45 ? now() : null,
+            'delivered_at' => $request['state'] == OrderStatus::Delivered->value ? now() : null,
         ]);
 
         $order->statuses()->attach($request['state'], ['notes' => $request['exceptionReason'] ?? null]);
+
+        if ($request['state'] == OrderStatus::Delivered->value) {
+            $order->points()->update([
+                'status' => 1,
+            ]);
+        }
 
         return response()->json(['success' => true]);
     }
