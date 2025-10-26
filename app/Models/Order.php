@@ -83,6 +83,12 @@ class Order extends Model
         return $this->hasMany(Transaction::class);
     }
 
+    public function pointTransactions()
+    {
+        return $this->hasMany(Transaction::class)
+            ->where('payment_method_id', PaymentMethod::Points->value);
+    }
+
     public function zone()
     {
         return $this->belongsTo(Zone::class);

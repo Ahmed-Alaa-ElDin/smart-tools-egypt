@@ -631,7 +631,8 @@ class OrdersDatatable extends Component
                             ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
                     }])
                     ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
-            }
+            },
+            'pointTransactions'
         ])->findOrFail($order_id)->toArray();
 
         $order['user_name'] = ($order['user']['f_name']['ar'] ?? '') . " " . ($order['user']['l_name']['ar'] ?? '');
@@ -645,6 +646,7 @@ class OrdersDatatable extends Component
         $order['coupon_discount'] = $order['invoice'] ? ($order['invoice']['coupon_items_discount'] + $order['invoice']['coupon_order_discount']) : 0;
         $order['coupon_code'] = $order['coupon'] ? $order['coupon']['code'] : null;
         $order['delivery_fees'] = $order['invoice'] ? $order['invoice']['delivery_fees'] : 0;
+        $order['points'] = count($order['point_transactions'] ?? []) ? $order['point_transactions'][0]['payment_amount'] : 0;
         $order['total'] = $order['invoice'] ? $order['invoice']['total'] : 0;
 
         $pdf = PDF::loadView("front.orders.purchase-order", compact("order"));
@@ -699,7 +701,8 @@ class OrdersDatatable extends Component
                             ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
                     }])
                     ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
-            }
+            },
+            'pointTransactions',
         ])->whereIn('id', $this->selectedOrders)->get()->toArray();
 
         $orders = array_map(function ($order) {
@@ -715,6 +718,7 @@ class OrdersDatatable extends Component
             $order['coupon_discount'] = $order['invoice'] ? ($order['invoice']['coupon_items_discount'] + $order['invoice']['coupon_order_discount']) : 0;
             $order['coupon_code'] = $order['coupon'] ? $order['coupon']['code'] : null;
             $order['delivery_fees'] = $order['invoice'] ? $order['invoice']['delivery_fees'] : 0;
+            $order['points'] = count($order['point_transactions'] ?? []) ? $order['point_transactions'][0]['payment_amount'] : 0;
             $order['total'] = $order['invoice'] ? $order['invoice']['total'] : 0;
 
             return $order;

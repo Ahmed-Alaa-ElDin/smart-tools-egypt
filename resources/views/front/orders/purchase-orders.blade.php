@@ -163,6 +163,15 @@
                                 {{ number_format($order['products_discount'], 2) }} ج.م
                             </td>
                         </tr>
+                        @if ($order['points'])
+                            <tr>
+                                <td colspan="4"></td>
+                                <th style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">خصم النقاط</th>
+                                <td style="border: 1px solid black;padding: 0.5rem 0.75rem;" colspan="2">
+                                    {{ number_format($order['points'], 2) }} ج.م
+                                </td>
+                            </tr>
+                        @endif
                         @if ($order['offers_discount'])
                             <tr>
                                 <td colspan="4"></td>
