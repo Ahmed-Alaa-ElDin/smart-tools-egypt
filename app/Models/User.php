@@ -84,6 +84,11 @@ class User extends Authenticatable
         return $this->hasMany(Address::class);
     }
 
+    public function defaultAddress()
+    {
+        return $this->hasMany(Address::class)->where('default', 1);
+    }
+
     // One to many relationship  User --> phones
     public function phones()
     {

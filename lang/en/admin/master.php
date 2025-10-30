@@ -64,6 +64,7 @@ return [
     'All Reviews'               =>      'All Reviews',
     'Add Review'                =>      'Add Review',
     'Pending Reviews'           =>      'Pending Reviews',
+    'Uncompleted Orders'        =>      'Uncompleted Orders',
     'Categories'                =>      'Categories',
     'Categories'                =>      'Categories',
     'Categories'                =>      'Categories',

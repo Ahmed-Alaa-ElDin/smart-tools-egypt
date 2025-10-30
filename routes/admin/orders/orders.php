@@ -12,4 +12,5 @@ Route::get('/orders/ready-for-shipping-orders', [OrderController::class, 'readyF
 Route::get('/orders/shipped-orders', [OrderController::class, 'shippedOrders'])->name('orders.shipped-orders');
 Route::get('/orders/suspended-orders', [OrderController::class, 'suspendedOrders'])->name('orders.suspended-orders');
 Route::get('/orders/delivered-orders', [OrderController::class, 'deliveredOrders'])->name('orders.delivered-orders');
+Route::get('/orders/uncompleted-orders', [OrderController::class, 'uncompletedOrders'])->name('orders.uncompleted-orders');
 Route::resource('/orders', OrderController::class);

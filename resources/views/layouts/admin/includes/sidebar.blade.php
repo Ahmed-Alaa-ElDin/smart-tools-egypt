@@ -159,6 +159,32 @@
                             </a>
                         </li>
 
+                        {{-- Uncompleted Orders --}}
+                        <li class="nav-item {{ $activePage == 'Uncompleted Orders' ? ' active' : '' }}">
+                            <a class="nav-link flex justify-between gap-2"
+                                href="{{ route('admin.orders.uncompleted-orders') }}">
+                                <div class="flex gap-1 justify-start items-center">
+                                    <span class="material-icons">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24">
+                                            <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="2">
+                                                <path d="M4 19a2 2 0 1 0 4 0a2 2 0 0 0-4 0" />
+                                                <path d="M13 17H6V3H4" />
+                                                <path d="m6 5l14 1l-1 7H6m11 4v5m4-5v5" />
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <span>{{ __('admin/master.Uncompleted Orders') }} </span>
+                                </div>
+
+                                <span
+                                    class="inline-flex items-center justify-center p-1 rounded-full w-6 h-6 text-2xs font-bold {{ $activePage == 'Uncompleted Orders' ? ' bg-white text-primary' : 'bg-secondary text-white hover:text-secondary hover:bg-white' }}">
+                                    {{ $cartsCount }}
+                                </span>
+                            </a>
+                        </li>
+
                         {{-- See New Orders --}}
                         <li class="nav-item {{ $activePage == 'New Orders' ? ' active' : '' }}">
                             <a class="nav-link flex justify-between gap-2"

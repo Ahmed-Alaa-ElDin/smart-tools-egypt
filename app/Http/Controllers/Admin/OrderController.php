@@ -159,6 +159,14 @@ class OrderController extends Controller
      */
     public function softDeletedOrders()
     {
-        return view('admin.orders.softDeleted');
+        return view('admin.orders.soft_deleted');
+    }
+
+    /**
+     * Display a listing of the uncompleted orders.
+     */
+    public function uncompletedOrders()
+    {
+        return view('admin.orders.uncompleted_orders');
     }
 }

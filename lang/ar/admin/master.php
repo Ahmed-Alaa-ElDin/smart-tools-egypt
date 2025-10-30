@@ -64,4 +64,5 @@ return [
     'All Reviews'               =>      'جميع التقييمات',
     'Add Review'                =>      'إضافة تقييم',
     'Pending Reviews'           =>      'التقييمات المعلقة',
+    'Uncompleted Orders'        =>      'طلبات غير مكتملة',
 ];

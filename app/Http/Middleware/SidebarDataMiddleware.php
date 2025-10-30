@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Cart;
 use Closure;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -31,6 +32,8 @@ class SidebarDataMiddleware
             ->pluck('count', 'status_id')
             ->toArray();
 
+        $carts = Cart::cartsOnly()->notEmpty()->count();
+
         $ordersCounts = [
             'new_orders' => array_sum(array_intersect_key($counts, array_flip(config('constants.order_status_type.new_orders')))),
             'approved_orders' => array_sum(array_intersect_key($counts, array_flip(config('constants.order_status_type.approved_orders')))),
@@ -42,6 +45,7 @@ class SidebarDataMiddleware
         ];
 
         View::share('ordersCounts', $ordersCounts);
+        View::share('cartsCount', $carts);
 
         return $next($request);
     }
