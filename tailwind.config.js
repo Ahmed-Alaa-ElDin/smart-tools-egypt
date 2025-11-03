@@ -114,6 +114,10 @@ module.exports = {
         },
     },
 
+    corePlugins: {
+        visibility: false, // disables Tailwind's .visible, .invisible, .collapse utilities
+    },
+    
     plugins: [
         require("@tailwindcss/forms"),
         require("@tailwindcss/typography"),
