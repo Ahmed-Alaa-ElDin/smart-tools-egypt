@@ -128,10 +128,24 @@ class NewOrderProductsPart extends Component
     {
         if ($product_collection == 'Product') {
             $product = Product::with('thumbnail')->findOrFail($product_id)->toArray();
+
+            if ($product['quantity'] <= 0) {
+                return;
+            } elseif ($product['quantity'] < $amount) {
+                $amount = $product['quantity'];
+            }
+
             $product['amount'] = $amount;
             $this->products[] = $product;
         } elseif ($product_collection == 'Collection') {
             $collection = Collection::with('thumbnail')->findOrFail($product_id)->toArray();
+
+            if ($collection['quantity'] <= 0) {
+                return;
+            } elseif ($collection['quantity'] < $amount) {
+                $amount = $collection['quantity'];
+            }
+
             $collection['amount'] = $amount;
             $this->products[] = $collection;
         }
