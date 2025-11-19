@@ -100,7 +100,8 @@
                 {{-- Upload --}}
                 <div class="form-inline col-span-1 justify-center">
                     <div class="flex justify-center">
-                        <button class="btn btn-success btn-round btn-sm text-white font-bold" type="button" onclick="modal.show()">
+                        <button class="btn btn-success btn-round btn-sm text-white font-bold" type="button"
+                            wire:click="openUploadModal">
                             <span class="material-icons">
                                 file_upload
                             </span> &nbsp; {{ __('admin/productsPages.Bulk Products Update') }}
@@ -323,14 +324,13 @@
 
                                     {{-- Quantity Body --}}
                                     <td class="px-6 py-2 text-center whitespace-nowrap">
-                                        <div
-                                            class="text-sm  @if ($product->quantity > $product->low_stock + 2) text-success
-                                            @elseif ($product->quantity > $product->low_stock)
-                                            text-yellow-600
-                                        @else
-                                            text-red-600 @endif">
-                                            {{ $product->quantity }}
-                                        </div>
+                                        <button title="{{ __('admin/productsPages.Edit Quantity') }}"
+                                            wire:click="openEditQuantityModal({{ $product->id }})"
+                                            class="m-auto text-sm @if ($product->quantity > $product->low_stock + 2) bg-success @elseif ($product->quantity > $product->low_stock) bg-yellow-600 @else bg-red-600 @endif rounded p-1 max-w-max h-9 flex flex-row justify-center items-center content-center">
+                                            <span class="bg-white rounded py-1 px-2">
+                                                {{ $product->quantity }}
+                                            </span>
+                                        </button>
                                     </td>
 
                                     {{-- Publish Body --}}
@@ -350,8 +350,9 @@
                                     <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
 
                                         {{-- Product Details --}}
-                                        <a href="{{ route('front.products.show', ['id' => $product->id, 'slug' => $product->slug]) }}" target="_blank"
-                                            title="{{ __('admin/productsPages.View') }}" class="m-0">
+                                        <a href="{{ route('front.products.show', ['id' => $product->id, 'slug' => $product->slug]) }}"
+                                            target="_blank" title="{{ __('admin/productsPages.View') }}"
+                                            class="m-0">
                                             <span
                                                 class="material-icons p-1 text-lg w-9 h-9 text-white bg-view hover:bg-viewHover rounded">
                                                 visibility
@@ -406,7 +407,7 @@
     </div>
 
     {{-- Bulk Update Modal Start --}}
-    <div id="bulk-update-modal" tabindex="-1" wire:ignore.self onclick="modal.hide()"
+    <div id="bulk-update-modal" tabindex="-1" wire:ignore.self wire:click="closeUploadModal"
         class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full justify-center items-center backdrop-blur cursor-pointer hidden"
         aria-modal="true" role="dialog">
         <div class="relative p-4 w-full max-w-2xl" wire:click.stop>
@@ -417,7 +418,7 @@
                     <h3 class="grow text-xl font-semibold text-gray-900 dark:text-white">
                         {{ __('admin/productsPages.Bulk Products Update') }}
                     </h3>
-                    <button type="button" onclick="modal.hide()"
+                    <button type="button" wire:click="closeUploadModal"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
                         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg">
@@ -452,7 +453,7 @@
                         {{ __('admin/productsPages.Update') }}
                     </button>
 
-                    <button type="button" onclick="modal.hide()"
+                    <button type="button" wire:click="closeUploadModal"
                         class="btn font-bold bg-primary focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                         {{ __('admin/productsPages.Cancel') }}
                     </button>
@@ -460,17 +461,96 @@
             </div>
         </div>
     </div>
-    {{-- Bulk Update Modal : End --}}
+    {{-- Bulk Update Modal :: End --}}
+
+    {{-- Edit Quantity Modal :: Start --}}
+    <div id="edit-quantity-modal" tabindex="-1" wire:ignore.self wire:click="closeEditQuantityModal"
+        class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full justify-center items-center backdrop-blur cursor-pointer hidden"
+        aria-modal="true" role="dialog">
+        <div class="relative p-4 w-full max-w-2xl" wire:click.stop>
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow">
+                <!-- Modal header -->
+                <div class="flex justify-between items-start p-4 rounded-t border-b">
+                    <h3 class="grow text-xl font-semibold text-gray-900 dark:text-white">
+                        {{ __('admin/productsPages.Edit Quantity') }}
+                    </h3>
+                    <button type="button" wire:click="closeEditQuantityModal"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-6 space-y-6">
+                    <div class="flex flex-wrap gap-3 justify-around items-start w-full">
+                        {{-- Upload input --}}
+                        <div class="flex w-full gap-3 items-center justify-center">
+                            <label for="editQuantity"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-200 m-0">
+                                {{ __('admin/productsPages.Quantity') }}
+                            </label>
+                            <div>
+                                <input type="number" wire:model="editQuantity" id="editQuantity" step="1"
+                                    class="col-span-12 md:col-span-6 md:col-start-4 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300">
+                                @error('editQuantity')
+                                    <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="flex items-center justify-around p-2 space-x-2 rounded-b border-t border-gray-200">
+                    <button type="button" wire:click="updateQuantity"
+                        class="btn font-bold text-white bg-success hover:bg-successDark hover:text-white focus:outline-none rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 ">
+                        {{ __('admin/productsPages.Update') }}
+                    </button>
+
+                    <button type="button" wire:click="closeEditQuantityModal"
+                        class="btn font-bold bg-primary focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        {{ __('admin/productsPages.Cancel') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- Edit Quantity Modal :: End --}}
 </div>
 
 @push('livewire-js')
     <script>
-        const bulkUpdateModal = document.getElementById('bulk-update-modal');
-        const modal = new Modal (bulkUpdateModal);
+        // Bulk Update Modal
+        const bulkUpdateModalElement = document.getElementById('bulk-update-modal');
+        const bulkUpdateModal = new Modal(bulkUpdateModalElement);
 
         // Hide the modal the livewire dispatches the event "bulkUpdateCloseModal"
         window.addEventListener('bulkUpdateCloseModal', event => {
-            modal.hide();
+            bulkUpdateModal.hide();
+        });
+
+        // Show the modal the livewire dispatches the event "bulkUpdateOpenModal"
+        window.addEventListener('bulkUpdateOpenModal', event => {
+            bulkUpdateModal.show();
+        });
+
+        // Edit Quantity Modal
+        const editQuantityModalElement = document.getElementById('edit-quantity-modal');
+        const editQuantityModal = new Modal(editQuantityModalElement);
+
+        // Hide the modal the livewire dispatches the event "editQuantityCloseModal"
+        window.addEventListener('editQuantityCloseModal', event => {
+            editQuantityModal.hide();
+        });
+
+        // Show the modal the livewire dispatches the event "editQuantityOpenModal"
+        window.addEventListener('editQuantityOpenModal', event => {
+            editQuantityModal.show();
         });
     </script>
 @endpush

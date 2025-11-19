@@ -22,6 +22,8 @@ class ProductsDatatable extends Component
 
     public $selectedProducts = [];
 
+    public $productToEditQty, $editQuantity;
+
     public $subcategory_id = "%";
     public $brand_id = "%";
 
@@ -314,6 +316,12 @@ class ProductsDatatable extends Component
     ######## Hide All Selected Products #########
 
     ######## Bulk Update #########
+
+    public function openUploadModal()
+    {
+        $this->dispatch('bulkUpdateOpenModal');
+    }
+
     public function bulkUpdate()
     {
         $this->validateOnly("bulkUpdateFile", [
@@ -334,5 +342,57 @@ class ProductsDatatable extends Component
 
         $this->dispatch('bulkUpdateCloseModal');
     }
+
+    public function closeUploadModal()
+    {
+        $this->dispatch('bulkUpdateCloseModal');
+    }
     ######## Bulk Update #########
+
+    ######## Edit Quantity #########
+    public function openEditQuantityModal($product_id)
+    {
+        $this->productToEditQty = Product::findOrFail($product_id);
+
+        $this->editQuantity = $this->productToEditQty->quantity;
+
+        $this->dispatch('editQuantityOpenModal');
+    }
+
+    public function updateQuantity()
+    {
+        $this->validateOnly("editQuantity", [
+            'editQuantity' => 'required|numeric'
+        ]);
+
+        try {
+            $this->productToEditQty->update([
+                'quantity' => $this->editQuantity
+            ]);
+
+            $this->dispatch(
+                'swalDone',
+                text: __('admin/productsPages.Product quantity has been updated successfully'),
+                icon: 'success'
+            );
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'swalDone',
+                text: __('admin/productsPages.Product quantity has not been updated'),
+                icon: 'error'
+            );
+        }
+
+        $this->closeEditQuantityModal();
+    }
+
+    public function closeEditQuantityModal()
+    {
+        $this->productToEditQty = null;
+
+        $this->editQuantity = null;
+
+        $this->dispatch('editQuantityCloseModal');
+    }
+    ######## Edit Quantity #########
 }
