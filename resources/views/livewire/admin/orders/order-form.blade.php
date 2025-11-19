@@ -3,19 +3,19 @@
 
     {{-- User Part :: Start --}}
     <div class="w-full">
-        @livewire('admin.orders.new-order-user-part', key('user-part'))
+        @livewire('admin.orders.new-order-user-part', key('user-part'), ['customerId' => $this->customerId])
     </div>
     {{-- User Part :: End --}}
 
     {{-- Products Part :: Start --}}
     <div class="w-full">
-        @livewire('admin.orders.new-order-products-part', key('products-part'))
+        @livewire('admin.orders.new-order-products-part', key('products-part'), ['customerId' => $this->customerId])
     </div>
     {{-- Products Part :: End --}}
 
     {{-- Payment Part :: Start --}}
     <div class="w-full">
-        @livewire('admin.orders.new-order-payment-part', key('payment-part'))
+        @livewire('admin.orders.new-order-payment-part', key('payment-part'), ['customerId' => $this->customerId])
     </div>
     {{-- Payment Part :: End --}}
 

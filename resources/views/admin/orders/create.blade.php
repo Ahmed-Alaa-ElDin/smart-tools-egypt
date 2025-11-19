@@ -10,15 +10,18 @@
             {{-- Breadcrumb --}}
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb text-sm">
-                    <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.dashboard') }}">{{ __('admin/ordersPages.Dashboard') }}
+                    <li class="breadcrumb-item hover:text-primary">
+                        <a href="{{ route('admin.dashboard') }}">
+                            {{ __('admin/ordersPages.Dashboard') }}
                         </a>
                     </li>
-                    <li class="breadcrumb-item hover:text-primary"><a
-                            href="{{ route('admin.orders.index') }}">{{ __('admin/ordersPages.All Orders') }}
+                    <li class="breadcrumb-item hover:text-primary">
+                        <a href="{{ route('admin.orders.index') }}">
+                            {{ __('admin/ordersPages.All Orders') }}
                         </a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ __('admin/ordersPages.Create New Order') }}
+                    <li class="breadcrumb-item active" aria-current="page">
+                        {{ __('admin/ordersPages.Create New Order') }}
                     </li>
                 </ol>
             </nav>
@@ -40,9 +43,8 @@
 
                         {{-- Card Body --}}
                         <div class="card-body static">
-
                             {{-- Order Form :: Start --}}
-                            @livewire('admin.orders.order-form')
+                            @livewire('admin.orders.order-form', ['customerId' => $customerId])
                             {{-- Order Form :: End --}}
                         </div>
                     </div>
@@ -67,7 +69,7 @@
         //     })
         // }
 
-        window.addEventListener('displayOrderSummary',function () {
+        window.addEventListener('displayOrderSummary', function() {
             modal.show();
         })
     </script>

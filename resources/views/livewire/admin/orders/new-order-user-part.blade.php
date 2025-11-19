@@ -41,7 +41,7 @@
                     {{-- Customers List :: Start --}}
                     @forelse ($customers as $customer)
                         <div class="group flex flex-col justify-center items-center gap-1 cursor-pointer rounded transition-all ease-in-out hover:bg-gray-700 p-1"
-                            wire:click="$set('customer_id',{{ $customer->id }})"
+                            wire:click="$set('customerId',{{ $customer->id }})"
                             wire:key="customer-{{ $customer->id }}-{{ rand() }}">
                             <span class="text-center font-bold text-gray-900 group-hover:text-white">
                                 {{ $customer->f_name . ' ' . $customer->l_name }}
@@ -66,7 +66,7 @@
             @endif
         </div>
 
-        @if ($customer_id)
+        @if ($customerId)
             <div>
                 {{-- Change Customer --}}
                 <button wire:click="clearCustomer"
@@ -104,7 +104,7 @@
     </div>
 
     {{-- Customer Selected --}}
-    @if ($customer_id)
+    @if ($customerId)
 
         <hr class="my-2">
 

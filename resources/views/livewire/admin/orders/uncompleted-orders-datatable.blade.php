@@ -175,6 +175,14 @@
                                     {{-- Manage Body --}}
                                     <td class="px-6 py-2 max-w-min whitespace-nowrap overflow-hidden">
                                         {{-- Complete Order Button --}}
+                                        <button wire:click="completeOrder({{ $cart->identifier }})"
+                                            title="{{ __('admin/ordersPages.Complete Order') }}" type="button"
+                                            class="m-0 focus:outline-none">
+                                            <span
+                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-success hover:bg-successHover rounded">
+                                                done
+                                            </span>
+                                        </button>
 
                                         {{-- Delete Cart Button --}}
                                         <button wire:click="deleteCart({{ $cart->identifier }})"

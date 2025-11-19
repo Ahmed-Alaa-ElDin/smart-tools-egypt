@@ -267,4 +267,5 @@ return [
     "Cancel Order"                                      =>          "Cancel Order",
     "Close"                                             =>          "Close",
     "No Cart Content"                                   =>          "No Cart Content",
+    "Order has not been created"                        =>          "Order has not been created",
 ];

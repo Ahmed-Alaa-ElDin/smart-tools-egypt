@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Orders;
 
+use App\Models\Cart;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Collection;
@@ -13,7 +14,7 @@ class NewOrderProductsPart extends Component
     public $product_id;
     public $products = [];
     public $products_list;
-
+    public $customerId;
 
 
     protected $listeners = [
@@ -23,6 +24,18 @@ class NewOrderProductsPart extends Component
     public function mount()
     {
         $this->products_list = [];
+
+        if ($this->customerId) {
+            $cart = Cart::where('identifier', $this->customerId)
+                ->where('instance', 'cart')
+                ->first();
+
+            foreach ($cart->content as $item) {
+                $productCollection = $item->associatedModel == Product::class ? "Product" : "Collection";
+
+                $this->addProduct($item->id, $productCollection, $item->qty);
+            }
+        }
     }
 
 
@@ -43,7 +56,7 @@ class NewOrderProductsPart extends Component
         $selectedProducts = array_column(array_filter($this->products, fn($product) => $product['type'] == "Product"), 'id');
         $selectedCollections = array_column(array_filter($this->products, fn($product) => $product['type'] == "Collection"), 'id');
 
-                // Search in Products
+        // Search in Products
         $products = Product::select([
             'id',
             'name',
@@ -111,15 +124,15 @@ class NewOrderProductsPart extends Component
         $this->products_list = collect([]);
     }
 
-    public function addProduct($product_id, $product_collection)
+    public function addProduct($product_id, $product_collection, $amount = 1)
     {
         if ($product_collection == 'Product') {
             $product = Product::with('thumbnail')->findOrFail($product_id)->toArray();
-            $product['amount'] = 1;
+            $product['amount'] = $amount;
             $this->products[] = $product;
         } elseif ($product_collection == 'Collection') {
             $collection = Collection::with('thumbnail')->findOrFail($product_id)->toArray();
-            $collection['amount'] = 1;
+            $collection['amount'] = $amount;
             $this->products[] = $collection;
         }
 

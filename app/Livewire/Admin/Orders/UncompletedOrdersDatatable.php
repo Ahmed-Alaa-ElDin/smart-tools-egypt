@@ -17,7 +17,7 @@ class UncompletedOrdersDatatable extends Component
     public $sortBy;
     public $sortDirection;
 
-    protected $listeners = ['deleteCart'];
+    protected $listeners = ['deleteCart', 'completeOrder'];
 
     // Before First Render
     public function mount()
@@ -73,6 +73,20 @@ class UncompletedOrdersDatatable extends Component
     public function showCartItems($identifier)
     {
         $this->dispatch('showCartItems', identifier: $identifier);
+    }
+
+    public function completeOrder($identifier)
+    {
+        try {
+            $this->redirect(route(
+                'admin.orders.create',
+                [
+                    'customerId' => $identifier,
+                ]
+            ));
+        } catch (\Throwable $th) {
+            $this->dispatch('swalDone', text: __('admin/ordersPages.Order has not been created'), icon: 'error');
+        }
     }
 
     public function deleteCart($identifier)

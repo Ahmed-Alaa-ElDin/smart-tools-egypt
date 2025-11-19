@@ -20,18 +20,19 @@
                 </button>
             </div>
             <!-- Modal body -->
-            <div class="p-4 md:p-5" x-data="{ showCartContent: @entangle('showCartContent') }">
-                    <ul class="flex flex-col gap-2">
-                        @forelse ($cart?->content ?? [] as $cartItem)
-                            <li>
-                                <livewire:admin.carts.cart-item-card :cartItem="$cartItem->toArray()" wire:key="cart-item-{{ $cartItem->rowId }}" />
-                            </li>
-                        @empty
-                            <li class="flex flex-col gap-4 ">
-                                {{ __('admin/ordersPages.No Cart Content') }}
-                            </li>
-                        @endforelse
-                    </ul>
+            <div class="p-4 md:p-5 max-h-[75vh] overflow-y-auto" x-data="{ showCartContent: @entangle('showCartContent') }">
+                <ul class="flex flex-col gap-2">
+                    @forelse ($cart?->content ?? [] as $cartItem)
+                        <li>
+                            <livewire:admin.carts.cart-item-card :cartItem="$cartItem->toArray()"
+                                wire:key="cart-item-{{ $cartItem->rowId }}" />
+                        </li>
+                    @empty
+                        <li class="flex flex-col gap-4 ">
+                            {{ __('admin/ordersPages.No Cart Content') }}
+                        </li>
+                    @endforelse
+                </ul>
             </div>
             {{-- Modal footer --}}
             <div class="flex items-center justify-between p-4 md:p-5 border-t rounded-b">

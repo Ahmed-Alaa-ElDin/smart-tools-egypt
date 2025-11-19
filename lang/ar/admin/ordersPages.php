@@ -267,4 +267,5 @@ return [
     "Cancel Order"                                      =>          "إلغاء الطلب",
     "Close"                                             =>          "إغلاق",
     "No Cart Content"                                   =>          "لا يوجد محتوى",
+    "Order has not been created"                        =>          "لم يتم إنشاء الطلب",
 ];

@@ -13,7 +13,7 @@ class NewOrderUserPart extends Component
 {
     public $search = "";
 
-    public $customer_id, $selectedCustomer;
+    public $customerId, $selectedCustomer;
 
     public $addAddress = false, $defaultAddress;
     public $addPhone = false, $defaultPhone;
@@ -57,6 +57,10 @@ class NewOrderUserPart extends Component
                 ->get()
                 ->toArray();
         }
+
+        if ($this->customerId) {
+            $this->updatedCustomerId();
+        }
     }
 
     public function render()
@@ -95,7 +99,7 @@ class NewOrderUserPart extends Component
 
     public function updatedCustomerId()
     {
-        $this->selectedCustomer = User::with('addresses', 'phones')->findOrFail($this->customer_id);
+        $this->selectedCustomer = User::with('addresses', 'phones')->findOrFail($this->customerId);
 
         $defaultAddress = $this->selectedCustomer->addresses->where('default', 1)->first();
 
@@ -118,7 +122,7 @@ class NewOrderUserPart extends Component
 
     public function clearCustomer()
     {
-        $this->customer_id = null;
+        $this->customerId = null;
         $this->selectedCustomer = null;
 
         $this->dispatch('setUserData', [
@@ -249,7 +253,7 @@ class NewOrderUserPart extends Component
 
         try {
             $this->selectedCustomer->addresses()->create([
-                'user_id'           =>      $this->customer_id,
+                'user_id'           =>      $this->customerId,
                 'country_id'        =>      $this->newAddress['country_id'],
                 'governorate_id'    =>      $this->newAddress['governorate_id'],
                 'city_id'           =>      $this->newAddress['city_id'],
@@ -334,14 +338,14 @@ class NewOrderUserPart extends Component
     public function savePhone()
     {
         $this->validate([
-            'newPhone'      =>    'required|digits:11|regex:/^01[0125]\d{1,8}$/|' . Rule::unique('phones', 'phone')->ignore($this->customer_id, 'user_id'),
+            'newPhone'      =>    'required|digits:11|regex:/^01[0125]\d{1,8}$/|' . Rule::unique('phones', 'phone')->ignore($this->customerId, 'user_id'),
         ], [
             'newPhone.regex' => __('validation.The phone numbers must start with 010, 011, 012 or 015')
         ]);
 
         try {
             $this->selectedCustomer->phones()->create([
-                'user_id'       =>      $this->customer_id,
+                'user_id'       =>      $this->customerId,
                 'phone'         =>      $this->newPhone,
                 'default'       =>      0,
             ]);

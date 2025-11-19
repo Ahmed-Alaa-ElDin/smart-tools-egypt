@@ -26,12 +26,15 @@ class CartContentModal extends Component
             ->first();
     }
 
-    // public function completeOrder()
-    // {
-    //     $this->cart->update([
-    //         'instance' => 'order',
-    //     ]);
-    // }
+    public function completeOrder()
+    {
+        $this->dispatch('completeOrder', identifier: $this->identifier);
+
+        $this->identifier = null;
+        $this->cart = null;
+
+        $this->closeModal();
+    }
 
     public function cancelOrder()
     {

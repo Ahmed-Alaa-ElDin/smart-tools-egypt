@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Orders;
 
 use Carbon\Carbon;
+use App\Models\Cart;
 use App\Models\Zone;
 use App\Models\Offer;
 use App\Models\Order;
@@ -15,7 +16,6 @@ use App\Enums\PaymentStatus;
 use App\Services\CouponService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use App\Services\Front\Deliveries\Bosta;
 
 class OrderForm extends Component
 {
@@ -25,7 +25,7 @@ class OrderForm extends Component
     public $collections_id = [];
     public $coupon_discount_percentage;
 
-    public $customer_id, $address_id;
+    public $customerId, $addressId;
 
     public $customer,
         $default_address,
@@ -674,6 +674,7 @@ class OrderForm extends Component
 
             ################### Modify Products and Collections :: End ###################
 
+            ################### Update Coupon Count :: Start ###################
             // Update Coupon Count
             if ($order->coupon_id != null) {
                 $coupon = Coupon::find($order->coupon_id);
@@ -682,6 +683,13 @@ class OrderForm extends Component
                     'number' => $coupon->number != null && $coupon->number > 0 ? $coupon->number - 1 : $coupon->number,
                 ]);
             }
+            ################### Update Coupon Count :: End ###################
+
+            ################### Clear Cart :: Start ###################
+            Cart::where('identifier', $this->customerId)
+                ->where('instance', 'cart')
+                ->delete();
+            ################### Clear Cart :: End ###################
 
             DB::commit();
 

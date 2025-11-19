@@ -21,9 +21,11 @@ class OrderController extends Controller
      * Show the form for creating a new resource.
      *
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('admin.orders.create');
+        $customerId = $request->customerId;
+
+        return view('admin.orders.create', compact('customerId'));
     }
 
     /**

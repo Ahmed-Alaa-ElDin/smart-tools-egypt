@@ -1608,6 +1608,33 @@ input:checked + .toggle-bg {
 .max-h-full {
   max-height: 100% !important;
 }
+.max-h-\[calc\(100\%-1rem\)\] {
+  max-height: calc(100% - 1rem) !important;
+}
+.max-h-7 {
+  max-height: 1.75rem !important;
+}
+.max-h-\[\] {
+  max-height:  !important;
+}
+.max-h-\[100\] {
+  max-height: 100 !important;
+}
+.max-h-\[100vh\] {
+  max-height: 100vh !important;
+}
+.max-h-\[100vh-\] {
+  max-height: 100vh- !important;
+}
+.max-h-\[calc\(100vh-1rem\)\] {
+  max-height: calc(100vh - 1rem) !important;
+}
+.max-h-\[750vh\] {
+  max-height: 750vh !important;
+}
+.max-h-\[75vh\] {
+  max-height: 75vh !important;
+}
 .min-h-\[100px\] {
   min-height: 100px !important;
 }

@@ -9,12 +9,20 @@ use Livewire\Component;
 
 class NewOrderPaymentPart extends Component
 {
-    public $customer, $code, $coupon_id, $message, $wallet = 0.00, $points = 0, $payment_method = 1;
+    public $customerId, $customer, $code, $coupon_id, $message, $wallet = 0.00, $points = 0, $payment_method = 1;
 
     protected $listeners = [
         'setUserData',
         'setPaymentDataToPaymentPart',
     ];
+
+    public function mount()
+    {
+        if ($this->customerId) {
+            $data['customer']['id'] = $this->customerId;
+            $this->setUserData($data);
+        }
+    }
 
     ############## Render :: Start ##############
     public function render()
@@ -38,7 +46,7 @@ class NewOrderPaymentPart extends Component
             $this->payment_method = 1;
         }
     }
-    ############## Get Customer Data :: End ##############
+    ############## Update Customer Data :: End ##############
 
     ############## Change Payment Method :: Start ##############
     public function updatedPaymentMethod()
