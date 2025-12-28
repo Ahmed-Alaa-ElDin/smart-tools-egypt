@@ -2,7 +2,7 @@
 
 @section('content')
     {{-- Main Slider : Start --}}
-    @livewire('front.homepage.main-slider', ['todayDeals' => $today_deals_section])
+    @livewire('front.homepage.homepage-middle-section', ['todayDeals' => $today_deals_section])
     {{-- Main Slider : End --}}
 
     @foreach ($homepage_sections as $section)
