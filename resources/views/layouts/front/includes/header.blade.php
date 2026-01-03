@@ -38,6 +38,8 @@
                     {{-- Cart :: End --}}
                 @show
 
+                {{-- All Categories Section for Mobile --}}
+                @livewire('front.homepage.all-categories-small')
             </div>
         </div>
     </div>
