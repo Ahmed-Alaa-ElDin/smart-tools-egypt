@@ -344,7 +344,7 @@ class OrderShippingDetails extends Component
                 DB::rollBack();
 
                 Session::flash('error', __('front/homePage.Shipping Details Haven\'t Saved'));
-                redirect()->route('front.order.shipping');
+                redirect()->route('front.orders.checkout');
             }
         }
     }

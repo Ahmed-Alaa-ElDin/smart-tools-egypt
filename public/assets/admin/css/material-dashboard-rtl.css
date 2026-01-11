@@ -525,66 +525,6 @@ html[dir="rtl"] .mx-5 {
     margin-right: 3rem !important;
 }
 
-html[dir="rtl"] .pr-0 {
-    padding-right: 0 !important;
-    padding-left: 0 !important;
-}
-
-html[dir="rtl"] .pl-0 {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-}
-
-html[dir="rtl"] .pr-1 {
-    padding-right: 0 !important;
-    padding-left: 0.25rem !important;
-}
-
-html[dir="rtl"] .pl-1 {
-    padding-left: 0 !important;
-    padding-right: 0.25rem !important;
-}
-
-html[dir="rtl"] .pr-2 {
-    padding-right: 0 !important;
-    padding-left: 0.5rem !important;
-}
-
-html[dir="rtl"] .pl-2 {
-    padding-left: 0 !important;
-    padding-right: 0.5rem !important;
-}
-
-html[dir="rtl"] .pr-3 {
-    padding-right: 0 !important;
-    padding-left: 1rem !important;
-}
-
-html[dir="rtl"] .pl-3 {
-    padding-left: 0 !important;
-    padding-right: 1rem !important;
-}
-
-html[dir="rtl"] .pr-4 {
-    padding-right: 0 !important;
-    padding-left: 1.5rem !important;
-}
-
-html[dir="rtl"] .pl-4 {
-    padding-left: 0 !important;
-    padding-right: 1.5rem !important;
-}
-
-html[dir="rtl"] .pr-5 {
-    padding-right: 0 !important;
-    padding-left: 3rem !important;
-}
-
-html[dir="rtl"] .pl-5 {
-    padding-left: 0 !important;
-    padding-right: 3rem !important;
-}
-
 html[dir="rtl"] .mr-auto,
 html[dir="rtl"] .mx-auto {
     margin-right: 0;

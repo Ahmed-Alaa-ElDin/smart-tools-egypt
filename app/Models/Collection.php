@@ -201,7 +201,7 @@ class Collection extends Model
     {
         return $this->products()
             ->without(['reviews', 'orders', 'brand'])->get()
-            ->map(fn($product) =>  floor($product->quantity / $product->pivot->quantity))
+            ->map(fn($product) => floor($product->quantity / $product->pivot->quantity))
             ->min() ?? 0;
     }
 
@@ -217,12 +217,25 @@ class Collection extends Model
                 $guestPhone = session('guest_phone', null);
 
                 if (auth()->check()) {
+                    $userId = auth()->id();
+                    if ($this->relationLoaded('backToStockNotifications')) {
+                        return $this->backToStockNotifications
+                            ->where('user_id', $userId)
+                            ->whereNull('sent_at')
+                            ->isNotEmpty();
+                    }
                     return $this
                         ->backToStockNotifications()
-                        ->where('user_id', auth()->id())
+                        ->where('user_id', $userId)
                         ->whereNull('sent_at')
                         ->exists();
                 } elseif ($guestPhone !== null) {
+                    if ($this->relationLoaded('backToStockNotifications')) {
+                        return $this->backToStockNotifications
+                            ->where('phone', $guestPhone)
+                            ->whereNull('sent_at')
+                            ->isNotEmpty();
+                    }
                     return $this
                         ->backToStockNotifications()
                         ->where('phone', $guestPhone)
@@ -233,7 +246,7 @@ class Collection extends Model
                 return false;
             },
             // Optional: Add a setter if needed
-            set: fn ($value) => $value
+            set: fn($value) => $value
         );
     }
     ############# Appends :: End #############
@@ -267,7 +280,8 @@ class Collection extends Model
                         ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
                         ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
                     'reviews' => fn($q) => $q->where('status', 1),
-                    'coupons'
+                    'coupons',
+                    'backToStockNotifications'
                 ]
             )
             ->where('under_reviewing', 0)
@@ -303,7 +317,8 @@ class Collection extends Model
                         ->whereRaw("start_at < STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i'))
                         ->whereRaw("expire_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now('Africa/Cairo')->format('Y-m-d H:i')),
                     'reviews' => fn($q) => $q->where('status', 1),
-                    'coupons'
+                    'coupons',
+                    'backToStockNotifications'
                 ]
             )
             ->whereIn('collections.id', $collections_id)

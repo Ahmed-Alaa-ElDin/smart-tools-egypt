@@ -113,18 +113,32 @@
     </div>
 
     @if ($type == 'cart')
-        {{-- Quantity Controls --}}
-        @livewire(
-            'front.general.cart.cart-amount-control',
-            [
-                'item_id' => $item['id'],
-                'unique' => 'item-' . $item['id'],
-                'type' => $item['type'],
-                'remove' => false,
-                'small' => false,
-            ],
-            key('amount-control-' . $item['id'] . '-' . $item['type'])
-        )
+        {{-- Quantity Controls :: Integrated --}}
+        <div class="p-2">
+            <div class="flex gap-4 px-3 py-2 items-center bg-gray-50 rounded-2xl w-fit mx-auto sm:mx-0">
+                {{-- Decrease --}}
+                <button
+                    class="w-8 h-8 flex items-center justify-center bg-white rounded-lg shadow-sm text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50"
+                    title="{{ __('front/homePage.Decrease') }}" wire:click="decrement"
+                    @if (($item['cartQty'] ?? 0) <= 1) disabled @endif>
+                    <span class="material-icons text-lg">remove</span>
+                </button>
+
+                {{-- Amount --}}
+                <div class="relative w-8 text-center uppercase">
+                    <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                        class="bg-transparent border-none p-0 text-center font-bold text-gray-800 focus:ring-0 text-sm w-full"
+                        value="{{ $item['cartQty'] ?? 0 }}" wire:change="updateQuantity($event.target.value)">
+                </div>
+
+                {{-- Increase --}}
+                <button
+                    class="w-8 h-8 flex items-center justify-center bg-white rounded-lg shadow-sm text-gray-400 hover:text-successDark transition-colors"
+                    title="{{ __('front/homePage.Increase') }}" wire:click="increment">
+                    <span class="material-icons text-lg">add</span>
+                </button>
+            </div>
+        </div>
     @endif
 
     {{-- Actions --}}
@@ -133,7 +147,7 @@
         @if ($type == 'cart')
             <div class="flex items-center gap-1 font-bold text-successDark w-full lg:justify-end">
                 <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
-                <span class="text-lg">{{ number_format($total, 2) }}</span>
+                <span class="text-lg">{{ number_format($this->total, 2) }}</span>
             </div>
         @endif
 
@@ -147,14 +161,14 @@
 
         @if ($type == 'cart')
             {{-- Remove from Cart --}}
-            <button wire:click="removeFromCart({{ $item['id'] }},'{{ $item['type'] }}')"
+            <button wire:click="removeFromCart"
                 class="text-xs text-gray-400 hover:text-primary flex items-center gap-1 transition-colors uppercase font-bold tracking-tighter">
                 <span class="material-icons text-sm">delete</span>
                 {{ __('front/homePage.Remove from Cart') }}
             </button>
         @elseif ($type == 'wishlist')
             {{-- Remove from Wishlist --}}
-            <button wire:click="removeFromWishlist({{ $item['id'] }},'{{ $item['type'] }}')"
+            <button wire:click="removeFromWishlist"
                 class="text-xs text-gray-400 hover:text-primary flex items-center gap-1 transition-colors uppercase font-bold tracking-tighter">
                 <span class="material-icons text-sm">delete</span>
                 {{ __('front/homePage.Remove from Wishlist') }}

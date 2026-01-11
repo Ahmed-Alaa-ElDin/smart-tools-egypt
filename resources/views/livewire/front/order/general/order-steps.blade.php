@@ -15,7 +15,7 @@
 
     <a
         class="block text-center @if ($step == 2) text-primary @elseif($step > 2) text-secondary @else text-gray-400 @endif"
-        @if ($step > 2) href="{{ route('front.order.shipping') }}" @else href="javascript:void(0)" @endif>
+        @if ($step > 2) href="{{ route('front.orders.checkout') }}" @else href="javascript:void(0)" @endif>
         <span class="material-icons text-4xl mb-2">
             local_shipping
         </span>

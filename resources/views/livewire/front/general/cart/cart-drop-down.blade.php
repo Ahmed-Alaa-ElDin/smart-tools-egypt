@@ -120,7 +120,7 @@
                 {{-- Cart Buttons :: Start --}}
                 <div class="flex flex-col justify-center items-center gap-1 m-1 px-2">
                     {{-- Checkout :: Start --}}
-                    <a href="{{ route('front.order.shipping') }}"
+                    <a href="{{ route('front.orders.checkout') }}"
                         class="block w-full btn bg-secondary text-white font-bold">
                         <span class="material-icons">
                             local_shipping

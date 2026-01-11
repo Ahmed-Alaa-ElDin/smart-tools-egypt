@@ -168,6 +168,6 @@ class RegisterFromOrder extends Component
 
         Auth::login($user);
 
-        return redirect()->route('front.order.shipping');
+        return redirect()->route('front.orders.checkout');
     }
 }

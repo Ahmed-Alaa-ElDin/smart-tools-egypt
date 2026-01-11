@@ -149,8 +149,8 @@ class Product extends Model
             'first_product_id',
             'second_product_id'
         )->withPivot([
-            'rank',
-        ]);
+                    'rank',
+                ]);
     }
 
     // many to many relationship Product --> Related Collections
@@ -162,8 +162,8 @@ class Product extends Model
             'product_id',
             'collection_id'
         )->withPivot([
-            'rank',
-        ]);
+                    'rank',
+                ]);
     }
 
     // many to many relationship Product --> Complemented Products
@@ -175,8 +175,8 @@ class Product extends Model
             'first_product_id',
             'second_product_id'
         )->withPivot([
-            'rank',
-        ]);
+                    'rank',
+                ]);
     }
 
     // many to many relationship Product --> Complemented Collections
@@ -188,8 +188,8 @@ class Product extends Model
             'product_id',
             'collection_id'
         )->withPivot([
-            'rank',
-        ]);
+                    'rank',
+                ]);
     }
 
     public function validOffers()
@@ -321,12 +321,25 @@ class Product extends Model
                 $guestPhone = session('guest_phone', null);
 
                 if (auth()->check()) {
+                    $userId = auth()->id();
+                    if ($this->relationLoaded('backToStockNotifications')) {
+                        return $this->backToStockNotifications
+                            ->where('user_id', $userId)
+                            ->whereNull('sent_at')
+                            ->isNotEmpty();
+                    }
                     return $this
                         ->backToStockNotifications()
-                        ->where('user_id', auth()->id())
+                        ->where('user_id', $userId)
                         ->whereNull('sent_at')
                         ->exists();
                 } elseif ($guestPhone !== null) {
+                    if ($this->relationLoaded('backToStockNotifications')) {
+                        return $this->backToStockNotifications
+                            ->where('phone', $guestPhone)
+                            ->whereNull('sent_at')
+                            ->isNotEmpty();
+                    }
                     return $this
                         ->backToStockNotifications()
                         ->where('phone', $guestPhone)
@@ -337,7 +350,7 @@ class Product extends Model
                 return false;
             },
             // Optional: Add a setter if needed
-            set: fn ($value) => $value
+            set: fn($value) => $value
         );
     }
 
@@ -394,7 +407,8 @@ class Product extends Model
                             'offers' => fn($q) => $q->active($now),
                         ]),
                     'reviews' => fn($q) => $q->where('status', 1),
-                    'coupons'
+                    'coupons',
+                    'backToStockNotifications'
                 ]
             )
             ->where('under_reviewing', 0)
@@ -441,7 +455,7 @@ class Product extends Model
                             'offers' => fn($q) => $q->active($now),
                         ]),
                     'subcategories.category' => fn($q) => $q
-                        ->select('categories.id', 'categories.name',    'categories.supercategory_id')
+                        ->select('categories.id', 'categories.name', 'categories.supercategory_id')
                         ->with([
                             'offers' => fn($q) => $q->active($now),
                         ]),
@@ -451,7 +465,8 @@ class Product extends Model
                             'offers' => fn($q) => $q->active($now),
                         ]),
                     'reviews' => fn($q) => $q->where('status', 1),
-                    'coupons'
+                    'coupons',
+                    'backToStockNotifications'
                 ]
             )
             ->whereIn('id', $productsIds)
@@ -509,7 +524,8 @@ class Product extends Model
                             'offers' => fn($q) => $q->active($now),
                         ]),
                     'reviews' => fn($q) => $q->where('status', 1),
-                    'coupons'
+                    'coupons',
+                    'backToStockNotifications'
                 ]
             )
             ->whereIn('id', $productsIds);

@@ -1,23 +1,13 @@
 <div>
     @forelse ($items as $item)
         {{-- Product : Start --}}
-        <x-front.product-box-wide :item="$item" type="cart"/>
+        <div wire:key="cart-row-container-{{ $item['rowId'] }}" class="hover:bg-gray-50/50 transition-colors rounded-2xl">
+            @livewire('front.product.product-card-wide', ['item' => $item], key('cart-row-' . $item['rowId']))
+        </div>
         {{-- Product : End --}}
 
-        <hr>
-
-        @if ($loop->last)
-            {{-- ############## Buttons :: Start ############## --}}
-            <div class="p-2 flex justify-center items-center">
-                <a class="btn bg-primary font-bold self-stretch" href="{{ route('front.order.shipping') }}">
-                    {{ __('front/homePage.Proceed to Shipping Info.') }}
-                    &nbsp;
-                    <span class="material-icons">
-                        local_shipping
-                    </span>
-                </a>
-            </div>
-            {{-- ############## Buttons :: End ############## --}}
+        @if (!$loop->last)
+            <hr class="border-gray-50 my-2">
         @endif
 
     @empty

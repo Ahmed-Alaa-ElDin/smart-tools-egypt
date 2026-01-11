@@ -49,7 +49,7 @@ class CouponService
             'coupon_items_points' => $this->itemsPoints,
             'coupon_order_discount' => $this->orderDiscount,
             'coupon_order_points' => $this->orderPoints,
-            'coupon_free_shipping' => $this->coupon->free_shipping
+            'coupon_free_shipping' => (bool) $this->coupon->free_shipping
         ];
     }
 
