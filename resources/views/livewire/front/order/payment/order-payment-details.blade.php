@@ -115,7 +115,7 @@
                     </span>
                 </button>
 
-                <a class="btn bg-primary max-w-max font-bold" href="{{ route('front.order.shipping') }}">
+                <a class="btn bg-primary max-w-max font-bold" href="{{ route('front.orders.checkout') }}">
                     {{ __('front/homePage.Back to Shipping Details') }}
                     &nbsp;
                     <span class="material-icons">
@@ -135,7 +135,7 @@
                     </span>
                 </button>
 
-                <a class="btn bg-primary max-w-max font-bold" href="{{ route('front.order.shipping') }}">
+                <a class="btn bg-primary max-w-max font-bold" href="{{ route('front.orders.checkout') }}">
                     {{ __('front/homePage.Back to Shipping Details') }}
                     &nbsp;
                     <span class="material-icons">
@@ -154,7 +154,7 @@
                     </span>
                 </button>
 
-                <a class="btn bg-primary max-w-max font-bold" href="{{ route('front.order.shipping') }}">
+                <a class="btn bg-primary max-w-max font-bold" href="{{ route('front.orders.checkout') }}">
                     {{ __('front/homePage.Back to Shipping Details') }}
                     &nbsp;
                     <span class="material-icons">
@@ -188,7 +188,7 @@
                     </span>
                 </button>
 
-                <a class="btn bg-primary max-w-max font-bold" href="{{ route('front.order.shipping') }}">
+                <a class="btn bg-primary max-w-max font-bold" href="{{ route('front.orders.checkout') }}">
                     {{ __('front/homePage.Back to Shipping Details') }}
                     &nbsp;
                     <span class="material-icons">
@@ -242,7 +242,7 @@
                     </span>
                 </button>
 
-                <a class="btn bg-primary max-w-max font-bold" href="{{ route('front.order.shipping') }}">
+                <a class="btn bg-primary max-w-max font-bold" href="{{ route('front.orders.checkout') }}">
                     {{ __('front/homePage.Back to Shipping Details') }}
                     &nbsp;
                     <span class="material-icons">

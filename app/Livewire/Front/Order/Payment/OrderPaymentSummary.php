@@ -33,7 +33,7 @@ class OrderPaymentSummary extends Component
     public $offers_discounts_percentage = 0;
     public $offers_free_shipping = 0;
     public $order_discount = 0;
-    public $order_discount_percent = 0;
+    public $order_discount_percentage = 0;
     public $order_offer_free_shipping = 0;
     public $total_after_order_discount = 0;
     public $total_after_coupon_discount = 0;
@@ -116,13 +116,13 @@ class OrderPaymentSummary extends Component
                 $item['total_offer_discount'] = $item['offer_discount'] * $item['qty'];
                 $item['total_offer_discount_percent'] = $item['final_price'] ? round(($item['offer_discount'] / $item['final_price']) * 100, 2) : 0;
                 $item['total_after_offer_price'] = $item['total_final_price'] - $item['total_offer_discount'];
-                $item['total_item_points'] =  $item['points'] * $item['qty'];
-                $item['total_offer_points'] =  $item['offer_points'] * $item['qty'];
-                $item['total_after_offer_points'] =  $item['total_item_points'] + $item['total_offer_points'];
+                $item['total_item_points'] = $item['points'] * $item['qty'];
+                $item['total_offer_points'] = $item['offer_points'] * $item['qty'];
+                $item['total_after_offer_points'] = $item['total_item_points'] + $item['total_offer_points'];
 
                 if (is_null($this->coupon_id)) {
-                    $item['coupon_discount'] =  0;
-                    $item['coupon_points'] =  0;
+                    $item['coupon_discount'] = 0;
+                    $item['coupon_points'] = 0;
                 }
 
                 return $item;
@@ -172,12 +172,12 @@ class OrderPaymentSummary extends Component
                 // Percent Discount
                 if ($order_offer->type == 0 && $order_offer->value <= 100) {
                     $this->order_discount = $this->total_after_offer_prices * ($order_offer->value / 100);
-                    $this->order_discount_percent = round($order_offer->value, 2);
+                    $this->order_discount_percentage = round($order_offer->value, 2);
                 }
                 // Fixed Discount
                 elseif ($order_offer->type == 1) {
                     $this->order_discount = $this->total_after_offer_prices - $order_offer->value > 0 ? $order_offer->value : $this->total_after_offer_prices;
-                    $this->order_discount_percent = $this->total_after_offer_prices ? round(($this->order_discount * 100) / $this->total_after_offer_prices, 2) : 0;
+                    $this->order_discount_percentage = $this->total_after_offer_prices ? round(($this->order_discount * 100) / $this->total_after_offer_prices, 2) : 0;
                 }
                 // Points
                 elseif ($order_offer->type == 2) {
@@ -217,7 +217,7 @@ class OrderPaymentSummary extends Component
             $this->offers_discounts_percentage = 0;
             $this->offers_free_shipping = 0;
             $this->order_discount = 0;
-            $this->order_discount_percent = 0;
+            $this->order_discount_percentage = 0;
             $this->order_points = 0;
             $this->order_offer_free_shipping = 0;
             $this->total_after_order_discount = 0;
@@ -516,7 +516,8 @@ class OrderPaymentSummary extends Component
                     'coupon_discount' => $product['coupon_discount'],
                     'coupon_points' => $product['coupon_points'],
                 ];
-            };
+            }
+            ;
 
 
             // get order's collections
@@ -533,7 +534,8 @@ class OrderPaymentSummary extends Component
                     'coupon_discount' => $collection['coupon_discount'],
                     'coupon_points' => $collection['coupon_points'],
                 ];
-            };
+            }
+            ;
 
             ################### Modify Products and Collections :: Start ###################
             // Add Previous Order Amounts of Collections and Products
@@ -606,10 +608,10 @@ class OrderPaymentSummary extends Component
                 'quantity' => $item['quantity'] ?? 1,
                 'item_price' => $item['price'],
             ], $final_products, array_keys($final_products)), array_map(fn($item, $key) => [
-                'id' => $key,
-                'quantity' => $item['quantity'] ?? 1,
-                'item_price' => $item['price'],
-            ], $final_collections, array_keys($final_collections)));
+                    'id' => $key,
+                    'quantity' => $item['quantity'] ?? 1,
+                    'item_price' => $item['price'],
+                ], $final_collections, array_keys($final_collections)));
 
             ############ Emit Meta Pixel event :: Start ############
             $eventId = MetaPixel::generateEventId();

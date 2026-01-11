@@ -9,7 +9,7 @@ use App\Models\Collection;
 use Illuminate\Support\Facades\Auth;
 use Gloudemans\Shoppingcart\Facades\Cart;
 
-class CartAmount extends Component
+class CartAmountControl extends Component
 {
     public $item_id, $cartAmount, $type, $unique, $remove = true, $title = false, $small = false;
 
@@ -31,7 +31,7 @@ class CartAmount extends Component
 
         $this->cartAmount = $cartItem ? $cartItem->qty : 0;
 
-        return view('livewire.front.general.cart.cart-amount', compact('cartItem'));
+        return view('livewire.front.general.cart.cart-amount-control', compact('cartItem'));
     }
 
     ############## Add One Item To Cart :: Start ##############
@@ -44,6 +44,7 @@ class CartAmount extends Component
         } elseif ($this->type == "Collection") {
             $item = Collection::select('id')->findOrFail($cart_item->id);
         }
+
 
         if ($item->quantity >= $quantity) {
             Cart::instance('cart')->update($rowId, $quantity);
@@ -249,7 +250,7 @@ class CartAmount extends Component
                 icon: 'error'
             );
             ############ Emit Sweet Alert :: End ############
-        } elseif ($item->quantity == 0) {
+        } elseif ($item->quantity <= 0) {
             ############ Emit Sweet Alert :: Start ############
             $this->dispatch(
                 'swalDone',
@@ -268,5 +269,4 @@ class CartAmount extends Component
         }
     }
     ############## Add TO Cart :: End ##############
-
 }

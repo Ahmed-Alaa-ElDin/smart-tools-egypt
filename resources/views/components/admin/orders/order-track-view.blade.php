@@ -33,7 +33,7 @@
                         class="text-lg font-semibold {{ in_array($status->id, [1, 2, 14, 15, 16])
                             ? 'text-yellow-600'
                             : (in_array($status->id, [3, 45, 12])
-                                ? 'text-green-600'
+                                ? 'text-successDark'
                                 : (in_array($status->id, [4, 5, 6])
                                     ? 'text-blue-600'
                                     : (in_array($status->id, [8, 9, 13])

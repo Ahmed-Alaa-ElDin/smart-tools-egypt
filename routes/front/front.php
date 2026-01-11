@@ -20,7 +20,7 @@ use App\Http\Controllers\Front\InvoiceRequestController;
 
 Route::group([
     'middleware' => ['getCart'],
-    'as' =>   'front.',
+    'as' => 'front.',
     'prefix' => '',
 ], function () {
     Route::get('/', [HomepageController::class, 'index'])->name('homepage');
@@ -70,9 +70,16 @@ Route::group([
     ################ Cart & Order Controller :: Start ##############
     Route::get('/cart', [CartController::class, 'index'])->name('cart')->middleware(['cart_not_empty']);
 
-    Route::get('/orders/shipping', [OrderController::class, 'shipping'])->name('order.shipping')->middleware(['cart_not_empty']);
-
+    
+    Route::get('/orders/shipping', [OrderController::class, 'shipping'])->name('orders.shipping')->middleware(['cart_not_empty']);
+    
     Route::prefix('/orders')->middleware(['auth'])->controller(OrderController::class)->name('orders.')->group(function () {
+        // Checkout
+        Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout')->middleware(['cart_not_empty']);
+        
+        // Submit order
+        Route::post('/submit', 'submit')->name('submit')->middleware(['cart_not_empty']);
+        
         // Billing Options
         Route::get('/payment', 'payment')->name('payment')->middleware(['can_deliver', 'cart_not_empty']);
 

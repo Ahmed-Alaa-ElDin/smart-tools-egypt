@@ -11,10 +11,6 @@
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-12 flex flex-col gap-5 self-start">
 
-                {{-- ############## Order Steps :: Start ############## --}}
-                @livewire('front.order.general.order-steps', ['step' => 4])
-                {{-- ############## Order Steps :: End ############## --}}
-
                 {{-- ############## Order Creation Status :: Start ############## --}}
                 <div class="bg-white rounded overflow-hidden">
                     {{-- ############## Title :: Start ############## --}}

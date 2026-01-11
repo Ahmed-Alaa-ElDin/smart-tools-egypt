@@ -231,6 +231,26 @@
             })
         });
 
+        // #### Sweetalert Confirm ####
+        window.addEventListener('swalConfirm', function(e) {
+            Swal.fire({
+                icon: e.detail.icon,
+                text: e.detail.text,
+                showDenyButton: true,
+                confirmButtonText: e.detail.confirmButtonText,
+                denyButtonText: e.detail.denyButtonText,
+                denyButtonColor: e.detail.denyButtonColor,
+                confirmButtonColor: e.detail.confirmButtonColor,
+                focusDeny: e.detail.focusDeny,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.dispatch(e.detail.method, {
+                        id: e.detail.id
+                    });
+                }
+            });
+        });
+
         window.addEventListener('swalGetGuestPhone', function(e) {
             Swal.fire({
                 title: e.detail.title,

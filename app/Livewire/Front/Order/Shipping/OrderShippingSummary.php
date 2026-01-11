@@ -24,7 +24,7 @@ class OrderShippingSummary extends Component
     public $offers_discounts_percentage = 0;
     public $offers_free_shipping = 0;
     public $order_discount = 0;
-    public $order_discount_percent = 0;
+    public $order_discount_percentage = 0;
     public $order_points = 0;
     public $order_offer_free_shipping = 0;
     public $total_after_order_discount = 0;
@@ -82,9 +82,9 @@ class OrderShippingSummary extends Component
                 $item['total_offer_discount'] = $item['offer_discount'] * $item['qty'];
                 $item['total_offer_discount_percent'] = $item['final_price'] ? round(($item['offer_discount'] / $item['final_price']) * 100, 2) : 0;
                 $item['total_after_offer_price'] = $item['total_final_price'] - $item['total_offer_discount'];
-                $item['total_item_points'] =  $item['points'] * $item['qty'];
-                $item['total_offer_points'] =  $item['offer_points'] * $item['qty'];
-                $item['total_after_offer_points'] =  $item['total_item_points'] + $item['total_offer_points'];
+                $item['total_item_points'] = $item['points'] * $item['qty'];
+                $item['total_offer_points'] = $item['offer_points'] * $item['qty'];
+                $item['total_after_offer_points'] = $item['total_item_points'] + $item['total_offer_points'];
 
                 return $item;
             }, $this->items);
@@ -133,12 +133,12 @@ class OrderShippingSummary extends Component
                 // Percent Discount
                 if ($order_offer->type == 0 && $order_offer->value <= 100) {
                     $this->order_discount = $this->total_after_offer_prices * ($order_offer->value / 100);
-                    $this->order_discount_percent = round($order_offer->value);
+                    $this->order_discount_percentage = round($order_offer->value);
                 }
                 // Fixed Discount
                 elseif ($order_offer->type == 1) {
                     $this->order_discount = $this->total_after_offer_prices - $order_offer->value > 0 ? $order_offer->value : $this->total_after_offer_prices;
-                    $this->order_discount_percent = $this->total_after_offer_prices ? round(($this->order_discount * 100) / $this->total_after_offer_prices) : 0;
+                    $this->order_discount_percentage = $this->total_after_offer_prices ? round(($this->order_discount * 100) / $this->total_after_offer_prices) : 0;
                 }
                 // Points
                 elseif ($order_offer->type == 2) {
@@ -171,7 +171,7 @@ class OrderShippingSummary extends Component
             $this->offers_discounts_percentage = 0;
             $this->offers_free_shipping = 0;
             $this->order_discount = 0;
-            $this->order_discount_percent = 0;
+            $this->order_discount_percentage = 0;
             $this->order_points = 0;
             $this->order_offer_free_shipping = 0;
             $this->total_after_order_discount = 0;

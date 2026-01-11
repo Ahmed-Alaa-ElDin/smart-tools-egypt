@@ -13,6 +13,10 @@ class Offer extends Model
     use HasFactory;
     use HasTranslations;
 
+    const TYPE_PERCENTAGE = 0;
+    const TYPE_FIXED = 1;
+    const TYPE_POINTS = 2;
+
     public $translatable = ['title'];
 
     protected $fillable = [

@@ -1,7 +1,7 @@
 <section class="bg-white rounded shadow-lg p-4">
     <div class="grid grid-cols-12 justify-center items-start align-top gap-3 ">
         @forelse ($items as $item)
-            <div
+            <div wire:key="wishlist-page-item-{{ $item->id }}-{{ $item->options->type }}"
                 class="col-span-12 md:col-span-6 flex gap-4 justify-start items-center transition-all ease-in-out hover:bg-white hover:text-black rounded shadow p-2  overflow-hidden">
                 <a
                     href="{{ $item->options->type == 'Product' ? route('front.products.show', ['id' => $item->id, 'slug' => $item->options->slug]) : route('front.collections.show', ['id' => $item->id, 'slug' => $item->options->slug]) }}">
@@ -56,11 +56,11 @@
                                 'add_buy' => 'add',
                                 'unique' => 'item-' . $item->id,
                             ],
-                            key("add-cart-button-{$item->id}")
+                            "add-cart-button-{$item->id}"
                         )
 
                         {{-- Delete :: Start --}}
-                        @livewire('front.general.wishlist.remove-from-wishlist-button', ['item_id' => $item->id, 'type' => $item->options->type, 'text' => false, 'add_buy' => 'add'], key('add-cart-button-' . Str::random(10)))
+                        @livewire('front.general.wishlist.remove-from-wishlist-button', ['item_id' => $item->id, 'type' => $item->options->type, 'text' => false, 'add_buy' => 'add'], 'remove-wishlist-button-' . $item->id . '-' . $item->options->type)
                         {{-- Delete :: End --}}
                     </div>
                     {{-- Buttons :: End --}}

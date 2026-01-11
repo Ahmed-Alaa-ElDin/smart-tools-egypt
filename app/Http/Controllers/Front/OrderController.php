@@ -48,10 +48,10 @@ class OrderController extends Controller
                     'collections.slug',
                     'collections.base_price',
                 ])->with([
-                    'products' => fn($q) => $q->select('products.id'),
-                    'reviews',
-                    'thumbnail',
-                ]);
+                            'products' => fn($q) => $q->select('products.id'),
+                            'reviews',
+                            'thumbnail',
+                        ]);
             },
             'status',
             'invoice',
@@ -67,6 +67,13 @@ class OrderController extends Controller
         return view('front.orders.index', compact('orders'));
     }
     ##################### Orders List :: End #####################
+
+    ##################### Checkout :: Start #####################
+    public function checkout()
+    {
+        return view('front.orders.checkout');
+    }
+    ##################### Checkout :: End #####################
 
     ##################### Edit Order Before Shipping:: Start #####################
     public function edit(Order $order)
@@ -182,11 +189,11 @@ class OrderController extends Controller
                 $product->total_offer_discount = $product->offer_discount * $product->qty;
                 $product->total_offer_discount_percent = $product->final_price ? round(($product->offer_discount / $product->final_price) * 100, 2) : 0;
                 $product->total_after_offer_price = $product->total_final_price - $product->total_offer_discount;
-                $product->total_product_points =  $product->points * $product->qty;
-                $product->total_offer_points =  $product->offer_points * $product->qty;
-                $product->total_after_offer_points =  $product->total_product_points + $product->total_offer_points;
-                $product->coupon_discount =  0;
-                $product->coupon_points =  0;
+                $product->total_product_points = $product->points * $product->qty;
+                $product->total_offer_points = $product->offer_points * $product->qty;
+                $product->total_after_offer_points = $product->total_product_points + $product->total_offer_points;
+                $product->coupon_discount = 0;
+                $product->coupon_points = 0;
 
                 return $product;
             });
@@ -207,11 +214,11 @@ class OrderController extends Controller
                 $collection->total_offer_discount = $collection->offer_discount * $collection->qty;
                 $collection->total_offer_discount_percent = $collection->final_price ? round(($collection->offer_discount / $collection->final_price) * 100, 2) : 0;
                 $collection->total_after_offer_price = $collection->total_final_price - $collection->total_offer_discount;
-                $collection->total_collection_points =  $collection->points * $collection->qty;
-                $collection->total_offer_points =  $collection->offer_points * $collection->qty;
-                $collection->total_after_offer_points =  $collection->total_collection_points + $collection->total_offer_points;
-                $collection->coupon_discount =  0;
-                $collection->coupon_points =  0;
+                $collection->total_collection_points = $collection->points * $collection->qty;
+                $collection->total_offer_points = $collection->offer_points * $collection->qty;
+                $collection->total_after_offer_points = $collection->total_collection_points + $collection->total_offer_points;
+                $collection->coupon_discount = 0;
+                $collection->coupon_points = 0;
 
                 return $collection;
             });
@@ -239,11 +246,11 @@ class OrderController extends Controller
             // add coupon discount and points to items
             $best_items->map(function ($item) use (&$coupon_data) {
                 if ($item->type == "Product" && isset($coupon_data['products_best_coupon'][$item->id])) {
-                    $item->coupon_discount =  $coupon_data['products_best_coupon'][$item->id]['coupon_discount'];
-                    $item->coupon_points =  $coupon_data['products_best_coupon'][$item->id]['coupon_points'];
+                    $item->coupon_discount = $coupon_data['products_best_coupon'][$item->id]['coupon_discount'];
+                    $item->coupon_points = $coupon_data['products_best_coupon'][$item->id]['coupon_points'];
                 } elseif ($item->type == "Collection" && isset($coupon_data['collections_best_coupon'][$item->id])) {
-                    $item->coupon_discount =  $coupon_data['collections_best_coupon'][$item->id]['coupon_discount'];
-                    $item->coupon_points =  $coupon_data['collections_best_coupon'][$item->id]['coupon_points'];
+                    $item->coupon_discount = $coupon_data['collections_best_coupon'][$item->id]['coupon_discount'];
+                    $item->coupon_points = $coupon_data['collections_best_coupon'][$item->id]['coupon_points'];
                 }
 
                 return $item;
@@ -298,7 +305,7 @@ class OrderController extends Controller
         // 1 - Base Items Prices
         $items_total_base_prices = $best_items->sum('total_base_price');
         // 2 - Final Items prices (Base Price - Item Discount)
-        $items_total_final_prices =  $best_items->sum('total_final_price');
+        $items_total_final_prices = $best_items->sum('total_final_price');
         $items_total_discounts = $items_total_base_prices - $items_total_final_prices;
         $items_discounts_percentage = $items_total_base_prices ? round(($items_total_discounts * 100) / $items_total_base_prices, 2) : 0;
         // 3 - After Offers Prices (Final Price - Offers Discount)
@@ -308,7 +315,7 @@ class OrderController extends Controller
 
         //  4- Order Discount
         $order_discount = $order_offer && $order_offer->type == 0 && $order_offer->value <= 100 ? $total_after_offer_prices * ($order_offer->value / 100) : ($order_offer && $order_offer->type == 1 ? $total_after_offer_prices - $order_offer->value > 0 ? $order_offer->value : $total_after_offer_prices : 0);
-        $order_discount_percent = $order_offer && $order_offer->type == 0 && $order_offer->value <= 100 ? round($order_offer->value, 2) : ($order_offer && $order_offer->type == 1 && $total_after_offer_prices ? round(($order_discount * 100) / $total_after_offer_prices, 2) : 0);
+        $order_discount_percentage = $order_offer && $order_offer->type == 0 && $order_offer->value <= 100 ? round($order_offer->value, 2) : ($order_offer && $order_offer->type == 1 && $total_after_offer_prices ? round(($order_discount * 100) / $total_after_offer_prices, 2) : 0);
 
         // 5 - Prices After Order Offer
         $total_after_order_discount = $total_after_offer_prices - $order_discount;
@@ -479,7 +486,7 @@ class OrderController extends Controller
                     ->where('payment_status_id', PaymentStatus::Paid->value)
                     ->first();
                 $old_order_used_points_egp = $old_order_used_points_transaction ? $old_order_used_points_transaction->payment_amount : 0.00;
-                $old_order_used_points =  $old_order_used_points_egp / config('settings.points_conversion_rate') ?? 0;
+                $old_order_used_points = $old_order_used_points_egp / config('settings.points_conversion_rate') ?? 0;
 
                 // Get old transaction done using user's points + balance
                 $old_order_paid = $old_order_used_other + $old_order_used_balance + $old_order_used_points_egp;
@@ -675,7 +682,8 @@ class OrderController extends Controller
                     'coupon_discount' => $product['coupon_discount'],
                     'coupon_points' => $product['coupon_points'],
                 ];
-            };
+            }
+            ;
 
 
             // get order's collections
@@ -690,7 +698,8 @@ class OrderController extends Controller
                     'coupon_discount' => $collection['coupon_discount'],
                     'coupon_points' => $collection['coupon_points'],
                 ];
-            };
+            }
+            ;
 
             // update order's products
             $temp_order->products()->detach();
@@ -724,7 +733,7 @@ class OrderController extends Controller
             'offers_discounts' => $offers_total_discounts ?? 0.00,
             'offers_discounts_percentage' => $offers_discounts_percentage ?? 0,
             'order_offers_discounts' => $order_discount ?? 0.00,
-            'order_offers_discounts_percentage' => $order_discount_percent ?? 0,
+            'order_offers_discounts_percentage' => $order_discount_percentage ?? 0,
             'products_best_prices' => $total_after_offer_prices ?? 0.00,
             'total_points' => $total_points_after_coupon_points ?? 0,
             'coupon_discount' => $total_coupon_discount,
@@ -1957,7 +1966,7 @@ class OrderController extends Controller
             $returned_products_coupon_points = $returned_quantity * $product->pivot->coupon_points;
 
             // Total
-            $returned_price = $returned_quantity * $product->pivot->price -  $returned_quantity * $product->pivot->coupon_discount;
+            $returned_price = $returned_quantity * $product->pivot->price - $returned_quantity * $product->pivot->coupon_discount;
             $returned_points = $returned_quantity * $product->pivot->points + $returned_quantity * $product->pivot->coupon_points;
 
             // Weight
@@ -2029,7 +2038,7 @@ class OrderController extends Controller
         if ($return_subtotal <= 0) {
             // Return the used points to the user's Points
             $returned_to_points_egp = $old_used_points_egp <= abs($return_subtotal) ? $old_used_points_egp : abs($return_subtotal);
-            $returned_to_points =  $returned_to_points_egp / config('settings.points_conversion_rate');
+            $returned_to_points = $returned_to_points_egp / config('settings.points_conversion_rate');
 
             // Returned Order Subtotal (After subtraction of used points only)
             $return_total = $return_subtotal + $returned_to_points_egp;
@@ -2041,7 +2050,7 @@ class OrderController extends Controller
             $return_total += $returned_to_balance;
         } else {
             $returned_to_points_egp = 0;
-            $returned_to_points =  0;
+            $returned_to_points = 0;
             $returned_to_balance = 0;
             $return_total = $return_subtotal;
         }
@@ -2063,12 +2072,12 @@ class OrderController extends Controller
                 'status_id' => 7,
                 'address_id' => $order->address_id,
                 'phone1' => $order->phone1,
-                'phone2'    => $order->phone2,
+                'phone2' => $order->phone2,
                 'package_type' => $order->package_type,
                 'package_desc' => $order->package_desc,
                 'num_of_items' => $returned_products_total_quantities,
                 'allow_opening' => $order->allow_opening,
-                'zone_id'   => $order->zone_id,
+                'zone_id' => $order->zone_id,
                 'coupon_id' => $order->coupon_id,
                 'coupon_order_discount' => 0,
                 'coupon_order_points' => 0,
@@ -2337,9 +2346,11 @@ class OrderController extends Controller
                 DB::beginTransaction();
 
                 // get transaction
-                $transaction = Transaction::with(['order' => function ($query) {
-                    $query->with(['user', 'products', 'address']);
-                }])
+                $transaction = Transaction::with([
+                    'order' => function ($query) {
+                        $query->with(['user', 'products', 'address']);
+                    }
+                ])
                     ->find($smartTransactionId);
 
                 // update transaction status

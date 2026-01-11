@@ -1,6 +1,6 @@
-<div wire:key="cart-summary" class="bg-white rounded-[2rem] shadow-sm border border-gray-100/50 overflow-hidden relative">
+<div class="bg-white rounded-[2rem] shadow-sm border border-gray-100/50 overflow-hidden relative">
     {{-- Loading Overlay --}}
-    <div wire:loading.flex wire:key="cart-summary-loading" wire:target="handleCartUpdated"
+    <div wire:loading.flex wire:key="cart-summary-loading"
         class="absolute inset-0 z-10 bg-white/60 backdrop-blur-[2px] items-center justify-center animate-pulse">
         <div class="flex flex-col items-center opacity-20">
             <img src="{{ asset('assets/img/logos/smart-tools-logo-waiting-400.png') }}" class="w-32" alt="Loading">
@@ -73,6 +73,20 @@
             </div>
         @endif
 
+        {{-- Coupon Discount --}}
+        @if ($this->coupon_discount > 0)
+            <div class="flex justify-between items-center text-sm animate-fadeIn text-xs">
+                <span class="text-successDark font-medium flex items-center gap-1">
+                    <span class="material-icons text-xs">confirmation_number</span>
+                    {{ __('front/homePage.Coupon Discount:') }}
+                </span>
+                <span class="font-bold text-successDark">
+                    - {{ number_format($this->coupon_discount, 2) }} {{ __('front/homePage.EGP') }}
+                    ({{ $this->coupon_discount_percentage }} %)
+                </span>
+            </div>
+        @endif
+
         {{-- Shipping --}}
         <div class="flex justify-between items-center text-sm pt-2">
             <span class="text-gray-500 font-medium">{{ __('front/homePage.Shipping:') }}</span>
@@ -81,13 +95,56 @@
                     class="text-successDark font-bold uppercase tracking-tighter text-[10px] bg-green-50 px-2 py-0.5 rounded-full">
                     {{ __('front/homePage.Free Shipping') }}
                 </span>
+            @elseif($this->shipping_fees > 0)
+                <span class="font-bold text-gray-800">
+                    {{ number_format($this->shipping_fees, 2) }} {{ __('front/homePage.EGP') }}
+                </span>
             @else
                 <span
                     class="text-gray-400 font-bold italic text-[10px] uppercase tracking-tighter bg-gray-50 px-2 py-0.5 rounded-full">
-                    {{ __('front/homePage.Will be determined in the next steps') }}
+                    {{ __('front/homePage.uneligable for shipping') }}
                 </span>
             @endif
         </div>
+
+        {{-- Allow Opening Package Fee --}}
+        @if (!$this->total_order_free_shipping && $this->allow_opening && $this->allow_opening_fee > 0)
+            <div class="flex justify-between items-center text-sm animate-fadeIn">
+                <span class="text-gray-500 font-medium flex items-center gap-1">
+                    <span class="material-icons text-xs">inventory_2</span>
+                    {{ __('front/homePage.Allow to open package') }}
+                </span>
+                <span class="font-bold text-gray-800">
+                    + {{ number_format($this->allow_opening_fee, 2) }} {{ __('front/homePage.EGP') }}
+                </span>
+            </div>
+        @endif
+
+        {{-- Points Used --}}
+        @if ($this->points_egp > 0)
+            <div class="flex justify-between items-center text-sm animate-fadeIn text-xs">
+                <span class="text-successDark font-medium flex items-center gap-1">
+                    <span class="material-icons text-xs">stars</span>
+                    {{ __('front/homePage.Points Discount:') }}
+                </span>
+                <span class="font-bold text-successDark">
+                    - {{ number_format($this->points_egp, 2) }} {{ __('front/homePage.EGP') }}
+                </span>
+            </div>
+        @endif
+
+        {{-- Balance Used --}}
+        @if ($this->balance_to_use > 0)
+            <div class="flex justify-between items-center text-sm animate-fadeIn text-xs">
+                <span class="text-successDark font-medium flex items-center gap-1">
+                    <span class="material-icons text-xs">account_balance_wallet</span>
+                    {{ __('front/homePage.Balance Used:') }}
+                </span>
+                <span class="font-bold text-successDark">
+                    - {{ number_format($this->balance_to_use, 2) }} {{ __('front/homePage.EGP') }}
+                </span>
+            </div>
+        @endif
 
         <hr class="border-gray-50">
 
@@ -103,8 +160,8 @@
                         <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
                             {{ __('front/homePage.You will get:') }}</p>
                         <p class="text-sm font-black text-gray-800">
-                            {{ number_format($this->total_points_after_order_points) }}
-                            {{ trans_choice('front/homePage.Point/Points', $this->total_points_after_order_points) }}
+                            {{ number_format($this->total_points_after_order_points + $this->coupon_items_points + $this->coupon_order_points) }}
+                            {{ trans_choice('front/homePage.Point/Points', $this->total_points_after_order_points + $this->coupon_items_points + $this->coupon_order_points) }}
                         </p>
                     </div>
                 </div>
@@ -117,7 +174,7 @@
                 class="text-gray-800 font-black text-lg uppercase tracking-tighter">{{ __('front/homePage.Total:') }}</span>
             <div class="text-right">
                 <div class="flex items-center gap-1 font-black text-3xl text-successDark">
-                    <span>{{ number_format($this->total_after_order_discount, 2) }}</span>
+                    <span>{{ number_format($this->subtotal_final, 2) }}</span>
                     <span class="text-xs uppercase">{{ __('front/homePage.EGP') }}</span>
                 </div>
                 <p class="text-[10px] text-gray-400 mt-1 uppercase font-bold tracking-widest">
@@ -127,22 +184,29 @@
         </div>
 
         {{-- Actions --}}
-        <div class="pt-4 space-y-3">
-            @if ($this->items_total_quantities > 0)
-                <a href="{{ route('front.orders.checkout') }}"
-                    class="w-full bg-primary hover:bg-primary/95 text-white font-black py-4 rounded-2xl flex rtl:flex-row-reverse items-center justify-center gap-2 shadow-lg shadow-primary/20 transition-all active:scale-[0.98] group">
-                    <span
-                        class="material-icons group-hover:translate-x-1 transition-transform rtl:rotate-270">check</span>
-                    <span class="uppercase tracking-widest">{{ __('front/homePage.Proceed to Checkout') }}</span>
-                </a>
-            @else
-                <a href="{{ route('front.homepage') }}"
-                    class="w-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-[0.98] group">
-                    <span
-                        class="material-icons group-hover:-translate-x-1 transition-transform rtl:rotate-180">arrow_back</span>
-                    <span class="uppercase tracking-widest">{{ __('front/homePage.Continue Shopping') }}</span>
-                </a>
-            @endif
-        </div>
+        @if (!request()->routeIs('front.orders.checkout'))
+            <div class="pt-4 space-y-3">
+                @if ($this->items_total_quantities > 0)
+                    <button wire:click="$parent.submit" wire:loading.attr="disabled"
+                        class="w-full py-4 bg-primary hover:bg-primaryDark text-white font-bold rounded-2xl shadow-xl shadow-primary/20 transition-all flex items-center justify-center gap-2 group">
+                        <span wire:loading.remove>
+                            {{ __('front/homePage.Confirm Order') }}
+                        </span>
+                        <span wire:loading class="material-icons animate-spin">sync</span>
+                        <span wire:loading.remove
+                            class="material-icons group-hover:translate-x-1 transition-transform rtl:group-hover:-translate-x-1">
+                            {{ session('locale') == 'ar' ? 'arrow_back' : 'arrow_forward' }}
+                        </span>
+                    </button>
+                @else
+                    <a href="{{ route('front.homepage') }}"
+                        class="w-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-[0.98] group">
+                        <span
+                            class="material-icons group-hover:-translate-x-1 transition-transform rtl:rotate-180">arrow_back</span>
+                        <span class="uppercase tracking-widest">{{ __('front/homePage.Continue Shopping') }}</span>
+                    </a>
+                @endif
+            </div>
+        @endif
     </div>
 </div>

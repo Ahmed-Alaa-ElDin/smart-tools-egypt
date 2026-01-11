@@ -32,7 +32,7 @@ class CanDeliver
 
             return $next($request);
         } catch (\Throwable $th) {
-            return redirect()->route('front.order.shipping');
+            return redirect()->route('front.orders.checkout');
         }
     }
 }
