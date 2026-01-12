@@ -463,10 +463,8 @@ class Wrapper extends Component
             }
 
             // Send Meta Pixel event
-            $eventId = MetaPixel::generateEventId();
-
-            $this->sendMetaPixelEvent($result['order'], 'InitiateCheckout', $eventId);
-            $this->sendMetaPixelEvent($result['order'], 'Purchase', $eventId);
+            $this->sendMetaPixelEvent($result['order'], 'InitiateCheckout', MetaPixel::generateEventId());
+            $this->sendMetaPixelEvent($result['order'], 'Purchase', MetaPixel::generateEventId());
 
             // Order created successfully
             Session::flash('success', __('front/homePage.Order placed successfully!'));

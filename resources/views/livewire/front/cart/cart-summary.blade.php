@@ -121,7 +121,7 @@
                     <span class="text-xs uppercase">{{ __('front/homePage.EGP') }}</span>
                 </div>
                 <p class="text-[10px] text-gray-400 mt-1 uppercase font-bold tracking-widest">
-                    {{ __('front/homePage.Inclusive of VAT') }}
+                    {{ __('front/homePage.Inclusive of shipment fees') }}
                 </p>
             </div>
         </div>
