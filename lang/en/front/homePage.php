@@ -580,4 +580,5 @@ return [
     "No phones found. Please add one." => "No phones found. Please add one.",
     "Are you sure you want to delete this phone?" => "Are you sure you want to delete this phone?",
     "This phone number already exists." => "This phone number already exists.",
+    "Inclusive of shipment fees" => "Inclusive of shipment fees"
 ];

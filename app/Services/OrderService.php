@@ -124,7 +124,8 @@ class OrderService
             $this->clearCart();
 
             // Send Meta Pixel event
-            $this->sendMetaPixelEvent($order);
+            $this->sendMetaPixelEvent($order, 'InitiateCheckout');
+            $this->sendMetaPixelEvent($order, 'Purchase');
 
             // Handle payment gateway redirect
             $redirect = $this->handlePaymentGateway($order, $transaction, $data['payment_method_id'], $shouldPay);
@@ -588,7 +589,7 @@ class OrderService
     /**
      * Send Meta Pixel event.
      */
-    private function sendMetaPixelEvent(Order $order): void
+    private function sendMetaPixelEvent(Order $order, string $event = 'Purchase'): void
     {
         try {
             $products = $order->products->pluck('id')->toArray();
@@ -604,7 +605,7 @@ class OrderService
             ];
 
             MetaPixel::sendEvent(
-                "Purchase",
+                $event,
                 [],
                 $customData,
                 $eventId
