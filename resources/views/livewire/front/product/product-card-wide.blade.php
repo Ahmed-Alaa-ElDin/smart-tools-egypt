@@ -145,7 +145,7 @@
     <div class="flex flex-col items-center sm:items-end gap-4 min-w-[150px]">
         {{-- Total --}}
         @if ($type == 'cart')
-            <div class="flex items-center gap-1 font-bold text-successDark w-full lg:justify-end">
+            <div class="flex items-center gap-1 font-bold text-successDark w-full justify-center lg:justify-end">
                 <span class="text-xs">{{ __('front/homePage.EGP') }}</span>
                 <span class="text-lg">{{ number_format($this->total, 2) }}</span>
             </div>

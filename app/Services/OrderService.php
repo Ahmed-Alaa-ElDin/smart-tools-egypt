@@ -123,9 +123,6 @@ class OrderService
             // Clear cart
             $this->clearCart();
 
-            // Send Meta Pixel event
-            $this->sendMetaPixelEvent($order);
-
             // Handle payment gateway redirect
             $redirect = $this->handlePaymentGateway($order, $transaction, $data['payment_method_id'], $shouldPay);
 
@@ -582,35 +579,6 @@ class OrderService
 
         if (Auth::check()) {
             Cart::instance('cart')->store(Auth::user()->id);
-        }
-    }
-
-    /**
-     * Send Meta Pixel event.
-     */
-    private function sendMetaPixelEvent(Order $order): void
-    {
-        try {
-            $products = $order->products->pluck('id')->toArray();
-            $collections = $order->collections->pluck('id')->toArray();
-
-            $eventId = MetaPixel::generateEventId();
-
-            $customData = [
-                'content_type' => 'product_group',
-                'content_ids' => array_merge($products, $collections),
-                'currency' => 'EGP',
-                'value' => ceil($this->total_after_coupon_discount),
-            ];
-
-            MetaPixel::sendEvent(
-                "Purchase",
-                [],
-                $customData,
-                $eventId
-            );
-        } catch (\Exception $e) {
-            // Don't fail order for Meta Pixel errors
         }
     }
 

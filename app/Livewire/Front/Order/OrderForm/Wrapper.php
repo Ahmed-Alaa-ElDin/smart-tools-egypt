@@ -2,15 +2,14 @@
 
 namespace App\Livewire\Front\Order\OrderForm;
 
+use App\Models\Zone;
 use App\Models\Offer;
 use App\Models\Order;
 use App\Models\Address;
-use App\Models\Zone;
 use Livewire\Component;
-use App\Enums\OrderStatus;
+use App\Facades\MetaPixel;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Computed;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\Front\EnrichesCartItems;
 use Illuminate\Support\Facades\Session;
@@ -463,6 +462,12 @@ class Wrapper extends Component
                 return redirect()->away($result['redirect']);
             }
 
+            // Send Meta Pixel event
+            $eventId = MetaPixel::generateEventId();
+
+            $this->sendMetaPixelEvent($result['order'], 'InitiateCheckout', $eventId);
+            $this->sendMetaPixelEvent($result['order'], 'Purchase', $eventId);
+
             // Order created successfully
             Session::flash('success', __('front/homePage.Order placed successfully!'));
             return redirect()->route('front.orders.done')->with('order_id', $result['order']->id);
@@ -475,4 +480,41 @@ class Wrapper extends Component
     {
         return view('livewire.front.order.order-form.wrapper');
     }
+
+    /**
+     * Send Meta Pixel event.
+     */
+    private function sendMetaPixelEvent(Order $order, string $event = 'Purchase', string $eventId = null): void
+    {
+        try {
+            $products = $order->products->pluck('id')->toArray();
+            $collections = $order->collections->pluck('id')->toArray();
+
+            $customData = [
+                'content_type' => 'product_group',
+                'content_ids' => array_merge($products, $collections),
+                'currency' => 'EGP',
+                'value' => ceil($this->subtotal_final),
+            ];
+
+            MetaPixel::sendEvent(
+                $event,
+                [],
+                $customData,
+                $eventId ?? MetaPixel::generateEventId()
+            );
+
+
+            $this->dispatch(
+                "metaPixelEvent",
+                eventName: $event,
+                userData: [],
+                customData: $customData,
+                eventId: $eventId,
+            );
+        } catch (\Exception $e) {
+            // Don't fail order for Meta Pixel errors
+        }
+    }
+
 }

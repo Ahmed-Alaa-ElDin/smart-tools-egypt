@@ -574,4 +574,5 @@ return [
     "No phones found. Please add one." => "لا توجد أرقام هاتف. من فضلك أضف رقماً.",
     "Are you sure you want to delete this phone?" => "هل أنت متأكد من حذف هذا الرقم؟",
     "This phone number already exists." => "هذا الرقم موجود بالفعل.",
+    "Inclusive of shipment fees" => "شامل مصاريف الشحن"
 ];
