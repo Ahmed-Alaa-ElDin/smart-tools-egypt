@@ -28,69 +28,69 @@ class OrderForm extends Component
     public $customerId, $addressId;
 
     public $customer,
-        $default_address,
-        $default_phone,
-        $items,
-        $coupon_id,
-        $wallet = 0.00,
-        $points = 0,
-        $points_egp = 0.00,
-        $payment_method = 1,
-        $notes = "",
-        $allowToOpenPackage = false;
+    $default_address,
+    $default_phone,
+    $items,
+    $coupon_id,
+    $wallet = 0.00,
+    $points = 0,
+    $points_egp = 0.00,
+    $payment_method = 1,
+    $notes = "",
+    $allowToOpenPackage = false;
 
     public $delivery_fees,
-        $zone_id,
-        $subtotal = 0.00,
-        $items_base_prices = 0.00,
-        $items_final_prices = 0.00,
-        $items_best_prices = 0.00,
-        $items_discounts = 0.00,
-        $items_discounts_percentage = 0,
-        $offers_discounts = 0,
-        $offers_discounts_percentage = 0,
-        $offers_free_shipping = false,
-        $items_best_points = 0,
-        $order_discount = 0.00,
-        $order_discount_percentage = 0,
-        $order_points = 0,
-        $total_points = 0,
-        $total = 0.00,
-        $total_after_wallet = 0.00;
+    $zone_id,
+    $subtotal = 0.00,
+    $items_base_prices = 0.00,
+    $items_final_prices = 0.00,
+    $items_best_prices = 0.00,
+    $items_discounts = 0.00,
+    $items_discounts_percentage = 0,
+    $offers_discounts = 0,
+    $offers_discounts_percentage = 0,
+    $offers_free_shipping = false,
+    $items_best_points = 0,
+    $order_discount = 0.00,
+    $order_discount_percentage = 0,
+    $order_points = 0,
+    $total_points = 0,
+    $total = 0.00,
+    $total_after_wallet = 0.00;
 
     public $products_after_coupon = [],
-        $collections_after_coupon = [],
-        $coupon_discount = 0.00,
-        $coupon_points = 0,
-        $coupon_free_shipping = false,
-        $coupon_items_discount = 0.00,
-        $coupon_order_discount = 0.00,
-        $coupon_items_points = 0,
-        $coupon_order_points = 0;
+    $collections_after_coupon = [],
+    $coupon_discount = 0.00,
+    $coupon_points = 0,
+    $coupon_free_shipping = false,
+    $coupon_items_discount = 0.00,
+    $coupon_order_discount = 0.00,
+    $coupon_items_points = 0,
+    $coupon_order_points = 0;
 
     public $best_items,
-        $best_products,
-        $best_collections,
-        $items_total_quantities = 0,
-        $items_total_weights = 0;
+    $best_products,
+    $best_collections,
+    $items_total_quantities = 0,
+    $items_total_weights = 0;
 
     protected $rules = [
-        'customer'              =>       'required',
-        'default_address'       =>       'required_with:customer',
-        'default_phone'         =>       'required_with:customer',
-        'items'                 =>       'array|min:1',
-        'payment_method'        =>       'required|in:1,2,3,4,5',
+        'customer' => 'required',
+        'default_address' => 'required_with:customer',
+        'default_phone' => 'required_with:customer',
+        'items' => 'array|min:1',
+        'payment_method' => 'required|in:1,2,3,4,5',
     ];
 
     public function messages()
     {
         return [
-            'customer.required'                 =>      __('admin/ordersPages.Please select a customer first'),
-            'default_address.required_with'     =>      __('admin/ordersPages.Please select the default address'),
-            'default_phone.required_with'       =>      __('admin/ordersPages.Please select the default phone number'),
-            'items.min'                         =>      __('admin/ordersPages.Please select the products (at least one product)'),
-            'payment_method.required'           =>      __('admin/ordersPages.Please select the payment method'),
-            'payment_method.in'                 =>      __('admin/ordersPages.Please select the payment method'),
+            'customer.required' => __('admin/ordersPages.Please select a customer first'),
+            'default_address.required_with' => __('admin/ordersPages.Please select the default address'),
+            'default_phone.required_with' => __('admin/ordersPages.Please select the default phone number'),
+            'items.min' => __('admin/ordersPages.Please select the products (at least one product)'),
+            'payment_method.required' => __('admin/ordersPages.Please select the payment method'),
+            'payment_method.in' => __('admin/ordersPages.Please select the payment method'),
         ];
     }
 
@@ -201,7 +201,7 @@ class OrderForm extends Component
         $items = $this->items;
 
         $itemsQuantities = array_reduce($items, function ($carry, $item) {
-            $carry[$item['type']][$item['id']] =  $item['amount'];
+            $carry[$item['type']][$item['id']] = $item['amount'];
 
             return $carry;
         });
@@ -258,12 +258,12 @@ class OrderForm extends Component
             $collection->total_offer_discount_percent = $collection->final_price ? round(($collection->offer_discount / $collection->final_price) * 100, 2) : 0;
 
             $collection->total_after_offer_price = $collection->total_final_price - $collection->total_offer_discount;
-            $collection->total_collection_points =  $collection->points * $collection->qty;
-            $collection->total_offer_points =  $collection->offer_points * $collection->qty;
-            $collection->total_after_offer_points =  $collection->total_collection_points + $collection->total_offer_points;
+            $collection->total_collection_points = $collection->points * $collection->qty;
+            $collection->total_offer_points = $collection->offer_points * $collection->qty;
+            $collection->total_after_offer_points = $collection->total_collection_points + $collection->total_offer_points;
 
-            $collection->coupon_discount =  0;
-            $collection->coupon_points =  0;
+            $collection->coupon_discount = 0;
+            $collection->coupon_points = 0;
 
             return $collection;
         });
@@ -335,11 +335,11 @@ class OrderForm extends Component
         $this->zone_id = $best_zone->count() ? $best_zone->first()['zone_id'] : null;
 
         // Check if the order's products and collections are free shipping
-        $productsEligibleForFreeShipping = $this->best_products->every(fn($product) => $product->free_shipping != 0);
+        $productsEligibleForFreeShipping = $this->best_products->some(fn($product) => $product->free_shipping != 0);
 
-        $collectionsEligibleForFreeShipping = $this->best_collections->every(fn($collection) => $collection->free_shipping != 0);
+        $collectionsEligibleForFreeShipping = $this->best_collections->some(fn($collection) => $collection->free_shipping != 0);
 
-        if ($productsEligibleForFreeShipping && $collectionsEligibleForFreeShipping) {
+        if ($productsEligibleForFreeShipping || $collectionsEligibleForFreeShipping) {
             $this->delivery_fees = 0;
         }
     }
@@ -426,7 +426,7 @@ class OrderForm extends Component
     {
         $default_phones = array_column(array_filter($this->customer['phones'], fn($phone) => $phone['default'] == 1), 'phone');
         $default_phone = count($default_phones) > 0 ? $default_phones[0] : null;
-        $non_default_phones =  array_map(fn($phone) => $phone['phone'], array_filter($this->customer['phones'], fn($phone) => $phone['default'] == 0));
+        $non_default_phones = array_map(fn($phone) => $phone['phone'], array_filter($this->customer['phones'], fn($phone) => $phone['default'] == 0));
 
         $default_addresses = array_filter($this->customer["addresses"], fn($address) => $address['default'] == 1);
         $default_address = count($default_addresses) > 0 ? array_shift($default_addresses) : null;
@@ -452,25 +452,25 @@ class OrderForm extends Component
 
             // Update the Order
             $order = Order::create([
-                'user_id'               =>      $this->customer["id"],
-                'address_id'            =>      $default_address ? $default_address["id"] : null,
-                'phone1'                =>      $default_phone,
-                'phone2'                =>      implode(", ", $non_default_phones),
-                'package_type'          =>      'parcel',
-                'package_desc'          =>      'عروض عدد وأدوات قابلة للكسر برجاء المحافظة على مكونات الشحنة لتفادى التلف أو فقدان مكونات الشحنة',
-                'status_id'             =>      OrderStatus::WaitingForApproval->value,
-                'num_of_items'          =>      $this->items_total_quantities,
-                'allow_opening'         =>      $this->allowToOpenPackage,
-                'zone_id'               =>      $this->zone_id,
-                'coupon_id'             =>      $this->coupon_id,
-                'items_points'          =>      $items_total_points,
-                'offers_items_points'   =>      $offers_total_points,
-                'offers_order_points'   =>      $this->order_points,
-                'coupon_items_points'   =>      $this->coupon_items_points,
-                'coupon_order_points'   =>      $this->coupon_order_points,
-                'gift_points'           =>      $total_points_after_coupon_points,
-                'total_weight'          =>      $this->items_total_weights,
-                'notes'                 =>      $this->notes
+                'user_id' => $this->customer["id"],
+                'address_id' => $default_address ? $default_address["id"] : null,
+                'phone1' => $default_phone,
+                'phone2' => implode(", ", $non_default_phones),
+                'package_type' => 'parcel',
+                'package_desc' => 'عروض عدد وأدوات قابلة للكسر برجاء المحافظة على مكونات الشحنة لتفادى التلف أو فقدان مكونات الشحنة',
+                'status_id' => OrderStatus::WaitingForApproval->value,
+                'num_of_items' => $this->items_total_quantities,
+                'allow_opening' => $this->allowToOpenPackage,
+                'zone_id' => $this->zone_id,
+                'coupon_id' => $this->coupon_id,
+                'items_points' => $items_total_points,
+                'offers_items_points' => $offers_total_points,
+                'offers_order_points' => $this->order_points,
+                'coupon_items_points' => $this->coupon_items_points,
+                'coupon_order_points' => $this->coupon_order_points,
+                'gift_points' => $total_points_after_coupon_points,
+                'total_weight' => $this->items_total_weights,
+                'notes' => $this->notes
             ]);
 
             // Change the state of the order
@@ -604,8 +604,7 @@ class OrderForm extends Component
                     'coupon_discount' => $product['coupon_discount'],
                     'coupon_points' => $product['coupon_points'],
                 ];
-            };
-
+            }
 
             // get order's collections
             $final_collections = [];
@@ -619,7 +618,7 @@ class OrderForm extends Component
                     'coupon_discount' => $collection['coupon_discount'],
                     'coupon_points' => $collection['coupon_points'],
                 ];
-            };
+            }
 
             ################### Modify Products and Collections :: Start ###################
             // Add Previous Order Amounts of Collections and Products
