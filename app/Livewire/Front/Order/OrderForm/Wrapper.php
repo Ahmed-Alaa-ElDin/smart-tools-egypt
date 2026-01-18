@@ -83,6 +83,11 @@ class Wrapper extends Component
             $defaultPhone = Auth::user()->phones()->where('default', true)->first();
             $this->phone1 = $defaultPhone ? $defaultPhone->phone : null;
         }
+
+        $productIds = array_filter($this->items, fn($item) => $item["type"] == "Product");
+        $collectionIds = array_filter($this->items, fn($item) => $item["type"] == "Collection");
+
+        $this->sendMetaPixelEvent($productIds, $collectionIds, 'InitiateCheckout', MetaPixel::generateEventId());
     }
 
     #[On('addressSelected')]
@@ -481,8 +486,8 @@ class Wrapper extends Component
             }
 
             // Send Meta Pixel event
-            $this->sendMetaPixelEvent($result['order'], 'InitiateCheckout', MetaPixel::generateEventId());
-            $this->sendMetaPixelEvent($result['order'], 'Purchase', MetaPixel::generateEventId());
+            $this->sendMetaPixelEvent($result['order']->products->pluck('id')->toArray(), $result['order']->collections->pluck('id')->toArray(), 'InitiateCheckout', MetaPixel::generateEventId());
+            $this->sendMetaPixelEvent($result['order']->products->pluck('id')->toArray(), $result['order']->collections->pluck('id')->toArray(), 'Purchase', MetaPixel::generateEventId());
 
             // Order created successfully
             Session::flash('success', __('front/homePage.Order placed successfully!'));
@@ -500,17 +505,14 @@ class Wrapper extends Component
     /**
      * Send Meta Pixel event.
      */
-    private function sendMetaPixelEvent(Order $order, string $event = 'Purchase', string $eventId = null): void
+    private function sendMetaPixelEvent(array $productIds, array $collectionIds, string $event = 'Purchase', string $eventId = null): void
     {
         try {
-            $products = $order->products->pluck('id')->toArray();
-            $collections = $order->collections->pluck('id')->toArray();
-
             $customData = [
                 'content_type' => 'product_group',
-                'content_ids' => array_merge($products, $collections),
+                'content_ids' => [...$productIds, ...$collectionIds],
                 'currency' => 'EGP',
-                'value' => ceil($this->subtotal_final),
+                'value' => ceil($this->total_after_order_discount),
             ];
 
             MetaPixel::sendEvent(
@@ -519,7 +521,6 @@ class Wrapper extends Component
                 $customData,
                 $eventId ?? MetaPixel::generateEventId()
             );
-
 
             $this->dispatch(
                 "metaPixelEvent",
