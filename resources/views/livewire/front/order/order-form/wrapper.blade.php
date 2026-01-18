@@ -97,6 +97,8 @@
                         'points_egp' => $this->points_egp,
                         'balance_to_use' => $this->balance_to_use,
                         'subtotal_final' => $this->subtotal_final,
+                        'is_eligible_for_shipping' => $this->is_eligible_for_shipping,
+                        'phone1' => $this->phone1,
                     ],
                     key('order-summary')
                 )

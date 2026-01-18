@@ -356,14 +356,29 @@ class Wrapper extends Component
     }
 
     #[Computed]
-    public function shipping_fees()
+    public function is_eligible_for_shipping()
     {
         if (Cart::instance('cart')->count() == 0 || !Auth::check() || !$this->address_id) {
-            return 0;
+            return false;
         }
 
         $address = Address::with(['city'])->find($this->address_id);
         if (!$address) {
+            return false;
+        }
+
+        $zonesCount = Zone::where('is_active', 1)
+            ->whereHas('destinations', fn($q) => $q->where('city_id', $address->city_id))
+            ->whereHas('delivery', fn($q) => $q->where('is_active', 1))
+            ->count();
+
+        return $zonesCount > 0;
+    }
+
+    #[Computed]
+    public function shipping_fees()
+    {
+        if (!$this->is_eligible_for_shipping) {
             return 0;
         }
 
@@ -371,15 +386,12 @@ class Wrapper extends Component
             return 0;
         }
 
+        $address = Address::find($this->address_id);
         $zones = Zone::with(['destinations'])
             ->where('is_active', 1)
             ->whereHas('destinations', fn($q) => $q->where('city_id', $address->city_id))
             ->whereHas('delivery', fn($q) => $q->where('is_active', 1))
             ->get();
-
-        if ($zones->isEmpty()) {
-            return 0;
-        }
 
         $weight = $this->items_total_shipping_weights;
 
@@ -437,8 +449,14 @@ class Wrapper extends Component
 
     public function submit()
     {
+        if (!$this->is_eligible_for_shipping) {
+            $this->dispatch('swalDone', text: __('front/homePage.uneligable for shipping'), icon: 'error');
+            return;
+        }
+
         $this->validate([
             'address_id' => 'required|exists:addresses,id',
+            'phone1' => 'required',
             'payment_method_id' => 'required',
         ]);
 

@@ -90,19 +90,19 @@
         {{-- Shipping --}}
         <div class="flex justify-between items-center text-sm pt-2">
             <span class="text-gray-500 font-medium">{{ __('front/homePage.Shipping:') }}</span>
-            @if ($this->total_order_free_shipping)
+            @if (!$this->is_eligible_for_shipping)
+                <span
+                    class="text-gray-400 font-bold italic text-[10px] uppercase tracking-tighter bg-gray-50 px-2 py-0.5 rounded-full">
+                    {{ __('front/homePage.uneligable for shipping') }}
+                </span>
+            @elseif ($this->total_order_free_shipping)
                 <span
                     class="text-successDark font-bold uppercase tracking-tighter text-[10px] bg-green-50 px-2 py-0.5 rounded-full">
                     {{ __('front/homePage.Free Shipping') }}
                 </span>
-            @elseif($this->shipping_fees > 0)
+            @else
                 <span class="font-bold text-gray-800">
                     {{ number_format($this->shipping_fees, 2) }} {{ __('front/homePage.EGP') }}
-                </span>
-            @else
-                <span
-                    class="text-gray-400 font-bold italic text-[10px] uppercase tracking-tighter bg-gray-50 px-2 py-0.5 rounded-full">
-                    {{ __('front/homePage.uneligable for shipping') }}
                 </span>
             @endif
         </div>
@@ -188,7 +188,8 @@
             <div class="pt-4 space-y-3">
                 @if ($this->items_total_quantities > 0)
                     <button wire:click="$parent.submit" wire:loading.attr="disabled"
-                        class="w-full py-4 bg-primary hover:bg-primaryDark text-white font-bold rounded-2xl shadow-xl shadow-primary/20 transition-all flex items-center justify-center gap-2 group">
+                        @if (!$this->is_eligible_for_shipping || !$this->phone1) disabled @endif
+                        class="w-full py-4 bg-primary hover:bg-primaryDark text-white font-bold rounded-2xl shadow-xl shadow-primary/20 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed">
                         <span wire:loading.remove>
                             {{ __('front/homePage.Confirm Order') }}
                         </span>
@@ -198,6 +199,16 @@
                             {{ session('locale') == 'ar' ? 'arrow_back' : 'arrow_forward' }}
                         </span>
                     </button>
+                    @if (!$this->is_eligible_for_shipping || !$this->phone1)
+                        <p class="text-[10px] text-red-500 font-bold text-center mt-2 animate-pulse">
+                            <span class="material-icons text-[10px] align-middle">error_outline</span>
+                            @if (!$this->is_eligible_for_shipping)
+                                {{ __('front/homePage.uneligable for shipping') }}
+                            @elseif(!$this->phone1)
+                                {{ __('front/homePage.Please select a phone number') }}
+                            @endif
+                        </p>
+                    @endif
                 @else
                     <a href="{{ route('front.homepage') }}"
                         class="w-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-[0.98] group">

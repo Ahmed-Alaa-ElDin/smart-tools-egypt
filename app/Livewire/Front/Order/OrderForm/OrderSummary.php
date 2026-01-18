@@ -49,6 +49,10 @@ class OrderSummary extends Component
     public $allow_opening = false;
     #[Reactive]
     public $allow_opening_fee = 0;
+    #[Reactive]
+    public $is_eligible_for_shipping = false;
+    #[Reactive]
+    public $phone1;
 
     public function handleCartUpdated()
     {
