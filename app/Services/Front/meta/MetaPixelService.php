@@ -30,8 +30,44 @@ class MetaPixelService
 
             $clientIp = request()->getClientIp();
             $userAgent = request()->userAgent();
-            $fbc = $_COOKIE['_fbc'] ?? null;
-            $fbp = $_COOKIE['_fbp'] ?? null;
+            $fbc = request()->cookie('_fbc');
+            $fbp = request()->cookie('_fbp');
+
+            $eventTime = time();
+
+            // Validate fbc timestamp (must not be older than 90 days or in the future)
+            if ($fbc) {
+                $fbcParts = explode('.', $fbc);
+                if (count($fbcParts) >= 3 && is_numeric($fbcParts[2])) {
+                    $fbcTimestamp = (int) $fbcParts[2];
+                    // Older than 90 days
+                    if (($eventTime - $fbcTimestamp) > (90 * 24 * 60 * 60)) {
+                        $fbc = null;
+                    }
+                    // In the future relative to server time (cap to eventTime)
+                    elseif ($fbcTimestamp > $eventTime) {
+                        $fbcParts[2] = $eventTime;
+                        $fbc = implode('.', $fbcParts);
+                    }
+                }
+            }
+
+            // Validate fbp timestamp (must not be older than 90 days or in the future)
+            if ($fbp) {
+                $fbpParts = explode('.', $fbp);
+                if (count($fbpParts) >= 3 && is_numeric($fbpParts[2])) {
+                    $fbpTimestamp = (int) $fbpParts[2];
+                    // Older than 90 days
+                    if (($eventTime - $fbpTimestamp) > (90 * 24 * 60 * 60)) {
+                        $fbp = null;
+                    }
+                    // In the future relative to server time (cap to eventTime)
+                    elseif ($fbpTimestamp > $eventTime) {
+                        $fbpParts[2] = $eventTime;
+                        $fbp = implode('.', $fbpParts);
+                    }
+                }
+            }
 
             $user = auth()->check() ? auth()->user() : null;
 
@@ -59,7 +95,7 @@ class MetaPixelService
                     [
                         'event_name' => $eventName,
                         'event_id' => $eventId,
-                        'event_time' => now()->timestamp,
+                        'event_time' => $eventTime,
                         'action_source' => 'website',
                         'user_data' => $finalUserData,
                         'custom_data' => $customData,
