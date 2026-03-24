@@ -29,6 +29,7 @@ class TrackPageViewMiddleware
             MetaPixel::sendEvent('PageView', [], [], $eventId);
 
             View::share('meta_event_id', $eventId);
+            View::share('meta_user_data', MetaPixel::getUserData());
         }
 
         return $next($request);

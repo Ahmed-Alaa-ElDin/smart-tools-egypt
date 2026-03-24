@@ -80,9 +80,9 @@
             s.parentNode.insertBefore(t, s)
         }(window, document, 'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '1174640216338366');
+        fbq('init', '1174640216338366', {!! json_encode($meta_user_data ?? []) !!});
         fbq('track', 'PageView', {}, {
-            eventId: "{{ $meta_event_id ?? '' }}"
+            eventID: "{{ $meta_event_id ?? '' }}"
         });
     </script>
     <noscript><img height="1" width="1" style="display:none"
@@ -200,19 +200,16 @@
         @endif
 
         window.pixelEvent = function(eventName, userData, customData, eventId) {
-            const eventParams = {
-                ...customData,
-                ...(eventId ? {
-                    eventID: eventId
-                } : {}) // Meta Pixel expects 'eventID', not 'eventId'
-            };
+            const eventParams = customData || {};
+            const options = eventId ? {
+                eventID: eventId
+            } : {};
 
-            fbq('track', eventName, eventParams);
-
-            // Optionally include user data for matching (if applicable)
-            if (Object.keys(userData).length) {
+            if (userData && Object.keys(userData).length) {
                 fbq('init', '1174640216338366', userData);
             }
+
+            fbq('track', eventName, eventParams, options);
         };
 
         window.addEventListener('swalDone', function(e) {

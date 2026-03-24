@@ -28,67 +28,9 @@ class MetaPixelService
 
             $endpoint = "https://graph.facebook.com/{$this->apiVersion}/{$this->pixelId}/events";
 
-            $clientIp = request()->getClientIp();
-            $userAgent = request()->userAgent();
-            $fbc = request()->cookie('_fbc');
-            $fbp = request()->cookie('_fbp');
-
             $eventTime = time();
 
-            // Validate fbc timestamp (must not be older than 90 days or in the future)
-            if ($fbc) {
-                $fbcParts = explode('.', $fbc);
-                if (count($fbcParts) >= 3 && is_numeric($fbcParts[2])) {
-                    $fbcTimestamp = (int) $fbcParts[2];
-                    // Older than 90 days
-                    if (($eventTime - $fbcTimestamp) > (90 * 24 * 60 * 60)) {
-                        $fbc = null;
-                    }
-                    // In the future relative to server time (cap to eventTime)
-                    elseif ($fbcTimestamp > $eventTime) {
-                        $fbcParts[2] = $eventTime;
-                        $fbc = implode('.', $fbcParts);
-                    }
-                }
-            }
-
-            // Validate fbp timestamp (must not be older than 90 days or in the future)
-            if ($fbp) {
-                $fbpParts = explode('.', $fbp);
-                if (count($fbpParts) >= 3 && is_numeric($fbpParts[2])) {
-                    $fbpTimestamp = (int) $fbpParts[2];
-                    // Older than 90 days
-                    if (($eventTime - $fbpTimestamp) > (90 * 24 * 60 * 60)) {
-                        $fbp = null;
-                    }
-                    // In the future relative to server time (cap to eventTime)
-                    elseif ($fbpTimestamp > $eventTime) {
-                        $fbpParts[2] = $eventTime;
-                        $fbp = implode('.', $fbpParts);
-                    }
-                }
-            }
-
-            $user = auth()->check() ? auth()->user() : null;
-
-            $hashedUserData = $this->hashUserData(array_merge($userData, [
-                'em' => $user?->email,
-                'ph' => $user?->phones?->pluck('phone')->toArray() ?? [],
-                'fn' => $user?->f_name,
-                'ln' => $user?->l_name,
-                'ge' => $user ? ($user->gender === 0 ? 'm' : 'f') : null,
-                'db' => $user?->birth_date ? \Carbon\Carbon::parse($user->birth_date)->format('Ymd') : null, //YYYYMMDD
-                'country' => "eg",
-                'external_id' => $user?->id,
-            ]));
-
-            $finalUserData = array_merge($hashedUserData, [
-                'client_ip_address' => $clientIp,
-                'client_user_agent' => $userAgent,
-                'fbc' => $fbc,
-                'fbp' => $fbp,
-                'page_id' => config('services.meta_pixel.page_id'),
-            ]);
+            $finalUserData = $this->getUserData($userData);
 
             $payload = [
                 'data' => [
@@ -114,6 +56,75 @@ class MetaPixelService
             (new SMSService())->sendSMS('01111339306', $e->getMessage());
             return null;
         }
+    }
+
+    public function getUserData(array $userData = [])
+    {
+        $user = auth()->check() ? auth()->user() : null;
+        $address = $user?->defaultAddress->first();
+
+        $baseUserData = [
+            'em' => $user?->email,
+            'ph' => $user?->phones?->map(fn($p) => preg_replace('/\D/', '', $p->phone))->toArray() ?? [],
+            'fn' => $user?->f_name,
+            'ln' => $user?->l_name,
+            'ge' => $user ? ($user->gender === 0 ? 'm' : 'f') : null,
+            'db' => $user?->birth_date ? \Carbon\Carbon::parse($user->birth_date)->format('Ymd') : null, //YYYYMMDD
+            'ct' => $address?->city?->name,
+            'st' => $address?->governorate?->name,
+            'country' => "eg",
+            'external_id' => (string) $user?->id,
+        ];
+
+        $hashedUserData = $this->hashUserData(array_filter(array_merge($baseUserData, $userData)));
+
+        $clientIp = request()->getClientIp();
+        $userAgent = request()->userAgent();
+        $fbc = request()->cookie('_fbc');
+        $fbp = request()->cookie('_fbp');
+        $eventTime = time();
+
+        // Validate fbc timestamp (must not be older than 90 days or in the future)
+        if ($fbc) {
+            $fbcParts = explode('.', $fbc);
+            if (count($fbcParts) >= 3 && is_numeric($fbcParts[2])) {
+                $fbcTimestamp = (int) $fbcParts[2];
+                // Older than 90 days
+                if (($eventTime - $fbcTimestamp) > (90 * 24 * 60 * 60)) {
+                    $fbc = null;
+                }
+                // In the future relative to server time (cap to eventTime)
+                elseif ($fbcTimestamp > $eventTime) {
+                    $fbcParts[2] = $eventTime;
+                    $fbc = implode('.', $fbcParts);
+                }
+            }
+        }
+
+        // Validate fbp timestamp (must not be older than 90 days or in the future)
+        if ($fbp) {
+            $fbpParts = explode('.', $fbp);
+            if (count($fbpParts) >= 3 && is_numeric($fbpParts[2])) {
+                $fbpTimestamp = (int) $fbpParts[2];
+                // Older than 90 days
+                if (($eventTime - $fbpTimestamp) > (90 * 24 * 60 * 60)) {
+                    $fbp = null;
+                }
+                // In the future relative to server time (cap to eventTime)
+                elseif ($fbpTimestamp > $eventTime) {
+                    $fbpParts[2] = $eventTime;
+                    $fbp = implode('.', $fbpParts);
+                }
+            }
+        }
+
+        return array_merge($hashedUserData, [
+            'client_ip_address' => $clientIp,
+            'client_user_agent' => $userAgent,
+            'fbc' => $fbc,
+            'fbp' => $fbp,
+            'page_id' => config('services.meta_pixel.page_id'),
+        ]);
     }
 
     private function hashUserData(array $data)
