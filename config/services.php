@@ -54,4 +54,10 @@ return [
         'api_version' => env('META_API_VERSION', 'v18.0'),
         'page_id' => env('META_PAGE_ID'),
     ],
+
+    'meta_catalog' => [
+        'id' => env('META_CATALOG_ID'),
+        'access_token' => env('META_CATALOG_ACCESS_TOKEN'),
+        'api_version' => env('META_CATALOG_API_VERSION', 'v25.0'),
+    ],
 ];

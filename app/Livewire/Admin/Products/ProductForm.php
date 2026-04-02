@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Str;
+use App\Services\Front\meta\MetaCatalogService;
+
 
 class ProductForm extends Component
 {
@@ -989,6 +991,10 @@ class ProductForm extends Component
                 imageDelete($deletedImage, 'products');
             }
 
+            if ($product->publish) {
+                app(MetaCatalogService::class)->syncProduct($product);
+            }
+
             if ($new) {
                 Session::flash('success', __('admin/productsPages.Product added successfully'));
                 redirect()->route('admin.products.create');
@@ -1128,6 +1134,12 @@ class ProductForm extends Component
             }
 
             DB::commit();
+
+            if ($this->product->publish) {
+                app(MetaCatalogService::class)->syncProduct($this->product);
+            } else {
+                app(MetaCatalogService::class)->deleteProduct($this->product->id);
+            }
 
             Session::flash('success', __('admin/productsPages.Product updated successfully'));
             redirect()->route('admin.products.index');
