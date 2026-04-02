@@ -1,10 +1,29 @@
 @extends('layouts.front.site', [
     'titlePage' => __('front/homePage.Product Page Title', ['product_name' => $product->name]),
-    'url' => "https://www.smarttoolsegypt.com/$product->id-$product->slug",
+    'url' => route('front.products.show', ['id' => $product->id, 'slug' => $product->slug]),
     'title' => $product->name,
     'description' => $product->description,
-    'thumbnail' => $product->thumbnail ? asset("storage/images/products/cropped100/{$product->thumbnail->file_name}") : asset('assets/img/logos/smart-tools-logos.png'),
+    'thumbnail' => $product->thumbnail ? asset("storage/images/products/cropped400/{$product->thumbnail->file_name}") : asset('assets/img/logos/smart-tools-logos.png'),
+    'type' => 'product',
 ])
+
+@push('meta_tags')
+    {{-- Facebook Catalog Tags --}}
+    <meta property="og:locale" content="ar_EG" />
+    <meta property="product:brand" content="{{ $product->brand->name ?? 'Smart Tools Egypt' }}" />
+    <meta property="product:availability" content="{{ $product->quantity > 0 ? 'in stock' : 'out of stock' }}" />
+    <meta property="product:condition" content="new" />
+    <meta property="product:price:amount" content="{{ $productOffer->base_price }}" />
+    <meta property="product:price:currency" content="EGP" />
+    <meta property="og:price:amount" content="{{ $productOffer->base_price }}" />
+    <meta property="og:price:currency" content="EGP" />
+    <meta property="product:sale_price:amount" content="{{ $productOffer->best_price }}" />
+    <meta property="product:sale_price:currency" content="EGP" />
+    <meta property="product:retailer_item_id" content="{{ $product->id }}" />
+    <meta property="product:item_group_id" content="{{ $product->id }}" />
+    <meta property="product:gtin" content="{{ $product->barcode ?? '' }}" />
+    <meta property="product:mfr_part_no" content="{{ $product->model ?? '' }}" />
+@endpush
 
 @section('content')
     <main class="container px-4 py-2 flex flex-col gap-3">

@@ -14,9 +14,6 @@
 
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no' name='viewport' />
 
-    {{-- TODO : facebook domain verification Need to remove after verification --}}
-    <meta name="facebook-domain-verification" content="kvbjjv1cjdz1pftztks7joyfsrxq86" />
-
     {{-- TODO : facebook meta tags --}}
     <meta property="og:url" content='{{ isset($url) ? $url : 'https://smarttoolsegypt.com' }}' />
     <meta property="og:type" content='{{ isset($type) ? $type : 'article' }}' />
@@ -25,6 +22,7 @@
         content='{{ isset($description) ? strip_tags($description) : 'Smart Tools Egypt' }}' />
     <meta property="og:image"
         content="{{ isset($thumbnail) ? $thumbnail : asset('assets/img/logos/smart-tools-logos.png') }}" />
+    @stack('meta_tags')
 
     {{-- Fonts --}}
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
