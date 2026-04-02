@@ -21,7 +21,6 @@
     <meta property="product:sale_price:currency" content="EGP" />
     <meta property="product:retailer_item_id" content="{{ $product->id }}" />
     <meta property="product:item_group_id" content="{{ $product->id }}" />
-    <meta property="product:gtin" content="{{ $product->barcode ?? '' }}" />
     <meta property="product:mfr_part_no" content="{{ $product->model ?? '' }}" />
 @endpush
 
