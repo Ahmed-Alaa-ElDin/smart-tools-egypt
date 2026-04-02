@@ -13,10 +13,10 @@
     <meta property="product:brand" content="{{ $product->brand->name ?? 'Smart Tools Egypt' }}" />
     <meta property="product:availability" content="{{ $product->quantity > 0 ? 'in stock' : 'out of stock' }}" />
     <meta property="product:condition" content="new" />
+    <meta property="og:price:amount" content="{{ $productOffer->best_price }}" />
+    <meta property="og:price:currency" content="EGP" />
     <meta property="product:price:amount" content="{{ $productOffer->base_price }}" />
     <meta property="product:price:currency" content="EGP" />
-    <meta property="og:price:amount" content="{{ $productOffer->base_price }}" />
-    <meta property="og:price:currency" content="EGP" />
     <meta property="product:sale_price:amount" content="{{ $productOffer->best_price }}" />
     <meta property="product:sale_price:currency" content="EGP" />
     <meta property="product:retailer_item_id" content="{{ $product->id }}" />
