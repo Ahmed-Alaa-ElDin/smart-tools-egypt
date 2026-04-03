@@ -38,14 +38,14 @@ class MetaCatalogService
         }
 
         $requests = $products->map(function ($product) {
-            $productOffer = $product->best_offer; // Assuming best_offer logic from model
+            $productOffer = $product->best_offer;
 
             $priceData = [
-                'price' => $product->base_price . ' EGP',
+                'price' => (int) round($product->base_price) * 100,
             ];
 
             if ($productOffer['best_price'] < $product->base_price) {
-                $priceData['sale_price'] = $productOffer['best_price'] . ' EGP';
+                $priceData['sale_price'] = (int) round($productOffer['best_price']) * 100;
             }
 
             return [
@@ -53,11 +53,12 @@ class MetaCatalogService
                 'retailer_id' => (string) $product->id,
                 'data' => array_merge([
                     'name' => $product->name,
-                    'description' => strip_tags($product->description),
+                    'description' => trim(html_entity_decode(strip_tags($product->description), ENT_QUOTES | ENT_HTML5, 'UTF-8')),
                     'availability' => $product->quantity > 0 ? 'in stock' : 'out of stock',
                     'condition' => 'new',
+                    'currency' => 'EGP',
                     'url' => route('front.products.show', ['id' => $product->id, 'slug' => $product->slug]),
-                    'image_url' => $product->thumbnail ? asset("storage/images/products/cropped400/{$product->thumbnail->file_name}") : asset('assets/img/logos/smart-tools-logos.png'),
+                    'image_url' => $product->thumbnail ? asset("storage/images/products/cropped250/{$product->thumbnail->file_name}") : asset('assets/img/logos/smart-tools-logos.png'),
                     'brand' => $product->brand->name ?? 'Smart Tools Egypt',
                 ], $priceData),
             ];
@@ -72,6 +73,9 @@ class MetaCatalogService
 
         try {
             $response = Http::post($endpoint, $payload);
+            
+            // Log for debugging
+            Log::info('Meta Catalog Sync Response: ' . $response->body());
 
             if ($response->successful()) {
                 return true;
