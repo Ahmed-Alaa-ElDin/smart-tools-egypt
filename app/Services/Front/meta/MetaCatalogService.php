@@ -62,10 +62,6 @@ class MetaCatalogService
             'price' => (int) round($product->base_price) * 100, // In cents if using integer
         ];
 
-        if ($product->video) {
-            $data['video[0].url'] = "https://www.youtube.com/watch?v={$product->video}";
-        }
-
         if ($productOffer['best_price'] < $product->base_price) {
             $data['sale_price'] = (int) round($productOffer['best_price']) * 100;
         }
