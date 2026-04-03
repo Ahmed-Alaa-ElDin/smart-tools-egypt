@@ -58,7 +58,7 @@ class MetaCatalogService
             'retailer_id' => $retailerId,
             'name' => $item->name,
             'description' => trim(html_entity_decode(strip_tags($item->description), ENT_QUOTES | ENT_HTML5, 'UTF-8')),
-            'availability' => $item->quantity > 0 ? 'in stock' : 'out of stock',
+            'availability' => ($item->quantity > 0 && !$item->under_reviewing) ? 'in stock' : 'out of stock',
             'condition' => 'new',
             'currency' => 'EGP',
             'url' => route($isCollection ? 'front.collections.show' : 'front.products.show', ['id' => $item->id, 'slug' => $item->slug]),
