@@ -63,9 +63,7 @@ class MetaCatalogService
         ];
 
         if ($product->video) {
-            $data['video'] = [
-                ['url' => asset("storage/videos/products/{$product->video}")]
-            ];
+            $data['video[0].url'] = "https://www.youtube.com/watch?v={$product->video}";
         }
 
         if ($productOffer['best_price'] < $product->base_price) {
