@@ -36,9 +36,8 @@ class MetaCatalogService
         // Fetch gallery images
         $additionalImageUrls = $item->images
             ->where('is_thumbnail', '!=', 1)
-            ->map(function ($image) {
-                return asset("storage/images/products/cropped250/{$image->file_name}");
-            })->take(20)->values()->toArray();
+            ->map(fn ($image) => asset($isCollection ? "storage/images/collections/cropped250/{$image->file_name}" : "storage/images/products/cropped250/{$image->file_name}"))
+            ->take(20)->values()->toArray();
 
         // Build Product Type
         $productType = 'Tools';
@@ -63,7 +62,7 @@ class MetaCatalogService
             'condition' => 'new',
             'currency' => 'EGP',
             'url' => route($isCollection ? 'front.collections.show' : 'front.products.show', ['id' => $item->id, 'slug' => $item->slug]),
-            'image_url' => $item->thumbnail ? ($isCollection ? asset("storage/images/collections/cropped250/{{$item->thumbnail->file_name}}") : asset("storage/images/products/cropped250/{{$item->thumbnail->file_name}}")) : asset('assets/img/logos/smart-tools-logos.png'),
+            'image_url' => $item->thumbnail ? ($isCollection ? asset("storage/images/collections/cropped250/{$item->thumbnail->file_name}") : asset("storage/images/products/cropped250/{$item->thumbnail->file_name}")) : asset('assets/img/logos/smart-tools-logos.png'),
             'additional_image_urls' => $additionalImageUrls,
             'brand' => $isCollection ? 'Smart Tools Collections' : ($item->brand->name ?? 'Smart Tools Egypt'),
             'manufacturer_part_number' => $item->model,
