@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Collections;
 
 use App\Models\Collection;
 use App\Models\Product;
+use App\Services\Front\meta\MetaCatalogService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
@@ -1013,6 +1014,14 @@ class CollectionForm extends Component
 
             DB::commit();
 
+            // Sync to Meta Catalog
+            $metaService = new MetaCatalogService();
+            if ($collection->publish && !$collection->under_reviewing) {
+                $metaService->syncCollection($collection);
+            } else {
+                $metaService->deleteItem($collection->id, true);
+            }
+
             // Remove Old Images
             foreach ($this->deletedImages as $key => $deletedImage) {
                 imageDelete($deletedImage, 'collections');
@@ -1154,6 +1163,14 @@ class CollectionForm extends Component
             }
 
             DB::commit();
+
+            // Sync to Meta Catalog
+            $metaService = new MetaCatalogService();
+            if ($this->collection->publish && !$this->collection->under_reviewing) {
+                $metaService->syncCollection($this->collection);
+            } else {
+                $metaService->deleteItem($this->collection->id, true);
+            }
 
             Session::flash('success', __('admin/productsPages.Collection updated successfully'));
             redirect()->route('admin.collections.index');

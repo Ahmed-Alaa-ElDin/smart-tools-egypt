@@ -19,12 +19,15 @@ class CatalogSyncCommand extends Command
      */
     public function handle(\App\Services\Front\meta\MetaCatalogService $service)
     {
-        $products = \App\Models\Product::where('publish', 1)->get();
+        $products = \App\Models\Product::where('publish', 1)
+            ->where('under_reviewing', 0)
+            ->get();
+            
         $this->info("Found {$products->count()} products to sync.");
 
-        // Batch in groups of 50 (Facebook limit is 10k per batch, but small is safer)
+        // Batch in groups of 50
         $products->chunk(50)->each(function ($chunk) use ($service) {
-            if ($service->syncProducts($chunk)) {
+            if ($service->syncItems($chunk)) {
                 $this->comment("Synced a batch of {$chunk->count()} products.");
             } else {
                 $this->error("Failed to sync a batch.");

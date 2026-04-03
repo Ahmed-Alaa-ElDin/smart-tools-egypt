@@ -3,6 +3,7 @@
 namespace App\Services\Front\meta;
 
 use App\Models\Product;
+use App\Models\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -20,66 +21,77 @@ class MetaCatalogService
     }
 
     /**
-     * Map product data to Facebook standard format.
+     * Map item data (Product or Collection) to Facebook standard format.
      */
-    protected function formatProductData(Product $product)
+    protected function formatItemData($item)
     {
-        $productOffer = $product->best_offer;
-
-        // Build Product Type from categories
-        $categories = $product->categories->first();
-        $supercategory = $product->supercategories->first();
-        $subcategory = $product->subcategories->first();
-        $productType = collect([
-            $supercategory->name ?? null,
-            $categories->name ?? null,
-            $subcategory->name ?? null,
-        ])->filter()->join(' > ');
-
-        // Build Additional Image URLs from gallery
-        $additionalImageUrls = $product->images
+        $isCollection = ($item instanceof Collection);
+        $retailerId = $isCollection ? "coll_{$item->id}" : (string) $item->id;
+        
+        // Get prices and offers
+        // Note: Both models have best_offer accessor and base_price
+        $itemOffer = $item->best_offer;
+        $price = (int) round($item->base_price) * 100;
+        
+        // Fetch gallery images
+        $additionalImageUrls = $item->images
             ->where('is_thumbnail', '!=', 1)
             ->map(function ($image) {
                 return asset("storage/images/products/cropped250/{$image->file_name}");
             })->take(20)->values()->toArray();
 
+        // Build Product Type
+        $productType = 'Tools';
+        if (!$isCollection) {
+            $categories = $item->categories->first();
+            $supercategory = $item->supercategories->first();
+            $subcategory = $item->subcategories->first();
+            $productType = collect([
+                $supercategory->name ?? null,
+                $categories->name ?? null,
+                $subcategory->name ?? null,
+            ])->filter()->join(' > ') ?: 'Tools';
+        } else {
+            $productType = 'Collections > Bundles';
+        }
+
         $data = [
-            'retailer_id' => (string) $product->id,
-            'name' => $product->name,
-            'description' => trim(html_entity_decode(strip_tags($product->description), ENT_QUOTES | ENT_HTML5, 'UTF-8')),
-            'availability' => $product->quantity > 0 ? 'in stock' : 'out of stock',
+            'retailer_id' => $retailerId,
+            'name' => $item->name,
+            'description' => trim(html_entity_decode(strip_tags($item->description), ENT_QUOTES | ENT_HTML5, 'UTF-8')),
+            'availability' => $item->quantity > 0 ? 'in stock' : 'out of stock',
             'condition' => 'new',
             'currency' => 'EGP',
-            'url' => route('front.products.show', ['id' => $product->id, 'slug' => $product->slug]),
-            'image_url' => $product->thumbnail ? asset("storage/images/products/cropped250/{$product->thumbnail->file_name}") : asset('assets/img/logos/smart-tools-logos.png'),
+            'url' => route($isCollection ? 'front.collections.show' : 'front.products.show', ['id' => $item->id, 'slug' => $item->slug]),
+            'image_url' => $item->thumbnail ? asset("storage/images/products/cropped250/{{$item->thumbnail->file_name}}") : asset('assets/img/logos/smart-tools-logos.png'),
             'additional_image_urls' => $additionalImageUrls,
-            'brand' => $product->brand->name ?? 'Smart Tools Egypt',
-            'manufacturer_part_number' => $product->model,
-            'product_type' => $productType ?: 'Tools',
+            'brand' => $isCollection ? 'Smart Tools Collections' : ($item->brand->name ?? 'Smart Tools Egypt'),
+            'manufacturer_part_number' => $item->model,
+            'product_type' => $productType,
             'gender' => 'unisex',
             'age_group' => 'adult',
-            'inventory' => (int) $product->quantity,
-            'price' => (int) round($product->base_price) * 100, // In cents if using integer
+            'inventory' => (int) $item->quantity,
+            'price' => $price,
         ];
 
-        if ($productOffer['best_price'] < $product->base_price) {
-            $data['sale_price'] = (int) round($productOffer['best_price']) * 100;
+        if ($itemOffer && $itemOffer['best_price'] < $item->base_price) {
+            $data['sale_price'] = (int) round($itemOffer['best_price']) * 100;
         }
 
         return $data;
     }
 
     /**
-     * Sync a single product to the catalog using the /products endpoint.
+     * Sync a single item (Product or Collection).
      */
-    public function syncProduct(Product $product)
+    public function syncItem($item)
     {
         if (empty($this->catalogId)) {
             return false;
         }
 
         $endpoint = "https://graph.facebook.com/{$this->apiVersion}/{$this->catalogId}/products";
-        $data = $this->formatProductData($product);
+        $data = $this->formatItemData($item);
         
         $payload = array_merge($data, [
             'item_type' => 'PRODUCT',
@@ -87,31 +99,43 @@ class MetaCatalogService
         ]);
 
         try {
-            // Log payload for debugging
-            Log::info('Meta Single Product Sync Payload:', $payload);
-
-            // Use asForm() because the standard /products endpoint usually expects form-data
+            Log::info("Meta Single Item Sync ({$item->getTypeAttribute()}): " . $item->id);
             $response = Http::asForm()->post($endpoint, $payload);
-            Log::info('Meta Single Product Sync Response: ' . $response->body());
+            Log::info('Meta Single Item Sync Response: ' . $response->body());
             return $response->successful();
         } catch (\Exception $e) {
-            Log::error('Meta Single Product Sync Exception: ' . $e->getMessage());
+            Log::error('Meta Single Item Sync Exception: ' . $e->getMessage());
             return false;
         }
     }
 
     /**
-     * Sync a batch of products to the catalog using the /batch endpoint.
+     * Legacy support for syncProduct.
      */
-    public function syncProducts($products)
+    public function syncProduct(Product $product)
     {
-        if (empty($this->catalogId)) {
-            Log::warning('Meta Catalog ID is not set.');
+        return $this->syncItem($product);
+    }
+
+    /**
+     * Sync a single collection.
+     */
+    public function syncCollection(Collection $collection)
+    {
+        return $this->syncItem($collection);
+    }
+
+    /**
+     * Sync a batch of items (Products or Collections).
+     */
+    public function syncItems($items)
+    {
+        if (empty($this->catalogId) || $items->isEmpty()) {
             return false;
         }
 
-        $requests = $products->map(function ($product) {
-            $data = $this->formatProductData($product);
+        $requests = $items->map(function ($item) {
+            $data = $this->formatItemData($item);
             $retailerId = $data['retailer_id'];
             unset($data['retailer_id']);
 
@@ -131,22 +155,24 @@ class MetaCatalogService
 
         try {
             $response = Http::post($endpoint, $payload);
-            Log::info('Meta Catalog Batch Response: ' . $response->body());
+            Log::info('Meta Catalog Batch Sync Response: ' . $response->body());
             return $response->successful();
         } catch (\Exception $e) {
-            Log::error('Meta Catalog Batch Exception: ' . $e->getMessage());
+            Log::error('Meta Catalog Batch Sync Exception: ' . $e->getMessage());
             return false;
         }
     }
 
     /**
-     * Delete a product from the catalog.
+     * Delete an item from the catalog.
      */
-    public function deleteProduct($productId)
+    public function deleteItem($id, $isCollection = false)
     {
         if (empty($this->catalogId)) {
             return false;
         }
+
+        $retailerId = $isCollection ? "coll_{$id}" : (string) $id;
 
         $endpoint = "https://graph.facebook.com/{$this->apiVersion}/{$this->catalogId}/batch";
 
@@ -154,7 +180,7 @@ class MetaCatalogService
             'requests' => [
                 [
                     'method' => 'DELETE',
-                    'retailer_id' => (string) $productId,
+                    'retailer_id' => $retailerId,
                 ]
             ],
             'access_token' => $this->accessToken,
