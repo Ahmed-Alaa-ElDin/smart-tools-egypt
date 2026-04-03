@@ -991,8 +991,10 @@ class ProductForm extends Component
                 imageDelete($deletedImage, 'products');
             }
 
-            if ($product->publish) {
+            if ($product->publish && !$product->under_reviewing) {
                 app(MetaCatalogService::class)->syncProduct($product);
+            } else {
+                app(MetaCatalogService::class)->deleteItem($product->id);
             }
 
             if ($new) {
@@ -1135,10 +1137,10 @@ class ProductForm extends Component
 
             DB::commit();
 
-            if ($this->product->publish) {
+            if ($this->product->publish && !$this->product->under_reviewing) {
                 app(MetaCatalogService::class)->syncProduct($this->product);
             } else {
-                app(MetaCatalogService::class)->deleteProduct($this->product->id);
+                app(MetaCatalogService::class)->deleteItem($this->product->id);
             }
 
             Session::flash('success', __('admin/productsPages.Product updated successfully'));

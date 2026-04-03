@@ -9,6 +9,7 @@ use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Config;
 use App\Imports\Admin\Products\ProductsImport;
+use App\Services\Front\meta\MetaCatalogService;
 
 class ProductsDatatable extends Component
 {
@@ -29,7 +30,14 @@ class ProductsDatatable extends Component
 
     public $bulkUpdateFile;
 
-    protected $listeners = ['softDeleteProduct', 'softDeleteAllProduct', 'publishAllProduct', 'hideAllProduct'];
+    protected $listeners = [
+        'softDeleteProduct', 
+        'softDeleteAllProduct', 
+        'publishAllProduct', 
+        'hideAllProduct',
+        'syncSelectedToMeta',
+        'removeSelectedFromMeta'
+    ];
 
     // Render Once
     public function mount()
@@ -395,4 +403,91 @@ class ProductsDatatable extends Component
         $this->dispatch('editQuantityCloseModal');
     }
     ######## Edit Quantity #########
+    
+    ######## Meta Catalog Sync #########
+    public function syncToMeta($id)
+    {
+        $product = Product::findOrFail($id);
+        $service = new MetaCatalogService();
+
+        if ($service->syncProduct($product)) {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Sync Successful'), icon: 'success');
+        } else {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Sync Failed'), icon: 'error');
+        }
+    }
+
+    public function removeFromMeta($id)
+    {
+        $service = new MetaCatalogService();
+
+        if ($service->deleteItem($id)) {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Removed from Meta'), icon: 'success');
+        } else {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Removal Failed'), icon: 'error');
+        }
+    }
+
+    public function syncSelectedToMetaConfirm()
+    {
+        $this->dispatch('swalConfirm', 
+            text: __('admin/productsPages.Sync all selected products to Facebook Catalog?'),
+            confirmButtonText: __('admin/productsPages.Sync'),
+            denyButtonText: __('admin/productsPages.Cancel'),
+            denyButtonColor: 'red',
+            confirmButtonColor: 'green',
+            focusDeny: true,
+            icon: 'warning',
+            method: 'syncSelectedToMeta',
+            id: ''
+        );
+    }
+
+    public function syncSelectedToMeta()
+    {
+        $products = Product::whereIn('id', $this->selectedProducts)->get();
+        $service = new MetaCatalogService();
+
+        if ($service->syncItems($products)) {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Bulk Sync Successful'), icon: 'success');
+            $this->selectedProducts = [];
+        } else {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Bulk Sync Failed'), icon: 'error');
+        }
+    }
+
+    public function removeSelectedFromMetaConfirm()
+    {
+        $this->dispatch('swalConfirm', 
+            text: __('admin/productsPages.Remove all selected products from Facebook Catalog?'),
+            confirmButtonText: __('admin/productsPages.Remove'),
+            denyButtonText: __('admin/productsPages.Cancel'),
+            denyButtonColor: 'green',
+            confirmButtonColor: 'red',
+            focusDeny: true,
+            icon: 'warning',
+            method: 'removeSelectedFromMeta',
+            id: ''
+        );
+    }
+
+    public function removeSelectedFromMeta()
+    {
+        $service = new MetaCatalogService();
+        $success = true;
+
+        foreach ($this->selectedProducts as $id) {
+            if (!$service->deleteItem($id)) {
+                $success = false;
+            }
+        }
+
+        if ($success) {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Bulk Removal Successful'), icon: 'success');
+            $this->selectedProducts = [];
+        } else {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Some removals failed'), icon: 'warning');
+        }
+    }
+    ######## Meta Catalog Sync #########
 }

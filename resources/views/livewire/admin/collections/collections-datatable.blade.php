@@ -45,6 +45,21 @@
                                 </span> &nbsp;&nbsp;
                                 {{ __('admin/productsPages.Hide All') }}
                             </a>
+                            <hr>
+                            <a wire:click.prevent="syncSelectedToMetaConfirm"
+                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-blue-600 focus:bg-blue-600 hover:text-white focus:text-white cursor-pointer">
+                                <span class="material-icons">
+                                    sync
+                                </span> &nbsp;&nbsp;
+                                {{ __('admin/productsPages.Sync Selected to Meta') }}
+                            </a>
+                            <a wire:click.prevent="removeSelectedFromMetaConfirm"
+                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-red-600 focus:bg-red-600 hover:text-white focus:text-white cursor-pointer">
+                                <span class="material-icons">
+                                    sync_disabled
+                                </span> &nbsp;&nbsp;
+                                {{ __('admin/productsPages.Remove Selected from Meta') }}
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -320,12 +335,28 @@
                                             </span>
                                         </a>
 
-                                        {{-- Copy Product --}}
+                                        {{-- Copy Bundle --}}
                                         <a href="{{ route('admin.collections.copy', ['collection_id' => $collection->id]) }}"
                                             title="{{ __('admin/productsPages.Copy Collection') }}" class="m-0">
                                             <span
                                                 class="material-icons p-1 text-lg w-9 h-9 text-white bg-yellow-400 hover:bg-yellow-500 rounded">
                                                 content_copy
+                                            </span>
+                                        </a>
+
+                                        {{-- Meta Sync --}}
+                                        <a href="#" wire:click.prevent="syncToMeta({{ $collection->id }})" 
+                                            title="{{ __('admin/productsPages.Push to Meta Catalog') }}" class="m-0">
+                                            <span class="material-icons p-1 text-lg w-9 h-9 text-white bg-blue-500 hover:bg-blue-600 rounded">
+                                                sync
+                                            </span>
+                                        </a>
+
+                                        {{-- Meta Remove --}}
+                                        <a href="#" wire:click.prevent="removeFromMeta({{ $collection->id }})" 
+                                            title="{{ __('admin/productsPages.Remove from Meta Catalog') }}" class="m-0">
+                                            <span class="material-icons p-1 text-lg w-9 h-9 text-white bg-gray-500 hover:bg-gray-600 rounded">
+                                                sync_disabled
                                             </span>
                                         </a>
                                     </td>

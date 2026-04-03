@@ -98,7 +98,7 @@ class MetaCatalogService
         ]);
 
         try {
-            Log::info("Meta Single Item Sync ({$item->getTypeAttribute()}): " . $item->id);
+            Log::info("Meta Single Item Sync (" . class_basename($item) . "): " . $item->id);
             $response = Http::asForm()->post($endpoint, $payload);
             Log::info('Meta Single Item Sync Response: ' . $response->body());
             return $response->successful();

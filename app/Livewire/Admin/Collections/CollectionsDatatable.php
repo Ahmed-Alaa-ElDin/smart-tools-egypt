@@ -6,6 +6,7 @@ use App\Models\Collection;
 use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Services\Front\meta\MetaCatalogService;
 
 class CollectionsDatatable extends Component
 {
@@ -22,7 +23,14 @@ class CollectionsDatatable extends Component
     public $sortDirection = 'ASC';
     public $perPage;
 
-    protected $listeners = ['softDeleteCollection', 'softDeleteAllCollection', 'publishAllCollection', 'hideAllCollection'];
+    protected $listeners = [
+        'softDeleteCollection', 
+        'softDeleteAllCollection', 
+        'publishAllCollection', 
+        'hideAllCollection',
+        'syncSelectedToMeta',
+        'removeSelectedFromMeta'
+    ];
 
     // Render Once
     public function mount()
@@ -293,4 +301,90 @@ class CollectionsDatatable extends Component
         }
     }
     ######## Hide All Selected Collections #########
+    
+    ######## Meta Catalog Sync #########
+    public function syncToMeta($id)
+    {
+        $collection = Collection::findOrFail($id);
+        $service = new MetaCatalogService();
+
+        if ($service->syncCollection($collection)) {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Sync Successful'), icon: 'success');
+        } else {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Sync Failed'), icon: 'error');
+        }
+    }
+
+    public function removeFromMeta($id)
+    {
+        $service = new MetaCatalogService();
+
+        if ($service->deleteItem($id, true)) {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Removed from Meta'), icon: 'success');
+        } else {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Removal Failed'), icon: 'error');
+        }
+    }
+
+    public function syncSelectedToMetaConfirm()
+    {
+        $this->dispatch('swalConfirm', 
+            text: __('admin/productsPages.Sync all selected collections to Facebook Catalog?'),
+            confirmButtonText: __('admin/productsPages.Sync'),
+            denyButtonText: __('admin/productsPages.Cancel'),
+            denyButtonColor: 'red',
+            confirmButtonColor: 'green',
+            focusDeny: true,
+            icon: 'warning',
+            method: 'syncSelectedToMeta',
+            id: '');
+    }
+
+    public function syncSelectedToMeta()
+    {
+        $collections = Collection::whereIn('id', $this->selectedCollections)->get();
+        $service = new MetaCatalogService();
+
+        if ($service->syncItems($collections)) {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Bulk Sync Successful'), icon: 'success');
+            $this->selectedCollections = [];
+        } else {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Bulk Sync Failed'), icon: 'error');
+        }
+    }
+
+    public function removeSelectedFromMetaConfirm()
+    {
+        $this->dispatch('swalConfirm', 
+            text: __('admin/productsPages.Remove all selected collections from Facebook Catalog?'),
+            confirmButtonText: __('admin/productsPages.Remove'),
+            denyButtonText: __('admin/productsPages.Cancel'),
+            denyButtonColor: 'green',
+            confirmButtonColor: 'red',
+            focusDeny: true,
+            icon: 'warning',
+            method: 'removeSelectedFromMeta',
+            id: ''
+        );
+    }
+
+    public function removeSelectedFromMeta()
+    {
+        $service = new MetaCatalogService();
+        $success = true;
+
+        foreach ($this->selectedCollections as $id) {
+            if (!$service->deleteItem($id, true)) {
+                $success = false;
+            }
+        }
+
+        if ($success) {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Bulk Removal Successful'), icon: 'success');
+            $this->selectedCollections = [];
+        } else {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Some removals failed'), icon: 'warning');
+        }
+    }
+    ######## Meta Catalog Sync #########
 }
