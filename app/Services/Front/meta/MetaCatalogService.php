@@ -63,7 +63,7 @@ class MetaCatalogService
             'condition' => 'new',
             'currency' => 'EGP',
             'url' => route($isCollection ? 'front.collections.show' : 'front.products.show', ['id' => $item->id, 'slug' => $item->slug]),
-            'image_url' => $item->thumbnail ? asset("storage/images/products/cropped250/{{$item->thumbnail->file_name}}") : asset('assets/img/logos/smart-tools-logos.png'),
+            'image_url' => $item->thumbnail ? ($isCollection ? asset("storage/images/collections/cropped250/{{$item->thumbnail->file_name}}") : asset("storage/images/products/cropped250/{{$item->thumbnail->file_name}}")) : asset('assets/img/logos/smart-tools-logos.png'),
             'additional_image_urls' => $additionalImageUrls,
             'brand' => $isCollection ? 'Smart Tools Collections' : ($item->brand->name ?? 'Smart Tools Egypt'),
             'manufacturer_part_number' => $item->model,
