@@ -59,6 +59,7 @@ class MetaCatalogService
             'google_product_category' => 'Hardware > Tools',
             'gender' => 'unisex',
             'age_group' => 'adult',
+            'inventory' => (int) $product->quantity,
             'price' => (int) round($product->base_price) * 100, // In cents if using integer
         ];
 
@@ -82,6 +83,7 @@ class MetaCatalogService
         $data = $this->formatProductData($product);
         
         $payload = array_merge($data, [
+            'item_type' => 'PRODUCT',
             'access_token' => $this->accessToken,
         ]);
 
@@ -124,6 +126,7 @@ class MetaCatalogService
         $endpoint = "https://graph.facebook.com/{$this->apiVersion}/{$this->catalogId}/items_batch";
 
         $payload = [
+            'item_type' => 'PRODUCT',
             'requests' => $requests,
             'access_token' => $this->accessToken,
         ];
