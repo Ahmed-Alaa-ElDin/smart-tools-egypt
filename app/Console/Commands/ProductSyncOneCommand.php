@@ -4,14 +4,14 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class CatalogSyncOneCommand extends Command
+class ProductSyncOneCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'meta:catalog-sync-one {id}';
+    protected $signature = 'meta:product-sync-one {id}';
     protected $description = 'Sync a single product to Facebook Catalog by ID';
 
     /**

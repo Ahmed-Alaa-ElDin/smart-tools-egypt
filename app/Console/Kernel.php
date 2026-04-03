@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('meta:product-sync')->twiceDaily(3, 15);
+        $schedule->command('meta:collection-sync')->twiceDaily(4, 16);
     }
 
     /**

@@ -4,14 +4,14 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class CatalogSyncCommand extends Command
+class ProductSyncCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'meta:catalog-sync';
+    protected $signature = 'meta:product-sync';
     protected $description = 'Sync all published products to Facebook Catalog';
 
     /**
@@ -23,6 +23,11 @@ class CatalogSyncCommand extends Command
             ->where('under_reviewing', 0)
             ->get();
             
+        if ($products->isEmpty()) {
+            $this->info("No products found to sync.");
+            return;
+        }
+
         $this->info("Found {$products->count()} products to sync.");
 
         // Batch in groups of 50
@@ -34,6 +39,6 @@ class CatalogSyncCommand extends Command
             }
         });
 
-        $this->info('Catalog sync completed.');
+        $this->info('Product sync completed.');
     }
 }
