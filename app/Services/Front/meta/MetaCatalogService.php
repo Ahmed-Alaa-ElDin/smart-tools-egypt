@@ -102,7 +102,7 @@ class MetaCatalogService
     }
 
     /**
-     * Sync a batch of products to the catalog using the /items_batch endpoint.
+     * Sync a batch of products to the catalog using the /batch endpoint.
      */
     public function syncProducts($products)
     {
@@ -123,10 +123,9 @@ class MetaCatalogService
             ];
         })->values()->toArray();
 
-        $endpoint = "https://graph.facebook.com/{$this->apiVersion}/{$this->catalogId}/items_batch";
+        $endpoint = "https://graph.facebook.com/{$this->apiVersion}/{$this->catalogId}/batch";
 
         $payload = [
-            'item_type' => 'PRODUCT',
             'requests' => $requests,
             'access_token' => $this->accessToken,
         ];
@@ -150,7 +149,7 @@ class MetaCatalogService
             return false;
         }
 
-        $endpoint = "https://graph.facebook.com/{$this->apiVersion}/{$this->catalogId}/items_batch";
+        $endpoint = "https://graph.facebook.com/{$this->apiVersion}/{$this->catalogId}/batch";
 
         $payload = [
             'requests' => [
