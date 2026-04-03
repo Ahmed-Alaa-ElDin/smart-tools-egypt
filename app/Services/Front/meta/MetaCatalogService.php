@@ -36,6 +36,13 @@ class MetaCatalogService
             $subcategory->name ?? null,
         ])->filter()->join(' > ');
 
+        // Build Additional Image URLs from gallery
+        $additionalImageUrls = $product->images
+            ->where('is_thumbnail', '!=', 1)
+            ->map(function ($image) {
+                return asset("storage/images/products/cropped250/{$image->file_name}");
+            })->take(20)->values()->toArray();
+
         $data = [
             'retailer_id' => (string) $product->id,
             'name' => $product->name,
@@ -45,6 +52,7 @@ class MetaCatalogService
             'currency' => 'EGP',
             'url' => route('front.products.show', ['id' => $product->id, 'slug' => $product->slug]),
             'image_url' => $product->thumbnail ? asset("storage/images/products/cropped250/{$product->thumbnail->file_name}") : asset('assets/img/logos/smart-tools-logos.png'),
+            'additional_image_urls' => $additionalImageUrls,
             'brand' => $product->brand->name ?? 'Smart Tools Egypt',
             'manufacturer_part_number' => $product->model,
             'product_type' => $productType ?: 'Tools',
