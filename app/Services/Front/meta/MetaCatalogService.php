@@ -46,7 +46,6 @@ class MetaCatalogService
             'url' => route('front.products.show', ['id' => $product->id, 'slug' => $product->slug]),
             'image_url' => $product->thumbnail ? asset("storage/images/products/cropped250/{$product->thumbnail->file_name}") : asset('assets/img/logos/smart-tools-logos.png'),
             'brand' => $product->brand->name ?? 'Smart Tools Egypt',
-            'gtin' => $product->barcode ?: null,
             'manufacturer_part_number' => $product->model,
             'product_type' => $productType ?: 'Tools',
             'google_product_category' => 'Hardware > Tools',
