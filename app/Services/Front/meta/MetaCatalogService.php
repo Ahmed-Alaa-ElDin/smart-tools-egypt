@@ -56,7 +56,6 @@ class MetaCatalogService
             'brand' => $product->brand->name ?? 'Smart Tools Egypt',
             'manufacturer_part_number' => $product->model,
             'product_type' => $productType ?: 'Tools',
-            'google_product_category' => 'Hardware > Tools',
             'gender' => 'unisex',
             'age_group' => 'adult',
             'inventory' => (int) $product->quantity,
