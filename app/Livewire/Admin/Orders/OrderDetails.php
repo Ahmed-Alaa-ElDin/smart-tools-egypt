@@ -14,7 +14,7 @@ use App\Services\Front\Payments\PaymentService;
 use App\Services\Front\Payments\Gateways\CardGateway;
 use App\Services\Front\Payments\Gateways\InstallmentGateway;
 
-class PaymentHistory extends Component
+class OrderDetails extends Component
 {
     public $order_id;
     public $order;
@@ -32,14 +32,21 @@ class PaymentHistory extends Component
     public function render()
     {
         $this->order = Order::with([
+            'products' => fn($q) => $q->with('thumbnail'),
+            'collections' => fn($q) => $q->with('thumbnail'),
             'transactions' => fn($q) => $q->orderBy('updated_at', 'desc')->withTrashed(),
             'invoice',
+            'status',
+            'statuses' => fn($q) => $q->orderBy('pivot_created_at'),
             'user' => fn($q) => $q->with([
                 'phones' => fn($q) => $q->where('default', 1)
-            ])->select('id', 'f_name', 'l_name')
+            ])->select('id', 'f_name', 'l_name', 'email'),
+            'address' => fn($q) => $q->with(['city', 'governorate'])
         ])->findOrFail($this->order_id);
 
-        return view('livewire.admin.orders.payment-history');
+        $this->order->items = $this->order->products->merge($this->order->collections)->toArray();
+
+        return view('livewire.admin.orders.order-details');
     }
     ############## Render :: End ##############
 

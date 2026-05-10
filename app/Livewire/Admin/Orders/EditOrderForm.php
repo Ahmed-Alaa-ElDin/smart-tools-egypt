@@ -172,6 +172,9 @@ class EditOrderForm extends Component
 
         // Store original total for comparison
         $this->original_total = $order->invoice?->total ?? 0;
+
+        // Calculate initial state
+        $this->calculate();
     }
 
     public function render()
@@ -185,12 +188,14 @@ class EditOrderForm extends Component
         $this->default_address = $data['default_address'];
         $this->default_phone = $data['default_phone'];
         $this->validate();
+        $this->calculate();
     }
 
     public function setProductsData($data)
     {
         $this->items = $data['products'];
         $this->validate();
+        $this->calculate();
     }
 
     public function setPaymentData($data)
@@ -200,6 +205,7 @@ class EditOrderForm extends Component
         $this->points = $data['points'];
         $this->payment_method = $data['payment_method'];
         $this->validate();
+        $this->calculate();
     }
 
     public function getOrderData($apply_edit = false)
