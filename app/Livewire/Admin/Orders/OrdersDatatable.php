@@ -200,8 +200,28 @@ class OrdersDatatable extends Component
     public function archiveOrder($id)
     {
         try {
-            $order = Order::findOrFail($id);
+            $order = Order::with([
+                'products', 'collections.products',
+                'coupon', 'transactions', 'user', 'points',
+            ])->findOrFail($id);
+
+            DB::beginTransaction();
+
+            // Treat archive as cancellation: restore all resources
+            InventoryService::restoreOrderInventory($order);
+            InventoryService::restoreCoupon($order);
+            InventoryService::restoreWallet($order);
+            InventoryService::restoreUsedPoints($order);
+            InventoryService::deleteGiftPoints($order);
+
+            // Update status to CancellationApproved
+            $order->update(['status_id' => OrderStatus::CancellationApproved->value]);
+            $order->statuses()->attach(OrderStatus::CancellationApproved->value);
+
+            // Soft delete
             $order->delete();
+
+            DB::commit();
 
             if (($key = array_search($id, $this->selectedOrders)) !== false) {
                 unset($this->selectedOrders[$key]);
@@ -215,6 +235,8 @@ class OrdersDatatable extends Component
 
             $this->selectedProducts = [];
         } catch (\Throwable $th) {
+            DB::rollBack();
+
             $this->dispatch(
                 'swalDone',
                 text: __("admin/ordersPages.Order has not been archived"),
@@ -242,7 +264,30 @@ class OrdersDatatable extends Component
     public function archiveAll()
     {
         try {
-            Order::whereIn('id', $this->selectedOrders)->delete();
+            DB::beginTransaction();
+
+            $orders = Order::with([
+                'products', 'collections.products',
+                'coupon', 'transactions', 'user', 'points',
+            ])->whereIn('id', $this->selectedOrders)->get();
+
+            $orders->each(function ($order) {
+                // Treat archive as cancellation: restore all resources
+                InventoryService::restoreOrderInventory($order);
+                InventoryService::restoreCoupon($order);
+                InventoryService::restoreWallet($order);
+                InventoryService::restoreUsedPoints($order);
+                InventoryService::deleteGiftPoints($order);
+
+                // Update status to CancellationApproved
+                $order->update(['status_id' => OrderStatus::CancellationApproved->value]);
+                $order->statuses()->attach(OrderStatus::CancellationApproved->value);
+
+                // Soft delete
+                $order->delete();
+            });
+
+            DB::commit();
 
             $this->selectedOrders = [];
 
@@ -252,7 +297,8 @@ class OrdersDatatable extends Component
                 icon: 'success'
             );
         } catch (\Throwable $th) {
-            // throw $th;
+            DB::rollBack();
+
             $this->dispatch(
                 'swalDone',
                 text: __("admin/ordersPages.Orders haven't been archived"),

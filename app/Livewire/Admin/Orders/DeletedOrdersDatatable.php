@@ -10,6 +10,7 @@ use App\Enums\PaymentStatus;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use App\Services\InventoryService;
 
 class DeletedOrdersDatatable extends Component
 {
@@ -261,8 +262,39 @@ class DeletedOrdersDatatable extends Component
     public function restoreOrder($id)
     {
         try {
-            $order = Order::onlyTrashed()->findOrFail($id);
+            $order = Order::onlyTrashed()
+                ->with([
+                    'products', 'collections.products',
+                    'coupon', 'transactions', 'user', 'points',
+                ])
+                ->findOrFail($id);
+
+            DB::beginTransaction();
+
+            // Restore the soft-deleted record first
             $order->restore();
+
+            // Re-deduct inventory if the order was cancelled during archiving
+            $cancelledStatuses = [
+                OrderStatus::CancellationApproved->value,
+                OrderStatus::Rejected->value,
+            ];
+
+            if (in_array($order->status_id, $cancelledStatuses)) {
+                // Re-deduct inventory
+                InventoryService::deductOrderInventory($order);
+
+                // Re-apply coupon usage
+                if ($order->coupon && !is_null($order->coupon->number)) {
+                    $order->coupon->decrement('number');
+                }
+
+                // Revert to WaitingForApproval status
+                $order->update(['status_id' => OrderStatus::WaitingForApproval->value]);
+                $order->statuses()->attach(OrderStatus::WaitingForApproval->value);
+            }
+
+            DB::commit();
 
             if (($key = array_search($id, $this->selectedOrders)) !== false) {
                 unset($this->selectedOrders[$key]);
@@ -276,6 +308,8 @@ class DeletedOrdersDatatable extends Component
 
             $this->selectedProducts = [];
         } catch (\Throwable $th) {
+            DB::rollBack();
+
             $this->dispatch(
                 'swalDone',
                 text: __("admin/ordersPages.Order has not been restored"),
@@ -303,7 +337,39 @@ class DeletedOrdersDatatable extends Component
     public function restoreAll()
     {
         try {
-            Order::whereIn('id', $this->selectedOrders)->onlyTrashed()->restore();
+            DB::beginTransaction();
+
+            $orders = Order::onlyTrashed()
+                ->with([
+                    'products', 'collections.products',
+                    'coupon', 'transactions', 'user', 'points',
+                ])
+                ->whereIn('id', $this->selectedOrders)
+                ->get();
+
+            $cancelledStatuses = [
+                OrderStatus::CancellationApproved->value,
+                OrderStatus::Rejected->value,
+            ];
+
+            $orders->each(function ($order) use ($cancelledStatuses) {
+                // Restore the soft-deleted record
+                $order->restore();
+
+                // Re-deduct inventory if the order was cancelled during archiving
+                if (in_array($order->status_id, $cancelledStatuses)) {
+                    InventoryService::deductOrderInventory($order);
+
+                    if ($order->coupon && !is_null($order->coupon->number)) {
+                        $order->coupon->decrement('number');
+                    }
+
+                    $order->update(['status_id' => OrderStatus::WaitingForApproval->value]);
+                    $order->statuses()->attach(OrderStatus::WaitingForApproval->value);
+                }
+            });
+
+            DB::commit();
 
             $this->selectedOrders = [];
 
@@ -313,7 +379,8 @@ class DeletedOrdersDatatable extends Component
                 icon: 'success'
             );
         } catch (\Throwable $th) {
-            // throw $th;
+            DB::rollBack();
+
             $this->dispatch(
                 'swalDone',
                 text: __("admin/ordersPages.Orders haven't been restored"),
