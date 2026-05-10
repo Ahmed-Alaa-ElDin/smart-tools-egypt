@@ -10,6 +10,7 @@ use Livewire\Component;
 class NewOrderPaymentPart extends Component
 {
     public $customerId, $customer, $code, $coupon_id, $message, $wallet = 0.00, $points = 0, $payment_method = 1;
+    public $initialCouponId, $initialWallet = 0.00, $initialPoints = 0, $initialPaymentMethod = 1;
 
     protected $listeners = [
         'setUserData',
@@ -18,6 +19,11 @@ class NewOrderPaymentPart extends Component
 
     public function mount()
     {
+        if ($this->initialCouponId) $this->coupon_id = $this->initialCouponId;
+        if ($this->initialWallet) $this->wallet = $this->initialWallet;
+        if ($this->initialPoints) $this->points = $this->initialPoints;
+        if ($this->initialPaymentMethod) $this->payment_method = $this->initialPaymentMethod;
+
         if ($this->customerId) {
             $data['customer']['id'] = $this->customerId;
             $this->setUserData($data);

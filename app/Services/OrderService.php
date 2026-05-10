@@ -18,6 +18,7 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use App\Services\Front\Payments\PaymentService;
 use App\Services\Front\Payments\Gateways\CardGateway;
 use App\Services\Front\Payments\Gateways\InstallmentGateway;
+use App\Services\InventoryService;
 
 class OrderService
 {
@@ -540,23 +541,11 @@ class OrderService
     }
 
     /**
-     * Update inventory by deducting ordered quantities.
+     * Update inventory by deducting ordered quantities (atomic).
      */
     private function updateInventory(Order $order): void
     {
-        // Deduct products
-        $order->products()->each(function ($product) {
-            $product->quantity = max(0, $product->quantity - $product->pivot->quantity);
-            $product->save();
-        });
-
-        // Deduct collections (each collection's products)
-        $order->collections()->each(function ($collection) {
-            $collection->products()->each(function ($product) use ($collection) {
-                $product->quantity = max(0, $product->quantity - ($collection->pivot->quantity * $product->pivot->quantity));
-                $product->save();
-            });
-        });
+        InventoryService::deductOrderInventory($order);
     }
 
     /**

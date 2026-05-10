@@ -1,4 +1,4 @@
-<div class="flex flex-col justify-center items-center gap-3">
+<div class="flex flex-col justify-center items-center gap-5">
     <x-admin.waiting />
 
     {{-- User Part :: Start --}}
@@ -20,63 +20,72 @@
     {{-- Payment Part :: End --}}
 
     {{-- Notes :: Start --}}
-    <div class="w-full bg-red-50 p-2 pb-3 rounded-xl shadow">
-        <div class="grid grid-cols-4 justify-center items-center gap-3 p-3">
-            <h2 class="col-span-4 text-center font-bold">
+    <div class="w-full rounded-2xl shadow-sm border border-gray-200" style="background: linear-gradient(180deg, #fef9f0 0%, #fff 100%);">
+        <div class="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
+            <span class="material-icons text-lg" style="color: #d97706;">sticky_note_2</span>
+            <h2 class="text-sm font-bold text-gray-800 m-0">
                 {{ __('front/homePage.Notes') }}
             </h2>
-            <div class="col-span-4">
-                <textarea id="notes" rows="2" wire:model.live.blur="notes" dir="rtl"
-                    placeholder="{{ __('front/homePage.Please mention any note related to the order') }}"
-                    class="w-full py-1 rounded text-center border-red-300 focus:outline-0 focus:ring-0 focus:border-primary overflow-hidden">
-                </textarea>
+        </div>
+        <div class="p-4 flex flex-col gap-4">
+            <textarea id="notes" rows="2" wire:model.live.blur="notes" dir="rtl"
+                placeholder="{{ __('front/homePage.Please mention any note related to the order') }}"
+                class="w-full py-2.5 px-3 rounded-xl text-center text-sm border-gray-200 bg-white focus:outline-0 focus:ring-2 focus:ring-amber-200 focus:border-amber-300 transition-all duration-200 resize-none">
+            </textarea>
+
+            {{-- Allow open package --}}
+            <div class="flex items-center gap-3 px-1">
+                <label for="allowToOpenPackage" class="relative inline-flex items-center cursor-pointer select-none gap-3">
+                    <input id="allowToOpenPackage" type="checkbox" wire:model.live="allowToOpenPackage"
+                        class="w-5 h-5 rounded-md border-2 border-gray-300 text-amber-500 focus:ring-amber-300 focus:ring-offset-0 cursor-pointer transition-colors duration-200">
+                    <span class="ltr:ml-2.5 rtl:mr-2.5 text-sm font-medium text-gray-700">
+                        {{ __('admin/ordersPages.Allow to open package') }}
+                    </span>
+                </label>
             </div>
         </div>
-
-        {{-- Allow open package :: Start --}}
-        <div class="col-span-4">
-            <label for="allowToOpenPackage" class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3">
-                {{ __('admin/ordersPages.Allow to open package') }}
-            </label>
-            <input id="allowToOpenPackage" type="checkbox" wire:model.live="allowToOpenPackage" class="appearance-none border-red-600 rounded-full checked:bg-primary outline-none ring-0 cursor-pointer">
-        </div>
-        {{-- Allow open package :: End --}}
     </div>
     {{-- Notes :: End --}}
 
     {{-- Errors :: Start --}}
-    <div class="">
-        @if ($errors->any())
-            <div class="bg-red-500 rounded-lg p-3 text-white font-bold">
-                <ul class="text-center">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-    </div>
+    @if ($errors->any())
+        <div class="w-full rounded-xl p-4 flex items-start gap-3" style="background: linear-gradient(135deg, #fef2f2, #fee2e2);">
+            <span class="material-icons text-red-500 mt-0.5">error_outline</span>
+            <ul class="text-sm font-semibold text-red-700 m-0 p-0" style="list-style: none;">
+                @foreach ($errors->all() as $error)
+                    <li class="py-0.5">{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     {{-- Errors :: End --}}
 
     {{-- Buttons :: Start --}}
-    <div class="flex flex-wrap items-center justify-around gap-3 w-full">
+    <div class="flex flex-wrap items-center justify-center gap-3 w-full pt-2">
         <button wire:click="getOrderData(false)"
-            class="text-white font-bold rounded px-3 py-2 bg-success hover:bg-successDark">
+            class="inline-flex items-center gap-2 text-white font-bold rounded-xl px-5 py-2.5 text-sm shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+            style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+            <span class="material-icons text-lg">calculate</span>
             {{ __('admin/ordersPages.Calculate the order cost') }}
         </button>
 
         <button wire:click="getOrderData(true)"
-            class="text-white font-bold rounded px-3 py-2 bg-success hover:bg-successDark">
+            class="inline-flex items-center gap-2 text-white font-bold rounded-xl px-5 py-2.5 text-sm shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+            style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+            <span class="material-icons text-lg">shopping_cart_checkout</span>
             {{ __('admin/ordersPages.Create Order') }}
         </button>
 
         <button wire:click="getOrderData(true, true)"
-            class="text-white font-bold rounded px-3 py-2 bg-success hover:bg-successDark">
+            class="inline-flex items-center gap-2 text-white font-bold rounded-xl px-5 py-2.5 text-sm shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+            style="background: linear-gradient(135deg, #14b8a6, #0d9488);">
+            <span class="material-icons text-lg">playlist_add</span>
             {{ __('admin/ordersPages.Create and Start another order') }}
         </button>
 
         <a href="{{ url()->previous() }}"
-            class="btn font-bold bg-primary focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+            class="inline-flex items-center gap-2 font-bold rounded-xl px-5 py-2.5 text-sm border-2 border-gray-300 text-gray-600 bg-white transition-all duration-200 hover:bg-gray-50 hover:border-gray-400 hover:shadow-sm">
+            <span class="material-icons text-lg">arrow_back</span>
             {{ __('admin/ordersPages.Back') }}
         </a>
     </div>
@@ -88,14 +97,15 @@
         aria-modal="true" role="dialog">
         <div class="relative p-4 w-full max-w-2xl h-full">
             <!-- Modal content -->
-            <div class="relative bg-white rounded-lg shadow">
+            <div class="relative bg-white rounded-2xl shadow-2xl overflow-hidden">
                 <!-- Modal header -->
-                <div class="flex justify-between items-start p-4 rounded-t border-b">
-                    <h3 class="grow text-xl font-semibold text-gray-900 dark:text-white">
+                <div class="flex justify-between items-center px-6 py-4" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%);">
+                    <h3 class="grow text-lg font-bold text-white m-0 flex items-center gap-2">
+                        <span class="material-icons">receipt_long</span>
                         {{ __('admin/ordersPages.Order Summary') }}
                     </h3>
                     <button type="button" onclick="modal.hide()"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                        class="text-gray-300 bg-transparent hover:bg-white/10 hover:text-white rounded-lg text-sm p-1.5 ml-auto inline-flex items-center transition-all duration-200">
                         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd"
@@ -503,19 +513,24 @@
 
                 </div>
                 <!-- Modal footer -->
-                <div class="flex items-center justify-around p-2 space-x-2 rounded-b border-t border-gray-200">
+                <div class="flex flex-wrap items-center justify-center gap-3 px-6 py-4 border-t border-gray-100" style="background: #f8fafc;">
                     <button type="button" wire:click="getOrderData(true)"
-                        class="btn font-bold text-white bg-success hover:bg-successDark hover:text-white focus:outline-none rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">
+                        class="inline-flex items-center gap-2 text-white font-bold rounded-xl px-5 py-2.5 text-sm shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+                        style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                        <span class="material-icons text-lg">shopping_cart_checkout</span>
                         {{ __('admin/ordersPages.Create Order') }}
                     </button>
 
                     <button type="button" wire:click="getOrderData(true, true)"
-                        class="btn font-bold text-white bg-success hover:bg-successDark hover:text-white focus:outline-none rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">
+                        class="inline-flex items-center gap-2 text-white font-bold rounded-xl px-5 py-2.5 text-sm shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+                        style="background: linear-gradient(135deg, #14b8a6, #0d9488);">
+                        <span class="material-icons text-lg">playlist_add</span>
                         {{ __('admin/ordersPages.Create and Start another order') }}
                     </button>
 
                     <button type="button" onclick="modal.hide()"
-                        class="btn font-bold bg-primary focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        class="inline-flex items-center gap-2 font-bold rounded-xl px-5 py-2.5 text-sm border-2 border-gray-300 text-gray-600 bg-white transition-all duration-200 hover:bg-gray-50 hover:border-gray-400">
+                        <span class="material-icons text-lg">close</span>
                         {{ __('admin/ordersPages.Cancel') }}
                     </button>
                 </div>

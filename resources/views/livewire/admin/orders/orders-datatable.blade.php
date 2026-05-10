@@ -457,15 +457,6 @@
                                             </span>
                                         </button>
 
-                                        {{-- Payment History --}}
-                                        <a href="{{ route('admin.orders.payment-history', [$order->id]) }}"
-                                            title="{{ __('admin/ordersPages.Payment History') }}" class="m-0">
-                                            <span
-                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-green-500 hover:bg-green-700 rounded">
-                                                attach_money
-                                            </span>
-                                        </a>
-
                                         {{-- Edit Status --}}
                                         <button title="{{ __('admin/ordersPages.Edit Status') }}"
                                             wire:click="statusUpdateSelect({{ $order->id }})"
@@ -477,13 +468,23 @@
                                         </button>
 
                                         {{-- Edit Button --}}
-                                        {{-- <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}"
-                                            title="{{ __('admin/ordersPages.Edit') }}" class="m-0">
-                                            <span
-                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
-                                                edit
+                                        @if ($order->isEditable())
+                                            <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}"
+                                                title="{{ __('admin/ordersPages.Edit') }}" class="m-0">
+                                                <span
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
+                                                    edit
+                                                </span>
+                                            </a>
+                                        @else
+                                            <span title="{{ __('admin/ordersPages.Cannot edit this order') }}"
+                                                class="m-0 cursor-not-allowed">
+                                                <span
+                                                    class="material-icons p-1 text-lg w-9 h-9 text-white bg-gray-300 rounded">
+                                                    edit_off
+                                                </span>
                                             </span>
-                                        </a> --}}
+                                        @endif
 
                                         {{-- Archive Button --}}
                                         <button title="{{ __('admin/ordersPages.Archive') }}" type="button"

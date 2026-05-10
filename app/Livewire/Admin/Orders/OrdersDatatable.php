@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use App\Services\Front\Deliveries\Bosta;
 use App\Services\Front\Deliveries\DeliveryService;
+use App\Services\InventoryService;
 use PDF;
 
 class OrdersDatatable extends Component
@@ -72,17 +73,17 @@ class OrdersDatatable extends Component
             'products' => fn($q) => $q->select('products.id', 'name')->with(['brand:id,name', 'thumbnail']),
             'collections' => fn($q) => $q->select('collections.id', 'name')->with(['thumbnail']),
         ])->select([
-            'orders.id as id',
-            'orders.user_id',
-            'orders.address_id',
-            'orders.status_id',
-            'orders.updated_at',
-            'orders.order_delivery_id',
-            'users.f_name',
-            'users.l_name',
-            'statuses.name as status_name',
-            'governorates.name as governorate_name',
-        ])
+                    'orders.id as id',
+                    'orders.user_id',
+                    'orders.address_id',
+                    'orders.status_id',
+                    'orders.updated_at',
+                    'orders.order_delivery_id',
+                    'users.f_name',
+                    'users.l_name',
+                    'statuses.name as status_name',
+                    'governorates.name as governorate_name',
+                ])
             ->leftJoin('users', 'users.id', '=', 'orders.user_id')
             ->leftJoin('statuses', 'statuses.id', '=', 'orders.status_id')
             ->leftJoin('addresses', 'addresses.id', '=', 'orders.address_id')
@@ -118,7 +119,14 @@ class OrdersDatatable extends Component
                     )
                     ->orWhereIn('orders.id', $this->selectedOrders)
             )
-            ->whereNotIn('orders.status_id', [OrderStatus::UnderEditing->value, OrderStatus::UnderReturning->value])
+            ->when(
+                $this->type != 'edited_orders',
+                fn($q) => $q->whereNotIn('orders.status_id', [OrderStatus::UnderEditing->value])
+            )
+            ->when(
+                $this->type != 'returned_orders',
+                fn($q) => $q->whereNotIn('orders.status_id', [OrderStatus::UnderReturning->value])
+            )
             ->when($this->type != 'all_orders', fn($q) => $q->whereIn('orders.status_id', config("constants.order_status_type.$this->type")))
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->perPage);
@@ -126,7 +134,7 @@ class OrdersDatatable extends Component
         $this->orders_ids = $orders->pluck('id')->toArray();
 
         $order = $orders->map(function ($order) {
-            $order->should_pay =  $order->transactions->where('payment_status_id', PaymentStatus::Pending->value)->sum('payment_amount');
+            $order->should_pay = $order->transactions->where('payment_status_id', PaymentStatus::Pending->value)->sum('payment_amount');
             $order->should_get = $order->transactions->where('payment_status_id', PaymentStatus::Refundable->value)->sum('payment_amount');
             return $order;
         });
@@ -192,8 +200,28 @@ class OrdersDatatable extends Component
     public function archiveOrder($id)
     {
         try {
-            $order = Order::findOrFail($id);
+            $order = Order::with([
+                'products', 'collections.products',
+                'coupon', 'transactions', 'user', 'points',
+            ])->findOrFail($id);
+
+            DB::beginTransaction();
+
+            // Treat archive as cancellation: restore all resources
+            InventoryService::restoreOrderInventory($order);
+            InventoryService::restoreCoupon($order);
+            InventoryService::restoreWallet($order);
+            InventoryService::restoreUsedPoints($order);
+            InventoryService::deleteGiftPoints($order);
+
+            // Update status to CancellationApproved
+            $order->update(['status_id' => OrderStatus::CancellationApproved->value]);
+            $order->statuses()->attach(OrderStatus::CancellationApproved->value);
+
+            // Soft delete
             $order->delete();
+
+            DB::commit();
 
             if (($key = array_search($id, $this->selectedOrders)) !== false) {
                 unset($this->selectedOrders[$key]);
@@ -207,6 +235,8 @@ class OrdersDatatable extends Component
 
             $this->selectedProducts = [];
         } catch (\Throwable $th) {
+            DB::rollBack();
+
             $this->dispatch(
                 'swalDone',
                 text: __("admin/ordersPages.Order has not been archived"),
@@ -234,7 +264,30 @@ class OrdersDatatable extends Component
     public function archiveAll()
     {
         try {
-            Order::whereIn('id', $this->selectedOrders)->delete();
+            DB::beginTransaction();
+
+            $orders = Order::with([
+                'products', 'collections.products',
+                'coupon', 'transactions', 'user', 'points',
+            ])->whereIn('id', $this->selectedOrders)->get();
+
+            $orders->each(function ($order) {
+                // Treat archive as cancellation: restore all resources
+                InventoryService::restoreOrderInventory($order);
+                InventoryService::restoreCoupon($order);
+                InventoryService::restoreWallet($order);
+                InventoryService::restoreUsedPoints($order);
+                InventoryService::deleteGiftPoints($order);
+
+                // Update status to CancellationApproved
+                $order->update(['status_id' => OrderStatus::CancellationApproved->value]);
+                $order->statuses()->attach(OrderStatus::CancellationApproved->value);
+
+                // Soft delete
+                $order->delete();
+            });
+
+            DB::commit();
 
             $this->selectedOrders = [];
 
@@ -244,7 +297,8 @@ class OrdersDatatable extends Component
                 icon: 'success'
             );
         } catch (\Throwable $th) {
-            // throw $th;
+            DB::rollBack();
+
             $this->dispatch(
                 'swalDone',
                 text: __("admin/ordersPages.Orders haven't been archived"),
@@ -283,46 +337,7 @@ class OrdersDatatable extends Component
 
             $order->statuses()->attach($status_id);
 
-            switch ($status_id) {
-                case OrderStatus::Approved->value:
-                    $this->handleApprovedStatus($order);
-                    break;
-                case OrderStatus::Rejected->value:
-                    $order->update([
-                        'status_id' => $status_id,
-                    ]);
-
-                    $order->delete();
-                    break;
-                case OrderStatus::Prepared->value:
-                    $order->statuses()->attach(OrderStatus::QualityChecked->value);
-
-                    $order->update([
-                        'status_id' => OrderStatus::Prepared->value,
-                    ]);
-                    break;
-                case OrderStatus::Delivered->value:
-                    $order->update([
-                        'status_id' => OrderStatus::Delivered->value,
-                        'delivered_at' => now()
-                    ]);
-
-                    $order->points()->update([
-                        'status' => 1,
-                    ]);
-                    break;
-                case OrderStatus::ReturnApproved->value:
-                case OrderStatus::ReturnedToBusiness->value:
-                    $order->points()->update([
-                        'status' => 0,
-                    ]);
-                    break;
-                default:
-                    $order->update([
-                        'status_id' => $status_id,
-                    ]);
-                    break;
-            }
+            $this->handleStatusTransition($order, $status_id);
 
             $this->dispatch(
                 'swalDone',
@@ -365,49 +380,7 @@ class OrdersDatatable extends Component
             $orders->each(function ($order) use ($status_id) {
                 $order->statuses()->attach($status_id);
 
-                switch ($status_id) {
-                    case OrderStatus::Approved->value:
-                        $this->handleApprovedStatus($order);
-
-                        break;
-                    case OrderStatus::Rejected->value:
-                        $order->update([
-                            'status_id' => $status_id,
-                        ]);
-
-                        $order->delete();
-                        break;
-                    case OrderStatus::Prepared->value:
-                        $order->statuses()->attach(OrderStatus::QualityChecked->value);
-
-                        $order->update([
-                            'status_id' => OrderStatus::Prepared->value,
-                        ]);
-                        break;
-                    case OrderStatus::Delivered->value:
-                        $order->statuses()->attach(OrderStatus::Delivered->value);
-
-                        $order->update([
-                            'status_id' => OrderStatus::Delivered->value,
-                            'delivered_at' => now()
-                        ]);
-
-                        $order->points()->update([
-                            'status' => 1,
-                        ]);
-                        break;
-                    case OrderStatus::ReturnApproved->value:
-                    case OrderStatus::ReturnedToBusiness->value:
-                        $order->points()->update([
-                            'status' => 0,
-                        ]);
-                        break;
-                    default:
-                        $order->update([
-                            'status_id' => $status_id,
-                        ]);
-                        break;
-                }
+                $this->handleStatusTransition($order, $status_id);
             });
 
             $this->dispatch(
@@ -421,6 +394,88 @@ class OrdersDatatable extends Component
                 text: __("admin/ordersPages.Orders' statuses haven't been updated"),
                 icon: 'error'
             );
+        }
+    }
+
+    /**
+     * Centralized handler for all order status transitions.
+     * Manages inventory, payments, points, and delivery side-effects.
+     */
+    protected function handleStatusTransition(Order $order, int $status_id): void
+    {
+        switch ($status_id) {
+            case OrderStatus::Approved->value:
+                $this->handleApprovedStatus($order);
+                break;
+
+            case OrderStatus::Rejected->value:
+                $order->update(['status_id' => $status_id]);
+
+                // Restore inventory, coupon, wallet, points, gift points
+                InventoryService::restoreOrderInventory($order);
+                InventoryService::restoreCoupon($order);
+                InventoryService::restoreWallet($order);
+                InventoryService::restoreUsedPoints($order);
+                InventoryService::deleteGiftPoints($order);
+
+                $order->delete();
+                break;
+
+            case OrderStatus::CancellationApproved->value:
+                // Full cancellation with inventory restoration
+                InventoryService::fullCancellation($order, softDelete: true);
+
+                $order->update(['status_id' => $status_id]);
+                break;
+
+            case OrderStatus::Prepared->value:
+                $order->statuses()->attach(OrderStatus::QualityChecked->value);
+
+                $order->update([
+                    'status_id' => OrderStatus::Prepared->value,
+                ]);
+                break;
+
+            case OrderStatus::Delivered->value:
+                $order->update([
+                    'status_id' => OrderStatus::Delivered->value,
+                    'delivered_at' => now()
+                ]);
+
+                $order->points()->update([
+                    'status' => 1,
+                ]);
+                break;
+
+            case OrderStatus::ReturnApproved->value:
+            case OrderStatus::ReturnedToBusiness->value:
+                $order->update(['status_id' => $status_id]);
+
+                // Restore inventory for returned items
+                InventoryService::restoreOrderInventory($order);
+
+                // Deactivate gift points
+                $order->points()->update([
+                    'status' => 0,
+                ]);
+                break;
+
+            case OrderStatus::EditApproved->value:
+                // Inventory is handled by OrderEditService, just update status
+                $order->update(['status_id' => $status_id]);
+                break;
+
+            case OrderStatus::EditRejected->value:
+                // Revert to previous editable status
+                $order->update(['status_id' => OrderStatus::WaitingForApproval->value]);
+                $order->statuses()->attach(OrderStatus::WaitingForApproval->value);
+                break;
+
+            default:
+                $order->update([
+                    'status_id' => $status_id,
+                ]);
+                break;
         }
     }
 
@@ -602,38 +657,40 @@ class OrdersDatatable extends Component
             'zone_id',
             'created_at',
         ])->with([
-            'user' => function ($query) {
-                $query->select('users.id', 'f_name', 'l_name')
-                    ->without('addresses', 'phones', 'points');
-            },
-            'address' => function ($query) {
-                $query
-                    ->select('addresses.id', 'governorate_id', 'city_id', 'details', 'landmarks')
-                    ->with([
-                        'governorate' => function ($query) {
-                            $query->select('id', 'name');
-                        },
-                        'city' => function ($query) {
-                            $query->select('id', 'name');
-                        },
-                    ]);
-            },
-            'invoice',
-            'coupon',
-            'products' => function ($query) {
-                $query->select('products.id', 'name', 'base_price', 'final_price', 'model')
-                    ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
-            },
-            'collections' => function ($query) {
-                $query->select('collections.id', 'collections.name', 'base_price', 'final_price')
-                    ->with(['products' => function ($query) {
+                    'user' => function ($query) {
+                        $query->select('users.id', 'f_name', 'l_name')
+                            ->without('addresses', 'phones', 'points');
+                    },
+                    'address' => function ($query) {
+                        $query
+                            ->select('addresses.id', 'governorate_id', 'city_id', 'details', 'landmarks')
+                            ->with([
+                                'governorate' => function ($query) {
+                                    $query->select('id', 'name');
+                                },
+                                'city' => function ($query) {
+                                    $query->select('id', 'name');
+                                },
+                            ]);
+                    },
+                    'invoice',
+                    'coupon',
+                    'products' => function ($query) {
                         $query->select('products.id', 'name', 'base_price', 'final_price', 'model')
                             ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
-                    }])
-                    ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
-            },
-            'pointTransactions'
-        ])->findOrFail($order_id)->toArray();
+                    },
+                    'collections' => function ($query) {
+                        $query->select('collections.id', 'collections.name', 'base_price', 'final_price')
+                            ->with([
+                                'products' => function ($query) {
+                                    $query->select('products.id', 'name', 'base_price', 'final_price', 'model')
+                                        ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
+                                }
+                            ])
+                            ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
+                    },
+                    'pointTransactions'
+                ])->findOrFail($order_id)->toArray();
 
         $order['user_name'] = ($order['user']['f_name']['ar'] ?? '') . " " . ($order['user']['l_name']['ar'] ?? '');
         $order['user_type'] = "عميل مميز";
@@ -672,38 +729,40 @@ class OrdersDatatable extends Component
             'zone_id',
             'created_at',
         ])->with([
-            'user' => function ($query) {
-                $query->select('users.id', 'f_name', 'l_name')
-                    ->without('addresses', 'phones', 'points');
-            },
-            'address' => function ($query) {
-                $query
-                    ->select('addresses.id', 'governorate_id', 'city_id', 'details', 'landmarks')
-                    ->with([
-                        'governorate' => function ($query) {
-                            $query->select('id', 'name');
-                        },
-                        'city' => function ($query) {
-                            $query->select('id', 'name');
-                        },
-                    ]);
-            },
-            'invoice',
-            'coupon',
-            'products' => function ($query) {
-                $query->select('products.id', 'name', 'base_price', 'final_price', 'model')
-                    ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
-            },
-            'collections' => function ($query) {
-                $query->select('collections.id', 'collections.name', 'base_price', 'final_price')
-                    ->with(['products' => function ($query) {
+                    'user' => function ($query) {
+                        $query->select('users.id', 'f_name', 'l_name')
+                            ->without('addresses', 'phones', 'points');
+                    },
+                    'address' => function ($query) {
+                        $query
+                            ->select('addresses.id', 'governorate_id', 'city_id', 'details', 'landmarks')
+                            ->with([
+                                'governorate' => function ($query) {
+                                    $query->select('id', 'name');
+                                },
+                                'city' => function ($query) {
+                                    $query->select('id', 'name');
+                                },
+                            ]);
+                    },
+                    'invoice',
+                    'coupon',
+                    'products' => function ($query) {
                         $query->select('products.id', 'name', 'base_price', 'final_price', 'model')
                             ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
-                    }])
-                    ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
-            },
-            'pointTransactions',
-        ])->whereIn('id', $this->selectedOrders)->get()->toArray();
+                    },
+                    'collections' => function ($query) {
+                        $query->select('collections.id', 'collections.name', 'base_price', 'final_price')
+                            ->with([
+                                'products' => function ($query) {
+                                    $query->select('products.id', 'name', 'base_price', 'final_price', 'model')
+                                        ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
+                                }
+                            ])
+                            ->without('orders', 'brand', 'reviews', 'valid_offers', 'avg_rating');
+                    },
+                    'pointTransactions',
+                ])->whereIn('id', $this->selectedOrders)->get()->toArray();
 
         $orders = array_map(function ($order) {
             $order['user_name'] = ($order['user']['f_name']['ar'] ?? '') . " " . ($order['user']['l_name']['ar'] ?? '');

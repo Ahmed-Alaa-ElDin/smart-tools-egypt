@@ -1,284 +1,262 @@
-<div class="bg-red-50 p-2 rounded-xl shadow">
+<div class="w-full rounded-2xl shadow-sm border border-gray-200"
+    style="background: linear-gradient(180deg, #fff5f5 0%, #fff 100%);">
     <x-admin.waiting />
 
-    <div class="text-center mb-2 font-bold text-red-900">
-        {{ __('admin/ordersPages.Products Choosing') }}
+    <div class="px-4 py-3 border-b border-red-100 flex items-center gap-2">
+        <span class="material-icons text-lg" style="color: #dc2626;">inventory_2</span>
+        <span class="text-sm font-bold text-gray-800 m-0">
+            {{ __('admin/ordersPages.Products Choosing') }}
+        </span>
     </div>
-    <div class="flex flex-wrap-reverse justify-around items-center gap-3 ">
-        <div class="relative w-full md:w-auto md:min-w-[50%]">
+    <div class="p-4">
+        <div class="flex flex-wrap-reverse justify-around items-center gap-3 ">
+            <div class="relative w-full md:w-auto md:min-w-[50%]">
 
-            {{-- Search Product Input :: Start --}}
-            <div class="flex rounded-md shadow-sm">
-                <span
-                    class="inline-flex items-center px-3 ltr:rounded-l-md rtl:rounded-r-md border border-r-0 border-primary bg-primary text-center text-white text-sm">
-                    <span class="material-icons">
-                        search
+                {{-- Search Product Input :: Start --}}
+                <div class="flex rounded-xl shadow-sm overflow-hidden">
+                    <span class="inline-flex items-center px-3 border border-r-0 text-center text-white text-sm"
+                        style="background: linear-gradient(135deg, #dc2626, #b91c1c); border-color: #dc2626;">
+                        <span class="material-icons text-base">
+                            search
+                        </span>
                     </span>
-                </span>
-                <input type="text" wire:model.live.debounce.500ms='search' wire:blur.debounce.200ms="$set('search','')"
-                    data-name="new-order-products-part"
-                    class="searchInput focus:ring-0 flex-1 block rounded-none ltr:rounded-r-md rtl:rounded-l-md sm:text-sm border-primary"
-                    placeholder="{{ __('admin/ordersPages.Search ...') }}">
-            </div>
-            {{-- Search Product Input :: End --}}
+                    <input type="text" wire:model.live.debounce.500ms='search'
+                        wire:blur.debounce.200ms="$set('search','')" data-name="new-order-products-part"
+                        class="searchInput focus:ring-2 focus:ring-red-200 focus:border-red-300 flex-1 block rounded-none ltr:rounded-r-xl rtl:rounded-l-xl sm:text-sm border-gray-200 transition-all duration-200"
+                        placeholder="{{ __('admin/ordersPages.Search ...') }}">
+                </div>
+                {{-- Search Product Input :: End --}}
 
-            @if ($search != null)
-                <div
-                    class="absolute button-0 left-0 w-full z-10 bg-white border border-t-0 border-primary max-h-36 overflow-x-hidden rounded-b-xl p-2 scrollbar scrollbar-thin scrollbar-thumb-primary">
-                    {{-- Loading :: Start --}}
-                    <div wire:loading.delay wire:target="search" class="w-full">
-                        <div class="flex gap-2 justify-center items-center p-4">
-                            <span class="text-primary text-xs font-bold">
-                                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
-                                    class="animate-spin text-9xl" height="1em" preserveAspectRatio="xMidYMid meet"
-                                    viewBox="0 0 50 50">
-                                    <path fill="currentColor"
-                                        d="M41.9 23.9c-.3-6.1-4-11.8-9.5-14.4c-6-2.7-13.3-1.6-18.3 2.6c-4.8 4-7 10.5-5.6 16.6c1.3 6 6 10.9 11.9 12.5c7.1 2 13.6-1.4 17.6-7.2c-3.6 4.8-9.1 8-15.2 6.9c-6.1-1.1-11.1-5.7-12.5-11.7c-1.5-6.4 1.5-13.1 7.2-16.4c5.9-3.4 14.2-2.1 18.1 3.7c1 1.4 1.7 3.1 2 4.8c.3 1.4.2 2.9.4 4.3c.2 1.3 1.3 3 2.8 2.1c1.3-.8 1.2-2.5 1.1-3.8c0-.4.1.7 0 0z" />
-                                </svg>
-                            </span>
-                        </div>
-                    </div>
-                    {{-- Products List :: Start --}}
-                    @forelse ($products_list as $product)
-                        <div class="group flex justify-center items-center gap-1 cursor-pointer rounded transition-all ease-in-out hover:bg-red-100 p-2"
-                            wire:click.stop="addProduct({{ $product['id'] }}, '{{ $product['type'] }}')"
-                            wire:key="product-{{ $product['id'] }}-{{ rand() }}">
-                            {{-- Product's Name --}}
-                            <div class="flex flex-col justify-start ltr:text-left rtl:text-right gap-2 grow">
-                                <span class="font-bold text-black">{{ $product['name'][session('locale')] }}</span>
-                                @if (isset($product['brand']))
-                                    <span
-                                        class="text-xs font-bold text-gray-500">{{ $product['brand'] ? $product['brand']['name'] : '' }}</span>
-                                @endif
-                            </div>
-
-                            {{-- Price --}}
-                            <div class="flex flex-wrap gap-2 justify-around items-center">
-                                @if ($product['under_reviewing'])
-                                    <span class="bg-yellow-600 px-2 py-1 rounded text-white">
-                                        {{ __('admin/productsPages.Under Reviewing') }}
-                                    </span>
-                                @elseif ($product['final_price'] == $product['base_price'])
-                                    <span class="bg-success px-2 py-1 rounded text-white">
-                                        {{ $product['final_price'] }}
-                                        <span class="">
-                                            {{ __('admin/productsPages. EGP') }}
-                                        </span>
-                                    </span>
-                                @else
-                                    <span class="line-through bg-red-600 px-2 py-1 rounded text-white">
-                                        {{ $product['base_price'] }}
-                                        <span class="">
-                                            {{ __('admin/productsPages. EGP') }}
-                                        </span>
-                                    </span>
-                                    <span class="bg-success px-2 py-1 rounded text-white ltr:ml-1 rtl:mr-1">
-                                        {{ $product['final_price'] }}
-                                        <span class="">
-                                            {{ __('admin/productsPages. EGP') }}
-                                        </span>
-                                    </span>
-                                @endif
-
-                                {{-- Points --}}
-                                <span class="bg-yellow-600 px-2 py-1 rounded text-white">
-                                    {{ $product['points'] ?? 0 }}
+                @if ($search != null)
+                    <div
+                        class="absolute top-full left-0 w-full z-[100] bg-white border border-gray-200 max-h-80 overflow-y-auto rounded-b-2xl p-2 shadow-2xl scrollbar scrollbar-thin scrollbar-thumb-red-200">
+                        {{-- Loading :: Start --}}
+                        <div wire:loading.delay wire:target="search" class="w-full">
+                            <div class="flex flex-col gap-2 justify-center items-center p-8 text-slate-400">
+                                <span class="animate-spin text-red-600">
+                                    <span class="material-icons text-4xl">sync</span>
                                 </span>
+                                <span
+                                    class="text-xs font-black uppercase tracking-widest">{{ __('admin/ordersPages.Searching ...') }}</span>
                             </div>
                         </div>
 
-                        @if (!$loop->last)
-                            <hr class="my-1">
-                        @endif
-                    @empty
-                        <div class="text-center font-bold">
-                            {{ __('admin/ordersPages.No Products Found') }}
+                        {{-- Products List :: Start --}}
+                        <div wire:loading.remove wire:target="search" class="space-y-1">
+                            @forelse ($products_list as $product)
+                                <div class="group flex items-center gap-4 cursor-pointer rounded-xl transition-all duration-300 hover:bg-red-50/50 p-3 border border-transparent hover:border-red-100"
+                                    wire:click.stop="addProduct({{ $product['id'] }}, '{{ $product['type'] }}')"
+                                    wire:key="product-result-{{ $product['id'] }}-{{ $product['type'] }}">
+
+                                    {{-- Thumbnail --}}
+                                    <div
+                                        class="w-12 h-12 flex-shrink-0 bg-white rounded-lg border border-slate-100 p-1 shadow-sm overflow-hidden group-hover:scale-110 transition-transform">
+                                        @if (isset($product['thumbnail']) && $product['thumbnail'])
+                                            <img src="{{ $product['type'] == 'Product' ? asset('storage/images/products/cropped100/' . $product['thumbnail']['file_name']) : asset('storage/images/collections/cropped100/' . $product['thumbnail']['file_name']) }}"
+                                                alt="" class="w-full h-full object-contain">
+                                        @else
+                                            <div
+                                                class="w-full h-full flex items-center justify-center bg-slate-50 text-slate-200">
+                                                <span class="material-icons text-xl">inventory_2</span>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    {{-- Info --}}
+                                    <div class="flex-grow min-w-0">
+                                        @if (isset($product['brand']))
+                                            <span
+                                                class="text-[9px] font-black text-red-600 uppercase tracking-widest block mb-0.5">{{ $product['brand']['name'] ?? '' }}</span>
+                                        @endif
+                                        <h5
+                                            class="text-sm font-black text-slate-800 truncate group-hover:text-red-600 transition-colors">
+                                            {{ $product['name'][session('locale')] }}
+                                        </h5>
+                                        <div
+                                            class="flex items-center gap-2 text-[10px] font-bold text-slate-400 mt-0.5">
+                                            <span class="material-icons text-[12px]">barcode_reader</span>
+                                            {{ $product['barcode'] ?? 'N/A' }}
+                                        </div>
+                                    </div>
+
+                                    {{-- Pricing --}}
+                                    <div class="flex flex-col items-end flex-shrink-0 gap-1">
+                                        @if ($product['under_reviewing'])
+                                            <span
+                                                class="px-2 py-0.5 rounded text-[10px] font-black bg-amber-100 text-amber-600 uppercase tracking-wider">
+                                                {{ __('admin/productsPages.Under Reviewing') }}
+                                            </span>
+                                        @else
+                                            <div class="flex items-center gap-2">
+                                                @if ($product['final_price'] < $product['base_price'])
+                                                    <span class="text-[10px] font-bold text-slate-300 line-through"
+                                                        dir="ltr">
+                                                        {{ number_format($product['base_price'], 2) }}
+                                                    </span>
+                                                @endif
+                                                <span
+                                                    class="px-2 py-0.5 rounded-lg text-xs font-black bg-emerald-500 text-white shadow-sm shadow-emerald-500/20"
+                                                    dir="ltr">
+                                                    {{ number_format($product['final_price'], 2) }}
+                                                    <small class="text-[8px] font-bold opacity-80">EGP</small>
+                                                </span>
+                                            </div>
+                                            @if ($product['points'] > 0)
+                                                <div
+                                                    class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-amber-50 text-amber-600 text-[9px] font-black border border-amber-100">
+                                                    <span class="material-icons text-[10px]">stars</span>
+                                                    {{ $product['points'] }}
+                                                </div>
+                                            @endif
+                                        @endif
+                                    </div>
+                                </div>
+                            @empty
+                                <div
+                                    class="py-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                                    <span
+                                        class="material-icons text-slate-200 text-3xl mb-1">sentiment_dissatisfied</span>
+                                    <p class="text-xs font-black text-slate-400 uppercase tracking-widest">
+                                        {{ __('admin/ordersPages.No Products Found') }}</p>
+                                </div>
+                            @endforelse
                         </div>
-                    @endforelse
-                    {{-- Products List :: End --}}
+                        {{-- Products List :: End --}}
+                    </div>
+                @endif
+            </div>
+
+            @if (count($products))
+                <div>
+                    {{-- Clear All Products --}}
+                    <button wire:click="clearProducts"
+                        class="inline-flex items-center gap-1.5 text-white font-bold text-xs rounded-xl px-3 py-2 shadow-sm transition-all duration-200 hover:shadow-md"
+                        style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                        <span class="material-icons text-sm">
+                            close
+                        </span>
+                        {{ __('admin/ordersPages.Clear Products') }}
+                    </button>
                 </div>
             @endif
         </div>
 
+        {{-- Product Selected :: Start --}}
         @if (count($products))
-            <div>
-                {{-- Clear All Products --}}
-                <button wire:click="clearProducts"
-                    class="btn btn-sm bg-red-500 hover:bg-red-700 focus:bg-red-700 active:bg-red-700 font-bold">
-                    <span class="material-icons rtl:ml-1 ltr:mr-1">
-                        close
-                    </span>
-                    {{ __('admin/ordersPages.Clear Products') }}
-                </button>
-            </div>
-        @endif
-    </div>
+            <div class="mt-8 space-y-4">
+                @forelse ($products as $product)
+                    <div class="group relative bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 p-4"
+                        wire:key='selected-product-{{ $product['id'] }}-{{ $product['type'] }}'>
 
-    {{-- Product Selected :: Start --}}
-    @if (count($products))
-        <hr class="my-2">
-
-        {{-- Product Info :: Start --}}
-        <div class="flex flex-col justify-center items-center gap-2">
-            @forelse ($products as $product)
-                {{-- Product : Start --}}
-                <div class="p-4 scrollbar scrollbar-thin w-full bg-white rounded shadow"
-                    wire:key='product-{{ $product['id'] }} }}'>
-                    <div class="flex gap-6 justify-start items-center">
-                        {{-- Thumnail :: Start --}}
-                        <a wire:ignore
-                            href="{{ $product['type'] == 'Product' ? route('front.products.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) : route('front.collections.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) }}"
-                            target="_blank" class="min-w-max block hover:text-current">
-                            @if ($product['thumbnail'])
-                                <img class="w-full h-full flex justify-center items-center bg-gray-200 rounded overflow-hidden construction-placeholder"
-                                    onerror="this.onerror=null; handleNotFoundImages(this);"
-                                    data-placeholder-size="text-[100px]"
-                                    src="{{ $product['type'] == 'Product' ? asset('storage/images/products/cropped100/' . $product['thumbnail']['file_name']) : asset('storage/images/collections/cropped100/' . $product['thumbnail']['file_name']) }}"
-                                    alt="{{ $product['name'][session('locale')] . 'image' }}">
-                            @else
-                                <div class="w-full h-full flex justify-center items-center bg-gray-200 rounded">
-                                    <span class="block material-icons text-8xl">
-                                        construction
-                                    </span>
-                                </div>
-                            @endif
-                        </a>
-                        {{-- Thumnail :: End --}}
-
-                        <div class="flex gap-6 justify-between items-center w-full max-w-100">
-                            {{-- Product Info : Start --}}
-                            <div class="grow flex flex-col justify-start gap-2">
-                                {{-- Product's Brand :: Start --}}
-                                @if (isset($product['brand']))
-                                    <div class="flex items-center">
-                                        <a href="{{ route('front.brands.show', ['brand' => $product['brand']['id']]) }}"
-                                            target="_blank" class="text-sm font-bold text-gray-400 hover:text-current">
-                                            {{ isset($product['brand']) && $product['brand'] ? $product['brand']['name'] : '' }}
-                                        </a>
-                                    </div>
-                                @endif
-                                {{-- Product's Brand :: End --}}
-
-                                {{-- Product Name : Start --}}
-                                <div class="flex items-center">
-                                    <a href="{{ $product['type'] == 'Product' ? route('front.products.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) : route('front.collections.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) }}"
-                                        target="_blank" class="text-lg font-bold hover:text-current">
-                                        {{ $product['name'][session('locale')] }}
-                                    </a>
-                                </div>
-                                {{-- Product Name : End --}}
-
-                                {{-- Reviews : Start --}}
-                                <div class="my-1 flex justify-start items-center gap-2 select-none">
-                                    <div class="rating flex">
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            <span
-                                                class="material-icons inline-block @if ($i <= ceil($product['avg_rating'])) text-yellow-300 @else text-gray-400 @endif">
-                                                star
-                                            </span>
-                                        @endfor
-                                    </div>
-
-                                    <span class="text-sm text-gray-600">({{ $product['reviews_count'] ?? 0 }})</span>
-                                </div>
-                                {{-- Reviews : End --}}
-                            </div>
-                            {{-- Product Info : End --}}
-
-                            {{-- Product Price : Start --}}
-                            <div class="flex flex-col items-end justify-center gap-2">
-                                @if ($product['under_reviewing'])
-                                    <span class="text-yellow-600 font-bold text-sm">
-                                        {{ __('front/homePage.Under Reviewing') }}
-                                    </span>
-                                @else
-                                    <div class="flex flex-col md:flex-row-reverse items-center gap-3">
-                                        {{-- Base Price : Start --}}
-                                        <del class="flex rtl:flex-row-reverse gap-1 font-bold text-gray-400">
-                                            <span class="text-xs">
-                                                {{ __('front/homePage.EGP') }}
-                                            </span>
-                                            <span class="font-bold text-2xl"
-                                                dir="ltr">{{ number_format(explode('.', $product['base_price'])[0], 0, '.', '\'') }}</span>
-                                        </del>
-                                        {{-- Base Price : End --}}
-
-                                        {{-- Final Price : Start --}}
-                                        <div class="flex rtl:flex-row-reverse gap-1">
-                                            <span
-                                                class="font-bold text-successDark text-xs">{{ __('front/homePage.EGP') }}</span>
-                                            <span class="font-bold text-successDark text-lg"
-                                                dir="ltr">{{ number_format(explode('.', $product['final_price'])[0], 0, '.', '\'') }}</span>
-                                            <span
-                                                class="text-successDark text-xs">{{ explode('.', $product['final_price'])[1] ?? '00' }}</span>
+                        <div class="flex flex-col sm:flex-row items-center gap-6">
+                            {{-- Thumbnail --}}
+                            <div class="relative flex-shrink-0">
+                                <div
+                                    class="w-24 h-24 bg-white rounded-xl overflow-hidden border border-slate-100 p-2 shadow-sm group-hover:scale-105 transition-transform duration-500">
+                                    @if (isset($product['thumbnail']) && $product['thumbnail'])
+                                        <img src="{{ $product['type'] == 'Product' ? asset('storage/images/products/cropped100/' . $product['thumbnail']['file_name']) : asset('storage/images/collections/cropped100/' . $product['thumbnail']['file_name']) }}"
+                                            alt="" class="w-full h-full object-contain">
+                                    @else
+                                        <div
+                                            class="w-full h-full flex items-center justify-center bg-slate-50 text-slate-200">
+                                            <span class="material-icons text-4xl">inventory_2</span>
                                         </div>
-                                        {{-- Final Price : End --}}
-                                    </div>
-                                @endif
+                                    @endif
+                                </div>
+                                {{-- Quick Link --}}
+                                <a href="{{ $product['type'] == 'Product' ? route('front.products.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) : route('front.collections.show', ['id' => $product['id'], 'slug' => $product['slug'][session('locale')]]) }}"
+                                    target="_blank"
+                                    class="absolute -bottom-1 -left-1 w-6 h-6 bg-slate-900 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors">
+                                    <span class="material-icons text-[14px]">open_in_new</span>
+                                </a>
+                            </div>
 
-                                {{-- Free Shipping:: Start --}}
-                                @if ($product['free_shipping'])
-                                    <span class="text-xs font-bold text-success text-center w-full">
-                                        {{ __('front/homePage.Free Shipping') }}
+                            {{-- Info --}}
+                            <div class="flex-grow min-w-0 text-center sm:text-left rtl:sm:text-right">
+                                @if (isset($product['brand']))
+                                    <span
+                                        class="text-[10px] font-black text-red-600 uppercase tracking-widest block mb-1">
+                                        {{ $product['brand']['name'] ?? '' }}
                                     </span>
                                 @endif
-                                {{-- Free Shipping:: End --}}
+                                <h4
+                                    class="text-lg font-black text-slate-800 line-clamp-2 leading-tight group-hover:text-red-600 transition-colors duration-300">
+                                    {{ $product['name'][session('locale')] }}
+                                </h4>
 
+                                <div class="flex flex-wrap justify-center sm:justify-start items-center gap-3 mt-3">
+                                    <div
+                                        class="flex items-center gap-1 px-2 py-1 bg-slate-50 rounded-lg text-[11px] font-bold text-slate-400 border border-slate-100">
+                                        <span class="material-icons text-[14px]">barcode_reader</span>
+                                        {{ $product['barcode'] ?? 'N/A' }}
+                                    </div>
 
-                                <div class="flex justify-center items-center gap-1 w-32">
-                                    {{-- Add :: Start --}}
-                                    <button
-                                        class="w-6 h-6 rounded-circle bg-secondary text-white flex justify-center items-center"
-                                        title="{{ __('front/homePage.Increase') }}"
-                                        wire:click="amountUpdated('{{ $product['id'] }}','{{ $product['type'] }}',{{ $product['amount'] + 1 }})">
-                                        <span class="material-icons text-xs">
-                                            add
-                                        </span>
-                                    </button>
-                                    {{-- Add :: End --}}
+                                    @if ($product['points'] > 0)
+                                        <div
+                                            class="flex items-center gap-1 px-2 py-1 bg-amber-50 rounded-lg text-[11px] font-bold text-amber-600 border border-amber-100">
+                                            <span class="material-icons text-[14px]">stars</span>
+                                            {{ $product['points'] }} {{ __('admin/ordersPages.Points') }}
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
 
-                                    {{-- Amount :: Start --}}
-                                    <input type="text" dir="ltr"
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
-                                        class="focus:ring-primary focus:border-primary flex-1 block w-full min-w-maxs rounded text-xs border-gray-300 text-center text-gray-700 px-1 p-2"
-                                        value="{{ $product['amount'] }}"
-                                        wire:change="amountUpdated('{{ $product['id'] }}', '{{ $product['type'] }}',$event.target.value)">
-                                    {{-- Amount :: End --}}
-
-                                    {{-- Remove :: Start --}}
-                                    <button
-                                        class="w-6 h-6 rounded-circle bg-secondary text-white flex justify-center items-center"
-                                        wire:key="DecreaseByOne-{{ rand() }}"
-                                        title="{{ __('front/homePage.Decrease') }}"
-                                        wire:click="amountUpdated('{{ $product['id'] }}','{{ $product['type'] }}',{{ $product['amount'] - 1 }})">
-                                        <span class="material-icons text-xs">
-                                            remove
-                                        </span>
-                                    </button>
-                                    {{-- Remove :: End --}}
-
-                                    {{-- Delete :: Start --}}
-                                    <button title="{{ __('front/homePage.Remove from Cart') }}"
-                                        class="w-6 h-6 rounded-circle bg-white border border-primary text-primary transition ease-in-out hover:bg-primary hover:text-white flex justify-center items-center"
-                                        wire:click="amountUpdated('{{ $product['id'] }}','{{ $product['type'] }}',0)">
-                                        <span class="material-icons text-xs">
-                                            delete
-                                        </span>
-                                    </button>
-                                    {{-- Delete :: End --}}
+                            {{-- Actions & Pricing --}}
+                            <div class="flex flex-col items-center sm:items-end gap-3 min-w-[180px]">
+                                {{-- Price Display --}}
+                                <div class="text-right rtl:text-left">
+                                    <div class="flex items-center gap-2 justify-center sm:justify-end">
+                                        @if ($product['final_price'] < $product['base_price'])
+                                            <span class="text-xs font-bold text-slate-300 line-through" dir="ltr">
+                                                {{ number_format($product['base_price'], 2) }}
+                                            </span>
+                                        @endif
+                                        <div class="text-xl font-black text-slate-900" dir="ltr">
+                                            {{ number_format($product['final_price'], 2) }}
+                                            <small class="text-xs font-bold text-slate-400">EGP</small>
+                                        </div>
+                                    </div>
+                                    @if ($product['final_price'] < $product['base_price'])
+                                        <div class="text-[10px] font-black text-emerald-600 uppercase tracking-tighter">
+                                            {{ __('admin/ordersPages.Saved :amount EGP', ['amount' => number_format($product['base_price'] - $product['final_price'], 2)]) }}
+                                        </div>
+                                    @endif
                                 </div>
 
+                                {{-- Quantity Controls --}}
+                                <div class="flex items-center bg-slate-100 rounded-xl p-1 border border-slate-200">
+                                    <button
+                                        wire:click="amountUpdated('{{ $product['id'] }}','{{ $product['type'] }}',{{ $product['amount'] - 1 }})"
+                                        class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-slate-600 hover:bg-red-600 hover:text-white transition-all duration-200">
+                                        <span class="material-icons text-sm">remove</span>
+                                    </button>
+
+                                    <input type="text" value="{{ $product['amount'] }}"
+                                        wire:change="amountUpdated('{{ $product['id'] }}', '{{ $product['type'] }}', $event.target.value)"
+                                        class="w-12 bg-transparent border-none text-center text-sm font-black text-slate-800 focus:ring-0">
+
+                                    <button
+                                        wire:click="amountUpdated('{{ $product['id'] }}','{{ $product['type'] }}',{{ $product['amount'] + 1 }})"
+                                        class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-slate-600 hover:bg-emerald-600 hover:text-white transition-all duration-200">
+                                        <span class="material-icons text-sm">add</span>
+                                    </button>
+
+                                    <div class="w-px h-6 bg-slate-200 mx-1"></div>
+
+                                    <button
+                                        wire:click="amountUpdated('{{ $product['id'] }}','{{ $product['type'] }}', 0)"
+                                        class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-red-600 transition-colors">
+                                        <span class="material-icons text-sm">delete</span>
+                                    </button>
+                                </div>
                             </div>
-                            {{-- Product Price : End --}}
                         </div>
                     </div>
-                </div>
-                {{-- Product : End --}}
-            @empty
-            @endforelse
-        </div>
-        {{-- Product Info :: End --}}
-    @endif
-    {{-- Product Selected :: End --}}
+                @empty
+                @endforelse
+            </div>
+        @endif
+        {{-- Product Selected :: End --}}
 
+    </div>
 </div>

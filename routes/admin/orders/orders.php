@@ -3,7 +3,6 @@
 use App\Http\Controllers\Admin\OrderController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/orders/{order}/payment-history', [OrderController::class, 'paymentHistory'])->name('orders.payment-history');
 Route::get('/orders/deleted-orders', [OrderController::class, 'softDeletedOrders'])->name('orders.softDeletedOrders');
 Route::get('/orders/new-orders', [OrderController::class, 'newOrders'])->name('orders.new-orders');
 Route::get('/orders/approved-orders', [OrderController::class, 'approvedOrders'])->name('orders.approved-orders');

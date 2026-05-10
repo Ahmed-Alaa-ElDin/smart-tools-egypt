@@ -2,13 +2,16 @@
     <x-admin.waiting />
 
     @if ($customer)
-        <div class="bg-gray-50 p-2 rounded-xl shadow">
-            <div class="text-center mb-2 font-bold text-gray-900 select-none">
-                {{ __('admin/ordersPages.Payment') }}
+        <div class="w-full rounded-2xl shadow-sm border border-gray-200" style="background: linear-gradient(180deg, #f0fdf4 0%, #fff 100%);">
+            <div class="px-4 py-3 border-b border-green-100 flex items-center gap-2">
+                <span class="material-icons text-lg" style="color: #16a34a;">payments</span>
+                <span class="text-sm font-bold text-gray-800 m-0">
+                    {{ __('admin/ordersPages.Payment') }}
+                </span>
             </div>
-            <div class="flex flex-wrap justify-around items-center gap-3">
+            <div class="p-4 flex flex-wrap justify-around items-center gap-3">
                 {{-- Coupon --}}
-                <div class="flex flex-col justify-center items-center gap-0 bg-gray-200 rounded p-2">
+                <div class="flex flex-col justify-center items-center gap-0 bg-white rounded-xl border border-gray-100 shadow-sm p-3">
                     <label for="coupon" class="m-0 p-2 text-xs font-bold text-gray-900 select-none">
                         {{ __('admin/ordersPages.Coupon') }}
                     </label>
@@ -47,7 +50,7 @@
 
                 {{-- Wallet --}}
                 @if ($customer->balance > 0)
-                    <div class="flex flex-col justify-center items-center gap-0 bg-gray-200 rounded p-2">
+                    <div class="flex flex-col justify-center items-center gap-0 bg-white rounded-xl border border-gray-100 shadow-sm p-3">
                         <label for="wallet" class="m-0 p-2 text-xs font-bold text-gray-900 select-none">
                             {{ __('admin/ordersPages.Wallet') }}
                         </label>
@@ -59,7 +62,7 @@
 
                 {{-- Points --}}
                 @if ($customer->validPoints > 0)
-                    <div class="flex flex-col justify-center items-center gap-0 bg-gray-200 rounded p-2">
+                    <div class="flex flex-col justify-center items-center gap-0 bg-white rounded-xl border border-gray-100 shadow-sm p-3">
                         <label for="points" class="m-0 p-2 text-xs font-bold text-gray-900 select-none">
                             {{ __('admin/ordersPages.Points') }}
                         </label>
@@ -70,14 +73,15 @@
                 @endif
 
                 {{-- Payment Method --}}
-                <div class="flex flex-col justify-center items-center gap-0 bg-gray-200 rounded p-2">
+                <div class="flex flex-col justify-center items-center gap-2 bg-white rounded-xl border border-gray-100 shadow-sm p-3">
                     <label for="points" class="m-0 p-2 text-xs font-bold text-gray-900 select-none">
                         {{ __('admin/ordersPages.Payment Method') }}
                     </label>
                     <div class="flex flex-wrap justify-around items-center gap-2">
                         {{-- Cash on Delivery --}}
-                        <div class="select-none cursor-pointer text-xs hover:shadow-inner shadow rounded-xl py-2 px-3
-                    @if ($payment_method == 1) bg-secondary text-white shadow-inner font-bold @else bg-white @endif"
+                        <div class="select-none cursor-pointer text-xs hover:shadow-md shadow-sm rounded-xl py-2 px-3 transition-all duration-200
+                    @if ($payment_method == 1) text-white shadow-inner font-bold @else bg-white border border-gray-200 @endif"
+                            @if ($payment_method == 1) style="background: linear-gradient(135deg, #475569, #334155);" @endif
                             wire:click="$set('payment_method',1)">
                             {{ __('admin/ordersPages.Cash on delivery (COD)') }}
                         </div>
@@ -97,15 +101,17 @@
                         </div> --}}
 
                         {{-- Electronic Wallet --}}
-                        <div class="select-none cursor-pointer text-xs hover:shadow-inner shadow rounded-xl py-2 px-3
-                            @if ($payment_method == 4) bg-secondary text-white shadow-inner font-bold @else bg-white @endif"
+                        <div class="select-none cursor-pointer text-xs hover:shadow-md shadow-sm rounded-xl py-2 px-3 transition-all duration-200
+                            @if ($payment_method == 4) text-white shadow-inner font-bold @else bg-white border border-gray-200 @endif"
+                            @if ($payment_method == 4) style="background: linear-gradient(135deg, #475569, #334155);" @endif
                             wire:click="$set('payment_method',4)">
                             {{ __('admin/ordersPages.Electronic Wallet') }}
                         </div>
 
                         {{-- Flash --}}
-                        <div class="select-none cursor-pointer text-xs hover:shadow-inner shadow rounded-xl py-2 px-3
-                            @if ($payment_method == 5) bg-secondary text-white shadow-inner font-bold @else bg-white @endif"
+                        <div class="select-none cursor-pointer text-xs hover:shadow-md shadow-sm rounded-xl py-2 px-3 transition-all duration-200
+                            @if ($payment_method == 5) text-white shadow-inner font-bold @else bg-white border border-gray-200 @endif"
+                            @if ($payment_method == 5) style="background: linear-gradient(135deg, #475569, #334155);" @endif
                             wire:click="$set('payment_method',5)">
                             {{ __('admin/ordersPages.Flash') }}
                         </div>

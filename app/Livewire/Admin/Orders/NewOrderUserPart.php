@@ -14,6 +14,7 @@ class NewOrderUserPart extends Component
     public $search = "";
 
     public $customerId, $selectedCustomer;
+    public $initialAddressId, $initialPhoneId;
 
     public $addAddress = false, $defaultAddress;
     public $addPhone = false, $defaultPhone;
@@ -101,13 +102,19 @@ class NewOrderUserPart extends Component
     {
         $this->selectedCustomer = User::with('addresses', 'phones')->findOrFail($this->customerId);
 
-        $defaultAddress = $this->selectedCustomer->addresses->where('default', 1)->first();
+        if ($this->initialAddressId) {
+            $this->defaultAddress = $this->initialAddressId;
+        } else {
+            $defaultAddress = $this->selectedCustomer->addresses->where('default', 1)->first();
+            $this->defaultAddress = $defaultAddress ? $defaultAddress->id : null;
+        }
 
-        $this->defaultAddress = $defaultAddress ? $defaultAddress->id : null;
-
-        $defaultPhone = $this->selectedCustomer->phones->where('default', 1)->first();
-
-        $this->defaultPhone = $defaultPhone ? $defaultPhone->id : null;
+        if ($this->initialPhoneId) {
+            $this->defaultPhone = $this->initialPhoneId;
+        } else {
+            $defaultPhone = $this->selectedCustomer->phones->where('default', 1)->first();
+            $this->defaultPhone = $defaultPhone ? $defaultPhone->id : null;
+        }
 
         $this->addAddress = false;
 

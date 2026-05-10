@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -46,9 +47,9 @@ class OrderController extends Controller
     public function show($order_id)
     {
         $order = Order::with([
-            'products' => fn ($q) => $q->with('thumbnail'),
-            'collections' => fn ($q) => $q->with('thumbnail'),
-            "statuses"=> fn($q) => $q->orderBy('pivot_created_at'),
+            'products' => fn($q) => $q->with('thumbnail'),
+            'collections' => fn($q) => $q->with('thumbnail'),
+            "statuses" => fn($q) => $q->orderBy('pivot_created_at'),
             "invoice",
             "transactions",
             "points"
@@ -68,7 +69,29 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        //
+        abort_unless(
+            $order->isEditable(),
+            403,
+            'This order cannot be edited in its current status.'
+        );
+
+        // Set status to UnderEditing if not already
+        if ($order->status_id !== OrderStatus::UnderEditing->value) {
+            $order->update(['status_id' => OrderStatus::UnderEditing->value]);
+            $order->statuses()->attach(OrderStatus::UnderEditing->value);
+        }
+
+        $order->load([
+            'products' => fn($q) => $q->with('thumbnail'),
+            'collections' => fn($q) => $q->with('thumbnail'),
+            'invoice',
+            'transactions',
+            'user' => fn($q) => $q->with(['phones', 'addresses.country', 'addresses.governorate', 'addresses.city']),
+            'address',
+            'coupon',
+        ]);
+
+        return view('admin.orders.edit', compact('order'));
     }
 
     /**
@@ -146,14 +169,6 @@ class OrderController extends Controller
     public function deliveredOrders()
     {
         return view('admin.orders.delivered_orders');
-    }
-
-    /**
-     * Display a listing of the history of payments.
-     */
-    public function paymentHistory($order_id)
-    {
-        return view('admin.orders.payment_history', compact('order_id'));
     }
 
     /**

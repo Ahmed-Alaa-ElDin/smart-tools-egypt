@@ -15,6 +15,7 @@ class NewOrderProductsPart extends Component
     public $products = [];
     public $products_list;
     public $customerId;
+    public $initialProducts = [];
 
 
     protected $listeners = [
@@ -25,15 +26,21 @@ class NewOrderProductsPart extends Component
     {
         $this->products_list = [];
 
-        if ($this->customerId) {
+        if (!empty($this->initialProducts)) {
+            foreach ($this->initialProducts as $item) {
+                $this->addProduct($item['id'], $item['type'], $item['amount'], true);
+            }
+        } elseif ($this->customerId) {
             $cart = Cart::where('identifier', $this->customerId)
                 ->where('instance', 'cart')
                 ->first();
 
-            foreach ($cart->content as $item) {
-                $productCollection = $item->associatedModel == Product::class ? "Product" : "Collection";
+            if ($cart) {
+                foreach ($cart->content as $item) {
+                    $productCollection = $item->associatedModel == Product::class ? "Product" : "Collection";
 
-                $this->addProduct($item->id, $productCollection, $item->qty);
+                    $this->addProduct($item->id, $productCollection, $item->qty);
+                }
             }
         }
     }
@@ -70,7 +77,7 @@ class NewOrderProductsPart extends Component
             'model',
             'brand_id'
         ])
-            ->with('brand')
+            ->with(['brand','thumbnail'])
             ->whereNotIn('id', $selectedProducts)
             ->where('publish', 1)
             ->where('quantity', '>', 0)
@@ -94,6 +101,7 @@ class NewOrderProductsPart extends Component
             'description',
             'model'
         ])
+            ->with('thumbnail')
             ->whereNotIn('id', $selectedCollections)
             ->where('publish', 1)
             ->where(function ($q) use ($search) {
@@ -124,29 +132,35 @@ class NewOrderProductsPart extends Component
         $this->products_list = collect([]);
     }
 
-    public function addProduct($product_id, $product_collection, $amount = 1)
+    public function addProduct($product_id, $product_collection, $amount = 1, $force = false)
     {
         if ($product_collection == 'Product') {
-            $product = Product::with('thumbnail')->findOrFail($product_id)->toArray();
+            $product = Product::withTrashed()->with('thumbnail')->findOrFail($product_id)->toArray();
 
-            if ($product['quantity'] <= 0) {
-                return;
-            } elseif ($product['quantity'] < $amount) {
-                $amount = $product['quantity'];
+            if (!$force) {
+                if ($product['quantity'] <= 0) {
+                    return;
+                } elseif ($product['quantity'] < $amount) {
+                    $amount = $product['quantity'];
+                }
             }
 
             $product['amount'] = $amount;
+            $product['type'] = 'Product';
             $this->products[] = $product;
         } elseif ($product_collection == 'Collection') {
-            $collection = Collection::with('thumbnail')->findOrFail($product_id)->toArray();
+            $collection = Collection::withTrashed()->with('thumbnail')->findOrFail($product_id)->toArray();
 
-            if ($collection['quantity'] <= 0) {
-                return;
-            } elseif ($collection['quantity'] < $amount) {
-                $amount = $collection['quantity'];
+            if (!$force) {
+                if ($collection['quantity'] <= 0) {
+                    return;
+                } elseif ($collection['quantity'] < $amount) {
+                    $amount = $collection['quantity'];
+                }
             }
 
             $collection['amount'] = $amount;
+            $collection['type'] = 'Collection';
             $this->products[] = $collection;
         }
 
@@ -166,8 +180,13 @@ class NewOrderProductsPart extends Component
     {
         $productId = array_key_first(array_filter($this->products, fn($product) => $product['id'] == $product_id && $product['type'] == $product_collection));
 
-        if ($amount > 0 && $this->products[$productId]['quantity'] > 0) {
-            $this->products[$productId]['amount'] = $amount <= $this->products[$productId]['quantity'] ? $amount : $this->products[$productId]['quantity'];
+        if ($amount > 0) {
+            if ($this->products[$productId]['quantity'] > 0 || !empty($this->initialProducts)) {
+                $maxQty = max($this->products[$productId]['quantity'], $this->products[$productId]['amount']); // Allow at least what was already there
+                $this->products[$productId]['amount'] = $amount <= $maxQty ? $amount : $maxQty;
+            } else {
+                $this->products[$productId]['amount'] = $amount;
+            }
         } else {
             unset($this->products[$productId]);
         }
