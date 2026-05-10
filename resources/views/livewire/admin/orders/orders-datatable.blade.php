@@ -457,15 +457,6 @@
                                             </span>
                                         </button>
 
-                                        {{-- Payment History --}}
-                                        <a href="{{ route('admin.orders.payment-history', [$order->id]) }}"
-                                            title="{{ __('admin/ordersPages.Payment History') }}" class="m-0">
-                                            <span
-                                                class="material-icons p-1 text-lg w-9 h-9 text-white bg-green-500 hover:bg-green-700 rounded">
-                                                attach_money
-                                            </span>
-                                        </a>
-
                                         {{-- Edit Status --}}
                                         <button title="{{ __('admin/ordersPages.Edit Status') }}"
                                             wire:click="statusUpdateSelect({{ $order->id }})"
