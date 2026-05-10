@@ -19,6 +19,7 @@ use App\Exceptions\InsufficientStockException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection as SupportCollection;
+use App\Services\InventoryService;
 
 class OrderEditService
 {
@@ -400,17 +401,7 @@ class OrderEditService
 
     private function reverseOldInventory(): void
     {
-        $this->order->products()->each(function ($product) {
-            $product->quantity += $product->pivot->quantity;
-            $product->save();
-        });
-
-        $this->order->collections()->each(function ($collection) {
-            $collection->products()->each(function ($product) use ($collection) {
-                $product->quantity += $collection->pivot->quantity * $product->pivot->quantity;
-                $product->save();
-            });
-        });
+        InventoryService::restoreOrderInventory($this->order);
     }
 
     private function reverseOldCoupon(): void
@@ -505,18 +496,7 @@ class OrderEditService
     private function deductNewInventory(): void
     {
         $this->order->load(['products', 'collections']);
-
-        $this->order->products()->each(function ($product) {
-            $product->quantity = max(0, $product->quantity - $product->pivot->quantity);
-            $product->save();
-        });
-
-        $this->order->collections()->each(function ($collection) {
-            $collection->products()->each(function ($product) use ($collection) {
-                $product->quantity = max(0, $product->quantity - ($collection->pivot->quantity * $product->pivot->quantity));
-                $product->save();
-            });
-        });
+        InventoryService::deductOrderInventory($this->order);
     }
 
     private function decrementCouponUsage(int $couponId): void

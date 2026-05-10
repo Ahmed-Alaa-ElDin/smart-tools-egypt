@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use App\Services\Front\Deliveries\Bosta;
 use App\Services\Front\Deliveries\DeliveryService;
+use App\Services\InventoryService;
 use PDF;
 
 class OrdersDatatable extends Component
@@ -290,46 +291,7 @@ class OrdersDatatable extends Component
 
             $order->statuses()->attach($status_id);
 
-            switch ($status_id) {
-                case OrderStatus::Approved->value:
-                    $this->handleApprovedStatus($order);
-                    break;
-                case OrderStatus::Rejected->value:
-                    $order->update([
-                        'status_id' => $status_id,
-                    ]);
-
-                    $order->delete();
-                    break;
-                case OrderStatus::Prepared->value:
-                    $order->statuses()->attach(OrderStatus::QualityChecked->value);
-
-                    $order->update([
-                        'status_id' => OrderStatus::Prepared->value,
-                    ]);
-                    break;
-                case OrderStatus::Delivered->value:
-                    $order->update([
-                        'status_id' => OrderStatus::Delivered->value,
-                        'delivered_at' => now()
-                    ]);
-
-                    $order->points()->update([
-                        'status' => 1,
-                    ]);
-                    break;
-                case OrderStatus::ReturnApproved->value:
-                case OrderStatus::ReturnedToBusiness->value:
-                    $order->points()->update([
-                        'status' => 0,
-                    ]);
-                    break;
-                default:
-                    $order->update([
-                        'status_id' => $status_id,
-                    ]);
-                    break;
-            }
+            $this->handleStatusTransition($order, $status_id);
 
             $this->dispatch(
                 'swalDone',
@@ -372,49 +334,7 @@ class OrdersDatatable extends Component
             $orders->each(function ($order) use ($status_id) {
                 $order->statuses()->attach($status_id);
 
-                switch ($status_id) {
-                    case OrderStatus::Approved->value:
-                        $this->handleApprovedStatus($order);
-
-                        break;
-                    case OrderStatus::Rejected->value:
-                        $order->update([
-                            'status_id' => $status_id,
-                        ]);
-
-                        $order->delete();
-                        break;
-                    case OrderStatus::Prepared->value:
-                        $order->statuses()->attach(OrderStatus::QualityChecked->value);
-
-                        $order->update([
-                            'status_id' => OrderStatus::Prepared->value,
-                        ]);
-                        break;
-                    case OrderStatus::Delivered->value:
-                        $order->statuses()->attach(OrderStatus::Delivered->value);
-
-                        $order->update([
-                            'status_id' => OrderStatus::Delivered->value,
-                            'delivered_at' => now()
-                        ]);
-
-                        $order->points()->update([
-                            'status' => 1,
-                        ]);
-                        break;
-                    case OrderStatus::ReturnApproved->value:
-                    case OrderStatus::ReturnedToBusiness->value:
-                        $order->points()->update([
-                            'status' => 0,
-                        ]);
-                        break;
-                    default:
-                        $order->update([
-                            'status_id' => $status_id,
-                        ]);
-                        break;
-                }
+                $this->handleStatusTransition($order, $status_id);
             });
 
             $this->dispatch(
@@ -428,6 +348,88 @@ class OrdersDatatable extends Component
                 text: __("admin/ordersPages.Orders' statuses haven't been updated"),
                 icon: 'error'
             );
+        }
+    }
+
+    /**
+     * Centralized handler for all order status transitions.
+     * Manages inventory, payments, points, and delivery side-effects.
+     */
+    protected function handleStatusTransition(Order $order, int $status_id): void
+    {
+        switch ($status_id) {
+            case OrderStatus::Approved->value:
+                $this->handleApprovedStatus($order);
+                break;
+
+            case OrderStatus::Rejected->value:
+                $order->update(['status_id' => $status_id]);
+
+                // Restore inventory, coupon, wallet, points, gift points
+                InventoryService::restoreOrderInventory($order);
+                InventoryService::restoreCoupon($order);
+                InventoryService::restoreWallet($order);
+                InventoryService::restoreUsedPoints($order);
+                InventoryService::deleteGiftPoints($order);
+
+                $order->delete();
+                break;
+
+            case OrderStatus::CancellationApproved->value:
+                // Full cancellation with inventory restoration
+                InventoryService::fullCancellation($order, softDelete: true);
+
+                $order->update(['status_id' => $status_id]);
+                break;
+
+            case OrderStatus::Prepared->value:
+                $order->statuses()->attach(OrderStatus::QualityChecked->value);
+
+                $order->update([
+                    'status_id' => OrderStatus::Prepared->value,
+                ]);
+                break;
+
+            case OrderStatus::Delivered->value:
+                $order->update([
+                    'status_id' => OrderStatus::Delivered->value,
+                    'delivered_at' => now()
+                ]);
+
+                $order->points()->update([
+                    'status' => 1,
+                ]);
+                break;
+
+            case OrderStatus::ReturnApproved->value:
+            case OrderStatus::ReturnedToBusiness->value:
+                $order->update(['status_id' => $status_id]);
+
+                // Restore inventory for returned items
+                InventoryService::restoreOrderInventory($order);
+
+                // Deactivate gift points
+                $order->points()->update([
+                    'status' => 0,
+                ]);
+                break;
+
+            case OrderStatus::EditApproved->value:
+                // Inventory is handled by OrderEditService, just update status
+                $order->update(['status_id' => $status_id]);
+                break;
+
+            case OrderStatus::EditRejected->value:
+                // Revert to previous editable status
+                $order->update(['status_id' => OrderStatus::WaitingForApproval->value]);
+                $order->statuses()->attach(OrderStatus::WaitingForApproval->value);
+                break;
+
+            default:
+                $order->update([
+                    'status_id' => $status_id,
+                ]);
+                break;
         }
     }
 

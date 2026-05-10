@@ -464,32 +464,14 @@ function returnTotalOrder($order)
 
         $order->statuses()->attach(301);
 
-        // Return Products & Collections
-        $order->products()->each(function ($product) {
-            $product->quantity += $product->pivot->quantity;
-            $product->pivot->quantity = 0;
-            $product->pivot->save();
-            $product->save();
-        });
-
-        $order->collections()->each(function ($collection) {
-            $collection->products()->each(function ($product) use (&$collection) {
-                $product->quantity += $collection->pivot->quantity * $product->pivot->quantity;
-                $product->save();
-            });
-
-            $collection->pivot->quantity = 0;
-            $collection->pivot->save();
-        });
+        // Return Products & Collections (atomic)
+        \App\Services\InventoryService::restoreOrderInventory($order);
 
         // Return Gift Points
-        $order->points()->delete();
+        \App\Services\InventoryService::deleteGiftPoints($order);
 
         // Return Coupon
-        if ($order->coupon && !is_null($order->coupon->number)) {
-            $order->coupon->number += 1;
-            $order->coupon->save();
-        }
+        \App\Services\InventoryService::restoreCoupon($order);
 
         // Update Order Status :: Cancellation Accepted
         $order->update([
@@ -503,7 +485,7 @@ function returnTotalOrder($order)
         return true;
     } catch (\Throwable $th) {
         //todo ::throw $th;
-        // Update Order Status :: Cancellation Accepted
+        // Update Order Status :: Cancellation Rejected
         $order->update([
             'status_id' => 303,
         ]);
@@ -516,6 +498,7 @@ function returnTotalOrder($order)
     }
 }
 ################ ORDER :: END ##################
+
 
 
 ################ COUPON :: START ##################
