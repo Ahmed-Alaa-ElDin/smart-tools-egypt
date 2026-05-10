@@ -125,6 +125,25 @@ class Order extends Model
         return $this->hasMany(InvoiceRequest::class);
     }
 
+    public function editLogs()
+    {
+        return $this->hasMany(OrderEditLog::class);
+    }
+
+    /**
+     * Check if the order can be edited by admin.
+     */
+    public function isEditable(): bool
+    {
+        return in_array($this->status_id, [
+            OrderStatus::WaitingForApproval->value,
+            OrderStatus::Approved->value,
+            OrderStatus::Preparing->value,
+            OrderStatus::UnderEditing->value,
+            OrderStatus::WaitingForContact->value,
+        ]);
+    }
+
     public function getCanReturnedAttribute()
     {
         if ($this->delivered_at) {

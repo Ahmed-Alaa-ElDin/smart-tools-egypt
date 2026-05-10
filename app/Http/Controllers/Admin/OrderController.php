@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -68,7 +69,25 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        //
+        abort_unless(
+            $order->isEditable(),
+            403,
+            'This order cannot be edited in its current status.'
+        );
+
+        // Set status to UnderEditing if not already
+        if ($order->status_id !== OrderStatus::UnderEditing->value) {
+            $order->update(['status_id' => OrderStatus::UnderEditing->value]);
+            $order->statuses()->attach(OrderStatus::UnderEditing->value);
+        }
+
+        $order->load([
+            'products' => fn($q) => $q->with('thumbnail'),
+            'collections' => fn($q) => $q->with('thumbnail'),
+            'invoice', 'transactions', 'user', 'address', 'coupon',
+        ]);
+
+        return view('admin.orders.edit', compact('order'));
     }
 
     /**
