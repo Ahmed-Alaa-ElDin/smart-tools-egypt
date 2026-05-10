@@ -65,9 +65,9 @@
         <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
             {{ __('admin/ordersPages.Line Total') }}
         </div>
-        <div class="text-xl font-black text-slate-900 mb-0.5" dir="ltr">
-            {{ number_format($finalPrice * $quantity, 2) }}
-            <small class="text-xs font-bold text-slate-500">EGP</small>
+        <div class="text-xl font-black text-slate-900 mb-0.5 flex items-baseline gap-1">
+            <span dir="ltr">{{ number_format($finalPrice * $quantity, 2) }}</span>
+            <small class="text-xs font-bold text-slate-500">{{ __('admin/productsPages. EGP') }}</small>
         </div>
         <div class="text-[11px] font-bold text-slate-400 mb-2">
             {{ number_format($finalPrice, 2) }} × {{ $quantity }}

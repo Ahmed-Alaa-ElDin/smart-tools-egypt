@@ -280,6 +280,7 @@ return [
     "Order"                                             =>          "Order",
     "Total Amount"                                      =>          "Total Amount",
     "Pending Payment"                                   =>          "Pending Payment",
+    "Partially Paid"                                    =>          "Partially Paid",
     "Fully Paid"                                        =>          "Fully Paid",
     "Current Status"                                    =>          "Current Status",
     "Last update"                                       =>          "Last Update",

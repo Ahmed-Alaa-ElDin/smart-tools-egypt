@@ -55,7 +55,7 @@
 
                 {{-- Action Buttons --}}
                 <div class="flex items-center gap-2">
-                    @if (!$order->trashed())
+                    @if (!$order->trashed() && $order->isEditable())
                         <a href="{{ route('admin.orders.edit', $order->id) }}"
                             class="flex items-center gap-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-slate-900 font-black rounded-xl transition-all duration-200 shadow-lg hover:shadow-yellow-500/20">
                             <span class="material-icons text-lg">edit</span>
@@ -82,16 +82,35 @@
                     <span class="material-icons text-lg">payments</span>
                 </div>
             </div>
-            <div class="text-2xl font-black text-slate-800" dir="ltr">
-                {{ formatTotal($order->invoice->total ?? 0, 2) }} <small
-                    class="text-xs font-bold text-slate-400">EGP</small>
+            <div class="text-2xl font-black text-slate-800 text-start flex items-baseline gap-1">
+                <span dir="ltr">{{ formatTotal($order->invoice->total ?? 0, 2) }}</span>
+                <small class="text-xs font-bold text-slate-400">
+                    {{ __('admin/productsPages. EGP') }}
+                </small>
             </div>
             <div class="mt-2 text-start">
+                @php
+                    $unpaid = $order->invoice->unpaid;
+                    $paid = $order->invoice->paid;
+
+                    if ($unpaid == 0) {
+                        $badgeStyle = 'bg-emerald-50 text-emerald-600 border border-emerald-100';
+                        $dotStyle = 'bg-emerald-600';
+                        $label = __('admin/ordersPages.Fully Paid');
+                    } elseif ($paid > 0) {
+                        $badgeStyle = 'bg-amber-50 text-amber-600 border border-amber-100';
+                        $dotStyle = 'bg-amber-600';
+                        $label = __('admin/ordersPages.Partially Paid');
+                    } else {
+                        $badgeStyle = 'bg-rose-50 text-rose-600 border border-rose-100';
+                        $dotStyle = 'bg-rose-600';
+                        $label = __('admin/ordersPages.Pending Payment');
+                    }
+                @endphp
                 <span
-                    class="inline-flex items-center gap-1.5 text-[10px] font-black py-1 px-2.5 rounded-full {{ $order->invoice->unpaid > 0 ? 'bg-rose-50 text-rose-600 border border-rose-100' : 'bg-emerald-50 text-emerald-600 border border-emerald-100' }}">
-                    <span
-                        class="w-1.5 h-1.5 rounded-full {{ $order->invoice->unpaid > 0 ? 'bg-rose-600' : 'bg-emerald-600' }} animate-pulse"></span>
-                    {{ $order->invoice->unpaid > 0 ? __('admin/ordersPages.Pending Payment') : __('admin/ordersPages.Fully Paid') }}
+                    class="inline-flex items-center gap-1.5 text-[10px] font-black py-1 px-2.5 rounded-full {{ $badgeStyle }}">
+                    <span class="w-1.5 h-1.5 rounded-full {{ $dotStyle }} animate-pulse"></span>
+                    {{ $label }}
                 </span>
             </div>
         </div>
@@ -100,11 +119,51 @@
         @php
             $statusId = $order->status_id;
             $statusConfig = match (true) {
-                in_array($statusId, [1, 2, 14, 15, 16]) => ['bg' => 'bg-amber-500', 'light' => 'bg-amber-500/5', 'border' => 'border-amber-100', 'text' => 'text-amber-600/60', 'shadow' => 'shadow-amber-500/20', 'hover' => 'hover:shadow-amber-500/10', 'icon' => 'pending_actions'],
-                in_array($statusId, [3, 45, 12]) => ['bg' => 'bg-emerald-500', 'light' => 'bg-emerald-500/5', 'border' => 'border-emerald-100', 'text' => 'text-emerald-600/60', 'shadow' => 'shadow-emerald-500/20', 'hover' => 'hover:shadow-emerald-500/10', 'icon' => 'check_circle'],
-                in_array($statusId, [4, 5, 6]) => ['bg' => 'bg-blue-500', 'light' => 'bg-blue-500/5', 'border' => 'border-blue-100', 'text' => 'text-blue-600/60', 'shadow' => 'shadow-blue-500/20', 'hover' => 'hover:shadow-blue-500/10', 'icon' => 'local_shipping'],
-                in_array($statusId, [8, 9, 13]) => ['bg' => 'bg-rose-500', 'light' => 'bg-rose-500/5', 'border' => 'border-rose-100', 'text' => 'text-rose-600/60', 'shadow' => 'shadow-rose-500/20', 'hover' => 'hover:shadow-rose-500/10', 'icon' => 'cancel'],
-                default => ['bg' => 'bg-slate-500', 'light' => 'bg-slate-500/5', 'border' => 'border-slate-100', 'text' => 'text-slate-600/60', 'shadow' => 'shadow-slate-500/20', 'hover' => 'hover:shadow-slate-500/10', 'icon' => 'help_outline'],
+                in_array($statusId, [1, 2, 14, 15, 16]) => [
+                    'bg' => 'bg-amber-500',
+                    'light' => 'bg-amber-500/5',
+                    'border' => 'border-amber-100',
+                    'text' => 'text-amber-600/60',
+                    'shadow' => 'shadow-amber-500/20',
+                    'hover' => 'hover:shadow-amber-500/10',
+                    'icon' => 'pending_actions',
+                ],
+                in_array($statusId, [3, 45, 12]) => [
+                    'bg' => 'bg-emerald-500',
+                    'light' => 'bg-emerald-500/5',
+                    'border' => 'border-emerald-100',
+                    'text' => 'text-emerald-600/60',
+                    'shadow' => 'shadow-emerald-500/20',
+                    'hover' => 'hover:shadow-emerald-500/10',
+                    'icon' => 'check_circle',
+                ],
+                in_array($statusId, [4, 5, 6]) => [
+                    'bg' => 'bg-blue-500',
+                    'light' => 'bg-blue-500/5',
+                    'border' => 'border-blue-100',
+                    'text' => 'text-blue-600/60',
+                    'shadow' => 'shadow-blue-500/20',
+                    'hover' => 'hover:shadow-blue-500/10',
+                    'icon' => 'local_shipping',
+                ],
+                in_array($statusId, [8, 9, 13]) => [
+                    'bg' => 'bg-rose-500',
+                    'light' => 'bg-rose-500/5',
+                    'border' => 'border-rose-100',
+                    'text' => 'text-rose-600/60',
+                    'shadow' => 'shadow-rose-500/20',
+                    'hover' => 'hover:shadow-rose-500/10',
+                    'icon' => 'cancel',
+                ],
+                default => [
+                    'bg' => 'bg-slate-500',
+                    'light' => 'bg-slate-500/5',
+                    'border' => 'border-slate-100',
+                    'text' => 'text-slate-600/60',
+                    'shadow' => 'shadow-slate-500/20',
+                    'hover' => 'hover:shadow-slate-500/10',
+                    'icon' => 'help_outline',
+                ],
             };
         @endphp
         <div
@@ -115,7 +174,8 @@
             <div class="flex items-center justify-between mb-3">
                 <span
                     class="text-[10px] font-black {{ $statusConfig['text'] }} uppercase tracking-widest">{{ __('admin/ordersPages.Current Status') }}</span>
-                <div class="p-2.5 {{ $statusConfig['bg'] }} text-white rounded-xl shadow-lg {{ $statusConfig['shadow'] }}">
+                <div
+                    class="p-2.5 {{ $statusConfig['bg'] }} text-white rounded-xl shadow-lg {{ $statusConfig['shadow'] }}">
                     <span class="material-icons text-lg">{{ $statusConfig['icon'] }}</span>
                 </div>
             </div>
@@ -282,11 +342,11 @@
                                         </div>
                                     </td>
 
-                                    <td class="px-6 py-4 text-center whitespace-nowrap" dir="ltr">
+                                    <td class="px-6 py-4 text-center whitespace-nowrap">
                                         <span
-                                            class="text-sm font-black {{ $transaction->payment_amount > 0 ? 'text-emerald-600' : 'text-rose-600' }}">
-                                            {{ formatTotal($transaction->payment_amount, 2) }}
-                                            <small class="text-[10px] font-bold text-slate-400">EGP</small>
+                                            class="text-sm font-black {{ $transaction->payment_amount > 0 ? 'text-emerald-600' : 'text-rose-600' }} flex items-baseline justify-center gap-1">
+                                            <span dir="ltr">{{ formatTotal($transaction->payment_amount, 2) }}</span>
+                                            <small class="text-[10px] font-bold text-slate-400">{{ __('admin/productsPages. EGP') }}</small>
                                         </span>
                                     </td>
 
@@ -296,10 +356,14 @@
                                                 $transaction->payment_status_id,
                                             );
                                             $statusColor = match ($transaction->payment_status_id) {
-                                                App\Enums\PaymentStatus::Paid->value => 'bg-emerald-50 text-emerald-600 border-emerald-100',
-                                                App\Enums\PaymentStatus::Pending->value => 'bg-amber-50 text-amber-600 border-amber-100',
-                                                App\Enums\PaymentStatus::Failed->value => 'bg-rose-50 text-rose-600 border-rose-100',
-                                                App\Enums\PaymentStatus::Refunded->value => 'bg-blue-50 text-blue-600 border-blue-100',
+                                                App\Enums\PaymentStatus::Paid->value
+                                                    => 'bg-emerald-50 text-emerald-600 border-emerald-100',
+                                                App\Enums\PaymentStatus::Pending->value
+                                                    => 'bg-amber-50 text-amber-600 border-amber-100',
+                                                App\Enums\PaymentStatus::Failed->value
+                                                    => 'bg-rose-50 text-rose-600 border-rose-100',
+                                                App\Enums\PaymentStatus::Refunded->value
+                                                    => 'bg-blue-50 text-blue-600 border-blue-100',
                                                 default => 'bg-slate-50 text-slate-600 border-slate-100',
                                             };
                                         @endphp
@@ -345,9 +409,7 @@
                                                 @endif
 
                                                 {{-- Mark as Refunded --}}
-                                                @if (
-                                                    $transaction->payment_amount <= 0 &&
-                                                        $transaction->payment_status_id == App\Enums\PaymentStatus::Refundable->value)
+                                                @if ($transaction->payment_amount <= 0 && $transaction->payment_status_id == App\Enums\PaymentStatus::Refundable->value)
                                                     <button title="{{ __('admin/ordersPages.Confirm Refund') }}"
                                                         wire:click.prevent="refundConfirm({{ $transaction->id }})"
                                                         class="w-8 h-8 flex items-center justify-center bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white rounded-lg transition-all duration-200">
@@ -356,7 +418,8 @@
                                                 @endif
 
                                                 {{-- Remove Transaction --}}
-                                                @if (!in_array($transaction->payment_status_id, [
+                                                @if (
+                                                    !in_array($transaction->payment_status_id, [
                                                         App\Enums\PaymentStatus::Paid->value,
                                                         App\Enums\PaymentStatus::Refunded->value,
                                                     ]))
@@ -367,7 +430,8 @@
                                                     </button>
                                                 @endif
                                             @else
-                                                <span class="text-[10px] font-black text-rose-500 uppercase tracking-widest">
+                                                <span
+                                                    class="text-[10px] font-black text-rose-500 uppercase tracking-widest">
                                                     {{ __('admin/ordersPages.Removed') }}
                                                 </span>
                                             @endif

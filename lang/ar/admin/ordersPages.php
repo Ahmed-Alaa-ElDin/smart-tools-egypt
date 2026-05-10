@@ -280,6 +280,7 @@ return [
     "Order"                                             =>          "الطلب",
     "Total Amount"                                      =>          "إجمالي المبلغ",
     "Pending Payment"                                   =>          "بانتظار الدفع",
+    "Partially Paid"                                    =>          "مدفوع جزئياً",
     "Fully Paid"                                        =>          "تم الدفع بالكامل",
     "Current Status"                                    =>          "الحالة الحالية",
     "Last update"                                       =>          "آخر تحديث",
