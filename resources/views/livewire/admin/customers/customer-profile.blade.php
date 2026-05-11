@@ -98,6 +98,13 @@
                             <span class="material-icons text-sm">add_circle</span>
                             {{ __('admin/usersPages.Add Points') }}
                         </button>
+                        {{-- Add Balance Action --}}
+                        <button
+                            onclick="window.dispatchEvent(new CustomEvent('swalAddBalanceForm', { detail: { user_id: {{ $customer->id }}, title: '{{ __('admin/usersPages.Add Balance') }}', inputPlaceholder: '{{ __('admin/usersPages.Enter the amount you want to add to the balance') }}', confirmButtonText: '{{ __('admin/usersPages.Add') }}', denyButtonText: '{{ __('admin/usersPages.Cancel') }}' } }))"
+                            class="btn bg-green-500 hover:bg-green-600 text-white btn-round flex items-center justify-center gap-2 m-0 shadow-lg hover:shadow-green-500/50 transition-all duration-300">
+                            <span class="material-icons text-sm">account_balance_wallet</span>
+                            {{ __('admin/usersPages.Add Balance') }}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -456,7 +463,40 @@
                     }
                 });
             });
-            // #### Customer Add Points ####
-        </script>
+        // #### Customer Add Points ####
+
+        // #### Customer Add Balance ####
+        window.addEventListener('swalAddBalanceForm', function(e) {
+            Swal.fire({
+                title: `<div class="flex items-center justify-center gap-3 text-green-500">
+                        <span class="material-icons text-3xl">account_balance_wallet</span>
+                        <span class="font-black">${e.detail.title}</span>
+                    </div>`,
+                input: 'number',
+                inputPlaceholder: '0.00',
+                customClass: {
+                    popup: 'rounded-[2rem] border-0 shadow-2xl p-8',
+                    title: 'text-2xl font-black pt-4 ltr:font-serif rtl:font-cairo',
+                    input: 'role-grapper rounded-2xl text-center border-2 border-gray-100 focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/10 text-3xl font-black py-4 mt-6',
+                    confirmButton: 'btn bg-green-500 hover:bg-green-600 text-white btn-round px-10 py-3 mx-2 font-bold shadow-lg shadow-green-500/30',
+                    cancelButton: 'btn bg-gray-200 hover:bg-gray-300 text-gray-700 btn-round px-10 py-3 mx-2 font-bold',
+                },
+                buttonsStyling: false,
+                showCancelButton: true,
+                confirmButtonText: e.detail.confirmButtonText,
+                cancelButtonText: e.detail.denyButtonText,
+                reverseButtons: true,
+
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.dispatch('addBalance', {
+                        user_id: e.detail.user_id,
+                        balance: result.value
+                    });
+                }
+            });
+        });
+        // #### Customer Add Balance ####
+    </script>
     @endpush
 </div>

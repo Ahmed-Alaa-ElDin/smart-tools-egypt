@@ -248,4 +248,8 @@ return [
     "Pending"                                                                                       =>      "معلق",
     "Manual"                                                                                        =>      "يدوي",
     "Expired"                                                                                       =>      "منتهي",
+    "Add Balance"                                                                                   =>      "إضافة رصيد",
+    "Enter the amount you want to add to the balance"                                               =>      "ادخل المبلغ الذي تريد إضافته للرصيد",
+    "Balance added successfully"                                                                    =>      "تم إضافة الرصيد بنجاح",
+    "Balance haven't been added"                                                                    =>      "لم يتم إضافة الرصيد",
 ];

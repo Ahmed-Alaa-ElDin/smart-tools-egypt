@@ -249,4 +249,8 @@ return [
     "Pending"                                                                                       =>      "Pending",
     "Manual"                                                                                        =>      "Manual",
     "Expired"                                                                                       =>      "Expired",
+    "Add Balance"                                                                                   =>      "Add Balance",
+    "Enter the amount you want to add to the balance"                                               =>      "Enter the amount you want to add to the balance",
+    "Balance added successfully"                                                                    =>      "Balance added successfully",
+    "Balance haven't been added"                                                                    =>      "Balance haven't been added",
 ];

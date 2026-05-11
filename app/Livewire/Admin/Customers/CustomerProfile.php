@@ -10,7 +10,7 @@ class CustomerProfile extends Component
 {
     public $customer_id;
 
-    protected $listeners = ['addPoints'];
+    protected $listeners = ['addPoints', 'addBalance'];
 
     public function mount($customer_id)
     {
@@ -46,7 +46,29 @@ class CustomerProfile extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'swalDone',
-                text: __("admin/usersPages.Points haven't been added"),
+                text: __('admin/usersPages.Points haven\'t been added'),
+                icon: 'error'
+            );
+        }
+    }
+
+    public function addBalance($user_id, $balance)
+    {
+        if ($this->customer_id != $user_id) return;
+
+        try {
+            $user = User::findOrFail($user_id);
+            $user->increment('balance', $balance);
+
+            $this->dispatch(
+                'swalDone',
+                text: __('admin/usersPages.Balance added successfully'),
+                icon: 'success'
+            );
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'swalDone',
+                text: __('admin/usersPages.Balance haven\'t been added'),
                 icon: 'error'
             );
         }
