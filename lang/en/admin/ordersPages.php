@@ -310,4 +310,5 @@ return [
     "Save Phone"                                        =>          "Save Phone",
     "Street, Building, etc..."                          =>          "Street, Building, etc...",
     "Near mosque, mall, etc..."                         =>          "Near mosque, mall, etc...",
+    "Order Updated Successfully"                        =>          "Order Updated Successfully",
 ];

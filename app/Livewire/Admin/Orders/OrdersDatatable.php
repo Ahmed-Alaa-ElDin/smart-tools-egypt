@@ -120,10 +120,6 @@ class OrdersDatatable extends Component
                     ->orWhereIn('orders.id', $this->selectedOrders)
             )
             ->when(
-                $this->type != 'edited_orders',
-                fn($q) => $q->whereNotIn('orders.status_id', [OrderStatus::UnderEditing->value])
-            )
-            ->when(
                 $this->type != 'returned_orders',
                 fn($q) => $q->whereNotIn('orders.status_id', [OrderStatus::UnderReturning->value])
             )
