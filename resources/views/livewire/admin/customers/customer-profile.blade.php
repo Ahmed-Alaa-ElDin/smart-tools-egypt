@@ -16,7 +16,7 @@
                         <div
                             class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl transition-transform duration-500 group-hover:scale-105 bg-gray-100 flex items-center justify-center">
                             @if ($customer->profile_photo_path)
-                                <img src="{{ asset('storage/images/profiles/cropped100/' . $customer->profile_photo_path) }}"
+                                <img src="{{ asset('storage/images/profiles/cropped400/' . $customer->profile_photo_path) }}"
                                     class="w-full h-full object-cover construction-placeholder"
                                     data-placeholder-size="text-5xl">
                             @else
