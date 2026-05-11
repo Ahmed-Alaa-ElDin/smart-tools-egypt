@@ -209,15 +209,8 @@ class OrderEditService
             }
 
             // 11. Update status
-            $previousStatus = $this->order->status_id;
-            if ($previousStatus !== OrderStatus::UnderEditing->value) {
-                $this->order->update(['status_id' => OrderStatus::EditApproved->value]);
-                $this->order->statuses()->attach(OrderStatus::EditApproved->value);
-            } else {
-                $this->order->update(['status_id' => OrderStatus::WaitingForApproval->value]);
-                $this->order->statuses()->attach(OrderStatus::EditApproved->value);
-                $this->order->statuses()->attach(OrderStatus::WaitingForApproval->value);
-            }
+            $this->order->update(['status_id' => OrderStatus::EditApproved->value]);
+            $this->order->statuses()->attach(OrderStatus::EditApproved->value);
 
             // 12. Audit log
             $this->order->refresh();

@@ -75,12 +75,6 @@ class OrderController extends Controller
             'This order cannot be edited in its current status.'
         );
 
-        // Set status to UnderEditing if not already
-        if ($order->status_id !== OrderStatus::UnderEditing->value) {
-            $order->update(['status_id' => OrderStatus::UnderEditing->value]);
-            $order->statuses()->attach(OrderStatus::UnderEditing->value);
-        }
-
         $order->load([
             'products' => fn($q) => $q->with('thumbnail'),
             'collections' => fn($q) => $q->with('thumbnail'),
