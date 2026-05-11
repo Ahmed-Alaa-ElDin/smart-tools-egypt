@@ -241,4 +241,12 @@ return [
     "Through this form you can edit customer data"                                                  =>      "Through this form you can edit customer data",
     "Save and Add New Customer"                                                                     =>      "Save and Add New Customer",
     "Add Points"                                                                                    =>      "Add Points",
+    "Points History"                                                                                =>      "Points History",
+    "Source"                                                                                        =>      "Source",
+    "Added Date"                                                                                    =>      "Added Date",
+    "Expiry Date"                                                                                   =>      "Expiry Date",
+    "Approved"                                                                                      =>      "Approved",
+    "Pending"                                                                                       =>      "Pending",
+    "Manual"                                                                                        =>      "Manual",
+    "Expired"                                                                                       =>      "Expired",
 ];

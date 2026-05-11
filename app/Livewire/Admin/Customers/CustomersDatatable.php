@@ -185,9 +185,10 @@ class CustomersDatatable extends Component
         try {
             $user = User::findOrFail($user_id);
 
-            $user->points = $user->points + $points;
-
-            $user->save();
+            $user->points()->create([
+                'value' => $points,
+                'status' => 1, // Approved
+            ]);
 
             $this->dispatch(
                 'swalDone',

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\Admin\Users\CustomerExport;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -49,7 +50,14 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        //
+        $customer = User::with([
+            'addresses' => fn($q) => $q->with(['governorate', 'city']),
+            'phones',
+            'orders' => fn($q) => $q->with(['status', 'invoice'])->orderBy('created_at', 'desc'),
+            'points' => fn($q) => $q->orderBy('created_at', 'desc'),
+        ])->findOrFail($id);
+
+        return view('admin.customers.show', compact('customer'));
     }
 
     /**

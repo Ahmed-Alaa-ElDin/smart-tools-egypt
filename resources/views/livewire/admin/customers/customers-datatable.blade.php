@@ -149,10 +149,8 @@
                                                         alt="{{ $user->f_name . ' ' . $user->l_name . 'profile image' }}">
                                                 @else
                                                     <div
-                                                        class="h-10 w-10 rounded-full text-white bg-secondary flex justify-center items-center">
-                                                        <span class="material-icons">
-                                                            account_circle
-                                                        </span>
+                                                        class="h-10 w-10 rounded-full text-white bg-primary/40 flex justify-center items-center font-bold text-xs">
+                                                        {{ mb_substr($user->f_name, 0, 1) }}
                                                     </div>
                                                 @endif
                                             </div>

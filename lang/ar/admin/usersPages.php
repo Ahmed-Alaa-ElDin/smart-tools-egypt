@@ -240,5 +240,12 @@ return [
     "Edit Customer"                                                                                 =>      "تعديل العميل",
     "Through this form you can edit customer data"                                                  =>      "من خلال هذه الصفحة يمكنك تعديل بيانات العميل",
     "Save and Add New Customer"                                                                     =>      "حفظ واضافة عميل جديد",
-
+    "Points History"                                                                                =>      "سجل النقاط",
+    "Source"                                                                                        =>      "المصدر",
+    "Added Date"                                                                                    =>      "تاريخ الإضافة",
+    "Expiry Date"                                                                                   =>      "تاريخ الإنتهاء",
+    "Approved"                                                                                      =>      "مقبول",
+    "Pending"                                                                                       =>      "معلق",
+    "Manual"                                                                                        =>      "يدوي",
+    "Expired"                                                                                       =>      "منتهي",
 ];
