@@ -310,4 +310,5 @@ return [
     "Save Phone"                                        =>          "حفظ الهاتف",
     "Street, Building, etc..."                          =>          "الشارع، المبنى، الخ...",
     "Near mosque, mall, etc..."                         =>          "بجوار مسجد، مول، الخ...",
+    "Order Updated Successfully"                        =>          "تم تحديث الطلب بنجاح",
 ];
