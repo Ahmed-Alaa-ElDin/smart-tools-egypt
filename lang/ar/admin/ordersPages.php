@@ -311,4 +311,12 @@ return [
     "Street, Building, etc..."                          =>          "الشارع، المبنى، الخ...",
     "Near mosque, mall, etc..."                         =>          "بجوار مسجد، مول، الخ...",
     "Order Updated Successfully"                        =>          "تم تحديث الطلب بنجاح",
+    "This order cannot be edited in its current status." =>          "لا يمكن تعديل هذا الطلب في حالته الحالية.",
+    "Product :name is only available in :available quantity" =>      "المنتج :name متوفر منه :available فقط",
+    "Product :name in the collection is only available in :available quantity" => "المنتج :name في المجموعة متوفر منه :available فقط",
+    "Total changed from :old to :new" => "تغير إجمالي المبلغ من :old إلى :new",
+    "Item count changed from :old to :new" => "تغير عدد الأصناف من :old إلى :new",
+    "Coupon changed from #:old to #:new" => "تغير كود الخصم من #:old إلى #:new",
+    "Address changed from #:old to #:new" => "تغير عنوان الشحن من #:old إلى #:new",
+    "Special Customer" => "عميل مميز",
 ];

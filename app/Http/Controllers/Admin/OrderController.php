@@ -72,7 +72,7 @@ class OrderController extends Controller
         abort_unless(
             $order->isEditable(),
             403,
-            'This order cannot be edited in its current status.'
+            __('admin/ordersPages.This order cannot be edited in its current status.')
         );
 
         $order->load([

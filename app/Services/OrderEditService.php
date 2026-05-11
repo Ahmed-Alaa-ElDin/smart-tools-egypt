@@ -370,7 +370,7 @@ class OrderEditService
             if ($product->qty > $available) {
                 $name = $product->getTranslation('name', 'ar');
                 throw new InsufficientStockException(
-                    "المنتج {$name} متوفر منه {$available} فقط"
+                    __('admin/ordersPages.Product :name is only available in :available quantity', ['name' => $name, 'available' => $available])
                 );
             }
         }
@@ -385,7 +385,7 @@ class OrderEditService
                 if ($needed > $available) {
                     $name = $product->getTranslation('name', 'ar');
                     throw new InsufficientStockException(
-                        "المنتج {$name} في المجموعة متوفر منه {$available} فقط"
+                        __('admin/ordersPages.Product :name in the collection is only available in :available quantity', ['name' => $name, 'available' => $available])
                     );
                 }
             }
@@ -629,25 +629,25 @@ class OrderEditService
         $oldTotal = $before['invoice']['total'] ?? 0;
         $newTotal = $after['invoice']['total'] ?? 0;
         if ($oldTotal != $newTotal) {
-            $changes[] = "Total changed from {$oldTotal} to {$newTotal}";
+            $changes[] = __('admin/ordersPages.Total changed from :old to :new', ['old' => $oldTotal, 'new' => $newTotal]);
         }
 
         $oldItemCount = count($before['products']) + count($before['collections']);
         $newItemCount = count($after['products']) + count($after['collections']);
         if ($oldItemCount != $newItemCount) {
-            $changes[] = "Item count changed from {$oldItemCount} to {$newItemCount}";
+            $changes[] = __('admin/ordersPages.Item count changed from :old to :new', ['old' => $oldItemCount, 'new' => $newItemCount]);
         }
 
         $oldCoupon = $before['order']['coupon_id'] ?? null;
         $newCoupon = $after['order']['coupon_id'] ?? null;
         if ($oldCoupon != $newCoupon) {
-            $changes[] = "Coupon changed from #{$oldCoupon} to #{$newCoupon}";
+            $changes[] = __('admin/ordersPages.Coupon changed from #:old to #:new', ['old' => $oldCoupon ?? 'N/A', 'new' => $newCoupon ?? 'N/A']);
         }
 
         $oldAddress = $before['order']['address_id'] ?? null;
         $newAddress = $after['order']['address_id'] ?? null;
         if ($oldAddress != $newAddress) {
-            $changes[] = "Address changed from #{$oldAddress} to #{$newAddress}";
+            $changes[] = __('admin/ordersPages.Address changed from #:old to #:new', ['old' => $oldAddress ?? 'N/A', 'new' => $newAddress ?? 'N/A']);
         }
 
         return $changes;

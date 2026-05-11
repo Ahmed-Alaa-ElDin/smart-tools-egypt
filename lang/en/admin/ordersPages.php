@@ -311,4 +311,12 @@ return [
     "Street, Building, etc..."                          =>          "Street, Building, etc...",
     "Near mosque, mall, etc..."                         =>          "Near mosque, mall, etc...",
     "Order Updated Successfully"                        =>          "Order Updated Successfully",
+    "This order cannot be edited in its current status." =>          "This order cannot be edited in its current status.",
+    "Product :name is only available in :available quantity" =>      "Product :name is only available in :available quantity",
+    "Product :name in the collection is only available in :available quantity" => "Product :name in the collection is only available in :available quantity",
+    "Total changed from :old to :new" => "Total changed from :old to :new",
+    "Item count changed from :old to :new" => "Item count changed from :old to :new",
+    "Coupon changed from #:old to #:new" => "Coupon changed from #:old to #:new",
+    "Address changed from #:old to #:new" => "Address changed from #:old to #:new",
+    "Special Customer" => "Special Customer",
 ];

@@ -689,7 +689,7 @@ class OrdersDatatable extends Component
                 ])->findOrFail($order_id)->toArray();
 
         $order['user_name'] = ($order['user']['f_name']['ar'] ?? '') . " " . ($order['user']['l_name']['ar'] ?? '');
-        $order['user_type'] = "عميل مميز";
+        $order['user_type'] = __('admin/ordersPages.Special Customer');
 
         $order['items'] = array_merge($order['products'], $order['collections']);
 
@@ -762,7 +762,7 @@ class OrdersDatatable extends Component
 
         $orders = array_map(function ($order) {
             $order['user_name'] = ($order['user']['f_name']['ar'] ?? '') . " " . ($order['user']['l_name']['ar'] ?? '');
-            $order['user_type'] = "عميل مميز";
+            $order['user_type'] = __('admin/ordersPages.Special Customer');
 
             $order['items'] = array_merge($order['products'], $order['collections']);
 
