@@ -252,4 +252,9 @@ return [
     "Enter the amount you want to add to the balance"                                               =>      "ادخل المبلغ الذي تريد إضافته للرصيد",
     "Balance added successfully"                                                                    =>      "تم إضافة الرصيد بنجاح",
     "Balance haven't been added"                                                                    =>      "لم يتم إضافة الرصيد",
+    "Basic Information"                                                                             =>      "المعلومات الأساسية",
+    "Phones"                                                                                        =>      "أرقام الهواتف",
+    "Select..."                                                                                     =>      "اختر...",
+    "Search..."                                                                                     =>      "بحث...",
+    "No results found"                                                                              =>      "لا يوجد نتائج",
 ];

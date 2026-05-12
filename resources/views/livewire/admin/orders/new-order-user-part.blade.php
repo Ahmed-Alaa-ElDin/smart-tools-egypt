@@ -239,29 +239,132 @@
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                     <div class="space-y-1">
                                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">{{ __('admin/ordersPages.Country') }}</label>
-                                        <select wire:model.live='newAddress.country_id' class="w-full rounded-xl border-slate-200 text-sm font-bold focus:ring-slate-900 focus:border-slate-900">
-                                            @foreach ($countries as $country)
-                                                <option value="{{ $country['id'] }}">{{ $country['name'][session('locale')] }}</option>
-                                            @endforeach
-                                        </select>
+                                        <div x-data="{
+                                            search: '',
+                                            open: false,
+                                            selectedId: $wire.entangle('newAddress.country_id').live,
+                                            options: {{ json_encode(collect($countries)->map(fn($c) => ['id' => $c['id'], 'name' => $c['name'][session('locale')]])->values()) }},
+                                            get filteredOptions() {
+                                                if (this.search === '') return this.options;
+                                                return this.options.filter(i => i.name.toLowerCase().includes(this.search.toLowerCase()));
+                                            },
+                                            get selectedName() {
+                                                let selected = this.options.find(i => i.id == this.selectedId);
+                                                return selected ? selected.name : '{{ __('admin/ordersPages.Select...') }}';
+                                            }
+                                        }" class="relative w-full" @click.away="open = false">
+                                            <div @click="open = !open" 
+                                                 class="w-full py-2 px-3 rounded-xl bg-white border border-slate-200 text-sm font-bold cursor-pointer flex justify-between items-center transition-all duration-200 focus:ring-slate-900 focus:border-slate-900">
+                                                <span x-text="selectedName" :class="!selectedId ? 'text-slate-400' : 'text-slate-800'"></span>
+                                                <span class="material-icons text-sm text-slate-400">expand_more</span>
+                                            </div>
+                                            
+                                            <div x-show="open" style="display: none;"
+                                                 class="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
+                                                <div class="p-2 border-b border-slate-100 bg-slate-50">
+                                                    <input x-model="search" type="text" class="w-full py-1.5 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900" placeholder="{{ __('admin/ordersPages.Search ...') }}">
+                                                </div>
+                                                <div class="max-h-48 overflow-y-auto py-1">
+                                                    <template x-for="option in filteredOptions" :key="option.id">
+                                                        <div @click="selectedId = option.id; open = false; search = '';" 
+                                                             class="px-3 py-2 text-sm font-bold cursor-pointer hover:bg-slate-50 flex items-center justify-between transition-colors">
+                                                            <span x-text="option.name" :class="selectedId == option.id ? 'text-slate-900' : 'text-slate-700'"></span>
+                                                            <span x-show="selectedId == option.id" class="material-icons text-sm text-slate-900">check</span>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="space-y-1">
                                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">{{ __('admin/ordersPages.Governorate') }}</label>
-                                        <select wire:model.live='newAddress.governorate_id' class="w-full rounded-xl border-slate-200 text-sm font-bold focus:ring-slate-900 focus:border-slate-900">
-                                            <option value="">{{ __('admin/ordersPages.Select...') }}</option>
-                                            @foreach ($governorates as $gov)
-                                                <option value="{{ $gov['id'] }}">{{ $gov['name'][session('locale')] }}</option>
-                                            @endforeach
-                                        </select>
+                                        <div x-data="{
+                                            search: '',
+                                            open: false,
+                                            selectedId: $wire.entangle('newAddress.governorate_id').live,
+                                            get options() {
+                                                let data = $wire.governorates || [];
+                                                return data.map(g => ({
+                                                    id: g.id,
+                                                    name: g.name && g.name['{{ session('locale') }}'] ? g.name['{{ session('locale') }}'] : ''
+                                                }));
+                                            },
+                                            get filteredOptions() {
+                                                if (this.search === '') return this.options;
+                                                return this.options.filter(i => i.name.toLowerCase().includes(this.search.toLowerCase()));
+                                            },
+                                            get selectedName() {
+                                                let selected = this.options.find(i => i.id == this.selectedId);
+                                                return selected ? selected.name : '{{ __('admin/ordersPages.Select...') }}';
+                                            }
+                                        }" class="relative w-full" x-init="$watch('options', () => search = '')" @click.away="open = false">
+                                            <div @click="open = !open" 
+                                                 class="w-full py-2 px-3 rounded-xl bg-white border border-slate-200 text-sm font-bold cursor-pointer flex justify-between items-center transition-all duration-200 focus:ring-slate-900 focus:border-slate-900">
+                                                <span x-text="selectedName" :class="!selectedId ? 'text-slate-400' : 'text-slate-800'"></span>
+                                                <span class="material-icons text-sm text-slate-400">expand_more</span>
+                                            </div>
+                                            
+                                            <div x-show="open" style="display: none;"
+                                                 class="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
+                                                <div class="p-2 border-b border-slate-100 bg-slate-50">
+                                                    <input x-model="search" type="text" class="w-full py-1.5 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900" placeholder="{{ __('admin/ordersPages.Search ...') }}">
+                                                </div>
+                                                <div class="max-h-48 overflow-y-auto py-1">
+                                                    <template x-for="option in filteredOptions" :key="option.id">
+                                                        <div @click="selectedId = option.id; open = false; search = '';" 
+                                                             class="px-3 py-2 text-sm font-bold cursor-pointer hover:bg-slate-50 flex items-center justify-between transition-colors">
+                                                            <span x-text="option.name" :class="selectedId == option.id ? 'text-slate-900' : 'text-slate-700'"></span>
+                                                            <span x-show="selectedId == option.id" class="material-icons text-sm text-slate-900">check</span>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="space-y-1">
                                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">{{ __('admin/ordersPages.City') }}</label>
-                                        <select wire:model.live='newAddress.city_id' class="w-full rounded-xl border-slate-200 text-sm font-bold focus:ring-slate-900 focus:border-slate-900">
-                                            <option value="">{{ __('admin/ordersPages.Select...') }}</option>
-                                            @foreach ($cities as $city)
-                                                <option value="{{ $city['id'] }}">{{ $city['name'][session('locale')] }}</option>
-                                            @endforeach
-                                        </select>
+                                        <div x-data="{
+                                            search: '',
+                                            open: false,
+                                            selectedId: $wire.entangle('newAddress.city_id').live,
+                                            get options() {
+                                                let data = $wire.cities || [];
+                                                return data.map(c => ({
+                                                    id: c.id,
+                                                    name: c.name && c.name['{{ session('locale') }}'] ? c.name['{{ session('locale') }}'] : ''
+                                                }));
+                                            },
+                                            get filteredOptions() {
+                                                if (this.search === '') return this.options;
+                                                return this.options.filter(i => i.name.toLowerCase().includes(this.search.toLowerCase()));
+                                            },
+                                            get selectedName() {
+                                                let selected = this.options.find(i => i.id == this.selectedId);
+                                                return selected ? selected.name : '{{ __('admin/ordersPages.Select...') }}';
+                                            }
+                                        }" class="relative w-full" x-init="$watch('options', () => search = '')" @click.away="open = false">
+                                            <div @click="open = !open" 
+                                                 class="w-full py-2 px-3 rounded-xl bg-white border border-slate-200 text-sm font-bold cursor-pointer flex justify-between items-center transition-all duration-200 focus:ring-slate-900 focus:border-slate-900">
+                                                <span x-text="selectedName" :class="!selectedId ? 'text-slate-400' : 'text-slate-800'"></span>
+                                                <span class="material-icons text-sm text-slate-400">expand_more</span>
+                                            </div>
+                                            
+                                            <div x-show="open" style="display: none;"
+                                                 class="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
+                                                <div class="p-2 border-b border-slate-100 bg-slate-50">
+                                                    <input x-model="search" type="text" class="w-full py-1.5 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900" placeholder="{{ __('admin/ordersPages.Search ...') }}">
+                                                </div>
+                                                <div class="max-h-48 overflow-y-auto py-1">
+                                                    <template x-for="option in filteredOptions" :key="option.id">
+                                                        <div @click="selectedId = option.id; open = false; search = '';" 
+                                                             class="px-3 py-2 text-sm font-bold cursor-pointer hover:bg-slate-50 flex items-center justify-between transition-colors">
+                                                            <span x-text="option.name" :class="selectedId == option.id ? 'text-slate-900' : 'text-slate-700'"></span>
+                                                            <span x-show="selectedId == option.id" class="material-icons text-sm text-slate-900">check</span>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="sm:col-span-3 space-y-1">
                                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">{{ __('admin/ordersPages.Address Details') }}</label>

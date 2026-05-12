@@ -1,401 +1,406 @@
-<div>
+<div class="flex flex-col gap-5">
     {{-- Loader : Start --}}
     <x-admin.waiting />
     {{-- Loader : End --}}
 
-    <form enctype="multipart/form-data">
+    <form enctype="multipart/form-data" class="flex flex-col gap-5">
 
-        {{-- Image --}}
-        <div class="grid grid-cols-12 gap-x-6 gap-y-2 items-center bg-gray-100 p-2 text-center my-2  rounded">
-
-            {{-- Loading Spinner --}}
-            <div wire:loading wire:target="photo" class="col-span-12 my-2">
-                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
-                    preserveAspectRatio="xMidYMid meet" viewBox="0 0 50 50" class="animate-spin inline-block">
-                    <path fill="currentColor"
-                        d="M41.9 23.9c-.3-6.1-4-11.8-9.5-14.4c-6-2.7-13.3-1.6-18.3 2.6c-4.8 4-7 10.5-5.6 16.6c1.3 6 6 10.9 11.9 12.5c7.1 2 13.6-1.4 17.6-7.2c-3.6 4.8-9.1 8-15.2 6.9c-6.1-1.1-11.1-5.7-12.5-11.7c-1.5-6.4 1.5-13.1 7.2-16.4c5.9-3.4 14.2-2.1 18.1 3.7c1 1.4 1.7 3.1 2 4.8c.3 1.4.2 2.9.4 4.3c.2 1.3 1.3 3 2.8 2.1c1.3-.8 1.2-2.5 1.1-3.8c0-.4.1.7 0 0z" />
-                </svg>
-                <span> &nbsp;&nbsp; {{ __('admin/usersPages.Uploading ...') }}</span>
+        {{-- Image Section --}}
+        <div class="w-full rounded-2xl shadow-sm border border-gray-200" style="background: linear-gradient(180deg, #f8fafc 0%, #fff 100%);">
+            <div class="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
+                <span class="material-icons text-lg" style="color: #3b82f6;">account_circle</span>
+                <h2 class="text-sm font-bold text-gray-800 m-0">{{ __('admin/usersPages.Profile Image') }}</h2>
             </div>
-
-            {{-- preview --}}
-            @if ($temp_path || $oldImage)
-                <div class="col-span-12 text-center w-full my-2">
-                    <img src="{{ $temp_path ?? asset('storage/images/profiles/original/' . $oldImage) }}"
-                        class="rounded-xl w-1/2 md:w-1/4 m-auto">
+            <div class="p-4 flex flex-col items-center gap-4">
+                {{-- Loading Spinner --}}
+                <div wire:loading wire:target="photo" class="w-full text-center mb-4">
+                    <div class="text-blue-500 inline-flex items-center justify-center gap-2 font-semibold">
+                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em"
+                            preserveAspectRatio="xMidYMid meet" viewBox="0 0 50 50" class="animate-spin inline-block text-xl">
+                            <path fill="currentColor"
+                                d="M41.9 23.9c-.3-6.1-4-11.8-9.5-14.4c-6-2.7-13.3-1.6-18.3 2.6c-4.8 4-7 10.5-5.6 16.6c1.3 6 6 10.9 11.9 12.5c7.1 2 13.6-1.4 17.6-7.2c-3.6 4.8-9.1 8-15.2 6.9c-6.1-1.1-11.1-5.7-12.5-11.7c-1.5-6.4 1.5-13.1 7.2-16.4c5.9-3.4 14.2-2.1 18.1 3.7c1 1.4 1.7 3.1 2 4.8c.3 1.4.2 2.9.4 4.3c.2 1.3 1.3 3 2.8 2.1c1.3-.8 1.2-2.5 1.1-3.8c0-.4.1.7 0 0z" />
+                        </svg>
+                        <span>{{ __('admin/usersPages.Uploading ...') }}</span>
+                    </div>
                 </div>
-                <div class="col-span-12 text-center">
-                    <button class="btn btn-danger btn-sm text-bold"
-                        wire:click.prevent='removePhoto'>{{ __('admin/usersPages.Remove / Replace Profile Image') }}</button>
-                </div>
-            @else
-                {{-- Upload New Image --}}
-                <label for="photo" class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">
-                    {{ __('admin/usersPages.Profile Image') }} </label>
-                <input
-                    class="col-span-12 md:col-span-10 block w-full pl-3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300"
-                    id="photo" type="file" type="image" wire:model="photo">
 
-                @error('photo')
-                    <span class="col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">{{ $message }}</span>
-                @enderror
-            @endif
-
-        </div>
-
-        {{-- First Name --}}
-        <div class="grid grid-cols-12 gap-x-6 gap-y-2 items-center bg-red-100 p-2 rounded text-center my-2">
-            <label
-                class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">{{ __('admin/usersPages.First Name') }}</label>
-            {{-- First Name Ar --}}
-            <div class="col-span-6 md:col-span-5">
-                <input
-                    class="first_input py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('f_name.ar') border-red-900 border-2 @enderror"
-                    type="text" wire:model.live.blur="f_name.ar" placeholder="{{ __('admin/usersPages.in Arabic') }}"
-                    tabindex="1" required>
-                @error('f_name.ar')
-                    <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                        {{ $message }}</div>
-                @enderror
-            </div>
-            {{-- First Name En --}}
-            <div class="col-span-6 md:col-span-5 ">
-                <input
-                    class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('f_name.en') border-red-900 border-2 @enderror"
-                    type="text" wire:model.live.blur="f_name.en" placeholder="{{ __('admin/usersPages.in English') }}"
-                    tabindex="3">
-                @error('f_name.en')
-                    <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                        {{ $message }}</div>
-                @enderror
+                {{-- preview --}}
+                @if ($temp_path || $oldImage)
+                    <div class="text-center w-full">
+                        <img src="{{ $temp_path ?? asset('storage/images/profiles/original/' . $oldImage) }}"
+                            class="rounded-xl w-32 h-32 object-cover m-auto shadow-sm border border-gray-200">
+                    </div>
+                    <div class="text-center mt-2">
+                        <button class="bg-red-50 hover:bg-red-100 text-red-600 font-bold py-1.5 px-4 rounded-xl text-xs transition-colors border border-red-200"
+                            wire:click.prevent='removePhoto'>
+                            <span class="material-icons text-sm align-middle mr-1">delete</span>
+                            {{ __('admin/usersPages.Remove / Replace Profile Image') }}
+                        </button>
+                    </div>
+                @else
+                    {{-- Upload New Image --}}
+                    <div class="w-full md:w-1/2">
+                        <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-xl cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 file:mr-4 file:py-2 file:px-4 file:rounded-l-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                            id="photo" type="file" wire:model="photo" accept="image/*">
+                        @error('photo')
+                            <p class="mt-2 text-xs text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                @endif
             </div>
         </div>
 
-        {{-- Last Name --}}
-        <div class="grid grid-cols-12 gap-x-6 gap-y-2 items-center bg-gray-100 p-2 rounded text-center">
-            <label
-                class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">{{ __('admin/usersPages.Last Name') }}</label>
-
-            {{-- Last Name Ar --}}
-            <div class="col-span-6 md:col-span-5 ">
-                <input
-                    class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('l_name.ar') border-red-900 border-2 @enderror"
-                    type="text" wire:model.live.blur="l_name.ar" placeholder="{{ __('admin/usersPages.in Arabic') }}"
-                    tabindex="2" required>
-                @error('l_name.ar')
-                    <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                        {{ $message }}</div>
-                @enderror
-
+        {{-- Basic Information Section --}}
+        <div class="w-full rounded-2xl shadow-sm border border-gray-200" style="background: linear-gradient(180deg, #fef2f2 0%, #fff 100%);">
+            <div class="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
+                <span class="material-icons text-lg" style="color: #ef4444;">badge</span>
+                <h2 class="text-sm font-bold text-gray-800 m-0">{{ __('admin/usersPages.Basic Information') }}</h2>
             </div>
-
-            {{-- Last Name En --}}
-            <div class="col-span-6 md:col-span-5 ">
-                <input
-                    class="py-1 w-full rounded text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('l_name.en') border-red-900 border-2 @enderror"
-                    type="text" wire:model.live.blur="l_name.en" placeholder="{{ __('admin/usersPages.in English') }}"
-                    tabindex="4">
-                @error('l_name.en')
-                    <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                        {{ $message }}</div>
-                @enderror
-
-            </div>
-        </div>
-
-        {{-- Contacts --}}
-        <div class="grid grid-cols-12 gap-x-6 gap-y-2 items-center bg-red-100 p-2 rounded text-center my-2">
-            <label
-                class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">{{ __('admin/usersPages.Contacts') }}</label>
-
-            {{-- Email --}}
-            <div class="col-span-12 sm:col-span-8 sm:col-start-3 md:col-span-5">
-                <input
-                    class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('email') border-red-900 border-2 @enderror"
-                    type="email" wire:model.live.blur="email" placeholder="{{ __('admin/usersPages.Email') }}"
-                    dir="ltr" tabindex="5">
-                @error('email')
-                    <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                        {{ $message }}</div>
-                @enderror
-            </div>
-
-            {{-- Phone --}}
-            <div class="col-span-12 md:col-span-5 grid grid-cols-6 gap-y-2">
-                @foreach ($phones as $index => $phone)
-                    {{-- Add remove button if their are more than one phone number --}}
-                    @if (count($phones) > 1)
-                        <div class="col-span-1">
-                            <button
-                                class=" bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full shadow btn btn-xs"
-                                wire:click.prevent='removePhone({{ $index }})'
-                                title="{{ __('admin/usersPages.Delete') }}">
-                                <span class="material-icons">
-                                    close
-                                </span>
-                            </button>
+            
+            <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                {{-- First Name --}}
+                <div class="flex flex-col gap-3">
+                    <label class="text-xs font-bold text-gray-700 m-0">{{ __('admin/usersPages.First Name') }}</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <input class="w-full py-2.5 px-3 rounded-xl text-center text-sm border-gray-200 bg-white focus:outline-0 focus:ring-2 focus:ring-red-200 focus:border-red-300 transition-all duration-200 @error('f_name.ar') border-red-500 @enderror"
+                                type="text" wire:model.live.blur="f_name.ar" placeholder="{{ __('admin/usersPages.in Arabic') }}" tabindex="1" required>
+                            @error('f_name.ar') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                         </div>
-                    @endif
-
-                    {{-- phone input field --}}
-                    <input
-                        class="@if (count($phones) > 1) col-span-4 @else col-span-5 @endif py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                        type="text" wire:model.live.blur="phones.{{ $index }}.phone"
-                        placeholder="{{ __('admin/usersPages.Phone') }}" dir="ltr" tabindex="6">
-
-                    {{-- Default Radio Button --}}
-                    <div class="col-span-1  flex flex-column justify-center items-center gap-1">
-                        <label for="defaultPhone{{ $index }}"
-                            class="text-xs text-black m-0 cursor-pointer">{{ __('admin/usersPages.Default') }}</label>
-                        <input type="radio" id="defaultPhone{{ $index }}" wire:model.live.blur="defaultPhone"
-                            value="{{ $index }}"
-                            class="appearance-none checked:bg-primary outline-none ring-0 cursor-pointer">
-                    </div>
-                @endforeach
-
-                {{-- Error Messages --}}
-                @error('phones.*.phone')
-                    <div class="inline-block mt-2 col-span-6 bg-red-700 rounded text-white shadow px-3 py-1">
-                        {{ $message }}</div>
-                @enderror
-
-                @error('defaultPhone')
-                    <div class="inline-block mt-2 col-span-3 bg-red-700 rounded text-white shadow px-3 py-1">
-                        {{ $message }}</div>
-                @enderror
-
-
-                {{-- Add New Phone Button --}}
-                <button
-                    class="col-start-3 col-span-2 bg-rose-500 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm text-center text-xs"
-                    wire:click.prevent="addPhone" title="{{ __('admin/usersPages.Add') }}">
-                    <span class="material-icons rtl:ml-1 ltr:mr-1">
-                        add
-                    </span>
-                    {{ __('admin/usersPages.Add') }}</button>
-            </div>
-        </div>
-
-        {{-- Other Information --}}
-        <div class="grid grid-cols-12 gap-x-6 gap-y-2 items-center bg-gray-100 p-2 rounded text-center">
-            <label
-                class="col-span-12 lg:col-span-2 text-black font-bold m-0 text-center">{{ __('admin/usersPages.Other Information') }}</label>
-
-            <div class="col-span-12 lg:col-span-10 grid grid-cols-12 gap-x-4 gap-y-2 items-center">
-                {{-- Gender --}}
-                <div
-                    class="col-span-12 sm:col-span-6  xl:col-span-3 py-1 grid grid-cols-3 gap-x-4 gap-y-2 items-center">
-                    <label for="gender"
-                        class="col-span-1 select-none cursor-pointer text-black font-medium m-0">{{ __('admin/usersPages.Gender') }}</label>
-
-                    <div class="col-span-2">
-                        <select
-                            class="col-span-2 rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('gender') border-red-900 border-2 @enderror"
-                            wire:model.live.blur="gender" id="gender" tabindex="7">
-                            <option value="0">{{ __('admin/usersPages.Male') }}</option>
-                            <option value="1">{{ __('admin/usersPages.Female') }}</option>
-                        </select>
-                        @error('gender')
-                            <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                                {{ $message }}</div>
-                        @enderror
+                        <div>
+                            <input class="w-full py-2.5 px-3 rounded-xl text-center text-sm border-gray-200 bg-white focus:outline-0 focus:ring-2 focus:ring-red-200 focus:border-red-300 transition-all duration-200 @error('f_name.en') border-red-500 @enderror"
+                                type="text" wire:model.live.blur="f_name.en" placeholder="{{ __('admin/usersPages.in English') }}" tabindex="3">
+                            @error('f_name.en') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                        </div>
                     </div>
                 </div>
 
-                {{-- Birth Date --}}
-                <div
-                    class="col-span-12 sm:col-span-12 xl:col-span-9 py-1 grid grid-cols-3 gap-x-4 gap-y-2 items-center">
-                    <label for="birth_date"
-                        class="col-span-1 select-none cursor-pointer text-black font-medium m-0">{{ __('admin/usersPages.Birth Date') }}</label>
-                    <div class="col-span-2">
-                        <input
-                            class="rounded w-full cursor-pointer py-1 text-center border-gray-300 focus:outline-gray-600 focus:ring-gray-300 focus:border-gray-300 @error('birth_date') border-red-900 border-2 @enderror"
-                            type="date" wire:model.live.blur="birth_date" id="birth_date" tabindex="9" required>
-                        @error('birth_date')
-                            <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
-                                {{ $message }}</div>
-                        @enderror
+                {{-- Last Name --}}
+                <div class="flex flex-col gap-3">
+                    <label class="text-xs font-bold text-gray-700 m-0">{{ __('admin/usersPages.Last Name') }}</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <input class="w-full py-2.5 px-3 rounded-xl text-center text-sm border-gray-200 bg-white focus:outline-0 focus:ring-2 focus:ring-gray-200 focus:border-gray-300 transition-all duration-200 @error('l_name.ar') border-red-500 @enderror"
+                                type="text" wire:model.live.blur="l_name.ar" placeholder="{{ __('admin/usersPages.in Arabic') }}" tabindex="2" required>
+                            @error('l_name.ar') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                        </div>
+                        <div>
+                            <input class="w-full py-2.5 px-3 rounded-xl text-center text-sm border-gray-200 bg-white focus:outline-0 focus:ring-2 focus:ring-gray-200 focus:border-gray-300 transition-all duration-200 @error('l_name.en') border-red-500 @enderror"
+                                type="text" wire:model.live.blur="l_name.en" placeholder="{{ __('admin/usersPages.in English') }}" tabindex="4">
+                            @error('l_name.en') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                        </div>
                     </div>
+                </div>
+
+                {{-- Email --}}
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-gray-700 m-0">{{ __('admin/usersPages.Email') }}</label>
+                    <input class="w-full py-2.5 px-3 rounded-xl text-center text-sm border-gray-200 bg-white focus:outline-0 focus:ring-2 focus:ring-red-200 focus:border-red-300 transition-all duration-200 @error('email') border-red-500 @enderror"
+                        type="email" wire:model.live.blur="email" placeholder="{{ __('admin/usersPages.Email') }}" dir="ltr" tabindex="5">
+                    @error('email') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                </div>
+
+                {{-- Other Info (Gender & Birth Date) --}}
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-bold text-gray-700 m-0">{{ __('admin/usersPages.Other Information') }}</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <select class="w-full py-2.5 px-3 rounded-xl text-center text-sm border-gray-200 bg-white focus:outline-0 focus:ring-2 focus:ring-gray-200 focus:border-gray-300 transition-all duration-200 cursor-pointer @error('gender') border-red-500 @enderror"
+                                wire:model.live.blur="gender" id="gender" tabindex="7">
+                                <option value="0">{{ __('admin/usersPages.Male') }}</option>
+                                <option value="1">{{ __('admin/usersPages.Female') }}</option>
+                            </select>
+                            @error('gender') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                        </div>
+                        <div>
+                            <input class="w-full py-2.5 px-3 rounded-xl text-center text-sm border-gray-200 bg-white focus:outline-0 focus:ring-2 focus:ring-gray-200 focus:border-gray-300 transition-all duration-200 cursor-pointer @error('birth_date') border-red-500 @enderror"
+                                type="date" wire:model.live.blur="birth_date" id="birth_date" tabindex="9" required>
+                            @error('birth_date') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Phones --}}
+                <div class="col-span-1 md:col-span-2 mt-2">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="text-xs font-bold text-gray-700 m-0">{{ __('admin/usersPages.Phones') }}</label>
+                        <button wire:click.prevent="addPhone" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold py-1 px-3 rounded-lg text-xs transition-colors border border-rose-200 flex items-center gap-1">
+                            <span class="material-icons text-sm">add</span> {{ __('admin/usersPages.Add') }}
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                        @foreach ($phones as $index => $phone)
+                            <div class="relative bg-white rounded-xl border border-gray-100 shadow-sm p-3 flex flex-col gap-2">
+                                <div class="flex justify-between items-center">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" wire:model.live.blur="defaultPhone" value="{{ $index }}" class="w-4 h-4 text-red-500 focus:ring-red-400 border-gray-300">
+                                        <span class="text-xs font-semibold text-gray-600">{{ __('admin/usersPages.Default') }}</span>
+                                    </label>
+                                    @if (count($phones) > 1)
+                                        <button wire:click.prevent='removePhone({{ $index }})' class="text-red-400 hover:text-red-600 p-0.5 rounded transition-colors">
+                                            <span class="material-icons text-sm">close</span>
+                                        </button>
+                                    @endif
+                                </div>
+                                <div>
+                                    <input class="w-full py-2 px-3 rounded-lg text-center text-sm border-gray-200 bg-gray-50 focus:outline-0 focus:ring-2 focus:ring-red-200 focus:border-red-300 transition-all duration-200 @error('phones.'.$index.'.phone') border-red-500 @enderror"
+                                        type="text" wire:model.live.blur="phones.{{ $index }}.phone" placeholder="{{ __('admin/usersPages.Phone') }}" dir="ltr" tabindex="6">
+                                    @error('phones.'.$index.'.phone') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    @error('defaultPhone') <p class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
             </div>
         </div>
 
-        {{-- Address --}}
-        <div class="grid grid-cols-12 gap-x-4 gap-y-2 items-center bg-red-100 p-2 rounded text-center my-2">
-            <label
-                class="col-span-12 md:col-span-2 text-black font-bold m-0 text-center">{{ __('admin/usersPages.Address') }}</label>
-            {{-- User Address Select Boxes --}}
-            <div class="grid grid-cols-3 gap-x-4 gap-y-2 col-span-12 md:col-span-10">
+        {{-- Address Section --}}
+        <div class="w-full rounded-2xl shadow-sm border border-gray-200" style="background: linear-gradient(180deg, #f0fdf4 0%, #fff 100%);">
+            <div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <span class="material-icons text-lg" style="color: #22c55e;">location_on</span>
+                    <h2 class="text-sm font-bold text-gray-800 m-0">{{ __('admin/usersPages.Address') }}</h2>
+                </div>
+                <button wire:click.prevent="addAddress" class="bg-green-50 hover:bg-green-100 text-green-600 font-bold py-1 px-3 rounded-lg border border-green-200 shadow-sm text-xs flex items-center gap-1 transition-colors">
+                    <span class="material-icons text-sm">add</span> {{ __('admin/usersPages.Add') }}
+                </button>
+            </div>
+            
+            <div class="p-4 flex flex-col gap-4">
                 @foreach ($addresses as $index => $address)
-                    <div class="bg-red-200 rounded col-span-3 grid grid-cols-3 gap-x-4 gap-y-2 p-2 ">
-                        <div class="col-span-3 flex justify-around bg-red-300 p-2 rounded-xl md:p-1">
+                    <div class="relative bg-white rounded-xl border border-gray-100 shadow-sm p-4" wire:key="address-{{ $index }}">
+                        {{-- Remove Button & Default Radio --}}
+                        <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-50">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" wire:model.live.blur="defaultAddress" value="{{ $index }}" class="w-4 h-4 text-green-500 focus:ring-green-400 border-gray-300">
+                                <span class="text-sm font-semibold text-gray-700">{{ __('admin/usersPages.Default') }}</span>
+                            </label>
+                            @if (count($addresses) > 1)
+                                <button wire:click.prevent='removeAddress({{ $index }})' class="text-red-500 hover:text-red-700 p-1 rounded-lg hover:bg-red-50 transition-colors">
+                                    <span class="material-icons text-sm">close</span>
+                                </button>
+                            @endif
+                        </div>
 
-                            {{-- Default Radio Button --}}
-                            <div class="flex flex-column md:flex-row justify-center items-center gap-1">
-                                <label for="defaultAddress{{ $index }}"
-                                    class="text-xs text-black m-0 cursor-pointer">{{ __('admin/usersPages.Default') }}</label>
-                                <input type="radio" id="defaultAddress{{ $index }}"
-                                    wire:model.live.blur="defaultAddress" value="{{ $index }}"
-                                    class="appearance-none checked:bg-primary outline-none ring-0 cursor-pointer">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+                            {{-- Country --}}
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('admin/usersPages.Country') }}</label>
+                                <div x-data="{
+                                    search: '',
+                                    open: false,
+                                    selectedId: $wire.entangle('addresses.{{ $index }}.country_id').live,
+                                    options: {{ json_encode(collect($countries)->map(fn($c) => ['id' => $c['id'], 'name' => $c['name'][session('locale')]])->values()) }},
+                                    get filteredOptions() {
+                                        if (this.search === '') return this.options;
+                                        return this.options.filter(i => i.name.toLowerCase().includes(this.search.toLowerCase()));
+                                    },
+                                    get selectedName() {
+                                        let selected = this.options.find(i => i.id == this.selectedId);
+                                        return selected ? selected.name : '{{ __('admin/usersPages.Select...') }}';
+                                    }
+                                }" class="relative w-full" @click.away="open = false">
+                                    <div @click="open = !open" 
+                                         class="w-full py-2 px-3 rounded-xl text-center text-sm border border-gray-200 bg-white cursor-pointer flex justify-between items-center transition-all duration-200 hover:border-green-300 @error('addresses.'.$index.'.country_id') border-red-500 @enderror">
+                                        <span x-text="selectedName" :class="!selectedId ? 'text-gray-400' : 'text-gray-700'"></span>
+                                        <span class="material-icons text-sm text-gray-400">expand_more</span>
+                                    </div>
+                                    
+                                    <div x-show="open" style="display: none;"
+                                         class="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+                                        <div class="p-2 border-b border-gray-100 bg-gray-50">
+                                            <input x-model="search" type="text" class="w-full py-1.5 px-3 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-green-400 focus:ring-1 focus:ring-green-400" placeholder="{{ __('admin/usersPages.Search...') }}">
+                                        </div>
+                                        <div class="max-h-48 overflow-y-auto py-1">
+                                            <template x-for="option in filteredOptions" :key="option.id">
+                                                <div @click="selectedId = option.id; open = false; search = '';" 
+                                                     class="px-3 py-2 text-sm cursor-pointer hover:bg-green-50 flex items-center justify-between transition-colors">
+                                                    <span x-text="option.name" :class="selectedId == option.id ? 'font-bold text-green-600' : 'text-gray-700'"></span>
+                                                    <span x-show="selectedId == option.id" class="material-icons text-sm text-green-600">check</span>
+                                                </div>
+                                            </template>
+                                            <div x-show="filteredOptions.length === 0" class="px-3 py-2 text-sm text-gray-500 text-center">
+                                                {{ __('admin/usersPages.No results found') }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @error('addresses.'.$index.'.country_id') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                             </div>
 
-                            {{-- Add remove button if their are more than one address --}}
-                            @if (count($addresses) > 1)
-                                <div>
-                                    <button
-                                        class=" bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded-full shadow btn btn-xs"
-                                        wire:click.prevent='removeAddress({{ $index }})'
-                                        title="{{ __('admin/usersPages.Delete') }}"><span class="material-icons">
-                                            close
-                                        </span>
-                                    </button>
+                            {{-- Governorate --}}
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('admin/usersPages.Governorate') }}</label>
+                                <div x-data="{
+                                    search: '',
+                                    open: false,
+                                    selectedId: $wire.entangle('addresses.{{ $index }}.governorate_id').live,
+                                    get options() {
+                                        let data = $wire.governorates[{{ $index }}] || [];
+                                        return data.map(g => ({
+                                            id: g.id,
+                                            name: g.name && g.name['{{ session('locale') }}'] ? g.name['{{ session('locale') }}'] : ''
+                                        }));
+                                    },
+                                    get filteredOptions() {
+                                        if (this.search === '') return this.options;
+                                        return this.options.filter(i => i.name.toLowerCase().includes(this.search.toLowerCase()));
+                                    },
+                                    get selectedName() {
+                                        let selected = this.options.find(i => i.id == this.selectedId);
+                                        return selected ? selected.name : '{{ __('admin/usersPages.Select...') }}';
+                                    }
+                                }" class="relative w-full" x-init="$watch('options', () => search = '')" @click.away="open = false">
+                                    <div @click="open = !open" 
+                                         class="w-full py-2 px-3 rounded-xl text-center text-sm border border-gray-200 bg-white cursor-pointer flex justify-between items-center transition-all duration-200 hover:border-green-300 @error('addresses.'.$index.'.governorate_id') border-red-500 @enderror">
+                                        <span x-text="selectedName" :class="!selectedId ? 'text-gray-400' : 'text-gray-700'"></span>
+                                        <span class="material-icons text-sm text-gray-400">expand_more</span>
+                                    </div>
+                                    
+                                    <div x-show="open" style="display: none;"
+                                         class="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+                                        <div class="p-2 border-b border-gray-100 bg-gray-50">
+                                            <input x-model="search" type="text" class="w-full py-1.5 px-3 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-green-400 focus:ring-1 focus:ring-green-400" placeholder="{{ __('admin/usersPages.Search...') }}">
+                                        </div>
+                                        <div class="max-h-48 overflow-y-auto py-1">
+                                            <template x-for="option in filteredOptions" :key="option.id">
+                                                <div @click="selectedId = option.id; open = false; search = '';" 
+                                                     class="px-3 py-2 text-sm cursor-pointer hover:bg-green-50 flex items-center justify-between transition-colors">
+                                                    <span x-text="option.name" :class="selectedId == option.id ? 'font-bold text-green-600' : 'text-gray-700'"></span>
+                                                    <span x-show="selectedId == option.id" class="material-icons text-sm text-green-600">check</span>
+                                                </div>
+                                            </template>
+                                            <div x-show="filteredOptions.length === 0" class="px-3 py-2 text-sm text-gray-500 text-center">
+                                                {{ __('admin/usersPages.No results found') }}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            @endif
+                                @error('addresses.'.$index.'.governorate_id') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                            </div>
 
+                            {{-- City --}}
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('admin/usersPages.City') }}</label>
+                                <div x-data="{
+                                    search: '',
+                                    open: false,
+                                    selectedId: $wire.entangle('addresses.{{ $index }}.city_id').live,
+                                    get options() {
+                                        let data = $wire.cities[{{ $index }}] || [];
+                                        return data.map(c => ({
+                                            id: c.id,
+                                            name: c.name && c.name['{{ session('locale') }}'] ? c.name['{{ session('locale') }}'] : ''
+                                        }));
+                                    },
+                                    get filteredOptions() {
+                                        if (this.search === '') return this.options;
+                                        return this.options.filter(i => i.name.toLowerCase().includes(this.search.toLowerCase()));
+                                    },
+                                    get selectedName() {
+                                        let selected = this.options.find(i => i.id == this.selectedId);
+                                        return selected ? selected.name : '{{ __('admin/usersPages.Select...') }}';
+                                    }
+                                }" class="relative w-full" x-init="$watch('options', () => search = '')" @click.away="open = false">
+                                    <div @click="open = !open" 
+                                         class="w-full py-2 px-3 rounded-xl text-center text-sm border border-gray-200 bg-white cursor-pointer flex justify-between items-center transition-all duration-200 hover:border-green-300 @error('addresses.'.$index.'.city_id') border-red-500 @enderror">
+                                        <span x-text="selectedName" :class="!selectedId ? 'text-gray-400' : 'text-gray-700'"></span>
+                                        <span class="material-icons text-sm text-gray-400">expand_more</span>
+                                    </div>
+                                    
+                                    <div x-show="open" style="display: none;"
+                                         class="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+                                        <div class="p-2 border-b border-gray-100 bg-gray-50">
+                                            <input x-model="search" type="text" class="w-full py-1.5 px-3 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-green-400 focus:ring-1 focus:ring-green-400" placeholder="{{ __('admin/usersPages.Search...') }}">
+                                        </div>
+                                        <div class="max-h-48 overflow-y-auto py-1">
+                                            <template x-for="option in filteredOptions" :key="option.id">
+                                                <div @click="selectedId = option.id; open = false; search = '';" 
+                                                     class="px-3 py-2 text-sm cursor-pointer hover:bg-green-50 flex items-center justify-between transition-colors">
+                                                    <span x-text="option.name" :class="selectedId == option.id ? 'font-bold text-green-600' : 'text-gray-700'"></span>
+                                                    <span x-show="selectedId == option.id" class="material-icons text-sm text-green-600">check</span>
+                                                </div>
+                                            </template>
+                                            <div x-show="filteredOptions.length === 0" class="px-3 py-2 text-sm text-gray-500 text-center">
+                                                {{ __('admin/usersPages.No results found') }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @error('addresses.'.$index.'.city_id') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                            </div>
                         </div>
 
-                        {{-- Country --}}
-                        <div class="col-span-3 lg:col-span-1 grid grid-cols-3 items-center">
-                            <label class="col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
-                                for="country{{ $index }}">{{ __('admin/usersPages.Country') }}</label>
-                            <select
-                                class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                                wire:model.live='addresses.{{ $index }}.country_id'
-                                wire:change='$dispatch("countryUpdated",{"index":{{ $index }}})'
-                                id="country{{ $index }}">
-                                @forelse ($countries as $country)
-                                    <option value="{{ $country['id'] }}">
-                                        {{ $country['name'][session('locale')] }}
-                                    </option>
-                                @empty
-                                    <option value="">{{ __('admin/usersPages.No Countries in Database') }}
-                                    </option>
-                                @endforelse
-                            </select>
-                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {{-- Details --}}
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('admin/usersPages.Address Details') }}</label>
+                                <textarea rows="2" wire:model.live.blur="addresses.{{ $index }}.details" dir="rtl"
+                                    placeholder="{{ __('admin/usersPages.Please mention the details of the address such as street name, building number, ... etc.') }}"
+                                    class="w-full py-2.5 px-3 rounded-xl text-center text-sm border-gray-200 bg-white focus:outline-0 focus:ring-2 focus:ring-green-200 focus:border-green-300 transition-all duration-200 resize-none @error('addresses.'.$index.'.details') border-red-500 @enderror"></textarea>
+                                @error('addresses.'.$index.'.details') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                            </div>
 
-                        {{-- Governorate --}}
-                        <div class="col-span-3 lg:col-span-1 grid grid-cols-3 items-center">
-                            <label
-                                class="col-span-1 rtl:text-xs select-none cursor-pointer text-black font-medium m-0 mx-3"
-                                for="governorate{{ $index }}">{{ __('admin/usersPages.Governorate') }}</label>
-                            <select
-                                class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                                wire:model.live='addresses.{{ $index }}.governorate_id'
-                                id="governorate{{ $index }}"
-                                wire:change='$dispatch("governorateUpdated",{"index":{{ $index }}})'>
-                                @forelse ($governorates[$index] as $governorate)
-                                    <option value="{{ $governorate['id'] }}">
-                                        {{ $governorate['name'][session('locale')] }}</option>
-                                @empty
-                                    @if ($country == null)
-                                        <option value="">
-                                            {{ __('admin/usersPages.Please Choose Country First') }}
-                                        </option>
-                                    @else
-                                        <option value="">
-                                            {{ __('admin/usersPages.No Governorates in Database') }}
-                                        </option>
-                                    @endif
-                                @endforelse
-                            </select>
-                        </div>
-
-                        {{-- City --}}
-                        <div class="col-span-3 lg:col-span-1 grid grid-cols-3 items-center">
-                            <label class="col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
-                                for="city{{ $index }}">{{ __('admin/usersPages.City') }}</label>
-
-                            <select
-                                class="col-span-2 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"
-                                wire:model.live='addresses.{{ $index }}.city_id' id="city{{ $index }}"
-                                wire:change='$dispatch("cityUpdated",{"index":{{ $index }}})'>
-                                @forelse ($cities[$index] as $city)
-                                    <option value="{{ $city['id'] }}">{{ $city['name'][session('locale')] }}
-                                    </option>
-                                @empty
-                                    @if ($addresses[$index]['governorate_id'] == null)
-                                        <option value="">
-                                            {{ __('admin/usersPages.Please Choose Governorate First') }}
-                                        </option>
-                                    @else
-                                        <option value="">{{ __('admin/usersPages.No Cities in Database') }}
-                                        </option>
-                                    @endif
-                                @endforelse
-                            </select>
-                        </div>
-
-                        {{-- Details --}}
-                        <div class="details col-span-3 grid grid-cols-6 justify-between items-center m-0">
-                            <label
-                                class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
-                                for="details{{ $index }}">{{ __('admin/usersPages.Address Details') }}</label>
-                            <textarea id="details{{ $index }}" rows="2" wire:model.live.blur="addresses.{{ $index }}.details"
-                                dir="rtl"
-                                placeholder="{{ __('admin/usersPages.Please mention the details of the address such as street name, building number, ... etc.') }}"
-                                class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 overflow-hidden"></textarea>
-                        </div>
-
-                        {{-- Landmarks --}}
-                        <div class="landmarks col-span-3 grid grid-cols-6 justify-between items-center">
-                            <label
-                                class="col-span-2 lg:col-span-1 select-none cursor-pointer text-black font-medium m-0 mx-3"
-                                for="landmarks{{ $index }}">{{ __('admin/usersPages.Landmarks') }}</label>
-                            <textarea id="landmarks{{ $index }}" rows="2"
-                                wire:model.live.blur="addresses.{{ $index }}.landmarks" dir="rtl"
-                                placeholder="{{ __('admin/usersPages.Please mention any landmarks such as mosque, grocery, ... etc.') }}"
-                                class="col-span-4 lg:col-span-5 w-full py-1 rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300"></textarea>
+                            {{-- Landmarks --}}
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1">{{ __('admin/usersPages.Landmarks') }}</label>
+                                <textarea rows="2" wire:model.live.blur="addresses.{{ $index }}.landmarks" dir="rtl"
+                                    placeholder="{{ __('admin/usersPages.Please mention any landmarks such as mosque, grocery, ... etc.') }}"
+                                    class="w-full py-2.5 px-3 rounded-xl text-center text-sm border-gray-200 bg-white focus:outline-0 focus:ring-2 focus:ring-green-200 focus:border-green-300 transition-all duration-200 resize-none @error('addresses.'.$index.'.landmarks') border-red-500 @enderror"></textarea>
+                                @error('addresses.'.$index.'.landmarks') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                            </div>
                         </div>
                     </div>
                 @endforeach
 
                 @error('addresses.*')
-                    <div
-                        class="inline-block mt-2 col-span-3 md:col-span-1 md:col-start-2 bg-red-700 rounded text-white shadow px-3 py-1">
-                        {{ $message }}</div>
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-3 text-red-600 text-sm font-semibold flex items-center gap-2 mt-2">
+                        <span class="material-icons text-lg">error_outline</span>
+                        {{ $message }}
+                    </div>
                 @enderror
                 @error('defaultAddress')
-                    <div
-                        class="inline-block mt-2 col-span-3 md:col-span-1 md:col-start-2 bg-red-700 rounded text-white shadow px-3 py-1">
-                        {{ $message }}</div>
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-3 text-red-600 text-sm font-semibold flex items-center gap-2 mt-2">
+                        <span class="material-icons text-lg">error_outline</span>
+                        {{ $message }}
+                    </div>
                 @enderror
-
-
-                {{-- Add New Address Button --}}
-                <button
-                    class="col-start-2 col-span-1 bg-rose-500 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm text-center text-xs"
-                    wire:click.prevent="addAddress" title="{{ __('admin/usersPages.Add') }}"> <span
-                        class="material-icons rtl:ml-1 ltr:mr-1">
-                        add
-                    </span>
-                    {{ __('admin/usersPages.Add') }}</button>
             </div>
         </div>
 
-        {{-- Password Notification --}}
-        <div class="grid grid-cols-12 gap-x-6 gap-y-2 items-center bg-yellow-100 p-2 rounded text-center">
-            <label
-                class="col-span-12 text-black font-bold m-0 text-center">{{ __('admin/usersPages.Password Notification') }}</label>
-        </div>
-
-        {{-- Buttons Section Start --}}
-        <div class="col-span-12 w-full flex mt-2 justify-around">
+        {{-- Buttons Section --}}
+        <div class="flex flex-wrap items-center justify-center gap-3 w-full mt-2">
             @if ($customer_id != null)
                 <button type="button" wire:click.prevent="update"
-                    class="bg-success hover:bg-successDark text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Update') }}</button>
+                    class="inline-flex items-center gap-2 text-white font-bold rounded-xl px-6 py-2.5 text-sm shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+                    style="background: linear-gradient(135deg, #10b981, #059669);">
+                    <span class="material-icons text-lg">save</span>
+                    {{ __('admin/usersPages.Update') }}
+                </button>
             @else
-                {{-- Save and Back --}}
                 <button type="button" wire:click.prevent="save"
-                    class="bg-success hover:bg-successDark text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Save') }}</button>
-                {{-- Save and New --}}
+                    class="inline-flex items-center gap-2 text-white font-bold rounded-xl px-6 py-2.5 text-sm shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+                    style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                    <span class="material-icons text-lg">person_add</span>
+                    {{ __('admin/usersPages.Save') }}
+                </button>
+                
                 <button type="button" wire:click.prevent="save('true')"
-                    class="bg-success hover:bg-successDark text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Save and Add New Customer') }}</button>
+                    class="inline-flex items-center gap-2 text-white font-bold rounded-xl px-6 py-2.5 text-sm shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+                    style="background: linear-gradient(135deg, #14b8a6, #0d9488);">
+                    <span class="material-icons text-lg">group_add</span>
+                    {{ __('admin/usersPages.Save and Add New Customer') }}
+                </button>
             @endif
-            {{-- Back --}}
+            
             <a href="{{ route('admin.customers.index') }}"
-                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl shadow btn btn-sm">{{ __('admin/usersPages.Back') }}</a>
+                class="inline-flex items-center gap-2 font-bold rounded-xl px-6 py-2.5 text-sm border border-gray-300 text-gray-700 bg-white transition-all duration-200 hover:bg-gray-50 hover:shadow-sm">
+                <span class="material-icons text-lg">arrow_back</span>
+                {{ __('admin/usersPages.Back') }}
+            </a>
         </div>
-        {{-- Buttons Section End --}}
+        
     </form>
 </div>

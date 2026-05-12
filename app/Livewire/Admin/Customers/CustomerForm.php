@@ -192,6 +192,18 @@ class CustomerForm extends Component
     public function updated($field)
     {
         $this->validateOnly($field);
+
+        if (str_starts_with($field, 'addresses.')) {
+            $parts = explode('.', $field);
+            $index = $parts[1];
+            $property = $parts[2] ?? '';
+
+            if ($property === 'country_id') {
+                $this->countryUpdated($index);
+            } elseif ($property === 'governorate_id') {
+                $this->governorateUpdated($index);
+            }
+        }
     }
 
     ################ Phones #####################

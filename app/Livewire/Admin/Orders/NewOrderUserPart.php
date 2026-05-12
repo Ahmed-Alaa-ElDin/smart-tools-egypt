@@ -69,6 +69,15 @@ class NewOrderUserPart extends Component
         return view('livewire.admin.orders.new-order-user-part');
     }
 
+    public function updated($property, $value)
+    {
+        if ($property === 'newAddress.country_id') {
+            $this->updatedNewAddressCountryId($value);
+        } elseif ($property === 'newAddress.governorate_id') {
+            $this->updatedNewAddressGovernorateId($value);
+        }
+    }
+
     public function updatedSearch()
     {
         $term = trim($this->search);

@@ -253,4 +253,9 @@ return [
     "Enter the amount you want to add to the balance"                                               =>      "Enter the amount you want to add to the balance",
     "Balance added successfully"                                                                    =>      "Balance added successfully",
     "Balance haven't been added"                                                                    =>      "Balance haven't been added",
+    "Basic Information"                                                                             =>      "Basic Information",
+    "Phones"                                                                                        =>      "Phones",
+    "Select..."                                                                                     =>      "Select...",
+    "Search..."                                                                                     =>      "Search...",
+    "No results found"                                                                              =>      "No results found",
 ];
