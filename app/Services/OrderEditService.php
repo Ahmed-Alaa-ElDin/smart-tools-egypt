@@ -209,8 +209,8 @@ class OrderEditService
             }
 
             // 11. Update status
-            $this->order->update(['status_id' => OrderStatus::EditApproved->value]);
-            $this->order->statuses()->attach(OrderStatus::EditApproved->value);
+            $this->order->update(['status_id' => OrderStatus::WaitingForApproval->value]);
+            $this->order->statuses()->attach(OrderStatus::WaitingForApproval->value);
 
             // 12. Audit log
             $this->order->refresh();
