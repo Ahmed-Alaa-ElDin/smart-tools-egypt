@@ -36,7 +36,9 @@ class ProductsDatatable extends Component
         'publishAllProduct', 
         'hideAllProduct',
         'syncSelectedToMeta',
-        'removeSelectedFromMeta'
+        'removeSelectedFromMeta',
+        'syncAllToMeta',
+        'removeAllFromMeta'
     ];
 
     // Render Once
@@ -485,6 +487,67 @@ class ProductsDatatable extends Component
         if ($success) {
             $this->dispatch('swalDone', text: __('admin/productsPages.Bulk Removal Successful'), icon: 'success');
             $this->selectedProducts = [];
+        } else {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Some removals failed'), icon: 'warning');
+        }
+    }
+
+    public function syncAllToMetaConfirm()
+    {
+        $this->dispatch('swalConfirm', 
+            text: __('admin/productsPages.Sync all products to Facebook Catalog?'),
+            confirmButtonText: __('admin/productsPages.Sync All'),
+            denyButtonText: __('admin/productsPages.Cancel'),
+            denyButtonColor: 'red',
+            confirmButtonColor: 'green',
+            focusDeny: true,
+            icon: 'warning',
+            method: 'syncAllToMeta',
+            id: ''
+        );
+    }
+
+    public function syncAllToMeta()
+    {
+        $products = Product::all();
+        $service = new MetaCatalogService();
+
+        if ($service->syncItems($products)) {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Bulk Sync Successful'), icon: 'success');
+        } else {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Bulk Sync Failed'), icon: 'error');
+        }
+    }
+
+    public function removeAllFromMetaConfirm()
+    {
+        $this->dispatch('swalConfirm', 
+            text: __('admin/productsPages.Remove all products from Facebook Catalog?'),
+            confirmButtonText: __('admin/productsPages.Remove All'),
+            denyButtonText: __('admin/productsPages.Cancel'),
+            denyButtonColor: 'green',
+            confirmButtonColor: 'red',
+            focusDeny: true,
+            icon: 'warning',
+            method: 'removeAllFromMeta',
+            id: ''
+        );
+    }
+
+    public function removeAllFromMeta()
+    {
+        $products = Product::all();
+        $service = new MetaCatalogService();
+        $success = true;
+
+        foreach ($products as $product) {
+            if (!$service->deleteItem($product->id)) {
+                $success = false;
+            }
+        }
+
+        if ($success) {
+            $this->dispatch('swalDone', text: __('admin/productsPages.Bulk Removal Successful'), icon: 'success');
         } else {
             $this->dispatch('swalDone', text: __('admin/productsPages.Some removals failed'), icon: 'warning');
         }

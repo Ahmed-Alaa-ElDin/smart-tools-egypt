@@ -382,4 +382,11 @@ return [
     "Remove all selected collections from Facebook Catalog?"                =>      "هل أنت متأكد من حذف جميع التجميعات المختارة من متجر فيسبوك؟",
     "Sync"                                                                  =>      "مزامنة",
     "Remove"                                                                =>      "حذف",
+    "Meta Catalog"                                                          =>      "كتالوج ميتا",
+    "Sync All to Meta"                                                      =>      "مزامنة الكل لكتالوج ميتا",
+    "Remove All from Meta"                                                  =>      "حذف الكل من كتالوج ميتا",
+    "Sync all products to Facebook Catalog?"                                =>      "هل أنت متأكد من مزامنة جميع المنتجات لكتالوج فيسبوك؟",
+    "Sync All"                                                              =>      "مزامنة الكل",
+    "Remove all products from Facebook Catalog?"                            =>      "هل أنت متأكد من حذف جميع المنتجات من كتالوج فيسبوك؟",
+    "Remove All"                                                            =>      "حذف الكل",
 ];

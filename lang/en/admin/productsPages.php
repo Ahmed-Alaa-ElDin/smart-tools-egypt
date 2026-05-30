@@ -388,4 +388,11 @@ return [
     "Remove all selected collections from Facebook Catalog?"                =>      "Remove all selected collections from Facebook Catalog?",
     "Sync"                                                                  =>      "Sync",
     "Remove"                                                                =>      "Remove",
+    "Meta Catalog"                                                          =>      "Meta Catalog",
+    "Sync All to Meta"                                                      =>      "Sync All to Meta",
+    "Remove All from Meta"                                                  =>      "Remove All from Meta",
+    "Sync all products to Facebook Catalog?"                                =>      "Sync all products to Facebook Catalog?",
+    "Sync All"                                                              =>      "Sync All",
+    "Remove all products from Facebook Catalog?"                            =>      "Remove all products from Facebook Catalog?",
+    "Remove All"                                                            =>      "Remove All",
 ];

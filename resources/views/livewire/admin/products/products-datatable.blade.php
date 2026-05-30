@@ -124,6 +124,33 @@
                     </div>
                 </div>
 
+                {{-- Meta Catalog --}}
+                <div class="form-inline col-span-1 justify-center">
+                    <div class="flex justify-center">
+                        <button class="btn btn-primary hover:bg-primaryDark focus:bg-primaryDark dropdown-toggle btn-round btn-sm text-white font-bold"
+                            type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="material-icons">
+                                sync
+                            </span> &nbsp; {{ __('admin/productsPages.Meta Catalog') }}
+                            &nbsp;</button>
+                        <div class="dropdown-menu">
+                            <a wire:click.prevent="syncAllToMetaConfirm"
+                                class="dropdown-item dropdown-item-excel justify-center font-bold hover:bg-success focus:bg-success hover:text-white focus:text-white cursor-pointer">
+                                <span class="material-icons">
+                                    sync
+                                </span> &nbsp;&nbsp;
+                                {{ __('admin/productsPages.Sync All to Meta') }}</a>
+                            <a wire:click.prevent="removeAllFromMetaConfirm"
+                                class="dropdown-item dropdown-item-pdf justify-center font-bold hover:bg-red-600 focus:bg-red-600 hover:text-white focus:text-white cursor-pointer">
+                                <span class="material-icons">
+                                    sync_disabled
+                                </span>
+                                &nbsp;&nbsp;
+                                {{ __('admin/productsPages.Remove All from Meta') }}</a>
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Pagination Number --}}
                 <div class="form-inline col-span-1 justify-end my-2">
                     {{ __('pagination.Show') }} &nbsp;
