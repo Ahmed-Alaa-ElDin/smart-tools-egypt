@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
-use App\Models\Order;
-use App\Models\Product;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
+use App\Models\Collection;
+use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -23,33 +24,42 @@ class InventoryService
     {
         $order->loadMissing(['products', 'collections.products']);
 
+        $productIds = collect();
+        $collectionIds = collect();
+
         // Restore direct products
-        $order->products->each(function ($product) {
+        $order->products->each(function ($product) use ($productIds) {
             $qty = $product->pivot->quantity;
 
             if ($qty > 0) {
                 Product::where('id', $product->id)
                     ->update(['quantity' => DB::raw("quantity + {$qty}")]);
+                $productIds->push($product->id);
             }
         });
 
         // Restore collection products
-        $order->collections->each(function ($collection) {
+        $order->collections->each(function ($collection) use ($productIds, $collectionIds) {
             $orderQty = $collection->pivot->quantity;
 
             if ($orderQty > 0) {
-                $collection->products->each(function ($product) use ($orderQty) {
+                $collectionIds->push($collection->id);
+                $collection->products->each(function ($product) use ($orderQty, $productIds) {
                     $restoreQty = $orderQty * $product->pivot->quantity;
 
                     if ($restoreQty > 0) {
                         Product::where('id', $product->id)
                             ->update(['quantity' => DB::raw("quantity + {$restoreQty}")]);
+                        $productIds->push($product->id);
                     }
                 });
             }
         });
 
         Log::info("InventoryService: Restored inventory for Order #{$order->id}");
+
+        // Resync updated items with Meta Catalog
+        self::syncWithMeta($productIds, $collectionIds);
     }
 
     /**
@@ -63,33 +73,99 @@ class InventoryService
     {
         $order->loadMissing(['products', 'collections.products']);
 
+        $productIds = collect();
+        $collectionIds = collect();
+
         // Deduct direct products
-        $order->products->each(function ($product) {
+        $order->products->each(function ($product) use ($productIds) {
             $qty = $product->pivot->quantity;
 
             if ($qty > 0) {
                 Product::where('id', $product->id)
                     ->update(['quantity' => DB::raw("GREATEST(quantity - {$qty}, 0)")]);
+                $productIds->push($product->id);
             }
         });
 
         // Deduct collection products
-        $order->collections->each(function ($collection) {
+        $order->collections->each(function ($collection) use ($productIds, $collectionIds) {
             $orderQty = $collection->pivot->quantity;
 
             if ($orderQty > 0) {
-                $collection->products->each(function ($product) use ($orderQty) {
+                $collectionIds->push($collection->id);
+                $collection->products->each(function ($product) use ($orderQty, $productIds) {
                     $deductQty = $orderQty * $product->pivot->quantity;
 
                     if ($deductQty > 0) {
                         Product::where('id', $product->id)
                             ->update(['quantity' => DB::raw("GREATEST(quantity - {$deductQty}, 0)")]);
+                        $productIds->push($product->id);
                     }
                 });
             }
         });
 
         Log::info("InventoryService: Deducted inventory for Order #{$order->id}");
+
+        // Resync updated items with Meta Catalog
+        self::syncWithMeta($productIds, $collectionIds);
+    }
+
+    /**
+     * Resync products and collections with the Meta Catalog.
+     *
+     * @param \Illuminate\Support\Collection $productIds
+     * @param \Illuminate\Support\Collection $collectionIds
+     * @return void
+     */
+    protected static function syncWithMeta($productIds, $collectionIds): void
+    {
+        $uniqueProductIds = $productIds->unique()->filter();
+        $uniqueCollectionIds = $collectionIds->unique()->filter();
+
+        if ($uniqueProductIds->isEmpty() && $uniqueCollectionIds->isEmpty()) {
+            return;
+        }
+
+        try {
+            $itemsToSync = collect();
+
+            // 1. Load products
+            if ($uniqueProductIds->isNotEmpty()) {
+                $products = Product::with([
+                    'images',
+                    'thumbnail',
+                    'brand',
+                    'subcategories.category.supercategory'
+                ])->whereIn('id', $uniqueProductIds)->get();
+
+                foreach ($products as $product) {
+                    $itemsToSync->push($product);
+                }
+            }
+
+            // 2. Load collections
+            if ($uniqueCollectionIds->isNotEmpty()) {
+                $collections = Collection::with([
+                    'images',
+                    'thumbnail',
+                    'products'
+                ])->whereIn('id', $uniqueCollectionIds)->get();
+
+                foreach ($collections as $collection) {
+                    $itemsToSync->push($collection);
+                }
+            }
+
+            $catalogService = app(\App\Services\Front\meta\MetaCatalogService::class);
+
+            // Batch sync all updated items (active will be published, disabled will be staged)
+            if ($itemsToSync->isNotEmpty()) {
+                $catalogService->syncItems($itemsToSync);
+            }
+        } catch (\Throwable $e) {
+            Log::error("InventoryService: Meta Catalog sync failed: " . $e->getMessage());
+        }
     }
 
     /**

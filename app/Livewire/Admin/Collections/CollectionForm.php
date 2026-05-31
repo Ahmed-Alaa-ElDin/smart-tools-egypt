@@ -1016,11 +1016,7 @@ class CollectionForm extends Component
 
             // Sync to Meta Catalog
             $metaService = new MetaCatalogService();
-            if ($collection->publish && !$collection->under_reviewing) {
-                $metaService->syncCollection($collection);
-            } else {
-                $metaService->deleteItem($collection->id, true);
-            }
+            $metaService->syncCollection($collection);
 
             // Remove Old Images
             foreach ($this->deletedImages as $key => $deletedImage) {
@@ -1166,11 +1162,7 @@ class CollectionForm extends Component
 
             // Sync to Meta Catalog
             $metaService = new MetaCatalogService();
-            if ($this->collection->publish && !$this->collection->under_reviewing) {
-                $metaService->syncCollection($this->collection);
-            } else {
-                $metaService->deleteItem($this->collection->id, true);
-            }
+            $metaService->syncCollection($this->collection);
 
             Session::flash('success', __('admin/productsPages.Collection updated successfully'));
             redirect()->route('admin.collections.index');
