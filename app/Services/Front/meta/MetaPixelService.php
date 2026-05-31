@@ -5,18 +5,33 @@ namespace App\Services\Front\meta;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use App\Services\Front\Communication\SMSService;
+use FacebookAds\ParamBuilder;
 
 class MetaPixelService
 {
     protected $pixelId;
     protected $accessToken;
     protected $apiVersion;
+    protected $paramBuilder;
 
     public function __construct()
     {
         $this->pixelId = config('services.meta_pixel.id');
         $this->accessToken = config('services.meta_pixel.access_token');
         $this->apiVersion = config('services.meta_pixel.api_version');
+
+        // Initialize Facebook ParamBuilder with the e-commerce domain
+        $this->paramBuilder = new ParamBuilder(['smarttoolsegypt.com']);
+        
+        // Extract and process parameters automatically from the Laravel Request context
+        $this->paramBuilder->processRequest(
+            request()->getHost(),
+            request()->query->all(),
+            request()->cookies->all(),
+            request()->headers->get('referer'),
+            request()->headers->get('x-forwarded-for'),
+            request()->ip()
+        );
     }
 
     public function sendEvent(string $eventName, array $userData = [], array $customData = [], string $eventId = "")
@@ -27,9 +42,7 @@ class MetaPixelService
             }
 
             $endpoint = "https://graph.facebook.com/{$this->apiVersion}/{$this->pixelId}/events";
-
             $eventTime = time();
-
             $finalUserData = $this->getUserData($userData);
 
             $payload = [
@@ -63,84 +76,78 @@ class MetaPixelService
         $user = auth()->check() ? auth()->user() : null;
         $address = $user?->defaultAddress->first();
 
-        $baseUserData = [
-            'em' => $user?->email,
-            'ph' => $user?->phones?->map(fn($p) => preg_replace('/\D/', '', $p->phone))->toArray() ?? [],
-            'fn' => $user?->f_name,
-            'ln' => $user?->l_name,
-            'ge' => $user ? ($user->gender === 0 ? 'm' : 'f') : null,
-            'db' => $user?->birth_date ? \Carbon\Carbon::parse($user->birth_date)->format('Ymd') : null, //YYYYMMDD
-            'ct' => $address?->city?->name,
-            'st' => $address?->governorate?->name,
-            'country' => "eg",
-            'external_id' => (string) $user?->id,
+        // Standardize base user data using ParamBuilder's automated normalization & SHA-256 hashing
+        $finalUserData = [
+            'em' => $user?->email ? $this->paramBuilder->getNormalizedAndHashedPII($user->email, 'email') : null,
+            'fn' => $user?->f_name ? $this->paramBuilder->getNormalizedAndHashedPII($user->f_name, 'first_name') : null,
+            'ln' => $user?->l_name ? $this->paramBuilder->getNormalizedAndHashedPII($user->l_name, 'last_name') : null,
+            'ge' => $user ? $this->paramBuilder->getNormalizedAndHashedPII(($user->gender === 0 ? 'm' : 'f'), 'gender') : null,
+            'db' => $user?->birth_date ? $this->paramBuilder->getNormalizedAndHashedPII(\Carbon\Carbon::parse($user->birth_date)->format('Ymd'), 'date_of_birth') : null,
+            'ct' => $address?->city?->name ? $this->paramBuilder->getNormalizedAndHashedPII($address->city->name, 'city') : null,
+            'st' => $address?->governorate?->name ? $this->paramBuilder->getNormalizedAndHashedPII($address->governorate->name, 'state') : null,
+            'country' => $this->paramBuilder->getNormalizedAndHashedPII('eg', 'country'),
+            'external_id' => $user?->id ? $this->paramBuilder->getNormalizedAndHashedPII((string) $user->id, 'external_id') : null,
         ];
 
-        $hashedUserData = $this->hashUserData(array_filter(array_merge($baseUserData, $userData)));
+        // Process phones list
+        $phones = $user?->phones?->map(fn($p) => preg_replace('/\D/', '', $p->phone))->toArray() ?? [];
+        $hashedPhones = [];
+        foreach ($phones as $phone) {
+            if (!empty($phone)) {
+                $hashedPhones[] = $this->paramBuilder->getNormalizedAndHashedPII($phone, 'phone');
+            }
+        }
+        if (!empty($hashedPhones)) {
+            $finalUserData['ph'] = $hashedPhones;
+        }
 
-        $clientIp = request()->getClientIp();
-        $userAgent = request()->userAgent();
-        $fbc = request()->cookie('_fbc');
-        $fbp = request()->cookie('_fbp');
-        $eventTime = time();
-
-        // Validate fbc timestamp (must not be older than 90 days or in the future)
-        if ($fbc) {
-            $fbcParts = explode('.', $fbc);
-            if (count($fbcParts) >= 3 && is_numeric($fbcParts[2])) {
-                $fbcTimestamp = (int) $fbcParts[2];
-                // Older than 90 days
-                if (($eventTime - $fbcTimestamp) > (90 * 24 * 60 * 60)) {
-                    $fbc = null;
-                }
-                // In the future relative to server time (cap to eventTime)
-                elseif ($fbcTimestamp > $eventTime) {
-                    $fbcParts[2] = $eventTime;
-                    $fbc = implode('.', $fbcParts);
-                }
+        // Process any custom dynamic PII passed into this method
+        foreach ($userData as $key => $value) {
+            if (!empty($value)) {
+                $finalUserData[$key] = $this->paramBuilder->getNormalizedAndHashedPII($value, $this->mapFieldToPIIType($key));
             }
         }
 
-        // Validate fbp timestamp (must not be older than 90 days or in the future)
-        if ($fbp) {
-            $fbpParts = explode('.', $fbp);
-            if (count($fbpParts) >= 3 && is_numeric($fbpParts[2])) {
-                $fbpTimestamp = (int) $fbpParts[2];
-                // Older than 90 days
-                if (($eventTime - $fbpTimestamp) > (90 * 24 * 60 * 60)) {
-                    $fbp = null;
-                }
-                // In the future relative to server time (cap to eventTime)
-                elseif ($fbpTimestamp > $eventTime) {
-                    $fbpParts[2] = $eventTime;
-                    $fbp = implode('.', $fbpParts);
-                }
-            }
-        }
-
-        return array_merge($hashedUserData, [
-            'client_ip_address' => $clientIp,
-            'client_user_agent' => $userAgent,
-            'fbc' => $fbc,
-            'fbp' => $fbp,
+        // Merge with auto-extracted request params
+        return array_merge(array_filter($finalUserData), [
+            'client_ip_address' => $this->paramBuilder->getClientIpAddress(),
+            'client_user_agent' => request()->userAgent(),
+            'fbc' => $this->paramBuilder->getFbc(),
+            'fbp' => $this->paramBuilder->getFbp(),
             'page_id' => config('services.meta_pixel.page_id'),
         ]);
     }
 
-    private function hashUserData(array $data)
+    /**
+     * Map Meta payload keys back to ParamBuilder PII types
+     */
+    private function mapFieldToPIIType(string $key): string
     {
-        return collect($data)
-            ->mapWithKeys(function ($value, $key) {
-                if (is_array($value)) {
-                    return [$key => array_map(fn($v) => empty($v) ? '' : hash('sha256', strtolower(trim($v))), $value ?? [])];
-                }
-                return [$key => empty($value) ? '' : hash('sha256', strtolower(trim($value)))];
-            })
-            ->toArray();
+        return [
+            'em' => 'email',
+            'ph' => 'phone',
+            'fn' => 'first_name',
+            'ln' => 'last_name',
+            'db' => 'date_of_birth',
+            'ge' => 'gender',
+            'ct' => 'city',
+            'st' => 'state',
+            'zp' => 'zip_code',
+            'country' => 'country',
+            'external_id' => 'external_id',
+        ][$key] ?? 'external_id';
     }
 
     public function generateEventId()
     {
         return Str::uuid();
+    }
+
+    /**
+     * Retrieve any first-party cookies recommended to be saved
+     */
+    public function getCookiesToSet()
+    {
+        return $this->paramBuilder->getCookiesToSet();
     }
 }

@@ -13,8 +13,6 @@ class TrackPageViewMiddleware
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -26,12 +24,33 @@ class TrackPageViewMiddleware
         ) {
             $eventId = Str::uuid();
 
+            // Send event via Meta CAPI
             MetaPixel::sendEvent('PageView', [], [], $eventId);
 
+            // Share event ID and user data with Blade views
             View::share('meta_event_id', $eventId);
             View::share('meta_user_data', MetaPixel::getUserData());
         }
 
-        return $next($request);
+        // Process request pipeline
+        $response = $next($request);
+
+        // Attach first-party cookies recommended by Meta Parameter Builder SDK
+        if (method_exists($response, 'cookie')) {
+            $cookiesToSet = MetaPixel::getCookiesToSet() ?? [];
+            foreach ($cookiesToSet as $cookie) {
+                $response->cookie(
+                    $cookie->name,
+                    $cookie->value,
+                    $cookie->max_age / 60, // Laravel expects minutes
+                    '/',
+                    $cookie->domain,
+                    $request->isSecure(), // Secure
+                    false // HttpOnly (must be false to allow standard JS scripts to access it)
+                );
+            }
+        }
+
+        return $response;
     }
 }
