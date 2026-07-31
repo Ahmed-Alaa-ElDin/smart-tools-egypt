@@ -103,6 +103,7 @@ class ProductController extends Controller
             return $collection;
         });
         $relatedItems = $relatedProducts->concat($relatedCollections)
+            ->filter(fn($item) => data_get($item, 'quantity', 0) > 0)
             ->sortBy('rank')
             ->toArray();
 
@@ -116,6 +117,7 @@ class ProductController extends Controller
             return $collection;
         });
         $complementedItems = $complementedProducts->concat($complementedCollections)
+            ->filter(fn($item) => data_get($item, 'quantity', 0) > 0)
             ->sortBy('rank')
             ->toArray();
 

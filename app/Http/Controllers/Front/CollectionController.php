@@ -98,12 +98,16 @@ class CollectionController extends Controller
         // Get the product's related products and collections
         $relatedProducts = $productsOffers->whereIn('id', $relatedProductsIds);
         $relatedCollections = $collectionsOffers->whereIn('id', $relatedCollectionsIds);
-        $relatedItems = $relatedProducts->concat($relatedCollections)->toArray();
+        $relatedItems = $relatedProducts->concat($relatedCollections)
+            ->filter(fn($item) => data_get($item, 'quantity', 0) > 0)
+            ->toArray();
 
         // Get the product's complemented products and collections
         $complementedProducts = $productsOffers->whereIn('id', $complementedProductsIds);
         $complementedCollections = $collectionsOffers->whereIn('id', $complementedCollectionsIds);
-        $complementedItems = $complementedProducts->concat($complementedCollections)->toArray();
+        $complementedItems = $complementedProducts->concat($complementedCollections)
+            ->filter(fn($item) => data_get($item, 'quantity', 0) > 0)
+            ->toArray();
 
         // Get the collection's data from the cart
         $collectionCart = Cart::instance('cart')->search(function ($cartItem) use ($id) {
