@@ -580,5 +580,7 @@ return [
     "No phones found. Please add one." => "No phones found. Please add one.",
     "Are you sure you want to delete this phone?" => "Are you sure you want to delete this phone?",
     "This phone number already exists." => "This phone number already exists.",
-    "Inclusive of shipment fees" => "Inclusive of shipment fees"
+    "Inclusive of shipment fees" => "Inclusive of shipment fees",
+    "Minimum order price to use this coupon is :min EGP" => "Minimum order total to use this coupon is :min EGP",
+    "This coupon is not valid for your delivery zone" => "This coupon is not valid for your delivery zone"
 ];

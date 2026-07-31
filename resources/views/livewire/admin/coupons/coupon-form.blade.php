@@ -66,22 +66,53 @@
         </div>
         {{-- Times End --}}
 
-        {{-- Free Shipping Start --}}
-        <div class="col-span-6 col-start-4 md:col-span-2 grid grid-cols-2 gap-y-2 gap-x-2 items-center w-full">
-            <label wire:click="freeShipping"
-                class="col-span-2 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Free Shipping') }}</label>
-            <div class="col-span-2">
-                {!! $free_shipping
-                    ? '<span class="block cursor-pointer material-icons text-success select-none" wire:click="freeShipping">toggle_on</span>'
-                    : '<span class="block cursor-pointer material-icons text-red-600 select-none" wire:click="freeShipping">toggle_off</span>' !!}
+        {{-- Minimum Order Price Start --}}
+        <div class="col-span-6 md:col-span-3 grid grid-cols-3 gap-x-4 gap-y-2 items-center w-full">
+            <label for="min_order_price"
+                class="col-span-3 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">{{ __('admin/offersPages.Minimum Order Price (EGP)') }}</label>
+            <div class="col-span-3">
+                <input id="min_order_price"
+                    class="py-1 w-full rounded text-center border-red-300 focus:outline-red-600 focus:ring-red-300 focus:border-red-300 @error('min_order_price') border-red-900 border-2 @enderror"
+                    type="number" min="0" step="0.01" wire:model.live.blur="min_order_price"
+                    placeholder="{{ __('admin/offersPages.Optional') }}">
 
-                @error('free_shipping')
+                @error('min_order_price')
                     <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
                         {{ $message }}</div>
                 @enderror
             </div>
         </div>
-        {{-- Free Shipping End --}}
+        {{-- Minimum Order Price End --}}
+
+        {{-- Target Zones Start --}}
+        <div class="col-span-12 md:col-span-9 grid grid-cols-12 gap-x-4 gap-y-2 items-center w-full">
+            <label class="col-span-12 select-none cursor-pointer m-0 font-bold text-xs text-gray-700">
+                {{ __('admin/offersPages.Target Zones (Leave blank for all zones)') }}
+            </label>
+            <div class="col-span-12 flex flex-wrap gap-2 justify-center items-center">
+                @forelse ($zones_list as $zone)
+                    @php
+                        $zoneName = is_array($zone['name']) ? ($zone['name'][session('locale')] ?? reset($zone['name'])) : $zone['name'];
+                        $isSelected = in_array($zone['id'], $selected_zones);
+                    @endphp
+                    <label for="zone-{{ $zone['id'] }}"
+                        class="px-3 py-1 rounded-full text-xs font-bold shadow cursor-pointer select-none border transition-all duration-200 {{ $isSelected ? 'bg-red-600 text-white border-red-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-red-50' }}">
+                        {{ $zoneName }}
+                        <input type="checkbox" id="zone-{{ $zone['id'] }}" value="{{ $zone['id'] }}"
+                            wire:model.live="selected_zones" class="hidden">
+                    </label>
+                @empty
+                    <span class="text-xs text-gray-500 font-bold">{{ __('admin/offersPages.No Zones Available') }}</span>
+                @endforelse
+            </div>
+
+            @error('selected_zones')
+                <div class="inline-block mt-2 col-span-12 bg-red-700 rounded text-white shadow px-3 py-1">
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+        {{-- Target Zones End --}}
 
     </div>
     {{-- Coupon Information End --}}

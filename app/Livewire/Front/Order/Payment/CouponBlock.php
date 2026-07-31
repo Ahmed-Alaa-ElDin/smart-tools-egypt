@@ -2,11 +2,12 @@
 
 namespace App\Livewire\Front\Order\Payment;
 
-use Carbon\Carbon;
 use App\Models\Coupon;
-use Livewire\Component;
+use App\Models\Zone;
 use App\Services\CouponService;
+use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Livewire\Component;
 
 class CouponBlock extends Component
 {
@@ -110,6 +111,7 @@ class CouponBlock extends Component
         $items_best_prices = array_sum(array_map(fn($item) => $item['best_price'] * $item['qty'], $items));
 
         $coupon = Coupon::with([
+            'zones',
             'supercategories' => function ($q) {
                 $q->with(['products']);
             },
@@ -132,6 +134,34 @@ class CouponBlock extends Component
             ->first();
 
         if ($coupon) {
+            // Check minimum order price requirement
+            if ($coupon->min_order_price && $items_best_prices < $coupon->min_order_price) {
+                $this->coupon_applied = false;
+                $this->success_message = null;
+                $this->error_message = __('front/homePage.Minimum order price to use this coupon is :min EGP', ['min' => number_format($coupon->min_order_price, 2)]);
+                return;
+            }
+
+            // Check target zones requirement
+            if ($coupon->zones->isNotEmpty()) {
+                $userAddress = auth()->check() ? auth()->user()->addresses->where('default', 1)->first() : null;
+                $userZoneIds = [];
+                if ($userAddress) {
+                    $userZoneIds = Zone::where('is_active', 1)
+                        ->whereHas('destinations', fn($q) => $q->where('city_id', $userAddress->city_id))
+                        ->whereHas('delivery', fn($q) => $q->where('is_active', 1))
+                        ->pluck('id')
+                        ->toArray();
+                }
+
+                if (empty($userZoneIds) || $coupon->zones->pluck('id')->intersect($userZoneIds)->isEmpty()) {
+                    $this->coupon_applied = false;
+                    $this->success_message = null;
+                    $this->error_message = __('front/homePage.This coupon is not valid for your delivery zone');
+                    return;
+                }
+            }
+
             $this->coupon_id = $coupon->id;
 
             $couponDiscounts = (new CouponService($products, $collections))->calculateDiscount($coupon->id, $items_best_prices);

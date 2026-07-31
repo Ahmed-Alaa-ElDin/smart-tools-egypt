@@ -58,16 +58,16 @@ class OrderService
             // Process cart items and calculate totals
             $this->processCartItems();
 
+            // Calculate best zone for shipping
+            $bestZoneId = $this->calculateBestZone($data['address_id']);
+
             // Apply coupon if provided
             if (!empty($data['coupon_id'])) {
-                $this->applyCoupon($data['coupon_id']);
+                $this->applyCoupon($data['coupon_id'], $bestZoneId);
             }
 
             // Calculate totals
             $this->calculateTotals($data);
-
-            // Calculate best zone for shipping
-            $bestZoneId = $this->calculateBestZone($data['address_id']);
 
             // Calculate shipping fees
             $this->calculateShippingFees($bestZoneId, $data['allow_opening'] ?? false);
@@ -162,14 +162,27 @@ class OrderService
     /**
      * Apply coupon to products and collections.
      */
-    private function applyCoupon(int $couponId): void
+    private function applyCoupon(int $couponId, ?int $bestZoneId = null): void
     {
         try {
-            $couponService = new CouponService($this->products, $this->collections);
+            $coupon = Coupon::with('zones')->find($couponId);
+            if (!$coupon) {
+                return;
+            }
 
             // Calculate subtotal from actual product/collection prices (not cart which may have stale prices)
             $subtotal = $this->products->sum(fn($p) => ($p->best_price ?? $p->final_price) * $p->qty)
                 + $this->collections->sum(fn($c) => ($c->best_price ?? $c->final_price) * $c->qty);
+
+            if ($coupon->min_order_price && $subtotal < $coupon->min_order_price) {
+                return;
+            }
+
+            if ($coupon->zones->isNotEmpty() && $bestZoneId && !$coupon->zones->contains('id', $bestZoneId)) {
+                return;
+            }
+
+            $couponService = new CouponService($this->products, $this->collections);
 
             $result = $couponService->calculateDiscount($couponId, $subtotal);
 

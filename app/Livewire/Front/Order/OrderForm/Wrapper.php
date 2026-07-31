@@ -2,18 +2,20 @@
 
 namespace App\Livewire\Front\Order\OrderForm;
 
-use App\Models\Zone;
+use App\Facades\MetaPixel;
+use App\Models\Address;
+use App\Models\Coupon;
 use App\Models\Offer;
 use App\Models\Order;
-use App\Models\Address;
-use Livewire\Component;
-use App\Facades\MetaPixel;
-use Livewire\Attributes\On;
-use Livewire\Attributes\Computed;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Zone;
+use App\Services\CouponService;
 use App\Traits\Front\EnrichesCartItems;
-use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
+use Livewire\Component;
 
 class Wrapper extends Component
 {
@@ -261,6 +263,51 @@ class Wrapper extends Component
         }
 
         try {
+            $coupon = Coupon::with('zones')->find($this->coupon_id);
+            if (!$coupon) {
+                return [
+                    'coupon_items_discount' => 0,
+                    'coupon_order_discount' => 0,
+                    'coupon_items_points' => 0,
+                    'coupon_order_points' => 0,
+                    'coupon_free_shipping' => false,
+                ];
+            }
+
+            $subtotal = (float) $this->total_after_offer_prices;
+
+            if ($coupon->min_order_price && $subtotal < $coupon->min_order_price) {
+                return [
+                    'coupon_items_discount' => 0,
+                    'coupon_order_discount' => 0,
+                    'coupon_items_points' => 0,
+                    'coupon_order_points' => 0,
+                    'coupon_free_shipping' => false,
+                ];
+            }
+
+            if ($coupon->zones->isNotEmpty()) {
+                $userAddress = $this->address_id ? Address::find($this->address_id) : (Auth::check() ? Auth::user()->addresses()->where('default', true)->first() : null);
+                $userZoneIds = [];
+                if ($userAddress) {
+                    $userZoneIds = Zone::where('is_active', 1)
+                        ->whereHas('destinations', fn($q) => $q->where('city_id', $userAddress->city_id))
+                        ->whereHas('delivery', fn($q) => $q->where('is_active', 1))
+                        ->pluck('id')
+                        ->toArray();
+                }
+
+                if (empty($userZoneIds) || $coupon->zones->pluck('id')->intersect($userZoneIds)->isEmpty()) {
+                    return [
+                        'coupon_items_discount' => 0,
+                        'coupon_order_discount' => 0,
+                        'coupon_items_points' => 0,
+                        'coupon_order_points' => 0,
+                        'coupon_free_shipping' => false,
+                    ];
+                }
+            }
+
             // Get cart content and separate by type
             $cartContent = Cart::instance('cart')->content();
 
@@ -284,8 +331,7 @@ class Wrapper extends Component
                 return $collection;
             });
 
-            $couponService = new \App\Services\CouponService($products, $collections);
-            $subtotal = (float) str_replace(',', '', Cart::instance('cart')->subtotal());
+            $couponService = new CouponService($products, $collections);
 
             return $couponService->calculateDiscount($this->coupon_id, $subtotal);
         } catch (\Exception $e) {

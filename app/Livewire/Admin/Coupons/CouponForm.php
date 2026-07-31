@@ -9,6 +9,7 @@ use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\Subcategory;
 use App\Models\Supercategory;
+use App\Models\Zone;
 use App\Rules\Maxif;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -25,6 +26,9 @@ class CouponForm extends Component
     public $number;
     public $on_orders = 0;
     public $free_shipping = 0;
+    public $min_order_price;
+    public $zones_list = [];
+    public $selected_zones = [];
     public $brands;
     public $supercategories;
     public $items = [];
@@ -71,7 +75,10 @@ class CouponForm extends Component
             'items.*.collections_id.*'          =>      "nullable|exists:collections,id",
             'items.*.type'                      =>      "required|in:0,1,2,3",
             'items.*.value'                     =>      ["required", "numeric", "min:0", "exclude_unless:items.*.type,0 | max:100"],
-            'on_orders'                         =>      "nullable"
+            'on_orders'                         =>      "nullable",
+            'min_order_price'                   =>      "nullable|numeric|min:0",
+            'selected_zones'                    =>      "nullable|array",
+            'selected_zones.*'                  =>      "nullable|exists:zones,id",
         ];
     }
 
@@ -87,9 +94,13 @@ class CouponForm extends Component
         $this->brands = Brand::get();
 
         $this->supercategories = Supercategory::select('id', 'name')->get()->toArray();
+        $this->zones_list = Zone::select('id', 'name')->where('is_active', 1)->get()->toArray();
 
         if ($this->coupon_id) {
             $coupon = Coupon::with([
+                'zones' => function ($q) {
+                    $q->select('zones.id', 'zones.name');
+                },
                 'products' => function ($q) {
                     $q->select('products.id', 'products.name', 'brand_id');
                 },
@@ -116,6 +127,8 @@ class CouponForm extends Component
             $this->number = $coupon->number;
             $this->on_orders = $coupon->on_orders;
             $this->free_shipping = $coupon->free_shipping;
+            $this->min_order_price = $coupon->min_order_price;
+            $this->selected_zones = $coupon->zones->pluck('id')->toArray();
 
             if ($coupon->supercategories->count()) {
                 $this->oldSupercategories = $coupon->supercategories->toArray();
@@ -468,8 +481,11 @@ class CouponForm extends Component
                 'number'  => $this->number ? $this->number : null,
                 'type' => $this->type ?? 0,
                 'value' => $this->value ?? 0,
-                'free_shipping' => $this->free_shipping ? 1 : 0
+                'free_shipping' => $this->free_shipping ? 1 : 0,
+                'min_order_price' => $this->min_order_price ?: null,
             ]);
+
+            $coupon->zones()->sync($this->selected_zones ?? []);
 
             foreach ($this->items as $item) {
                 if ($item['item_type'] == 'product_collection') {
@@ -560,7 +576,10 @@ class CouponForm extends Component
                 'value' => $this->value ?? 0,
                 'free_shipping' => $this->free_shipping ? 1 : 0,
                 'on_orders' => $this->on_orders ?? 0,
+                'min_order_price' => $this->min_order_price != "" ? $this->min_order_price : null,
             ]);
+
+            $this->coupon->zones()->sync($this->selected_zones ?? []);
 
             if (isset($this->deleteSupercategories_id)) {
                 $this->coupon->supercategories()->detach($this->deleteSupercategories_id);

@@ -2,15 +2,18 @@
 
 namespace App\Livewire\Front\Order\OrderForm;
 
-use App\Models\Order;
-
-use App\Models\Coupon;
-use Livewire\Component;
-use Illuminate\Support\Facades\Auth;
 use App\Livewire\Front\Order\OrderForm\Wrapper;
+use App\Models\Coupon;
+use App\Models\Order;
+use App\Models\Zone;
+use App\Traits\Front\EnrichesCartItems;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
 
 class CouponSection extends Component
 {
+    use EnrichesCartItems;
+
     public $coupon_code;
     public $applied_coupon;
 
@@ -20,7 +23,7 @@ class CouponSection extends Component
             'coupon_code' => 'required',
         ]);
 
-        $coupon = Coupon::where('code', $this->coupon_code)->first();
+        $coupon = Coupon::with('zones')->where('code', $this->coupon_code)->first();
 
         if (!$coupon) {
             $this->addError('coupon_code', __('front/homePage.Invalid coupon code.'));
@@ -37,6 +40,39 @@ class CouponSection extends Component
         if ($coupon->number !== null && $coupon->number <= 0) {
             $this->addError('coupon_code', __('front/homePage.This coupon has reached its usage limit.'));
             return;
+        }
+
+        // Check min order price
+        if ($coupon->min_order_price) {
+            $items = $this->getEnrichedItems('cart');
+            $subtotal = collect($items)->sum(function ($item) {
+                $qty = $item['cartQty'] ?? 1;
+                $price = $item['best_price'] ?? 0;
+                return $price * $qty;
+            });
+
+            if ($subtotal < $coupon->min_order_price) {
+                $this->addError('coupon_code', __('front/homePage.Minimum order price to use this coupon is :min EGP', ['min' => number_format($coupon->min_order_price, 2)]));
+                return;
+            }
+        }
+
+        // Check target zones
+        if ($coupon->zones->isNotEmpty()) {
+            $userAddress = Auth::check() ? Auth::user()->addresses()->where('default', true)->first() : null;
+            $userZoneIds = [];
+            if ($userAddress) {
+                $userZoneIds = Zone::where('is_active', 1)
+                    ->whereHas('destinations', fn($q) => $q->where('city_id', $userAddress->city_id))
+                    ->whereHas('delivery', fn($q) => $q->where('is_active', 1))
+                    ->pluck('id')
+                    ->toArray();
+            }
+
+            if (empty($userZoneIds) || $coupon->zones->pluck('id')->intersect($userZoneIds)->isEmpty()) {
+                $this->addError('coupon_code', __('front/homePage.This coupon is not valid for your delivery zone'));
+                return;
+            }
         }
 
         // Check per-user restriction

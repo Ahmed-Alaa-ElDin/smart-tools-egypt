@@ -30,7 +30,7 @@ class CouponsDatatable extends Component
     // Render With each update
     public function render()
     {
-        $coupons = Coupon::where(function ($query) {
+        $coupons = Coupon::with('zones')->where(function ($query) {
             return $query
                 ->where('code', 'like', '%' . $this->search . '%')
                 ->orWhere('value', 'like', '%' . $this->search . '%')

@@ -63,4 +63,10 @@ class Zone extends Model
     {
         return $this->hasMany(Destination::class);
     }
+
+    // Many to Many relationship Zone --> Coupons
+    public function coupons()
+    {
+        return $this->belongsToMany(Coupon::class, 'coupon_zone');
+    }
 }

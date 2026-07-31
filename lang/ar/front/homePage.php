@@ -576,4 +576,6 @@ return [
     "This phone number already exists." => "هذا الرقم موجود بالفعل.",
     "Inclusive of shipment fees" => "شامل مصاريف الشحن",
     "Please select a phone number" => "يرجى اختيار رقم هاتف للتواصل",
+    "Minimum order price to use this coupon is :min EGP" => "الحد الأدنى لإجمالي الطلب لاستخدام كود الخصم هو :min ج.م",
+    "This coupon is not valid for your delivery zone" => "كود الخصم غير متاح لمنطقة التوصيل الخاصة بك",
 ];

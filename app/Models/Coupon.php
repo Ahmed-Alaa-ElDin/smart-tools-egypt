@@ -18,8 +18,15 @@ class Coupon extends Model
         'number',
         'free_shipping',
         'on_orders',
+        'min_order_price',
         'expire_at',
     ];
+
+    // Many to many relationship Zone --> Coupons
+    public function zones()
+    {
+        return $this->belongsToMany(Zone::class, 'coupon_zone');
+    }
 
     // many to many relationship (polymorphic) (inverse)  Super-Category --> Coupons
     public function supercategories()

@@ -102,5 +102,12 @@ return [
     "Collections"                                           =>      "تجميعات",
     "No Products or Collections Found"                      =>      "لم يتم العثور على منتجات أو تجميعات",
     "Collections & Products"                                =>      "منتجات وتجميعات",
+    "Minimum Order Price"                                   =>      "الحد الأدنى لسعر الطلب",
+    "Minimum Order Price (EGP)"                             =>      "الحد الأدنى لسعر الطلب (ج.م)",
+    "Target Zones"                                          =>      "المناطق المستهدفة",
+    "Target Zones (Leave blank for all zones)"              =>      "المناطق المستهدفة (اتركه فارغاً لجميع المناطق)",
+    "All Zones"                                             =>      "جميع المناطق",
+    "No Zones Available"                                    =>      "لا يوجد مناطق مضافة",
+    "Optional"                                              =>      "اختياري",
 
 ];

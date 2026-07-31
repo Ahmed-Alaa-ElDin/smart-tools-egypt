@@ -73,6 +73,25 @@
                                     </div>
                                 </th>
 
+                                {{-- Minimum Order Price --}}
+                                <th wire:click="setSortBy('min_order_price')" scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer select-none">
+                                    <div class="min-w-max">
+                                        {{ __('admin/offersPages.Minimum Order Price') }}
+                                        @include('partials._sort_icon', [
+                                            'field' => 'min_order_price',
+                                        ])
+                                    </div>
+                                </th>
+
+                                {{-- Target Zones --}}
+                                <th scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
+                                    <div class="min-w-max">
+                                        {{ __('admin/offersPages.Target Zones') }}
+                                    </div>
+                                </th>
+
                                 {{-- Manage --}}
                                 <th scope="col"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider select-none">
@@ -114,6 +133,32 @@
                                             <div class="text-sm font-medium text-gray-900">
                                                 {{ $coupon->number ?? __('admin/offersPages.Unlimited') }}
                                             </div>
+                                        </div>
+                                    </td>
+
+                                    {{-- Minimum Order Price --}}
+                                    <td class="px-6 py-2 whitespace-nowrap">
+                                        <div class="flex items-center content-center justify-center">
+                                            <div class="text-sm font-medium text-gray-900">
+                                                {{ $coupon->min_order_price ? number_format($coupon->min_order_price, 2) . ' ' . __('admin/offersPages.EPG') : '-' }}
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    {{-- Target Zones --}}
+                                    <td class="px-6 py-2 text-center">
+                                        <div class="flex flex-wrap items-center justify-center gap-1">
+                                            @if ($coupon->zones->isEmpty())
+                                                <span class="px-2 py-0.5 text-xs bg-gray-100 text-gray-700 rounded-full font-bold">
+                                                    {{ __('admin/offersPages.All Zones') }}
+                                                </span>
+                                            @else
+                                                @foreach ($coupon->zones as $zone)
+                                                    <span class="px-2 py-0.5 text-xs bg-red-100 text-red-800 rounded-full font-bold">
+                                                        {{ is_array($zone->name) ? ($zone->name[session('locale')] ?? reset($zone->name)) : $zone->name }}
+                                                    </span>
+                                                @endforeach
+                                            @endif
                                         </div>
                                     </td>
 
