@@ -105,228 +105,216 @@
     {{-- Add Product Search : End --}}
 
     {{-- List :: Start --}}
-    @foreach ($items as $key => $product)
-        <div class="flex flex-wrap gap-2 w-100 justify-between items-center @if ($key % 2 == 0) bg-red-100 @else bg-gray-100 @endif rounded-xl"
-            wire:key='product-{{ $key }}-{{ $product['id'] }}'>
+    <div class="flex flex-col gap-2" x-data="{
+        draggedIndex: null,
+        dragOverIndex: null,
+        onDragStart(e, index) {
+            this.draggedIndex = index;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', index);
+        },
+        onDragOver(e, index) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            this.dragOverIndex = index;
+        },
+        onDragLeave(e, index) {
+            if (this.dragOverIndex === index) {
+                this.dragOverIndex = null;
+            }
+        },
+        onDrop(e, targetIndex) {
+            e.preventDefault();
+            const fromIndex = this.draggedIndex !== null ? this.draggedIndex : parseInt(e.dataTransfer.getData('text/plain'));
+            if (fromIndex !== null && !isNaN(fromIndex) && fromIndex !== targetIndex) {
+                $wire.reorder(fromIndex, targetIndex);
+            }
+            this.draggedIndex = null;
+            this.dragOverIndex = null;
+        },
+        onDragEnd() {
+            this.draggedIndex = null;
+            this.dragOverIndex = null;
+        }
+    }">
+        @foreach ($items as $key => $product)
+            <div draggable="true"
+                x-on:dragstart="onDragStart($event, {{ $key }})"
+                x-on:dragover="onDragOver($event, {{ $key }})"
+                x-on:dragleave="onDragLeave($event, {{ $key }})"
+                x-on:drop="onDrop($event, {{ $key }})"
+                x-on:dragend="onDragEnd()"
+                :class="{
+                    'opacity-40 border-2 border-dashed border-primary scale-[0.99]': draggedIndex === {{ $key }},
+                    'border-t-4 border-t-primary': dragOverIndex === {{ $key }} && draggedIndex !== {{ $key }}
+                }"
+                class="flex flex-wrap gap-2 w-full justify-between items-center @if ($key % 2 == 0) bg-red-100 @else bg-gray-100 @endif rounded-xl p-2 cursor-grab active:cursor-grabbing transition-all duration-200 shadow-sm hover:shadow-md"
+                wire:key="deal-item-{{ $product['type'] }}-{{ $product['id'] }}">
 
-            {{-- Rank --}}
-            <div class="p-2 text-center">
-                <div class="text-sm text-gray-900">
-                    @if ($product['rank'] && $product['rank'] != 0 && $product['rank'] <= 11)
-                        <div class="flex gap-2 items-center min-w-max">
-
-                            <div>
-                                {{-- down : Start --}}
-                                <span
-                                    class="material-icons rounded text-white text-lg @if ($product['rank'] < 12) @if ($key % 2 == 0) bg-primary @else bg-secondary @endif cursor-pointer
-@else
-bg-gray-200 @endif select-none"
-                                    wire:click="rankDown({{ $product['id'] }},'{{ $product['type'] }}')">
-                                    expand_more
-                                </span>
-                                {{-- down : End --}}
-
-                                {{-- up : Start --}}
-                                <span
-                                    class="material-icons rounded text-white text-lg @if ($product['rank'] > 1) @if ($key % 2 == 0) bg-primary @else bg-secondary @endif cursor-pointer
-@else
-bg-gray-200 @endif select-none"
-                                    wire:click="rankUp({{ $product['id'] }},'{{ $product['type'] }}')">
-                                    expand_less
-                                </span>
-                                {{-- up : Start --}}
-                            </div>
-
-                            <span class="font-bold">
-                                {{ $product['rank'] }}
-                            </span>
-                        </div>
-                    @else
-                        <div class="flex gap-2 items-center min-w-max">
-
-                            <div>
-                                {{-- down : Start --}}
-                                <span
-                                    class="material-icons rounded text-white text-lg @if ($product['rank'] < 11) @if ($key % 2 == 0) bg-primary @else bg-secondary @endif cursor-pointer
-@else
-bg-gray-200 @endif select-none"
-                                    wire:click="rankDown({{ $product['id'] }},'{{ $product['type'] }}')">
-                                    expand_more
-                                </span>
-                                {{-- down : End --}}
-
-                                {{-- up : Start --}}
-                                <span
-                                    class="material-icons rounded text-white text-lg @if ($product['rank'] > 1) @if ($key % 2 == 0) bg-primary @else bg-secondary @endif cursor-pointer
-@else
-bg-gray-200 @endif select-none"
-                                    wire:click="rankUp({{ $product['id'] }},'{{ $product['type'] }}')">
-                                    expand_less
-                                </span>
-                                {{-- up : Start --}}
-                            </div>
-
-                            <span class="font-bold">
-                                0
-                            </span>
-                        </div>
-                    @endif
-                </div>
-            </div>
-
-            {{-- Image & Name --}}
-            <div class="grow p-2 text-center flex items-center gap-2 max-w-50">
-                <div class="flex-shrink-0 h-10 w-10">
-                    @if ($product['thumbnail'])
-                        <img class="h-10 w-10 rounded-full"
-                            @if ($product['type'] == 'Product') src="{{ asset('storage/images/products/cropped100/' . $product['thumbnail']['file_name']) }}"
-                        @elseif ($product['type'] == 'Collection') src="{{ asset('storage/images/collections/cropped100/' . $product['thumbnail']['file_name']) }}" @endif
-                            alt="{{ $product['name'][session('locale')] . 'image' }}">
-                    @else
-                        <div
-                            class="h-10 w-10 rounded-full text-white @if ($key % 2 == 0) bg-primary @else bg-secondary @endif flex justify-center items-center">
-                            <span class="material-icons">
-                                construction
-                            </span>
-                        </div>
-                    @endif
-                </div>
-                <span class="truncate">
-                    {{ $product['name'][session('locale')] }}
-                </span>
-            </div>
-
-
-            {{-- Price : Start --}}
-            <div class="p-2 text-center">
-                <div class="text-sm flex gap-2 ">
-                    @if ($product['under_reviewing'])
-                        <span class="bg-yellow-600 px-2 p-1 rounded text-white text-xs">
-                            {{ __('admin/sitePages.Under Reviewing') }}
-                        </span>
-                    @elseif ($product['final_price'] == $product['base_price'])
-                        <div
-                            class="flex flex-col items-center content-center justify-center bg-secondary p-1 rounded shadow">
-                            <span class="font-bold text-xs mb-1 text-white">
-                                {{ __('admin/sitePages.Original Price') }}
-                            </span>
-                            <div class="text-sm font-medium text-gray-900 bg-white p-1 w-100 rounded shadow">
-                                <span dir="ltr">
-                                    {{ number_format($product['original_price'], 2, '.', '\'') ?? 0 }}
-                                </span>
-                                <span class="text-xs">
-                                    {{ __('admin/sitePages. EGP') }}
-                                </span>
-                            </div>
-                        </div>
-                        <div
-                            class="flex flex-col items-center content-center justify-center bg-success p-1 rounded shadow">
-                            <span class="font-bold text-xs mb-1 text-white">
-                                {{ __('admin/sitePages.Final Price') }}
-                            </span>
-                            <div class="text-sm font-medium text-gray-900 bg-white p-1 w-100 rounded shadow">
-                                <span dir="ltr">
-                                    {{ number_format($product['final_price'], 2, '.', '\'') ?? 0 }}
-                                </span>
-                                <span class="text-xs">
-                                    {{ __('admin/sitePages. EGP') }}
-                                </span>
-                            </div>
-                        </div>
-                    @else
-                        <div
-                            class="flex flex-col items-center content-center justify-center bg-secondary p-1 rounded shadow">
-                            <span class="font-bold text-xs mb-1 text-white">
-                                {{ __('admin/sitePages.Original Price') }}
-                            </span>
-                            <div class="text-sm font-medium text-gray-900 bg-white p-1 w-100 rounded shadow">
-                                <span dir="ltr">
-                                    {{ number_format($product['original_price'], 2, '.', '\'') ?? 0 }}
-                                </span>
-                                <span class="text-xs">
-                                    {{ __('admin/sitePages. EGP') }}
-                                </span>
-                            </div>
-                        </div>
-                        <div
-                            class="flex flex-col items-center content-center justify-center bg-red-600 p-1 rounded shadow">
-                            <span class="font-bold text-xs mb-1 text-white">
-                                {{ __('admin/sitePages.Base Price') }}
-                            </span>
-                            <div
-                                class="line-through text-sm font-medium text-gray-900 bg-white p-1 w-100 rounded shadow">
-                                <span dir="ltr">
-                                    {{ number_format($product['base_price'], 2, '.', '\'') ?? 0 }}
-                                </span>
-                                <span class="text-xs">
-                                    {{ __('admin/sitePages. EGP') }}
-                                </span>
-                            </div>
-                        </div>
-                        <div
-                            class="flex flex-col items-center content-center justify-center bg-success p-1 rounded shadow">
-                            <span class="font-bold text-xs mb-1 text-white">
-                                {{ __('admin/sitePages.Final Price') }}
-                            </span>
-                            <div class="text-sm font-medium text-gray-900 bg-white p-1 w-100 rounded shadow">
-                                <span dir="ltr">
-                                    {{ number_format($product['final_price'], 2, '.', '\'') ?? 0 }}
-                                </span>
-                                <span class="text-xs">
-                                    {{ __('admin/sitePages. EGP') }}
-                                </span>
-                            </div>
-                        </div>
-                    @endif
-                </div>
-            </div>
-            {{-- Price : End --}}
-
-            {{-- Points : Start --}}
-            <div class="p-2 text-center">
-                <div class="flex flex-col items-center content-center justify-center bg-yellow-600 p-1 rounded shadow">
-                    <span class="font-bold text-xs mb-1 text-white">
-                        {{ __('admin/sitePages.Points') }}
+                {{-- Drag Handle & Rank Badge --}}
+                <div class="p-2 text-center flex items-center gap-2">
+                    <span class="material-icons text-gray-500 cursor-grab active:cursor-grabbing select-none text-xl p-1 rounded hover:bg-gray-200 transition-colors" title="{{ __('admin/sitePages.Drag to reorder') }}">
+                        drag_indicator
                     </span>
-                    <div class="text-sm font-medium text-gray-900 bg-white p-1 w-100 rounded shadow">
-                        <span dir="ltr">
-                            {{ number_format($product['points'], 0, '.', '\'') ?? 0 }}
-                        </span>
+                    <span class="font-bold bg-white text-gray-800 px-2.5 py-1 rounded-full text-xs shadow-sm border border-gray-200 min-w-[28px]">
+                        {{ $loop->iteration }}
+                    </span>
+                </div>
+
+                {{-- Image & Name --}}
+                <div class="grow p-2 text-center flex items-center gap-2 max-w-50">
+                    <div class="flex-shrink-0 h-10 w-10">
+                        @if ($product['thumbnail'])
+                            <img class="h-10 w-10 rounded-full"
+                                @if ($product['type'] == 'Product') src="{{ asset('storage/images/products/cropped100/' . $product['thumbnail']['file_name']) }}"
+                            @elseif ($product['type'] == 'Collection') src="{{ asset('storage/images/collections/cropped100/' . $product['thumbnail']['file_name']) }}" @endif
+                                alt="{{ $product['name'][session('locale')] . 'image' }}">
+                        @else
+                            <div
+                                class="h-10 w-10 rounded-full text-white @if ($key % 2 == 0) bg-primary @else bg-secondary @endif flex justify-center items-center">
+                                <span class="material-icons">
+                                    construction
+                                </span>
+                            </div>
+                        @endif
+                    </div>
+                    <span class="truncate">
+                        {{ $product['name'][session('locale')] }}
+                    </span>
+                </div>
+
+
+                {{-- Price : Start --}}
+                <div class="p-2 text-center">
+                    <div class="text-sm flex gap-2 ">
+                        @if ($product['under_reviewing'])
+                            <span class="bg-yellow-600 px-2 p-1 rounded text-white text-xs">
+                                {{ __('admin/sitePages.Under Reviewing') }}
+                            </span>
+                        @elseif ($product['final_price'] == $product['base_price'])
+                            <div
+                                class="flex flex-col items-center content-center justify-center bg-secondary p-1 rounded shadow">
+                                <span class="font-bold text-xs mb-1 text-white">
+                                    {{ __('admin/sitePages.Original Price') }}
+                                </span>
+                                <div class="text-sm font-medium text-gray-900 bg-white p-1 w-100 rounded shadow">
+                                    <span dir="ltr">
+                                        {{ number_format($product['original_price'], 2, '.', '\'') ?? 0 }}
+                                    </span>
+                                    <span class="text-xs">
+                                        {{ __('admin/sitePages. EGP') }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div
+                                class="flex flex-col items-center content-center justify-center bg-success p-1 rounded shadow">
+                                <span class="font-bold text-xs mb-1 text-white">
+                                    {{ __('admin/sitePages.Final Price') }}
+                                </span>
+                                <div class="text-sm font-medium text-gray-900 bg-white p-1 w-100 rounded shadow">
+                                    <span dir="ltr">
+                                        {{ number_format($product['final_price'], 2, '.', '\'') ?? 0 }}
+                                    </span>
+                                    <span class="text-xs">
+                                        {{ __('admin/sitePages. EGP') }}
+                                    </span>
+                                </div>
+                            </div>
+                        @else
+                            <div
+                                class="flex flex-col items-center content-center justify-center bg-secondary p-1 rounded shadow">
+                                <span class="font-bold text-xs mb-1 text-white">
+                                    {{ __('admin/sitePages.Original Price') }}
+                                </span>
+                                <div class="text-sm font-medium text-gray-900 bg-white p-1 w-100 rounded shadow">
+                                    <span dir="ltr">
+                                        {{ number_format($product['original_price'], 2, '.', '\'') ?? 0 }}
+                                    </span>
+                                    <span class="text-xs">
+                                        {{ __('admin/sitePages. EGP') }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div
+                                class="flex flex-col items-center content-center justify-center bg-red-600 p-1 rounded shadow">
+                                <span class="font-bold text-xs mb-1 text-white">
+                                    {{ __('admin/sitePages.Base Price') }}
+                                </span>
+                                <div
+                                    class="line-through text-sm font-medium text-gray-900 bg-white p-1 w-100 rounded shadow">
+                                    <span dir="ltr">
+                                        {{ number_format($product['base_price'], 2, '.', '\'') ?? 0 }}
+                                    </span>
+                                    <span class="text-xs">
+                                        {{ __('admin/sitePages. EGP') }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div
+                                class="flex flex-col items-center content-center justify-center bg-success p-1 rounded shadow">
+                                <span class="font-bold text-xs mb-1 text-white">
+                                    {{ __('admin/sitePages.Final Price') }}
+                                </span>
+                                <div class="text-sm font-medium text-gray-900 bg-white p-1 w-100 rounded shadow">
+                                    <span dir="ltr">
+                                        {{ number_format($product['final_price'], 2, '.', '\'') ?? 0 }}
+                                    </span>
+                                    <span class="text-xs">
+                                        {{ __('admin/sitePages. EGP') }}
+                                    </span>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
+                {{-- Price : End --}}
+
+                {{-- Points : Start --}}
+                <div class="p-2 text-center">
+                    <div class="flex flex-col items-center content-center justify-center bg-yellow-600 p-1 rounded shadow">
+                        <span class="font-bold text-xs mb-1 text-white">
+                            {{ __('admin/sitePages.Points') }}
+                        </span>
+                        <div class="text-sm font-medium text-gray-900 bg-white p-1 w-100 rounded shadow">
+                            <span dir="ltr">
+                                {{ number_format($product['points'], 0, '.', '\'') ?? 0 }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                {{-- Points : End --}}
+
+                {{-- Buttons : Start --}}
+                <div class="p-2 text-center text-sm font-medium flex gap-2">
+
+                    {{-- Edit Button --}}
+                    <a target="_blank" data-title="{{ __('admin/sitePages.Edit') }}" data-toggle="tooltip"
+                        @if ($product['type'] == 'Product') href="{{ route('admin.products.edit', [$product['id']]) }}"
+    @elseif ($product['type'] == 'Collection') href="{{ route('admin.collections.edit', [$product['id']]) }}" @endif
+                        data-placement="top" class="m-0">
+                        <span class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
+                            edit
+                        </span>
+                    </a>
+
+                    {{-- Delete Button --}}
+                    <a href="#" data-title="{{ __('admin/sitePages.Remove from list') }}" data-toggle="tooltip"
+                        data-placement="top"
+                        @if ($product['type'] == 'Product') wire:click.prevent="removeProduct({{ $product['id'] }})"
+                        @elseif ($product['type'] == 'Collection')
+                        wire:click.prevent="removeCollection({{ $product['id'] }})" @endif
+                        class="m-0">
+                        <span
+                            class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded-circle">
+                            close
+                        </span>
+                    </a>
+                </div>
+                {{-- Buttons : End --}}
+
             </div>
-            {{-- Points : End --}}
-
-            {{-- Buttons : Start --}}
-            <div class="p-2 text-center text-sm font-medium flex gap-2">
-
-                {{-- Edit Button --}}
-                <a target="_blank" data-title="{{ __('admin/sitePages.Edit') }}" data-toggle="tooltip"
-                    @if ($product['type'] == 'Product') href="{{ route('admin.products.edit', [$product['id']]) }}"
-@elseif ($product['type'] == 'Collection') href="{{ route('admin.collections.edit', [$product['id']]) }}" @endif
-                    data-placement="top" class="m-0">
-                    <span class="material-icons p-1 text-lg w-9 h-9 text-white bg-edit hover:bg-editHover rounded">
-                        edit
-                    </span>
-                </a>
-
-                {{-- Delete Button --}}
-                <a href="#" data-title="{{ __('admin/sitePages.Remove from list') }}" data-toggle="tooltip"
-                    data-placement="top"
-                    @if ($product['type'] == 'Product') wire:click.prevent="removeProduct({{ $product['id'] }})"
-                    @elseif ($product['type'] == 'Collection')
-                    wire:click.prevent="removeCollection({{ $product['id'] }})" @endif
-                    class="m-0">
-                    <span
-                        class="material-icons p-1 text-lg w-9 h-9 text-white bg-delete hover:bg-deleteHover rounded-circle">
-                        close
-                    </span>
-                </a>
-            </div>
-            {{-- Buttons : End --}}
-
-        </div>
-    @endforeach
+        @endforeach
+    </div>
     {{-- List :: End --}}
 
     {{-- Buttons Section Start --}}

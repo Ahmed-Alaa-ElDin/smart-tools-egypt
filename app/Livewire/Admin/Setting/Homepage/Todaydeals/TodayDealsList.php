@@ -198,6 +198,28 @@ class TodayDealsList extends Component
     }
     // Add Products or Collections to the item :: End
 
+    ######## Drag and Drop Reorder : Start ########
+    public function reorder($fromIndex, $toIndex)
+    {
+        if (!isset($this->items[$fromIndex]) || !isset($this->items[$toIndex])) {
+            return;
+        }
+
+        usort($this->items, function ($a, $b) {
+            return $a['rank'] <=> $b['rank'];
+        });
+
+        $movedItem = array_splice($this->items, $fromIndex, 1)[0];
+        array_splice($this->items, $toIndex, 0, [$movedItem]);
+
+        foreach ($this->items as $index => &$item) {
+            $item['rank'] = $index + 1;
+        }
+
+        $this->dispatch('swalDone', text: __('admin/sitePages.List reordered successfully'), icon: 'success');
+    }
+    ######## Drag and Drop Reorder : End ########
+
     ######## Check Rank : Start ########
     public function checkRank($rank, $old_rank)
     {
@@ -215,7 +237,7 @@ class TodayDealsList extends Component
     }
     ######## Check Rank : End ########
 
-    ######## Rank UP : Start #########
+    ######## Rank UP : Start # extraction ########
     public function rankUp($product_id, $type = 'Product')
     {
         $product_key = null;
@@ -267,18 +289,24 @@ class TodayDealsList extends Component
         try {
             $product_key = null;
 
-            array_map(function ($item) use ($product_id, &$product_key) {
+            foreach ($this->items as $key => $item) {
                 if ($item['id'] == $product_id && $item['type'] == 'Product') {
-                    $product_key = array_search($item, $this->items);
+                    $product_key = $key;
+                    break;
                 }
-            }, $this->items);
+            }
 
-            unset($this->items[$product_key]);
+            if ($product_key !== null) {
+                unset($this->items[$product_key]);
+                $this->items = array_values($this->items);
+
+                foreach ($this->items as $index => &$item) {
+                    $item['rank'] = $index + 1;
+                }
+            }
 
             $this->dispatch('swalDone', text: __('admin/sitePages.Product has been removed from list successfully'),
                 icon: 'success');
-
-            $this->dispatch('listUpdated', ['selected_products' => $this->items])->to('admin.homepage.sections.section-form');
         } catch (\Throwable $th) {
             $this->dispatch('swalDone', text: __("admin/sitePages.Product has not been removed from list"),
                 icon: 'error');
@@ -292,18 +320,24 @@ class TodayDealsList extends Component
         try {
             $collection_key = null;
 
-            array_map(function ($item) use ($collection_id, &$collection_key) {
+            foreach ($this->items as $key => $item) {
                 if ($item['id'] == $collection_id && $item['type'] == 'Collection') {
-                    $collection_key = array_search($item, $this->items);
+                    $collection_key = $key;
+                    break;
                 }
-            }, $this->items);
+            }
 
-            unset($this->items[$collection_key]);
+            if ($collection_key !== null) {
+                unset($this->items[$collection_key]);
+                $this->items = array_values($this->items);
+
+                foreach ($this->items as $index => &$item) {
+                    $item['rank'] = $index + 1;
+                }
+            }
 
             $this->dispatch('swalDone', text: __('admin/sitePages.Product has been removed from list successfully'),
                 icon: 'success');
-
-            $this->dispatch('listUpdated', ['selected_products' => $this->items])->to('admin.homepage.sections.section-form');
         } catch (\Throwable $th) {
             $this->dispatch('swalDone', text: __("admin/sitePages.Product has not been removed from list"),
                 icon: 'error');
