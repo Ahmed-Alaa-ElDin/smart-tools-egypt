@@ -57,7 +57,7 @@ class LoginRequest extends FormRequest
             }
 
             if ($user && Hash::check($this->password, $user->password)) {
-                Auth::login($user, $this->remember);
+                Auth::login($user, $this->boolean('remember'));
 
                 RateLimiter::clear($this->throttleKey());
 

@@ -110,7 +110,7 @@ class AuthenticatedSessionController extends Controller
 
         $createdUser->assignRole('Customer');
 
-        Auth::login($createdUser, true);
+        Auth::login($createdUser);
 
         // Send Meta Pixel event
         $pixelParams = [
@@ -174,7 +174,7 @@ class AuthenticatedSessionController extends Controller
 
         $createdUser->assignRole('Customer');
 
-        Auth::login($createdUser, true);
+        Auth::login($createdUser);
 
         // Send Meta Pixel event
         $pixelParams = [
@@ -238,7 +238,7 @@ class AuthenticatedSessionController extends Controller
 
         $createdUser->assignRole('Customer');
 
-        Auth::login($createdUser, true);
+        Auth::login($createdUser);
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

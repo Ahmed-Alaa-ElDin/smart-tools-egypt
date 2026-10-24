@@ -6,14 +6,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $title . ' | ' . env('APP_NAME') }}</title>
+    <title>{{ (isset($title) && $title ? $title . ' | ' : '') . config('app.name', 'Smart Tools Egypt') }}</title>
 
     {{-- FavIcons --}}
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}">
     <link rel="icon" type="image/png" href="{{ asset('assets/img/logos/smart-tools-logo-50.png') }}">
 
-    <!-- Font Icon -->
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;400;700;900&display=swap" rel="stylesheet">
+    <!-- Font Icons & Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- Main css -->
@@ -24,11 +26,23 @@
         <link href="{{ mix('assets/css/material-dashboard-rtl.css') }}" rel="stylesheet" />
     @endif
 
+    <style>
+        body {
+            font-family: {{ LaravelLocalization::getCurrentLocale() == 'ar' ? "'Cairo', sans-serif" : "'Plus Jakarta Sans', 'Lato', sans-serif" }} !important;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        input, button, select, textarea, label {
+            font-family: inherit;
+        }
+    </style>
+
+    @stack('styles')
 </head>
 
-<body>
+<body class="bg-slate-950 text-gray-800 antialiased selection:bg-primary selection:text-white">
 
-    <div class="main">
+    <div class="main min-h-screen">
 
         @yield('content')
 
@@ -49,11 +63,7 @@
             Swal.fire({
                 text: e.detail.text,
                 icon: e.detail.icon,
-                @if(session('locale' == 'en'))
-                position: 'top-left',
-                @else
-                position: 'top-right',
-                @endif
+                position: '{{ LaravelLocalization::getCurrentLocale() == 'en' ? 'top-left' : 'top-right' }}',
                 showConfirmButton: false,
                 toast: true,
                 timer: 3000,

@@ -75,7 +75,7 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user, $request->remember);
+        Auth::login($user);
 
         // Send Meta Pixel event
         $pixelParams = [
@@ -87,6 +87,6 @@ class RegisteredUserController extends Controller
 
         MetaPixel::sendEvent($pixelParams['eventName'], $pixelParams['userData'], $pixelParams['customData'], $pixelParams['eventId']);
 
-        return redirect(RouteServiceProvider::HOME);
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 }
