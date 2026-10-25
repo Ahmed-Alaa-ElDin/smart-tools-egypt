@@ -66,13 +66,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function facebookRedirect()
     {
-        $driver = Socialite::driver('facebook');
-
-        if ($configId = config('services.facebook.config_id')) {
-            $driver->with(['config_id' => $configId]);
-        }
-
-        return $driver->redirect();
+        return Socialite::driver('facebook')->redirect();
     }
 
     /**

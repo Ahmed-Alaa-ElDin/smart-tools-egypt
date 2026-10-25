@@ -35,7 +35,6 @@ return [
         'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
         'redirect' => env('FACEBOOK_CALLBACK'),
         'access_token' => env('FACEBOOK_ACCESS_TOKEN'),
-        'config_id' => env('FACEBOOK_CONFIG_ID'),
     ],
 
     'google' => [
