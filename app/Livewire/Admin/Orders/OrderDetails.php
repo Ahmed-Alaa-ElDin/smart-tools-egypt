@@ -673,7 +673,7 @@ class OrderDetails extends Component
             } else {
                 $this->dispatch(
                     'swalDone',
-                    text: __("admin/ordersPages.The delivery has not been created"),
+                    text: $bosta_order['message'] ?? __("admin/ordersPages.The delivery has not been created"),
                     icon: 'error'
                 );
             }

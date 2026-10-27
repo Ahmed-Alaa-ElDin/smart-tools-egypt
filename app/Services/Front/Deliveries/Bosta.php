@@ -7,7 +7,9 @@ use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use App\Interfaces\Front\Deliveries\DeliveryInterface;
+use Throwable;
 
 class Bosta implements DeliveryInterface
 {
@@ -15,6 +17,24 @@ class Bosta implements DeliveryInterface
 
     public function createDelivery(Order $order): array
     {
+        $order->loadMissing([
+            'address.city',
+            'address.governorate',
+            'user.phones',
+            'transactions',
+        ]);
+
+        $validationErrors = $this->validateOrderData($order);
+
+        if ($validationErrors) {
+            Log::warning('Bosta delivery was not created because the order data is incomplete.', [
+                'order_id' => $order->id,
+                'errors' => $validationErrors,
+            ]);
+
+            return $this->failed(implode(' ', $validationErrors));
+        }
+
         // Get the unpaid transactions
         $unpaidTransactions = $order->transactions()->where('payment_status_id', PaymentStatus::Pending->value)->get();
 
@@ -55,34 +75,95 @@ class Bosta implements DeliveryInterface
         ];
 
         // Send the request to Bosta API
-        $response = Http::withHeaders([
-            'Authorization'     =>  env('BOSTA_API_KEY'),
-            'Content-Type'      =>  'application/json',
-            'Accept'            =>  'application/json'
-        ])->post(env('BOSTA_NEW_DELIVERY_URL'), $orderData);
+        try {
+            $response = Http::timeout(20)->withHeaders([
+                'Authorization'     =>  env('BOSTA_API_KEY'),
+                'Content-Type'      =>  'application/json',
+                'Accept'            =>  'application/json'
+            ])->post(env('BOSTA_NEW_DELIVERY_URL'), $orderData);
 
-        $decodedBostaResponse = $response->json();
+            $decodedBostaResponse = $response->json();
+            $deliveryData = data_get($decodedBostaResponse, 'data');
 
-        if ($response->successful() && $decodedBostaResponse['data']) {
+            if ($response->successful() && is_array($deliveryData) && filled($deliveryData['trackingNumber'] ?? null) && filled($deliveryData['_id'] ?? null)) {
 
-            // update order in database
-            $order->update([
-                'tracking_number' => $decodedBostaResponse['data']['trackingNumber'],
-                'order_delivery_id' => $decodedBostaResponse['data']['_id'],
+                // update order in database
+                $order->update([
+                    'tracking_number' => $deliveryData['trackingNumber'],
+                    'order_delivery_id' => $deliveryData['_id'],
+                ]);
+
+                $order->statuses()->attach(OrderStatus::PickupRequested->value);
+
+                return [
+                    'status'    =>  true,
+                    'data'      =>  $decodedBostaResponse,
+                ];
+            }
+
+            $message = $this->responseMessage($decodedBostaResponse);
+
+            Log::warning('Bosta rejected delivery creation.', [
+                'order_id' => $order->id,
+                'http_status' => $response->status(),
+                'bosta_error' => $message,
+                'bosta_response' => $decodedBostaResponse,
             ]);
 
-            $order->statuses()->attach(OrderStatus::PickupRequested->value);
+            return $this->failed($message, $decodedBostaResponse);
+        } catch (Throwable $exception) {
+            report($exception);
 
-            return [
-                'status'    =>  true,
-                'data'      =>  $decodedBostaResponse,
-            ];
-        } else {
-            return [
-                'status'    =>  false,
-                'data'      =>  $decodedBostaResponse,
-            ];
+            Log::error('Bosta delivery request failed before a response was received.', [
+                'order_id' => $order->id,
+                'exception' => $exception->getMessage(),
+            ]);
+
+            return $this->failed('Could not contact Bosta. Please try again.');
         }
+    }
+
+    private function validateOrderData(Order $order): array
+    {
+        $errors = [];
+
+        if (!$order->address) {
+            $errors[] = 'This order has no delivery address.';
+        } elseif (!$order->address->city || blank($order->address->city->bosta_id)) {
+            $errors[] = 'The address city is not mapped to a Bosta district.';
+        } elseif (!$order->address->governorate) {
+            $errors[] = 'The address has no governorate.';
+        }
+
+        if (!$order->user) {
+            $errors[] = 'This order has no customer.';
+        } elseif (!$order->user->phones->firstWhere('default', 1)) {
+            $errors[] = 'The customer has no default phone number.';
+        }
+
+        return $errors;
+    }
+
+    private function responseMessage(mixed $response): string
+    {
+        $message = data_get($response, 'message')
+            ?? data_get($response, 'error.message')
+            ?? data_get($response, 'error')
+            ?? data_get($response, 'errors.0.message')
+            ?? data_get($response, 'errors.0');
+
+        return is_string($message) && filled($message)
+            ? $message
+            : 'Bosta rejected the delivery request. See the application log for the response.';
+    }
+
+    private function failed(string $message, mixed $data = null): array
+    {
+        return [
+            'status' => false,
+            'message' => $message,
+            'data' => $data,
+        ];
     }
 
     public function getAWBs(array $deliveryIds, string $pageSize = "A6", string $language = "ar"): string
