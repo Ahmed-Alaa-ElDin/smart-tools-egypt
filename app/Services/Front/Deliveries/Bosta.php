@@ -3,6 +3,7 @@
 namespace App\Services\Front\Deliveries;
 
 use App\Models\Order;
+use App\Models\Collection;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
@@ -17,12 +18,23 @@ class Bosta implements DeliveryInterface
 
     public function createDelivery(Order $order): array
     {
-        $order->loadMissing([
+        $relations = [
             'address.city',
             'address.governorate',
             'user.phones',
             'transactions',
-        ]);
+        ];
+
+        if ($order->allow_opening) {
+            $relations = array_merge($relations, [
+                'products.thumbnail',
+                'products.images',
+                'collections.thumbnail',
+                'collections.images',
+            ]);
+        }
+
+        $order->loadMissing($relations);
 
         $validationErrors = $this->validateOrderData($order);
 
@@ -73,6 +85,15 @@ class Bosta implements DeliveryInterface
             "allowToOpenPackage"    =>      $order->allow_opening ? true : false,
             "webhookUrl"            =>      env('BOSTA_WEBHOOK_URL', "https://www.smarttoolsegypt.com/api/orders/update-status"),
         ];
+
+        if ($order->allow_opening) {
+            $orderData["deliveryImages"] = [
+                [
+                    "type"   => "ALLOW_TO_OPEN_THE_PACKAGE",
+                    "images" => $this->getDeliveryImages($order),
+                ],
+            ];
+        }
 
         // Send the request to Bosta API
         try {
@@ -182,5 +203,45 @@ class Bosta implements DeliveryInterface
 
         // Return the response
         return $response['data'] ?? "";
+    }
+
+    /**
+     * Get the delivery images for order items (first image of each item, max 10 images).
+     *
+     * @param Order $order
+     * @return array<string>
+     */
+    private function getDeliveryImages(Order $order): array
+    {
+        $items = $order->products->concat($order->collections)->sortBy(fn($item) => $item->pivot->id ?? 0);
+
+        $images = [];
+
+        foreach ($items as $item) {
+            $image = $item->thumbnail ?? $item->images->first();
+
+            if ($image && filled($image->file_name)) {
+                $folder = ($item instanceof Collection) ? 'collections' : 'products';
+                $path = "storage/images/{$folder}/cropped400/{$image->file_name}";
+
+                if (!file_exists(public_path($path)) && file_exists(public_path("storage/images/{$folder}/original/{$image->file_name}"))) {
+                    $path = "storage/images/{$folder}/original/{$image->file_name}";
+                }
+
+                $images[] = asset($path);
+            }
+
+            if (count($images) >= 10) {
+                break;
+            }
+        }
+
+        // Bosta requires 1 to 10 photo URLs when allowToOpenPackage is true.
+        // Fallback to store logo if no item images are available.
+        if (empty($images)) {
+            $images[] = asset('assets/img/logos/smart-tools-logos.png');
+        }
+
+        return array_slice($images, 0, 10);
     }
 }
