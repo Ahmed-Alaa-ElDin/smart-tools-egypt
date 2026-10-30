@@ -11,6 +11,8 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\Auth\LoginRequest;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\InvalidStateException;
+use GuzzleHttp\Exception\GuzzleException;
 use Gloudemans\Shoppingcart\Facades\Cart;
 
 class AuthenticatedSessionController extends Controller
@@ -74,9 +76,25 @@ class AuthenticatedSessionController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function facebookCallback()
+    public function facebookCallback(Request $request)
     {
-        $user = Socialite::driver('facebook')->user();
+        if ($request->has('error') || !$request->filled('code')) {
+            $message = $request->query('error') === 'access_denied'
+                ? 'auth.facebook_canceled'
+                : 'auth.facebook_failed';
+
+            return redirect()->route('login')->withErrors(['auth' => __($message)]);
+        }
+
+        try {
+            $user = Socialite::driver('facebook')->user();
+        } catch (InvalidStateException $e) {
+            return redirect()->route('login')->withErrors(['auth' => __('auth.facebook_failed')]);
+        } catch (GuzzleException $e) {
+            report($e);
+
+            return redirect()->route('login')->withErrors(['auth' => __('auth.facebook_failed')]);
+        }
 
         $createdUser = User::updateOrCreate(
             ['auth_id' => $user->id],
