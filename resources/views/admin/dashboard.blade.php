@@ -2,7 +2,7 @@
 
 @push('css')
     <style>
-        /* Scoped styling for bidirectional (ar & en) support */
+        /* Scoped styling for bidirectional (ar & en) support and proper number rendering */
         html[dir="rtl"] .card-chart .card-body,
         html[dir="rtl"] .card-chart .card-footer {
             direction: rtl;
@@ -29,17 +29,28 @@
         html[dir="rtl"] .ct-chart .ct-label {
             font-family: 'Cairo', sans-serif !important;
             font-size: 11px;
+            font-weight: 600;
         }
         html[dir="ltr"] .ct-chart .ct-label {
             font-family: 'Lato', sans-serif !important;
             font-size: 11px;
+            font-weight: 600;
         }
         .ct-chart .ct-grid {
             stroke: rgba(255, 255, 255, 0.25);
         }
         .ct-chart .ct-label {
-            color: rgba(255, 255, 255, 0.85);
-            fill: rgba(255, 255, 255, 0.85);
+            color: rgba(255, 255, 255, 0.9);
+            fill: rgba(255, 255, 255, 0.9);
+        }
+        .ct-chart .ct-bar {
+            stroke-width: 12px;
+        }
+        /* Ensure numbers and currencies render without BiDi inversion */
+        .num-val {
+            display: inline-block;
+            direction: ltr;
+            unicode-bidi: isolate;
         }
     </style>
 @endpush
@@ -58,14 +69,16 @@
                                 <i class="material-icons">paid</i>
                             </div>
                             <p class="card-category">{{ __('admin/dashboard.Total Revenue') }}</p>
-                            <h3 class="card-title">{{ formatTotal($totalRevenue) }}
+                            <h3 class="card-title">
+                                <span class="num-val">{{ number_format($totalRevenue) }}</span>
                                 <small>{{ __('admin/dashboard.EGP') }}</small>
                             </h3>
                         </div>
                         <div class="card-footer">
                             <div class="stats text-truncate">
                                 <i class="material-icons text-success">check_circle</i>
-                                {{ __('admin/dashboard.Delivered Revenue') }}: {{ formatTotal($deliveredRevenue) }} {{ __('admin/dashboard.EGP') }}
+                                {{ __('admin/dashboard.Delivered Revenue') }}:
+                                <span class="num-val font-weight-bold">{{ number_format($deliveredRevenue) }}</span> {{ __('admin/dashboard.EGP') }}
                             </div>
                         </div>
                     </div>
@@ -79,14 +92,16 @@
                                 <i class="material-icons">shopping_bag</i>
                             </div>
                             <p class="card-category">{{ __('admin/dashboard.Total Orders') }}</p>
-                            <h3 class="card-title">{{ number_format($totalOrders) }}</h3>
+                            <h3 class="card-title">
+                                <span class="num-val">{{ number_format($totalOrders) }}</span>
+                            </h3>
                         </div>
                         <div class="card-footer">
                             <div class="stats text-truncate">
                                 @if ($pendingOrdersCount > 0)
                                     <i class="material-icons text-warning">warning</i>
                                     <a href="{{ route('admin.orders.new-orders') }}" class="text-warning font-weight-bold">
-                                        {{ $pendingOrdersCount }} {{ __('admin/dashboard.Pending Action') }}
+                                        <span class="num-val">{{ number_format($pendingOrdersCount) }}</span> {{ __('admin/dashboard.Pending Action') }}
                                     </a>
                                 @else
                                     <i class="material-icons text-success">done_all</i>
@@ -105,13 +120,15 @@
                                 <i class="material-icons">people</i>
                             </div>
                             <p class="card-category">{{ __('admin/dashboard.Customers') }}</p>
-                            <h3 class="card-title">{{ number_format($totalCustomers) }}</h3>
+                            <h3 class="card-title">
+                                <span class="num-val">{{ number_format($totalCustomers) }}</span>
+                            </h3>
                         </div>
                         <div class="card-footer">
                             <div class="stats text-truncate">
                                 <i class="material-icons">person_add</i>
                                 <a href="{{ route('admin.customers.index') }}">
-                                    {{ $newCustomersThisMonth }} {{ __('admin/dashboard.new this month') }}
+                                    <span class="num-val">{{ number_format($newCustomersThisMonth) }}</span> {{ __('admin/dashboard.new this month') }}
                                 </a>
                             </div>
                         </div>
@@ -126,8 +143,9 @@
                                 <i class="material-icons">inventory_2</i>
                             </div>
                             <p class="card-category">{{ __('admin/dashboard.Active Products') }}</p>
-                            <h3 class="card-title">{{ number_format($activeProductsCount) }}
-                                <small>/ {{ number_format($totalProductsCount) }}</small>
+                            <h3 class="card-title">
+                                <span class="num-val">{{ number_format($activeProductsCount) }}</span>
+                                <small class="text-muted">/ <span class="num-val">{{ number_format($totalProductsCount) }}</span></small>
                             </h3>
                         </div>
                         <div class="card-footer">
@@ -135,7 +153,8 @@
                                 @if ($outOfStockCount > 0 || $lowStockCount > 0)
                                     <i class="material-icons text-danger">warning</i>
                                     <a href="{{ route('admin.products.index') }}" class="text-danger font-weight-bold">
-                                        {{ $outOfStockCount }} {{ __('admin/dashboard.out of stock') }}, {{ $lowStockCount }} {{ __('admin/dashboard.low stock') }}
+                                        <span class="num-val">{{ number_format($outOfStockCount) }}</span> {{ __('admin/dashboard.out of stock') }},
+                                        <span class="num-val">{{ number_format($lowStockCount) }}</span> {{ __('admin/dashboard.low stock') }}
                                     </a>
                                 @else
                                     <i class="material-icons text-success">check_circle</i>
@@ -164,7 +183,7 @@
                         <div class="card-footer">
                             <div class="stats">
                                 <i class="material-icons">payments</i>
-                                {{ __('admin/dashboard.Total') }}: <strong>{{ formatTotal($dailySalesSum) }} {{ __('admin/dashboard.EGP') }}</strong>
+                                {{ __('admin/dashboard.Total') }}: <strong class="num-val">{{ number_format($dailySalesSum) }}</strong> {{ __('admin/dashboard.EGP') }}
                             </div>
                         </div>
                     </div>
@@ -185,7 +204,7 @@
                         <div class="card-footer">
                             <div class="stats">
                                 <i class="material-icons">calendar_today</i>
-                                {{ __('admin/dashboard.Total Annual Orders') }}: <strong>{{ number_format($annualOrdersCount) }}</strong>
+                                {{ __('admin/dashboard.Total Annual Orders') }}: <strong class="num-val">{{ number_format($annualOrdersCount) }}</strong>
                             </div>
                         </div>
                     </div>
@@ -206,7 +225,7 @@
                         <div class="card-footer">
                             <div class="stats">
                                 <i class="material-icons">local_shipping</i>
-                                {{ number_format($deliveredOrdersCount) }} {{ __('admin/dashboard.delivered orders') }}
+                                <span class="num-val font-weight-bold">{{ number_format($deliveredOrdersCount) }}</span> {{ __('admin/dashboard.delivered orders') }}
                             </div>
                         </div>
                     </div>
@@ -242,19 +261,21 @@
                                     <tbody>
                                         @foreach ($recentOrders as $order)
                                             <tr>
-                                                <td class="font-weight-bold ltr:text-left rtl:text-right">#{{ $order->id }}</td>
+                                                <td class="font-weight-bold ltr:text-left rtl:text-right">
+                                                    <span class="num-val">#{{ $order->id }}</span>
+                                                </td>
                                                 <td class="ltr:text-left rtl:text-right">
                                                     @if ($order->user)
                                                         <div class="font-weight-bold">{{ $order->user->f_name }} {{ $order->user->l_name }}</div>
                                                         @if ($order->user->phones && $order->user->phones->count())
-                                                            <small class="text-muted">{{ $order->user->phones->first()->phone }}</small>
+                                                            <small class="text-muted num-val">{{ $order->user->phones->first()->phone }}</small>
                                                         @endif
                                                     @else
                                                         <span class="text-muted">{{ __('admin/dashboard.N/A') }}</span>
                                                     @endif
                                                 </td>
                                                 <td class="font-weight-bold text-nowrap ltr:text-left rtl:text-right">
-                                                    {{ formatTotal($order->invoice?->total) }} {{ __('admin/dashboard.EGP') }}
+                                                    <span class="num-val">{{ number_format($order->invoice?->total ?? 0) }}</span> {{ __('admin/dashboard.EGP') }}
                                                 </td>
                                                 <td class="ltr:text-left rtl:text-right">
                                                     @php
@@ -310,7 +331,7 @@
                                                 <i class="material-icons">hourglass_top</i>
                                                 {{ __('admin/dashboard.Pending Orders') }}
                                                 @if ($pendingOrders->count() > 0)
-                                                    <span class="badge badge-light ltr:ml-1 rtl:mr-1">{{ $pendingOrders->count() }}</span>
+                                                    <span class="badge badge-light ltr:ml-1 rtl:mr-1 num-val">{{ $pendingOrders->count() }}</span>
                                                 @endif
                                                 <div class="ripple-container"></div>
                                             </a>
@@ -320,7 +341,7 @@
                                                 <i class="material-icons">warning</i>
                                                 {{ __('admin/dashboard.Low Stock Alerts') }}
                                                 @if ($lowStockProducts->count() > 0)
-                                                    <span class="badge badge-light ltr:ml-1 rtl:mr-1">{{ $lowStockProducts->count() }}</span>
+                                                    <span class="badge badge-light ltr:ml-1 rtl:mr-1 num-val">{{ $lowStockProducts->count() }}</span>
                                                 @endif
                                                 <div class="ripple-container"></div>
                                             </a>
@@ -330,7 +351,7 @@
                                                 <i class="material-icons">rate_review</i>
                                                 {{ __('admin/dashboard.Latest Reviews') }}
                                                 @if ($recentReviews->count() > 0)
-                                                    <span class="badge badge-light ltr:ml-1 rtl:mr-1">{{ $recentReviews->count() }}</span>
+                                                    <span class="badge badge-light ltr:ml-1 rtl:mr-1 num-val">{{ $recentReviews->count() }}</span>
                                                 @endif
                                                 <div class="ripple-container"></div>
                                             </a>
@@ -351,11 +372,11 @@
                                                         <td class="ltr:text-left rtl:text-right">
                                                             <div class="font-weight-bold">
                                                                 <a href="{{ route('admin.orders.show', $order->id) }}">
-                                                                    #{{ $order->id }} - {{ $order->user ? $order->user->f_name . ' ' . $order->user->l_name : __('admin/dashboard.N/A') }}
+                                                                    <span class="num-val">#{{ $order->id }}</span> - {{ $order->user ? $order->user->f_name . ' ' . $order->user->l_name : __('admin/dashboard.N/A') }}
                                                                 </a>
                                                             </div>
                                                             <small class="text-muted">
-                                                                {{ formatTotal($order->invoice?->total) }} {{ __('admin/dashboard.EGP') }} &bull; {{ \Carbon\Carbon::parse($order->created_at)->diffForHumans() }}
+                                                                <span class="num-val font-weight-bold">{{ number_format($order->invoice?->total ?? 0) }}</span> {{ __('admin/dashboard.EGP') }} &bull; {{ \Carbon\Carbon::parse($order->created_at)->diffForHumans() }}
                                                             </small>
                                                         </td>
                                                         <td class="ltr:text-right rtl:text-left">
@@ -411,7 +432,7 @@
                                                                 </span>
                                                             @else
                                                                 <span class="badge badge-warning">
-                                                                    {{ $product->quantity }} {{ __('admin/dashboard.unit') }}
+                                                                    <span class="num-val">{{ number_format($product->quantity) }}</span> {{ __('admin/dashboard.unit') }}
                                                                 </span>
                                                             @endif
                                                         </td>
@@ -512,9 +533,14 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            function formatResponsiveLabel(val) {
-                if (!val) return '';
-                return val.length > 7 ? val.split(' ')[0] : val;
+            function formatAxisNumber(val) {
+                if (val >= 1000000) {
+                    return (val / 1000000).toFixed(1) + 'M';
+                }
+                if (val >= 1000) {
+                    return (val / 1000).toFixed(0) + 'k';
+                }
+                return val;
             }
 
             function initRealDashboardCharts() {
@@ -533,7 +559,12 @@
                             tension: 0.2
                         }),
                         low: 0,
-                        high: maxDailySales > 0 ? Math.ceil(maxDailySales * 1.2) : 100,
+                        high: maxDailySales > 0 ? Math.ceil(maxDailySales * 1.15) : 100,
+                        axisY: {
+                            labelInterpolationFnc: function(value) {
+                                return formatAxisNumber(value);
+                            }
+                        },
                         chartPadding: {
                             top: 10,
                             right: 10,
@@ -562,8 +593,13 @@
                         axisX: {
                             showGrid: false
                         },
+                        axisY: {
+                            labelInterpolationFnc: function(value) {
+                                return formatAxisNumber(value);
+                            }
+                        },
                         low: 0,
-                        high: maxMonthlyOrders > 0 ? Math.ceil(maxMonthlyOrders * 1.25) : 50,
+                        high: maxMonthlyOrders > 0 ? Math.ceil(maxMonthlyOrders * 1.2) : 50,
                         chartPadding: {
                             top: 10,
                             right: 5,
@@ -574,12 +610,7 @@
 
                     var responsiveOptionsMonthly = [
                         ['screen and (max-width: 640px)', {
-                            seriesBarDistance: 5,
-                            axisX: {
-                                labelInterpolationFnc: function(value) {
-                                    return formatResponsiveLabel(value);
-                                }
-                            }
+                            seriesBarDistance: 4
                         }]
                     ];
 
@@ -603,8 +634,13 @@
                         axisX: {
                             showGrid: false
                         },
+                        axisY: {
+                            labelInterpolationFnc: function(value) {
+                                return formatAxisNumber(value);
+                            }
+                        },
                         low: 0,
-                        high: maxStatusOrders > 0 ? Math.ceil(maxStatusOrders * 1.2) : 50,
+                        high: maxStatusOrders > 0 ? Math.ceil(maxStatusOrders * 1.15) : 50,
                         chartPadding: {
                             top: 10,
                             right: 5,
@@ -615,12 +651,7 @@
 
                     var responsiveOptionsStatus = [
                         ['screen and (max-width: 640px)', {
-                            seriesBarDistance: 4,
-                            axisX: {
-                                labelInterpolationFnc: function(value) {
-                                    return formatResponsiveLabel(value);
-                                }
-                            }
+                            seriesBarDistance: 4
                         }]
                     ];
 

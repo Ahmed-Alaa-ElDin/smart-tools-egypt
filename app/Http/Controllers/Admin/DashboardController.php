@@ -117,7 +117,7 @@ class DashboardController extends Controller
 
         for ($m = $monthlyStartDate->copy(); $m->lte($monthlyEndDate); $m->addMonth()) {
             $key = $m->format('Y-m');
-            $monthlyLabels[] = __('admin/ordersPages.' . $m->format('M'));
+            $monthlyLabels[] = __('admin/dashboard.months_short.' . $m->format('M'));
             $rec = $monthlyRaw->get($key);
             $count = $rec ? (int) $rec->orders_count : 0;
             $monthlyOrdersSeries[] = $count;
