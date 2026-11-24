@@ -1,155 +1,337 @@
-@extends('layouts.admin.admin', ['activeSection' => 'dashboard', 'activePage' => '', 'titlePage' =>
-__('admin/master.dashboard')])
+@extends('layouts.admin.admin', ['activeSection' => 'dashboard', 'activePage' => '', 'titlePage' => __('admin/master.dashboard')])
+
+@push('css')
+    <style>
+        /* Scoped styling for bidirectional (ar & en) support */
+        html[dir="rtl"] .card-chart .card-body,
+        html[dir="rtl"] .card-chart .card-footer {
+            direction: rtl;
+            text-align: right;
+        }
+        html[dir="rtl"] .card-chart .card-footer .stats {
+            text-align: right;
+        }
+        html[dir="rtl"] .card-stats .card-header.card-header-icon .card-icon {
+            float: right;
+            margin-left: 15px;
+            margin-right: 0;
+        }
+        html[dir="rtl"] .card-stats .card-header.card-header-icon {
+            text-align: left;
+        }
+        html[dir="rtl"] .card-stats .card-footer .stats {
+            text-align: right;
+        }
+        html[dir="rtl"] .card-stats .card-footer .stats i {
+            margin-left: 4px;
+            margin-right: 0;
+        }
+        html[dir="rtl"] .ct-chart .ct-label {
+            font-family: 'Cairo', sans-serif !important;
+            font-size: 11px;
+        }
+        html[dir="ltr"] .ct-chart .ct-label {
+            font-family: 'Lato', sans-serif !important;
+            font-size: 11px;
+        }
+        .ct-chart .ct-grid {
+            stroke: rgba(255, 255, 255, 0.25);
+        }
+        .ct-chart .ct-label {
+            color: rgba(255, 255, 255, 0.85);
+            fill: rgba(255, 255, 255, 0.85);
+        }
+    </style>
+@endpush
 
 @section('content')
-
     <div class="content">
         <div class="container-fluid">
+
+            {{-- 1. Top Stat Cards --}}
             <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card card-stats">
-                        <div class="card-header card-header-warning card-header-icon">
-                            <div class="card-icon">
-                                <i class="material-icons">content_copy</i>
-                            </div>
-                            <p class="card-category">Used Space</p>
-                            <h3 class="card-title">49/50
-                                <small>GB</small>
-                            </h3>
-                        </div>
-                        <div class="card-footer">
-                            <div class="stats">
-                                <i class="material-icons text-danger">warning</i>
-                                <a href="#pablo">Get More Space...</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {{-- Total Revenue --}}
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="card card-stats">
                         <div class="card-header card-header-success card-header-icon">
                             <div class="card-icon">
-                                <i class="material-icons">store</i>
+                                <i class="material-icons">paid</i>
                             </div>
-                            <p class="card-category">Revenue</p>
-                            <h3 class="card-title">$34,245</h3>
+                            <p class="card-category">{{ __('admin/dashboard.Total Revenue') }}</p>
+                            <h3 class="card-title">{{ formatTotal($totalRevenue) }}
+                                <small>{{ __('admin/dashboard.EGP') }}</small>
+                            </h3>
                         </div>
                         <div class="card-footer">
-                            <div class="stats">
-                                <i class="material-icons">date_range</i> Last 24 Hours
+                            <div class="stats text-truncate">
+                                <i class="material-icons text-success">check_circle</i>
+                                {{ __('admin/dashboard.Delivered Revenue') }}: {{ formatTotal($deliveredRevenue) }} {{ __('admin/dashboard.EGP') }}
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card card-stats">
-                        <div class="card-header card-header-danger card-header-icon">
-                            <div class="card-icon">
-                                <i class="material-icons">info_outline</i>
-                            </div>
-                            <p class="card-category">Fixed Issues</p>
-                            <h3 class="card-title">75</h3>
-                        </div>
-                        <div class="card-footer">
-                            <div class="stats">
-                                <i class="material-icons">local_offer</i> Tracked from Github
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+                {{-- Total Orders --}}
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="card card-stats">
                         <div class="card-header card-header-info card-header-icon">
                             <div class="card-icon">
-                                <i class="fa fa-twitter"></i>
+                                <i class="material-icons">shopping_bag</i>
                             </div>
-                            <p class="card-category">Followers</p>
-                            <h3 class="card-title">+245</h3>
+                            <p class="card-category">{{ __('admin/dashboard.Total Orders') }}</p>
+                            <h3 class="card-title">{{ number_format($totalOrders) }}</h3>
                         </div>
                         <div class="card-footer">
-                            <div class="stats">
-                                <i class="material-icons">update</i> Just Updated
+                            <div class="stats text-truncate">
+                                @if ($pendingOrdersCount > 0)
+                                    <i class="material-icons text-warning">warning</i>
+                                    <a href="{{ route('admin.orders.new-orders') }}" class="text-warning font-weight-bold">
+                                        {{ $pendingOrdersCount }} {{ __('admin/dashboard.Pending Action') }}
+                                    </a>
+                                @else
+                                    <i class="material-icons text-success">done_all</i>
+                                    {{ __('admin/dashboard.All caught up') }}
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Total Customers --}}
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-header card-header-warning card-header-icon">
+                            <div class="card-icon">
+                                <i class="material-icons">people</i>
+                            </div>
+                            <p class="card-category">{{ __('admin/dashboard.Customers') }}</p>
+                            <h3 class="card-title">{{ number_format($totalCustomers) }}</h3>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats text-truncate">
+                                <i class="material-icons">person_add</i>
+                                <a href="{{ route('admin.customers.index') }}">
+                                    {{ $newCustomersThisMonth }} {{ __('admin/dashboard.new this month') }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Active Products & Stock --}}
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-header card-header-danger card-header-icon">
+                            <div class="card-icon">
+                                <i class="material-icons">inventory_2</i>
+                            </div>
+                            <p class="card-category">{{ __('admin/dashboard.Active Products') }}</p>
+                            <h3 class="card-title">{{ number_format($activeProductsCount) }}
+                                <small>/ {{ number_format($totalProductsCount) }}</small>
+                            </h3>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats text-truncate">
+                                @if ($outOfStockCount > 0 || $lowStockCount > 0)
+                                    <i class="material-icons text-danger">warning</i>
+                                    <a href="{{ route('admin.products.index') }}" class="text-danger font-weight-bold">
+                                        {{ $outOfStockCount }} {{ __('admin/dashboard.out of stock') }}, {{ $lowStockCount }} {{ __('admin/dashboard.low stock') }}
+                                    </a>
+                                @else
+                                    <i class="material-icons text-success">check_circle</i>
+                                    {{ __('admin/dashboard.Stock levels healthy') }}
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            {{-- 2. Real Analytics Charts --}}
             <div class="row">
+                {{-- Daily Sales Chart --}}
                 <div class="col-md-4">
                     <div class="card card-chart">
                         <div class="card-header card-header-success">
                             <div class="ct-chart" id="dailySalesChart"></div>
                         </div>
                         <div class="card-body">
-                            <h4 class="card-title">Daily Sales</h4>
-                            <p class="card-category">
-                                <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase in
-                                today sales.
+                            <h4 class="card-title">{{ __('admin/dashboard.Daily Sales') }}</h4>
+                            <p class="card-category text-muted">
+                                {{ __('admin/dashboard.Sales over the last 7 days') }}
                             </p>
                         </div>
                         <div class="card-footer">
                             <div class="stats">
-                                <i class="material-icons">access_time</i> updated 4 minutes ago
+                                <i class="material-icons">payments</i>
+                                {{ __('admin/dashboard.Total') }}: <strong>{{ formatTotal($dailySalesSum) }} {{ __('admin/dashboard.EGP') }}</strong>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {{-- Monthly Orders Chart --}}
                 <div class="col-md-4">
                     <div class="card card-chart">
                         <div class="card-header card-header-warning">
-                            <div class="ct-chart" id="websiteViewsChart"></div>
+                            <div class="ct-chart" id="monthlyOrdersChart"></div>
                         </div>
                         <div class="card-body">
-                            <h4 class="card-title">Email Subscriptions</h4>
-                            <p class="card-category text-slate-700">Last Campaign Performance</p>
+                            <h4 class="card-title">{{ __('admin/dashboard.Monthly Orders') }}</h4>
+                            <p class="card-category text-muted">
+                                {{ __('admin/dashboard.Order volume over the last 12 months') }}
+                            </p>
                         </div>
                         <div class="card-footer">
                             <div class="stats">
-                                <i class="material-icons">access_time</i> campaign sent 2 days ago
+                                <i class="material-icons">calendar_today</i>
+                                {{ __('admin/dashboard.Total Annual Orders') }}: <strong>{{ number_format($annualOrdersCount) }}</strong>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {{-- Orders by Status Chart --}}
                 <div class="col-md-4">
                     <div class="card card-chart">
                         <div class="card-header card-header-danger">
-                            <div class="ct-chart" id="completedTasksChart"></div>
+                            <div class="ct-chart" id="orderStatusChart"></div>
                         </div>
                         <div class="card-body">
-                            <h4 class="card-title">Completed Tasks</h4>
-                            <p class="card-category">Last Campaign Performance</p>
+                            <h4 class="card-title">{{ __('admin/dashboard.Orders by Status') }}</h4>
+                            <p class="card-category text-muted">
+                                {{ __('admin/dashboard.Breakdown of orders across fulfillment stages') }}
+                            </p>
                         </div>
                         <div class="card-footer">
                             <div class="stats">
-                                <i class="material-icons">access_time</i> campaign sent 2 days ago
+                                <i class="material-icons">local_shipping</i>
+                                {{ number_format($deliveredOrdersCount) }} {{ __('admin/dashboard.delivered orders') }}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            {{-- 3. Detailed Data Sections --}}
             <div class="row">
-                <div class="col-lg-6 col-md-12">
+                {{-- Recent Orders Table --}}
+                <div class="col-lg-7 col-md-12">
                     <div class="card">
-                        <div class="card-header card-header-tabs card-header-primary">
+                        <div class="card-header card-header-primary d-flex justify-content-between align-items-center">
+                            <div>
+                                <h4 class="card-title">{{ __('admin/dashboard.Recent Orders') }}</h4>
+                                <p class="card-category">{{ __('admin/dashboard.Latest customer orders placed') }}</p>
+                            </div>
+                            <a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-white font-weight-bold">
+                                {{ __('admin/dashboard.View All Orders') }}
+                                <span class="inline-block rtl:rotate-180 font-bold">&rarr;</span>
+                            </a>
+                        </div>
+                        <div class="card-body table-responsive">
+                            @if ($recentOrders->count() > 0)
+                                <table class="table table-hover align-middle">
+                                    <thead class="text-primary">
+                                        <th class="ltr:text-left rtl:text-right">{{ __('admin/dashboard.Order ID') }}</th>
+                                        <th class="ltr:text-left rtl:text-right">{{ __('admin/dashboard.Customer') }}</th>
+                                        <th class="ltr:text-left rtl:text-right">{{ __('admin/dashboard.Total') }}</th>
+                                        <th class="ltr:text-left rtl:text-right">{{ __('admin/dashboard.Status') }}</th>
+                                        <th class="ltr:text-left rtl:text-right">{{ __('admin/dashboard.Date') }}</th>
+                                        <th class="text-center">{{ __('admin/dashboard.Actions') }}</th>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($recentOrders as $order)
+                                            <tr>
+                                                <td class="font-weight-bold ltr:text-left rtl:text-right">#{{ $order->id }}</td>
+                                                <td class="ltr:text-left rtl:text-right">
+                                                    @if ($order->user)
+                                                        <div class="font-weight-bold">{{ $order->user->f_name }} {{ $order->user->l_name }}</div>
+                                                        @if ($order->user->phones && $order->user->phones->count())
+                                                            <small class="text-muted">{{ $order->user->phones->first()->phone }}</small>
+                                                        @endif
+                                                    @else
+                                                        <span class="text-muted">{{ __('admin/dashboard.N/A') }}</span>
+                                                    @endif
+                                                </td>
+                                                <td class="font-weight-bold text-nowrap ltr:text-left rtl:text-right">
+                                                    {{ formatTotal($order->invoice?->total) }} {{ __('admin/dashboard.EGP') }}
+                                                </td>
+                                                <td class="ltr:text-left rtl:text-right">
+                                                    @php
+                                                        $statusClass = 'badge-secondary';
+                                                        if (in_array($order->status_id, [3, 45, 12])) {
+                                                            $statusClass = 'badge-success';
+                                                        } elseif (in_array($order->status_id, [1, 2, 14, 15, 16, 201, 208, 212])) {
+                                                            $statusClass = 'badge-warning';
+                                                        } elseif (in_array($order->status_id, [4, 5, 6, 207, 209, 210])) {
+                                                            $statusClass = 'badge-info';
+                                                        } elseif (in_array($order->status_id, [8, 9, 13, 46, 211, 301, 302, 303])) {
+                                                            $statusClass = 'badge-danger';
+                                                        }
+                                                    @endphp
+                                                    <span class="badge {{ $statusClass }} px-2 py-1">
+                                                        {{ $order->status ? $order->status->name : __('admin/dashboard.N/A') }}
+                                                    </span>
+                                                </td>
+                                                <td class="text-nowrap text-muted text-sm ltr:text-left rtl:text-right">
+                                                    {{ \Carbon\Carbon::parse($order->created_at)->diffForHumans() }}
+                                                </td>
+                                                <td class="td-actions text-center">
+                                                    <a href="{{ route('admin.orders.show', $order->id) }}"
+                                                        class="btn btn-primary btn-link btn-sm"
+                                                        rel="tooltip"
+                                                        title="{{ __('admin/dashboard.View Details') }}">
+                                                        <i class="material-icons">visibility</i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            @else
+                                <div class="py-4 text-center text-muted">
+                                    <i class="material-icons mb-2" style="font-size: 48px;">inbox</i>
+                                    <p>{{ __('admin/ordersPages.No data in this table') }}</p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Actionable Alerts Tabs (Pending, Low Stock, Reviews) --}}
+                <div class="col-lg-5 col-md-12">
+                    <div class="card">
+                        <div class="card-header card-header-tabs card-header-warning">
                             <div class="nav-tabs-navigation">
                                 <div class="nav-tabs-wrapper">
-                                    <span class="nav-tabs-title">Tasks:</span>
                                     <ul class="nav nav-tabs" data-tabs="tabs">
                                         <li class="nav-item">
-                                            <a class="nav-link active" href="#profile" data-toggle="tab">
-                                                <i class="material-icons">bug_report</i> Bugs
+                                            <a class="nav-link active" href="#tab-pending-orders" data-toggle="tab">
+                                                <i class="material-icons">hourglass_top</i>
+                                                {{ __('admin/dashboard.Pending Orders') }}
+                                                @if ($pendingOrders->count() > 0)
+                                                    <span class="badge badge-light ltr:ml-1 rtl:mr-1">{{ $pendingOrders->count() }}</span>
+                                                @endif
                                                 <div class="ripple-container"></div>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#messages" data-toggle="tab">
-                                                <i class="material-icons">code</i> Website
+                                            <a class="nav-link" href="#tab-low-stock" data-toggle="tab">
+                                                <i class="material-icons">warning</i>
+                                                {{ __('admin/dashboard.Low Stock Alerts') }}
+                                                @if ($lowStockProducts->count() > 0)
+                                                    <span class="badge badge-light ltr:ml-1 rtl:mr-1">{{ $lowStockProducts->count() }}</span>
+                                                @endif
                                                 <div class="ripple-container"></div>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#settings" data-toggle="tab">
-                                                <i class="material-icons">cloud</i> Server
+                                            <a class="nav-link" href="#tab-recent-reviews" data-toggle="tab">
+                                                <i class="material-icons">rate_review</i>
+                                                {{ __('admin/dashboard.Latest Reviews') }}
+                                                @if ($recentReviews->count() > 0)
+                                                    <span class="badge badge-light ltr:ml-1 rtl:mr-1">{{ $recentReviews->count() }}</span>
+                                                @endif
                                                 <div class="ripple-container"></div>
                                             </a>
                                         </li>
@@ -159,291 +341,170 @@ __('admin/master.dashboard')])
                         </div>
                         <div class="card-body">
                             <div class="tab-content">
-                                <div class="tab-pane active" id="profile">
-                                    <table class="table">
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check">
-                                                        <label class="form-check-label">
-                                                            <input class="form-check-input" type="checkbox" value=""
-                                                                checked>
-                                                            <span class="form-check-sign">
-                                                                <span class="check"></span>
+                                {{-- Tab 1: Pending Orders --}}
+                                <div class="tab-pane active" id="tab-pending-orders">
+                                    @if ($pendingOrders->count() > 0)
+                                        <table class="table table-hover">
+                                            <tbody>
+                                                @foreach ($pendingOrders as $order)
+                                                    <tr>
+                                                        <td class="ltr:text-left rtl:text-right">
+                                                            <div class="font-weight-bold">
+                                                                <a href="{{ route('admin.orders.show', $order->id) }}">
+                                                                    #{{ $order->id }} - {{ $order->user ? $order->user->f_name . ' ' . $order->user->l_name : __('admin/dashboard.N/A') }}
+                                                                </a>
+                                                            </div>
+                                                            <small class="text-muted">
+                                                                {{ formatTotal($order->invoice?->total) }} {{ __('admin/dashboard.EGP') }} &bull; {{ \Carbon\Carbon::parse($order->created_at)->diffForHumans() }}
+                                                            </small>
+                                                        </td>
+                                                        <td class="ltr:text-right rtl:text-left">
+                                                            <span class="badge badge-warning px-2 py-1">
+                                                                {{ $order->status ? $order->status->name : __('admin/dashboard.N/A') }}
                                                             </span>
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>Sign contract for "What are conference organizers afraid of?"</td>
-                                                <td class="td-actions text-right">
-                                                    <button type="button" rel="tooltip" title="Edit Task"
-                                                        class="btn btn-primary btn-link btn-sm">
-                                                        <i class="material-icons">edit</i>
-                                                    </button>
-                                                    <button type="button" rel="tooltip" title="Remove"
-                                                        class="btn btn-danger btn-link btn-sm">
-                                                        <i class="material-icons">close</i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check">
-                                                        <label class="form-check-label">
-                                                            <input class="form-check-input" type="checkbox" value="">
-                                                            <span class="form-check-sign">
-                                                                <span class="check"></span>
-                                                            </span>
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>Lines From Great Russian Literature? Or E-mails From My Boss?</td>
-                                                <td class="td-actions text-right">
-                                                    <button type="button" rel="tooltip" title="Edit Task"
-                                                        class="btn btn-primary btn-link btn-sm">
-                                                        <i class="material-icons">edit</i>
-                                                    </button>
-                                                    <button type="button" rel="tooltip" title="Remove"
-                                                        class="btn btn-danger btn-link btn-sm">
-                                                        <i class="material-icons">close</i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check">
-                                                        <label class="form-check-label">
-                                                            <input class="form-check-input" type="checkbox" value="">
-                                                            <span class="form-check-sign">
-                                                                <span class="check"></span>
-                                                            </span>
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>Flooded: One year later, assessing what was lost and what was found when
-                                                    a ravaging rain swept through metro Detroit
-                                                </td>
-                                                <td class="td-actions text-right">
-                                                    <button type="button" rel="tooltip" title="Edit Task"
-                                                        class="btn btn-primary btn-link btn-sm">
-                                                        <i class="material-icons">edit</i>
-                                                    </button>
-                                                    <button type="button" rel="tooltip" title="Remove"
-                                                        class="btn btn-danger btn-link btn-sm">
-                                                        <i class="material-icons">close</i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check">
-                                                        <label class="form-check-label">
-                                                            <input class="form-check-input" type="checkbox" value=""
-                                                                checked>
-                                                            <span class="form-check-sign">
-                                                                <span class="check"></span>
-                                                            </span>
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>Create 4 Invisible User Experiences you Never Knew About</td>
-                                                <td class="td-actions text-right">
-                                                    <button type="button" rel="tooltip" title="Edit Task"
-                                                        class="btn btn-primary btn-link btn-sm">
-                                                        <i class="material-icons">edit</i>
-                                                    </button>
-                                                    <button type="button" rel="tooltip" title="Remove"
-                                                        class="btn btn-danger btn-link btn-sm">
-                                                        <i class="material-icons">close</i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                                        </td>
+                                                        <td class="td-actions text-center">
+                                                            <a href="{{ route('admin.orders.show', $order->id) }}"
+                                                                class="btn btn-warning btn-link btn-sm"
+                                                                rel="tooltip"
+                                                                title="{{ __('admin/dashboard.View Details') }}">
+                                                                <i class="material-icons">visibility</i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                        <div class="text-center pt-2">
+                                            <a href="{{ route('admin.orders.new-orders') }}" class="btn btn-sm btn-link text-warning font-weight-bold">
+                                                {{ __('admin/dashboard.View All Orders') }}
+                                                <span class="inline-block rtl:rotate-180 font-bold">&rarr;</span>
+                                            </a>
+                                        </div>
+                                    @else
+                                        <div class="py-4 text-center text-muted">
+                                            <i class="material-icons text-success mb-2" style="font-size: 48px;">check_circle</i>
+                                            <p>{{ __('admin/dashboard.No pending orders') }}</p>
+                                        </div>
+                                    @endif
                                 </div>
-                                <div class="tab-pane" id="messages">
-                                    <table class="table">
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check">
-                                                        <label class="form-check-label">
-                                                            <input class="form-check-input" type="checkbox" value=""
-                                                                checked>
-                                                            <span class="form-check-sign">
-                                                                <span class="check"></span>
-                                                            </span>
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>Flooded: One year later, assessing what was lost and what was found when
-                                                    a ravaging rain swept through metro Detroit
-                                                </td>
-                                                <td class="td-actions text-right">
-                                                    <button type="button" rel="tooltip" title="Edit Task"
-                                                        class="btn btn-primary btn-link btn-sm">
-                                                        <i class="material-icons">edit</i>
-                                                    </button>
-                                                    <button type="button" rel="tooltip" title="Remove"
-                                                        class="btn btn-danger btn-link btn-sm">
-                                                        <i class="material-icons">close</i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check">
-                                                        <label class="form-check-label">
-                                                            <input class="form-check-input" type="checkbox" value="">
-                                                            <span class="form-check-sign">
-                                                                <span class="check"></span>
-                                                            </span>
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>Sign contract for "What are conference organizers afraid of?"</td>
-                                                <td class="td-actions text-right">
-                                                    <button type="button" rel="tooltip" title="Edit Task"
-                                                        class="btn btn-primary btn-link btn-sm">
-                                                        <i class="material-icons">edit</i>
-                                                    </button>
-                                                    <button type="button" rel="tooltip" title="Remove"
-                                                        class="btn btn-danger btn-link btn-sm">
-                                                        <i class="material-icons">close</i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+
+                                {{-- Tab 2: Low Stock Products --}}
+                                <div class="tab-pane" id="tab-low-stock">
+                                    @if ($lowStockProducts->count() > 0)
+                                        <table class="table table-hover">
+                                            <tbody>
+                                                @foreach ($lowStockProducts as $product)
+                                                    <tr>
+                                                        <td class="ltr:text-left rtl:text-right">
+                                                            <div class="font-weight-bold text-truncate" style="max-width: 200px;">
+                                                                {{ $product->name }}
+                                                            </div>
+                                                            <small class="text-muted">
+                                                                {{ $product->brand ? $product->brand->name : '' }}
+                                                            </small>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            @if ($product->quantity <= 0)
+                                                                <span class="badge badge-danger">
+                                                                    0 {{ __('admin/dashboard.unit') }}
+                                                                </span>
+                                                            @else
+                                                                <span class="badge badge-warning">
+                                                                    {{ $product->quantity }} {{ __('admin/dashboard.unit') }}
+                                                                </span>
+                                                            @endif
+                                                        </td>
+                                                        <td class="td-actions ltr:text-right rtl:text-left">
+                                                            <a href="{{ route('admin.products.edit', $product->id) }}"
+                                                                class="btn btn-primary btn-link btn-sm"
+                                                                rel="tooltip"
+                                                                title="{{ __('admin/dashboard.Edit Product') }}">
+                                                                <i class="material-icons">edit</i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                        <div class="text-center pt-2">
+                                            <a href="{{ route('admin.products.index') }}" class="btn btn-sm btn-link text-danger font-weight-bold">
+                                                {{ __('admin/productsPages.All Products') }}
+                                                <span class="inline-block rtl:rotate-180 font-bold">&rarr;</span>
+                                            </a>
+                                        </div>
+                                    @else
+                                        <div class="py-4 text-center text-muted">
+                                            <i class="material-icons text-success mb-2" style="font-size: 48px;">check_circle</i>
+                                            <p>{{ __('admin/dashboard.No low stock products') }}</p>
+                                        </div>
+                                    @endif
                                 </div>
-                                <div class="tab-pane" id="settings">
-                                    <table class="table">
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check">
-                                                        <label class="form-check-label">
-                                                            <input class="form-check-input" type="checkbox" value="">
-                                                            <span class="form-check-sign">
-                                                                <span class="check"></span>
-                                                            </span>
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>Lines From Great Russian Literature? Or E-mails From My Boss?</td>
-                                                <td class="td-actions text-right">
-                                                    <button type="button" rel="tooltip" title="Edit Task"
-                                                        class="btn btn-primary btn-link btn-sm">
-                                                        <i class="material-icons">edit</i>
-                                                    </button>
-                                                    <button type="button" rel="tooltip" title="Remove"
-                                                        class="btn btn-danger btn-link btn-sm">
-                                                        <i class="material-icons">close</i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check">
-                                                        <label class="form-check-label">
-                                                            <input class="form-check-input" type="checkbox" value=""
-                                                                checked>
-                                                            <span class="form-check-sign">
-                                                                <span class="check"></span>
-                                                            </span>
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>Flooded: One year later, assessing what was lost and what was found when
-                                                    a ravaging rain swept through metro Detroit
-                                                </td>
-                                                <td class="td-actions text-right">
-                                                    <button type="button" rel="tooltip" title="Edit Task"
-                                                        class="btn btn-primary btn-link btn-sm">
-                                                        <i class="material-icons">edit</i>
-                                                    </button>
-                                                    <button type="button" rel="tooltip" title="Remove"
-                                                        class="btn btn-danger btn-link btn-sm">
-                                                        <i class="material-icons">close</i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check">
-                                                        <label class="form-check-label">
-                                                            <input class="form-check-input" type="checkbox" value=""
-                                                                checked>
-                                                            <span class="form-check-sign">
-                                                                <span class="check"></span>
-                                                            </span>
-                                                        </label>
-                                                    </div>
-                                                </td>
-                                                <td>Sign contract for "What are conference organizers afraid of?"</td>
-                                                <td class="td-actions text-right">
-                                                    <button type="button" rel="tooltip" title="Edit Task"
-                                                        class="btn btn-primary btn-link btn-sm">
-                                                        <i class="material-icons">edit</i>
-                                                    </button>
-                                                    <button type="button" rel="tooltip" title="Remove"
-                                                        class="btn btn-danger btn-link btn-sm">
-                                                        <i class="material-icons">close</i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+
+                                {{-- Tab 3: Recent Reviews --}}
+                                <div class="tab-pane" id="tab-recent-reviews">
+                                    @if ($recentReviews->count() > 0)
+                                        <table class="table table-hover">
+                                            <tbody>
+                                                @foreach ($recentReviews as $review)
+                                                    <tr>
+                                                        <td class="ltr:text-left rtl:text-right">
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <span class="font-weight-bold">
+                                                                    {{ $review->user ? $review->user->f_name . ' ' . $review->user->l_name : __('admin/dashboard.N/A') }}
+                                                                </span>
+                                                                <span class="text-warning">
+                                                                    @for ($i = 1; $i <= 5; $i++)
+                                                                        @if ($i <= $review->rating)
+                                                                            <i class="material-icons" style="font-size: 14px;">star</i>
+                                                                        @else
+                                                                            <i class="material-icons" style="font-size: 14px;">star_border</i>
+                                                                        @endif
+                                                                    @endfor
+                                                                </span>
+                                                            </div>
+                                                            <p class="text-muted text-sm mb-1 text-truncate" style="max-width: 250px;">
+                                                                @if ($review->reviewable)
+                                                                    <span class="font-weight-bold text-dark">{{ $review->reviewable->name }}:</span>
+                                                                @endif
+                                                                {{ $review->comment ?: __('admin/dashboard.Review') }}
+                                                            </p>
+                                                            <small class="text-muted">
+                                                                {{ \Carbon\Carbon::parse($review->created_at)->diffForHumans() }}
+                                                            </small>
+                                                        </td>
+                                                        <td class="ltr:text-right rtl:text-left">
+                                                            @if ($review->status == 1)
+                                                                <span class="badge badge-success">{{ __('admin/dashboard.Status Approved') }}</span>
+                                                            @elseif ($review->status == 0)
+                                                                <span class="badge badge-warning">{{ __('admin/dashboard.Status Pending') }}</span>
+                                                            @else
+                                                                <span class="badge badge-danger">{{ __('admin/dashboard.Status Rejected') }}</span>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                        <div class="text-center pt-2">
+                                            <a href="{{ route('admin.reviews.index') }}" class="btn btn-sm btn-link text-primary font-weight-bold">
+                                                {{ __('admin/dashboard.View All Reviews') }}
+                                                <span class="inline-block rtl:rotate-180 font-bold">&rarr;</span>
+                                            </a>
+                                        </div>
+                                    @else
+                                        <div class="py-4 text-center text-muted">
+                                            <i class="material-icons text-muted mb-2" style="font-size: 48px;">rate_review</i>
+                                            <p>{{ __('admin/dashboard.No recent reviews') }}</p>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-12">
-                    <div class="card">
-                        <div class="card-header card-header-warning">
-                            <h4 class="card-title">Employees Stats</h4>
-                            <p class="card-category">New employees on 15th September, 2016</p>
-                        </div>
-                        <div class="card-body table-responsive">
-                            <table class="table table-hover">
-                                <thead class="text-warning">
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Salary</th>
-                                    <th>Country</th>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Dakota Rice</td>
-                                        <td>$36,738</td>
-                                        <td>Niger</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Minerva Hooper</td>
-                                        <td>$23,789</td>
-                                        <td>Curaçao</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Sage Rodriguez</td>
-                                        <td>$56,142</td>
-                                        <td>Netherlands</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Philip Chaney</td>
-                                        <td>$38,735</td>
-                                        <td>Korea, South</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
             </div>
+
         </div>
     </div>
 @endsection
@@ -451,8 +512,133 @@ __('admin/master.dashboard')])
 @push('js')
     <script>
         $(document).ready(function() {
-            // Javascript method's body can be found in assets/js/demos.js
-            md.initDashboardPageCharts();
+            function formatResponsiveLabel(val) {
+                if (!val) return '';
+                return val.length > 7 ? val.split(' ')[0] : val;
+            }
+
+            function initRealDashboardCharts() {
+                // 1. Daily Sales Chart
+                if ($('#dailySalesChart').length !== 0) {
+                    var dataDailySalesChart = {
+                        labels: {!! json_encode($dailyLabels) !!},
+                        series: [
+                            {!! json_encode($dailySalesSeries) !!}
+                        ]
+                    };
+
+                    var maxDailySales = Math.max.apply(Math, {!! json_encode($dailySalesSeries) !!});
+                    var optionsDailySalesChart = {
+                        lineSmooth: Chartist.Interpolation.cardinal({
+                            tension: 0.2
+                        }),
+                        low: 0,
+                        high: maxDailySales > 0 ? Math.ceil(maxDailySales * 1.2) : 100,
+                        chartPadding: {
+                            top: 10,
+                            right: 10,
+                            bottom: 0,
+                            left: 10
+                        }
+                    };
+
+                    var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
+                    if (typeof md !== 'undefined' && md.startAnimationForLineChart) {
+                        md.startAnimationForLineChart(dailySalesChart);
+                    }
+                }
+
+                // 2. Monthly Orders Chart
+                if ($('#monthlyOrdersChart').length !== 0) {
+                    var dataMonthlyOrdersChart = {
+                        labels: {!! json_encode($monthlyLabels) !!},
+                        series: [
+                            {!! json_encode($monthlyOrdersSeries) !!}
+                        ]
+                    };
+
+                    var maxMonthlyOrders = Math.max.apply(Math, {!! json_encode($monthlyOrdersSeries) !!});
+                    var optionsMonthlyOrdersChart = {
+                        axisX: {
+                            showGrid: false
+                        },
+                        low: 0,
+                        high: maxMonthlyOrders > 0 ? Math.ceil(maxMonthlyOrders * 1.25) : 50,
+                        chartPadding: {
+                            top: 10,
+                            right: 5,
+                            bottom: 0,
+                            left: 0
+                        }
+                    };
+
+                    var responsiveOptionsMonthly = [
+                        ['screen and (max-width: 640px)', {
+                            seriesBarDistance: 5,
+                            axisX: {
+                                labelInterpolationFnc: function(value) {
+                                    return formatResponsiveLabel(value);
+                                }
+                            }
+                        }]
+                    ];
+
+                    var monthlyOrdersChart = Chartist.Bar('#monthlyOrdersChart', dataMonthlyOrdersChart, optionsMonthlyOrdersChart, responsiveOptionsMonthly);
+                    if (typeof md !== 'undefined' && md.startAnimationForBarChart) {
+                        md.startAnimationForBarChart(monthlyOrdersChart);
+                    }
+                }
+
+                // 3. Orders by Status Chart
+                if ($('#orderStatusChart').length !== 0) {
+                    var dataOrderStatusChart = {
+                        labels: {!! json_encode($statusChartLabels) !!},
+                        series: [
+                            {!! json_encode($statusChartSeries) !!}
+                        ]
+                    };
+
+                    var maxStatusOrders = Math.max.apply(Math, {!! json_encode($statusChartSeries) !!});
+                    var optionsOrderStatusChart = {
+                        axisX: {
+                            showGrid: false
+                        },
+                        low: 0,
+                        high: maxStatusOrders > 0 ? Math.ceil(maxStatusOrders * 1.2) : 50,
+                        chartPadding: {
+                            top: 10,
+                            right: 5,
+                            bottom: 0,
+                            left: 0
+                        }
+                    };
+
+                    var responsiveOptionsStatus = [
+                        ['screen and (max-width: 640px)', {
+                            seriesBarDistance: 4,
+                            axisX: {
+                                labelInterpolationFnc: function(value) {
+                                    return formatResponsiveLabel(value);
+                                }
+                            }
+                        }]
+                    ];
+
+                    var orderStatusChart = Chartist.Bar('#orderStatusChart', dataOrderStatusChart, optionsOrderStatusChart, responsiveOptionsStatus);
+                    if (typeof md !== 'undefined' && md.startAnimationForBarChart) {
+                        md.startAnimationForBarChart(orderStatusChart);
+                    }
+                }
+            }
+
+            // Override md.initDashboardPageCharts so window resize preserves real charts
+            if (typeof md !== 'undefined') {
+                md.initDashboardPageCharts = function() {
+                    initRealDashboardCharts();
+                };
+            }
+
+            initRealDashboardCharts();
         });
     </script>
 @endpush
